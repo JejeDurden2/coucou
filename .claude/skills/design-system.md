@@ -2,14 +2,14 @@
 
 ## Philosophy
 
-**Modern, technological, and smart** - A dark-mode SaaS aesthetic for AI visibility tracking. Think futuristic dashboard, not corporate software.
+**Clean, modern, and professional** - A dark-mode SaaS aesthetic for AI visibility tracking. Minimal, flat design with solid colors.
 
 ### Design Principles
 
-- **Tech-forward**: Cyan and violet convey AI and innovation
-- **Depth through glow**: Subtle glows and glass effects create dimension
+- **Clean and flat**: No gradients, solid colors only
 - **Dark-first**: Deep space backgrounds let content shine
-- **Smooth motion**: Transitions that feel premium
+- **Subtle accents**: Cyan for primary actions, violet for secondary
+- **Smooth motion**: Simple transitions that feel premium
 
 ---
 
@@ -58,9 +58,9 @@
 ### Tailwind Usage
 
 ```tsx
-// Primary button (cyan gradient)
+// Primary button (solid cyan)
 <Button>Get Started</Button>
-// → bg-gradient-to-r from-cyan-500 to-cyan-600 text-slate-900
+// → bg-cyan-500 text-slate-900 hover:bg-cyan-400
 
 // Outline button
 <Button variant="outline">Learn More</Button>
@@ -77,9 +77,8 @@
 <span className="text-cyan-400">
 <span className="text-violet-400">
 
-// Gradient text
-<h1 className="gradient-text">
-// → bg-gradient-to-r from-cyan-400 via-blue-500 to-violet-500 bg-clip-text text-transparent
+// Brand text (no gradients)
+<h1 className="text-cyan-400">
 ```
 
 ---
@@ -118,51 +117,6 @@
 
 ---
 
-## Gradients
-
-### Primary Gradient (CTAs)
-
-```css
-bg-gradient-to-r from-cyan-500 to-cyan-600
-```
-
-### Accent Gradient (Decorative)
-
-```css
-bg-gradient-to-r from-cyan-400 via-blue-500 to-violet-500
-```
-
-### Background Orbs
-
-```css
-/* Cyan orb */
-bg-cyan-500/10 rounded-full blur-3xl
-
-/* Violet orb */
-bg-violet-500/10 rounded-full blur-3xl
-```
-
----
-
-## Glow Effects
-
-```css
-/* Cyan glow - for primary elements */
-.glow-cyan {
-  box-shadow: 0 0 20px rgb(6 182 212 / 0.3), 0 0 40px rgb(6 182 212 / 0.1);
-}
-
-/* Violet glow - for secondary elements */
-.glow-violet {
-  box-shadow: 0 0 20px rgb(139 92 246 / 0.3), 0 0 40px rgb(139 92 246 / 0.1);
-}
-
-/* Button glow */
-shadow-lg shadow-cyan-500/25
-```
-
----
-
 ## Glass Effects
 
 ### Card Glass
@@ -191,9 +145,9 @@ shadow-lg shadow-cyan-500/25
 ### Buttons
 
 ```tsx
-// Primary (default)
+// Primary (default) - solid color, no gradient
 <Button>Primary Action</Button>
-// → bg-gradient-to-r from-cyan-500 to-cyan-600 text-slate-900 shadow-lg shadow-cyan-500/25
+// → bg-cyan-500 text-slate-900 hover:bg-cyan-400 font-semibold
 
 // Outline
 <Button variant="outline">Secondary</Button>
@@ -205,7 +159,11 @@ shadow-lg shadow-cyan-500/25
 
 // Destructive
 <Button variant="destructive">Delete</Button>
-// → bg-rose-600 text-white hover:bg-rose-700
+// → bg-rose-500 text-white hover:bg-rose-600
+
+// Secondary
+<Button variant="secondary">Secondary</Button>
+// → bg-violet-500 text-white hover:bg-violet-400
 ```
 
 ### Badges
@@ -279,6 +237,15 @@ shadow-lg shadow-cyan-500/25
   <X className="h-3 w-3" aria-hidden="true" />
   <span>Absent</span>
 </Badge>
+```
+
+### Progress Bars
+
+```tsx
+// Solid color, no gradient
+<div className="h-2 rounded-full bg-muted overflow-hidden">
+  <div className="h-full rounded-full bg-cyan-500" style={{ width: '75%' }} />
+</div>
 ```
 
 ---
@@ -375,14 +342,14 @@ focus-visible:ring-offset-background
 
 ## Key Rules
 
-1. **Text colors**: Use `text-foreground` for primary, `text-muted-foreground` for secondary
-2. **Accent colors**: Cyan (`cyan-400/500`) for primary, violet (`violet-400/500`) for secondary
-3. **CTAs**: Use gradient `from-cyan-500 to-cyan-600` with `text-slate-900`
-4. **Links**: Use `text-muted-foreground hover:text-cyan-400`
-5. **Cards**: Use glass effect with `bg-card/80 backdrop-blur-sm border-cyan-500/10`
-6. **Transitions**: Always `duration-200` or `duration-300`
-7. **Borders**: Use `border-cyan-500/10` for subtle, `border-cyan-500/30` for emphasis
-8. **Glows**: Use `glow-cyan` for highlighted elements, `shadow-cyan-500/25` for buttons
+1. **No gradients**: Use solid colors only for buttons, backgrounds, and progress bars
+2. **Text colors**: Use `text-foreground` for primary, `text-muted-foreground` for secondary
+3. **Accent colors**: Cyan (`cyan-400/500`) for primary, violet (`violet-400/500`) for secondary
+4. **CTAs**: Use solid `bg-cyan-500` with `text-slate-900`
+5. **Links**: Use `text-muted-foreground hover:text-cyan-400`
+6. **Cards**: Use glass effect with `bg-card/80 backdrop-blur-sm border-cyan-500/10`
+7. **Transitions**: Always `duration-200` or `duration-300`
+8. **Borders**: Use `border-cyan-500/10` for subtle, `border-cyan-500/30` for emphasis
 9. **Spacing**: Generous - sections get `py-20`, cards get `p-6`
 10. **Focus rings**: Use `ring-cyan-500/50`
 11. **Icons**: Always add `aria-hidden="true"` to decorative icons

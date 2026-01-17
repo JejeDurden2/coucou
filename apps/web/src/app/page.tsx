@@ -153,7 +153,7 @@ export default function LandingPage() {
       {/* Navigation */}
       <header className="fixed top-0 left-0 right-0 z-50 border-b border-cyan-500/10 bg-background/80 backdrop-blur-xl">
         <nav className="container mx-auto flex h-16 items-center justify-between px-4">
-          <Link href="/" className="text-xl font-bold gradient-text">
+          <Link href="/" className="text-xl font-bold text-cyan-400">
             Coucou IA
           </Link>
           <div className="hidden md:flex items-center gap-8">
@@ -190,10 +190,6 @@ export default function LandingPage() {
       <main>
         {/* Hero Section */}
         <section className="relative pt-32 pb-20 px-4 overflow-hidden grid-pattern">
-          {/* Background gradient orbs */}
-          <div className="absolute inset-0 bg-gradient-to-b from-cyan-500/5 via-transparent to-transparent" />
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl animate-pulse-slow" />
-          <div className="absolute top-1/3 right-1/4 w-96 h-96 bg-violet-500/10 rounded-full blur-3xl animate-pulse-slow" />
 
           <div className="container mx-auto max-w-5xl text-center relative z-10">
             <Badge className="mb-6" variant="secondary">
@@ -202,7 +198,7 @@ export default function LandingPage() {
             </Badge>
 
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6">
-              <span className="gradient-text">L&apos;IA parle-t-elle</span>
+              <span className="text-cyan-400">L&apos;IA parle-t-elle</span>
               <br />
               de vous ?
             </h1>
@@ -356,10 +352,10 @@ export default function LandingPage() {
               {steps.map((step, index) => (
                 <div key={step.number} className="relative">
                   {index < steps.length - 1 && (
-                    <div className="hidden md:block absolute top-8 left-full w-full h-[2px] bg-gradient-to-r from-cyan-500/50 to-transparent -translate-x-1/2" />
+                    <div className="hidden md:block absolute top-8 left-full w-full h-[2px] bg-cyan-500/30 -translate-x-1/2" />
                   )}
                   <div className="text-center">
-                    <div className="h-16 w-16 rounded-2xl bg-gradient-to-br from-cyan-500/20 to-violet-500/20 border border-cyan-500/20 flex items-center justify-center mx-auto mb-4 text-2xl font-bold text-cyan-400">
+                    <div className="h-16 w-16 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center mx-auto mb-4 text-2xl font-bold text-cyan-400">
                       {step.number}
                     </div>
                     <h3 className="text-lg font-semibold mb-2">{step.title}</h3>
@@ -393,7 +389,7 @@ export default function LandingPage() {
                   key={plan.name}
                   className={
                     plan.popular
-                      ? 'border-cyan-500/50 shadow-lg shadow-cyan-500/10 relative glow-cyan'
+                      ? 'border-cyan-500/50 relative'
                       : ''
                   }
                 >
@@ -471,7 +467,7 @@ export default function LandingPage() {
         {/* CTA Section */}
         <section className="py-20 px-4">
           <div className="container mx-auto max-w-4xl text-center">
-            <div className="rounded-3xl bg-gradient-to-r from-cyan-500/10 via-violet-500/10 to-cyan-500/10 p-12 border border-cyan-500/20 glow-cyan">
+            <div className="rounded-3xl bg-cyan-500/5 p-12 border border-cyan-500/20">
               <Bot className="h-12 w-12 mx-auto mb-6 text-cyan-400" aria-hidden="true" />
               <h2 className="text-3xl md:text-4xl font-bold mb-4">
                 Prêt à être visible par l&apos;IA ?
@@ -501,7 +497,7 @@ export default function LandingPage() {
         <div className="container mx-auto max-w-6xl">
           <div className="grid md:grid-cols-4 gap-8 mb-8">
             <div>
-              <Link href="/" className="text-xl font-bold gradient-text">
+              <Link href="/" className="text-xl font-bold text-cyan-400">
                 Coucou IA
               </Link>
               <p className="text-sm text-muted-foreground mt-2">

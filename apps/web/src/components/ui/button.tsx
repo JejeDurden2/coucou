@@ -9,13 +9,13 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          'bg-gradient-to-r from-cyan-500 to-cyan-600 text-slate-900 hover:from-cyan-400 hover:to-cyan-500 shadow-lg shadow-cyan-500/25 font-semibold',
+          'bg-cyan-500 text-slate-900 hover:bg-cyan-400 font-semibold',
         destructive:
-          'bg-rose-500 text-white hover:bg-rose-600 shadow-lg shadow-rose-500/20',
+          'bg-rose-500 text-white hover:bg-rose-600',
         outline:
           'border border-cyan-500/30 bg-transparent hover:bg-cyan-500/10 hover:border-cyan-500/50 text-foreground',
         secondary:
-          'bg-violet-500 text-white hover:bg-violet-600 shadow-lg shadow-violet-500/20',
+          'bg-violet-500 text-white hover:bg-violet-400',
         ghost: 'hover:bg-cyan-500/10 hover:text-cyan-400',
         link: 'text-cyan-400 underline-offset-4 hover:underline hover:text-cyan-300',
       },

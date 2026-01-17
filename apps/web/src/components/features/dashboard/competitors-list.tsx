@@ -39,7 +39,7 @@ export function CompetitorsList({
                 </div>
                 <div className="h-2 rounded-full bg-muted overflow-hidden">
                   <div
-                    className="h-full rounded-full bg-gradient-to-r from-cyan-500 to-violet-500 transition-all duration-500"
+                    className="h-full rounded-full bg-cyan-500 transition-all duration-500"
                     style={{
                       width: `${(competitor.count / maxCount) * 100}%`,
                     }}
