@@ -12,15 +12,13 @@ async function bootstrap(): Promise<void> {
     .split(',')
     .map((origin) => origin.trim());
 
+  logger.log(`CORS allowed origins: ${allowedOrigins.join(', ')}`);
+
   app.enableCors({
-    origin: (origin, callback) => {
-      if (origin && allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error('Not allowed by CORS'));
-      }
-    },
+    origin: allowedOrigins,
     credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Accept'],
   });
 
   app.useGlobalPipes(
