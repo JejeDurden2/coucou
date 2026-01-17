@@ -22,6 +22,9 @@ export function useCreatePrompt(projectId: string) {
       queryClient.invalidateQueries({
         queryKey: ['projects', projectId, 'prompts'],
       });
+      queryClient.invalidateQueries({
+        queryKey: ['projects', projectId, 'stats'],
+      });
     },
   });
 }
@@ -54,6 +57,9 @@ export function useDeletePrompt(projectId: string) {
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ['projects', projectId, 'prompts'],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['projects', projectId, 'stats'],
       });
     },
   });
