@@ -152,7 +152,7 @@ class ApiClient {
 
   // Dashboard
   async getDashboardStats(projectId: string): Promise<DashboardStats> {
-    return this.fetch<DashboardStats>(`/projects/${projectId}/stats`);
+    return this.fetch<DashboardStats>(`/projects/${projectId}/dashboard`);
   }
 
   // Billing
