@@ -2,7 +2,14 @@
 
 import { useAuth } from '@/lib/auth-context';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Check } from 'lucide-react';
 
@@ -11,51 +18,38 @@ const plans = [
     name: 'Free',
     price: '0',
     description: 'Pour découvrir',
-    features: ['1 projet', '3 prompts', 'Scans manuels', 'Rétention 30 jours'],
-    current: true,
+    features: [
+      '1 projet',
+      '3 prompts / projet',
+      'Scans manuels uniquement',
+      'Historique 30 jours',
+    ],
   },
   {
     name: 'Solo',
-    price: '39',
+    price: '29',
     description: 'Pour les indépendants',
     features: [
-      '3 projets',
-      '15 prompts / projet',
-      'Scans hebdomadaires',
-      'Rétention 1 an',
+      '5 projets',
+      '20 prompts / projet',
+      'Scans automatiques hebdo',
+      'Historique 6 mois',
       'Support email',
     ],
-    current: false,
   },
   {
     name: 'Pro',
-    price: '99',
-    description: 'Pour les PME',
+    price: '79',
+    description: 'Pour les équipes',
     features: [
-      '10 projets',
+      '15 projets',
       '50 prompts / projet',
-      'Scans hebdomadaires',
-      'Rétention 1 an',
+      'Scans automatiques quotidiens',
+      'Historique illimité',
       'Support prioritaire',
-      'Export des données',
+      'Export CSV / API',
     ],
-    current: false,
     popular: true,
-  },
-  {
-    name: 'Agency',
-    price: '249',
-    description: 'Pour les agences',
-    features: [
-      '25 projets',
-      '150 prompts / projet',
-      'Scans quotidiens',
-      'Rétention 1 an',
-      'Support dédié',
-      'API access',
-      'White label',
-    ],
-    current: false,
   },
 ];
 
@@ -71,17 +65,17 @@ export default function BillingPage() {
   return (
     <div>
       <h1 className="text-2xl font-bold mb-2">Facturation</h1>
-      <p className="text-muted-foreground mb-6">
+      <p className="text-muted-foreground mb-8">
         Gérez votre abonnement et consultez vos factures
       </p>
 
-      <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid md:grid-cols-3 gap-6 max-w-4xl">
         {plans.map((plan) => {
           const isCurrent = plan.name.toUpperCase() === currentPlan;
           return (
             <Card
               key={plan.name}
-              className={plan.popular ? 'border-cyan-500/50 relative' : ''}
+              className={`flex flex-col ${plan.popular ? 'border-cyan-500/50 relative' : ''}`}
             >
               {plan.popular && (
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2">
@@ -91,9 +85,7 @@ export default function BillingPage() {
               <CardHeader>
                 <CardTitle className="flex items-center justify-between">
                   {plan.name}
-                  {isCurrent && (
-                    <Badge variant="secondary">Actuel</Badge>
-                  )}
+                  {isCurrent && <Badge variant="secondary">Actuel</Badge>}
                 </CardTitle>
                 <div className="mt-2">
                   <span className="text-3xl font-bold">{plan.price}€</span>
@@ -101,15 +93,17 @@ export default function BillingPage() {
                 </div>
                 <CardDescription>{plan.description}</CardDescription>
               </CardHeader>
-              <CardContent>
-                <ul className="space-y-2 mb-4">
+              <CardContent className="flex-1">
+                <ul className="space-y-2">
                   {plan.features.map((feature) => (
                     <li key={feature} className="flex items-center gap-2 text-sm">
-                      <Check className="h-4 w-4 text-cyan-400" />
+                      <Check className="h-4 w-4 text-cyan-400 shrink-0" />
                       {feature}
                     </li>
                   ))}
                 </ul>
+              </CardContent>
+              <CardFooter>
                 {isCurrent ? (
                   <Button variant="outline" className="w-full" disabled>
                     Plan actuel
@@ -120,10 +114,10 @@ export default function BillingPage() {
                     variant={plan.popular ? 'default' : 'outline'}
                     onClick={() => handleUpgrade(plan.name)}
                   >
-                    {plan.price === '0' ? 'Downgrader' : 'Upgrader'}
+                    {plan.price === '0' ? 'Downgrader' : 'Choisir'}
                   </Button>
                 )}
-              </CardContent>
+              </CardFooter>
             </Card>
           );
         })}
