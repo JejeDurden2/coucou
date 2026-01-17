@@ -1,15 +1,15 @@
-# Design System - Beyond
+# Design System - Coucou IA
 
 ## Philosophy
 
-**Refined and premium** while keeping a serious, trustworthy tone. Think private banking, not startup.
+**Modern, technological, and smart** - A dark-mode SaaS aesthetic for AI visibility tracking. Think futuristic dashboard, not corporate software.
 
 ### Design Principles
 
-- **Quiet confidence**: Navy and gold convey trust and heritage
-- **Depth through subtlety**: Soft shadows, fine borders, layered surfaces
-- **Intentional whitespace**: Generous padding, content breathes
-- **Micro-interactions**: Smooth transitions that feel expensive
+- **Tech-forward**: Cyan and violet convey AI and innovation
+- **Depth through glow**: Subtle glows and glass effects create dimension
+- **Dark-first**: Deep space backgrounds let content shine
+- **Smooth motion**: Transitions that feel premium
 
 ---
 
@@ -19,44 +19,67 @@
 
 ```css
 :root {
-  /* Beyond Brand Colors */
-  --navy-deep: 217 69% 30%; /* #173C7F - textes, headers */
-  --navy-light: 215 56% 46%; /* #3262B7 - liens, textes secondaires */
-  --gold-heritage: 43 86% 38%; /* #B8860B - accents, CTAs, bordures actives */
-  --gold-soft: 43 64% 56%; /* #D4A84B - hovers, highlights */
-  --cream: 43 50% 98%; /* #FDFBF7 - background principal */
-  --warm-gray: 40 22% 96%; /* #F7F5F2 - cards, sections alternees */
-  --slate: 215 16% 47%; /* #64748b - texte body */
+  /* Coucou IA Brand Colors */
+  --background: 8 10 18;           /* #080a12 - deep space black */
+  --foreground: 237 242 247;       /* #edf2f7 - primary text */
+  --card: 15 20 35;                /* #0f1423 - card backgrounds */
+  --card-foreground: 237 242 247;  /* #edf2f7 - card text */
+
+  --primary: 6 182 212;            /* #06b6d4 - cyan-500, CTAs */
+  --primary-foreground: 8 10 18;   /* #080a12 - text on primary */
+  --secondary: 139 92 246;         /* #8b5cf6 - violet-500, accents */
+  --secondary-foreground: 237 242 247;
+
+  --success: 34 197 94;            /* #22c55e - emerald-500 */
+  --destructive: 244 63 94;        /* #f43f5e - rose-500 */
+
+  --muted: 30 40 60;               /* #1e283c - muted backgrounds */
+  --muted-foreground: 148 163 184; /* #94a3b8 - slate-400, secondary text */
+
+  --border: 30 40 60;              /* #1e283c - default borders */
+  --input: 20 30 50;               /* #141e32 - input backgrounds */
+  --ring: 6 182 212;               /* #06b6d4 - focus rings */
+  --accent: 30 40 60;              /* #1e283c - accent backgrounds */
 }
 ```
 
 ### Semantic Mappings
 
-| Semantic Token       | Maps To       | Usage                 |
-| -------------------- | ------------- | --------------------- |
-| `primary`            | navy-deep     | Main text, headers    |
-| `primary-foreground` | cream         | Text on primary bg    |
-| `secondary`          | warm-gray     | Secondary backgrounds |
-| `accent`             | gold-heritage | CTAs, active states   |
-| `background`         | cream         | Main background       |
-| `foreground`         | navy-deep     | Body text             |
-| `muted`              | warm-gray     | Muted backgrounds     |
-| `muted-foreground`   | slate         | Muted text            |
+| Semantic Token       | RGB Value       | Hex       | Usage                    |
+| -------------------- | --------------- | --------- | ------------------------ |
+| `primary`            | 6 182 212       | #06b6d4   | CTAs, links, focus rings |
+| `secondary`          | 139 92 246      | #8b5cf6   | Accents, badges          |
+| `success`            | 34 197 94       | #22c55e   | Cited states             |
+| `destructive`        | 244 63 94       | #f43f5e   | Absent states, errors    |
+| `background`         | 8 10 18         | #080a12   | Page background          |
+| `foreground`         | 237 242 247     | #edf2f7   | Primary text             |
+| `muted-foreground`   | 148 163 184     | #94a3b8   | Secondary text           |
 
 ### Tailwind Usage
 
 ```tsx
-// Primary button (gold CTA)
-<button className="bg-gold-heritage text-cream hover:bg-gold-soft">
+// Primary button (cyan gradient)
+<Button>Get Started</Button>
+// → bg-gradient-to-r from-cyan-500 to-cyan-600 text-slate-900
+
+// Outline button
+<Button variant="outline">Learn More</Button>
+// → border border-cyan-500/30 hover:bg-cyan-500/10
 
 // Links
-<a className="text-navy-light hover:text-gold-heritage">
+<a className="text-muted-foreground hover:text-cyan-400 transition-colors">
 
 // Cards
-<div className="bg-warm-gray border-border/50">
+<Card>
+// → bg-card/80 backdrop-blur-sm border-cyan-500/10
 
-// Headings
-<h1 className="text-navy-deep font-serif-brand">
+// Accent text
+<span className="text-cyan-400">
+<span className="text-violet-400">
+
+// Gradient text
+<h1 className="gradient-text">
+// → bg-gradient-to-r from-cyan-400 via-blue-500 to-violet-500 bg-clip-text text-transparent
 ```
 
 ---
@@ -65,166 +88,224 @@
 
 ### Fonts
 
-- **Serif (headings)**: Georgia, 'Times New Roman', serif - via `font-serif-brand`
-- **Sans (body)**: Inter via `--font-sans`
-- **Display**: Fraunces via `--font-display` (alternate for special headings)
+| Family              | Variable         | Usage                  | Weights         |
+| ------------------- | ---------------- | ---------------------- | --------------- |
+| **Inter**           | `--font-sans`    | Body text, UI          | 400, 500, 600, 700 |
+| **Space Grotesk**   | `--font-display` | Headings, titles       | 400, 500, 600, 700 |
+| **JetBrains Mono**  | `--font-mono`    | Code, data, technical  | 400, 500, 600 |
 
-### Font Sizes (Tailwind)
+### Tailwind Classes
 
-```typescript
-fontSize: {
-  'display-lg': ['3.5rem', { lineHeight: '1.1', letterSpacing: '-0.02em' }],
-  'display': ['2.5rem', { lineHeight: '1.15', letterSpacing: '-0.02em' }],
-  'display-sm': ['1.875rem', { lineHeight: '1.2', letterSpacing: '-0.01em' }],
+```tsx
+<p className="font-sans">Body text with Inter</p>
+<h1 className="font-display">Heading with Space Grotesk</h1>
+<code className="font-mono">Code with JetBrains Mono</code>
+```
+
+### Type Scale
+
+| Size  | Class      | Usage              |
+| ----- | ---------- | ------------------ |
+| 48px  | `text-5xl` | Hero titles        |
+| 36px  | `text-4xl` | Page titles        |
+| 30px  | `text-3xl` | Section titles, stat values |
+| 24px  | `text-2xl` | Card titles        |
+| 20px  | `text-xl`  | Subsections        |
+| 18px  | `text-lg`  | Large body         |
+| 16px  | `text-base`| Body text          |
+| 14px  | `text-sm`  | Secondary text, labels |
+| 12px  | `text-xs`  | Captions, badges   |
+
+---
+
+## Gradients
+
+### Primary Gradient (CTAs)
+
+```css
+bg-gradient-to-r from-cyan-500 to-cyan-600
+```
+
+### Accent Gradient (Decorative)
+
+```css
+bg-gradient-to-r from-cyan-400 via-blue-500 to-violet-500
+```
+
+### Background Orbs
+
+```css
+/* Cyan orb */
+bg-cyan-500/10 rounded-full blur-3xl
+
+/* Violet orb */
+bg-violet-500/10 rounded-full blur-3xl
+```
+
+---
+
+## Glow Effects
+
+```css
+/* Cyan glow - for primary elements */
+.glow-cyan {
+  box-shadow: 0 0 20px rgb(6 182 212 / 0.3), 0 0 40px rgb(6 182 212 / 0.1);
 }
-```
 
-### Usage
-
-```tsx
-<h1 className="font-serif-brand text-display-lg text-navy-deep">Hero Title</h1>
-<h2 className="font-serif-brand text-display-sm text-navy-deep">Section Title</h2>
-<p className="text-slate text-lg leading-relaxed">Body text</p>
-```
-
----
-
-## Logo
-
-The `Logo` component in `components/ui/Logo.tsx` supports three variants:
-
-```tsx
-import { Logo } from '@/components/ui';
-
-<Logo variant="full" />     // Full logo with symbol + text (default)
-<Logo variant="symbol" />   // Symbol only (for mobile/favicon)
-<Logo variant="text" />     // Text only with underline
-```
-
----
-
-## Shadows
-
-```typescript
-boxShadow: {
-  'soft': '0 2px 8px -2px rgba(0,0,0,0.05), 0 4px 16px -4px rgba(0,0,0,0.05)',
-  'soft-md': '0 4px 12px -4px rgba(0,0,0,0.08), 0 8px 24px -8px rgba(0,0,0,0.06)',
-  'soft-lg': '0 8px 24px -8px rgba(0,0,0,0.1), 0 16px 48px -16px rgba(0,0,0,0.08)',
-  'inner-soft': 'inset 0 2px 4px 0 rgba(0,0,0,0.02)',
+/* Violet glow - for secondary elements */
+.glow-violet {
+  box-shadow: 0 0 20px rgb(139 92 246 / 0.3), 0 0 40px rgb(139 92 246 / 0.1);
 }
+
+/* Button glow */
+shadow-lg shadow-cyan-500/25
 ```
 
 ---
 
-## Glassmorphism
+## Glass Effects
 
-Our premium aesthetic uses glassmorphism for cards, modals, and elevated UI elements. This creates depth while maintaining the refined, trustworthy feel.
-
-### Core Principles
-
-1. **Layered structure**: Gradient background -> Glass overlay -> Border -> Content
-2. **Subtle colors**: Use very low opacity color tints (40-60%)
-3. **Soft blur**: `backdrop-blur-[2px]` for subtle, `backdrop-blur-md` for modals
-4. **White overlay**: Semi-transparent white creates the frosted effect
-5. **Colored glow**: Subtle colored shadows add depth without harshness
-
-### Glass Card Pattern
+### Card Glass
 
 ```tsx
-<div className="relative rounded-2xl overflow-hidden shadow-lg">
-  {/* 1. Gradient background with color tint */}
-  <div className="absolute inset-0 bg-gradient-to-br from-amber-50/40 via-orange-50/20 to-white/10" />
-
-  {/* 2. Glass overlay */}
-  <div className="absolute inset-0 bg-white/30 backdrop-blur-[2px]" />
-
-  {/* 3. Subtle border */}
-  <div className="absolute inset-0 rounded-2xl border border-white/40" />
-
-  {/* 4. Content */}
-  <div className="relative p-6">{children}</div>
-</div>
+<Card>
+// → rounded-xl border border-cyan-500/10 bg-[rgb(15_20_35/0.8)] backdrop-blur-sm
 ```
 
-### Glass Accent Colors
-
-| Accent  | Gradient                                        | Border                  | Glow                    |
-| ------- | ----------------------------------------------- | ----------------------- | ----------------------- |
-| neutral | `from-slate-50/40 via-gray-50/20 to-white/10`   | `border-white/40`       | none                    |
-| gold    | `from-amber-50/40 via-orange-50/20 to-white/10` | `border-amber-100/20`   | `shadow-amber-100/10`   |
-| emerald | `from-emerald-50/40 via-teal-50/20 to-white/10` | `border-emerald-100/20` | `shadow-emerald-100/10` |
-| amber   | `from-amber-50/50 via-yellow-50/25 to-white/10` | `border-amber-200/30`   | `shadow-amber-100/15`   |
-
-### Using BentoCard with Glass
+### Navigation Glass
 
 ```tsx
-import { BentoCard } from '@/components/features/dashboard';
-
-// Default glass (neutral)
-<BentoCard>Content</BentoCard>
-
-// Gold accent (keepsakes, CTAs)
-<BentoCard glassAccent="gold">Content</BentoCard>
-
-// Emerald accent (success states)
-<BentoCard glassAccent="emerald">Content</BentoCard>
-
-// Solid variant (no glass, original styling)
-<BentoCard variant="solid">Content</BentoCard>
+<header className="bg-background/80 backdrop-blur-xl border-b border-cyan-500/10">
 ```
 
-### Glass Modal Pattern
+### Section Background
 
 ```tsx
-<div className="fixed inset-0 bg-navy-deep/30 backdrop-blur-sm flex items-center justify-center">
-  <div className="relative rounded-2xl overflow-hidden shadow-xl max-w-md">
-    {/* Glass background - stronger blur for modals */}
-    <div className="absolute inset-0 bg-gradient-to-br from-slate-50/80 via-gray-50/60 to-white/40" />
-    <div className="absolute inset-0 bg-white/50 backdrop-blur-md" />
-    <div className="absolute inset-0 rounded-2xl border border-white/60" />
-
-    {/* Content */}
-    <div className="relative p-6">{children}</div>
-  </div>
-</div>
+<section className="bg-[rgb(12_15_25)]">
 ```
 
-### Glass Icon Container
+---
+
+## Component Patterns
+
+### Buttons
 
 ```tsx
-<div className="w-10 h-10 rounded-full bg-gold-heritage/10 backdrop-blur-sm border border-gold-heritage/20 flex items-center justify-center">
-  <Icon className="w-5 h-5 text-gold-heritage" />
-</div>
+// Primary (default)
+<Button>Primary Action</Button>
+// → bg-gradient-to-r from-cyan-500 to-cyan-600 text-slate-900 shadow-lg shadow-cyan-500/25
+
+// Outline
+<Button variant="outline">Secondary</Button>
+// → border border-cyan-500/30 bg-transparent hover:bg-cyan-500/10
+
+// Ghost
+<Button variant="ghost">Subtle</Button>
+// → hover:bg-cyan-500/10 hover:text-cyan-400
+
+// Destructive
+<Button variant="destructive">Delete</Button>
+// → bg-rose-600 text-white hover:bg-rose-700
 ```
 
-### When to Use Glassmorphism
+### Badges
 
-**Use glass for:**
+```tsx
+// Default (cyan)
+<Badge>Default</Badge>
+// → bg-cyan-500/20 text-cyan-400 border border-cyan-500/30
 
-- Dashboard cards (BentoCard)
-- Keepsake cards
-- Modal dialogs
-- Floating panels
-- Status badges
-- Icon containers
+// Secondary (violet)
+<Badge variant="secondary">Secondary</Badge>
+// → bg-violet-500/20 text-violet-400 border border-violet-500/30
 
-**Keep solid for:**
+// Success (emerald)
+<Badge variant="success">Cité #1</Badge>
+// → bg-emerald-500/20 text-emerald-400 border border-emerald-500/30
 
-- Form inputs (need clear boundaries)
-- Primary buttons (need visual weight)
-- Navigation (already has blur)
-- Footer (grounding element)
+// Destructive (rose)
+<Badge variant="destructive">Absent</Badge>
+// → bg-rose-500/20 text-rose-400 border border-rose-500/30
+```
+
+### Cards
+
+```tsx
+<Card>
+  <CardHeader>
+    <CardTitle>Title</CardTitle>
+  </CardHeader>
+  <CardContent>Content</CardContent>
+</Card>
+// → rounded-xl border-cyan-500/10 bg-card/80 backdrop-blur-sm hover:border-cyan-500/20
+```
+
+### Inputs
+
+```tsx
+<Input placeholder="Email" />
+// → bg-input border-border rounded-lg focus:ring-2 focus:ring-cyan-500/50
+```
+
+### Stat Card
+
+```tsx
+<Card>
+  <CardContent className="p-6">
+    <div className="flex items-start justify-between">
+      <div className="space-y-2">
+        <p className="text-sm text-muted-foreground">Label</p>
+        <p className="text-3xl font-bold tracking-tight">42%</p>
+      </div>
+      <div className="rounded-xl bg-cyan-500/10 p-3 border border-cyan-500/20">
+        <Icon className="h-6 w-6 text-cyan-400" />
+      </div>
+    </div>
+  </CardContent>
+</Card>
+```
+
+### Citation Badge
+
+```tsx
+// Cited
+<Badge variant="success" className="gap-1">
+  <Check className="h-3 w-3" aria-hidden="true" />
+  <span>Cité #1</span>
+</Badge>
+
+// Absent
+<Badge variant="destructive" className="gap-1">
+  <X className="h-3 w-3" aria-hidden="true" />
+  <span>Absent</span>
+</Badge>
+```
+
+---
+
+## Spacing
+
+| Scale | Value | Usage           |
+| ----- | ----- | --------------- |
+| `1`   | 4px   | Tight spacing   |
+| `2`   | 8px   | Element gaps    |
+| `3`   | 12px  | Small padding   |
+| `4`   | 16px  | Default padding |
+| `6`   | 24px  | Section padding |
+| `8`   | 32px  | Large gaps      |
+| `12`  | 48px  | Section margins |
+| `16`  | 64px  | Page sections   |
 
 ---
 
 ## Border Radius
 
-```typescript
-borderRadius: {
-  xl: '1rem',
-  '2xl': '1.25rem',
-}
-```
+| Token         | Value   | Usage           |
+| ------------- | ------- | --------------- |
+| `--radius`    | 12px    | Base radius     |
+| `rounded-lg`  | 12px    | Cards, modals   |
+| `rounded-xl`  | 16px    | Large cards     |
+| `rounded-full`| 9999px  | Pills, avatars  |
 
 ---
 
@@ -234,98 +315,74 @@ borderRadius: {
 animation: {
   'fade-in': 'fadeIn 0.5s ease-out',
   'slide-up': 'slideUp 0.5s ease-out',
+  'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
 }
 ```
 
-All interactive elements use `transition-all duration-200 ease-out`.
-
----
-
-## Component Patterns
-
-### Cards
+### Transitions
 
 ```tsx
-<div className="bg-warm-gray rounded-2xl border border-border/50 shadow-soft p-8 transition-shadow duration-200 ease-out hover:shadow-soft-md">
-  {/* content */}
-</div>
-```
-
-### Primary Button (Gold CTA)
-
-```tsx
-<button className="bg-gold-heritage text-cream hover:bg-gold-soft rounded-xl px-8 py-4 font-medium shadow-soft transition-all duration-200 ease-out hover:shadow-soft-md">
-  Get Started
-</button>
-```
-
-### Secondary Button
-
-```tsx
-<button className="border border-border/60 text-foreground rounded-xl px-8 py-4 font-medium transition-colors duration-200 ease-out hover:bg-muted/50">
-  Learn More
-</button>
-```
-
-### Links
-
-```tsx
-<a className="text-navy-light hover:text-gold-heritage transition-colors duration-200 ease-out">
-  Click here
-</a>
-```
-
-### Inputs
-
-```tsx
-<input className="rounded-xl border-border/60 bg-background px-4 py-3 shadow-inner-soft focus:border-gold-heritage focus:ring-gold-heritage/50 transition-colors" />
-```
-
-### Section Spacing
-
-```tsx
-<section className="py-24 px-6">
-  <div className="max-w-4xl mx-auto space-y-16">{/* content */}</div>
-</section>
-```
-
-### Header/Navbar
-
-```tsx
-<header className="border-b border-warm-gray bg-cream/80 backdrop-blur-sm sticky top-0 z-50">
+transition-colors   // Color changes
+transition-all      // All properties
+duration-200        // Fast (200ms)
+duration-300        // Normal (300ms)
+duration-500        // Slow (500ms)
 ```
 
 ---
 
-## Selection Styling
+## Dark Mode
+
+This design system is **dark-mode only**. The color scheme meta tag is set:
+
+```tsx
+<meta name="color-scheme" content="dark" />
+<meta name="theme-color" content="#080a12" />
+```
+
+---
+
+## Accessibility
+
+### Color Contrast
+
+- Primary text (`foreground`) on background: >7:1
+- Secondary text (`muted-foreground`) on background: >4.5:1
+- Interactive elements have clear focus states
+
+### Focus States
 
 ```css
-::selection {
-  @apply bg-gold-heritage/20 text-foreground;
+focus-visible:outline-none
+focus-visible:ring-2
+focus-visible:ring-cyan-500/50
+focus-visible:ring-offset-2
+focus-visible:ring-offset-background
+```
+
+### Reduced Motion
+
+```css
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
 }
-```
-
----
-
-## Focus Rings
-
-```css
-focus:ring-gold-heritage/50
-focus:border-gold-heritage
 ```
 
 ---
 
 ## Key Rules
 
-1. **Headings**: Always use `font-serif-brand` for h1, h2
-2. **CTAs**: Use `bg-gold-heritage` with `text-cream`
-3. **Links**: Use `text-navy-light hover:text-gold-heritage`
-4. **Cards**: Use glassmorphism (BentoCard) for dashboard cards, keepsakes
-5. **Modals**: Use glass pattern with `backdrop-blur-md` and layered structure
-6. **Transitions**: Always `duration-200 ease-out`
-7. **Borders**: Use `border-white/40` for glass, `border-border/50` for solid
-8. **Shadows**: Replace harsh shadows with `shadow-soft` variants
-9. **Spacing**: Generous - sections get `py-24`, cards get `p-6`
-10. **Focus states**: Use `ring-gold-heritage/50`
-11. **Glass accents**: Use gold for keepsakes/CTAs, emerald for success, amber for warnings
+1. **Text colors**: Use `text-foreground` for primary, `text-muted-foreground` for secondary
+2. **Accent colors**: Cyan (`cyan-400/500`) for primary, violet (`violet-400/500`) for secondary
+3. **CTAs**: Use gradient `from-cyan-500 to-cyan-600` with `text-slate-900`
+4. **Links**: Use `text-muted-foreground hover:text-cyan-400`
+5. **Cards**: Use glass effect with `bg-card/80 backdrop-blur-sm border-cyan-500/10`
+6. **Transitions**: Always `duration-200` or `duration-300`
+7. **Borders**: Use `border-cyan-500/10` for subtle, `border-cyan-500/30` for emphasis
+8. **Glows**: Use `glow-cyan` for highlighted elements, `shadow-cyan-500/25` for buttons
+9. **Spacing**: Generous - sections get `py-20`, cards get `p-6`
+10. **Focus rings**: Use `ring-cyan-500/50`
+11. **Icons**: Always add `aria-hidden="true"` to decorative icons
