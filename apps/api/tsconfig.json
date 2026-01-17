@@ -1,5 +1,5 @@
 {
-  "extends": "@app/config/typescript/base",
+  "extends": "@coucou-ia/config/typescript/base",
   "compilerOptions": {
     "module": "commonjs",
     "moduleResolution": "node",

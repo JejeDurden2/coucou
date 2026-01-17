@@ -1,5 +1,5 @@
 {
-  "name": "@app/shared",
+  "name": "@coucou-ia/shared",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -21,7 +21,7 @@
     "zod": "^4.3.5"
   },
   "devDependencies": {
-    "@app/config": "workspace:*",
+    "@coucou-ia/config": "workspace:*",
     "typescript": "^5.7.2"
   }
 }

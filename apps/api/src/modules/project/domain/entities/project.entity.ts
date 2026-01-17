@@ -1,0 +1,67 @@
+export interface ProjectProps {
+  id: string;
+  userId: string;
+  name: string;
+  brandName: string;
+  brandVariants: string[];
+  domain: string | null;
+  lastScannedAt: Date | null;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export class Project {
+  private constructor(private readonly props: ProjectProps) {}
+
+  static create(props: ProjectProps): Project {
+    return new Project(props);
+  }
+
+  static fromPersistence(data: ProjectProps): Project {
+    return new Project(data);
+  }
+
+  get id(): string {
+    return this.props.id;
+  }
+
+  get userId(): string {
+    return this.props.userId;
+  }
+
+  get name(): string {
+    return this.props.name;
+  }
+
+  get brandName(): string {
+    return this.props.brandName;
+  }
+
+  get brandVariants(): string[] {
+    return this.props.brandVariants;
+  }
+
+  get domain(): string | null {
+    return this.props.domain;
+  }
+
+  get lastScannedAt(): Date | null {
+    return this.props.lastScannedAt;
+  }
+
+  get createdAt(): Date {
+    return this.props.createdAt;
+  }
+
+  get updatedAt(): Date {
+    return this.props.updatedAt;
+  }
+
+  belongsTo(userId: string): boolean {
+    return this.props.userId === userId;
+  }
+
+  toJSON(): ProjectProps {
+    return { ...this.props };
+  }
+}

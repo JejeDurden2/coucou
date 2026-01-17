@@ -10,7 +10,7 @@ Monorepo full-stack application with React frontend and NestJS backend, followin
 
 - **Framework**: React 18+ with TypeScript (strict mode)
 - **Build Tool**: Next.js 16+ (App Router)
-- **Styling**: Tailwind CSS + shadcn/ui (optional)
+- **Styling**: Tailwind CSS + shadcn/ui
 - **Deployment**: Vercel
 - **State**: TanStack Query for server state, Zustand for client state
 - **Testing**: Vitest + Testing Library

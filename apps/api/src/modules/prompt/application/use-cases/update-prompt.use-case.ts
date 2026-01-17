@@ -1,0 +1,48 @@
+import { Inject, Injectable } from '@nestjs/common';
+
+import { ForbiddenError, NotFoundError, Result } from '../../../../common';
+import { PROJECT_REPOSITORY, type ProjectRepository } from '../../../project';
+import { PROMPT_REPOSITORY, type PromptRepository } from '../../domain';
+import type { PromptResponseDto, UpdatePromptDto } from '../dto/prompt.dto';
+
+type UpdatePromptError = NotFoundError | ForbiddenError;
+
+@Injectable()
+export class UpdatePromptUseCase {
+  constructor(
+    @Inject(PROMPT_REPOSITORY)
+    private readonly promptRepository: PromptRepository,
+    @Inject(PROJECT_REPOSITORY)
+    private readonly projectRepository: ProjectRepository,
+  ) {}
+
+  async execute(
+    promptId: string,
+    userId: string,
+    dto: UpdatePromptDto,
+  ): Promise<Result<PromptResponseDto, UpdatePromptError>> {
+    const prompt = await this.promptRepository.findById(promptId);
+
+    if (!prompt) {
+      return Result.err(new NotFoundError('Prompt', promptId));
+    }
+
+    const project = await this.projectRepository.findById(prompt.projectId);
+
+    if (!project || !project.belongsTo(userId)) {
+      return Result.err(new ForbiddenError('You do not have access to this prompt'));
+    }
+
+    const updated = await this.promptRepository.update(promptId, dto);
+
+    return Result.ok({
+      id: updated.id,
+      projectId: updated.projectId,
+      content: updated.content,
+      category: updated.category,
+      isActive: updated.isActive,
+      createdAt: updated.createdAt,
+      updatedAt: updated.updatedAt,
+    });
+  }
+}

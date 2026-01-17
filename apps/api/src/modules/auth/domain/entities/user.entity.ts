@@ -1,0 +1,68 @@
+import type { Plan } from '@prisma/client';
+
+export interface UserProps {
+  id: string;
+  email: string;
+  name: string;
+  password: string;
+  plan: Plan;
+  stripeCustomerId: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export class User {
+  private constructor(private readonly props: UserProps) {}
+
+  static create(props: UserProps): User {
+    return new User(props);
+  }
+
+  static fromPersistence(data: UserProps): User {
+    return new User(data);
+  }
+
+  get id(): string {
+    return this.props.id;
+  }
+
+  get email(): string {
+    return this.props.email;
+  }
+
+  get name(): string {
+    return this.props.name;
+  }
+
+  get password(): string {
+    return this.props.password;
+  }
+
+  get plan(): Plan {
+    return this.props.plan;
+  }
+
+  get stripeCustomerId(): string | null {
+    return this.props.stripeCustomerId;
+  }
+
+  get createdAt(): Date {
+    return this.props.createdAt;
+  }
+
+  get updatedAt(): Date {
+    return this.props.updatedAt;
+  }
+
+  toJSON(): Omit<UserProps, 'password'> {
+    return {
+      id: this.props.id,
+      email: this.props.email,
+      name: this.props.name,
+      plan: this.props.plan,
+      stripeCustomerId: this.props.stripeCustomerId,
+      createdAt: this.props.createdAt,
+      updatedAt: this.props.updatedAt,
+    };
+  }
+}

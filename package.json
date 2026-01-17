@@ -1,5 +1,5 @@
 {
-  "name": "fullstack-boilerplate",
+  "name": "coucou-ia",
   "version": "0.1.0",
   "private": true,
   "packageManager": "pnpm@9.15.0",
@@ -13,11 +13,11 @@
     "type-check": "turbo run type-check",
     "format": "prettier --write \"**/*.{ts,tsx,js,json,md}\"",
     "format:check": "prettier --check \"**/*.{ts,tsx,js,json,md}\"",
-    "db:generate": "pnpm --filter @app/api db:generate",
-    "db:migrate": "pnpm --filter @app/api db:migrate",
-    "db:deploy": "pnpm --filter @app/api db:deploy",
-    "db:push": "pnpm --filter @app/api db:push",
-    "db:studio": "pnpm --filter @app/api db:studio",
+    "db:generate": "pnpm --filter @coucou-ia/api db:generate",
+    "db:migrate": "pnpm --filter @coucou-ia/api db:migrate",
+    "db:deploy": "pnpm --filter @coucou-ia/api db:deploy",
+    "db:push": "pnpm --filter @coucou-ia/api db:push",
+    "db:studio": "pnpm --filter @coucou-ia/api db:studio",
     "prepare": "husky"
   },
   "devDependencies": {
