@@ -69,7 +69,7 @@ export class PromptController {
     return result.value;
   }
 
-  @Patch('prompts/:id')
+  @Patch('projects/:projectId/prompts/:id')
   async update(
     @Param('id') id: string,
     @CurrentUser() user: AuthenticatedUser,
@@ -84,7 +84,7 @@ export class PromptController {
     return result.value;
   }
 
-  @Delete('prompts/:id')
+  @Delete('projects/:projectId/prompts/:id')
   @HttpCode(HttpStatus.NO_CONTENT)
   async delete(@Param('id') id: string, @CurrentUser() user: AuthenticatedUser) {
     const result = await this.deletePromptUseCase.execute(id, user.id);

@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import {
-  LayoutDashboard,
   FolderKanban,
   Settings,
   LogOut,
@@ -16,9 +15,8 @@ import { Logo } from '@/components/ui/logo';
 import { cn } from '@/lib/utils';
 
 const navigation = [
-  { name: 'Dashboard', href: '/projects', icon: LayoutDashboard },
   { name: 'Projets', href: '/projects', icon: FolderKanban },
-  { name: 'Facturation', href: '/settings/billing', icon: CreditCard },
+  { name: 'Facturation', href: '/billing', icon: CreditCard },
   { name: 'Paramètres', href: '/settings', icon: Settings },
 ];
 
