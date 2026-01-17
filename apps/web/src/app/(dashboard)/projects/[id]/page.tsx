@@ -237,7 +237,7 @@ export default function ProjectDashboardPage({ params }: ProjectDashboardPagePro
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="h-8 w-8 text-muted-foreground hover:text-rose-400"
+                        className="h-8 w-8 text-muted-foreground hover:text-red-500"
                         onClick={() => handleDeletePrompt(prompt.promptId)}
                         aria-label="Supprimer ce prompt"
                       >
@@ -310,7 +310,7 @@ interface TrendIndicatorProps {
 
 function TrendIndicator({ value, isPositive }: TrendIndicatorProps): React.ReactNode {
   const Icon = isPositive ? TrendingUp : TrendingDown;
-  const colorClass = isPositive ? 'text-emerald-400' : 'text-rose-400';
+  const colorClass = isPositive ? 'text-emerald-500' : 'text-red-500';
   const prefix = isPositive ? '+' : '';
 
   return (
@@ -337,7 +337,7 @@ function CitationStatus({ result }: CitationStatusProps): React.ReactNode {
 
   if (result.isCited) {
     return (
-      <span className="inline-flex items-center gap-1 text-emerald-400">
+      <span className="inline-flex items-center gap-1 text-emerald-500">
         <Check className="h-4 w-4" aria-hidden="true" />
         {result.position ? (
           <span className="text-xs font-medium">#{result.position}</span>
@@ -347,7 +347,7 @@ function CitationStatus({ result }: CitationStatusProps): React.ReactNode {
   }
 
   return (
-    <span className="inline-flex items-center text-rose-400">
+    <span className="inline-flex items-center text-red-500">
       <X className="h-4 w-4" aria-hidden="true" />
     </span>
   );

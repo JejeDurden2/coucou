@@ -37,9 +37,9 @@ export default function ProjectsPage(): React.ReactNode {
 
       {!canCreateProject ? (
         <div className="rounded-lg border border-amber-500/30 bg-amber-500/5 px-4 py-3">
-          <p className="text-sm text-amber-300">
+          <p className="text-sm text-amber-500">
             Limite atteinte.{' '}
-            <Link href="/billing" className="underline hover:text-amber-200">
+            <Link href="/billing" className="underline hover:text-amber-400">
               Passez à un plan supérieur
             </Link>{' '}
             pour créer plus de projets.

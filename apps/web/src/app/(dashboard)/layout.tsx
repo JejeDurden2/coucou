@@ -128,7 +128,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps): Rea
                   Facturation
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={handleLogout} className="text-rose-400">
+                <DropdownMenuItem onClick={handleLogout} className="text-red-500">
                   <LogOut className="mr-2 h-4 w-4" aria-hidden="true" />
                   Déconnexion
                 </DropdownMenuItem>

@@ -73,10 +73,10 @@ const plans = [
     price: '39',
     description: 'Pour les indépendants',
     features: [
-      '3 projets',
-      '15 prompts / projet',
+      '5 projets',
+      '20 prompts / projet',
       'Scans hebdomadaires',
-      'Rétention 1 an',
+      'Rétention 6 mois',
       'Support email',
     ],
     cta: 'Essai gratuit 14 jours',
@@ -85,33 +85,17 @@ const plans = [
   {
     name: 'Pro',
     price: '99',
-    description: 'Pour les PME',
+    description: 'Pour les équipes',
     features: [
-      '10 projets',
+      '15 projets',
       '50 prompts / projet',
-      'Scans hebdomadaires',
-      'Rétention 1 an',
+      'Scans quotidiens',
+      'Historique illimité',
       'Support prioritaire',
-      'Export des données',
+      'Export CSV / API',
     ],
     cta: 'Essai gratuit 14 jours',
     popular: true,
-  },
-  {
-    name: 'Agency',
-    price: '249',
-    description: 'Pour les agences',
-    features: [
-      '25 projets',
-      '150 prompts / projet',
-      'Scans quotidiens',
-      'Rétention 1 an',
-      'Support dédié',
-      'API access',
-      'White label',
-    ],
-    cta: 'Nous contacter',
-    popular: false,
   },
 ];
 
@@ -134,7 +118,7 @@ const faqs = [
   {
     question: 'À quelle fréquence les scans sont-ils effectués ?',
     answer:
-      'La fréquence dépend de votre plan : manuellement pour le plan gratuit, hebdomadairement pour Solo et Pro, et quotidiennement pour Agency. Vous pouvez aussi lancer des scans manuels à tout moment.',
+      'La fréquence dépend de votre plan : manuellement pour le plan gratuit, hebdomadairement pour Solo, et quotidiennement pour Pro. Vous pouvez aussi lancer des scans manuels à tout moment.',
   },
   {
     question: 'Comment améliorer ma visibilité dans les réponses IA ?',
@@ -152,7 +136,7 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen bg-background">
       {/* Navigation */}
-      <header className="fixed top-0 left-0 right-0 z-50 border-b border-cyan-500/10 bg-background/80 backdrop-blur-xl">
+      <header className="fixed top-0 left-0 right-0 z-50 border-b border-zinc-800 bg-zinc-950/80 backdrop-blur-xl">
         <nav className="container mx-auto flex h-16 items-center justify-between px-4">
           <Link href="/">
             <Logo size="sm" />
@@ -248,7 +232,7 @@ export default function LandingPage() {
         </section>
 
         {/* Problem Section */}
-        <section className="py-20 px-4 bg-[rgb(12_15_25)]">
+        <section className="py-20 px-4 bg-zinc-900/50">
           <div className="container mx-auto max-w-5xl">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-bold mb-4">
@@ -262,9 +246,9 @@ export default function LandingPage() {
             </div>
 
             <div className="grid md:grid-cols-3 gap-6">
-              <Card className="bg-rose-500/5 border-rose-500/20">
+              <Card className="bg-red-500/5 border-red-500/20">
                 <CardContent className="pt-6">
-                  <div className="text-4xl font-bold text-rose-400 mb-2">
+                  <div className="text-4xl font-bold text-red-500 mb-2">
                     67%
                   </div>
                   <p className="text-sm text-muted-foreground">
@@ -283,7 +267,7 @@ export default function LandingPage() {
                   </p>
                 </CardContent>
               </Card>
-              <Card className="bg-cyan-500/5 border-cyan-500/20">
+              <Card className="bg-cyan-400/5 border-cyan-400/20">
                 <CardContent className="pt-6">
                   <div className="text-4xl font-bold text-cyan-400 mb-2">
                     +40%
@@ -319,7 +303,7 @@ export default function LandingPage() {
                   className="group hover:border-primary/50 transition-colors"
                 >
                   <CardHeader>
-                    <div className="h-12 w-12 rounded-xl bg-cyan-500/10 flex items-center justify-center mb-4 group-hover:bg-cyan-500/20 transition-colors">
+                    <div className="h-12 w-12 rounded-xl bg-cyan-400/10 flex items-center justify-center mb-4 group-hover:bg-cyan-400/20 transition-colors">
                       <feature.icon className="h-6 w-6 text-cyan-400" aria-hidden="true" />
                     </div>
                     <CardTitle className="text-lg">{feature.title}</CardTitle>
@@ -336,7 +320,7 @@ export default function LandingPage() {
         </section>
 
         {/* How it works */}
-        <section className="py-20 px-4 bg-[rgb(12_15_25)]">
+        <section className="py-20 px-4 bg-zinc-900/50">
           <div className="container mx-auto max-w-5xl">
             <div className="text-center mb-12">
               <Badge className="mb-4">Comment ça marche</Badge>
@@ -353,10 +337,10 @@ export default function LandingPage() {
               {steps.map((step, index) => (
                 <div key={step.number} className="relative">
                   {index < steps.length - 1 && (
-                    <div className="hidden md:block absolute top-8 left-full w-full h-[2px] bg-cyan-500/30 -translate-x-1/2" />
+                    <div className="hidden md:block absolute top-8 left-full w-full h-[2px] bg-zinc-700 -translate-x-1/2" />
                   )}
                   <div className="text-center">
-                    <div className="h-16 w-16 rounded-2xl bg-cyan-500/10 border border-cyan-500/20 flex items-center justify-center mx-auto mb-4 text-2xl font-bold text-cyan-400">
+                    <div className="h-16 w-16 rounded-2xl bg-cyan-400/10 border border-cyan-400/20 flex items-center justify-center mx-auto mb-4 text-2xl font-bold text-cyan-400">
                       {step.number}
                     </div>
                     <h3 className="text-lg font-semibold mb-2">{step.title}</h3>
@@ -384,13 +368,13 @@ export default function LandingPage() {
               </p>
             </div>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
               {plans.map((plan) => (
                 <Card
                   key={plan.name}
                   className={
                     plan.popular
-                      ? 'border-cyan-500/50 relative'
+                      ? 'border-cyan-400/50 relative'
                       : ''
                   }
                 >
@@ -436,7 +420,7 @@ export default function LandingPage() {
         </section>
 
         {/* FAQ Section */}
-        <section id="faq" className="py-20 px-4 bg-[rgb(12_15_25)]">
+        <section id="faq" className="py-20 px-4 bg-zinc-900/50">
           <div className="container mx-auto max-w-3xl">
             <div className="text-center mb-12">
               <Badge className="mb-4">FAQ</Badge>
@@ -468,7 +452,7 @@ export default function LandingPage() {
         {/* CTA Section */}
         <section className="py-20 px-4">
           <div className="container mx-auto max-w-4xl text-center">
-            <div className="rounded-3xl bg-cyan-500/5 p-12 border border-cyan-500/20">
+            <div className="rounded-3xl bg-cyan-400/5 p-12 border border-cyan-400/20">
               <Bot className="h-12 w-12 mx-auto mb-6 text-cyan-400" aria-hidden="true" />
               <h2 className="text-3xl md:text-4xl font-bold mb-4">
                 Prêt à être visible par l&apos;IA ?
@@ -494,7 +478,7 @@ export default function LandingPage() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-cyan-500/10 py-12 px-4">
+      <footer className="border-t border-zinc-800 py-12 px-4">
         <div className="container mx-auto max-w-6xl">
           <div className="grid md:grid-cols-4 gap-8 mb-8">
             <div>
@@ -567,7 +551,7 @@ export default function LandingPage() {
               </ul>
             </div>
           </div>
-          <div className="border-t border-cyan-500/10 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="border-t border-zinc-800 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
             <p className="text-sm text-muted-foreground">
               © 2025 Coucou IA. Tous droits réservés.
             </p>
@@ -608,9 +592,9 @@ export default function LandingPage() {
             offers: {
               '@type': 'AggregateOffer',
               lowPrice: '0',
-              highPrice: '249',
+              highPrice: '99',
               priceCurrency: 'EUR',
-              offerCount: 4,
+              offerCount: 3,
             },
             aggregateRating: {
               '@type': 'AggregateRating',
