@@ -1,11 +1,21 @@
 'use client';
 
+import { Check } from 'lucide-react';
+
 import { useAuth } from '@/lib/auth-context';
 import { Button } from '@/components/ui/button';
-import { Check } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-const plans = [
+interface PlanConfig {
+  id: string;
+  name: string;
+  price: string;
+  description: string;
+  features: string[];
+  popular?: boolean;
+}
+
+const PLANS: PlanConfig[] = [
   {
     id: 'FREE',
     name: 'Free',
@@ -48,14 +58,14 @@ const plans = [
   },
 ];
 
-export default function BillingPage() {
+export default function BillingPage(): React.ReactNode {
   const { user } = useAuth();
   const currentPlan = user?.plan ?? 'FREE';
 
-  const handleUpgrade = (planId: string) => {
+  function handleUpgrade(planId: string): void {
     // TODO: Implement Stripe checkout
     console.log('Upgrade to', planId);
-  };
+  }
 
   return (
     <div className="space-y-6">
@@ -67,7 +77,7 @@ export default function BillingPage() {
       </div>
 
       <div className="grid gap-4 md:grid-cols-3 max-w-4xl">
-        {plans.map((plan) => {
+        {PLANS.map((plan) => {
           const isCurrent = plan.id === currentPlan;
           return (
             <div

@@ -1,21 +1,22 @@
 'use client';
 
 import { useState } from 'react';
+
 import { useAuth } from '@/lib/auth-context';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
-export default function SettingsPage() {
+export default function SettingsPage(): React.ReactNode {
   const { user } = useAuth();
   const [name, setName] = useState(user?.name ?? '');
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  function handleSubmit(e: React.FormEvent): void {
     e.preventDefault();
     setIsLoading(true);
     // TODO: Implement profile update
     setTimeout(() => setIsLoading(false), 1000);
-  };
+  }
 
   return (
     <div className="max-w-lg space-y-6">

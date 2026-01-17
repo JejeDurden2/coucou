@@ -3,6 +3,7 @@
 import { use, useState } from 'react';
 import Link from 'next/link';
 import { Play, Plus, RefreshCw, Check, X, Trash2, TrendingUp, TrendingDown } from 'lucide-react';
+
 import { useProject } from '@/hooks/use-projects';
 import { useCreatePrompt, useDeletePrompt } from '@/hooks/use-prompts';
 import { useDashboardStats, useTriggerScan } from '@/hooks/use-dashboard';
@@ -11,11 +12,11 @@ import { Input } from '@/components/ui/input';
 import { LLMProvider } from '@coucou-ia/shared';
 import { cn } from '@/lib/utils';
 
-export default function ProjectDashboardPage({
-  params,
-}: {
+interface ProjectDashboardPageProps {
   params: Promise<{ id: string }>;
-}) {
+}
+
+export default function ProjectDashboardPage({ params }: ProjectDashboardPageProps): React.ReactNode {
   const { id } = use(params);
   const { data: project, isLoading: projectLoading } = useProject(id);
   const { data: stats, isLoading: statsLoading } = useDashboardStats(id);
@@ -26,24 +27,24 @@ export default function ProjectDashboardPage({
   const [newPrompt, setNewPrompt] = useState('');
   const [showAddPrompt, setShowAddPrompt] = useState(false);
 
-  const handleAddPrompt = async (e: React.FormEvent) => {
+  async function handleAddPrompt(e: React.FormEvent): Promise<void> {
     e.preventDefault();
     if (!newPrompt.trim()) return;
 
     await createPrompt.mutateAsync({ content: newPrompt.trim() });
     setNewPrompt('');
     setShowAddPrompt(false);
-  };
+  }
 
-  const handleTriggerScan = async () => {
+  async function handleTriggerScan(): Promise<void> {
     await triggerScan.mutateAsync();
-  };
+  }
 
-  const handleDeletePrompt = async (promptId: string) => {
+  async function handleDeletePrompt(promptId: string): Promise<void> {
     if (confirm('Supprimer ce prompt ?')) {
       await deletePrompt.mutateAsync(promptId);
     }
-  };
+  }
 
   if (projectLoading) {
     return (
@@ -86,7 +87,7 @@ export default function ProjectDashboardPage({
               {project.brandVariants.length > 0 && ` · ${project.brandVariants.join(', ')}`}
             </span>
           </div>
-          {stats?.lastScanAt && (
+          {stats?.lastScanAt ? (
             <p className="text-xs text-muted-foreground mt-1">
               Dernier scan: {new Date(stats.lastScanAt).toLocaleDateString('fr-FR', {
                 day: 'numeric',
@@ -95,7 +96,7 @@ export default function ProjectDashboardPage({
                 minute: '2-digit'
               })}
             </p>
-          )}
+          ) : null}
         </div>
         <Button
           onClick={handleTriggerScan}
@@ -222,9 +223,9 @@ export default function ProjectDashboardPage({
                   >
                     <td className="px-4 py-3">
                       <p className="text-sm">{prompt.content}</p>
-                      {prompt.category && (
+                      {prompt.category ? (
                         <span className="text-xs text-muted-foreground">{prompt.category}</span>
-                      )}
+                      ) : null}
                     </td>
                     <td className="px-4 py-3 text-center">
                       <CitationStatus result={prompt.openai} />
@@ -251,7 +252,7 @@ export default function ProjectDashboardPage({
       </div>
 
       {/* Competitors Section */}
-      {stats?.topCompetitors && stats.topCompetitors.length > 0 && (
+      {stats?.topCompetitors && stats.topCompetitors.length > 0 ? (
         <div className="space-y-3">
           <h2 className="text-sm font-medium text-muted-foreground uppercase tracking-wide">
             Concurrents détectés
@@ -268,24 +269,22 @@ export default function ProjectDashboardPage({
             ))}
           </div>
         </div>
-      )}
+      ) : null}
     </div>
   );
 }
 
-function ScoreCard({
-  label,
-  value,
-  trend,
-  isPercentage,
-}: {
+interface ScoreCardProps {
   label: string;
   value: number;
   trend?: number;
   isPercentage?: boolean;
-}) {
+}
+
+function ScoreCard({ label, value, trend, isPercentage }: ScoreCardProps): React.ReactNode {
   const displayValue = Math.round(value);
-  const trendPositive = trend !== undefined && trend >= 0;
+  const hasTrend = trend !== undefined && trend !== 0;
+  const isPositive = (trend ?? 0) >= 0;
 
   return (
     <div className="rounded-lg border border-border bg-card p-4">
@@ -295,32 +294,42 @@ function ScoreCard({
           {displayValue}
           {isPercentage && <span className="text-lg">%</span>}
         </p>
-        {trend !== undefined && trend !== 0 && (
-          <span
-            className={cn(
-              'inline-flex items-center text-xs font-medium',
-              trendPositive ? 'text-emerald-400' : 'text-rose-400'
-            )}
-          >
-            {trendPositive ? (
-              <TrendingUp className="h-3 w-3 mr-0.5" />
-            ) : (
-              <TrendingDown className="h-3 w-3 mr-0.5" />
-            )}
-            {trendPositive ? '+' : ''}
-            {Math.round(trend)}%
-          </span>
-        )}
+        {hasTrend ? (
+          <TrendIndicator value={trend} isPositive={isPositive} />
+        ) : null}
       </div>
     </div>
   );
 }
 
-function CitationStatus({
-  result,
-}: {
-  result: { isCited: boolean; position: number | null } | null;
-}) {
+interface TrendIndicatorProps {
+  value: number;
+  isPositive: boolean;
+}
+
+function TrendIndicator({ value, isPositive }: TrendIndicatorProps): React.ReactNode {
+  const Icon = isPositive ? TrendingUp : TrendingDown;
+  const colorClass = isPositive ? 'text-emerald-400' : 'text-rose-400';
+  const prefix = isPositive ? '+' : '';
+
+  return (
+    <span className={cn('inline-flex items-center text-xs font-medium', colorClass)}>
+      <Icon className="h-3 w-3 mr-0.5" />
+      {prefix}{Math.round(value)}%
+    </span>
+  );
+}
+
+interface CitationResult {
+  isCited: boolean;
+  position: number | null;
+}
+
+interface CitationStatusProps {
+  result: CitationResult | null;
+}
+
+function CitationStatus({ result }: CitationStatusProps): React.ReactNode {
   if (!result) {
     return <span className="text-xs text-muted-foreground">—</span>;
   }
@@ -329,9 +338,9 @@ function CitationStatus({
     return (
       <span className="inline-flex items-center gap-1 text-emerald-400">
         <Check className="h-4 w-4" />
-        {result.position && (
+        {result.position ? (
           <span className="text-xs font-medium">#{result.position}</span>
-        )}
+        ) : null}
       </span>
     );
   }

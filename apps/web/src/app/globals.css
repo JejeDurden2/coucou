@@ -4,49 +4,47 @@
 
 @layer base {
   :root {
-    /* Clean dark background - professional slate */
-    --background: 15 23 42; /* slate-900 */
-    --foreground: 248 250 252; /* slate-50 */
+    /* Background */
+    --background: 15 23 42;
+    --foreground: 248 250 252;
 
-    /* Cards slightly lighter for hierarchy */
-    --card: 30 41 59; /* slate-800 */
+    /* Cards */
+    --card: 30 41 59;
     --card-foreground: 248 250 252;
     --popover: 30 41 59;
     --popover-foreground: 248 250 252;
 
-    /* Cyan primary - used sparingly for CTAs */
-    --primary: 6 182 212; /* cyan-500 */
+    /* Primary */
+    --primary: 6 182 212;
     --primary-foreground: 15 23 42;
 
-    /* Slate secondary for subtle actions */
-    --secondary: 51 65 85; /* slate-700 */
+    /* Secondary */
+    --secondary: 51 65 85;
     --secondary-foreground: 248 250 252;
 
-    /* Muted for less prominent elements */
-    --muted: 51 65 85; /* slate-700 */
-    --muted-foreground: 148 163 184; /* slate-400 */
+    /* Muted */
+    --muted: 51 65 85;
+    --muted-foreground: 148 163 184;
 
-    /* Accent same as primary */
-    --accent: 34 211 238; /* cyan-400 */
+    /* Accent */
+    --accent: 34 211 238;
     --accent-foreground: 15 23 42;
 
-    /* Semantic colors */
-    --destructive: 244 63 94; /* rose-500 */
+    /* Semantic */
+    --destructive: 244 63 94;
     --destructive-foreground: 255 255 255;
-    --success: 16 185 129; /* emerald-500 */
+    --success: 16 185 129;
     --success-foreground: 255 255 255;
-    --warning: 245 158 11; /* amber-500 */
+    --warning: 245 158 11;
     --warning-foreground: 15 23 42;
 
     /* Borders and inputs */
-    --border: 51 65 85; /* slate-700 */
-    --input: 30 41 59; /* slate-800 */
+    --border: 51 65 85;
+    --input: 30 41 59;
     --ring: 6 182 212;
     --radius: 0.5rem;
   }
-}
 
-@layer base {
   * {
     @apply border-border;
   }

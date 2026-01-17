@@ -2,12 +2,13 @@
 
 import Link from 'next/link';
 import { Plus, FolderKanban, ChevronRight } from 'lucide-react';
+
 import { useProjects } from '@/hooks/use-projects';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/lib/auth-context';
 import { PLAN_LIMITS, Plan } from '@coucou-ia/shared';
 
-export default function ProjectsPage() {
+export default function ProjectsPage(): React.ReactNode {
   const { user } = useAuth();
   const { data: projects, isLoading } = useProjects();
 
@@ -24,17 +25,17 @@ export default function ProjectsPage() {
             {projects?.length ?? 0} / {limits.projects} projet{limits.projects > 1 ? 's' : ''}
           </p>
         </div>
-        {canCreateProject && (
+        {canCreateProject ? (
           <Button asChild size="sm">
             <Link href="/projects/new">
               <Plus className="mr-2 h-4 w-4" />
               Nouveau projet
             </Link>
           </Button>
-        )}
+        ) : null}
       </div>
 
-      {!canCreateProject && (
+      {!canCreateProject ? (
         <div className="rounded-lg border border-amber-500/30 bg-amber-500/5 px-4 py-3">
           <p className="text-sm text-amber-300">
             Limite atteinte.{' '}
@@ -44,7 +45,7 @@ export default function ProjectsPage() {
             pour créer plus de projets.
           </p>
         </div>
-      )}
+      ) : null}
 
       {isLoading ? (
         <div className="space-y-2">
@@ -84,9 +85,9 @@ export default function ProjectsPage() {
                 <h3 className="font-medium">{project.name}</h3>
                 <p className="text-sm text-muted-foreground">
                   {project.brandName}
-                  {project.brandVariants.length > 0 && (
+                  {project.brandVariants.length > 0 ? (
                     <span> · {project.brandVariants.join(', ')}</span>
-                  )}
+                  ) : null}
                 </p>
               </div>
               <div className="flex items-center gap-4">

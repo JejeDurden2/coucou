@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { LogOut, Settings, CreditCard, ChevronDown, Zap } from 'lucide-react';
+
 import { useAuth } from '@/lib/auth-context';
 import { useProjects } from '@/hooks/use-projects';
 import { Button } from '@/components/ui/button';
@@ -17,17 +18,16 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
 
-export default function DashboardLayout({
-  children,
-}: {
+interface DashboardLayoutProps {
   children: React.ReactNode;
-}) {
+}
+
+export default function DashboardLayout({ children }: DashboardLayoutProps): React.ReactNode {
   const pathname = usePathname();
   const router = useRouter();
   const { user, isLoading, isAuthenticated, logout } = useAuth();
   const { data: projects } = useProjects();
 
-  // Extract current project ID from URL if on a project page
   const projectIdMatch = pathname.match(/\/projects\/([^/]+)/);
   const currentProjectId = projectIdMatch?.[1];
   const currentProject = projects?.find((p) => p.id === currentProjectId);
@@ -50,24 +50,23 @@ export default function DashboardLayout({
     return null;
   }
 
-  const handleLogout = () => {
+  function handleLogout(): void {
     logout();
     router.push('/');
-  };
+  }
+
+  const hasProjects = projects && projects.length > 0;
 
   return (
     <div className="min-h-screen flex flex-col">
-      {/* Top Header */}
       <header className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="flex h-14 items-center justify-between px-4 md:px-6">
-          {/* Left: Logo + Project Selector */}
           <div className="flex items-center gap-6">
             <Link href="/projects" className="flex items-center">
               <Logo size="sm" />
             </Link>
 
-            {/* Project Selector - only show when we have projects */}
-            {projects && projects.length > 0 && (
+            {hasProjects ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" className="gap-2 text-sm font-medium">
@@ -99,10 +98,9 @@ export default function DashboardLayout({
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
-            )}
+            ) : null}
           </div>
 
-          {/* Right: User Menu */}
           <div className="flex items-center gap-2">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -140,7 +138,6 @@ export default function DashboardLayout({
         </div>
       </header>
 
-      {/* Main content */}
       <main className="flex-1">
         <div className="mx-auto max-w-7xl px-4 py-6 md:px-6 md:py-8">
           {children}
