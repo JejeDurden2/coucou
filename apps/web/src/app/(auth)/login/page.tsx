@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Logo } from '@/components/ui/logo';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 export default function LoginPage() {
@@ -34,8 +35,8 @@ export default function LoginPage() {
   return (
     <Card>
       <CardHeader className="text-center">
-        <div className="mx-auto mb-4 text-3xl font-bold gradient-text">
-          Coucou IA
+        <div className="mx-auto mb-4">
+          <Logo size="lg" />
         </div>
         <CardTitle>Connexion</CardTitle>
         <CardDescription>

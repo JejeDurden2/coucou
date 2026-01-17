@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '@/lib/auth-context';
 import { Button } from '@/components/ui/button';
+import { Logo } from '@/components/ui/logo';
 import { cn } from '@/lib/utils';
 
 const navigation = [
@@ -60,8 +61,8 @@ export default function DashboardLayout({
         <div className="flex h-full flex-col">
           {/* Logo */}
           <div className="flex h-16 items-center border-b border-slate-800 px-6">
-            <Link href="/projects" className="text-xl font-bold gradient-text">
-              Coucou IA
+            <Link href="/projects">
+              <Logo size="sm" />
             </Link>
           </div>
 

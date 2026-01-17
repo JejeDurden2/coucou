@@ -13,6 +13,7 @@ import {
   Users,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Logo } from '@/components/ui/logo';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 
@@ -153,8 +154,8 @@ export default function LandingPage() {
       {/* Navigation */}
       <header className="fixed top-0 left-0 right-0 z-50 border-b border-cyan-500/10 bg-background/80 backdrop-blur-xl">
         <nav className="container mx-auto flex h-16 items-center justify-between px-4">
-          <Link href="/" className="text-xl font-bold text-cyan-400">
-            Coucou IA
+          <Link href="/">
+            <Logo size="sm" />
           </Link>
           <div className="hidden md:flex items-center gap-8">
             <Link
@@ -497,8 +498,8 @@ export default function LandingPage() {
         <div className="container mx-auto max-w-6xl">
           <div className="grid md:grid-cols-4 gap-8 mb-8">
             <div>
-              <Link href="/" className="text-xl font-bold text-cyan-400">
-                Coucou IA
+              <Link href="/">
+                <Logo size="sm" />
               </Link>
               <p className="text-sm text-muted-foreground mt-2">
                 Surveillez et améliorez la visibilité de votre marque dans les
