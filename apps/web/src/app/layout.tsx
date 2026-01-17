@@ -48,6 +48,13 @@ export const metadata: Metadata = {
   authors: [{ name: 'Coucou IA' }],
   creator: 'Coucou IA',
   publisher: 'Coucou IA',
+  icons: {
+    icon: [
+      { url: '/favicon.svg', type: 'image/svg+xml' },
+    ],
+    apple: '/apple-touch-icon.svg',
+  },
+  manifest: '/site.webmanifest',
   robots: {
     index: true,
     follow: true,
@@ -69,7 +76,7 @@ export const metadata: Metadata = {
       "Surveillez et améliorez la visibilité de votre marque dans les réponses de ChatGPT, Claude et autres IA.",
     images: [
       {
-        url: '/og-image.png',
+        url: '/og-image.svg',
         width: 1200,
         height: 630,
         alt: 'Coucou IA - Monitoring de visibilité IA',
@@ -81,7 +88,7 @@ export const metadata: Metadata = {
     title: 'Coucou IA - Votre marque est-elle visible dans les réponses IA ?',
     description:
       "Surveillez et améliorez la visibilité de votre marque dans les réponses de ChatGPT, Claude et autres IA.",
-    images: ['/og-image.png'],
+    images: ['/twitter-image.svg'],
     creator: '@coucouia',
   },
   alternates: {

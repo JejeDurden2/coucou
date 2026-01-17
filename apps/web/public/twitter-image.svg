@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" fill="none">
+  <!-- Twitter Card Image - 1200x600 (2:1 ratio) -->
+
+  <!-- Background -->
+  <rect width="1200" height="600" fill="#080A12"/>
+
+  <!-- Grid pattern -->
+  <defs>
+    <pattern id="grid" width="50" height="50" patternUnits="userSpaceOnUse">
+      <path d="M 50 0 L 0 0 0 50" fill="none" stroke="#06B6D4" stroke-width="0.5" opacity="0.1"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="600" fill="url(#grid)"/>
+
+  <!-- Centered content -->
+  <g transform="translate(350, 180)">
+    <!-- Logo -->
+    <g transform="scale(2.5)">
+      <path d="M8 20C8 12.268 14.268 6 22 6h4c7.732 0 14 6.268 14 14v4c0 7.732-6.268 14-14 14h-2l-6 6v-6.17C11.058 35.93 8 30.374 8 24v-4z" fill="#06B6D4"/>
+      <circle cx="28" cy="20" r="4" fill="#080A12"/>
+      <circle cx="29.5" cy="18.5" r="1.5" fill="#FFFFFF"/>
+      <path d="M36 22l6 2-6 2v-4z" fill="#06B6D4"/>
+    </g>
+
+    <!-- Brand name -->
+    <text x="140" y="70" font-family="system-ui, -apple-system, sans-serif" font-size="56" font-weight="700" fill="#06B6D4">Coucou IA</text>
+  </g>
+
+  <!-- Tagline -->
+  <text x="600" y="380" font-family="system-ui, -apple-system, sans-serif" font-size="28" fill="#94A3B8" text-anchor="middle">L'IA parle-t-elle de vous ?</text>
+
+  <!-- Decorative elements -->
+  <circle cx="100" cy="100" r="80" fill="#06B6D4" opacity="0.1"/>
+  <circle cx="1100" cy="500" r="120" fill="#8B5CF6" opacity="0.1"/>
+</svg>
