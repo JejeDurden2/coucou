@@ -52,8 +52,6 @@ export class StripeService {
     this.priceIds = {
       [Plan.SOLO]: this.configService.get<string>('STRIPE_PRICE_SOLO') ?? '',
       [Plan.PRO]: this.configService.get<string>('STRIPE_PRICE_PRO') ?? '',
-      [Plan.AGENCY]:
-        this.configService.get<string>('STRIPE_PRICE_AGENCY') ?? '',
     };
   }
 

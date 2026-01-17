@@ -6,7 +6,6 @@ export enum Plan {
   FREE = 'FREE',
   SOLO = 'SOLO',
   PRO = 'PRO',
-  AGENCY = 'AGENCY',
 }
 
 export enum LLMProvider {
@@ -173,22 +172,16 @@ export const PLAN_LIMITS: Record<Plan, PlanLimits> = {
     retentionDays: 30,
   },
   [Plan.SOLO]: {
-    projects: 3,
-    promptsPerProject: 15,
+    projects: 5,
+    promptsPerProject: 20,
     scanFrequency: 'weekly',
-    retentionDays: 365,
+    retentionDays: 180,
   },
   [Plan.PRO]: {
-    projects: 10,
+    projects: 15,
     promptsPerProject: 50,
-    scanFrequency: 'weekly',
-    retentionDays: 365,
-  },
-  [Plan.AGENCY]: {
-    projects: 25,
-    promptsPerProject: 150,
     scanFrequency: 'daily',
-    retentionDays: 365,
+    retentionDays: 365 * 10, // "unlimited"
   },
 };
 

@@ -7,9 +7,8 @@ import type { CreateProjectDto, ProjectResponseDto } from '../dto/project.dto';
 
 const PROJECT_LIMITS: Record<Plan, number> = {
   FREE: 1,
-  SOLO: 3,
-  PRO: 10,
-  AGENCY: 25,
+  SOLO: 5,
+  PRO: 15,
 };
 
 @Injectable()

@@ -4,44 +4,45 @@
 
 @layer base {
   :root {
-    /* Deep space background - almost black with subtle blue */
-    --background: 8 10 18;
-    --foreground: 237 242 247;
+    /* Clean dark background - professional slate */
+    --background: 15 23 42; /* slate-900 */
+    --foreground: 248 250 252; /* slate-50 */
 
-    /* Card with subtle transparency for depth */
-    --card: 15 20 35;
-    --card-foreground: 237 242 247;
-    --popover: 15 20 35;
-    --popover-foreground: 237 242 247;
+    /* Cards slightly lighter for hierarchy */
+    --card: 30 41 59; /* slate-800 */
+    --card-foreground: 248 250 252;
+    --popover: 30 41 59;
+    --popover-foreground: 248 250 252;
 
-    /* Electric cyan as primary - modern tech feel */
+    /* Cyan primary - used sparingly for CTAs */
     --primary: 6 182 212; /* cyan-500 */
-    --primary-foreground: 8 10 18;
+    --primary-foreground: 15 23 42;
 
-    /* Vivid violet as secondary - smart/AI vibes */
-    --secondary: 139 92 246; /* violet-500 */
-    --secondary-foreground: 255 255 255;
+    /* Slate secondary for subtle actions */
+    --secondary: 51 65 85; /* slate-700 */
+    --secondary-foreground: 248 250 252;
 
-    /* Muted colors for less prominent elements */
-    --muted: 30 35 55;
-    --muted-foreground: 148 163 184;
+    /* Muted for less prominent elements */
+    --muted: 51 65 85; /* slate-700 */
+    --muted-foreground: 148 163 184; /* slate-400 */
 
-    /* Accent matches primary for consistency */
-    --accent: 6 182 212;
-    --accent-foreground: 8 10 18;
+    /* Accent same as primary */
+    --accent: 34 211 238; /* cyan-400 */
+    --accent-foreground: 15 23 42;
 
-    /* Destructive stays red but more saturated */
+    /* Semantic colors */
     --destructive: 244 63 94; /* rose-500 */
     --destructive-foreground: 255 255 255;
+    --success: 16 185 129; /* emerald-500 */
+    --success-foreground: 255 255 255;
+    --warning: 245 158 11; /* amber-500 */
+    --warning-foreground: 15 23 42;
 
-    /* Borders - subtle with cyan tint */
-    --border: 30 40 60;
-    --input: 25 30 50;
+    /* Borders and inputs */
+    --border: 51 65 85; /* slate-700 */
+    --input: 30 41 59; /* slate-800 */
     --ring: 6 182 212;
-    --radius: 0.75rem;
-
-    /* Success color */
-    --success: 34 197 94; /* green-500 */
+    --radius: 0.5rem;
   }
 }
 
@@ -51,53 +52,50 @@
   }
 
   body {
-    @apply bg-background text-foreground;
-    font-feature-settings:
-      'rlig' 1,
-      'calt' 1;
+    @apply bg-background text-foreground antialiased;
   }
 }
 
 @layer utilities {
-  /* Glass morphism - modern transparent effect */
-  .glass {
-    @apply bg-[rgb(15_20_35/0.6)] backdrop-blur-xl border border-[rgb(6_182_212/0.1)];
+  /* Status indicators */
+  .status-success {
+    @apply text-emerald-400;
   }
-
-  /* Grid pattern overlay for tech feel */
-  .grid-pattern {
-    background-image:
-      linear-gradient(rgb(6 182 212 / 0.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgb(6 182 212 / 0.03) 1px, transparent 1px);
-    background-size: 50px 50px;
+  .status-error {
+    @apply text-rose-400;
+  }
+  .status-warning {
+    @apply text-amber-400;
+  }
+  .status-neutral {
+    @apply text-slate-400;
   }
 }
 
-/* Custom scrollbar with tech styling */
+/* Scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+  width: 8px;
+  height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background: rgb(15 20 35);
+  @apply bg-slate-900;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgb(6 182 212 / 0.4);
-  border-radius: 3px;
+  @apply bg-slate-700 rounded;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgb(6 182 212 / 0.6);
+  @apply bg-slate-600;
 }
 
-/* Selection with brand color */
+/* Selection */
 ::selection {
   @apply bg-cyan-500/30;
 }
 
-/* Focus visible with glow */
+/* Focus */
 :focus-visible {
-  @apply outline-none ring-2 ring-cyan-500/50 ring-offset-2 ring-offset-background;
+  @apply outline-none ring-2 ring-cyan-500/50 ring-offset-2 ring-offset-slate-900;
 }

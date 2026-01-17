@@ -3,22 +3,19 @@
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect } from 'react';
-import {
-  FolderKanban,
-  Settings,
-  LogOut,
-  CreditCard,
-} from 'lucide-react';
+import { LogOut, Settings, CreditCard, ChevronDown, Zap } from 'lucide-react';
 import { useAuth } from '@/lib/auth-context';
+import { useProjects } from '@/hooks/use-projects';
 import { Button } from '@/components/ui/button';
 import { Logo } from '@/components/ui/logo';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
-
-const navigation = [
-  { name: 'Projets', href: '/projects', icon: FolderKanban },
-  { name: 'Facturation', href: '/billing', icon: CreditCard },
-  { name: 'Paramètres', href: '/settings', icon: Settings },
-];
 
 export default function DashboardLayout({
   children,
@@ -28,6 +25,12 @@ export default function DashboardLayout({
   const pathname = usePathname();
   const router = useRouter();
   const { user, isLoading, isAuthenticated, logout } = useAuth();
+  const { data: projects } = useProjects();
+
+  // Extract current project ID from URL if on a project page
+  const projectIdMatch = pathname.match(/\/projects\/([^/]+)/);
+  const currentProjectId = projectIdMatch?.[1];
+  const currentProject = projects?.find((p) => p.id === currentProjectId);
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
@@ -37,7 +40,7 @@ export default function DashboardLayout({
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-900">
+      <div className="min-h-screen flex items-center justify-center">
         <div className="animate-pulse text-muted-foreground">Chargement...</div>
       </div>
     );
@@ -53,60 +56,95 @@ export default function DashboardLayout({
   };
 
   return (
-    <div className="min-h-screen bg-slate-900">
-      {/* Sidebar */}
-      <aside className="fixed inset-y-0 left-0 z-50 w-64 border-r border-slate-800 bg-slate-900/95 backdrop-blur-sm">
-        <div className="flex h-full flex-col">
-          {/* Logo */}
-          <div className="flex h-16 items-center border-b border-slate-800 px-6">
-            <Link href="/projects">
+    <div className="min-h-screen flex flex-col">
+      {/* Top Header */}
+      <header className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <div className="flex h-14 items-center justify-between px-4 md:px-6">
+          {/* Left: Logo + Project Selector */}
+          <div className="flex items-center gap-6">
+            <Link href="/projects" className="flex items-center">
               <Logo size="sm" />
             </Link>
+
+            {/* Project Selector - only show when we have projects */}
+            {projects && projects.length > 0 && (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="gap-2 text-sm font-medium">
+                    {currentProject?.name ?? 'Sélectionner un projet'}
+                    <ChevronDown className="h-4 w-4 text-muted-foreground" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="start" className="w-56">
+                  {projects.map((project) => (
+                    <DropdownMenuItem
+                      key={project.id}
+                      onClick={() => router.push(`/projects/${project.id}`)}
+                      className={cn(
+                        currentProjectId === project.id && 'bg-accent/10'
+                      )}
+                    >
+                      <div className="flex flex-col">
+                        <span className="font-medium">{project.name}</span>
+                        <span className="text-xs text-muted-foreground">
+                          {project.brandName}
+                        </span>
+                      </div>
+                    </DropdownMenuItem>
+                  ))}
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={() => router.push('/projects/new')}>
+                    <Zap className="mr-2 h-4 w-4" />
+                    Nouveau projet
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            )}
           </div>
 
-          {/* Navigation */}
-          <nav className="flex-1 space-y-1 px-3 py-4">
-            {navigation.map((item) => {
-              const isActive = pathname === item.href;
-              return (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  className={cn(
-                    'flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors',
-                    isActive
-                      ? 'bg-primary/10 text-primary'
-                      : 'text-muted-foreground hover:bg-slate-800 hover:text-foreground',
-                  )}
-                >
-                  <item.icon className="h-5 w-5" />
-                  {item.name}
-                </Link>
-              );
-            })}
-          </nav>
-
-          {/* User section */}
-          <div className="border-t border-slate-800 p-4">
-            <div className="mb-3 px-3">
-              <p className="text-sm font-medium">{user?.name}</p>
-              <p className="text-xs text-muted-foreground">{user?.email}</p>
-            </div>
-            <Button
-              variant="ghost"
-              className="w-full justify-start gap-3"
-              onClick={handleLogout}
-            >
-              <LogOut className="h-5 w-5" />
-              Déconnexion
-            </Button>
+          {/* Right: User Menu */}
+          <div className="flex items-center gap-2">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" className="gap-2">
+                  <div className="h-7 w-7 rounded-full bg-primary/20 flex items-center justify-center text-xs font-medium text-primary">
+                    {user?.name?.charAt(0).toUpperCase()}
+                  </div>
+                  <span className="hidden md:inline text-sm">{user?.name}</span>
+                  <ChevronDown className="h-4 w-4 text-muted-foreground" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                <div className="px-2 py-1.5">
+                  <p className="text-sm font-medium">{user?.name}</p>
+                  <p className="text-xs text-muted-foreground">{user?.email}</p>
+                  <p className="text-xs text-primary mt-1">Plan {user?.plan}</p>
+                </div>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={() => router.push('/settings')}>
+                  <Settings className="mr-2 h-4 w-4" />
+                  Paramètres
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => router.push('/billing')}>
+                  <CreditCard className="mr-2 h-4 w-4" />
+                  Facturation
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={handleLogout} className="text-rose-400">
+                  <LogOut className="mr-2 h-4 w-4" />
+                  Déconnexion
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
-      </aside>
+      </header>
 
       {/* Main content */}
-      <main className="pl-64">
-        <div className="p-8">{children}</div>
+      <main className="flex-1">
+        <div className="mx-auto max-w-7xl px-4 py-6 md:px-6 md:py-8">
+          {children}
+        </div>
       </main>
     </div>
   );

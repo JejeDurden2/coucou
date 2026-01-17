@@ -11,9 +11,8 @@ import type { CreatePromptDto, PromptResponseDto } from '../dto/prompt.dto';
 
 const PROMPT_LIMITS: Record<Plan, number> = {
   FREE: 3,
-  SOLO: 15,
+  SOLO: 20,
   PRO: 50,
-  AGENCY: 150,
 };
 
 type CreatePromptError = NotFoundError | ForbiddenError | PlanLimitError;

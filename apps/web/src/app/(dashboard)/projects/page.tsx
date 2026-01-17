@@ -1,11 +1,9 @@
 'use client';
 
 import Link from 'next/link';
-import { Plus, FolderKanban, BarChart3 } from 'lucide-react';
+import { Plus, FolderKanban, ChevronRight } from 'lucide-react';
 import { useProjects } from '@/hooks/use-projects';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { useAuth } from '@/lib/auth-context';
 import { PLAN_LIMITS, Plan } from '@coucou-ia/shared';
 
@@ -18,18 +16,18 @@ export default function ProjectsPage() {
   const canCreateProject = (projects?.length ?? 0) < limits.projects;
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold">Mes projets</h1>
-          <p className="text-muted-foreground mt-1">
-            Gérez vos projets de tracking de visibilité IA
+          <h1 className="text-xl font-semibold">Mes projets</h1>
+          <p className="text-sm text-muted-foreground mt-1">
+            {projects?.length ?? 0} / {limits.projects} projet{limits.projects > 1 ? 's' : ''}
           </p>
         </div>
         {canCreateProject && (
-          <Button asChild>
+          <Button asChild size="sm">
             <Link href="/projects/new">
-              <Plus className="mr-2 h-4 w-4" aria-hidden="true" />
+              <Plus className="mr-2 h-4 w-4" />
               Nouveau projet
             </Link>
           </Button>
@@ -37,11 +35,10 @@ export default function ProjectsPage() {
       </div>
 
       {!canCreateProject && (
-        <div className="rounded-lg border border-amber-500/50 bg-amber-500/10 p-4">
-          <p className="text-sm text-amber-200">
-            Vous avez atteint la limite de {limits.projects} projet
-            {limits.projects > 1 ? 's' : ''} pour votre plan {plan}.{' '}
-            <Link href="/settings/billing" className="underline">
+        <div className="rounded-lg border border-amber-500/30 bg-amber-500/5 px-4 py-3">
+          <p className="text-sm text-amber-300">
+            Limite atteinte.{' '}
+            <Link href="/billing" className="underline hover:text-amber-200">
               Passez à un plan supérieur
             </Link>{' '}
             pour créer plus de projets.
@@ -50,65 +47,56 @@ export default function ProjectsPage() {
       )}
 
       {isLoading ? (
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="space-y-2">
           {[1, 2, 3].map((i) => (
-            <Card key={i} className="animate-pulse">
-              <CardHeader>
-                <div className="h-6 w-32 rounded bg-slate-700" />
-                <div className="h-4 w-48 rounded bg-slate-700 mt-2" />
-              </CardHeader>
-              <CardContent>
-                <div className="h-8 w-full rounded bg-slate-700" />
-              </CardContent>
-            </Card>
+            <div
+              key={i}
+              className="animate-pulse rounded-lg border border-border bg-card p-4"
+            >
+              <div className="h-5 w-40 rounded bg-muted" />
+              <div className="h-4 w-24 rounded bg-muted mt-2" />
+            </div>
           ))}
         </div>
       ) : projects?.length === 0 ? (
-        <Card className="p-12 text-center">
-          <FolderKanban className="mx-auto h-12 w-12 text-muted-foreground" aria-hidden="true" />
-          <h3 className="mt-4 text-lg font-medium">Aucun projet</h3>
-          <p className="mt-2 text-sm text-muted-foreground">
-            Créez votre premier projet pour commencer à tracker la visibilité de
-            votre marque dans les réponses IA.
+        <div className="rounded-lg border border-dashed border-border p-12 text-center">
+          <FolderKanban className="mx-auto h-10 w-10 text-muted-foreground" />
+          <h3 className="mt-4 font-medium">Aucun projet</h3>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Créez votre premier projet pour commencer à tracker votre visibilité IA.
           </p>
-          <Button className="mt-6" asChild>
+          <Button className="mt-4" asChild size="sm">
             <Link href="/projects/new">
-              <Plus className="mr-2 h-4 w-4" aria-hidden="true" />
-              Créer mon premier projet
+              <Plus className="mr-2 h-4 w-4" />
+              Créer un projet
             </Link>
           </Button>
-        </Card>
+        </div>
       ) : (
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="space-y-2">
           {projects?.map((project) => (
-            <Link key={project.id} href={`/projects/${project.id}`}>
-              <Card className="h-full transition-all hover:border-primary/50 hover:shadow-lg hover:shadow-primary/10">
-                <CardHeader>
-                  <div className="flex items-start justify-between">
-                    <CardTitle className="text-lg">{project.name}</CardTitle>
-                    <Badge variant="outline">{project.brandName}</Badge>
-                  </div>
-                  <CardDescription>
-                    {project.brandVariants.length > 0 && (
-                      <span>
-                        Variantes: {project.brandVariants.join(', ')}
-                      </span>
-                    )}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex items-center gap-4 text-sm text-muted-foreground">
-                    <div className="flex items-center gap-1">
-                      <BarChart3 className="h-4 w-4" aria-hidden="true" />
-                      <span>
-                        {project.lastScannedAt
-                          ? `Dernier scan: ${new Date(project.lastScannedAt).toLocaleDateString('fr-FR')}`
-                          : 'Jamais scanné'}
-                      </span>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+            <Link
+              key={project.id}
+              href={`/projects/${project.id}`}
+              className="group flex items-center justify-between rounded-lg border border-border bg-card p-4 transition-colors hover:border-primary/50 hover:bg-card/80"
+            >
+              <div>
+                <h3 className="font-medium">{project.name}</h3>
+                <p className="text-sm text-muted-foreground">
+                  {project.brandName}
+                  {project.brandVariants.length > 0 && (
+                    <span> · {project.brandVariants.join(', ')}</span>
+                  )}
+                </p>
+              </div>
+              <div className="flex items-center gap-4">
+                <span className="text-xs text-muted-foreground">
+                  {project.lastScannedAt
+                    ? `Scanné le ${new Date(project.lastScannedAt).toLocaleDateString('fr-FR')}`
+                    : 'Jamais scanné'}
+                </span>
+                <ChevronRight className="h-4 w-4 text-muted-foreground transition-transform group-hover:translate-x-1" />
+              </div>
             </Link>
           ))}
         </div>

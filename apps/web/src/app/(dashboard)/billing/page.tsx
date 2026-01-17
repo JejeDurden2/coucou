@@ -2,19 +2,12 @@
 
 import { useAuth } from '@/lib/auth-context';
 import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { Check } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 const plans = [
   {
+    id: 'FREE',
     name: 'Free',
     price: '0',
     description: 'Pour découvrir',
@@ -26,6 +19,7 @@ const plans = [
     ],
   },
   {
+    id: 'SOLO',
     name: 'Solo',
     price: '29',
     description: 'Pour les indépendants',
@@ -38,6 +32,7 @@ const plans = [
     ],
   },
   {
+    id: 'PRO',
     name: 'Pro',
     price: '79',
     description: 'Pour les équipes',
@@ -57,68 +52,77 @@ export default function BillingPage() {
   const { user } = useAuth();
   const currentPlan = user?.plan ?? 'FREE';
 
-  const handleUpgrade = (planName: string) => {
+  const handleUpgrade = (planId: string) => {
     // TODO: Implement Stripe checkout
-    console.log('Upgrade to', planName);
+    console.log('Upgrade to', planId);
   };
 
   return (
-    <div>
-      <h1 className="text-2xl font-bold mb-2">Facturation</h1>
-      <p className="text-muted-foreground mb-8">
-        Gérez votre abonnement et consultez vos factures
-      </p>
+    <div className="space-y-6">
+      <div>
+        <h1 className="text-xl font-semibold">Facturation</h1>
+        <p className="text-sm text-muted-foreground mt-1">
+          Gérez votre abonnement
+        </p>
+      </div>
 
-      <div className="grid md:grid-cols-3 gap-6 max-w-4xl">
+      <div className="grid gap-4 md:grid-cols-3 max-w-4xl">
         {plans.map((plan) => {
-          const isCurrent = plan.name.toUpperCase() === currentPlan;
+          const isCurrent = plan.id === currentPlan;
           return (
-            <Card
-              key={plan.name}
-              className={`flex flex-col ${plan.popular ? 'border-cyan-500/50 relative' : ''}`}
+            <div
+              key={plan.id}
+              className={cn(
+                'relative flex flex-col rounded-lg border bg-card p-6',
+                plan.popular ? 'border-primary' : 'border-border',
+                isCurrent && 'ring-2 ring-primary/50'
+              )}
             >
               {plan.popular && (
-                <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                  <Badge>Populaire</Badge>
-                </div>
+                <span className="absolute -top-2.5 left-4 bg-primary text-primary-foreground text-xs font-medium px-2 py-0.5 rounded">
+                  Populaire
+                </span>
               )}
-              <CardHeader>
-                <CardTitle className="flex items-center justify-between">
-                  {plan.name}
-                  {isCurrent && <Badge variant="secondary">Actuel</Badge>}
-                </CardTitle>
-                <div className="mt-2">
-                  <span className="text-3xl font-bold">{plan.price}€</span>
-                  <span className="text-muted-foreground">/mois</span>
+
+              <div className="mb-4">
+                <div className="flex items-center justify-between">
+                  <h3 className="font-semibold">{plan.name}</h3>
+                  {isCurrent && (
+                    <span className="text-xs bg-muted px-2 py-0.5 rounded">Actuel</span>
+                  )}
                 </div>
-                <CardDescription>{plan.description}</CardDescription>
-              </CardHeader>
-              <CardContent className="flex-1">
-                <ul className="space-y-2">
-                  {plan.features.map((feature) => (
-                    <li key={feature} className="flex items-center gap-2 text-sm">
-                      <Check className="h-4 w-4 text-cyan-400 shrink-0" />
-                      {feature}
-                    </li>
-                  ))}
-                </ul>
-              </CardContent>
-              <CardFooter>
-                {isCurrent ? (
-                  <Button variant="outline" className="w-full" disabled>
-                    Plan actuel
-                  </Button>
-                ) : (
-                  <Button
-                    className="w-full"
-                    variant={plan.popular ? 'default' : 'outline'}
-                    onClick={() => handleUpgrade(plan.name)}
-                  >
-                    {plan.price === '0' ? 'Downgrader' : 'Choisir'}
-                  </Button>
-                )}
-              </CardFooter>
-            </Card>
+                <p className="text-sm text-muted-foreground">{plan.description}</p>
+              </div>
+
+              <div className="mb-4">
+                <span className="text-3xl font-bold">{plan.price}€</span>
+                <span className="text-muted-foreground text-sm">/mois</span>
+              </div>
+
+              <ul className="space-y-2 mb-6 flex-1">
+                {plan.features.map((feature) => (
+                  <li key={feature} className="flex items-start gap-2 text-sm">
+                    <Check className="h-4 w-4 text-emerald-400 shrink-0 mt-0.5" />
+                    <span>{feature}</span>
+                  </li>
+                ))}
+              </ul>
+
+              {isCurrent ? (
+                <Button variant="outline" className="w-full" disabled size="sm">
+                  Plan actuel
+                </Button>
+              ) : (
+                <Button
+                  className="w-full"
+                  variant={plan.popular ? 'default' : 'outline'}
+                  onClick={() => handleUpgrade(plan.id)}
+                  size="sm"
+                >
+                  {plan.price === '0' ? 'Downgrader' : 'Choisir ce plan'}
+                </Button>
+              )}
+            </div>
           );
         })}
       </div>
