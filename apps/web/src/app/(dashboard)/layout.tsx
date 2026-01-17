@@ -62,16 +62,16 @@ export default function DashboardLayout({ children }: DashboardLayoutProps): Rea
       <header className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="flex h-14 items-center justify-between px-4 md:px-6">
           <div className="flex items-center gap-6">
-            <Link href="/projects" className="flex items-center">
+            <Link href="/projects" className="flex items-center" aria-label="Accueil - Liste des projets">
               <Logo size="sm" />
             </Link>
 
             {hasProjects ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="gap-2 text-sm font-medium">
+                  <Button variant="ghost" className="gap-2 text-sm font-medium" aria-label="Sélectionner un projet">
                     {currentProject?.name ?? 'Sélectionner un projet'}
-                    <ChevronDown className="h-4 w-4 text-muted-foreground" />
+                    <ChevronDown className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="start" className="w-56">
@@ -93,7 +93,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps): Rea
                   ))}
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={() => router.push('/projects/new')}>
-                    <Zap className="mr-2 h-4 w-4" />
+                    <Zap className="mr-2 h-4 w-4" aria-hidden="true" />
                     Nouveau projet
                   </DropdownMenuItem>
                 </DropdownMenuContent>
@@ -104,12 +104,12 @@ export default function DashboardLayout({ children }: DashboardLayoutProps): Rea
           <div className="flex items-center gap-2">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="gap-2">
+                <Button variant="ghost" className="gap-2" aria-label="Menu utilisateur">
                   <div className="h-7 w-7 rounded-full bg-primary/20 flex items-center justify-center text-xs font-medium text-primary">
                     {user?.name?.charAt(0).toUpperCase()}
                   </div>
                   <span className="hidden md:inline text-sm">{user?.name}</span>
-                  <ChevronDown className="h-4 w-4 text-muted-foreground" />
+                  <ChevronDown className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56">
@@ -120,16 +120,16 @@ export default function DashboardLayout({ children }: DashboardLayoutProps): Rea
                 </div>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={() => router.push('/settings')}>
-                  <Settings className="mr-2 h-4 w-4" />
+                  <Settings className="mr-2 h-4 w-4" aria-hidden="true" />
                   Paramètres
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => router.push('/billing')}>
-                  <CreditCard className="mr-2 h-4 w-4" />
+                  <CreditCard className="mr-2 h-4 w-4" aria-hidden="true" />
                   Facturation
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={handleLogout} className="text-rose-400">
-                  <LogOut className="mr-2 h-4 w-4" />
+                  <LogOut className="mr-2 h-4 w-4" aria-hidden="true" />
                   Déconnexion
                 </DropdownMenuItem>
               </DropdownMenuContent>

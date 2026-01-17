@@ -105,12 +105,12 @@ export default function ProjectDashboardPage({ params }: ProjectDashboardPagePro
         >
           {triggerScan.isPending ? (
             <>
-              <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
+              <RefreshCw className="mr-2 h-4 w-4 animate-spin" aria-hidden="true" />
               Scan en cours…
             </>
           ) : (
             <>
-              <Play className="mr-2 h-4 w-4" />
+              <Play className="mr-2 h-4 w-4" aria-hidden="true" />
               Lancer un scan
             </>
           )}
@@ -152,21 +152,21 @@ export default function ProjectDashboardPage({ params }: ProjectDashboardPagePro
             size="sm"
             onClick={() => setShowAddPrompt(true)}
           >
-            <Plus className="mr-2 h-4 w-4" />
+            <Plus className="mr-2 h-4 w-4" aria-hidden="true" />
             Ajouter
           </Button>
         </div>
 
         {/* Add Prompt Form */}
-        {showAddPrompt && (
+        {showAddPrompt ? (
           <form onSubmit={handleAddPrompt} className="flex gap-2">
             <Input
-              placeholder="Ex: Quels sont les meilleurs cafés à Paris ?"
+              placeholder="Ex: Quels sont les meilleurs cafés à Paris…"
               value={newPrompt}
               onChange={(e) => setNewPrompt(e.target.value)}
               className="flex-1"
-              autoFocus
               autoComplete="off"
+              aria-label="Nouveau prompt à tracker"
             />
             <Button type="submit" disabled={createPrompt.isPending} size="sm">
               Ajouter
@@ -183,7 +183,7 @@ export default function ProjectDashboardPage({ params }: ProjectDashboardPagePro
               Annuler
             </Button>
           </form>
-        )}
+        ) : null}
 
         {/* Prompts Table */}
         <div className="rounded-lg border border-border overflow-hidden">
@@ -239,8 +239,9 @@ export default function ProjectDashboardPage({ params }: ProjectDashboardPagePro
                         size="icon"
                         className="h-8 w-8 text-muted-foreground hover:text-rose-400"
                         onClick={() => handleDeletePrompt(prompt.promptId)}
+                        aria-label="Supprimer ce prompt"
                       >
-                        <Trash2 className="h-4 w-4" />
+                        <Trash2 className="h-4 w-4" aria-hidden="true" />
                       </Button>
                     </td>
                   </tr>
@@ -314,7 +315,7 @@ function TrendIndicator({ value, isPositive }: TrendIndicatorProps): React.React
 
   return (
     <span className={cn('inline-flex items-center text-xs font-medium', colorClass)}>
-      <Icon className="h-3 w-3 mr-0.5" />
+      <Icon className="h-3 w-3 mr-0.5" aria-hidden="true" />
       {prefix}{Math.round(value)}%
     </span>
   );
@@ -337,7 +338,7 @@ function CitationStatus({ result }: CitationStatusProps): React.ReactNode {
   if (result.isCited) {
     return (
       <span className="inline-flex items-center gap-1 text-emerald-400">
-        <Check className="h-4 w-4" />
+        <Check className="h-4 w-4" aria-hidden="true" />
         {result.position ? (
           <span className="text-xs font-medium">#{result.position}</span>
         ) : null}
@@ -347,7 +348,7 @@ function CitationStatus({ result }: CitationStatusProps): React.ReactNode {
 
   return (
     <span className="inline-flex items-center text-rose-400">
-      <X className="h-4 w-4" />
+      <X className="h-4 w-4" aria-hidden="true" />
     </span>
   );
 }

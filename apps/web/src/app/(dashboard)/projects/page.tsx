@@ -28,7 +28,7 @@ export default function ProjectsPage(): React.ReactNode {
         {canCreateProject ? (
           <Button asChild size="sm">
             <Link href="/projects/new">
-              <Plus className="mr-2 h-4 w-4" />
+              <Plus className="mr-2 h-4 w-4" aria-hidden="true" />
               Nouveau projet
             </Link>
           </Button>
@@ -61,14 +61,14 @@ export default function ProjectsPage(): React.ReactNode {
         </div>
       ) : projects?.length === 0 ? (
         <div className="rounded-lg border border-dashed border-border p-12 text-center">
-          <FolderKanban className="mx-auto h-10 w-10 text-muted-foreground" />
+          <FolderKanban className="mx-auto h-10 w-10 text-muted-foreground" aria-hidden="true" />
           <h3 className="mt-4 font-medium">Aucun projet</h3>
           <p className="mt-1 text-sm text-muted-foreground">
             Créez votre premier projet pour commencer à tracker votre visibilité IA.
           </p>
           <Button className="mt-4" asChild size="sm">
             <Link href="/projects/new">
-              <Plus className="mr-2 h-4 w-4" />
+              <Plus className="mr-2 h-4 w-4" aria-hidden="true" />
               Créer un projet
             </Link>
           </Button>
@@ -96,7 +96,7 @@ export default function ProjectsPage(): React.ReactNode {
                     ? `Scanné le ${new Date(project.lastScannedAt).toLocaleDateString('fr-FR')}`
                     : 'Jamais scanné'}
                 </span>
-                <ChevronRight className="h-4 w-4 text-muted-foreground transition-transform group-hover:translate-x-1" />
+                <ChevronRight className="h-4 w-4 text-muted-foreground transition-transform group-hover:translate-x-1" aria-hidden="true" />
               </div>
             </Link>
           ))}

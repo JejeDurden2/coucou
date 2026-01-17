@@ -62,9 +62,8 @@ export default function BillingPage(): React.ReactNode {
   const { user } = useAuth();
   const currentPlan = user?.plan ?? 'FREE';
 
-  function handleUpgrade(planId: string): void {
+  function handleUpgrade(_planId: string): void {
     // TODO: Implement Stripe checkout
-    console.log('Upgrade to', planId);
   }
 
   return (
