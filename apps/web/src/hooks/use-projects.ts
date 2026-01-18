@@ -1,8 +1,9 @@
 'use client';
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
 import type { CreateProjectInput, UpdateProjectInput } from '@coucou-ia/shared';
-import { apiClient } from '@/lib/api-client';
+import { apiClient, ApiClientError } from '@/lib/api-client';
 
 export function useProjects() {
   return useQuery({
@@ -24,8 +25,24 @@ export function useCreateProject() {
 
   return useMutation({
     mutationFn: (data: CreateProjectInput) => apiClient.createProject(data),
-    onSuccess: () => {
+    onSuccess: (project) => {
       queryClient.invalidateQueries({ queryKey: ['projects'] });
+      toast.success('Projet créé', {
+        description: `Le projet "${project.name}" a été créé avec succès.`,
+      });
+    },
+    onError: (error) => {
+      if (error instanceof ApiClientError) {
+        if (error.code === 'PLAN_LIMIT_EXCEEDED') {
+          toast.error('Limite atteinte', {
+            description: 'Passez à un plan supérieur pour créer plus de projets.',
+          });
+        } else {
+          toast.error('Erreur', { description: error.message });
+        }
+      } else {
+        toast.error('Erreur', { description: 'Une erreur inattendue est survenue.' });
+      }
     },
   });
 }
@@ -38,6 +55,14 @@ export function useUpdateProject(id: string) {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['projects'] });
       queryClient.invalidateQueries({ queryKey: ['projects', id] });
+      toast.success('Projet mis à jour');
+    },
+    onError: (error) => {
+      if (error instanceof ApiClientError) {
+        toast.error('Erreur', { description: error.message });
+      } else {
+        toast.error('Erreur', { description: 'Une erreur inattendue est survenue.' });
+      }
     },
   });
 }
@@ -49,6 +74,14 @@ export function useDeleteProject() {
     mutationFn: (id: string) => apiClient.deleteProject(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['projects'] });
+      toast.success('Projet supprimé');
+    },
+    onError: (error) => {
+      if (error instanceof ApiClientError) {
+        toast.error('Erreur', { description: error.message });
+      } else {
+        toast.error('Erreur', { description: 'Une erreur inattendue est survenue.' });
+      }
     },
   });
 }

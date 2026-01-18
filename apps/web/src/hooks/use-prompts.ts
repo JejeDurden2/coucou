@@ -1,8 +1,9 @@
 'use client';
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
 import type { CreatePromptInput, UpdatePromptInput } from '@coucou-ia/shared';
-import { apiClient } from '@/lib/api-client';
+import { apiClient, ApiClientError } from '@/lib/api-client';
 
 export function usePrompts(projectId: string) {
   return useQuery({
@@ -25,6 +26,20 @@ export function useCreatePrompt(projectId: string) {
       queryClient.invalidateQueries({
         queryKey: ['projects', projectId, 'stats'],
       });
+      toast.success('Prompt créé');
+    },
+    onError: (error) => {
+      if (error instanceof ApiClientError) {
+        if (error.code === 'PLAN_LIMIT_EXCEEDED') {
+          toast.error('Limite atteinte', {
+            description: 'Passez à un plan supérieur pour créer plus de prompts.',
+          });
+        } else {
+          toast.error('Erreur', { description: error.message });
+        }
+      } else {
+        toast.error('Erreur', { description: 'Une erreur inattendue est survenue.' });
+      }
     },
   });
 }
@@ -44,6 +59,14 @@ export function useUpdatePrompt(projectId: string) {
       queryClient.invalidateQueries({
         queryKey: ['projects', projectId, 'prompts'],
       });
+      toast.success('Prompt mis à jour');
+    },
+    onError: (error) => {
+      if (error instanceof ApiClientError) {
+        toast.error('Erreur', { description: error.message });
+      } else {
+        toast.error('Erreur', { description: 'Une erreur inattendue est survenue.' });
+      }
     },
   });
 }
@@ -61,6 +84,14 @@ export function useDeletePrompt(projectId: string) {
       queryClient.invalidateQueries({
         queryKey: ['projects', projectId, 'stats'],
       });
+      toast.success('Prompt supprimé');
+    },
+    onError: (error) => {
+      if (error instanceof ApiClientError) {
+        toast.error('Erreur', { description: error.message });
+      } else {
+        toast.error('Erreur', { description: 'Une erreur inattendue est survenue.' });
+      }
     },
   });
 }
