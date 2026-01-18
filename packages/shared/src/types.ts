@@ -186,11 +186,23 @@ export interface PromptStat {
   anthropic: { isCited: boolean; position: number | null } | null;
 }
 
+export interface TimeSeriesPoint {
+  date: string;
+  value: number;
+}
+
+export interface TimeSeriesTrends {
+  citationRate: TimeSeriesPoint[];
+  averageRank: TimeSeriesPoint[];
+  mentionCount: TimeSeriesPoint[];
+}
+
 export interface DashboardStats {
   globalScore: number;
   averageRank: number | null;
   breakdown: ProviderBreakdown[];
   trend: Trend;
+  trends: TimeSeriesTrends;
   topCompetitors: Competitor[];
   enrichedCompetitors: EnrichedCompetitor[];
   promptStats: PromptStat[];
@@ -276,6 +288,35 @@ export const PLAN_PRICING: Record<Plan, PlanPricing> = {
     isPopular: true,
   },
 };
+
+// ============================================
+// Recommendations Types
+// ============================================
+
+export type RecommendationType =
+  | 'low_citation'
+  | 'competitor_dominance'
+  | 'provider_disparity'
+  | 'prompt_weakness'
+  | 'improvement';
+
+export type RecommendationSeverity = 'info' | 'warning' | 'critical';
+
+export interface Recommendation {
+  id: string;
+  type: RecommendationType;
+  severity: RecommendationSeverity;
+  title: string;
+  description: string;
+  actionItems: string[];
+  relatedPromptIds?: string[];
+  metadata?: Record<string, unknown>;
+}
+
+export interface RecommendationsResponse {
+  recommendations: Recommendation[];
+  generatedAt: Date;
+}
 
 // ============================================
 // API Error Response

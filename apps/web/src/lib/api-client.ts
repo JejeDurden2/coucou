@@ -7,6 +7,7 @@ import type {
   UpdatePromptInput,
   Scan,
   DashboardStats,
+  RecommendationsResponse,
   User,
   ApiError,
 } from '@coucou-ia/shared';
@@ -161,6 +162,10 @@ class ApiClient {
   // Dashboard
   async getDashboardStats(projectId: string): Promise<DashboardStats> {
     return this.fetch<DashboardStats>(`/projects/${projectId}/dashboard`);
+  }
+
+  async getRecommendations(projectId: string): Promise<RecommendationsResponse> {
+    return this.fetch<RecommendationsResponse>(`/projects/${projectId}/dashboard/recommendations`);
   }
 
   // Billing

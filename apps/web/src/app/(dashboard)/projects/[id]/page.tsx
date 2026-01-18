@@ -6,7 +6,7 @@ import { Radar, Plus, RefreshCw, Trash2, Trophy, MessageSquare, BarChart3, EyeOf
 
 import { useProject } from '@/hooks/use-projects';
 import { useCreatePrompt, useDeletePrompt } from '@/hooks/use-prompts';
-import { useDashboardStats, useTriggerScan } from '@/hooks/use-dashboard';
+import { useDashboardStats, useRecommendations, useTriggerScan } from '@/hooks/use-dashboard';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
@@ -19,7 +19,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import { CompetitorsList } from '@/components/features/dashboard';
+import { CompetitorsList, RecommendationsPanel } from '@/components/features/dashboard';
 import { StatCard } from '@/components/features/dashboard/stat-card';
 import { LLMProvider, type ProviderBreakdown } from '@coucou-ia/shared';
 import { cn } from '@/lib/utils';
@@ -77,6 +77,7 @@ export default function ProjectDashboardPage({
   const { id } = use(params);
   const { data: project, isLoading: projectLoading } = useProject(id);
   const { data: stats, isLoading: statsLoading } = useDashboardStats(id);
+  const { data: recommendationsData } = useRecommendations(id);
   const triggerScan = useTriggerScan(id);
   const createPrompt = useCreatePrompt(id);
   const deletePrompt = useDeletePrompt(id);
@@ -195,6 +196,7 @@ export default function ProjectDashboardPage({
           value={stats?.averageRank ?? null}
           gradient="gold"
           trend={stats?.trend ? { delta: stats.trend.delta } : undefined}
+          sparklineData={stats?.trends?.averageRank?.map((p) => p.value)}
         />
         <StatCard
           icon={MessageSquare}
@@ -337,6 +339,11 @@ export default function ProjectDashboardPage({
           </table>
         </div>
       </div>
+
+      {/* Recommendations Section */}
+      {recommendationsData?.recommendations && recommendationsData.recommendations.length > 0 ? (
+        <RecommendationsPanel recommendations={recommendationsData.recommendations} />
+      ) : null}
 
       {/* Competitors Section */}
       {stats && (stats.enrichedCompetitors?.length > 0 || stats.topCompetitors?.length > 0) ? (

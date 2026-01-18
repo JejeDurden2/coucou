@@ -52,11 +52,23 @@ export interface PromptStatDto {
   anthropic: { isCited: boolean; position: number | null } | null;
 }
 
+export interface TimeSeriesPointDto {
+  date: string;
+  value: number;
+}
+
+export interface TimeSeriesTrendsDto {
+  citationRate: TimeSeriesPointDto[];
+  averageRank: TimeSeriesPointDto[];
+  mentionCount: TimeSeriesPointDto[];
+}
+
 export interface DashboardStatsDto {
   globalScore: number;
   averageRank: number | null;
   breakdown: ProviderBreakdownDto[];
   trend: TrendDto;
+  trends: TimeSeriesTrendsDto;
   topCompetitors: CompetitorDto[];
   enrichedCompetitors: EnrichedCompetitorDto[];
   promptStats: PromptStatDto[];

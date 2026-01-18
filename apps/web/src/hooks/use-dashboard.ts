@@ -20,6 +20,15 @@ export function useScans(projectId: string) {
   });
 }
 
+export function useRecommendations(projectId: string) {
+  return useQuery({
+    queryKey: ['projects', projectId, 'recommendations'],
+    queryFn: () => apiClient.getRecommendations(projectId),
+    enabled: !!projectId,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+  });
+}
+
 export function useTriggerScan(projectId: string) {
   const queryClient = useQueryClient();
 
@@ -31,6 +40,9 @@ export function useTriggerScan(projectId: string) {
       });
       queryClient.invalidateQueries({
         queryKey: ['projects', projectId, 'stats'],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ['projects', projectId, 'recommendations'],
       });
 
       const hasErrors = data.some((scan) => scan.providerErrors?.length);

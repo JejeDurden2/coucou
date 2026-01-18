@@ -12,6 +12,8 @@ import type {
   EnrichedCompetitorDto,
   PromptStatDto,
   ProviderBreakdownDto,
+  TimeSeriesPointDto,
+  TimeSeriesTrendsDto,
 } from '../dto/dashboard.dto';
 
 type GetDashboardStatsError = NotFoundError | ForbiddenError;
@@ -58,6 +60,9 @@ export class GetDashboardStatsUseCase {
     // Calculate trend (last 7 days vs previous 7 days)
     const trend = this.calculateTrend(scans);
 
+    // Calculate time series trends (daily data points for sparklines)
+    const trends = this.calculateTimeSeriesTrends(scans);
+
     // Aggregate competitors (simple version for backward compat)
     const topCompetitors = this.aggregateCompetitors(scans.flatMap((s) => s.results));
 
@@ -74,6 +79,7 @@ export class GetDashboardStatsUseCase {
       averageRank,
       breakdown,
       trend,
+      trends,
       topCompetitors,
       enrichedCompetitors,
       promptStats,
@@ -147,6 +153,69 @@ export class GetDashboardStatsUseCase {
     if (scans.length === 0) return 0;
     const citedCount = scans.filter((s) => s.results.some((r) => r.isCited)).length;
     return (citedCount / scans.length) * 100;
+  }
+
+  private calculateTimeSeriesTrends(
+    scans: Array<{ executedAt: Date; results: LLMResult[] }>,
+  ): TimeSeriesTrendsDto {
+    const DAYS = 30;
+    const now = new Date();
+    const startDate = new Date(now.getTime() - DAYS * 24 * 60 * 60 * 1000);
+
+    // Filter scans to last N days
+    const recentScans = scans.filter((s) => s.executedAt >= startDate);
+
+    // Group scans by day (YYYY-MM-DD)
+    const scansByDay = new Map<
+      string,
+      Array<{ executedAt: Date; results: LLMResult[] }>
+    >();
+
+    for (const scan of recentScans) {
+      const dateKey = scan.executedAt.toISOString().split('T')[0];
+      const existing = scansByDay.get(dateKey) ?? [];
+      existing.push(scan);
+      scansByDay.set(dateKey, existing);
+    }
+
+    // Generate daily data points
+    const citationRate: TimeSeriesPointDto[] = [];
+    const averageRank: TimeSeriesPointDto[] = [];
+    const mentionCount: TimeSeriesPointDto[] = [];
+
+    for (let i = DAYS - 1; i >= 0; i--) {
+      const date = new Date(now.getTime() - i * 24 * 60 * 60 * 1000);
+      const dateKey = date.toISOString().split('T')[0];
+      const dayScans = scansByDay.get(dateKey) ?? [];
+
+      if (dayScans.length > 0) {
+        // Citation rate for the day
+        const citedCount = dayScans.filter((s) =>
+          s.results.some((r) => r.isCited),
+        ).length;
+        const dayCitationRate = (citedCount / dayScans.length) * 100;
+        citationRate.push({
+          date: dateKey,
+          value: Math.round(dayCitationRate * 10) / 10,
+        });
+
+        // Average rank for the day
+        const dayResults = dayScans.flatMap((s) => s.results);
+        const dayAvgRank = this.calculateAverageRank(dayResults);
+        if (dayAvgRank !== null) {
+          averageRank.push({ date: dateKey, value: dayAvgRank });
+        }
+
+        // Mention count for the day (sum of all competitor mentions)
+        const dayMentions = dayResults.reduce(
+          (sum, r) => sum + r.competitorMentions.length,
+          0,
+        );
+        mentionCount.push({ date: dateKey, value: dayMentions });
+      }
+    }
+
+    return { citationRate, averageRank, mentionCount };
   }
 
   private aggregateCompetitors(results: LLMResult[]): CompetitorDto[] {
