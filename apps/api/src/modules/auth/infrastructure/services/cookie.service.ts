@@ -20,10 +20,11 @@ export class CookieService {
     accessToken: string,
     refreshToken: string,
   ): void {
+    // Cross-origin cookies require sameSite: 'none' and secure: true
     const commonOptions = {
       httpOnly: true,
       secure: this.isProduction,
-      sameSite: 'lax' as const,
+      sameSite: this.isProduction ? ('none' as const) : ('lax' as const),
       path: '/',
       ...(this.cookieDomain && { domain: this.cookieDomain }),
     };
@@ -45,7 +46,7 @@ export class CookieService {
     const commonOptions = {
       httpOnly: true,
       secure: this.isProduction,
-      sameSite: 'lax' as const,
+      sameSite: this.isProduction ? ('none' as const) : ('lax' as const),
       path: '/',
       ...(this.cookieDomain && { domain: this.cookieDomain }),
     };
