@@ -21,6 +21,17 @@ export class CompetitorExtractionService {
     const competitors = new Set<string>();
     const brandLower = brandName.toLowerCase();
 
+    // Extract from numbered list format: "1. BrandName - description" or "1. **BrandName** - description"
+    const numberedMatches = response.matchAll(
+      /^\d+\.\s+\*{0,2}([A-ZÀ-Ü][^\s*-]+(?:\s+[A-ZÀ-Ü][^\s*-]+)*)\*{0,2}\s*[-–:]/gm,
+    );
+    for (const match of numberedMatches) {
+      const name = match[1].trim();
+      if (this.isValidCompetitor(name, brandLower)) {
+        competitors.add(name);
+      }
+    }
+
     // Extract quoted names
     const quotedMatches = response.match(/["«]([^"»]+)["»]/g);
     if (quotedMatches) {
