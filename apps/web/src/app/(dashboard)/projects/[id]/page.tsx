@@ -9,6 +9,16 @@ import { useCreatePrompt, useDeletePrompt } from '@/hooks/use-prompts';
 import { useDashboardStats, useTriggerScan } from '@/hooks/use-dashboard';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 import { LLMProvider } from '@coucou-ia/shared';
 import { cn } from '@/lib/utils';
 
@@ -26,6 +36,7 @@ export default function ProjectDashboardPage({ params }: ProjectDashboardPagePro
 
   const [newPrompt, setNewPrompt] = useState('');
   const [showAddPrompt, setShowAddPrompt] = useState(false);
+  const [promptToDelete, setPromptToDelete] = useState<string | null>(null);
 
   async function handleAddPrompt(e: React.FormEvent): Promise<void> {
     e.preventDefault();
@@ -40,9 +51,10 @@ export default function ProjectDashboardPage({ params }: ProjectDashboardPagePro
     await triggerScan.mutateAsync();
   }
 
-  async function handleDeletePrompt(promptId: string): Promise<void> {
-    if (confirm('Supprimer ce prompt ?')) {
-      await deletePrompt.mutateAsync(promptId);
+  async function handleConfirmDelete(): Promise<void> {
+    if (promptToDelete) {
+      await deletePrompt.mutateAsync(promptToDelete);
+      setPromptToDelete(null);
     }
   }
 
@@ -137,7 +149,7 @@ export default function ProjectDashboardPage({ params }: ProjectDashboardPagePro
         />
         <div className="rounded-lg border border-border bg-card p-4">
           <p className="text-xs text-muted-foreground mb-1">Total scans</p>
-          <p className="text-2xl font-semibold">{stats?.totalScans ?? 0}</p>
+          <p className="text-2xl font-semibold tabular-nums">{stats?.totalScans ?? 0}</p>
         </div>
       </div>
 
@@ -237,11 +249,11 @@ export default function ProjectDashboardPage({ params }: ProjectDashboardPagePro
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="h-8 w-8 text-muted-foreground hover:text-red-500"
-                        onClick={() => handleDeletePrompt(prompt.promptId)}
+                        className="size-8 text-muted-foreground hover:text-red-500"
+                        onClick={() => setPromptToDelete(prompt.promptId)}
                         aria-label="Supprimer ce prompt"
                       >
-                        <Trash2 className="h-4 w-4" aria-hidden="true" />
+                        <Trash2 className="size-4" aria-hidden="true" />
                       </Button>
                     </td>
                   </tr>
@@ -265,12 +277,33 @@ export default function ProjectDashboardPage({ params }: ProjectDashboardPagePro
                 className="inline-flex items-center gap-1.5 rounded-full bg-muted px-3 py-1 text-sm"
               >
                 {competitor.name}
-                <span className="text-xs text-muted-foreground">({competitor.count})</span>
+                <span className="text-xs text-muted-foreground tabular-nums">({competitor.count})</span>
               </span>
             ))}
           </div>
         </div>
       ) : null}
+
+      {/* Delete Prompt AlertDialog */}
+      <AlertDialog open={promptToDelete !== null} onOpenChange={(open) => !open && setPromptToDelete(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Supprimer ce prompt ?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Cette action est irréversible. Le prompt et son historique de scans seront définitivement supprimés.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Annuler</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleConfirmDelete}
+              className="bg-red-500 hover:bg-red-600 text-white"
+            >
+              Supprimer
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
@@ -291,7 +324,7 @@ function ScoreCard({ label, value, trend, isPercentage }: ScoreCardProps): React
     <div className="rounded-lg border border-border bg-card p-4">
       <p className="text-xs text-muted-foreground mb-1">{label}</p>
       <div className="flex items-baseline gap-2">
-        <p className="text-2xl font-semibold">
+        <p className="text-2xl font-semibold tabular-nums">
           {displayValue}
           {isPercentage && <span className="text-lg">%</span>}
         </p>
@@ -314,8 +347,8 @@ function TrendIndicator({ value, isPositive }: TrendIndicatorProps): React.React
   const prefix = isPositive ? '+' : '';
 
   return (
-    <span className={cn('inline-flex items-center text-xs font-medium', colorClass)}>
-      <Icon className="h-3 w-3 mr-0.5" aria-hidden="true" />
+    <span className={cn('inline-flex items-center text-xs font-medium tabular-nums', colorClass)}>
+      <Icon className="size-3 mr-0.5" aria-hidden="true" />
       {prefix}{Math.round(value)}%
     </span>
   );
@@ -338,9 +371,9 @@ function CitationStatus({ result }: CitationStatusProps): React.ReactNode {
   if (result.isCited) {
     return (
       <span className="inline-flex items-center gap-1 text-emerald-500">
-        <Check className="h-4 w-4" aria-hidden="true" />
+        <Check className="size-4" aria-hidden="true" />
         {result.position ? (
-          <span className="text-xs font-medium">#{result.position}</span>
+          <span className="text-xs font-medium tabular-nums">#{result.position}</span>
         ) : null}
       </span>
     );
@@ -348,7 +381,7 @@ function CitationStatus({ result }: CitationStatusProps): React.ReactNode {
 
   return (
     <span className="inline-flex items-center text-red-500">
-      <X className="h-4 w-4" aria-hidden="true" />
+      <X className="size-4" aria-hidden="true" />
     </span>
   );
 }

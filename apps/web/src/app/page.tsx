@@ -12,6 +12,7 @@ import {
   TrendingUp,
   Users,
 } from 'lucide-react';
+import { Plan, PLAN_PRICING } from '@coucou-ia/shared';
 import { Button } from '@/components/ui/button';
 import { Logo } from '@/components/ui/logo';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -62,40 +63,27 @@ const steps = [
 const plans = [
   {
     name: 'Free',
-    price: '0',
-    description: 'Pour découvrir',
-    features: ['1 projet', '3 prompts', 'Scans manuels', 'Rétention 30 jours'],
+    price: PLAN_PRICING[Plan.FREE].price.toString(),
+    description: PLAN_PRICING[Plan.FREE].description,
+    features: PLAN_PRICING[Plan.FREE].features,
     cta: 'Commencer gratuitement',
     popular: false,
   },
   {
     name: 'Solo',
-    price: '39',
-    description: 'Pour les indépendants',
-    features: [
-      '5 projets',
-      '20 prompts / projet',
-      'Scans hebdomadaires',
-      'Rétention 6 mois',
-      'Support email',
-    ],
+    price: PLAN_PRICING[Plan.SOLO].price.toString(),
+    description: PLAN_PRICING[Plan.SOLO].description,
+    features: PLAN_PRICING[Plan.SOLO].features,
     cta: 'Essai gratuit 14 jours',
     popular: false,
   },
   {
     name: 'Pro',
-    price: '99',
-    description: 'Pour les équipes',
-    features: [
-      '15 projets',
-      '50 prompts / projet',
-      'Scans quotidiens',
-      'Historique illimité',
-      'Support prioritaire',
-      'Export CSV / API',
-    ],
+    price: PLAN_PRICING[Plan.PRO].price.toString(),
+    description: PLAN_PRICING[Plan.PRO].description,
+    features: PLAN_PRICING[Plan.PRO].features,
     cta: 'Essai gratuit 14 jours',
-    popular: true,
+    popular: PLAN_PRICING[Plan.PRO].isPopular ?? false,
   },
 ];
 
@@ -134,7 +122,7 @@ const faqs = [
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-dvh bg-background">
       {/* Navigation */}
       <header className="fixed top-0 left-0 right-0 z-50 border-b border-zinc-800 bg-zinc-950/80 backdrop-blur-xl">
         <nav className="container mx-auto flex h-16 items-center justify-between px-4">
@@ -182,13 +170,13 @@ export default function LandingPage() {
               Nouveau: Support de Claude 3.5
             </Badge>
 
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6">
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6 text-balance">
               <span className="text-cyan-400">L&apos;IA parle-t-elle</span>
               <br />
               de vous ?
             </h1>
 
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-8">
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-8 text-pretty">
               Surveillez et améliorez la visibilité de votre marque dans les
               réponses de{' '}
               <span className="text-foreground font-medium">ChatGPT</span>,{' '}
@@ -235,10 +223,10 @@ export default function LandingPage() {
         <section className="py-20 px-4 bg-zinc-900/50">
           <div className="container mx-auto max-w-5xl">
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">
+              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-balance">
                 Le problème avec la recherche IA
               </h2>
-              <p className="text-muted-foreground max-w-2xl mx-auto">
+              <p className="text-muted-foreground max-w-2xl mx-auto text-pretty">
                 De plus en plus de personnes utilisent l&apos;IA pour trouver
                 des produits et services. Si vous n&apos;êtes pas visible, vous
                 êtes invisible.
@@ -248,7 +236,7 @@ export default function LandingPage() {
             <div className="grid md:grid-cols-3 gap-6">
               <Card className="bg-red-500/5 border-red-500/20">
                 <CardContent className="pt-6">
-                  <div className="text-4xl font-bold text-red-500 mb-2">
+                  <div className="text-4xl font-bold text-red-500 mb-2 tabular-nums">
                     67%
                   </div>
                   <p className="text-sm text-muted-foreground">
@@ -259,7 +247,7 @@ export default function LandingPage() {
               </Card>
               <Card className="bg-amber-500/5 border-amber-500/20">
                 <CardContent className="pt-6">
-                  <div className="text-4xl font-bold text-amber-400 mb-2">
+                  <div className="text-4xl font-bold text-amber-400 mb-2 tabular-nums">
                     0%
                   </div>
                   <p className="text-sm text-muted-foreground">
@@ -269,7 +257,7 @@ export default function LandingPage() {
               </Card>
               <Card className="bg-cyan-400/5 border-cyan-400/20">
                 <CardContent className="pt-6">
-                  <div className="text-4xl font-bold text-cyan-400 mb-2">
+                  <div className="text-4xl font-bold text-cyan-400 mb-2 tabular-nums">
                     +40%
                   </div>
                   <p className="text-sm text-muted-foreground">
@@ -287,10 +275,10 @@ export default function LandingPage() {
           <div className="container mx-auto max-w-5xl">
             <div className="text-center mb-12">
               <Badge className="mb-4">Fonctionnalités</Badge>
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">
+              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-balance">
                 Tout ce qu&apos;il faut pour dominer le GEO
               </h2>
-              <p className="text-muted-foreground max-w-2xl mx-auto">
+              <p className="text-muted-foreground max-w-2xl mx-auto text-pretty">
                 Coucou IA vous donne les outils pour comprendre et améliorer
                 votre présence dans les réponses des intelligences artificielles.
               </p>
@@ -303,7 +291,7 @@ export default function LandingPage() {
                   className="group hover:border-primary/50 transition-colors"
                 >
                   <CardHeader>
-                    <div className="h-12 w-12 rounded-xl bg-cyan-400/10 flex items-center justify-center mb-4 group-hover:bg-cyan-400/20 transition-colors">
+                    <div className="size-12 rounded-xl bg-cyan-400/10 flex items-center justify-center mb-4 group-hover:bg-cyan-400/20 transition-colors">
                       <feature.icon className="h-6 w-6 text-cyan-400" aria-hidden="true" />
                     </div>
                     <CardTitle className="text-lg">{feature.title}</CardTitle>
@@ -324,10 +312,10 @@ export default function LandingPage() {
           <div className="container mx-auto max-w-5xl">
             <div className="text-center mb-12">
               <Badge className="mb-4">Comment ça marche</Badge>
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">
+              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-balance">
                 3 étapes simples
               </h2>
-              <p className="text-muted-foreground max-w-2xl mx-auto">
+              <p className="text-muted-foreground max-w-2xl mx-auto text-pretty">
                 Configurez votre tracking en quelques minutes et commencez à
                 suivre votre visibilité IA.
               </p>
@@ -340,7 +328,7 @@ export default function LandingPage() {
                     <div className="hidden md:block absolute top-8 left-full w-full h-[2px] bg-zinc-700 -translate-x-1/2" />
                   )}
                   <div className="text-center">
-                    <div className="h-16 w-16 rounded-2xl bg-cyan-400/10 border border-cyan-400/20 flex items-center justify-center mx-auto mb-4 text-2xl font-bold text-cyan-400">
+                    <div className="size-16 rounded-2xl bg-cyan-400/10 border border-cyan-400/20 flex items-center justify-center mx-auto mb-4 text-2xl font-bold text-cyan-400 tabular-nums">
                       {step.number}
                     </div>
                     <h3 className="text-lg font-semibold mb-2">{step.title}</h3>
@@ -359,10 +347,10 @@ export default function LandingPage() {
           <div className="container mx-auto max-w-6xl">
             <div className="text-center mb-12">
               <Badge className="mb-4">Tarifs</Badge>
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">
+              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-balance">
                 Un plan pour chaque besoin
               </h2>
-              <p className="text-muted-foreground max-w-2xl mx-auto">
+              <p className="text-muted-foreground max-w-2xl mx-auto text-pretty">
                 Commencez gratuitement, évoluez selon vos besoins. Tous les
                 plans incluent un essai gratuit de 14 jours.
               </p>
@@ -386,7 +374,7 @@ export default function LandingPage() {
                   <CardHeader>
                     <CardTitle className="text-lg">{plan.name}</CardTitle>
                     <div className="mt-2">
-                      <span className="text-4xl font-bold">{plan.price}€</span>
+                      <span className="text-4xl font-bold tabular-nums">{plan.price}€</span>
                       <span className="text-muted-foreground">/mois</span>
                     </div>
                     <p className="text-sm text-muted-foreground">
@@ -424,10 +412,10 @@ export default function LandingPage() {
           <div className="container mx-auto max-w-3xl">
             <div className="text-center mb-12">
               <Badge className="mb-4">FAQ</Badge>
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">
+              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-balance">
                 Questions fréquentes
               </h2>
-              <p className="text-muted-foreground">
+              <p className="text-muted-foreground text-pretty">
                 Tout ce que vous devez savoir sur Coucou IA et la visibilité IA.
               </p>
             </div>
@@ -453,11 +441,11 @@ export default function LandingPage() {
         <section className="py-20 px-4">
           <div className="container mx-auto max-w-4xl text-center">
             <div className="rounded-3xl bg-cyan-400/5 p-12 border border-cyan-400/20">
-              <Bot className="h-12 w-12 mx-auto mb-6 text-cyan-400" aria-hidden="true" />
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">
+              <Bot className="size-12 mx-auto mb-6 text-cyan-400" aria-hidden="true" />
+              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-balance">
                 Prêt à être visible par l&apos;IA ?
               </h2>
-              <p className="text-muted-foreground mb-8 max-w-xl mx-auto">
+              <p className="text-muted-foreground mb-8 max-w-xl mx-auto text-pretty">
                 Rejoignez les 500+ marques qui utilisent Coucou IA pour tracker
                 et améliorer leur présence dans les réponses de ChatGPT et Claude.
               </p>
@@ -485,7 +473,7 @@ export default function LandingPage() {
               <Link href="/">
                 <Logo size="sm" />
               </Link>
-              <p className="text-sm text-muted-foreground mt-2">
+              <p className="text-sm text-muted-foreground mt-2 text-pretty">
                 Surveillez et améliorez la visibilité de votre marque dans les
                 réponses IA.
               </p>
@@ -592,7 +580,7 @@ export default function LandingPage() {
             offers: {
               '@type': 'AggregateOffer',
               lowPrice: '0',
-              highPrice: '99',
+              highPrice: PLAN_PRICING[Plan.PRO].price.toString(),
               priceCurrency: 'EUR',
               offerCount: 3,
             },

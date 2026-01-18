@@ -40,7 +40,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps): Rea
 
   if (isLoading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <div className="min-h-dvh flex items-center justify-center">
         <div className="animate-pulse text-muted-foreground">Chargement...</div>
       </div>
     );
@@ -58,7 +58,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps): Rea
   const hasProjects = projects && projects.length > 0;
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-dvh flex flex-col">
       <header className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="flex h-14 items-center justify-between px-4 md:px-6">
           <div className="flex items-center gap-6">
@@ -105,7 +105,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps): Rea
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="gap-2" aria-label="Menu utilisateur">
-                  <div className="h-7 w-7 rounded-full bg-primary/20 flex items-center justify-center text-xs font-medium text-primary">
+                  <div className="size-7 rounded-full bg-primary/20 flex items-center justify-center text-xs font-medium text-primary">
                     {user?.name?.charAt(0).toUpperCase()}
                   </div>
                   <span className="hidden md:inline text-sm">{user?.name}</span>
