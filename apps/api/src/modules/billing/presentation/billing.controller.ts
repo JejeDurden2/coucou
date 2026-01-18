@@ -13,6 +13,7 @@ import type { Request } from 'express';
 
 import { JwtAuthGuard } from '../../auth/presentation/guards/jwt-auth.guard';
 import { CurrentUser } from '../../auth/presentation/decorators/current-user.decorator';
+import type { AuthenticatedUser } from '../../auth/application/dto/auth.dto';
 import { CreateCheckoutUseCase } from '../application/use-cases/create-checkout.use-case';
 import { CreatePortalUseCase } from '../application/use-cases/create-portal.use-case';
 import { HandleWebhookUseCase } from '../application/use-cases/handle-webhook.use-case';
@@ -22,11 +23,6 @@ import {
   type CheckoutSessionResponse,
   type PortalSessionResponse,
 } from '../application/dto/billing.dto';
-
-interface JwtPayload {
-  sub: string;
-  email: string;
-}
 
 @Controller('billing')
 export class BillingController {
@@ -39,11 +35,11 @@ export class BillingController {
   @Post('checkout')
   @UseGuards(JwtAuthGuard)
   async createCheckout(
-    @CurrentUser() user: JwtPayload,
+    @CurrentUser() user: AuthenticatedUser,
     @Body() dto: CreateCheckoutDto,
   ): Promise<CheckoutSessionResponse> {
     const result = await this.createCheckoutUseCase.execute({
-      userId: user.sub,
+      userId: user.id,
       plan: dto.plan,
       successUrl: dto.successUrl,
       cancelUrl: dto.cancelUrl,
@@ -59,11 +55,11 @@ export class BillingController {
   @Post('portal')
   @UseGuards(JwtAuthGuard)
   async createPortal(
-    @CurrentUser() user: JwtPayload,
+    @CurrentUser() user: AuthenticatedUser,
     @Body() dto: CreatePortalDto,
   ): Promise<PortalSessionResponse> {
     const result = await this.createPortalUseCase.execute({
-      userId: user.sub,
+      userId: user.id,
       returnUrl: dto.returnUrl,
     });
 
