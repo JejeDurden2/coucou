@@ -5,6 +5,7 @@ import { PassportModule } from '@nestjs/passport';
 
 import { USER_REPOSITORY } from './domain';
 import { PrismaUserRepository } from './infrastructure/persistence/prisma-user.repository';
+import { CookieService } from './infrastructure/services/cookie.service';
 import {
   DeleteAccountUseCase,
   ExportDataUseCase,
@@ -50,12 +51,14 @@ import { GoogleStrategy } from './presentation/strategies/google.strategy';
     GoogleStrategy,
     JwtAuthGuard,
     GoogleAuthGuard,
+    // Infrastructure services
+    CookieService,
     // Repository binding
     {
       provide: USER_REPOSITORY,
       useClass: PrismaUserRepository,
     },
   ],
-  exports: [USER_REPOSITORY, JwtAuthGuard, JwtStrategy],
+  exports: [USER_REPOSITORY, JwtAuthGuard, JwtStrategy, CookieService],
 })
 export class AuthModule {}

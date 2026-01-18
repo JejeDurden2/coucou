@@ -27,11 +27,14 @@ import {
   RegisterUseCase,
   UpdateProfileUseCase,
 } from '../../application/use-cases';
+import {
+  CookieService,
+  REFRESH_TOKEN_COOKIE,
+} from '../../infrastructure/services/cookie.service';
 import type { GoogleProfile } from '../strategies/google.strategy';
 import { CurrentUser } from '../decorators/current-user.decorator';
 import {
   LoginRequestDto,
-  RefreshTokenRequestDto,
   RegisterRequestDto,
   UpdateProfileRequestDto,
 } from '../dto/auth-request.dto';
@@ -50,34 +53,66 @@ export class AuthController {
     private readonly updateProfileUseCase: UpdateProfileUseCase,
     private readonly googleAuthUseCase: GoogleAuthUseCase,
     private readonly configService: ConfigService,
+    private readonly cookieService: CookieService,
   ) {}
 
   @Post('register')
   @Throttle({ short: { limit: 3, ttl: 60000 } }) // 3 registrations per minute
-  async register(@Body() dto: RegisterRequestDto) {
-    const result = await this.registerUseCase.execute(dto);
+  async register(
+    @Body() dto: RegisterRequestDto,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    const registerResult = await this.registerUseCase.execute(dto);
 
-    if (!result.ok) {
-      throw new HttpException(result.error.toJSON(), result.error.statusCode);
+    if (!registerResult.ok) {
+      throw new HttpException(
+        registerResult.error.toJSON(),
+        registerResult.error.statusCode,
+      );
     }
 
-    return {
-      message: 'User registered successfully',
-      user: result.value.toJSON(),
-    };
+    // Auto-login after registration
+    const loginResult = await this.loginUseCase.execute({
+      email: dto.email,
+      password: dto.password,
+    });
+
+    if (!loginResult.ok) {
+      throw new HttpException(
+        loginResult.error.toJSON(),
+        loginResult.error.statusCode,
+      );
+    }
+
+    this.cookieService.setAuthCookies(
+      res,
+      loginResult.value.accessToken,
+      loginResult.value.refreshToken,
+    );
+
+    return { user: loginResult.value.user };
   }
 
   @Post('login')
   @HttpCode(HttpStatus.OK)
   @Throttle({ short: { limit: 5, ttl: 60000 } }) // 5 login attempts per minute
-  async login(@Body() dto: LoginRequestDto) {
+  async login(
+    @Body() dto: LoginRequestDto,
+    @Res({ passthrough: true }) res: Response,
+  ) {
     const result = await this.loginUseCase.execute(dto);
 
     if (!result.ok) {
       throw new HttpException(result.error.toJSON(), result.error.statusCode);
     }
 
-    return result.value;
+    this.cookieService.setAuthCookies(
+      res,
+      result.value.accessToken,
+      result.value.refreshToken,
+    );
+
+    return { user: result.value.user };
   }
 
   @Get('me')
@@ -109,14 +144,41 @@ export class AuthController {
 
   @Post('refresh')
   @HttpCode(HttpStatus.OK)
-  async refresh(@Body() dto: RefreshTokenRequestDto) {
-    const result = await this.refreshTokenUseCase.execute(dto.refreshToken);
+  async refresh(
+    @Req() req: Request,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    const refreshToken = req.cookies?.[REFRESH_TOKEN_COOKIE] as
+      | string
+      | undefined;
+
+    if (!refreshToken) {
+      throw new HttpException(
+        { code: 'UNAUTHORIZED', message: 'Refresh token not found' },
+        HttpStatus.UNAUTHORIZED,
+      );
+    }
+
+    const result = await this.refreshTokenUseCase.execute(refreshToken);
 
     if (!result.ok) {
+      this.cookieService.clearAuthCookies(res);
       throw new HttpException(result.error.toJSON(), result.error.statusCode);
     }
 
-    return result.value;
+    this.cookieService.setAuthCookies(
+      res,
+      result.value.accessToken,
+      result.value.refreshToken,
+    );
+
+    return { user: result.value.user };
+  }
+
+  @Post('logout')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  logout(@Res({ passthrough: true }) res: Response) {
+    this.cookieService.clearAuthCookies(res);
   }
 
   @Get('me/export')
@@ -154,17 +216,17 @@ export class AuthController {
   @UseGuards(GoogleAuthGuard)
   async googleAuthCallback(@Req() req: Request, @Res() res: Response) {
     const profile = req.user as GoogleProfile;
-    const { accessToken, refreshToken } = await this.googleAuthUseCase.execute(profile);
+    const { accessToken, refreshToken } =
+      await this.googleAuthUseCase.execute(profile);
 
-    // Redirect to frontend with tokens
+    // Set HttpOnly cookies
+    this.cookieService.setAuthCookies(res, accessToken, refreshToken);
+
+    // Redirect to frontend without tokens in URL
     const frontendUrl = this.configService.get<string>(
       'FRONTEND_URL',
       'http://localhost:3000',
     );
-    const callbackUrl = new URL('/auth/callback', frontendUrl);
-    callbackUrl.searchParams.set('accessToken', accessToken);
-    callbackUrl.searchParams.set('refreshToken', refreshToken);
-
-    res.redirect(callbackUrl.toString());
+    res.redirect(`${frontendUrl}/auth/callback`);
   }
 }

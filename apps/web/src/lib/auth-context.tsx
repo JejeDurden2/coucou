@@ -18,46 +18,27 @@ interface AuthContextValue {
   isAuthenticated: boolean;
   login: (email: string, password: string) => Promise<void>;
   register: (email: string, password: string, name: string) => Promise<void>;
-  setTokens: (accessToken: string, refreshToken: string) => Promise<void>;
-  logout: () => void;
+  loadUser: () => Promise<void>;
+  logout: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null);
-
-const ACCESS_TOKEN_KEY = 'coucou_access_token';
-const REFRESH_TOKEN_KEY = 'coucou_refresh_token';
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   const loadUser = useCallback(async () => {
-    const accessToken = localStorage.getItem(ACCESS_TOKEN_KEY);
-    if (!accessToken) {
-      setIsLoading(false);
-      return;
-    }
-
-    apiClient.setAccessToken(accessToken);
-
     try {
       const userData = await apiClient.getMe();
       setUser(userData);
     } catch {
-      // Try to refresh
-      const refreshToken = localStorage.getItem(REFRESH_TOKEN_KEY);
-      if (refreshToken) {
-        try {
-          const response = await apiClient.refreshToken(refreshToken);
-          localStorage.setItem(ACCESS_TOKEN_KEY, response.accessToken);
-          localStorage.setItem(REFRESH_TOKEN_KEY, response.refreshToken);
-          apiClient.setAccessToken(response.accessToken);
-          setUser(response.user);
-        } catch {
-          localStorage.removeItem(ACCESS_TOKEN_KEY);
-          localStorage.removeItem(REFRESH_TOKEN_KEY);
-          apiClient.setAccessToken(null);
-        }
+      // Try to refresh the token
+      try {
+        const userData = await apiClient.refreshToken();
+        setUser(userData);
+      } catch {
+        setUser(null);
       }
     } finally {
       setIsLoading(false);
@@ -69,34 +50,24 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [loadUser]);
 
   const login = useCallback(async (email: string, password: string) => {
-    const response = await apiClient.login(email, password);
-    localStorage.setItem(ACCESS_TOKEN_KEY, response.accessToken);
-    localStorage.setItem(REFRESH_TOKEN_KEY, response.refreshToken);
-    apiClient.setAccessToken(response.accessToken);
-    setUser(response.user);
-  }, []);
-
-  const register = useCallback(async (email: string, password: string, name: string) => {
-    const response = await apiClient.register(email, password, name);
-    localStorage.setItem(ACCESS_TOKEN_KEY, response.accessToken);
-    localStorage.setItem(REFRESH_TOKEN_KEY, response.refreshToken);
-    apiClient.setAccessToken(response.accessToken);
-    setUser(response.user);
-  }, []);
-
-  const setTokens = useCallback(async (accessToken: string, refreshToken: string) => {
-    localStorage.setItem(ACCESS_TOKEN_KEY, accessToken);
-    localStorage.setItem(REFRESH_TOKEN_KEY, refreshToken);
-    apiClient.setAccessToken(accessToken);
-    const userData = await apiClient.getMe();
+    const userData = await apiClient.login(email, password);
     setUser(userData);
   }, []);
 
-  const logout = useCallback(() => {
-    localStorage.removeItem(ACCESS_TOKEN_KEY);
-    localStorage.removeItem(REFRESH_TOKEN_KEY);
-    apiClient.setAccessToken(null);
-    setUser(null);
+  const register = useCallback(
+    async (email: string, password: string, name: string) => {
+      const userData = await apiClient.register(email, password, name);
+      setUser(userData);
+    },
+    [],
+  );
+
+  const logout = useCallback(async () => {
+    try {
+      await apiClient.logout();
+    } finally {
+      setUser(null);
+    }
   }, []);
 
   const value = useMemo(
@@ -106,10 +77,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       isAuthenticated: !!user,
       login,
       register,
-      setTokens,
+      loadUser,
       logout,
     }),
-    [user, isLoading, login, register, setTokens, logout],
+    [user, isLoading, login, register, loadUser, logout],
   );
 
   return (

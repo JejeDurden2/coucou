@@ -1,5 +1,4 @@
 import type {
-  AuthResponse,
   Project,
   CreateProjectInput,
   UpdateProjectInput,
@@ -14,13 +13,11 @@ import type {
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001';
 
+interface AuthUserResponse {
+  user: User;
+}
+
 class ApiClient {
-  private accessToken: string | null = null;
-
-  setAccessToken(token: string | null): void {
-    this.accessToken = token;
-  }
-
   private async fetch<T>(
     endpoint: string,
     options: RequestInit = {},
@@ -30,14 +27,10 @@ class ApiClient {
       ...options.headers,
     };
 
-    if (this.accessToken) {
-      (headers as Record<string, string>)['Authorization'] =
-        `Bearer ${this.accessToken}`;
-    }
-
     const response = await fetch(`${API_URL}${endpoint}`, {
       ...options,
       headers,
+      credentials: 'include',
     });
 
     if (!response.ok) {
@@ -49,28 +42,32 @@ class ApiClient {
   }
 
   // Auth
-  async register(
-    email: string,
-    password: string,
-    name: string,
-  ): Promise<AuthResponse> {
-    return this.fetch<AuthResponse>('/auth/register', {
+  async register(email: string, password: string, name: string): Promise<User> {
+    const response = await this.fetch<AuthUserResponse>('/auth/register', {
       method: 'POST',
       body: JSON.stringify({ email, password, name }),
     });
+    return response.user;
   }
 
-  async login(email: string, password: string): Promise<AuthResponse> {
-    return this.fetch<AuthResponse>('/auth/login', {
+  async login(email: string, password: string): Promise<User> {
+    const response = await this.fetch<AuthUserResponse>('/auth/login', {
       method: 'POST',
       body: JSON.stringify({ email, password }),
     });
+    return response.user;
   }
 
-  async refreshToken(refreshToken: string): Promise<AuthResponse> {
-    return this.fetch<AuthResponse>('/auth/refresh', {
+  async refreshToken(): Promise<User> {
+    const response = await this.fetch<AuthUserResponse>('/auth/refresh', {
       method: 'POST',
-      body: JSON.stringify({ refreshToken }),
+    });
+    return response.user;
+  }
+
+  async logout(): Promise<void> {
+    await this.fetch<void>('/auth/logout', {
+      method: 'POST',
     });
   }
 
