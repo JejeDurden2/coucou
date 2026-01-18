@@ -7,12 +7,16 @@ const badgeVariants = cva(
   {
     variants: {
       variant: {
-        default: 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/30',
-        secondary: 'bg-violet-500/20 text-violet-400 border border-violet-500/30',
-        success: 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30',
-        destructive: 'bg-rose-500/20 text-rose-400 border border-rose-500/30',
-        outline: 'border border-cyan-500/30 text-foreground',
-        muted: 'bg-muted text-muted-foreground border border-muted',
+        default: 'bg-primary/20 text-primary border border-primary/30',
+        secondary: 'bg-secondary/20 text-secondary border border-secondary/30',
+        success: 'bg-success/20 text-success border border-success/30',
+        destructive: 'bg-destructive/20 text-destructive border border-destructive/30',
+        warning: 'bg-warning/20 text-warning border border-warning/30',
+        outline: 'border border-primary/30 text-foreground',
+        muted: 'bg-muted text-muted-foreground border border-border',
+        // LLM-specific variants
+        chatgpt: 'bg-chatgpt/20 text-chatgpt border border-chatgpt/30',
+        claude: 'bg-claude/20 text-claude border border-claude/30',
       },
     },
     defaultVariants: {

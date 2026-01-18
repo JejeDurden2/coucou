@@ -4,17 +4,19 @@ import { forwardRef, type ButtonHTMLAttributes } from 'react';
 import { cn } from '@/lib/utils';
 
 const buttonVariants = cva(
-  'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50',
+  'inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-sm font-medium transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50',
   {
     variants: {
       variant: {
-        default: 'bg-cyan-500 text-slate-900 hover:bg-cyan-400 font-semibold',
-        destructive: 'bg-rose-500 text-white hover:bg-rose-600',
+        default:
+          'bg-gradient-to-r from-primary to-primary/80 text-primary-foreground hover:from-primary/90 hover:to-primary/70 font-semibold shadow-lg shadow-primary/25 hover:shadow-primary/40',
+        destructive: 'bg-destructive text-destructive-foreground hover:bg-destructive/90',
         outline:
-          'border border-cyan-500/30 bg-transparent hover:bg-cyan-500/10 hover:border-cyan-500/50 text-foreground',
-        secondary: 'bg-violet-500 text-white hover:bg-violet-400',
-        ghost: 'hover:bg-cyan-500/10 hover:text-cyan-400',
-        link: 'text-cyan-400 underline-offset-4 hover:underline hover:text-cyan-300',
+          'border border-primary/30 bg-transparent hover:bg-primary/10 hover:border-primary/50 text-foreground',
+        secondary:
+          'bg-gradient-to-r from-secondary to-secondary/80 text-secondary-foreground hover:from-secondary/90 hover:to-secondary/70 shadow-lg shadow-secondary/20',
+        ghost: 'hover:bg-primary/10 hover:text-primary',
+        link: 'text-primary underline-offset-4 hover:underline hover:text-primary/80',
       },
       size: {
         default: 'h-10 px-4 py-2',

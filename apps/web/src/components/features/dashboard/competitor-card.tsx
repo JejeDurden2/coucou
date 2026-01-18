@@ -27,7 +27,7 @@ const GRADIENT_BY_RANK: Record<number, string> = {
   3: 'from-orange-600/20 via-amber-700/10 to-transparent border-orange-600/30',
 };
 
-const DEFAULT_GRADIENT = 'from-cyan-500/10 to-transparent border-cyan-500/20';
+const DEFAULT_GRADIENT = 'from-primary/10 to-transparent border-primary/20';
 
 function getRankGradient(rank: number): string {
   return GRADIENT_BY_RANK[rank] ?? DEFAULT_GRADIENT;
@@ -85,10 +85,10 @@ function ProviderPositions({
   return (
     <div className="flex justify-between text-xs">
       <div className="flex items-center gap-1.5">
-        <span className="h-2 w-2 rounded-full bg-emerald-500" />
+        <span className="h-2 w-2 rounded-full bg-chatgpt" />
         <span className="text-muted-foreground">ChatGPT</span>
         {openai.averagePosition !== null ? (
-          <span className="font-medium text-foreground tabular-nums">
+          <span className="font-medium text-chatgpt tabular-nums">
             #{openai.averagePosition}
           </span>
         ) : (
@@ -98,13 +98,13 @@ function ProviderPositions({
       <div className="flex items-center gap-1.5">
         <span className="text-muted-foreground">Claude</span>
         {anthropic.averagePosition !== null ? (
-          <span className="font-medium text-foreground tabular-nums">
+          <span className="font-medium text-claude tabular-nums">
             #{anthropic.averagePosition}
           </span>
         ) : (
           <span className="text-muted-foreground">—</span>
         )}
-        <span className="h-2 w-2 rounded-full bg-orange-500" />
+        <span className="h-2 w-2 rounded-full bg-claude" />
       </div>
     </div>
   );
@@ -175,13 +175,13 @@ export const CompetitorCard = memo(function CompetitorCard({
       <div className="space-y-2 mb-3">
         <div className="flex items-center justify-between text-sm">
           <span className="text-muted-foreground">Citations</span>
-          <span className="font-semibold text-cyan-400 tabular-nums">
+          <span className="font-semibold text-primary tabular-nums">
             {competitor.totalMentions}
           </span>
         </div>
         <div className="h-2 rounded-full bg-muted/50 overflow-hidden">
           <div
-            className="h-full rounded-full bg-cyan-500 transition-[width] duration-500"
+            className="h-full rounded-full bg-gradient-to-r from-primary to-secondary transition-[width] duration-500"
             style={{ width: `${mentionProgress}%` }}
           />
         </div>

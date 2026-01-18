@@ -4,44 +4,49 @@
 
 @layer base {
   :root {
-    /* Background - Zinc 950 */
+    /* Background - Deep zinc */
     --background: 9 9 11;
     --foreground: 250 250 250;
 
-    /* Cards - Zinc 900 */
+    /* Cards - Elevated surfaces */
     --card: 24 24 27;
     --card-foreground: 250 250 250;
+    --card-hover: 39 39 42;
     --popover: 24 24 27;
     --popover-foreground: 250 250 250;
 
-    /* Primary - Cyan 400 */
-    --primary: 34 211 238;
-    --primary-foreground: 9 9 11;
+    /* Primary - Violet chaud #8B5CF6 */
+    --primary: 139 92 246;
+    --primary-foreground: 250 250 250;
 
-    /* Secondary - Zinc 800 */
-    --secondary: 39 39 42;
+    /* Secondary - Corail doux #F97066 */
+    --secondary: 249 112 102;
     --secondary-foreground: 250 250 250;
 
-    /* Muted - Zinc 800/500 */
+    /* Muted - Zinc tones */
     --muted: 39 39 42;
-    --muted-foreground: 113 113 122;
+    --muted-foreground: 161 161 170;
 
-    /* Accent - Cyan 400 */
-    --accent: 34 211 238;
-    --accent-foreground: 9 9 11;
+    /* Accent - Same as primary for consistency */
+    --accent: 139 92 246;
+    --accent-foreground: 250 250 250;
+
+    /* LLM-specific colors (neutral tones) */
+    --chatgpt: 56 189 248;
+    --claude: 167 139 250;
 
     /* Semantic */
+    --success: 52 211 153;
+    --success-foreground: 9 9 11;
     --destructive: 239 68 68;
     --destructive-foreground: 250 250 250;
-    --success: 16 185 129;
-    --success-foreground: 250 250 250;
-    --warning: 245 158 11;
+    --warning: 251 191 36;
     --warning-foreground: 9 9 11;
 
-    /* Borders and inputs - Zinc 800 */
+    /* Borders and inputs */
     --border: 39 39 42;
     --input: 24 24 27;
-    --ring: 34 211 238;
+    --ring: 139 92 246;
     --radius: 0.5rem;
   }
 
@@ -56,16 +61,27 @@
 
 @layer utilities {
   .status-success {
-    @apply text-emerald-500;
+    @apply text-success;
   }
   .status-error {
-    @apply text-red-500;
+    @apply text-destructive;
   }
   .status-warning {
-    @apply text-amber-500;
+    @apply text-warning;
   }
   .status-neutral {
-    @apply text-zinc-500;
+    @apply text-muted-foreground;
+  }
+
+  /* Glow effects */
+  .glow-primary {
+    box-shadow: 0 0 20px rgb(var(--primary) / 0.3);
+  }
+  .glow-secondary {
+    box-shadow: 0 0 20px rgb(var(--secondary) / 0.3);
+  }
+  .glow-success {
+    box-shadow: 0 0 20px rgb(var(--success) / 0.3);
   }
 }
 
@@ -88,12 +104,59 @@
   background: rgb(63 63 70);
 }
 
-/* Selection */
+/* Selection - Violet tint */
 ::selection {
-  @apply bg-cyan-400/20;
+  background: rgb(var(--primary) / 0.2);
 }
 
-/* Focus */
+/* Focus - Violet ring */
 :focus-visible {
-  @apply outline-none ring-2 ring-cyan-400/50 ring-offset-2 ring-offset-zinc-950;
+  @apply outline-none ring-2 ring-primary/50 ring-offset-2 ring-offset-background;
+}
+
+/* Custom animations */
+@keyframes wave {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(20deg);
+  }
+  75% {
+    transform: rotate(-10deg);
+  }
+}
+
+@keyframes count-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes glow-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 5px rgb(var(--primary) / 0.2);
+  }
+  50% {
+    box-shadow: 0 0 20px rgb(var(--primary) / 0.4);
+  }
+}
+
+.animate-wave {
+  animation: wave 0.5s ease-in-out;
+}
+
+.animate-count-up {
+  animation: count-up 0.5s ease-out forwards;
+}
+
+.animate-glow-pulse {
+  animation: glow-pulse 2s ease-in-out infinite;
 }

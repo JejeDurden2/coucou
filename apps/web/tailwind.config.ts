@@ -18,6 +18,7 @@ const config: Config = {
         card: {
           DEFAULT: 'rgb(var(--card) / <alpha-value>)',
           foreground: 'rgb(var(--card-foreground) / <alpha-value>)',
+          hover: 'rgb(var(--card-hover) / <alpha-value>)',
         },
         popover: {
           DEFAULT: 'rgb(var(--popover) / <alpha-value>)',
@@ -39,6 +40,10 @@ const config: Config = {
           DEFAULT: 'rgb(var(--accent) / <alpha-value>)',
           foreground: 'rgb(var(--accent-foreground) / <alpha-value>)',
         },
+        // LLM-specific colors
+        chatgpt: 'rgb(var(--chatgpt) / <alpha-value>)',
+        claude: 'rgb(var(--claude) / <alpha-value>)',
+        // Semantic colors
         destructive: {
           DEFAULT: 'rgb(var(--destructive) / <alpha-value>)',
           foreground: 'rgb(var(--destructive-foreground) / <alpha-value>)',
@@ -59,6 +64,11 @@ const config: Config = {
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
+      },
+      animation: {
+        wave: 'wave 0.5s ease-in-out',
+        'count-up': 'count-up 0.5s ease-out forwards',
+        'glow-pulse': 'glow-pulse 2s ease-in-out infinite',
       },
     },
   },

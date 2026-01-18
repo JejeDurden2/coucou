@@ -1,3 +1,6 @@
+'use client';
+
+import { useState, useCallback } from 'react';
 import { cn } from '@/lib/utils';
 
 interface LogoProps {
@@ -7,58 +10,81 @@ interface LogoProps {
 }
 
 const sizes = {
-  sm: { icon: 24, text: 'text-lg' },
-  md: { icon: 32, text: 'text-xl' },
-  lg: { icon: 48, text: 'text-2xl' },
+  sm: { wrapper: 'h-8', emoji: 'text-xl', text: 'text-lg' },
+  md: { wrapper: 'h-10', emoji: 'text-2xl', text: 'text-xl' },
+  lg: { wrapper: 'h-14', emoji: 'text-4xl', text: 'text-2xl' },
 };
 
-function LogoIcon({ size = 32 }: { size?: number }) {
+function WaveEmoji({ className, onAnimationEnd }: { className?: string; onAnimationEnd?: () => void }) {
   return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 48 48"
-      fill="none"
-      width={size}
-      height={size}
-      aria-hidden="true"
+    <span
+      className={cn('inline-block origin-[70%_70%]', className)}
+      onAnimationEnd={onAnimationEnd}
+      role="img"
+      aria-label="Main qui salue"
     >
-      <path
-        d="M8 20C8 12.268 14.268 6 22 6h4c7.732 0 14 6.268 14 14v4c0 7.732-6.268 14-14 14h-2l-6 6v-6.17C11.058 35.93 8 30.374 8 24v-4z"
-        fill="#06B6D4"
-      />
-      <circle cx="28" cy="20" r="4" fill="#080A12" />
-      <circle cx="29.5" cy="18.5" r="1.5" fill="#FFFFFF" />
-      <path d="M36 22l6 2-6 2v-4z" fill="#06B6D4" />
-      <path
-        d="M14 22c2-4 6-6 10-6"
-        stroke="#080A12"
-        strokeWidth="2"
-        strokeLinecap="round"
-        opacity="0.3"
-      />
-    </svg>
+      👋
+    </span>
   );
 }
 
 export function Logo({ className, variant = 'full', size = 'md' }: LogoProps) {
-  const { icon, text } = sizes[size];
+  const [isWaving, setIsWaving] = useState(false);
+  const { wrapper, emoji, text } = sizes[size];
+
+  const handleMouseEnter = useCallback(() => {
+    setIsWaving(true);
+  }, []);
+
+  const handleAnimationEnd = useCallback(() => {
+    setIsWaving(false);
+  }, []);
 
   if (variant === 'icon') {
     return (
-      <div className={cn('flex items-center', className)}>
-        <LogoIcon size={icon} />
+      <div
+        className={cn('flex items-center', wrapper, className)}
+        onMouseEnter={handleMouseEnter}
+      >
+        <WaveEmoji
+          className={cn(emoji, isWaving && 'animate-wave')}
+          onAnimationEnd={handleAnimationEnd}
+        />
       </div>
     );
   }
 
   if (variant === 'text') {
-    return <span className={cn('font-bold text-cyan-400', text, className)}>Coucou IA</span>;
+    return (
+      <span
+        className={cn(
+          'font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent',
+          text,
+          className,
+        )}
+      >
+        Coucou IA
+      </span>
+    );
   }
 
   return (
-    <div className={cn('flex items-center gap-2', className)}>
-      <LogoIcon size={icon} />
-      <span className={cn('font-bold text-cyan-400', text)}>Coucou IA</span>
+    <div
+      className={cn('flex items-center gap-2', wrapper, className)}
+      onMouseEnter={handleMouseEnter}
+    >
+      <WaveEmoji
+        className={cn(emoji, isWaving && 'animate-wave')}
+        onAnimationEnd={handleAnimationEnd}
+      />
+      <span
+        className={cn(
+          'font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent',
+          text,
+        )}
+      >
+        Coucou IA
+      </span>
     </div>
   );
 }

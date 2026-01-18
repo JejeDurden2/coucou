@@ -33,13 +33,16 @@ function getProviderBreakdown(
 }
 
 interface PulsingDotProps {
-  color: 'cyan' | 'emerald';
+  color: 'primary' | 'success' | 'cyan' | 'emerald';
   size?: 'sm' | 'md';
 }
 
 const DOT_COLORS = {
-  cyan: { ping: 'bg-cyan-400', dot: 'bg-cyan-500' },
-  emerald: { ping: 'bg-emerald-400', dot: 'bg-emerald-500' },
+  primary: { ping: 'bg-primary', dot: 'bg-primary' },
+  success: { ping: 'bg-success', dot: 'bg-success' },
+  // Legacy
+  cyan: { ping: 'bg-chatgpt', dot: 'bg-chatgpt' },
+  emerald: { ping: 'bg-success', dot: 'bg-success' },
 } as const;
 
 const DOT_SIZES = {
@@ -135,8 +138,8 @@ export default function ProjectDashboardPage({
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-3">
           {/* Brand Avatar */}
-          <div className="h-10 w-10 rounded-lg bg-gradient-to-br from-cyan-500/20 to-violet-500/20 border border-cyan-500/20 flex items-center justify-center flex-shrink-0">
-            <span className="text-lg font-bold text-cyan-400">
+          <div className="h-10 w-10 rounded-lg bg-gradient-to-br from-primary/20 to-secondary/20 border border-primary/20 flex items-center justify-center flex-shrink-0">
+            <span className="text-lg font-bold text-primary">
               {project.brandName.charAt(0).toUpperCase()}
             </span>
           </div>
@@ -151,8 +154,8 @@ export default function ProjectDashboardPage({
             </div>
             {/* Scan Status */}
             {triggerScan.isPending ? (
-              <span className="flex items-center gap-1.5 text-xs text-cyan-400">
-                <PulsingDot color="cyan" />
+              <span className="flex items-center gap-1.5 text-xs text-primary">
+                <PulsingDot color="primary" />
                 Scan en cours…
               </span>
             ) : stats?.lastScanAt ? (
@@ -197,19 +200,19 @@ export default function ProjectDashboardPage({
           icon={MessageSquare}
           label="ChatGPT"
           value={openaiBreakdown?.averageRank ?? null}
-          gradient="emerald"
+          gradient="chatgpt"
         />
         <StatCard
           icon={MessageSquare}
           label="Claude"
           value={anthropicBreakdown?.averageRank ?? null}
-          gradient="orange"
+          gradient="claude"
         />
         <StatCard
           icon={BarChart3}
           label="Total scans"
           value={stats?.totalScans?.toString() ?? '0'}
-          gradient="cyan"
+          gradient="primary"
         />
       </div>
 
@@ -257,19 +260,19 @@ export default function ProjectDashboardPage({
         <div className="rounded-lg border border-border overflow-hidden">
           <table className="w-full">
             <thead>
-              <tr className="border-b border-cyan-500/10 bg-gradient-to-r from-muted/50 via-muted/30 to-muted/50">
+              <tr className="border-b border-primary/10 bg-gradient-to-r from-muted/50 via-muted/30 to-muted/50">
                 <th className="text-left text-xs font-medium text-muted-foreground uppercase tracking-wide px-4 py-3">
                   Prompt
                 </th>
                 <th className="text-center text-xs font-medium text-muted-foreground uppercase tracking-wide px-4 py-3 w-28">
                   <span className="flex items-center gap-2 justify-center">
-                    <span className="h-2 w-2 rounded-full bg-emerald-500" />
+                    <span className="h-2 w-2 rounded-full bg-chatgpt" />
                     ChatGPT
                   </span>
                 </th>
                 <th className="text-center text-xs font-medium text-muted-foreground uppercase tracking-wide px-4 py-3 w-28">
                   <span className="flex items-center gap-2 justify-center">
-                    <span className="h-2 w-2 rounded-full bg-orange-500" />
+                    <span className="h-2 w-2 rounded-full bg-claude" />
                     Claude
                   </span>
                 </th>
@@ -280,9 +283,9 @@ export default function ProjectDashboardPage({
               {!hasPrompts ? (
                 <tr>
                   <td colSpan={4} className="px-4 py-12 text-center">
-                    <div className="mx-auto w-16 h-16 rounded-full bg-cyan-500/10 flex items-center justify-center mb-4">
+                    <div className="mx-auto w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
                       <MessageSquare
-                        className="h-8 w-8 text-cyan-400 opacity-50"
+                        className="h-8 w-8 text-primary opacity-50"
                         aria-hidden="true"
                       />
                     </div>
@@ -299,18 +302,18 @@ export default function ProjectDashboardPage({
                     <tr
                       key={prompt.promptId}
                       className={cn(
-                        'border-b border-border last:border-0 hover:bg-cyan-500/5 transition-colors relative',
+                        'border-b border-border last:border-0 hover:bg-primary/5 transition-colors relative',
                         (statsLoading || deletePrompt.isPending) && 'opacity-50',
                       )}
                     >
                       <td className="px-4 py-3 relative">
                         {/* Left accent for cited rows */}
                         {isCitedByAny && (
-                          <div className="absolute left-0 top-0 bottom-0 w-1 bg-emerald-500 rounded-r" />
+                          <div className="absolute left-0 top-0 bottom-0 w-1 bg-success rounded-r" />
                         )}
                         <p className="text-sm pl-2">{prompt.content}</p>
                         {prompt.category ? (
-                          <span className="ml-2 inline-flex px-2 py-0.5 rounded-full text-[10px] bg-cyan-500/10 text-cyan-400">
+                          <span className="ml-2 inline-flex px-2 py-0.5 rounded-full text-[10px] bg-primary/10 text-primary">
                             {prompt.category}
                           </span>
                         ) : null}
@@ -397,9 +400,9 @@ const CitationStatus = memo(function CitationStatus({
   if (result.isCited) {
     return (
       <span className="inline-flex items-center gap-1.5">
-        <PulsingDot color="emerald" size="md" />
+        <PulsingDot color="success" size="md" />
         {result.position !== null && (
-          <span className="font-medium tabular-nums text-emerald-400 text-xs">
+          <span className="font-medium tabular-nums text-success text-xs">
             #{result.position}
           </span>
         )}
@@ -408,9 +411,9 @@ const CitationStatus = memo(function CitationStatus({
   }
 
   return (
-    <span className="inline-flex items-center text-rose-400">
-      <span className="h-3 w-3 rounded-full bg-rose-500/20 flex items-center justify-center">
-        <span className="h-1.5 w-1.5 rounded-full bg-rose-500" />
+    <span className="inline-flex items-center text-destructive">
+      <span className="h-3 w-3 rounded-full bg-destructive/20 flex items-center justify-center">
+        <span className="h-1.5 w-1.5 rounded-full bg-destructive" />
       </span>
     </span>
   );
