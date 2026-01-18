@@ -1,6 +1,6 @@
 import { memo } from 'react';
 import { cn } from '@/lib/utils';
-import { ArrowDown, ArrowUp, Minus, type LucideIcon } from 'lucide-react';
+import { ArrowDown, ArrowUp, EyeOff, Minus, type LucideIcon } from 'lucide-react';
 import { Sparkline } from '@/components/ui/sparkline';
 
 interface StatCardProps {
@@ -25,7 +25,7 @@ interface TrendIndicatorProps {
 function TrendIndicator({ delta }: TrendIndicatorProps): React.ReactNode {
   if (delta === 0) {
     return (
-      <span className="inline-flex items-center gap-1 text-xs text-muted-foreground">
+      <span className="inline-flex items-center text-xs text-muted-foreground">
         <Minus className="h-3 w-3" aria-hidden="true" />
       </span>
     );
@@ -36,9 +36,8 @@ function TrendIndicator({ delta }: TrendIndicatorProps): React.ReactNode {
   const Icon = isRankWorse ? ArrowUp : ArrowDown;
 
   return (
-    <span className={cn('inline-flex items-center gap-1 text-xs', colorClass)}>
+    <span className={cn('inline-flex items-center text-xs', colorClass)}>
       <Icon className="h-3 w-3" aria-hidden="true" />
-      <span className="tabular-nums">{Math.abs(delta).toFixed(1)}</span>
     </span>
   );
 }
@@ -54,8 +53,6 @@ export const StatCard = memo(function StatCard({
   subtitle,
   className,
 }: StatCardProps) {
-  const displayValue = value ?? '—';
-
   return (
     <div
       className={cn(
@@ -74,13 +71,18 @@ export const StatCard = memo(function StatCard({
                 valueClassName ?? 'text-foreground',
               )}
             >
-              {typeof displayValue === 'number' ? (
+              {value === null ? (
+                <span className="inline-flex items-center gap-1.5 text-muted-foreground">
+                  <EyeOff className="h-5 w-5" aria-hidden="true" />
+                  <span className="text-sm">Non classé</span>
+                </span>
+              ) : typeof value === 'number' ? (
                 <>
                   <span className="text-lg text-muted-foreground">#</span>
-                  {displayValue.toFixed(1)}
+                  {value.toFixed(1)}
                 </>
               ) : (
-                displayValue
+                value
               )}
             </p>
             {trend !== undefined && <TrendIndicator delta={trend.delta} />}

@@ -83,11 +83,21 @@ export class GetDashboardStatsUseCase {
   }
 
   private calculateAverageRank(results: LLMResult[]): number | null {
-    const rankedResults = results.filter((r) => r.isCited && r.position !== null);
-    if (rankedResults.length === 0) return null;
+    if (results.length === 0) return null;
 
-    const sum = rankedResults.reduce((acc, r) => acc + (r.position ?? 0), 0);
-    return Math.round((sum / rankedResults.length) * 10) / 10;
+    // For average rank calculation:
+    // - If cited with position: use the position
+    // - If not cited (not in top 5): consider as rank 7
+    const DEFAULT_RANK_FOR_NOT_CITED = 7;
+
+    const sum = results.reduce((acc, r) => {
+      if (r.isCited && r.position !== null) {
+        return acc + r.position;
+      }
+      return acc + DEFAULT_RANK_FOR_NOT_CITED;
+    }, 0);
+
+    return Math.round((sum / results.length) * 10) / 10;
   }
 
   private calculateProviderBreakdown(results: LLMResult[]): ProviderBreakdownDto[] {

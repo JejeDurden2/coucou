@@ -3,7 +3,7 @@
 import { useState, useCallback, memo } from 'react';
 import type { EnrichedCompetitor } from '@coucou-ia/shared';
 import { cn } from '@/lib/utils';
-import { TrendingUp, TrendingDown, Minus, Sparkles } from 'lucide-react';
+import { TrendingUp, TrendingDown, Minus, Sparkles, EyeOff } from 'lucide-react';
 
 interface CompetitorCardProps {
   competitor: EnrichedCompetitor;
@@ -22,7 +22,7 @@ function TrendBadge({
   if (trend === 'new') {
     return (
       <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-primary/12 text-primary">
-        <Sparkles className="h-3 w-3" />
+        <Sparkles className="h-3 w-3" aria-hidden="true" />
         NEW
       </span>
     );
@@ -31,8 +31,8 @@ function TrendBadge({
   if (trend === 'up') {
     return (
       <span className="inline-flex items-center gap-1 text-xs font-medium text-success">
-        <TrendingUp className="h-3 w-3" />
-        {percentage !== null && `+${percentage}%`}
+        <TrendingUp className="h-3 w-3" aria-hidden="true" />
+        {percentage !== null ? `+${percentage}%` : null}
       </span>
     );
   }
@@ -40,15 +40,15 @@ function TrendBadge({
   if (trend === 'down') {
     return (
       <span className="inline-flex items-center gap-1 text-xs font-medium text-destructive">
-        <TrendingDown className="h-3 w-3" />
-        {percentage !== null && `${percentage}%`}
+        <TrendingDown className="h-3 w-3" aria-hidden="true" />
+        {percentage !== null ? `${percentage}%` : null}
       </span>
     );
   }
 
   return (
     <span className="inline-flex items-center gap-1 text-xs font-medium text-muted-foreground">
-      <Minus className="h-3 w-3" />
+      <Minus className="h-3 w-3" aria-hidden="true" />
     </span>
   );
 }
@@ -69,7 +69,7 @@ function ProviderPositions({
             #{openai.averagePosition}
           </span>
         ) : (
-          <span>—</span>
+          <EyeOff className="h-3 w-3" aria-hidden="true" />
         )}
       </div>
       <div className="flex items-center gap-1.5">
@@ -79,7 +79,7 @@ function ProviderPositions({
             #{anthropic.averagePosition}
           </span>
         ) : (
-          <span>—</span>
+          <EyeOff className="h-3 w-3" aria-hidden="true" />
         )}
       </div>
     </div>
@@ -150,8 +150,8 @@ export const CompetitorCard = memo(function CompetitorCard({
         </div>
         <div className="h-1.5 rounded-full bg-muted overflow-hidden">
           <div
-            className="h-full rounded-full bg-primary transition-[width] duration-500"
-            style={{ width: `${mentionProgress}%` }}
+            className="h-full w-full origin-left rounded-full bg-primary transition-transform duration-500"
+            style={{ transform: `scaleX(${mentionProgress / 100})` }}
           />
         </div>
       </div>

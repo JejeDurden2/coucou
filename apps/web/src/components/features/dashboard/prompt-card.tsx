@@ -1,7 +1,7 @@
 'use client';
 
 import { memo, useState, useCallback } from 'react';
-import { ChevronDown, Trash2 } from 'lucide-react';
+import { ChevronDown, Trash2, EyeOff } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -25,7 +25,7 @@ interface PromptCardProps {
 
 function PositionIndicator({ result, provider }: { result: ProviderResult | null; provider: 'chatgpt' | 'claude' }) {
   if (!result) {
-    return <span className="text-xs text-muted-foreground">—</span>;
+    return <EyeOff className="h-3 w-3 text-muted-foreground" aria-label="Pas encore scanné" />;
   }
 
   if (result.isCited) {

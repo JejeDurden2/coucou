@@ -2,7 +2,7 @@
 
 import { use, useState, memo } from 'react';
 import Link from 'next/link';
-import { Radar, Plus, RefreshCw, Trash2, Trophy, MessageSquare, BarChart3 } from 'lucide-react';
+import { Radar, Plus, RefreshCw, Trash2, Trophy, MessageSquare, BarChart3, EyeOff } from 'lucide-react';
 
 import { useProject } from '@/hooks/use-projects';
 import { useCreatePrompt, useDeletePrompt } from '@/hooks/use-prompts';
@@ -191,7 +191,7 @@ export default function ProjectDashboardPage({
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
         <StatCard
           icon={Trophy}
-          label="Classement moyen"
+          label="Rang moyen"
           value={stats?.averageRank ?? null}
           gradient="gold"
           trend={stats?.trend ? { delta: stats.trend.delta } : undefined}
@@ -388,7 +388,7 @@ const CitationStatus = memo(function CitationStatus({
   result,
 }: CitationStatusProps): React.ReactNode {
   if (!result) {
-    return <span className="text-xs text-muted-foreground">—</span>;
+    return <EyeOff className="h-4 w-4 text-muted-foreground mx-auto" aria-label="Pas encore scanné" />;
   }
 
   if (result.isCited) {

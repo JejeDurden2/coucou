@@ -131,19 +131,19 @@ export default function LandingPage() {
           <div className="hidden md:flex items-center gap-8">
             <Link
               href="#features"
-              className="text-sm text-muted-foreground hover:text-cyan-400 transition-colors"
+              className="text-sm text-muted-foreground hover:text-primary transition-colors"
             >
               Fonctionnalités
             </Link>
             <Link
               href="#pricing"
-              className="text-sm text-muted-foreground hover:text-cyan-400 transition-colors"
+              className="text-sm text-muted-foreground hover:text-primary transition-colors"
             >
               Tarifs
             </Link>
             <Link
               href="#faq"
-              className="text-sm text-muted-foreground hover:text-cyan-400 transition-colors"
+              className="text-sm text-muted-foreground hover:text-primary transition-colors"
             >
               FAQ
             </Link>
@@ -164,12 +164,12 @@ export default function LandingPage() {
         <section className="relative pt-32 pb-20 px-4 overflow-hidden grid-pattern">
           <div className="container mx-auto max-w-5xl text-center relative z-10">
             <Badge className="mb-6" variant="secondary">
-              <Sparkles className="mr-1 h-3 w-3" />
-              Nouveau: Support de Claude 3.5
+              <Sparkles className="mr-1 h-3 w-3" aria-hidden="true" />
+              Nouveau: Support de Claude 4
             </Badge>
 
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6 text-balance">
-              <span className="text-cyan-400">L&apos;IA parle-t-elle</span>
+              <span className="text-primary">L&apos;IA parle-t-elle</span>
               <br />
               de vous ?
             </h1>
@@ -185,7 +185,7 @@ export default function LandingPage() {
               <Button size="lg" asChild>
                 <Link href="/register">
                   Essayer gratuitement
-                  <ArrowRight className="ml-2 h-4 w-4" />
+                  <ArrowRight className="ml-2 h-4 w-4" aria-hidden="true" />
                 </Link>
               </Button>
               <Button size="lg" variant="outline" asChild>
@@ -196,23 +196,23 @@ export default function LandingPage() {
             {/* Social proof */}
             <div className="flex items-center justify-center gap-8 text-sm text-muted-foreground">
               <div className="flex items-center gap-2">
-                <Users className="h-4 w-4" />
+                <Users className="h-4 w-4" aria-hidden="true" />
                 <span>500+ marques suivies</span>
               </div>
               <div className="flex items-center gap-2">
-                <Gauge className="h-4 w-4" />
+                <Gauge className="h-4 w-4" aria-hidden="true" />
                 <span>10M+ scans effectués</span>
               </div>
               <div className="flex items-center gap-2">
-                <Shield className="h-4 w-4" />
+                <Shield className="h-4 w-4" aria-hidden="true" />
                 <span>RGPD compliant</span>
               </div>
             </div>
           </div>
 
           {/* Scroll indicator */}
-          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
-            <ChevronDown className="h-6 w-6 text-muted-foreground" />
+          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce motion-reduce:animate-none">
+            <ChevronDown className="h-6 w-6 text-muted-foreground" aria-hidden="true" />
           </div>
         </section>
 
@@ -246,9 +246,9 @@ export default function LandingPage() {
                   </p>
                 </CardContent>
               </Card>
-              <Card className="bg-cyan-400/5 border-cyan-400/20">
+              <Card className="bg-primary/5 border-primary/20">
                 <CardContent className="pt-6">
-                  <div className="text-4xl font-bold text-cyan-400 mb-2 tabular-nums">+40%</div>
+                  <div className="text-4xl font-bold text-primary mb-2 tabular-nums">+40%</div>
                   <p className="text-sm text-muted-foreground">
                     de conversions pour les marques citées en premier par l&apos;IA
                   </p>
@@ -259,7 +259,7 @@ export default function LandingPage() {
         </section>
 
         {/* Features Section */}
-        <section id="features" className="py-20 px-4">
+        <section id="features" className="py-20 px-4 scroll-mt-20">
           <div className="container mx-auto max-w-5xl">
             <div className="text-center mb-12">
               <Badge className="mb-4">Fonctionnalités</Badge>
@@ -279,8 +279,8 @@ export default function LandingPage() {
                   className="group hover:border-primary/50 transition-colors"
                 >
                   <CardHeader>
-                    <div className="size-12 rounded-xl bg-cyan-400/10 flex items-center justify-center mb-4 group-hover:bg-cyan-400/20 transition-colors">
-                      <feature.icon className="h-6 w-6 text-cyan-400" aria-hidden="true" />
+                    <div className="size-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
+                      <feature.icon className="h-6 w-6 text-primary" aria-hidden="true" />
                     </div>
                     <CardTitle className="text-lg">{feature.title}</CardTitle>
                   </CardHeader>
@@ -312,7 +312,7 @@ export default function LandingPage() {
                     <div className="hidden md:block absolute top-8 left-full w-full h-[2px] bg-zinc-700 -translate-x-1/2" />
                   )}
                   <div className="text-center">
-                    <div className="size-16 rounded-2xl bg-cyan-400/10 border border-cyan-400/20 flex items-center justify-center mx-auto mb-4 text-2xl font-bold text-cyan-400 tabular-nums">
+                    <div className="size-16 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center mx-auto mb-4 text-2xl font-bold text-primary tabular-nums">
                       {step.number}
                     </div>
                     <h3 className="text-lg font-semibold mb-2">{step.title}</h3>
@@ -325,7 +325,7 @@ export default function LandingPage() {
         </section>
 
         {/* Pricing Section */}
-        <section id="pricing" className="py-20 px-4">
+        <section id="pricing" className="py-20 px-4 scroll-mt-20">
           <div className="container mx-auto max-w-6xl">
             <div className="text-center mb-12">
               <Badge className="mb-4">Tarifs</Badge>
@@ -340,7 +340,7 @@ export default function LandingPage() {
 
             <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
               {plans.map((plan) => (
-                <Card key={plan.name} className={plan.popular ? 'border-cyan-400/50 relative' : ''}>
+                <Card key={plan.name} className={plan.popular ? 'border-primary/50 relative' : ''}>
                   {plan.popular && (
                     <div className="absolute -top-3 left-1/2 -translate-x-1/2">
                       <Badge>Le plus populaire</Badge>
@@ -358,7 +358,7 @@ export default function LandingPage() {
                     <ul className="space-y-3 mb-6">
                       {plan.features.map((feature) => (
                         <li key={feature} className="flex items-center gap-2 text-sm">
-                          <Check className="h-4 w-4 text-cyan-400" aria-hidden="true" />
+                          <Check className="h-4 w-4 text-primary" aria-hidden="true" />
                           {feature}
                         </li>
                       ))}
@@ -378,7 +378,7 @@ export default function LandingPage() {
         </section>
 
         {/* FAQ Section */}
-        <section id="faq" className="py-20 px-4 bg-zinc-900/50">
+        <section id="faq" className="py-20 px-4 bg-zinc-900/50 scroll-mt-20">
           <div className="container mx-auto max-w-3xl">
             <div className="text-center mb-12">
               <Badge className="mb-4">FAQ</Badge>
@@ -408,8 +408,8 @@ export default function LandingPage() {
         {/* CTA Section */}
         <section className="py-20 px-4">
           <div className="container mx-auto max-w-4xl text-center">
-            <div className="rounded-3xl bg-cyan-400/5 p-12 border border-cyan-400/20">
-              <Bot className="size-12 mx-auto mb-6 text-cyan-400" aria-hidden="true" />
+            <div className="rounded-3xl bg-primary/5 p-12 border border-primary/20">
+              <Bot className="size-12 mx-auto mb-6 text-primary" aria-hidden="true" />
               <h2 className="text-3xl md:text-4xl font-bold mb-4 text-balance">
                 Prêt à être visible par l&apos;IA ?
               </h2>
@@ -421,7 +421,7 @@ export default function LandingPage() {
                 <Button size="lg" asChild>
                   <Link href="/register">
                     Créer mon compte gratuitement
-                    <ArrowRight className="ml-2 h-4 w-4" />
+                    <ArrowRight className="ml-2 h-4 w-4" aria-hidden="true" />
                   </Link>
                 </Button>
               </div>
@@ -507,7 +507,7 @@ export default function LandingPage() {
             </div>
           </div>
           <div className="border-t border-zinc-800 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
-            <p className="text-sm text-muted-foreground">© 2025 Coucou IA. Tous droits réservés.</p>
+            <p className="text-sm text-muted-foreground">© 2026 Coucou IA. Tous droits réservés.</p>
             <div className="flex items-center gap-4">
               <Link
                 href="https://twitter.com/coucouia"
@@ -530,7 +530,7 @@ export default function LandingPage() {
         </div>
       </footer>
 
-      {/* JSON-LD Schema */}
+      {/* JSON-LD Schema - Software Application */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -554,6 +554,24 @@ export default function LandingPage() {
               ratingValue: '4.8',
               ratingCount: '127',
             },
+          }),
+        }}
+      />
+      {/* JSON-LD Schema - FAQ */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'FAQPage',
+            mainEntity: faqs.map((faq) => ({
+              '@type': 'Question',
+              name: faq.question,
+              acceptedAnswer: {
+                '@type': 'Answer',
+                text: faq.answer,
+              },
+            })),
           }),
         }}
       />
