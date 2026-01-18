@@ -42,7 +42,7 @@ export default function BillingPage(): React.ReactNode {
       <div>
         <h1 className="text-xl font-semibold">Facturation</h1>
         <p className="text-sm text-muted-foreground mt-1">
-          Gerez votre abonnement
+          Gérez votre abonnement
         </p>
       </div>
 
@@ -56,9 +56,9 @@ export default function BillingPage(): React.ReactNode {
         <div className="pt-4 border-t max-w-4xl">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="font-medium">Gerer votre abonnement</h3>
+              <h3 className="font-medium">Gérer votre abonnement</h3>
               <p className="text-sm text-muted-foreground">
-                Modifier votre moyen de paiement, telecharger vos factures ou
+                Modifier votre moyen de paiement, télécharger vos factures ou
                 annuler votre abonnement
               </p>
             </div>

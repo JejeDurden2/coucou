@@ -30,7 +30,7 @@ export default function RegisterPage() {
       // New users always go to onboarding for plan selection and first project
       router.push('/onboarding');
     } catch {
-      setError('Une erreur est survenue. Veuillez reessayer.');
+      setError('Une erreur est survenue. Veuillez réessayer.');
     } finally {
       setIsLoading(false);
     }

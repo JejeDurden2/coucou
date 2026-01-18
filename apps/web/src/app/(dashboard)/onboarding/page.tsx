@@ -116,7 +116,7 @@ export default function OnboardingPage(): React.ReactNode {
               </div>
               <h1 className="text-3xl font-bold text-balance">Bienvenue sur Coucou IA</h1>
               <p className="text-muted-foreground text-lg text-pretty">
-                Choisissez le plan qui correspond a vos besoins
+                Choisissez le plan qui correspond à vos besoins
               </p>
             </div>
 
@@ -126,7 +126,7 @@ export default function OnboardingPage(): React.ReactNode {
             />
 
             <p className="text-center text-sm text-muted-foreground">
-              Vous pouvez changer de plan a tout moment depuis les parametres.
+              Vous pouvez changer de plan à tout moment depuis les paramètres.
             </p>
           </div>
         )}
@@ -136,7 +136,7 @@ export default function OnboardingPage(): React.ReactNode {
             <div className="text-center space-y-2">
               <h1 className="text-3xl font-bold text-balance">Ajoutez votre marque</h1>
               <p className="text-muted-foreground text-pretty">
-                Ces informations seront utilisees pour detecter les mentions dans les reponses IA
+                Ces informations seront utilisées pour détecter les mentions dans les réponses IA
               </p>
             </div>
 
@@ -144,7 +144,7 @@ export default function OnboardingPage(): React.ReactNode {
               <CardHeader>
                 <CardTitle>Votre marque</CardTitle>
                 <CardDescription>
-                  Renseignez le nom de votre marque et ses variantes pour un tracking precis.
+                  Renseignez le nom de votre marque et ses variantes pour un tracking précis.
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -155,14 +155,14 @@ export default function OnboardingPage(): React.ReactNode {
                     </label>
                     <Input
                       id="brandName"
-                      placeholder="Ex: Cafe Lomi"
+                      placeholder="Ex: Café Lomi"
                       value={brandName}
                       onChange={(e) => setBrandName(e.target.value)}
                       required
                       autoComplete="off"
                     />
                     <p className="text-xs text-muted-foreground">
-                      Le nom principal de votre marque a tracker
+                      Le nom principal de votre marque à tracker
                     </p>
                   </div>
 
@@ -210,7 +210,7 @@ export default function OnboardingPage(): React.ReactNode {
                       </div>
                     )}
                     <p className="text-xs text-muted-foreground">
-                      Autres facons dont votre marque peut etre mentionnee
+                      Autres façons dont votre marque peut être mentionnée
                     </p>
                   </div>
 
@@ -227,7 +227,7 @@ export default function OnboardingPage(): React.ReactNode {
                       autoComplete="off"
                     />
                     <p className="text-xs text-muted-foreground">
-                      Sera aussi utilise pour detecter les mentions
+                      Sera aussi utilisé pour détecter les mentions
                     </p>
                   </div>
 
@@ -238,7 +238,7 @@ export default function OnboardingPage(): React.ReactNode {
                     disabled={createProject.isPending}
                   >
                     {createProject.isPending
-                      ? 'Creation...'
+                      ? 'Création...'
                       : 'Commencer le tracking'}
                   </Button>
                 </form>
