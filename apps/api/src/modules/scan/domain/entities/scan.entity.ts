@@ -49,8 +49,53 @@ export class Scan {
       id: data.id,
       promptId: data.promptId,
       executedAt: data.executedAt,
-      results: data.results as LLMResult[],
+      results: Scan.normalizeResults(data.results),
       createdAt: data.createdAt,
+    });
+  }
+
+  /**
+   * Normalize results from persistence to handle both old and new formats.
+   * Old format had: competitors: string[], citationContext: string
+   * New format has: competitorMentions: CompetitorMentionData[], brandKeywords, queryKeywords, parseSuccess
+   */
+  private static normalizeResults(rawResults: unknown): LLMResult[] {
+    if (!Array.isArray(rawResults)) return [];
+
+    return rawResults.map((r): LLMResult => {
+      // Already in new format
+      if ('competitorMentions' in r && Array.isArray(r.competitorMentions)) {
+        return r as LLMResult;
+      }
+
+      // Migrate from old format
+      const oldResult = r as {
+        provider: LLMProvider;
+        model: string;
+        rawResponse?: string;
+        isCited: boolean;
+        position: number | null;
+        citationContext?: string;
+        competitors?: string[];
+        latencyMs: number;
+      };
+
+      return {
+        provider: oldResult.provider,
+        model: oldResult.model,
+        rawResponse: oldResult.rawResponse ?? '',
+        isCited: oldResult.isCited,
+        position: oldResult.position,
+        brandKeywords: [],
+        queryKeywords: [],
+        competitorMentions: (oldResult.competitors ?? []).map((name, idx) => ({
+          name,
+          position: idx + 1,
+          keywords: [],
+        })),
+        latencyMs: oldResult.latencyMs,
+        parseSuccess: true, // Assume old data was valid
+      };
     });
   }
 
