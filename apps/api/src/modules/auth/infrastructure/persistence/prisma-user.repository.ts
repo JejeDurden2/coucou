@@ -51,6 +51,21 @@ export class PrismaUserRepository implements UserRepository {
     return User.fromPersistence(user);
   }
 
+  async linkGoogleAccount(
+    userId: string,
+    googleId: string,
+    avatarUrl?: string,
+  ): Promise<User> {
+    const user = await this.prisma.user.update({
+      where: { id: userId },
+      data: {
+        googleId,
+        ...(avatarUrl && { avatarUrl }),
+      },
+    });
+    return User.fromPersistence(user);
+  }
+
   async updatePlan(
     userId: string,
     plan: string,

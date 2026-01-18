@@ -23,7 +23,14 @@ export class GoogleAuthUseCase {
       // Check if user exists by email (may have registered with email/password before)
       user = await this.userRepository.findByEmail(profile.email);
 
-      if (!user) {
+      if (user) {
+        // Link Google account to existing user
+        user = await this.userRepository.linkGoogleAccount(
+          user.id,
+          profile.id,
+          profile.picture,
+        );
+      } else {
         // Create new user from OAuth
         user = await this.userRepository.createFromOAuth({
           email: profile.email,
@@ -32,8 +39,6 @@ export class GoogleAuthUseCase {
           avatarUrl: profile.picture,
         });
       }
-      // Note: If user exists with email but no googleId, they need to link accounts manually
-      // For MVP, we just create a new session for the existing user
     }
 
     const payload: JwtPayload = {
