@@ -122,7 +122,6 @@ export default function OnboardingPage(): React.ReactNode {
             </div>
 
             <PlanGrid
-              currentPlan={user?.plan}
               onSelectPlan={handleSelectPlan}
               loadingPlan={loadingPlan}
             />
