@@ -3,6 +3,7 @@ import type { LLMProvider } from '@prisma/client';
 export interface ProviderBreakdownDto {
   provider: LLMProvider;
   citationRate: number;
+  averageRank: number | null;
   totalScans: number;
 }
 
@@ -28,6 +29,7 @@ export interface PromptStatDto {
 
 export interface DashboardStatsDto {
   globalScore: number;
+  averageRank: number | null;
   breakdown: ProviderBreakdownDto[];
   trend: TrendDto;
   topCompetitors: CompetitorDto[];

@@ -46,8 +46,12 @@ export class GetDashboardStatsUseCase {
     const citedScans = scans.filter((s) => s.results.some((r) => r.isCited)).length;
     const globalScore = scans.length > 0 ? (citedScans / scans.length) * 100 : 0;
 
+    // Calculate global average rank
+    const allResults = scans.flatMap((s) => s.results);
+    const averageRank = this.calculateAverageRank(allResults);
+
     // Calculate breakdown by provider
-    const breakdown = this.calculateProviderBreakdown(scans.flatMap((s) => s.results));
+    const breakdown = this.calculateProviderBreakdown(allResults);
 
     // Calculate trend (last 7 days vs previous 7 days)
     const trend = this.calculateTrend(scans);
@@ -62,6 +66,7 @@ export class GetDashboardStatsUseCase {
 
     return Result.ok({
       globalScore: Math.round(globalScore * 10) / 10,
+      averageRank,
       breakdown,
       trend,
       topCompetitors,
@@ -69,6 +74,14 @@ export class GetDashboardStatsUseCase {
       totalScans: scans.length,
       lastScanAt: lastScan?.executedAt ?? null,
     });
+  }
+
+  private calculateAverageRank(results: LLMResult[]): number | null {
+    const rankedResults = results.filter((r) => r.isCited && r.position !== null);
+    if (rankedResults.length === 0) return null;
+
+    const sum = rankedResults.reduce((acc, r) => acc + (r.position ?? 0), 0);
+    return Math.round((sum / rankedResults.length) * 10) / 10;
   }
 
   private calculateProviderBreakdown(results: LLMResult[]): ProviderBreakdownDto[] {
@@ -79,10 +92,12 @@ export class GetDashboardStatsUseCase {
       const citedCount = providerResults.filter((r) => r.isCited).length;
       const citationRate =
         providerResults.length > 0 ? (citedCount / providerResults.length) * 100 : 0;
+      const averageRank = this.calculateAverageRank(providerResults);
 
       return {
         provider,
         citationRate: Math.round(citationRate * 10) / 10,
+        averageRank,
         totalScans: providerResults.length,
       };
     });

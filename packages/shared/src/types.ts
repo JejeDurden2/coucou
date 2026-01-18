@@ -121,6 +121,7 @@ export interface ScanHistory {
 export interface ProviderBreakdown {
   provider: LLMProvider;
   citationRate: number;
+  averageRank: number | null;
   totalScans: number;
 }
 
@@ -146,6 +147,7 @@ export interface PromptStat {
 
 export interface DashboardStats {
   globalScore: number;
+  averageRank: number | null;
   breakdown: ProviderBreakdown[];
   trend: Trend;
   topCompetitors: Competitor[];

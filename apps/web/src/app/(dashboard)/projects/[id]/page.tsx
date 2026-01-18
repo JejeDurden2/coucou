@@ -2,7 +2,7 @@
 
 import { use, useState } from 'react';
 import Link from 'next/link';
-import { Play, Plus, RefreshCw, Check, X, Trash2, TrendingUp, TrendingDown } from 'lucide-react';
+import { Play, Plus, RefreshCw, Check, X, Trash2 } from 'lucide-react';
 
 import { useProject } from '@/hooks/use-projects';
 import { useCreatePrompt, useDeletePrompt } from '@/hooks/use-prompts';
@@ -132,21 +132,17 @@ export default function ProjectDashboardPage({ params }: ProjectDashboardPagePro
 
       {/* Stats Row */}
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-        <ScoreCard
-          label="Score global"
-          value={stats?.globalScore ?? 0}
-          trend={stats?.trend?.delta}
-          isPercentage
+        <RankCard
+          label="Classement moyen"
+          value={stats?.averageRank ?? null}
         />
-        <ScoreCard
+        <RankCard
           label="ChatGPT"
-          value={openaiBreakdown?.citationRate ?? 0}
-          isPercentage
+          value={openaiBreakdown?.averageRank ?? null}
         />
-        <ScoreCard
+        <RankCard
           label="Claude"
-          value={anthropicBreakdown?.citationRate ?? 0}
-          isPercentage
+          value={anthropicBreakdown?.averageRank ?? null}
         />
         <div className="rounded-lg border border-border bg-card p-4">
           <p className="text-xs text-muted-foreground mb-1">Total scans</p>
@@ -309,49 +305,26 @@ export default function ProjectDashboardPage({ params }: ProjectDashboardPagePro
   );
 }
 
-interface ScoreCardProps {
+interface RankCardProps {
   label: string;
-  value: number;
-  trend?: number;
-  isPercentage?: boolean;
+  value: number | null;
 }
 
-function ScoreCard({ label, value, trend, isPercentage }: ScoreCardProps): React.ReactNode {
-  const displayValue = Math.round(value);
-  const hasTrend = trend !== undefined && trend !== 0;
-  const isPositive = (trend ?? 0) >= 0;
+function RankCard({ label, value }: RankCardProps): React.ReactNode {
+  const hasValue = value !== null;
 
   return (
     <div className="rounded-lg border border-border bg-card p-4">
       <p className="text-xs text-muted-foreground mb-1">{label}</p>
-      <div className="flex items-baseline gap-2">
+      {hasValue ? (
         <p className="text-2xl font-semibold tabular-nums">
-          {displayValue}
-          {isPercentage && <span className="text-lg">%</span>}
+          <span className="text-lg text-muted-foreground">#</span>
+          {value.toFixed(1)}
         </p>
-        {hasTrend ? (
-          <TrendIndicator value={trend} isPositive={isPositive} />
-        ) : null}
-      </div>
+      ) : (
+        <p className="text-2xl font-semibold text-muted-foreground">—</p>
+      )}
     </div>
-  );
-}
-
-interface TrendIndicatorProps {
-  value: number;
-  isPositive: boolean;
-}
-
-function TrendIndicator({ value, isPositive }: TrendIndicatorProps): React.ReactNode {
-  const Icon = isPositive ? TrendingUp : TrendingDown;
-  const colorClass = isPositive ? 'text-emerald-500' : 'text-red-500';
-  const prefix = isPositive ? '+' : '';
-
-  return (
-    <span className={cn('inline-flex items-center text-xs font-medium tabular-nums', colorClass)}>
-      <Icon className="size-3 mr-0.5" aria-hidden="true" />
-      {prefix}{Math.round(value)}%
-    </span>
   );
 }
 
