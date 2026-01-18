@@ -33,15 +33,20 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     },
     done: VerifyCallback,
   ): void {
+    const email = profile.emails?.[0]?.value;
+    if (!email) {
+      return done(new Error('Email not provided by Google'), undefined);
+    }
+
+    const nameFromParts = [profile.name?.givenName, profile.name?.familyName]
+      .filter(Boolean)
+      .join(' ');
+    const name = profile.displayName || nameFromParts || 'User';
+
     const googleProfile: GoogleProfile = {
       id: profile.id,
-      email: profile.emails?.[0]?.value ?? '',
-      name:
-        profile.displayName ??
-        [profile.name?.givenName, profile.name?.familyName]
-          .filter(Boolean)
-          .join(' ') ??
-        'User',
+      email,
+      name,
       picture: profile.photos?.[0]?.value,
     };
 
