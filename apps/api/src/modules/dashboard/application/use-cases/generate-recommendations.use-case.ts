@@ -104,10 +104,11 @@ export class GenerateRecommendationsUseCase {
         title: 'Visibilité critique',
         description: `Votre marque n'apparaît que dans ${Math.round(citationRate)}% des réponses IA. C'est significativement en dessous de la moyenne du marché.`,
         actionItems: [
-          'Enrichissez votre contenu web avec des informations factuelles et vérifiables',
-          'Créez du contenu qui répond directement aux questions de vos prompts',
-          'Assurez-vous que votre marque est mentionnée sur des sources fiables (Wikipedia, presse, etc.)',
-          'Travaillez votre présence sur les sites d\'avis et comparateurs de votre secteur',
+          'Ajoutez 1 statistique vérifiable tous les 150-200 mots sur vos pages clés (+30-40% de citations)',
+          'Structurez chaque page avec des H2/H3 et des listes à puces (40% plus de chances d\'être cité)',
+          'Créez une page FAQ répondant directement aux questions de vos prompts',
+          'Publiez un tableau comparatif de votre offre vs concurrents (4x plus de citations)',
+          'Ajoutez le schema markup FAQ/Article/Organization sur vos pages principales',
         ],
       };
     }
@@ -120,9 +121,10 @@ export class GenerateRecommendationsUseCase {
         title: 'Visibilité à améliorer',
         description: `Votre marque apparaît dans ${Math.round(citationRate)}% des réponses. Il y a une marge de progression importante.`,
         actionItems: [
-          'Analysez les prompts où vous n\'êtes pas cité et optimisez votre contenu en conséquence',
-          'Augmentez le nombre de backlinks de qualité vers votre site',
-          'Publiez régulièrement du contenu expert dans votre domaine',
+          'Reformulez vos introductions : réponse directe dans les 40-60 premiers mots',
+          'Citez vos sources avec liens (études, rapports) pour gagner en crédibilité (+20-30% de citations)',
+          'Créez du contenu au format Q&A qui reprend les formulations de vos prompts',
+          'Vérifiez votre présence sur les pages Wikipedia pertinentes de votre secteur',
         ],
       };
     }
@@ -168,9 +170,10 @@ export class GenerateRecommendationsUseCase {
           title: `${competitor} domine les réponses`,
           description: `${competitor} apparaît dans ${Math.round(competitorRate)}% des réponses, contre ${Math.round(brandRate)}% pour vous. Analysez leur stratégie de contenu.`,
           actionItems: [
-            `Étudiez le positionnement et le contenu de ${competitor}`,
-            'Identifiez les mots-clés et sujets où ils sont mieux référencés',
-            'Créez du contenu différenciant qui met en avant vos avantages uniques',
+            `Analysez les pages de ${competitor} qui apparaissent dans les réponses IA`,
+            'Créez du contenu qui cite des données plus récentes que les leurs',
+            'Publiez des études de cas chiffrées démontrant vos résultats concrets',
+            'Répondez aux questions Reddit/Quora où ils sont mentionnés',
           ],
           metadata: { competitor, competitorRate, brandRate },
         });
@@ -204,17 +207,27 @@ export class GenerateRecommendationsUseCase {
       const betterRate = Math.max(openaiCitationRate, anthropicCitationRate);
       const worseRate = Math.min(openaiCitationRate, anthropicCitationRate);
 
+      // Action items adaptés selon le provider défaillant
+      const actionItems =
+        worseProvider === 'ChatGPT'
+          ? [
+              'Créez du contenu long-form (2000+ mots) avec une structure claire en H2/H3',
+              'Renforcez vos backlinks depuis des sites d\'autorité (.edu, .gov, presse)',
+              'Publiez des guides complets couvrant tous les aspects d\'un sujet',
+            ]
+          : [
+              'Ajoutez des définitions techniques précises et des citations de sources',
+              'Structurez avec des tableaux de données et des exemples concrets',
+              'Évitez le jargon marketing, privilégiez la clarté factuelle',
+            ];
+
       return {
         id: generateId(),
         type: 'provider_disparity',
         severity: 'info',
         title: `Écart de visibilité entre LLMs`,
         description: `Vous êtes cité ${Math.round(betterRate)}% du temps sur ${betterProvider}, mais seulement ${Math.round(worseRate)}% sur ${worseProvider}. Les deux IA utilisent des sources différentes.`,
-        actionItems: [
-          `Analysez les sources que ${worseProvider} semble privilégier`,
-          'Diversifiez vos canaux de présence en ligne',
-          'Assurez une cohérence de votre message sur toutes les plateformes',
-        ],
+        actionItems,
         metadata: { openaiCitationRate, anthropicCitationRate },
       };
     }
@@ -245,9 +258,10 @@ export class GenerateRecommendationsUseCase {
           title: 'Prompt sans citation',
           description: `Vous n'êtes jamais cité sur le prompt "${prompt.content.slice(0, 50)}...". Ce type de requête ne génère pas de visibilité pour vous.`,
           actionItems: [
-            'Vérifiez que votre contenu répond à cette question spécifique',
-            'Créez une page dédiée qui traite directement ce sujet',
-            'Envisagez de reformuler le prompt pour cibler une intention différente',
+            'Créez une page dédiée avec ce prompt exact comme titre H1',
+            'Ajoutez un paragraphe de 40-60 mots répondant directement à la question',
+            'Incluez 3-5 statistiques pertinentes avec sources citées',
+            'Ajoutez le schema FAQ avec cette question et votre réponse',
           ],
           relatedPromptIds: [prompt.id],
         });
@@ -274,9 +288,10 @@ export class GenerateRecommendationsUseCase {
         title: 'Excellente visibilité !',
         description: `Votre marque apparaît dans ${Math.round(citationRate)}% des réponses. Pour maintenir cette position, continuez à publier du contenu de qualité.`,
         actionItems: [
-          'Surveillez régulièrement l\'évolution de votre positionnement',
-          'Continuez à enrichir votre contenu avec des données fraîches',
-          'Explorez de nouveaux prompts pour identifier des opportunités',
+          'Mettez à jour vos statistiques mensuellement (données fraîches = plus de citations)',
+          'Créez du contenu sur des prompts adjacents pour élargir votre couverture',
+          'Publiez des études originales avec vos propres données (4x plus de citations)',
+          'Surveillez les nouvelles questions sur Reddit/Quora dans votre domaine',
         ],
       };
     }
