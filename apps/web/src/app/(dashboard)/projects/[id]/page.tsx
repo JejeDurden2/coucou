@@ -2,7 +2,7 @@
 
 import { use, useState, memo } from 'react';
 import Link from 'next/link';
-import { Play, Plus, RefreshCw, Trash2, Trophy, MessageSquare, BarChart3 } from 'lucide-react';
+import { Radar, Plus, RefreshCw, Trash2, Trophy, MessageSquare, BarChart3 } from 'lucide-react';
 
 import { useProject } from '@/hooks/use-projects';
 import { useCreatePrompt, useDeletePrompt } from '@/hooks/use-prompts';
@@ -180,8 +180,8 @@ export default function ProjectDashboardPage({
             </>
           ) : (
             <>
-              <Play className="mr-2 h-4 w-4" aria-hidden="true" />
-              Lancer un scan
+              <Radar className="mr-2 h-4 w-4" aria-hidden="true" />
+              Scanner
             </>
           )}
         </Button>
@@ -260,21 +260,15 @@ export default function ProjectDashboardPage({
         <div className="rounded-lg border border-border overflow-hidden">
           <table className="w-full">
             <thead>
-              <tr className="border-b border-primary/10 bg-gradient-to-r from-muted/50 via-muted/30 to-muted/50">
+              <tr className="border-b border-border bg-muted/30">
                 <th className="text-left text-xs font-medium text-muted-foreground uppercase tracking-wide px-4 py-3">
                   Prompt
                 </th>
                 <th className="text-center text-xs font-medium text-muted-foreground uppercase tracking-wide px-4 py-3 w-28">
-                  <span className="flex items-center gap-2 justify-center">
-                    <span className="h-2 w-2 rounded-full bg-chatgpt" />
-                    ChatGPT
-                  </span>
+                  ChatGPT
                 </th>
                 <th className="text-center text-xs font-medium text-muted-foreground uppercase tracking-wide px-4 py-3 w-28">
-                  <span className="flex items-center gap-2 justify-center">
-                    <span className="h-2 w-2 rounded-full bg-claude" />
-                    Claude
-                  </span>
+                  Claude
                 </th>
                 <th className="w-12" />
               </tr>

@@ -1,8 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" fill="none">
   <!-- Simplified favicon version -->
   <rect width="32" height="32" rx="8" fill="#080A12"/>
-  <path d="M5 13C5 8.582 8.582 5 13 5h3c4.418 0 8 3.582 8 8v2c0 4.418-3.582 8-8 8h-1l-3.5 3.5V23.1C8.136 21.977 5 18.347 5 14v-1z" fill="#06B6D4"/>
+  <path d="M5 13C5 8.582 8.582 5 13 5h3c4.418 0 8 3.582 8 8v2c0 4.418-3.582 8-8 8h-1l-3.5 3.5V23.1C8.136 21.977 5 18.347 5 14v-1z" fill="#8B5CF6"/>
   <circle cx="17" cy="12" r="2.5" fill="#080A12"/>
   <circle cx="18" cy="11" r="1" fill="#FFFFFF"/>
-  <path d="M22 13l3.5 1.5-3.5 1.5v-3z" fill="#06B6D4"/>
+  <path d="M22 13l3.5 1.5-3.5 1.5v-3z" fill="#8B5CF6"/>
 </svg>

@@ -100,9 +100,9 @@ function SimpleCompetitorsList({
                     {competitor.count} citation{competitor.count > 1 ? 's' : ''}
                   </span>
                 </div>
-                <div className="h-2 rounded-full bg-muted overflow-hidden">
+                <div className="h-1.5 rounded-full bg-muted overflow-hidden">
                   <div
-                    className="h-full rounded-full bg-cyan-500 transition-[width] duration-500"
+                    className="h-full rounded-full bg-primary transition-[width] duration-500"
                     style={{
                       width: `${(competitor.count / maxCount) * 100}%`,
                     }}

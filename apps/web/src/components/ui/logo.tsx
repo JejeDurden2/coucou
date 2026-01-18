@@ -1,6 +1,4 @@
-'use client';
-
-import { useState, useCallback } from 'react';
+import Image from 'next/image';
 import { cn } from '@/lib/utils';
 
 interface LogoProps {
@@ -10,81 +8,32 @@ interface LogoProps {
 }
 
 const sizes = {
-  sm: { wrapper: 'h-8', emoji: 'text-xl', text: 'text-lg' },
-  md: { wrapper: 'h-10', emoji: 'text-2xl', text: 'text-xl' },
-  lg: { wrapper: 'h-14', emoji: 'text-4xl', text: 'text-2xl' },
+  sm: { wrapper: 'h-8', iconSize: 24, text: 'text-lg' },
+  md: { wrapper: 'h-10', iconSize: 32, text: 'text-xl' },
+  lg: { wrapper: 'h-14', iconSize: 48, text: 'text-2xl' },
 };
 
-function WaveEmoji({ className, onAnimationEnd }: { className?: string; onAnimationEnd?: () => void }) {
-  return (
-    <span
-      className={cn('inline-block origin-[70%_70%]', className)}
-      onAnimationEnd={onAnimationEnd}
-      role="img"
-      aria-label="Main qui salue"
-    >
-      👋
-    </span>
-  );
-}
-
 export function Logo({ className, variant = 'full', size = 'md' }: LogoProps) {
-  const [isWaving, setIsWaving] = useState(false);
-  const { wrapper, emoji, text } = sizes[size];
-
-  const handleMouseEnter = useCallback(() => {
-    setIsWaving(true);
-  }, []);
-
-  const handleAnimationEnd = useCallback(() => {
-    setIsWaving(false);
-  }, []);
+  const { wrapper, iconSize, text } = sizes[size];
 
   if (variant === 'icon') {
     return (
-      <div
-        className={cn('flex items-center', wrapper, className)}
-        onMouseEnter={handleMouseEnter}
-      >
-        <WaveEmoji
-          className={cn(emoji, isWaving && 'animate-wave')}
-          onAnimationEnd={handleAnimationEnd}
-        />
+      <div className={cn('flex items-center', wrapper, className)}>
+        <Image src="/logo.svg" alt="Coucou IA" width={iconSize} height={iconSize} />
       </div>
     );
   }
 
   if (variant === 'text') {
     return (
-      <span
-        className={cn(
-          'font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent',
-          text,
-          className,
-        )}
-      >
-        Coucou IA
-      </span>
+      <span className={cn('font-bold text-foreground', text, className)}>Coucou IA</span>
     );
   }
 
   return (
-    <div
-      className={cn('flex items-center gap-2', wrapper, className)}
-      onMouseEnter={handleMouseEnter}
-    >
-      <WaveEmoji
-        className={cn(emoji, isWaving && 'animate-wave')}
-        onAnimationEnd={handleAnimationEnd}
-      />
-      <span
-        className={cn(
-          'font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent',
-          text,
-        )}
-      >
-        Coucou IA
-      </span>
+    <div className={cn('flex items-center gap-2', wrapper, className)}>
+      <Image src="/logo.svg" alt="Coucou IA" width={iconSize} height={iconSize} />
+      <span className={cn('font-bold text-foreground', text)}>Coucou IA</span>
     </div>
   );
 }

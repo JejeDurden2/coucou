@@ -39,6 +39,7 @@ const config: Config = {
         accent: {
           DEFAULT: 'rgb(var(--accent) / <alpha-value>)',
           foreground: 'rgb(var(--accent-foreground) / <alpha-value>)',
+          muted: 'rgb(var(--accent-muted) / 0.12)',
         },
         // LLM-specific colors
         chatgpt: 'rgb(var(--chatgpt) / <alpha-value>)',
