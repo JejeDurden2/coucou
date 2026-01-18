@@ -146,18 +146,24 @@ export interface Competitor {
 
 export type CompetitorTrend = 'up' | 'down' | 'stable' | 'new';
 
-export interface CompetitorMentionsByProvider {
-  openai: number;
-  anthropic: number;
+export interface CompetitorProviderStats {
+  mentions: number;
+  averagePosition: number | null;
+}
+
+export interface CompetitorStatsByProvider {
+  openai: CompetitorProviderStats;
+  anthropic: CompetitorProviderStats;
 }
 
 export interface EnrichedCompetitor {
   name: string;
   totalMentions: number;
   averagePosition: number | null;
-  mentionsByProvider: CompetitorMentionsByProvider;
+  statsByProvider: CompetitorStatsByProvider;
   trend: CompetitorTrend;
   trendPercentage: number | null;
+  keywords: string[];
   firstSeenAt: Date;
   lastSeenAt: Date;
   lastContext: string | null;

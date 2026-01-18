@@ -1,8 +1,8 @@
 'use client';
 
-import { use, useState } from 'react';
+import { use, useState, memo } from 'react';
 import Link from 'next/link';
-import { Play, Plus, RefreshCw, Check, X, Trash2 } from 'lucide-react';
+import { Play, Plus, RefreshCw, Trash2, Trophy, MessageSquare, BarChart3 } from 'lucide-react';
 
 import { useProject } from '@/hooks/use-projects';
 import { useCreatePrompt, useDeletePrompt } from '@/hooks/use-prompts';
@@ -20,8 +20,49 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { CompetitorsList } from '@/components/features/dashboard';
-import { LLMProvider } from '@coucou-ia/shared';
+import { StatCard } from '@/components/features/dashboard/stat-card';
+import { LLMProvider, type ProviderBreakdown } from '@coucou-ia/shared';
 import { cn } from '@/lib/utils';
+import { formatRelativeTime } from '@/lib/format';
+
+function getProviderBreakdown(
+  breakdown: ProviderBreakdown[] | undefined,
+  provider: LLMProvider,
+): ProviderBreakdown | undefined {
+  return breakdown?.find((b) => b.provider === provider);
+}
+
+interface PulsingDotProps {
+  color: 'cyan' | 'emerald';
+  size?: 'sm' | 'md';
+}
+
+const DOT_COLORS = {
+  cyan: { ping: 'bg-cyan-400', dot: 'bg-cyan-500' },
+  emerald: { ping: 'bg-emerald-400', dot: 'bg-emerald-500' },
+} as const;
+
+const DOT_SIZES = {
+  sm: 'h-2 w-2',
+  md: 'h-3 w-3',
+} as const;
+
+function PulsingDot({ color, size = 'sm' }: PulsingDotProps): React.ReactNode {
+  const colors = DOT_COLORS[color];
+  const sizeClass = DOT_SIZES[size];
+
+  return (
+    <span className={cn('relative flex', sizeClass)}>
+      <span
+        className={cn(
+          'animate-ping absolute h-full w-full rounded-full opacity-75 motion-reduce:animate-none',
+          colors.ping,
+        )}
+      />
+      <span className={cn('relative rounded-full h-full w-full', colors.dot)} />
+    </span>
+  );
+}
 
 interface ProjectDashboardPageProps {
   params: Promise<{ id: string }>;
@@ -64,7 +105,9 @@ export default function ProjectDashboardPage({
   if (projectLoading) {
     return (
       <div className="flex items-center justify-center min-h-[50vh]">
-        <div className="animate-pulse text-muted-foreground">Chargement…</div>
+        <div className="animate-pulse motion-reduce:animate-none text-muted-foreground">
+          Chargement…
+        </div>
       </div>
     );
   }
@@ -80,8 +123,8 @@ export default function ProjectDashboardPage({
     );
   }
 
-  const openaiBreakdown = stats?.breakdown.find((b) => b.provider === LLMProvider.OPENAI);
-  const anthropicBreakdown = stats?.breakdown.find((b) => b.provider === LLMProvider.ANTHROPIC);
+  const openaiBreakdown = getProviderBreakdown(stats?.breakdown, LLMProvider.OPENAI);
+  const anthropicBreakdown = getProviderBreakdown(stats?.breakdown, LLMProvider.ANTHROPIC);
 
   const promptCount = stats?.promptStats?.length ?? 0;
   const hasPrompts = promptCount > 0;
@@ -90,26 +133,34 @@ export default function ProjectDashboardPage({
     <div className="space-y-6">
       {/* Header with brand info and scan button */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <div className="flex items-center gap-3">
-            <h1 className="text-xl font-semibold">{project.brandName}</h1>
-            {project.brandVariants.length > 0 && (
-              <span className="text-sm text-muted-foreground">
-                {project.brandVariants.join(', ')}
-              </span>
-            )}
+        <div className="flex items-center gap-3">
+          {/* Brand Avatar */}
+          <div className="h-10 w-10 rounded-lg bg-gradient-to-br from-cyan-500/20 to-violet-500/20 border border-cyan-500/20 flex items-center justify-center flex-shrink-0">
+            <span className="text-lg font-bold text-cyan-400">
+              {project.brandName.charAt(0).toUpperCase()}
+            </span>
           </div>
-          {stats?.lastScanAt ? (
-            <p className="text-xs text-muted-foreground mt-1">
-              Dernier scan:{' '}
-              {new Date(stats.lastScanAt).toLocaleDateString('fr-FR', {
-                day: 'numeric',
-                month: 'short',
-                hour: '2-digit',
-                minute: '2-digit',
-              })}
-            </p>
-          ) : null}
+          <div>
+            <div className="flex items-center gap-2">
+              <h1 className="text-xl font-semibold">{project.brandName}</h1>
+              {project.brandVariants.length > 0 && (
+                <span className="text-sm text-muted-foreground hidden sm:inline">
+                  {project.brandVariants.join(', ')}
+                </span>
+              )}
+            </div>
+            {/* Scan Status */}
+            {triggerScan.isPending ? (
+              <span className="flex items-center gap-1.5 text-xs text-cyan-400">
+                <PulsingDot color="cyan" />
+                Scan en cours…
+              </span>
+            ) : stats?.lastScanAt ? (
+              <p className="text-xs text-muted-foreground">
+                Dernier scan {formatRelativeTime(stats.lastScanAt)}
+              </p>
+            ) : null}
+          </div>
         </div>
         <Button
           onClick={handleTriggerScan}
@@ -118,7 +169,10 @@ export default function ProjectDashboardPage({
         >
           {triggerScan.isPending ? (
             <>
-              <RefreshCw className="mr-2 h-4 w-4 animate-spin" aria-hidden="true" />
+              <RefreshCw
+                className="mr-2 h-4 w-4 animate-spin motion-reduce:animate-none"
+                aria-hidden="true"
+              />
               Scan en cours…
             </>
           ) : (
@@ -132,13 +186,31 @@ export default function ProjectDashboardPage({
 
       {/* Stats Row */}
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-        <RankCard label="Classement moyen" value={stats?.averageRank ?? null} />
-        <RankCard label="ChatGPT" value={openaiBreakdown?.averageRank ?? null} />
-        <RankCard label="Claude" value={anthropicBreakdown?.averageRank ?? null} />
-        <div className="rounded-lg border border-border bg-card p-4">
-          <p className="text-xs text-muted-foreground mb-1">Total scans</p>
-          <p className="text-2xl font-semibold tabular-nums">{stats?.totalScans ?? 0}</p>
-        </div>
+        <StatCard
+          icon={Trophy}
+          label="Classement moyen"
+          value={stats?.averageRank ?? null}
+          gradient="gold"
+          trend={stats?.trend ? { delta: stats.trend.delta } : undefined}
+        />
+        <StatCard
+          icon={MessageSquare}
+          label="ChatGPT"
+          value={openaiBreakdown?.averageRank ?? null}
+          gradient="emerald"
+        />
+        <StatCard
+          icon={MessageSquare}
+          label="Claude"
+          value={anthropicBreakdown?.averageRank ?? null}
+          gradient="orange"
+        />
+        <StatCard
+          icon={BarChart3}
+          label="Total scans"
+          value={stats?.totalScans?.toString() ?? '0'}
+          gradient="cyan"
+        />
       </div>
 
       {/* Main Content: Prompts Table */}
@@ -185,23 +257,35 @@ export default function ProjectDashboardPage({
         <div className="rounded-lg border border-border overflow-hidden">
           <table className="w-full">
             <thead>
-              <tr className="border-b border-border bg-muted/50">
+              <tr className="border-b border-cyan-500/10 bg-gradient-to-r from-muted/50 via-muted/30 to-muted/50">
                 <th className="text-left text-xs font-medium text-muted-foreground uppercase tracking-wide px-4 py-3">
                   Prompt
                 </th>
-                <th className="text-center text-xs font-medium text-muted-foreground uppercase tracking-wide px-4 py-3 w-24">
-                  ChatGPT
+                <th className="text-center text-xs font-medium text-muted-foreground uppercase tracking-wide px-4 py-3 w-28">
+                  <span className="flex items-center gap-2 justify-center">
+                    <span className="h-2 w-2 rounded-full bg-emerald-500" />
+                    ChatGPT
+                  </span>
                 </th>
-                <th className="text-center text-xs font-medium text-muted-foreground uppercase tracking-wide px-4 py-3 w-24">
-                  Claude
+                <th className="text-center text-xs font-medium text-muted-foreground uppercase tracking-wide px-4 py-3 w-28">
+                  <span className="flex items-center gap-2 justify-center">
+                    <span className="h-2 w-2 rounded-full bg-orange-500" />
+                    Claude
+                  </span>
                 </th>
-                <th className="w-12"></th>
+                <th className="w-12" />
               </tr>
             </thead>
             <tbody>
               {!hasPrompts ? (
                 <tr>
                   <td colSpan={4} className="px-4 py-12 text-center">
+                    <div className="mx-auto w-16 h-16 rounded-full bg-cyan-500/10 flex items-center justify-center mb-4">
+                      <MessageSquare
+                        className="h-8 w-8 text-cyan-400 opacity-50"
+                        aria-hidden="true"
+                      />
+                    </div>
                     <p className="text-muted-foreground">Aucun prompt configuré</p>
                     <p className="text-sm text-muted-foreground mt-1">
                       Ajoutez des prompts pour commencer à tracker votre visibilité
@@ -209,39 +293,48 @@ export default function ProjectDashboardPage({
                   </td>
                 </tr>
               ) : (
-                stats?.promptStats.map((prompt) => (
-                  <tr
-                    key={prompt.promptId}
-                    className={cn(
-                      'border-b border-border last:border-0 hover:bg-muted/30 transition-colors',
-                      (statsLoading || deletePrompt.isPending) && 'opacity-50',
-                    )}
-                  >
-                    <td className="px-4 py-3">
-                      <p className="text-sm">{prompt.content}</p>
-                      {prompt.category ? (
-                        <span className="text-xs text-muted-foreground">{prompt.category}</span>
-                      ) : null}
-                    </td>
-                    <td className="px-4 py-3 text-center">
-                      <CitationStatus result={prompt.openai} />
-                    </td>
-                    <td className="px-4 py-3 text-center">
-                      <CitationStatus result={prompt.anthropic} />
-                    </td>
-                    <td className="px-4 py-3">
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="size-8 text-muted-foreground hover:text-red-500"
-                        onClick={() => setPromptToDelete(prompt.promptId)}
-                        aria-label="Supprimer ce prompt"
-                      >
-                        <Trash2 className="size-4" aria-hidden="true" />
-                      </Button>
-                    </td>
-                  </tr>
-                ))
+                stats?.promptStats.map((prompt) => {
+                  const isCitedByAny = prompt.openai?.isCited || prompt.anthropic?.isCited;
+                  return (
+                    <tr
+                      key={prompt.promptId}
+                      className={cn(
+                        'border-b border-border last:border-0 hover:bg-cyan-500/5 transition-colors relative',
+                        (statsLoading || deletePrompt.isPending) && 'opacity-50',
+                      )}
+                    >
+                      <td className="px-4 py-3 relative">
+                        {/* Left accent for cited rows */}
+                        {isCitedByAny && (
+                          <div className="absolute left-0 top-0 bottom-0 w-1 bg-emerald-500 rounded-r" />
+                        )}
+                        <p className="text-sm pl-2">{prompt.content}</p>
+                        {prompt.category ? (
+                          <span className="ml-2 inline-flex px-2 py-0.5 rounded-full text-[10px] bg-cyan-500/10 text-cyan-400">
+                            {prompt.category}
+                          </span>
+                        ) : null}
+                      </td>
+                      <td className="px-4 py-3 text-center">
+                        <CitationStatus result={prompt.openai} />
+                      </td>
+                      <td className="px-4 py-3 text-center">
+                        <CitationStatus result={prompt.anthropic} />
+                      </td>
+                      <td className="px-4 py-3">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="size-8 text-muted-foreground hover:text-red-500"
+                          onClick={() => setPromptToDelete(prompt.promptId)}
+                          aria-label="Supprimer ce prompt"
+                        >
+                          <Trash2 className="size-4" aria-hidden="true" />
+                        </Button>
+                      </td>
+                    </tr>
+                  );
+                })
               )}
             </tbody>
           </table>
@@ -285,29 +378,6 @@ export default function ProjectDashboardPage({
   );
 }
 
-interface RankCardProps {
-  label: string;
-  value: number | null;
-}
-
-function RankCard({ label, value }: RankCardProps): React.ReactNode {
-  const hasValue = value !== null;
-
-  return (
-    <div className="rounded-lg border border-border bg-card p-4">
-      <p className="text-xs text-muted-foreground mb-1">{label}</p>
-      {hasValue ? (
-        <p className="text-2xl font-semibold tabular-nums">
-          <span className="text-lg text-muted-foreground">#</span>
-          {value.toFixed(1)}
-        </p>
-      ) : (
-        <p className="text-2xl font-semibold text-muted-foreground">—</p>
-      )}
-    </div>
-  );
-}
-
 interface CitationResult {
   isCited: boolean;
   position: number | null;
@@ -317,25 +387,31 @@ interface CitationStatusProps {
   result: CitationResult | null;
 }
 
-function CitationStatus({ result }: CitationStatusProps): React.ReactNode {
+const CitationStatus = memo(function CitationStatus({
+  result,
+}: CitationStatusProps): React.ReactNode {
   if (!result) {
     return <span className="text-xs text-muted-foreground">—</span>;
   }
 
   if (result.isCited) {
     return (
-      <span className="inline-flex items-center gap-1 text-emerald-500">
-        <Check className="size-4" aria-hidden="true" />
-        {result.position ? (
-          <span className="text-xs font-medium tabular-nums">#{result.position}</span>
-        ) : null}
+      <span className="inline-flex items-center gap-1.5">
+        <PulsingDot color="emerald" size="md" />
+        {result.position !== null && (
+          <span className="font-medium tabular-nums text-emerald-400 text-xs">
+            #{result.position}
+          </span>
+        )}
       </span>
     );
   }
 
   return (
-    <span className="inline-flex items-center text-red-500">
-      <X className="size-4" aria-hidden="true" />
+    <span className="inline-flex items-center text-rose-400">
+      <span className="h-3 w-3 rounded-full bg-rose-500/20 flex items-center justify-center">
+        <span className="h-1.5 w-1.5 rounded-full bg-rose-500" />
+      </span>
     </span>
   );
-}
+});

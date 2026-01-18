@@ -75,35 +75,54 @@ function TrendBadge({
   );
 }
 
-function ProviderBreakdownBar({ openai, anthropic }: { openai: number; anthropic: number }) {
-  const total = openai + anthropic;
-  if (total === 0) return null;
+function ProviderPositions({
+  openai,
+  anthropic,
+}: {
+  openai: { mentions: number; averagePosition: number | null };
+  anthropic: { mentions: number; averagePosition: number | null };
+}) {
+  return (
+    <div className="flex justify-between text-xs">
+      <div className="flex items-center gap-1.5">
+        <span className="h-2 w-2 rounded-full bg-emerald-500" />
+        <span className="text-muted-foreground">ChatGPT</span>
+        {openai.averagePosition !== null ? (
+          <span className="font-medium text-foreground tabular-nums">
+            #{openai.averagePosition}
+          </span>
+        ) : (
+          <span className="text-muted-foreground">—</span>
+        )}
+      </div>
+      <div className="flex items-center gap-1.5">
+        <span className="text-muted-foreground">Claude</span>
+        {anthropic.averagePosition !== null ? (
+          <span className="font-medium text-foreground tabular-nums">
+            #{anthropic.averagePosition}
+          </span>
+        ) : (
+          <span className="text-muted-foreground">—</span>
+        )}
+        <span className="h-2 w-2 rounded-full bg-orange-500" />
+      </div>
+    </div>
+  );
+}
 
-  const openaiPercent = Math.round((openai / total) * 100);
-  const anthropicPercent = 100 - openaiPercent;
+function KeywordBadges({ keywords }: { keywords: string[] }) {
+  if (keywords.length === 0) return null;
 
   return (
-    <div className="space-y-1">
-      <div className="flex justify-between text-xs text-muted-foreground">
-        <span className="flex items-center gap-1">
-          <span className="h-2 w-2 rounded-full bg-emerald-500" />
-          OpenAI {openaiPercent}%
+    <div className="flex flex-wrap gap-1 mt-2">
+      {keywords.map((keyword) => (
+        <span
+          key={keyword}
+          className="px-1.5 py-0.5 rounded text-[10px] font-medium bg-muted text-muted-foreground capitalize"
+        >
+          {keyword}
         </span>
-        <span className="flex items-center gap-1">
-          Anthropic {anthropicPercent}%
-          <span className="h-2 w-2 rounded-full bg-orange-500" />
-        </span>
-      </div>
-      <div className="h-1.5 rounded-full bg-muted overflow-hidden flex">
-        <div
-          className="h-full bg-emerald-500 transition-[width] duration-500"
-          style={{ width: `${openaiPercent}%` }}
-        />
-        <div
-          className="h-full bg-orange-500 transition-[width] duration-500"
-          style={{ width: `${anthropicPercent}%` }}
-        />
-      </div>
+      ))}
     </div>
   );
 }
@@ -168,11 +187,14 @@ export const CompetitorCard = memo(function CompetitorCard({
         </div>
       </div>
 
-      {/* Provider Breakdown */}
-      <ProviderBreakdownBar
-        openai={competitor.mentionsByProvider.openai}
-        anthropic={competitor.mentionsByProvider.anthropic}
+      {/* Provider Positions */}
+      <ProviderPositions
+        openai={competitor.statsByProvider.openai}
+        anthropic={competitor.statsByProvider.anthropic}
       />
+
+      {/* Keywords */}
+      <KeywordBadges keywords={competitor.keywords} />
 
       {/* Context Tooltip */}
       {showContext && competitor.lastContext && (

@@ -166,8 +166,11 @@ export class GetDashboardStatsUseCase {
       name: string;
       totalMentions: number;
       positions: number[];
+      openaiPositions: number[];
+      anthropicPositions: number[];
       openaiMentions: number;
       anthropicMentions: number;
+      contexts: string[];
       firstSeenAt: Date;
       lastSeenAt: Date;
       lastContext: string | null;
@@ -190,12 +193,20 @@ export class GetDashboardStatsUseCase {
 
       if (existing) {
         existing.totalMentions++;
-        if (position !== null) existing.positions.push(position);
+        if (position !== null) {
+          existing.positions.push(position);
+          if (provider === LLMProvider.OPENAI) {
+            existing.openaiPositions.push(position);
+          } else {
+            existing.anthropicPositions.push(position);
+          }
+        }
         if (provider === LLMProvider.OPENAI) {
           existing.openaiMentions++;
         } else {
           existing.anthropicMentions++;
         }
+        if (context) existing.contexts.push(context);
         if (scanDate < existing.firstSeenAt) existing.firstSeenAt = scanDate;
         if (scanDate > existing.lastSeenAt) {
           existing.lastSeenAt = scanDate;
@@ -208,8 +219,12 @@ export class GetDashboardStatsUseCase {
           name,
           totalMentions: 1,
           positions: position !== null ? [position] : [],
+          openaiPositions: position !== null && provider === LLMProvider.OPENAI ? [position] : [],
+          anthropicPositions:
+            position !== null && provider === LLMProvider.ANTHROPIC ? [position] : [],
           openaiMentions: provider === LLMProvider.OPENAI ? 1 : 0,
           anthropicMentions: provider === LLMProvider.ANTHROPIC ? 1 : 0,
+          contexts: context ? [context] : [],
           firstSeenAt: scanDate,
           lastSeenAt: scanDate,
           lastContext: context,
@@ -261,6 +276,22 @@ export class GetDashboardStatsUseCase {
               10
             : null;
 
+        const openaiAvgPosition =
+          agg.openaiPositions.length > 0
+            ? Math.round(
+                (agg.openaiPositions.reduce((a, b) => a + b, 0) / agg.openaiPositions.length) * 10,
+              ) / 10
+            : null;
+
+        const anthropicAvgPosition =
+          agg.anthropicPositions.length > 0
+            ? Math.round(
+                (agg.anthropicPositions.reduce((a, b) => a + b, 0) /
+                  agg.anthropicPositions.length) *
+                  10,
+              ) / 10
+            : null;
+
         const trend = this.calculateCompetitorTrend(
           agg.currentPeriodMentions,
           agg.previousPeriodMentions,
@@ -273,16 +304,19 @@ export class GetDashboardStatsUseCase {
           agg.previousPeriodMentions,
         );
 
+        const keywords = this.extractKeywords(agg.contexts, agg.name);
+
         return {
           name: agg.name,
           totalMentions: agg.totalMentions,
           averagePosition,
-          mentionsByProvider: {
-            openai: agg.openaiMentions,
-            anthropic: agg.anthropicMentions,
+          statsByProvider: {
+            openai: { mentions: agg.openaiMentions, averagePosition: openaiAvgPosition },
+            anthropic: { mentions: agg.anthropicMentions, averagePosition: anthropicAvgPosition },
           },
           trend,
           trendPercentage,
+          keywords,
           firstSeenAt: agg.firstSeenAt,
           lastSeenAt: agg.lastSeenAt,
           lastContext: agg.lastContext,
@@ -290,6 +324,59 @@ export class GetDashboardStatsUseCase {
       })
       .sort((a, b) => b.totalMentions - a.totalMentions)
       .slice(0, 10);
+  }
+
+  private extractKeywords(contexts: string[], _competitorName: string): string[] {
+    if (contexts.length === 0) return [];
+
+    // Common descriptive words to look for
+    const descriptivePatterns = [
+      /leader/i,
+      /premium/i,
+      /luxe/i,
+      /qualit[ée]/i,
+      /innovant/i,
+      /abordable/i,
+      /populaire/i,
+      /reconnu/i,
+      /expert/i,
+      /sp[ée]cialis[ée]/i,
+      /traditionnel/i,
+      /moderne/i,
+      /artisan/i,
+      /bio/i,
+      /durable/i,
+      /local/i,
+      /international/i,
+      /professionnel/i,
+      /fiable/i,
+      /rapide/i,
+      /efficace/i,
+      /simple/i,
+      /complet/i,
+      /original/i,
+      /unique/i,
+    ];
+
+    const keywordCounts = new Map<string, number>();
+
+    for (const context of contexts) {
+      const lowerContext = context.toLowerCase();
+
+      for (const pattern of descriptivePatterns) {
+        const match = lowerContext.match(pattern);
+        if (match) {
+          const keyword = match[0].toLowerCase();
+          keywordCounts.set(keyword, (keywordCounts.get(keyword) ?? 0) + 1);
+        }
+      }
+    }
+
+    // Return top 2 keywords by frequency
+    return Array.from(keywordCounts.entries())
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, 2)
+      .map(([keyword]) => keyword);
   }
 
   private calculateCompetitorTrend(
