@@ -1,6 +1,9 @@
+'use client';
+
+import { useState } from 'react';
 import type { Competitor, EnrichedCompetitor } from '@coucou-ia/shared';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Users, Trophy } from 'lucide-react';
+import { Users, Trophy, ChevronUp } from 'lucide-react';
 import { CompetitorCard } from './competitor-card';
 
 interface CompetitorsListProps {
@@ -14,10 +17,7 @@ export function CompetitorsList({
   enrichedCompetitors,
   maxItems = 5,
 }: CompetitorsListProps) {
-  // Use enriched data if available, fall back to simple list
-  const hasEnrichedData = enrichedCompetitors && enrichedCompetitors.length > 0;
-
-  if (hasEnrichedData) {
+  if (enrichedCompetitors && enrichedCompetitors.length > 0) {
     return <EnrichedCompetitorsList competitors={enrichedCompetitors} maxItems={maxItems} />;
   }
 
@@ -31,7 +31,8 @@ function EnrichedCompetitorsList({
   competitors: EnrichedCompetitor[];
   maxItems: number;
 }) {
-  const displayedCompetitors = competitors.slice(0, maxItems);
+  const [showAll, setShowAll] = useState(false);
+  const displayedCompetitors = showAll ? competitors : competitors.slice(0, maxItems);
   const maxMentions = Math.max(...competitors.map((c) => c.totalMentions), 1);
   const remainingCount = competitors.length - maxItems;
 
@@ -59,10 +60,24 @@ function EnrichedCompetitorsList({
                 maxMentions={maxMentions}
               />
             ))}
-            {remainingCount > 0 && (
-              <div className="flex items-center justify-center rounded-lg border border-dashed border-muted-foreground/30 p-4 text-muted-foreground text-sm">
+            {remainingCount > 0 && !showAll && (
+              <button
+                type="button"
+                onClick={() => setShowAll(true)}
+                className="flex items-center justify-center rounded-lg border border-dashed border-muted-foreground/30 p-4 text-muted-foreground text-sm hover:border-primary hover:text-primary transition-colors cursor-pointer"
+              >
                 +{remainingCount} autre{remainingCount > 1 ? 's' : ''}
-              </div>
+              </button>
+            )}
+            {showAll && remainingCount > 0 && (
+              <button
+                type="button"
+                onClick={() => setShowAll(false)}
+                className="flex items-center justify-center gap-1 rounded-lg border border-dashed border-muted-foreground/30 p-4 text-muted-foreground text-sm hover:border-primary hover:text-primary transition-colors cursor-pointer"
+              >
+                <ChevronUp className="h-4 w-4" aria-hidden="true" />
+                Réduire
+              </button>
             )}
           </div>
         )}

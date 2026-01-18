@@ -1,5 +1,4 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { LLMProvider } from '@prisma/client';
 
 import { ForbiddenError, NotFoundError, Result } from '../../../../common';
 import { PROJECT_REPOSITORY, type ProjectRepository } from '../../../project';
@@ -48,37 +47,22 @@ export class GenerateRecommendationsUseCase {
     const prompts = await this.promptRepository.findByProjectId(projectId);
     const scans = await this.scanRepository.findByProjectId(projectId, 200);
 
-    const recommendations: RecommendationDto[] = [];
     let idCounter = 1;
-
     const generateId = (): string => `rec_${idCounter++}`;
 
-    // 1. Check overall citation rate
     const citationRateRec = this.analyzeCitationRate(scans, generateId);
-    if (citationRateRec) recommendations.push(citationRateRec);
-
-    // 2. Check competitor dominance
     const competitorRecs = this.analyzeCompetitorDominance(scans, generateId);
-    recommendations.push(...competitorRecs);
-
-    // 3. Check provider disparity
-    const providerRec = this.analyzeProviderDisparity(scans, generateId);
-    if (providerRec) recommendations.push(providerRec);
-
-    // 4. Check weak prompts (prompts that never get citations)
     const weakPromptRecs = this.analyzeWeakPrompts(prompts, scans, generateId);
-    recommendations.push(...weakPromptRecs);
-
-    // 5. Add improvement suggestions if doing well
     const improvementRec = this.generateImprovementSuggestion(scans, generateId);
-    if (improvementRec) recommendations.push(improvementRec);
 
-    // Sort by severity: critical > warning > info
-    const severityOrder: Record<RecommendationSeverity, number> = {
-      critical: 0,
-      warning: 1,
-      info: 2,
-    };
+    const recommendations: RecommendationDto[] = [
+      citationRateRec,
+      ...competitorRecs,
+      ...weakPromptRecs,
+      improvementRec,
+    ].filter((rec): rec is RecommendationDto => rec !== null);
+
+    const severityOrder: Record<RecommendationSeverity, number> = { critical: 0, warning: 1, info: 2 };
     recommendations.sort((a, b) => severityOrder[a.severity] - severityOrder[b.severity]);
 
     return Result.ok({
@@ -136,9 +120,6 @@ export class GenerateRecommendationsUseCase {
     scans: ScanWithResults[],
     generateId: () => string,
   ): RecommendationDto[] {
-    const recommendations: RecommendationDto[] = [];
-
-    // Aggregate competitor mentions
     const competitorCounts = new Map<string, number>();
     let brandCitations = 0;
 
@@ -146,27 +127,28 @@ export class GenerateRecommendationsUseCase {
       for (const result of scan.results) {
         if (result.isCited) brandCitations++;
         for (const mention of result.competitorMentions) {
-          const count = competitorCounts.get(mention.name) ?? 0;
-          competitorCounts.set(mention.name, count + 1);
+          competitorCounts.set(mention.name, (competitorCounts.get(mention.name) ?? 0) + 1);
         }
       }
     }
 
-    // Find competitors that dominate
     const totalResults = scans.flatMap((s) => s.results).length;
+    const brandRate = (brandCitations / totalResults) * 100;
     const sortedCompetitors = Array.from(competitorCounts.entries())
       .sort((a, b) => b[1] - a[1])
       .slice(0, 3);
 
-    for (const [competitor, count] of sortedCompetitors) {
-      const competitorRate = (count / totalResults) * 100;
-      const brandRate = (brandCitations / totalResults) * 100;
-
-      if (competitorRate > brandRate * 2 && competitorRate > 30) {
-        recommendations.push({
+    return sortedCompetitors
+      .filter(([, count]) => {
+        const competitorRate = (count / totalResults) * 100;
+        return competitorRate > brandRate * 2 && competitorRate > 30;
+      })
+      .map(([competitor, count]) => {
+        const competitorRate = (count / totalResults) * 100;
+        return {
           id: generateId(),
-          type: 'competitor_dominance',
-          severity: 'warning',
+          type: 'competitor_dominance' as RecommendationType,
+          severity: 'warning' as RecommendationSeverity,
           title: `${competitor} domine les réponses`,
           description: `${competitor} apparaît dans ${Math.round(competitorRate)}% des réponses, contre ${Math.round(brandRate)}% pour vous. Analysez leur stratégie de contenu.`,
           actionItems: [
@@ -176,63 +158,8 @@ export class GenerateRecommendationsUseCase {
             'Répondez aux questions Reddit/Quora où ils sont mentionnés',
           ],
           metadata: { competitor, competitorRate, brandRate },
-        });
-      }
-    }
-
-    return recommendations;
-  }
-
-  private analyzeProviderDisparity(
-    scans: ScanWithResults[],
-    generateId: () => string,
-  ): RecommendationDto | null {
-    const allResults = scans.flatMap((s) => s.results);
-
-    const openaiResults = allResults.filter((r) => r.provider === LLMProvider.OPENAI);
-    const anthropicResults = allResults.filter((r) => r.provider === LLMProvider.ANTHROPIC);
-
-    if (openaiResults.length === 0 || anthropicResults.length === 0) return null;
-
-    const openaiCitationRate =
-      (openaiResults.filter((r) => r.isCited).length / openaiResults.length) * 100;
-    const anthropicCitationRate =
-      (anthropicResults.filter((r) => r.isCited).length / anthropicResults.length) * 100;
-
-    const difference = Math.abs(openaiCitationRate - anthropicCitationRate);
-
-    if (difference > 30) {
-      const betterProvider = openaiCitationRate > anthropicCitationRate ? 'ChatGPT' : 'Claude';
-      const worseProvider = openaiCitationRate > anthropicCitationRate ? 'Claude' : 'ChatGPT';
-      const betterRate = Math.max(openaiCitationRate, anthropicCitationRate);
-      const worseRate = Math.min(openaiCitationRate, anthropicCitationRate);
-
-      // Action items adaptés selon le provider défaillant
-      const actionItems =
-        worseProvider === 'ChatGPT'
-          ? [
-              'Créez du contenu long-form (2000+ mots) avec une structure claire en H2/H3',
-              'Renforcez vos backlinks depuis des sites d\'autorité (.edu, .gov, presse)',
-              'Publiez des guides complets couvrant tous les aspects d\'un sujet',
-            ]
-          : [
-              'Ajoutez des définitions techniques précises et des citations de sources',
-              'Structurez avec des tableaux de données et des exemples concrets',
-              'Évitez le jargon marketing, privilégiez la clarté factuelle',
-            ];
-
-      return {
-        id: generateId(),
-        type: 'provider_disparity',
-        severity: 'info',
-        title: `Écart de visibilité entre LLMs`,
-        description: `Vous êtes cité ${Math.round(betterRate)}% du temps sur ${betterProvider}, mais seulement ${Math.round(worseRate)}% sur ${worseProvider}. Les deux IA utilisent des sources différentes.`,
-        actionItems,
-        metadata: { openaiCitationRate, anthropicCitationRate },
-      };
-    }
-
-    return null;
+        };
+      });
   }
 
   private analyzeWeakPrompts(
