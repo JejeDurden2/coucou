@@ -240,7 +240,7 @@ export default function LandingPage() {
               </Card>
               <Card className="bg-amber-500/5 border-amber-500/20">
                 <CardContent className="pt-6">
-                  <div className="text-4xl font-bold text-amber-400 mb-2 tabular-nums">-25%</div>
+                  <div className="text-4xl font-bold text-amber-400 mb-2 tabular-nums">25%</div>
                   <p className="text-sm text-muted-foreground">
                     de recherches Google en moins depuis l&apos;arrivée de ChatGPT
                   </p>

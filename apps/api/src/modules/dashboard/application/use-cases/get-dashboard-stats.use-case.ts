@@ -96,6 +96,10 @@ export class GetDashboardStatsUseCase {
     // - If not cited (not in top 5): consider as rank 7
     const DEFAULT_RANK_FOR_NOT_CITED = 7;
 
+    // Check if there's at least one citation - if none, return null
+    const hasCitation = results.some((r) => r.isCited && r.position !== null);
+    if (!hasCitation) return null;
+
     const sum = results.reduce((acc, r) => {
       if (r.isCited && r.position !== null) {
         return acc + r.position;
