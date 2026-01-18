@@ -14,12 +14,7 @@ export function GoogleButton({ label = 'Continuer avec Google' }: GoogleButtonPr
   };
 
   return (
-    <Button
-      type="button"
-      variant="outline"
-      className="w-full"
-      onClick={handleClick}
-    >
+    <Button type="button" variant="outline" className="w-full" onClick={handleClick}>
       <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">
         <path
           fill="currentColor"

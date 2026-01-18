@@ -11,13 +11,7 @@ import { useCreateCheckout } from '@/hooks/use-billing';
 import { PlanGrid } from '@/components/plan-card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 
 type OnboardingStep = 'plan' | 'brand';
@@ -29,8 +23,7 @@ export default function OnboardingPage(): React.ReactNode {
 
   // Determine initial step from URL params
   const stepParam = searchParams.get('step');
-  const initialStep: OnboardingStep =
-    stepParam === 'brand' ? 'brand' : 'plan';
+  const initialStep: OnboardingStep = stepParam === 'brand' ? 'brand' : 'plan';
 
   const [step, setStep] = useState<OnboardingStep>(initialStep);
   const [selectedPlan, setSelectedPlan] = useState<Plan | null>(null);
@@ -120,10 +113,7 @@ export default function OnboardingPage(): React.ReactNode {
               </p>
             </div>
 
-            <PlanGrid
-              onSelectPlan={handleSelectPlan}
-              loadingPlan={loadingPlan}
-            />
+            <PlanGrid onSelectPlan={handleSelectPlan} loadingPlan={loadingPlan} />
 
             <p className="text-center text-sm text-muted-foreground">
               Vous pouvez changer de plan à tout moment depuis les paramètres.
@@ -191,11 +181,7 @@ export default function OnboardingPage(): React.ReactNode {
                     {brandVariants.length > 0 && (
                       <div className="flex flex-wrap gap-2 mt-2">
                         {brandVariants.map((variant) => (
-                          <Badge
-                            key={variant}
-                            variant="secondary"
-                            className="gap-1"
-                          >
+                          <Badge key={variant} variant="secondary" className="gap-1">
                             {variant}
                             <button
                               type="button"
@@ -237,9 +223,7 @@ export default function OnboardingPage(): React.ReactNode {
                     size="lg"
                     disabled={createProject.isPending}
                   >
-                    {createProject.isPending
-                      ? 'Création...'
-                      : 'Commencer le tracking'}
+                    {createProject.isPending ? 'Création...' : 'Commencer le tracking'}
                   </Button>
                 </form>
               </CardContent>

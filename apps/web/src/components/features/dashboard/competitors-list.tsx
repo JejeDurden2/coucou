@@ -1,32 +1,95 @@
-import type { Competitor } from '@coucou-ia/shared';
+import type { Competitor, EnrichedCompetitor } from '@coucou-ia/shared';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Users } from 'lucide-react';
+import { Users, Trophy } from 'lucide-react';
+import { CompetitorCard } from './competitor-card';
 
 interface CompetitorsListProps {
   competitors: Competitor[];
+  enrichedCompetitors?: EnrichedCompetitor[];
   maxItems?: number;
 }
 
 export function CompetitorsList({
   competitors,
-  maxItems = 10,
+  enrichedCompetitors,
+  maxItems = 5,
 }: CompetitorsListProps) {
+  // Use enriched data if available, fall back to simple list
+  const hasEnrichedData = enrichedCompetitors && enrichedCompetitors.length > 0;
+
+  if (hasEnrichedData) {
+    return <EnrichedCompetitorsList competitors={enrichedCompetitors} maxItems={maxItems} />;
+  }
+
+  return <SimpleCompetitorsList competitors={competitors} maxItems={maxItems} />;
+}
+
+function EnrichedCompetitorsList({
+  competitors,
+  maxItems,
+}: {
+  competitors: EnrichedCompetitor[];
+  maxItems: number;
+}) {
+  const displayedCompetitors = competitors.slice(0, maxItems);
+  const maxMentions = Math.max(...competitors.map((c) => c.totalMentions), 1);
+  const remainingCount = competitors.length - maxItems;
+
+  return (
+    <Card>
+      <CardHeader className="flex flex-row items-center justify-between pb-4">
+        <div className="flex items-center gap-2">
+          <Trophy className="h-5 w-5 text-amber-500" aria-hidden="true" />
+          <CardTitle className="text-lg font-medium">Top Concurrents</CardTitle>
+        </div>
+        <span className="text-xs text-muted-foreground">7 derniers jours</span>
+      </CardHeader>
+      <CardContent>
+        {displayedCompetitors.length === 0 ? (
+          <p className="text-sm text-muted-foreground text-center py-8">
+            Aucun concurrent détecté. Lancez un scan pour analyser vos concurrents.
+          </p>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {displayedCompetitors.map((competitor, index) => (
+              <CompetitorCard
+                key={competitor.name}
+                competitor={competitor}
+                rank={index + 1}
+                maxMentions={maxMentions}
+              />
+            ))}
+            {remainingCount > 0 && (
+              <div className="flex items-center justify-center rounded-lg border border-dashed border-muted-foreground/30 p-4 text-muted-foreground text-sm">
+                +{remainingCount} autre{remainingCount > 1 ? 's' : ''}
+              </div>
+            )}
+          </div>
+        )}
+      </CardContent>
+    </Card>
+  );
+}
+
+function SimpleCompetitorsList({
+  competitors,
+  maxItems,
+}: {
+  competitors: Competitor[];
+  maxItems: number;
+}) {
   const displayedCompetitors = competitors.slice(0, maxItems);
   const maxCount = Math.max(...competitors.map((c) => c.count), 1);
 
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between pb-2">
-        <CardTitle className="text-lg font-medium">
-          Concurrents détectés
-        </CardTitle>
+        <CardTitle className="text-lg font-medium">Concurrents détectés</CardTitle>
         <Users className="h-5 w-5 text-muted-foreground" aria-hidden="true" />
       </CardHeader>
       <CardContent>
         {displayedCompetitors.length === 0 ? (
-          <p className="text-sm text-muted-foreground text-center py-4">
-            Aucun concurrent détecté
-          </p>
+          <p className="text-sm text-muted-foreground text-center py-4">Aucun concurrent détecté</p>
         ) : (
           <div className="space-y-3">
             {displayedCompetitors.map((competitor) => (
@@ -39,7 +102,7 @@ export function CompetitorsList({
                 </div>
                 <div className="h-2 rounded-full bg-muted overflow-hidden">
                   <div
-                    className="h-full rounded-full bg-cyan-500 transition-all duration-500"
+                    className="h-full rounded-full bg-cyan-500 transition-[width] duration-500"
                     style={{
                       width: `${(competitor.count / maxCount) * 100}%`,
                     }}

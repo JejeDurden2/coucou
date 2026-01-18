@@ -151,11 +151,7 @@ export default function NewBrandPage() {
             </div>
 
             <div className="flex gap-4 pt-4">
-              <Button
-                type="submit"
-                className="flex-1"
-                disabled={createProject.isPending}
-              >
+              <Button type="submit" className="flex-1" disabled={createProject.isPending}>
                 {createProject.isPending ? 'Création…' : 'Ajouter la marque'}
               </Button>
               <Button type="button" variant="outline" asChild>

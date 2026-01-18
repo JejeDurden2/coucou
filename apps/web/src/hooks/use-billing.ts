@@ -38,7 +38,7 @@ export function useCreatePortal() {
       if (error instanceof ApiClientError) {
         toast.error('Erreur', { description: error.message });
       } else {
-        toast.error('Erreur', { description: 'Impossible d\'accéder au portail de facturation.' });
+        toast.error('Erreur', { description: "Impossible d'accéder au portail de facturation." });
       }
     },
   });

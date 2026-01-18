@@ -13,13 +13,7 @@ interface StatCardProps {
   className?: string;
 }
 
-export function StatCard({
-  label,
-  value,
-  icon: Icon,
-  trend,
-  className,
-}: StatCardProps) {
+export function StatCard({ label, value, icon: Icon, trend, className }: StatCardProps) {
   return (
     <Card className={cn('overflow-hidden', className)}>
       <CardContent className="p-6">

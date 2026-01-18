@@ -7,7 +7,9 @@ import { PROMPT_REPOSITORY, type PromptRepository } from '../../../prompt';
 import { SCAN_REPOSITORY, type ScanRepository, type LLMResult } from '../../../scan';
 import type {
   CompetitorDto,
+  CompetitorTrend,
   DashboardStatsDto,
+  EnrichedCompetitorDto,
   PromptStatDto,
   ProviderBreakdownDto,
 } from '../dto/dashboard.dto';
@@ -56,8 +58,11 @@ export class GetDashboardStatsUseCase {
     // Calculate trend (last 7 days vs previous 7 days)
     const trend = this.calculateTrend(scans);
 
-    // Aggregate competitors
+    // Aggregate competitors (simple version for backward compat)
     const topCompetitors = this.aggregateCompetitors(scans.flatMap((s) => s.results));
+
+    // Aggregate enriched competitors with trends and provider breakdown
+    const enrichedCompetitors = this.aggregateEnrichedCompetitors(scans);
 
     // Get per-prompt stats with latest scan results
     const promptStats = await this.getPromptStats(prompts, scans);
@@ -70,6 +75,7 @@ export class GetDashboardStatsUseCase {
       breakdown,
       trend,
       topCompetitors,
+      enrichedCompetitors,
       promptStats,
       totalScans: scans.length,
       lastScanAt: lastScan?.executedAt ?? null,
@@ -103,9 +109,11 @@ export class GetDashboardStatsUseCase {
     });
   }
 
-  private calculateTrend(
-    scans: Array<{ executedAt: Date; results: LLMResult[] }>,
-  ): { current: number; previous: number; delta: number } {
+  private calculateTrend(scans: Array<{ executedAt: Date; results: LLMResult[] }>): {
+    current: number;
+    previous: number;
+    delta: number;
+  } {
     const now = new Date();
     const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
     const fourteenDaysAgo = new Date(now.getTime() - 14 * 24 * 60 * 60 * 1000);
@@ -125,9 +133,7 @@ export class GetDashboardStatsUseCase {
     };
   }
 
-  private calculateCitationRate(
-    scans: Array<{ results: LLMResult[] }>,
-  ): number {
+  private calculateCitationRate(scans: Array<{ results: LLMResult[] }>): number {
     if (scans.length === 0) return 0;
     const citedCount = scans.filter((s) => s.results.some((r) => r.isCited)).length;
     return (citedCount / scans.length) * 100;
@@ -149,6 +155,182 @@ export class GetDashboardStatsUseCase {
       .slice(0, 10);
   }
 
+  private aggregateEnrichedCompetitors(
+    scans: Array<{ executedAt: Date; results: LLMResult[] }>,
+  ): EnrichedCompetitorDto[] {
+    const now = new Date();
+    const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+    const fourteenDaysAgo = new Date(now.getTime() - 14 * 24 * 60 * 60 * 1000);
+
+    interface CompetitorAggregation {
+      name: string;
+      totalMentions: number;
+      positions: number[];
+      openaiMentions: number;
+      anthropicMentions: number;
+      firstSeenAt: Date;
+      lastSeenAt: Date;
+      lastContext: string | null;
+      currentPeriodMentions: number;
+      previousPeriodMentions: number;
+    }
+
+    const aggregations = new Map<string, CompetitorAggregation>();
+
+    const updateAggregation = (
+      name: string,
+      scanDate: Date,
+      provider: LLMProvider,
+      position: number | null,
+      context: string | null,
+      isCurrentPeriod: boolean,
+      isPreviousPeriod: boolean,
+    ): void => {
+      const existing = aggregations.get(name);
+
+      if (existing) {
+        existing.totalMentions++;
+        if (position !== null) existing.positions.push(position);
+        if (provider === LLMProvider.OPENAI) {
+          existing.openaiMentions++;
+        } else {
+          existing.anthropicMentions++;
+        }
+        if (scanDate < existing.firstSeenAt) existing.firstSeenAt = scanDate;
+        if (scanDate > existing.lastSeenAt) {
+          existing.lastSeenAt = scanDate;
+          if (context !== null) existing.lastContext = context;
+        }
+        if (isCurrentPeriod) existing.currentPeriodMentions++;
+        if (isPreviousPeriod) existing.previousPeriodMentions++;
+      } else {
+        aggregations.set(name, {
+          name,
+          totalMentions: 1,
+          positions: position !== null ? [position] : [],
+          openaiMentions: provider === LLMProvider.OPENAI ? 1 : 0,
+          anthropicMentions: provider === LLMProvider.ANTHROPIC ? 1 : 0,
+          firstSeenAt: scanDate,
+          lastSeenAt: scanDate,
+          lastContext: context,
+          currentPeriodMentions: isCurrentPeriod ? 1 : 0,
+          previousPeriodMentions: isPreviousPeriod ? 1 : 0,
+        });
+      }
+    };
+
+    for (const scan of scans) {
+      const isCurrentPeriod = scan.executedAt >= sevenDaysAgo;
+      const isPreviousPeriod = scan.executedAt >= fourteenDaysAgo && scan.executedAt < sevenDaysAgo;
+
+      for (const result of scan.results) {
+        const mentions = result.competitorMentions ?? [];
+        const fallbackCompetitors = mentions.length === 0 ? result.competitors : [];
+
+        for (const mention of mentions) {
+          updateAggregation(
+            mention.name,
+            scan.executedAt,
+            result.provider,
+            mention.position,
+            mention.context || null,
+            isCurrentPeriod,
+            isPreviousPeriod,
+          );
+        }
+
+        for (const competitor of fallbackCompetitors) {
+          updateAggregation(
+            competitor,
+            scan.executedAt,
+            result.provider,
+            null,
+            null,
+            isCurrentPeriod,
+            isPreviousPeriod,
+          );
+        }
+      }
+    }
+
+    return Array.from(aggregations.values())
+      .map((agg): EnrichedCompetitorDto => {
+        const averagePosition =
+          agg.positions.length > 0
+            ? Math.round((agg.positions.reduce((a, b) => a + b, 0) / agg.positions.length) * 10) /
+              10
+            : null;
+
+        const trend = this.calculateCompetitorTrend(
+          agg.currentPeriodMentions,
+          agg.previousPeriodMentions,
+          agg.firstSeenAt,
+          sevenDaysAgo,
+        );
+
+        const trendPercentage = this.calculateTrendPercentage(
+          agg.currentPeriodMentions,
+          agg.previousPeriodMentions,
+        );
+
+        return {
+          name: agg.name,
+          totalMentions: agg.totalMentions,
+          averagePosition,
+          mentionsByProvider: {
+            openai: agg.openaiMentions,
+            anthropic: agg.anthropicMentions,
+          },
+          trend,
+          trendPercentage,
+          firstSeenAt: agg.firstSeenAt,
+          lastSeenAt: agg.lastSeenAt,
+          lastContext: agg.lastContext,
+        };
+      })
+      .sort((a, b) => b.totalMentions - a.totalMentions)
+      .slice(0, 10);
+  }
+
+  private calculateCompetitorTrend(
+    currentMentions: number,
+    previousMentions: number,
+    firstSeenAt: Date,
+    sevenDaysAgo: Date,
+  ): CompetitorTrend {
+    // New competitor (first seen in last 7 days)
+    if (firstSeenAt >= sevenDaysAgo) {
+      return 'new';
+    }
+
+    // No previous data to compare
+    if (previousMentions === 0 && currentMentions === 0) {
+      return 'stable';
+    }
+
+    // Was not mentioned before, now mentioned
+    if (previousMentions === 0 && currentMentions > 0) {
+      return 'up';
+    }
+
+    // Calculate percentage change
+    const change = ((currentMentions - previousMentions) / previousMentions) * 100;
+
+    if (change > 10) return 'up';
+    if (change < -10) return 'down';
+    return 'stable';
+  }
+
+  private calculateTrendPercentage(
+    currentMentions: number,
+    previousMentions: number,
+  ): number | null {
+    if (previousMentions === 0) {
+      return currentMentions > 0 ? 100 : null;
+    }
+    return Math.round(((currentMentions - previousMentions) / previousMentions) * 100);
+  }
+
   private async getPromptStats(
     prompts: Array<{ id: string; content: string; category: string | null }>,
     scans: Array<{ promptId: string; executedAt: Date; results: LLMResult[] }>,
@@ -157,12 +339,8 @@ export class GetDashboardStatsUseCase {
       const promptScans = scans.filter((s) => s.promptId === prompt.id);
       const latestScan = promptScans[0];
 
-      const openaiResult = latestScan?.results.find(
-        (r) => r.provider === LLMProvider.OPENAI,
-      );
-      const anthropicResult = latestScan?.results.find(
-        (r) => r.provider === LLMProvider.ANTHROPIC,
-      );
+      const openaiResult = latestScan?.results.find((r) => r.provider === LLMProvider.OPENAI);
+      const anthropicResult = latestScan?.results.find((r) => r.provider === LLMProvider.ANTHROPIC);
 
       return {
         promptId: prompt.id,

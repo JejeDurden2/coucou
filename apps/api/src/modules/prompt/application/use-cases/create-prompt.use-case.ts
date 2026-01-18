@@ -2,10 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import type { Plan } from '@prisma/client';
 
 import { ForbiddenError, NotFoundError, PlanLimitError, Result } from '../../../../common';
-import {
-  PROJECT_REPOSITORY,
-  type ProjectRepository,
-} from '../../../project';
+import { PROJECT_REPOSITORY, type ProjectRepository } from '../../../project';
 import { PROMPT_REPOSITORY, type PromptRepository } from '../../domain';
 import type { CreatePromptDto, PromptResponseDto } from '../dto/prompt.dto';
 

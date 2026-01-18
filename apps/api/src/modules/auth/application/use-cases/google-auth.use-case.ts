@@ -27,11 +27,7 @@ export class GoogleAuthUseCase {
 
       if (user) {
         // Link Google account to existing user
-        user = await this.userRepository.linkGoogleAccount(
-          user.id,
-          profile.id,
-          profile.picture,
-        );
+        user = await this.userRepository.linkGoogleAccount(user.id, profile.id, profile.picture);
       } else {
         // Create new user from OAuth
         user = await this.userRepository.createFromOAuth({

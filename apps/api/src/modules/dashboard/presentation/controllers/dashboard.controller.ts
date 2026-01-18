@@ -10,10 +10,7 @@ export class DashboardController {
   constructor(private readonly getDashboardStatsUseCase: GetDashboardStatsUseCase) {}
 
   @Get()
-  async getStats(
-    @Param('projectId') projectId: string,
-    @CurrentUser() user: AuthenticatedUser,
-  ) {
+  async getStats(@Param('projectId') projectId: string, @CurrentUser() user: AuthenticatedUser) {
     const result = await this.getDashboardStatsUseCase.execute(projectId, user.id);
 
     if (!result.ok) {

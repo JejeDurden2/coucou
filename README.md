@@ -298,6 +298,7 @@ claude
 ```
 
 Example prompts:
+
 - "Add user authentication"
 - "Create a new feature module"
 - "Set up email notifications with BullMQ"

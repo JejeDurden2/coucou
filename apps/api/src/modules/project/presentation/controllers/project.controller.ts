@@ -21,10 +21,7 @@ import {
   ListProjectsUseCase,
   UpdateProjectUseCase,
 } from '../../application/use-cases';
-import {
-  CreateProjectRequestDto,
-  UpdateProjectRequestDto,
-} from '../dto/project-request.dto';
+import { CreateProjectRequestDto, UpdateProjectRequestDto } from '../dto/project-request.dto';
 
 @Controller('projects')
 @UseGuards(JwtAuthGuard)
@@ -38,10 +35,7 @@ export class ProjectController {
   ) {}
 
   @Post()
-  async create(
-    @CurrentUser() user: AuthenticatedUser,
-    @Body() dto: CreateProjectRequestDto,
-  ) {
+  async create(@CurrentUser() user: AuthenticatedUser, @Body() dto: CreateProjectRequestDto) {
     const result = await this.createProjectUseCase.execute(user.id, user.plan, dto);
 
     if (!result.ok) {

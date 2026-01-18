@@ -49,8 +49,7 @@ export class StripeService {
 
   constructor(private readonly configService: ConfigService) {
     this.secretKey = this.configService.get<string>('STRIPE_SECRET_KEY') ?? '';
-    this.webhookSecret =
-      this.configService.get<string>('STRIPE_WEBHOOK_SECRET') ?? '';
+    this.webhookSecret = this.configService.get<string>('STRIPE_WEBHOOK_SECRET') ?? '';
     this.priceIds = {
       [Plan.SOLO]: this.configService.get<string>('STRIPE_PRICE_SOLO') ?? '',
       [Plan.PRO]: this.configService.get<string>('STRIPE_PRICE_PRO') ?? '',
@@ -58,10 +57,7 @@ export class StripeService {
     this.stripe = new Stripe(this.secretKey);
   }
 
-  private async fetch<T>(
-    endpoint: string,
-    options: RequestInit = {},
-  ): Promise<T> {
+  private async fetch<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
     const response = await fetch(`${this.baseUrl}${endpoint}`, {
       ...options,
       headers: {
@@ -82,10 +78,7 @@ export class StripeService {
 
   private toFormData(obj: Record<string, string | number | boolean>): string {
     return Object.entries(obj)
-      .map(
-        ([key, value]) =>
-          `${encodeURIComponent(key)}=${encodeURIComponent(String(value))}`,
-      )
+      .map(([key, value]) => `${encodeURIComponent(key)}=${encodeURIComponent(String(value))}`)
       .join('&');
   }
 
@@ -122,10 +115,7 @@ export class StripeService {
     });
   }
 
-  async createPortalSession(
-    customerId: string,
-    returnUrl: string,
-  ): Promise<StripePortalSession> {
+  async createPortalSession(customerId: string, returnUrl: string): Promise<StripePortalSession> {
     return this.fetch<StripePortalSession>('/billing_portal/sessions', {
       method: 'POST',
       body: this.toFormData({
@@ -148,21 +138,14 @@ export class StripeService {
     return Plan.FREE;
   }
 
-  constructWebhookEvent(
-    payload: string,
-    signature: string,
-  ): StripeWebhookEvent | null {
+  constructWebhookEvent(payload: string, signature: string): StripeWebhookEvent | null {
     if (!this.webhookSecret) {
       this.logger.error('Webhook secret not configured - rejecting webhook');
       return null;
     }
 
     try {
-      const event = this.stripe.webhooks.constructEvent(
-        payload,
-        signature,
-        this.webhookSecret,
-      );
+      const event = this.stripe.webhooks.constructEvent(payload, signature, this.webhookSecret);
       return {
         type: event.type,
         data: {

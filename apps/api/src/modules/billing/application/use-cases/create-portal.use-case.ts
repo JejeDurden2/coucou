@@ -22,9 +22,7 @@ export class CreatePortalUseCase {
     private readonly stripeService: StripeService,
   ) {}
 
-  async execute(
-    input: CreatePortalInput,
-  ): Promise<Result<PortalSessionResponse, ValidationError>> {
+  async execute(input: CreatePortalInput): Promise<Result<PortalSessionResponse, ValidationError>> {
     const { userId, returnUrl } = input;
 
     const user = await this.userRepository.findById(userId);
@@ -38,10 +36,7 @@ export class CreatePortalUseCase {
       );
     }
 
-    const session = await this.stripeService.createPortalSession(
-      user.stripeCustomerId,
-      returnUrl,
-    );
+    const session = await this.stripeService.createPortalSession(user.stripeCustomerId, returnUrl);
 
     return Result.ok({ url: session.url });
   }

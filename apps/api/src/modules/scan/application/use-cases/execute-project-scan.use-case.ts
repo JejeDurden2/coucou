@@ -55,9 +55,7 @@ export class ExecuteProjectScanUseCase {
       return Result.ok([]);
     }
 
-    this.logger.log(
-      `Executing scan for project ${projectId} with ${prompts.length} prompts`,
-    );
+    this.logger.log(`Executing scan for project ${projectId} with ${prompts.length} prompts`);
 
     const scanResults: ScanResponseDto[] = [];
     let hasAtLeastOneSuccess = false;
@@ -164,9 +162,7 @@ export class ExecuteProjectScanUseCase {
 
     await this.projectRepository.updateLastScannedAt(project.id, new Date());
 
-    this.logger.log(
-      `Completed ${scanResults.length} scans for project ${projectId}`,
-    );
+    this.logger.log(`Completed ${scanResults.length} scans for project ${projectId}`);
 
     return Result.ok(scanResults);
   }
@@ -183,7 +179,7 @@ export class ExecuteProjectScanUseCase {
       brandVariants,
     );
 
-    const competitors = CompetitorExtractionService.extractCompetitors(
+    const competitorMentions = CompetitorExtractionService.extractCompetitorMentions(
       response.content,
       brandName,
     );
@@ -195,7 +191,8 @@ export class ExecuteProjectScanUseCase {
       isCited: mentionResult.isCited,
       citationContext: mentionResult.citationContext,
       position: mentionResult.position,
-      competitors,
+      competitors: competitorMentions.map((m) => m.name),
+      competitorMentions,
       latencyMs: response.latencyMs,
     };
   }

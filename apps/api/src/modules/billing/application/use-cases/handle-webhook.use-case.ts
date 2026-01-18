@@ -46,28 +46,20 @@ export class HandleWebhookUseCase {
 
     switch (event.type) {
       case 'checkout.session.completed':
-        await this.handleCheckoutCompleted(
-          event.data.object as unknown as WebhookCheckoutSession,
-        );
+        await this.handleCheckoutCompleted(event.data.object as unknown as WebhookCheckoutSession);
         break;
       case 'customer.subscription.updated':
-        await this.handleSubscriptionUpdated(
-          event.data.object as unknown as WebhookSubscription,
-        );
+        await this.handleSubscriptionUpdated(event.data.object as unknown as WebhookSubscription);
         break;
       case 'customer.subscription.deleted':
-        await this.handleSubscriptionDeleted(
-          event.data.object as unknown as WebhookSubscription,
-        );
+        await this.handleSubscriptionDeleted(event.data.object as unknown as WebhookSubscription);
         break;
       default:
         this.logger.log(`Unhandled event type: ${event.type}`);
     }
   }
 
-  private async handleCheckoutCompleted(
-    session: WebhookCheckoutSession,
-  ): Promise<void> {
+  private async handleCheckoutCompleted(session: WebhookCheckoutSession): Promise<void> {
     const user = await this.prisma.user.findFirst({
       where: { stripeCustomerId: session.customer },
     });
@@ -77,13 +69,9 @@ export class HandleWebhookUseCase {
       return;
     }
 
-    const subscription = await this.stripeService.getSubscription(
-      session.subscription,
-    );
+    const subscription = await this.stripeService.getSubscription(session.subscription);
     const priceId = subscription.items.data[0]?.price?.id;
-    const plan = priceId
-      ? this.stripeService.getPlanFromPriceId(priceId)
-      : Plan.FREE;
+    const plan = priceId ? this.stripeService.getPlanFromPriceId(priceId) : Plan.FREE;
 
     await this.prisma.$transaction([
       this.prisma.subscription.upsert({
@@ -93,9 +81,7 @@ export class HandleWebhookUseCase {
           stripeSubscriptionId: session.subscription,
           status: this.mapStatus(subscription.status),
           plan,
-          currentPeriodStart: new Date(
-            subscription.current_period_start * 1000,
-          ),
+          currentPeriodStart: new Date(subscription.current_period_start * 1000),
           currentPeriodEnd: new Date(subscription.current_period_end * 1000),
           cancelAtPeriodEnd: subscription.cancel_at_period_end,
         },
@@ -103,9 +89,7 @@ export class HandleWebhookUseCase {
           stripeSubscriptionId: session.subscription,
           status: this.mapStatus(subscription.status),
           plan,
-          currentPeriodStart: new Date(
-            subscription.current_period_start * 1000,
-          ),
+          currentPeriodStart: new Date(subscription.current_period_start * 1000),
           currentPeriodEnd: new Date(subscription.current_period_end * 1000),
           cancelAtPeriodEnd: subscription.cancel_at_period_end,
         },
@@ -119,24 +103,18 @@ export class HandleWebhookUseCase {
     this.logger.log(`Subscription created for user: ${user.id}, plan: ${plan}`);
   }
 
-  private async handleSubscriptionUpdated(
-    subscription: WebhookSubscription,
-  ): Promise<void> {
+  private async handleSubscriptionUpdated(subscription: WebhookSubscription): Promise<void> {
     const user = await this.prisma.user.findFirst({
       where: { stripeCustomerId: subscription.customer },
     });
 
     if (!user) {
-      this.logger.error(
-        `User not found for customer: ${subscription.customer}`,
-      );
+      this.logger.error(`User not found for customer: ${subscription.customer}`);
       return;
     }
 
     const priceId = subscription.items.data[0]?.price?.id;
-    const plan = priceId
-      ? this.stripeService.getPlanFromPriceId(priceId)
-      : Plan.FREE;
+    const plan = priceId ? this.stripeService.getPlanFromPriceId(priceId) : Plan.FREE;
 
     await this.prisma.$transaction([
       this.prisma.subscription.update({
@@ -144,9 +122,7 @@ export class HandleWebhookUseCase {
         data: {
           status: this.mapStatus(subscription.status),
           plan,
-          currentPeriodStart: new Date(
-            subscription.current_period_start * 1000,
-          ),
+          currentPeriodStart: new Date(subscription.current_period_start * 1000),
           currentPeriodEnd: new Date(subscription.current_period_end * 1000),
           cancelAtPeriodEnd: subscription.cancel_at_period_end,
         },
@@ -160,17 +136,13 @@ export class HandleWebhookUseCase {
     this.logger.log(`Subscription updated for user: ${user.id}, plan: ${plan}`);
   }
 
-  private async handleSubscriptionDeleted(
-    subscription: WebhookSubscription,
-  ): Promise<void> {
+  private async handleSubscriptionDeleted(subscription: WebhookSubscription): Promise<void> {
     const user = await this.prisma.user.findFirst({
       where: { stripeCustomerId: subscription.customer },
     });
 
     if (!user) {
-      this.logger.error(
-        `User not found for customer: ${subscription.customer}`,
-      );
+      this.logger.error(`User not found for customer: ${subscription.customer}`);
       return;
     }
 

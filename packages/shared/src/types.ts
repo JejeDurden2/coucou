@@ -144,6 +144,25 @@ export interface Competitor {
   count: number;
 }
 
+export type CompetitorTrend = 'up' | 'down' | 'stable' | 'new';
+
+export interface CompetitorMentionsByProvider {
+  openai: number;
+  anthropic: number;
+}
+
+export interface EnrichedCompetitor {
+  name: string;
+  totalMentions: number;
+  averagePosition: number | null;
+  mentionsByProvider: CompetitorMentionsByProvider;
+  trend: CompetitorTrend;
+  trendPercentage: number | null;
+  firstSeenAt: Date;
+  lastSeenAt: Date;
+  lastContext: string | null;
+}
+
 export interface PromptStat {
   promptId: string;
   content: string;
@@ -159,6 +178,7 @@ export interface DashboardStats {
   breakdown: ProviderBreakdown[];
   trend: Trend;
   topCompetitors: Competitor[];
+  enrichedCompetitors: EnrichedCompetitor[];
   promptStats: PromptStat[];
   totalScans: number;
   lastScanAt: Date | null;
@@ -213,12 +233,7 @@ export const PLAN_PRICING: Record<Plan, PlanPricing> = {
     price: 0,
     period: 'month',
     description: 'Pour tester la plateforme',
-    features: [
-      '1 marque',
-      '3 prompts',
-      'Scans manuels',
-      'Historique 30 jours',
-    ],
+    features: ['1 marque', '3 prompts', 'Scans manuels', 'Historique 30 jours'],
   },
   [Plan.SOLO]: {
     price: 29,

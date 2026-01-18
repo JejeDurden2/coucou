@@ -43,8 +43,7 @@ const steps = [
   {
     number: '1',
     title: 'Configurez votre marque',
-    description:
-      'Entrez le nom de votre marque et ses variantes pour un tracking précis.',
+    description: 'Entrez le nom de votre marque et ses variantes pour un tracking précis.',
   },
   {
     number: '2',
@@ -96,7 +95,7 @@ const faqs = [
   {
     question: 'Comment Coucou IA détecte les mentions de ma marque ?',
     answer:
-      "Notre système interroge les principaux LLM (ChatGPT, Claude) avec vos prompts personnalisés et analyse les réponses pour détecter si votre marque est citée, sa position dans les recommandations, et quels concurrents sont mentionnés.",
+      'Notre système interroge les principaux LLM (ChatGPT, Claude) avec vos prompts personnalisés et analyse les réponses pour détecter si votre marque est citée, sa position dans les recommandations, et quels concurrents sont mentionnés.',
   },
   {
     question: 'Pourquoi est-ce important pour mon business ?',
@@ -114,7 +113,7 @@ const faqs = [
       'Plusieurs facteurs influencent la visibilité IA : la présence sur les sources citées par les LLM, la notoriété de marque, le SEO traditionnel, et la qualité du contenu. Nos rapports vous guident sur les axes prioritaires.',
   },
   {
-    question: "Quels LLM sont supportés par Coucou IA ?",
+    question: 'Quels LLM sont supportés par Coucou IA ?',
     answer:
       "Nous supportons actuellement ChatGPT (OpenAI) et Claude (Anthropic), les deux leaders du marché. D'autres modèles seront ajoutés prochainement (Gemini, Mistral, Llama).",
   },
@@ -163,7 +162,6 @@ export default function LandingPage() {
       <main>
         {/* Hero Section */}
         <section className="relative pt-32 pb-20 px-4 overflow-hidden grid-pattern">
-
           <div className="container mx-auto max-w-5xl text-center relative z-10">
             <Badge className="mb-6" variant="secondary">
               <Sparkles className="mr-1 h-3 w-3" />
@@ -177,11 +175,10 @@ export default function LandingPage() {
             </h1>
 
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-8 text-pretty">
-              Surveillez et améliorez la visibilité de votre marque dans les
-              réponses de{' '}
+              Surveillez et améliorez la visibilité de votre marque dans les réponses de{' '}
               <span className="text-foreground font-medium">ChatGPT</span>,{' '}
-              <span className="text-foreground font-medium">Claude</span> et
-              autres IA. Le GEO, c&apos;est le nouveau SEO.
+              <span className="text-foreground font-medium">Claude</span> et autres IA. Le GEO,
+              c&apos;est le nouveau SEO.
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
@@ -227,29 +224,23 @@ export default function LandingPage() {
                 Le problème avec la recherche IA
               </h2>
               <p className="text-muted-foreground max-w-2xl mx-auto text-pretty">
-                De plus en plus de personnes utilisent l&apos;IA pour trouver
-                des produits et services. Si vous n&apos;êtes pas visible, vous
-                êtes invisible.
+                De plus en plus de personnes utilisent l&apos;IA pour trouver des produits et
+                services. Si vous n&apos;êtes pas visible, vous êtes invisible.
               </p>
             </div>
 
             <div className="grid md:grid-cols-3 gap-6">
               <Card className="bg-red-500/5 border-red-500/20">
                 <CardContent className="pt-6">
-                  <div className="text-4xl font-bold text-red-500 mb-2 tabular-nums">
-                    67%
-                  </div>
+                  <div className="text-4xl font-bold text-red-500 mb-2 tabular-nums">67%</div>
                   <p className="text-sm text-muted-foreground">
-                    des utilisateurs font confiance aux recommandations de
-                    l&apos;IA
+                    des utilisateurs font confiance aux recommandations de l&apos;IA
                   </p>
                 </CardContent>
               </Card>
               <Card className="bg-amber-500/5 border-amber-500/20">
                 <CardContent className="pt-6">
-                  <div className="text-4xl font-bold text-amber-400 mb-2 tabular-nums">
-                    0%
-                  </div>
+                  <div className="text-4xl font-bold text-amber-400 mb-2 tabular-nums">0%</div>
                   <p className="text-sm text-muted-foreground">
                     des PME trackent leur visibilité dans les réponses IA
                   </p>
@@ -257,12 +248,9 @@ export default function LandingPage() {
               </Card>
               <Card className="bg-cyan-400/5 border-cyan-400/20">
                 <CardContent className="pt-6">
-                  <div className="text-4xl font-bold text-cyan-400 mb-2 tabular-nums">
-                    +40%
-                  </div>
+                  <div className="text-4xl font-bold text-cyan-400 mb-2 tabular-nums">+40%</div>
                   <p className="text-sm text-muted-foreground">
-                    de conversions pour les marques citées en premier par
-                    l&apos;IA
+                    de conversions pour les marques citées en premier par l&apos;IA
                   </p>
                 </CardContent>
               </Card>
@@ -279,8 +267,8 @@ export default function LandingPage() {
                 Tout ce qu&apos;il faut pour dominer le GEO
               </h2>
               <p className="text-muted-foreground max-w-2xl mx-auto text-pretty">
-                Coucou IA vous donne les outils pour comprendre et améliorer
-                votre présence dans les réponses des intelligences artificielles.
+                Coucou IA vous donne les outils pour comprendre et améliorer votre présence dans les
+                réponses des intelligences artificielles.
               </p>
             </div>
 
@@ -297,9 +285,7 @@ export default function LandingPage() {
                     <CardTitle className="text-lg">{feature.title}</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-sm text-muted-foreground">
-                      {feature.description}
-                    </p>
+                    <p className="text-sm text-muted-foreground">{feature.description}</p>
                   </CardContent>
                 </Card>
               ))}
@@ -312,12 +298,10 @@ export default function LandingPage() {
           <div className="container mx-auto max-w-5xl">
             <div className="text-center mb-12">
               <Badge className="mb-4">Comment ça marche</Badge>
-              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-balance">
-                3 étapes simples
-              </h2>
+              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-balance">3 étapes simples</h2>
               <p className="text-muted-foreground max-w-2xl mx-auto text-pretty">
-                Configurez votre tracking en quelques minutes et commencez à
-                suivre votre visibilité IA.
+                Configurez votre tracking en quelques minutes et commencez à suivre votre visibilité
+                IA.
               </p>
             </div>
 
@@ -332,9 +316,7 @@ export default function LandingPage() {
                       {step.number}
                     </div>
                     <h3 className="text-lg font-semibold mb-2">{step.title}</h3>
-                    <p className="text-sm text-muted-foreground">
-                      {step.description}
-                    </p>
+                    <p className="text-sm text-muted-foreground">{step.description}</p>
                   </div>
                 </div>
               ))}
@@ -351,21 +333,14 @@ export default function LandingPage() {
                 Un plan pour chaque besoin
               </h2>
               <p className="text-muted-foreground max-w-2xl mx-auto text-pretty">
-                Commencez gratuitement, évoluez selon vos besoins. Tous les
-                plans incluent un essai gratuit de 14 jours.
+                Commencez gratuitement, évoluez selon vos besoins. Tous les plans incluent un essai
+                gratuit de 14 jours.
               </p>
             </div>
 
             <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
               {plans.map((plan) => (
-                <Card
-                  key={plan.name}
-                  className={
-                    plan.popular
-                      ? 'border-cyan-400/50 relative'
-                      : ''
-                  }
-                >
+                <Card key={plan.name} className={plan.popular ? 'border-cyan-400/50 relative' : ''}>
                   {plan.popular && (
                     <div className="absolute -top-3 left-1/2 -translate-x-1/2">
                       <Badge>Le plus populaire</Badge>
@@ -377,17 +352,12 @@ export default function LandingPage() {
                       <span className="text-4xl font-bold tabular-nums">{plan.price}€</span>
                       <span className="text-muted-foreground">/mois</span>
                     </div>
-                    <p className="text-sm text-muted-foreground">
-                      {plan.description}
-                    </p>
+                    <p className="text-sm text-muted-foreground">{plan.description}</p>
                   </CardHeader>
                   <CardContent>
                     <ul className="space-y-3 mb-6">
                       {plan.features.map((feature) => (
-                        <li
-                          key={feature}
-                          className="flex items-center gap-2 text-sm"
-                        >
+                        <li key={feature} className="flex items-center gap-2 text-sm">
                           <Check className="h-4 w-4 text-cyan-400" aria-hidden="true" />
                           {feature}
                         </li>
@@ -424,9 +394,7 @@ export default function LandingPage() {
               {faqs.map((faq, index) => (
                 <Card key={index}>
                   <CardHeader className="pb-2">
-                    <CardTitle className="text-base font-medium">
-                      {faq.question}
-                    </CardTitle>
+                    <CardTitle className="text-base font-medium">{faq.question}</CardTitle>
                   </CardHeader>
                   <CardContent>
                     <p className="text-sm text-muted-foreground">{faq.answer}</p>
@@ -446,8 +414,8 @@ export default function LandingPage() {
                 Prêt à être visible par l&apos;IA ?
               </h2>
               <p className="text-muted-foreground mb-8 max-w-xl mx-auto text-pretty">
-                Rejoignez les 500+ marques qui utilisent Coucou IA pour tracker
-                et améliorer leur présence dans les réponses de ChatGPT et Claude.
+                Rejoignez les 500+ marques qui utilisent Coucou IA pour tracker et améliorer leur
+                présence dans les réponses de ChatGPT et Claude.
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                 <Button size="lg" asChild>
@@ -474,8 +442,7 @@ export default function LandingPage() {
                 <Logo size="sm" />
               </Link>
               <p className="text-sm text-muted-foreground mt-2 text-pretty">
-                Surveillez et améliorez la visibilité de votre marque dans les
-                réponses IA.
+                Surveillez et améliorez la visibilité de votre marque dans les réponses IA.
               </p>
             </div>
             <div>
@@ -540,9 +507,7 @@ export default function LandingPage() {
             </div>
           </div>
           <div className="border-t border-zinc-800 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
-            <p className="text-sm text-muted-foreground">
-              © 2025 Coucou IA. Tous droits réservés.
-            </p>
+            <p className="text-sm text-muted-foreground">© 2025 Coucou IA. Tous droits réservés.</p>
             <div className="flex items-center gap-4">
               <Link
                 href="https://twitter.com/coucouia"

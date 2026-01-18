@@ -43,16 +43,12 @@ export default function RegisterPage() {
           <Logo size="lg" />
         </div>
         <CardTitle>Créer un compte</CardTitle>
-        <CardDescription>
-          Commencez gratuitement avec 1 projet et 3 prompts
-        </CardDescription>
+        <CardDescription>Commencez gratuitement avec 1 projet et 3 prompts</CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-4">
           {error && (
-            <div className="rounded-lg bg-destructive/10 p-3 text-sm text-destructive">
-              {error}
-            </div>
+            <div className="rounded-lg bg-destructive/10 p-3 text-sm text-destructive">{error}</div>
           )}
           <div className="space-y-2">
             <label htmlFor="name" className="text-sm font-medium">

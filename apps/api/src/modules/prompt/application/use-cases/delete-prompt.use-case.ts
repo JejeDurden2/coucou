@@ -15,10 +15,7 @@ export class DeletePromptUseCase {
     private readonly projectRepository: ProjectRepository,
   ) {}
 
-  async execute(
-    promptId: string,
-    userId: string,
-  ): Promise<Result<void, DeletePromptError>> {
+  async execute(promptId: string, userId: string): Promise<Result<void, DeletePromptError>> {
     const prompt = await this.promptRepository.findById(promptId);
 
     if (!prompt) {

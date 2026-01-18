@@ -20,10 +20,7 @@ import {
   ListPromptsUseCase,
   UpdatePromptUseCase,
 } from '../../application/use-cases';
-import {
-  CreatePromptRequestDto,
-  UpdatePromptRequestDto,
-} from '../dto/prompt-request.dto';
+import { CreatePromptRequestDto, UpdatePromptRequestDto } from '../dto/prompt-request.dto';
 
 @Controller()
 @UseGuards(JwtAuthGuard)
@@ -41,12 +38,7 @@ export class PromptController {
     @CurrentUser() user: AuthenticatedUser,
     @Body() dto: CreatePromptRequestDto,
   ) {
-    const result = await this.createPromptUseCase.execute(
-      projectId,
-      user.id,
-      user.plan,
-      dto,
-    );
+    const result = await this.createPromptUseCase.execute(projectId, user.id, user.plan, dto);
 
     if (!result.ok) {
       throw new HttpException(result.error.toJSON(), result.error.statusCode);
@@ -56,10 +48,7 @@ export class PromptController {
   }
 
   @Get('projects/:projectId/prompts')
-  async list(
-    @Param('projectId') projectId: string,
-    @CurrentUser() user: AuthenticatedUser,
-  ) {
+  async list(@Param('projectId') projectId: string, @CurrentUser() user: AuthenticatedUser) {
     const result = await this.listPromptsUseCase.execute(projectId, user.id);
 
     if (!result.ok) {

@@ -1,3 +1,9 @@
+export interface CompetitorMention {
+  name: string;
+  position: number | null;
+  context: string;
+}
+
 export class CompetitorExtractionService {
   private static readonly MAX_COMPETITORS = 10;
 
@@ -8,29 +14,100 @@ export class CompetitorExtractionService {
   ];
 
   private static readonly EXCLUDE_WORDS = new Set([
-    'le', 'la', 'les', 'un', 'une', 'des', 'du', 'de', 'et', 'ou', 'en', 'au', 'aux',
-    'ce', 'cette', 'ces', 'son', 'sa', 'ses', 'leur', 'leurs',
-    'france', 'paris', 'europe', 'français', 'française',
-    'qualité', 'prix', 'service', 'produit', 'marque',
-    'café', 'thé', 'boisson', 'restaurant', 'boutique', 'magasin',
-    'meilleur', 'meilleure', 'meilleurs', 'meilleures',
-    'premier', 'première', 'deuxième', 'troisième',
+    'le',
+    'la',
+    'les',
+    'un',
+    'une',
+    'des',
+    'du',
+    'de',
+    'et',
+    'ou',
+    'en',
+    'au',
+    'aux',
+    'ce',
+    'cette',
+    'ces',
+    'son',
+    'sa',
+    'ses',
+    'leur',
+    'leurs',
+    'france',
+    'paris',
+    'europe',
+    'français',
+    'française',
+    'qualité',
+    'prix',
+    'service',
+    'produit',
+    'marque',
+    'café',
+    'thé',
+    'boisson',
+    'restaurant',
+    'boutique',
+    'magasin',
+    'meilleur',
+    'meilleure',
+    'meilleurs',
+    'meilleures',
+    'premier',
+    'première',
+    'deuxième',
+    'troisième',
   ]);
 
-  static extractCompetitors(response: string, brandName: string): string[] {
-    const competitors = new Set<string>();
+  /**
+   * Extract competitor mentions with position and context from numbered list format.
+   * Example: "1. Nespresso - Leader du marché" → { name: "Nespresso", position: 1, context: "Leader du marché" }
+   */
+  static extractCompetitorMentions(response: string, brandName: string): CompetitorMention[] {
+    const mentions: CompetitorMention[] = [];
+    const seenNames = new Set<string>();
     const brandLower = brandName.toLowerCase();
 
-    // Extract from numbered list format: "1. BrandName - description" or "1. **BrandName** - description"
-    const numberedMatches = response.matchAll(
-      /^\d+\.\s+\*{0,2}([A-ZÀ-Ü][^\s*-]+(?:\s+[A-ZÀ-Ü][^\s*-]+)*)\*{0,2}\s*[-–:]/gm,
-    );
-    for (const match of numberedMatches) {
-      const name = match[1].trim();
-      if (this.isValidCompetitor(name, brandLower)) {
-        competitors.add(name);
+    // Extract from numbered list format with position and context
+    const numberedRegex = /^(\d+)\.\s+\*{0,2}([A-ZÀ-Ü][^*\n-]+?)\*{0,2}\s*[-–:]\s*(.+)$/gm;
+    let match;
+    while ((match = numberedRegex.exec(response)) !== null) {
+      const position = parseInt(match[1], 10);
+      const name = match[2].trim();
+      const context = match[3].trim();
+
+      if (this.isValidCompetitor(name, brandLower) && !seenNames.has(name.toLowerCase())) {
+        seenNames.add(name.toLowerCase());
+        mentions.push({ name, position, context });
       }
     }
+
+    // If no numbered format found, try other extraction methods without position
+    if (mentions.length === 0) {
+      const competitors = this.extractCompetitorsLegacy(response, brandName);
+      for (const name of competitors) {
+        if (!seenNames.has(name.toLowerCase())) {
+          seenNames.add(name.toLowerCase());
+          mentions.push({ name, position: null, context: '' });
+        }
+      }
+    }
+
+    return mentions.slice(0, this.MAX_COMPETITORS);
+  }
+
+  /**
+   * Legacy method for backward compatibility - returns just competitor names
+   */
+  static extractCompetitors(response: string, brandName: string): string[] {
+    return this.extractCompetitorMentions(response, brandName).map((m) => m.name);
+  }
+
+  private static extractCompetitorsLegacy(response: string, brandName: string): string[] {
+    const competitors = new Set<string>();
+    const brandLower = brandName.toLowerCase();
 
     // Extract quoted names
     const quotedMatches = response.match(/["«]([^"»]+)["»]/g);
@@ -44,7 +121,9 @@ export class CompetitorExtractionService {
     }
 
     // Extract capitalized words/phrases that look like brand names
-    const capitalizedMatches = response.match(/(?:[A-Z][a-zàâäéèêëïîôùûü]+(?:\s+[A-Z][a-zàâäéèêëïîôùûü]+)*)/g);
+    const capitalizedMatches = response.match(
+      /(?:[A-Z][a-zàâäéèêëïîôùûü]+(?:\s+[A-Z][a-zàâäéèêëïîôùûü]+)*)/g,
+    );
     if (capitalizedMatches) {
       for (const match of capitalizedMatches) {
         if (this.isValidCompetitor(match, brandLower)) {
@@ -79,7 +158,11 @@ export class CompetitorExtractionService {
 
     const nameLower = name.toLowerCase();
 
-    if (nameLower === brandLower || nameLower.includes(brandLower) || brandLower.includes(nameLower)) {
+    if (
+      nameLower === brandLower ||
+      nameLower.includes(brandLower) ||
+      brandLower.includes(nameLower)
+    ) {
       return false;
     }
 

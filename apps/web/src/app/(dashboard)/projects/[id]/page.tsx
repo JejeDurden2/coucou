@@ -19,6 +19,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
+import { CompetitorsList } from '@/components/features/dashboard';
 import { LLMProvider } from '@coucou-ia/shared';
 import { cn } from '@/lib/utils';
 
@@ -26,7 +27,9 @@ interface ProjectDashboardPageProps {
   params: Promise<{ id: string }>;
 }
 
-export default function ProjectDashboardPage({ params }: ProjectDashboardPageProps): React.ReactNode {
+export default function ProjectDashboardPage({
+  params,
+}: ProjectDashboardPageProps): React.ReactNode {
   const { id } = use(params);
   const { data: project, isLoading: projectLoading } = useProject(id);
   const { data: stats, isLoading: statsLoading } = useDashboardStats(id);
@@ -77,12 +80,8 @@ export default function ProjectDashboardPage({ params }: ProjectDashboardPagePro
     );
   }
 
-  const openaiBreakdown = stats?.breakdown.find(
-    (b) => b.provider === LLMProvider.OPENAI
-  );
-  const anthropicBreakdown = stats?.breakdown.find(
-    (b) => b.provider === LLMProvider.ANTHROPIC
-  );
+  const openaiBreakdown = stats?.breakdown.find((b) => b.provider === LLMProvider.OPENAI);
+  const anthropicBreakdown = stats?.breakdown.find((b) => b.provider === LLMProvider.ANTHROPIC);
 
   const promptCount = stats?.promptStats?.length ?? 0;
   const hasPrompts = promptCount > 0;
@@ -102,11 +101,12 @@ export default function ProjectDashboardPage({ params }: ProjectDashboardPagePro
           </div>
           {stats?.lastScanAt ? (
             <p className="text-xs text-muted-foreground mt-1">
-              Dernier scan: {new Date(stats.lastScanAt).toLocaleDateString('fr-FR', {
+              Dernier scan:{' '}
+              {new Date(stats.lastScanAt).toLocaleDateString('fr-FR', {
                 day: 'numeric',
                 month: 'short',
                 hour: '2-digit',
-                minute: '2-digit'
+                minute: '2-digit',
               })}
             </p>
           ) : null}
@@ -132,18 +132,9 @@ export default function ProjectDashboardPage({ params }: ProjectDashboardPagePro
 
       {/* Stats Row */}
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-        <RankCard
-          label="Classement moyen"
-          value={stats?.averageRank ?? null}
-        />
-        <RankCard
-          label="ChatGPT"
-          value={openaiBreakdown?.averageRank ?? null}
-        />
-        <RankCard
-          label="Claude"
-          value={anthropicBreakdown?.averageRank ?? null}
-        />
+        <RankCard label="Classement moyen" value={stats?.averageRank ?? null} />
+        <RankCard label="ChatGPT" value={openaiBreakdown?.averageRank ?? null} />
+        <RankCard label="Claude" value={anthropicBreakdown?.averageRank ?? null} />
         <div className="rounded-lg border border-border bg-card p-4">
           <p className="text-xs text-muted-foreground mb-1">Total scans</p>
           <p className="text-2xl font-semibold tabular-nums">{stats?.totalScans ?? 0}</p>
@@ -156,11 +147,7 @@ export default function ProjectDashboardPage({ params }: ProjectDashboardPagePro
           <h2 className="text-sm font-medium text-muted-foreground uppercase tracking-wide">
             Vos prompts ({promptCount})
           </h2>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setShowAddPrompt(true)}
-          >
+          <Button variant="outline" size="sm" onClick={() => setShowAddPrompt(true)}>
             <Plus className="mr-2 h-4 w-4" aria-hidden="true" />
             Ajouter
           </Button>
@@ -227,7 +214,7 @@ export default function ProjectDashboardPage({ params }: ProjectDashboardPagePro
                     key={prompt.promptId}
                     className={cn(
                       'border-b border-border last:border-0 hover:bg-muted/30 transition-colors',
-                      (statsLoading || deletePrompt.isPending) && 'opacity-50'
+                      (statsLoading || deletePrompt.isPending) && 'opacity-50',
                     )}
                   >
                     <td className="px-4 py-3">
@@ -262,32 +249,25 @@ export default function ProjectDashboardPage({ params }: ProjectDashboardPagePro
       </div>
 
       {/* Competitors Section */}
-      {stats?.topCompetitors && stats.topCompetitors.length > 0 ? (
-        <div className="space-y-3">
-          <h2 className="text-sm font-medium text-muted-foreground uppercase tracking-wide">
-            Concurrents détectés
-          </h2>
-          <div className="flex flex-wrap gap-2">
-            {stats.topCompetitors.slice(0, 8).map((competitor) => (
-              <span
-                key={competitor.name}
-                className="inline-flex items-center gap-1.5 rounded-full bg-muted px-3 py-1 text-sm"
-              >
-                {competitor.name}
-                <span className="text-xs text-muted-foreground tabular-nums">({competitor.count})</span>
-              </span>
-            ))}
-          </div>
-        </div>
+      {stats && (stats.enrichedCompetitors?.length > 0 || stats.topCompetitors?.length > 0) ? (
+        <CompetitorsList
+          competitors={stats.topCompetitors}
+          enrichedCompetitors={stats.enrichedCompetitors}
+          maxItems={5}
+        />
       ) : null}
 
       {/* Delete Prompt AlertDialog */}
-      <AlertDialog open={promptToDelete !== null} onOpenChange={(open) => !open && setPromptToDelete(null)}>
+      <AlertDialog
+        open={promptToDelete !== null}
+        onOpenChange={(open) => !open && setPromptToDelete(null)}
+      >
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Supprimer ce prompt ?</AlertDialogTitle>
             <AlertDialogDescription>
-              Cette action est irréversible. Le prompt et son historique de scans seront définitivement supprimés.
+              Cette action est irréversible. Le prompt et son historique de scans seront
+              définitivement supprimés.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

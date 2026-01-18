@@ -7,11 +7,7 @@ interface CitationBadgeProps {
   showPosition?: boolean;
 }
 
-export function CitationBadge({
-  isCited,
-  position,
-  showPosition = true,
-}: CitationBadgeProps) {
+export function CitationBadge({ isCited, position, showPosition = true }: CitationBadgeProps) {
   if (isCited) {
     return (
       <Badge variant="success" className="gap-1">

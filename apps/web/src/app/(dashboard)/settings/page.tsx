@@ -53,7 +53,7 @@ export default function SettingsPage(): React.ReactNode {
       URL.revokeObjectURL(url);
       setMessage({ type: 'success', text: 'Données exportées avec succès' });
     } catch {
-      setMessage({ type: 'error', text: 'Erreur lors de l\'export des données' });
+      setMessage({ type: 'error', text: "Erreur lors de l'export des données" });
     } finally {
       setIsExporting(false);
     }
@@ -79,9 +79,7 @@ export default function SettingsPage(): React.ReactNode {
     <div className="max-w-lg space-y-6">
       <div>
         <h1 className="text-xl font-semibold">Paramètres</h1>
-        <p className="text-sm text-muted-foreground mt-1">
-          Gérez les informations de votre compte
-        </p>
+        <p className="text-sm text-muted-foreground mt-1">Gérez les informations de votre compte</p>
       </div>
 
       {message ? (
@@ -112,9 +110,7 @@ export default function SettingsPage(): React.ReactNode {
               disabled
               className="bg-muted/50"
             />
-            <p className="text-xs text-muted-foreground">
-              L&apos;email ne peut pas être modifié
-            </p>
+            <p className="text-xs text-muted-foreground">L&apos;email ne peut pas être modifié</p>
           </div>
           <div className="space-y-2">
             <label htmlFor="name" className="text-sm font-medium">
@@ -160,15 +156,11 @@ export default function SettingsPage(): React.ReactNode {
           Consultez notre{' '}
           <Link href="/privacy" className="text-cyan-400 hover:underline">
             Politique de confidentialité
-          </Link>.
+          </Link>
+          .
         </p>
         <div className="flex gap-3">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={handleExportData}
-            disabled={isExporting}
-          >
+          <Button variant="outline" size="sm" onClick={handleExportData} disabled={isExporting}>
             <Download className="mr-2 h-4 w-4" aria-hidden="true" />
             {isExporting ? 'Export…' : 'Exporter mes données'}
           </Button>
@@ -182,8 +174,8 @@ export default function SettingsPage(): React.ReactNode {
         {!showDeleteConfirm ? (
           <>
             <p className="text-sm text-muted-foreground mb-4">
-              La suppression de votre compte est irréversible. Toutes vos données
-              (projets, prompts, scans) seront définitivement supprimées.
+              La suppression de votre compte est irréversible. Toutes vos données (projets, prompts,
+              scans) seront définitivement supprimées.
             </p>
             <Button
               variant="outline"
@@ -198,15 +190,18 @@ export default function SettingsPage(): React.ReactNode {
         ) : (
           <div className="space-y-4">
             <div className="flex items-start gap-3 p-3 rounded-lg bg-red-500/10 border border-red-500/20">
-              <AlertTriangle className="h-5 w-5 text-red-500 flex-shrink-0 mt-0.5" aria-hidden="true" />
+              <AlertTriangle
+                className="h-5 w-5 text-red-500 flex-shrink-0 mt-0.5"
+                aria-hidden="true"
+              />
               <div className="text-sm">
                 <p className="font-medium text-red-500">
                   Êtes-vous sûr de vouloir supprimer votre compte ?
                 </p>
                 <p className="text-muted-foreground mt-1">
                   Cette action est irréversible. Tapez{' '}
-                  <span className="font-mono font-bold text-red-500">SUPPRIMER</span>{' '}
-                  pour confirmer.
+                  <span className="font-mono font-bold text-red-500">SUPPRIMER</span> pour
+                  confirmer.
                 </p>
               </div>
             </div>

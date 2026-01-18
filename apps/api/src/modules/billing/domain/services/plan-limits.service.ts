@@ -55,9 +55,7 @@ export class PlanLimitsService {
     }
 
     const now = new Date();
-    const diffDays = Math.floor(
-      (now.getTime() - lastScannedAt.getTime()) / (1000 * 60 * 60 * 24),
-    );
+    const diffDays = Math.floor((now.getTime() - lastScannedAt.getTime()) / (1000 * 60 * 60 * 24));
 
     if (PLAN_LIMITS[plan].scanFrequency === 'daily') {
       return diffDays >= 1;

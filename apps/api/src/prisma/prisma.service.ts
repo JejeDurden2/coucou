@@ -5,10 +5,7 @@ import { PrismaClient } from '@prisma/client';
 import pg from 'pg';
 
 @Injectable()
-export class PrismaService
-  extends PrismaClient
-  implements OnModuleInit, OnModuleDestroy
-{
+export class PrismaService extends PrismaClient implements OnModuleInit, OnModuleDestroy {
   private pool: pg.Pool;
 
   constructor(private readonly configService: ConfigService) {

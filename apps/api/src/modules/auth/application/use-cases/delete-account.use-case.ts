@@ -2,10 +2,7 @@ import { Inject, Injectable, Logger } from '@nestjs/common';
 
 import { Result } from '../../../../common/utils/result';
 import { DomainError } from '../../../../common/errors/domain-error';
-import {
-  USER_REPOSITORY,
-  UserRepository,
-} from '../../domain/repositories/user.repository';
+import { USER_REPOSITORY, UserRepository } from '../../domain/repositories/user.repository';
 
 export class UserNotFoundError extends DomainError {
   readonly code = 'USER_NOT_FOUND';

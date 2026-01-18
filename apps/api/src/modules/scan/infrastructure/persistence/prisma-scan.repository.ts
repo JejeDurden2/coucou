@@ -2,10 +2,7 @@ import { Injectable } from '@nestjs/common';
 
 import { PrismaService } from '../../../../prisma';
 import { Scan } from '../../domain/entities/scan.entity';
-import type {
-  CreateScanData,
-  ScanRepository,
-} from '../../domain/repositories/scan.repository';
+import type { CreateScanData, ScanRepository } from '../../domain/repositories/scan.repository';
 
 @Injectable()
 export class PrismaScanRepository implements ScanRepository {

@@ -10,10 +10,7 @@ interface LLMResultRowProps {
   className?: string;
 }
 
-const providerInfo: Record<
-  LLMProvider,
-  { name: string; logo: string; color: string }
-> = {
+const providerInfo: Record<LLMProvider, { name: string; logo: string; color: string }> = {
   [LLMProvider.OPENAI]: {
     name: 'ChatGPT',
     logo: '/logos/openai.svg',
@@ -36,12 +33,7 @@ export function LLMResultRow({
   const info = providerInfo[provider];
 
   return (
-    <div
-      className={cn(
-        'flex items-center gap-4 rounded-lg bg-slate-800/50 p-4',
-        className,
-      )}
-    >
+    <div className={cn('flex items-center gap-4 rounded-lg bg-slate-800/50 p-4', className)}>
       <div className="flex items-center gap-3 min-w-[140px]">
         <div
           className={cn(
@@ -49,9 +41,7 @@ export function LLMResultRow({
             info.color,
           )}
         >
-          <span className="text-lg font-bold">
-            {provider === LLMProvider.OPENAI ? 'G' : 'C'}
-          </span>
+          <span className="text-lg font-bold">{provider === LLMProvider.OPENAI ? 'G' : 'C'}</span>
         </div>
         <span className="font-medium">{info.name}</span>
       </div>

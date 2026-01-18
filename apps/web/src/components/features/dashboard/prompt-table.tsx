@@ -13,12 +13,7 @@ interface PromptTableProps {
   isLoading?: boolean;
 }
 
-export function PromptTable({
-  prompts,
-  onTriggerScan,
-  onDelete,
-  isLoading,
-}: PromptTableProps) {
+export function PromptTable({ prompts, onTriggerScan, onDelete, isLoading }: PromptTableProps) {
   if (prompts.length === 0) {
     return (
       <div className="rounded-xl border border-cyan-500/10 bg-card/50 p-8 text-center">
@@ -59,13 +54,9 @@ export function PromptTable({
               )}
             >
               <td className="px-4 py-4">
-                <p className="text-sm font-medium line-clamp-2">
-                  {prompt.content}
-                </p>
+                <p className="text-sm font-medium line-clamp-2">{prompt.content}</p>
                 {prompt.category && (
-                  <span className="text-xs text-muted-foreground">
-                    {prompt.category}
-                  </span>
+                  <span className="text-xs text-muted-foreground">{prompt.category}</span>
                 )}
               </td>
               <td className="px-4 py-4 text-center">

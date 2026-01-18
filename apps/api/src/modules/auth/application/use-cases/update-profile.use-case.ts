@@ -3,10 +3,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { Result } from '../../../../common/utils/result';
 import { DomainError } from '../../../../common/errors/domain-error';
 import { User } from '../../domain/entities/user.entity';
-import {
-  USER_REPOSITORY,
-  UserRepository,
-} from '../../domain/repositories/user.repository';
+import { USER_REPOSITORY, UserRepository } from '../../domain/repositories/user.repository';
 
 export class UserNotFoundError extends DomainError {
   readonly code = 'USER_NOT_FOUND';
@@ -28,10 +25,7 @@ export class UpdateProfileUseCase {
     private readonly userRepository: UserRepository,
   ) {}
 
-  async execute(
-    userId: string,
-    dto: UpdateProfileDto,
-  ): Promise<Result<User, UserNotFoundError>> {
+  async execute(userId: string, dto: UpdateProfileDto): Promise<Result<User, UserNotFoundError>> {
     const user = await this.userRepository.findById(userId);
 
     if (!user) {

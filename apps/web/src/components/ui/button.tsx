@@ -8,14 +8,11 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default:
-          'bg-cyan-500 text-slate-900 hover:bg-cyan-400 font-semibold',
-        destructive:
-          'bg-rose-500 text-white hover:bg-rose-600',
+        default: 'bg-cyan-500 text-slate-900 hover:bg-cyan-400 font-semibold',
+        destructive: 'bg-rose-500 text-white hover:bg-rose-600',
         outline:
           'border border-cyan-500/30 bg-transparent hover:bg-cyan-500/10 hover:border-cyan-500/50 text-foreground',
-        secondary:
-          'bg-violet-500 text-white hover:bg-violet-400',
+        secondary: 'bg-violet-500 text-white hover:bg-violet-400',
         ghost: 'hover:bg-cyan-500/10 hover:text-cyan-400',
         link: 'text-cyan-400 underline-offset-4 hover:underline hover:text-cyan-300',
       },
@@ -34,8 +31,7 @@ const buttonVariants = cva(
 );
 
 export interface ButtonProps
-  extends ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {
+  extends ButtonHTMLAttributes<HTMLButtonElement>, VariantProps<typeof buttonVariants> {
   asChild?: boolean;
 }
 
@@ -43,11 +39,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, size, asChild = false, ...props }, ref) => {
     const Comp = asChild ? Slot : 'button';
     return (
-      <Comp
-        className={cn(buttonVariants({ variant, size, className }))}
-        ref={ref}
-        {...props}
-      />
+      <Comp className={cn(buttonVariants({ variant, size, className }))} ref={ref} {...props} />
     );
   },
 );

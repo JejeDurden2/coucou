@@ -15,11 +15,7 @@ export class CookieService {
     this.cookieDomain = configService.get<string>('COOKIE_DOMAIN');
   }
 
-  setAuthCookies(
-    res: Response,
-    accessToken: string,
-    refreshToken: string,
-  ): void {
+  setAuthCookies(res: Response, accessToken: string, refreshToken: string): void {
     // Cross-origin cookies require sameSite: 'none' and secure: true
     const commonOptions = {
       httpOnly: true,

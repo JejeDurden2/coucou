@@ -17,9 +17,7 @@ export class RefreshTokenUseCase {
     private readonly prisma: PrismaService,
   ) {}
 
-  async execute(
-    refreshToken: string,
-  ): Promise<Result<AuthResponseDto, UnauthorizedError>> {
+  async execute(refreshToken: string): Promise<Result<AuthResponseDto, UnauthorizedError>> {
     try {
       const decoded = this.jwtService.verify<JwtPayload>(refreshToken);
       const user = await this.userRepository.findById(decoded.sub);

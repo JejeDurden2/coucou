@@ -12,10 +12,7 @@ export class DeleteProjectUseCase {
     private readonly projectRepository: ProjectRepository,
   ) {}
 
-  async execute(
-    projectId: string,
-    userId: string,
-  ): Promise<Result<void, DeleteProjectError>> {
+  async execute(projectId: string, userId: string): Promise<Result<void, DeleteProjectError>> {
     const project = await this.projectRepository.findById(projectId);
 
     if (!project) {

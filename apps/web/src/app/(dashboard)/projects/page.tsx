@@ -50,10 +50,7 @@ export default function ProjectsPage(): React.ReactNode {
       {isLoading ? (
         <div className="space-y-2">
           {[1, 2, 3].map((i) => (
-            <div
-              key={i}
-              className="animate-pulse rounded-lg border border-border bg-card p-4"
-            >
+            <div key={i} className="animate-pulse rounded-lg border border-border bg-card p-4">
               <div className="h-5 w-40 rounded bg-muted" />
               <div className="h-4 w-24 rounded bg-muted mt-2" />
             </div>
@@ -95,7 +92,10 @@ export default function ProjectsPage(): React.ReactNode {
                     ? `Scanné le ${new Date(project.lastScannedAt).toLocaleDateString('fr-FR')}`
                     : 'Jamais scanné'}
                 </span>
-                <ChevronRight className="h-4 w-4 text-muted-foreground transition-transform group-hover:translate-x-1" aria-hidden="true" />
+                <ChevronRight
+                  className="h-4 w-4 text-muted-foreground transition-transform group-hover:translate-x-1"
+                  aria-hidden="true"
+                />
               </div>
             </Link>
           ))}

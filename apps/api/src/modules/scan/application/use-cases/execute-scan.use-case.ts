@@ -126,7 +126,7 @@ export class ExecuteScanUseCase {
       brandVariants,
     );
 
-    const competitors = CompetitorExtractionService.extractCompetitors(
+    const competitorMentions = CompetitorExtractionService.extractCompetitorMentions(
       response.content,
       brandName,
     );
@@ -138,7 +138,8 @@ export class ExecuteScanUseCase {
       isCited: mentionResult.isCited,
       citationContext: mentionResult.citationContext,
       position: mentionResult.position,
-      competitors,
+      competitors: competitorMentions.map((m) => m.name),
+      competitorMentions,
       latencyMs: response.latencyMs,
     };
   }

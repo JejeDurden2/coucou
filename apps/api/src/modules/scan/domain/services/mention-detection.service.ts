@@ -35,16 +35,9 @@ export class MentionDetectionService {
     };
   }
 
-  private static extractContext(
-    response: string,
-    matchIndex: number,
-    matchLength: number,
-  ): string {
+  private static extractContext(response: string, matchIndex: number, matchLength: number): string {
     const start = Math.max(0, matchIndex - this.CONTEXT_CHARS);
-    const end = Math.min(
-      response.length,
-      matchIndex + matchLength + this.CONTEXT_CHARS,
-    );
+    const end = Math.min(response.length, matchIndex + matchLength + this.CONTEXT_CHARS);
 
     let context = response.slice(start, end);
 

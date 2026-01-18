@@ -20,40 +20,40 @@
 ```css
 :root {
   /* Coucou IA Brand Colors */
-  --background: 8 10 18;           /* #080a12 - deep space black */
-  --foreground: 237 242 247;       /* #edf2f7 - primary text */
-  --card: 15 20 35;                /* #0f1423 - card backgrounds */
-  --card-foreground: 237 242 247;  /* #edf2f7 - card text */
+  --background: 8 10 18; /* #080a12 - deep space black */
+  --foreground: 237 242 247; /* #edf2f7 - primary text */
+  --card: 15 20 35; /* #0f1423 - card backgrounds */
+  --card-foreground: 237 242 247; /* #edf2f7 - card text */
 
-  --primary: 6 182 212;            /* #06b6d4 - cyan-500, CTAs */
-  --primary-foreground: 8 10 18;   /* #080a12 - text on primary */
-  --secondary: 139 92 246;         /* #8b5cf6 - violet-500, accents */
+  --primary: 6 182 212; /* #06b6d4 - cyan-500, CTAs */
+  --primary-foreground: 8 10 18; /* #080a12 - text on primary */
+  --secondary: 139 92 246; /* #8b5cf6 - violet-500, accents */
   --secondary-foreground: 237 242 247;
 
-  --success: 34 197 94;            /* #22c55e - emerald-500 */
-  --destructive: 244 63 94;        /* #f43f5e - rose-500 */
+  --success: 34 197 94; /* #22c55e - emerald-500 */
+  --destructive: 244 63 94; /* #f43f5e - rose-500 */
 
-  --muted: 30 40 60;               /* #1e283c - muted backgrounds */
+  --muted: 30 40 60; /* #1e283c - muted backgrounds */
   --muted-foreground: 148 163 184; /* #94a3b8 - slate-400, secondary text */
 
-  --border: 30 40 60;              /* #1e283c - default borders */
-  --input: 20 30 50;               /* #141e32 - input backgrounds */
-  --ring: 6 182 212;               /* #06b6d4 - focus rings */
-  --accent: 30 40 60;              /* #1e283c - accent backgrounds */
+  --border: 30 40 60; /* #1e283c - default borders */
+  --input: 20 30 50; /* #141e32 - input backgrounds */
+  --ring: 6 182 212; /* #06b6d4 - focus rings */
+  --accent: 30 40 60; /* #1e283c - accent backgrounds */
 }
 ```
 
 ### Semantic Mappings
 
-| Semantic Token       | RGB Value       | Hex       | Usage                    |
-| -------------------- | --------------- | --------- | ------------------------ |
-| `primary`            | 6 182 212       | #06b6d4   | CTAs, links, focus rings |
-| `secondary`          | 139 92 246      | #8b5cf6   | Accents, badges          |
-| `success`            | 34 197 94       | #22c55e   | Cited states             |
-| `destructive`        | 244 63 94       | #f43f5e   | Absent states, errors    |
-| `background`         | 8 10 18         | #080a12   | Page background          |
-| `foreground`         | 237 242 247     | #edf2f7   | Primary text             |
-| `muted-foreground`   | 148 163 184     | #94a3b8   | Secondary text           |
+| Semantic Token     | RGB Value   | Hex     | Usage                    |
+| ------------------ | ----------- | ------- | ------------------------ |
+| `primary`          | 6 182 212   | #06b6d4 | CTAs, links, focus rings |
+| `secondary`        | 139 92 246  | #8b5cf6 | Accents, badges          |
+| `success`          | 34 197 94   | #22c55e | Cited states             |
+| `destructive`      | 244 63 94   | #f43f5e | Absent states, errors    |
+| `background`       | 8 10 18     | #080a12 | Page background          |
+| `foreground`       | 237 242 247 | #edf2f7 | Primary text             |
+| `muted-foreground` | 148 163 184 | #94a3b8 | Secondary text           |
 
 ### Tailwind Usage
 
@@ -87,11 +87,11 @@
 
 ### Fonts
 
-| Family              | Variable         | Usage                  | Weights         |
-| ------------------- | ---------------- | ---------------------- | --------------- |
-| **Inter**           | `--font-sans`    | Body text, UI          | 400, 500, 600, 700 |
-| **Space Grotesk**   | `--font-display` | Headings, titles       | 400, 500, 600, 700 |
-| **JetBrains Mono**  | `--font-mono`    | Code, data, technical  | 400, 500, 600 |
+| Family             | Variable         | Usage                 | Weights            |
+| ------------------ | ---------------- | --------------------- | ------------------ |
+| **Inter**          | `--font-sans`    | Body text, UI         | 400, 500, 600, 700 |
+| **Space Grotesk**  | `--font-display` | Headings, titles      | 400, 500, 600, 700 |
+| **JetBrains Mono** | `--font-mono`    | Code, data, technical | 400, 500, 600      |
 
 ### Tailwind Classes
 
@@ -103,17 +103,17 @@
 
 ### Type Scale
 
-| Size  | Class      | Usage              |
-| ----- | ---------- | ------------------ |
-| 48px  | `text-5xl` | Hero titles        |
-| 36px  | `text-4xl` | Page titles        |
-| 30px  | `text-3xl` | Section titles, stat values |
-| 24px  | `text-2xl` | Card titles        |
-| 20px  | `text-xl`  | Subsections        |
-| 18px  | `text-lg`  | Large body         |
-| 16px  | `text-base`| Body text          |
-| 14px  | `text-sm`  | Secondary text, labels |
-| 12px  | `text-xs`  | Captions, badges   |
+| Size | Class       | Usage                       |
+| ---- | ----------- | --------------------------- |
+| 48px | `text-5xl`  | Hero titles                 |
+| 36px | `text-4xl`  | Page titles                 |
+| 30px | `text-3xl`  | Section titles, stat values |
+| 24px | `text-2xl`  | Card titles                 |
+| 20px | `text-xl`   | Subsections                 |
+| 18px | `text-lg`   | Large body                  |
+| 16px | `text-base` | Body text                   |
+| 14px | `text-sm`   | Secondary text, labels      |
+| 12px | `text-xs`   | Captions, badges            |
 
 ---
 
@@ -267,12 +267,12 @@
 
 ## Border Radius
 
-| Token         | Value   | Usage           |
-| ------------- | ------- | --------------- |
-| `--radius`    | 12px    | Base radius     |
-| `rounded-lg`  | 12px    | Cards, modals   |
-| `rounded-xl`  | 16px    | Large cards     |
-| `rounded-full`| 9999px  | Pills, avatars  |
+| Token          | Value  | Usage          |
+| -------------- | ------ | -------------- |
+| `--radius`     | 12px   | Base radius    |
+| `rounded-lg`   | 12px   | Cards, modals  |
+| `rounded-xl`   | 16px   | Large cards    |
+| `rounded-full` | 9999px | Pills, avatars |
 
 ---
 
@@ -289,11 +289,11 @@ animation: {
 ### Transitions
 
 ```tsx
-transition-colors   // Color changes
-transition-all      // All properties
-duration-200        // Fast (200ms)
-duration-300        // Normal (300ms)
-duration-500        // Slow (500ms)
+transition - colors; // Color changes
+transition - all; // All properties
+duration - 200; // Fast (200ms)
+duration - 300; // Normal (300ms)
+duration - 500; // Slow (500ms)
 ```
 
 ---
@@ -331,7 +331,9 @@ focus-visible:ring-offset-background
 
 ```css
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
   }

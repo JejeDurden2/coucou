@@ -18,10 +18,7 @@ interface AuthUserResponse {
 }
 
 class ApiClient {
-  private async fetch<T>(
-    endpoint: string,
-    options: RequestInit = {},
-  ): Promise<T> {
+  private async fetch<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
     const headers: HeadersInit = {
       'Content-Type': 'application/json',
       ...options.headers,
@@ -126,10 +123,7 @@ class ApiClient {
     return this.fetch<Prompt[]>(`/projects/${projectId}/prompts`);
   }
 
-  async createPrompt(
-    projectId: string,
-    data: CreatePromptInput,
-  ): Promise<Prompt> {
+  async createPrompt(projectId: string, data: CreatePromptInput): Promise<Prompt> {
     return this.fetch<Prompt>(`/projects/${projectId}/prompts`, {
       method: 'POST',
       body: JSON.stringify(data),

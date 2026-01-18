@@ -31,9 +31,7 @@ export class CreateCheckoutUseCase {
     const { userId, plan, successUrl, cancelUrl } = input;
 
     if (plan === Plan.FREE) {
-      return Result.err(
-        new ValidationError(['FREE plan does not require payment']),
-      );
+      return Result.err(new ValidationError(['FREE plan does not require payment']));
     }
 
     const user = await this.userRepository.findById(userId);
@@ -45,10 +43,7 @@ export class CreateCheckoutUseCase {
 
     // Create Stripe customer if not exists
     if (!customerId) {
-      customerId = await this.stripeService.createCustomer(
-        user.email,
-        user.name,
-      );
+      customerId = await this.stripeService.createCustomer(user.email, user.name);
       await this.userRepository.updatePlan(userId, user.plan, customerId);
     }
 
@@ -60,9 +55,7 @@ export class CreateCheckoutUseCase {
     );
 
     if (!session.url) {
-      return Result.err(
-        new ValidationError(['Failed to create checkout session']),
-      );
+      return Result.err(new ValidationError(['Failed to create checkout session']));
     }
 
     return Result.ok({ url: session.url });

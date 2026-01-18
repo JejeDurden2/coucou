@@ -41,9 +41,7 @@ export default function BillingPage(): React.ReactNode {
     <div className="space-y-6">
       <div>
         <h1 className="text-xl font-semibold">Facturation</h1>
-        <p className="text-sm text-muted-foreground mt-1">
-          Gérez votre abonnement
-        </p>
+        <p className="text-sm text-muted-foreground mt-1">Gérez votre abonnement</p>
       </div>
 
       <PlanGrid
@@ -58,8 +56,8 @@ export default function BillingPage(): React.ReactNode {
             <div>
               <h3 className="font-medium">Gérer votre abonnement</h3>
               <p className="text-sm text-muted-foreground">
-                Modifier votre moyen de paiement, télécharger vos factures ou
-                annuler votre abonnement
+                Modifier votre moyen de paiement, télécharger vos factures ou annuler votre
+                abonnement
               </p>
             </div>
             <Button

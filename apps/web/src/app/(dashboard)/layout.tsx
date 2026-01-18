@@ -62,14 +62,22 @@ export default function DashboardLayout({ children }: DashboardLayoutProps): Rea
       <header className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="flex h-14 items-center justify-between px-4 md:px-6">
           <div className="flex items-center gap-6">
-            <Link href="/projects" className="flex items-center" aria-label="Accueil - Liste des marques">
+            <Link
+              href="/projects"
+              className="flex items-center"
+              aria-label="Accueil - Liste des marques"
+            >
               <Logo size="sm" />
             </Link>
 
             {hasProjects ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="gap-2 text-sm font-medium" aria-label="Sélectionner une marque">
+                  <Button
+                    variant="ghost"
+                    className="gap-2 text-sm font-medium"
+                    aria-label="Sélectionner une marque"
+                  >
                     {currentProject?.brandName ?? 'Sélectionner une marque'}
                     <ChevronDown className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
                   </Button>
@@ -79,9 +87,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps): Rea
                     <DropdownMenuItem
                       key={project.id}
                       onClick={() => router.push(`/projects/${project.id}`)}
-                      className={cn(
-                        currentProjectId === project.id && 'bg-accent/10'
-                      )}
+                      className={cn(currentProjectId === project.id && 'bg-accent/10')}
                     >
                       <span className="font-medium">{project.brandName}</span>
                     </DropdownMenuItem>
@@ -134,9 +140,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps): Rea
       </header>
 
       <main className="flex-1">
-        <div className="mx-auto max-w-7xl px-4 py-6 md:px-6 md:py-8">
-          {children}
-        </div>
+        <div className="mx-auto max-w-7xl px-4 py-6 md:px-6 md:py-8">{children}</div>
       </main>
     </div>
   );

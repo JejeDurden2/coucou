@@ -17,8 +17,7 @@ export function useCreatePrompt(projectId: string) {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: CreatePromptInput) =>
-      apiClient.createPrompt(projectId, data),
+    mutationFn: (data: CreatePromptInput) => apiClient.createPrompt(projectId, data),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ['projects', projectId, 'prompts'],
@@ -48,13 +47,8 @@ export function useUpdatePrompt(projectId: string) {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({
-      promptId,
-      data,
-    }: {
-      promptId: string;
-      data: UpdatePromptInput;
-    }) => apiClient.updatePrompt(projectId, promptId, data),
+    mutationFn: ({ promptId, data }: { promptId: string; data: UpdatePromptInput }) =>
+      apiClient.updatePrompt(projectId, promptId, data),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ['projects', projectId, 'prompts'],
@@ -75,8 +69,7 @@ export function useDeletePrompt(projectId: string) {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (promptId: string) =>
-      apiClient.deletePrompt(projectId, promptId),
+    mutationFn: (promptId: string) => apiClient.deletePrompt(projectId, promptId),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ['projects', projectId, 'prompts'],

@@ -1,5 +1,11 @@
 import type { LLMProvider } from '@prisma/client';
 
+export interface CompetitorMentionData {
+  name: string;
+  position: number | null;
+  context: string;
+}
+
 export interface LLMResult {
   provider: LLMProvider;
   model: string;
@@ -8,6 +14,7 @@ export interface LLMResult {
   citationContext: string | null;
   position: number | null;
   competitors: string[];
+  competitorMentions?: CompetitorMentionData[];
   latencyMs: number;
 }
 

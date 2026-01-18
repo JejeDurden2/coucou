@@ -12,18 +12,14 @@ export const Result = {
     error,
   }),
 
-  isOk: <T, E extends DomainError>(
-    result: Result<T, E>,
-  ): result is { ok: true; value: T } => result.ok,
+  isOk: <T, E extends DomainError>(result: Result<T, E>): result is { ok: true; value: T } =>
+    result.ok,
 
-  isErr: <T, E extends DomainError>(
-    result: Result<T, E>,
-  ): result is { ok: false; error: E } => !result.ok,
+  isErr: <T, E extends DomainError>(result: Result<T, E>): result is { ok: false; error: E } =>
+    !result.ok,
 
-  map: <T, U, E extends DomainError>(
-    result: Result<T, E>,
-    fn: (value: T) => U,
-  ): Result<U, E> => (result.ok ? Result.ok(fn(result.value)) : result),
+  map: <T, U, E extends DomainError>(result: Result<T, E>, fn: (value: T) => U): Result<U, E> =>
+    result.ok ? Result.ok(fn(result.value)) : result,
 
   flatMap: <T, U, E extends DomainError>(
     result: Result<T, E>,
@@ -37,8 +33,6 @@ export const Result = {
     throw result.error;
   },
 
-  unwrapOr: <T, E extends DomainError>(
-    result: Result<T, E>,
-    defaultValue: T,
-  ): T => (result.ok ? result.value : defaultValue),
+  unwrapOr: <T, E extends DomainError>(result: Result<T, E>, defaultValue: T): T =>
+    result.ok ? result.value : defaultValue,
 };

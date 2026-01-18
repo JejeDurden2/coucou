@@ -44,9 +44,7 @@ export function PlanCard({
       <div className={variant === 'compact' ? 'mb-3' : 'mb-4'}>
         <div className="flex items-center justify-between">
           <h3 className="font-semibold">{planName}</h3>
-          {isCurrent && (
-            <span className="text-xs bg-muted px-2 py-0.5 rounded">Actuel</span>
-          )}
+          {isCurrent && <span className="text-xs bg-muted px-2 py-0.5 rounded">Actuel</span>}
         </div>
         <p className="text-sm text-muted-foreground">{pricing.description}</p>
       </div>
@@ -56,12 +54,7 @@ export function PlanCard({
         <span className="text-muted-foreground text-sm">/{pricing.period}</span>
       </div>
 
-      <ul
-        className={cn(
-          'space-y-2 flex-1',
-          variant === 'compact' ? 'mb-4' : 'mb-6',
-        )}
-      >
+      <ul className={cn('space-y-2 flex-1', variant === 'compact' ? 'mb-4' : 'mb-6')}>
         {pricing.features.map((feature) => (
           <li key={feature} className="flex items-start gap-2 text-sm">
             <Check className="size-4 text-emerald-400 shrink-0 mt-0.5" aria-hidden="true" />

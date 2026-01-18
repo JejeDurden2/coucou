@@ -54,11 +54,7 @@ export class PrismaUserRepository implements UserRepository {
     return User.fromPersistence(user);
   }
 
-  async linkGoogleAccount(
-    userId: string,
-    googleId: string,
-    avatarUrl?: string,
-  ): Promise<User> {
+  async linkGoogleAccount(userId: string, googleId: string, avatarUrl?: string): Promise<User> {
     const user = await this.prisma.user.update({
       where: { id: userId },
       data: {
@@ -69,11 +65,7 @@ export class PrismaUserRepository implements UserRepository {
     return User.fromPersistence(user);
   }
 
-  async updatePlan(
-    userId: string,
-    plan: string,
-    stripeCustomerId?: string,
-  ): Promise<User> {
+  async updatePlan(userId: string, plan: string, stripeCustomerId?: string): Promise<User> {
     const user = await this.prisma.user.update({
       where: { id: userId },
       data: {
