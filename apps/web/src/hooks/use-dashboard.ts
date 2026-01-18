@@ -1,7 +1,8 @@
 'use client';
 
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { apiClient } from '@/lib/api-client';
+import { toast } from 'sonner';
+import { apiClient, ApiClientError } from '@/lib/api-client';
 
 export function useDashboardStats(projectId: string) {
   return useQuery({
@@ -24,13 +25,47 @@ export function useTriggerScan(projectId: string) {
 
   return useMutation({
     mutationFn: () => apiClient.triggerScan(projectId),
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries({
         queryKey: ['projects', projectId, 'scans'],
       });
       queryClient.invalidateQueries({
         queryKey: ['projects', projectId, 'stats'],
       });
+
+      const hasErrors = data.some((scan) => scan.providerErrors?.length);
+      const allSkipped = data.every((scan) => scan.skippedReason);
+
+      if (allSkipped && data.length > 0) {
+        toast.warning('Scan terminé avec des erreurs', {
+          description: 'Tous les prompts ont été ignorés ou ont échoué.',
+        });
+      } else if (hasErrors) {
+        toast.warning('Scan partiel terminé', {
+          description: 'Certains fournisseurs LLM ont échoué.',
+        });
+      } else {
+        toast.success('Scan terminé', {
+          description: `${data.length} prompt(s) analysé(s) avec succès.`,
+        });
+      }
+    },
+    onError: (error) => {
+      if (error instanceof ApiClientError) {
+        if (error.code === 'ALL_PROVIDERS_FAILED') {
+          toast.error('Tous les fournisseurs LLM ont échoué', {
+            description: 'Vérifiez la configuration des clés API.',
+          });
+        } else {
+          toast.error('Erreur lors du scan', {
+            description: error.message,
+          });
+        }
+      } else {
+        toast.error('Erreur lors du scan', {
+          description: 'Une erreur inattendue est survenue.',
+        });
+      }
     },
   });
 }

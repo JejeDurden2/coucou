@@ -10,6 +10,11 @@ export interface LLMResultDto {
   latencyMs: number;
 }
 
+export interface ProviderErrorDto {
+  provider: string;
+  error: string;
+}
+
 export interface ScanResponseDto {
   id: string;
   promptId: string;
@@ -19,6 +24,7 @@ export interface ScanResponseDto {
   citationRate: number;
   wasSanitized?: boolean;
   skippedReason?: string;
+  providerErrors?: ProviderErrorDto[];
 }
 
 export interface ScanHistoryDto {

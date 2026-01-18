@@ -5,6 +5,7 @@ import { ForbiddenError, NotFoundError, Result } from '../../../../common';
 import { PROJECT_REPOSITORY, type ProjectRepository } from '../../../project';
 import { PROMPT_REPOSITORY, type PromptRepository } from '../../../prompt';
 import {
+  AllProvidersFailedError,
   CompetitorExtractionService,
   MentionDetectionService,
   SCAN_REPOSITORY,
@@ -15,7 +16,7 @@ import type { LLMService, LLMResponse } from '../ports/llm.port';
 import { LLM_SERVICE } from '../ports/llm.port';
 import type { ScanResponseDto } from '../dto/scan.dto';
 
-type ExecuteScanError = NotFoundError | ForbiddenError;
+type ExecuteScanError = NotFoundError | ForbiddenError | AllProvidersFailedError;
 
 @Injectable()
 export class ExecuteScanUseCase {
@@ -54,13 +55,25 @@ export class ExecuteScanUseCase {
 
     this.logger.log(`Executing scan for prompt ${promptId}`);
 
-    // Query all LLMs
-    const llmResponses = await this.llmService.queryAll(prompt.content);
+    const { successes, failures } = await this.llmService.queryAll(prompt.content);
 
-    // Process results
+    if (successes.size === 0) {
+      this.logger.error(`All LLM providers failed for prompt ${promptId}`);
+      return Result.err(
+        new AllProvidersFailedError(
+          failures.map((f) => ({ provider: f.provider, error: f.error })),
+        ),
+      );
+    }
+
+    if (failures.length > 0) {
+      this.logger.warn(
+        `Partial LLM failures for prompt ${promptId}: ${failures.map((f) => f.provider).join(', ')}`,
+      );
+    }
+
     const results: LLMResult[] = [];
-
-    for (const [provider, response] of llmResponses) {
+    for (const [provider, response] of successes) {
       const result = this.processLLMResponse(
         provider,
         response,
@@ -70,13 +83,11 @@ export class ExecuteScanUseCase {
       results.push(result);
     }
 
-    // Save scan
     const scan = await this.scanRepository.create({
       promptId,
       results,
     });
 
-    // Update project lastScannedAt
     await this.projectRepository.updateLastScannedAt(project.id, new Date());
 
     this.logger.log(`Scan ${scan.id} completed for prompt ${promptId}`);
@@ -96,6 +107,10 @@ export class ExecuteScanUseCase {
       })),
       isCitedByAny: scan.isCitedByAny,
       citationRate: scan.citationRate,
+      providerErrors:
+        failures.length > 0
+          ? failures.map((f) => ({ provider: f.provider, error: f.error }))
+          : undefined,
     });
   }
 

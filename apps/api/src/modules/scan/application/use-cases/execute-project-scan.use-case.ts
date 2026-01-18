@@ -5,6 +5,7 @@ import { ForbiddenError, NotFoundError, Result } from '../../../../common';
 import { PROJECT_REPOSITORY, type ProjectRepository } from '../../../project';
 import { PROMPT_REPOSITORY, type PromptRepository } from '../../../prompt';
 import {
+  AllProvidersFailedError,
   CompetitorExtractionService,
   MentionDetectionService,
   PromptSanitizerService,
@@ -17,7 +18,7 @@ import type { LLMService, LLMResponse } from '../ports/llm.port';
 import { LLM_SERVICE } from '../ports/llm.port';
 import type { ScanResponseDto } from '../dto/scan.dto';
 
-type ExecuteProjectScanError = NotFoundError | ForbiddenError;
+type ExecuteProjectScanError = NotFoundError | ForbiddenError | AllProvidersFailedError;
 
 @Injectable()
 export class ExecuteProjectScanUseCase {
@@ -59,12 +60,12 @@ export class ExecuteProjectScanUseCase {
     );
 
     const scanResults: ScanResponseDto[] = [];
+    let hasAtLeastOneSuccess = false;
+    let lastAllProvidersError: AllProvidersFailedError | null = null;
 
     for (const prompt of prompts) {
-      // Analyze prompt for potential injection attacks
       const analysis = PromptSanitizerService.analyze(prompt.content);
 
-      // Block HIGH threat prompts entirely
       if (analysis.level === ThreatLevel.HIGH) {
         this.logger.warn(
           `Blocked HIGH threat prompt for project ${projectId}: ${analysis.matchedPatterns.join(', ')}`,
@@ -81,7 +82,6 @@ export class ExecuteProjectScanUseCase {
         continue;
       }
 
-      // Log LOW threat prompts but continue with sanitized version
       const wasSanitized = analysis.level === ThreatLevel.LOW;
       if (wasSanitized) {
         this.logger.log(
@@ -89,10 +89,38 @@ export class ExecuteProjectScanUseCase {
         );
       }
 
-      const llmResponses = await this.llmService.queryAll(analysis.sanitized);
+      const { successes, failures } = await this.llmService.queryAll(analysis.sanitized);
+
+      if (successes.size === 0) {
+        this.logger.error(
+          `All LLM providers failed for prompt ${prompt.id}: ${failures.map((f) => `${f.provider}: ${f.error}`).join(', ')}`,
+        );
+        lastAllProvidersError = new AllProvidersFailedError(
+          failures.map((f) => ({ provider: f.provider, error: f.error })),
+        );
+        scanResults.push({
+          id: '',
+          promptId: prompt.id,
+          executedAt: new Date(),
+          results: [],
+          isCitedByAny: false,
+          citationRate: 0,
+          skippedReason: `Échec des fournisseurs LLM: ${failures.map((f) => f.provider).join(', ')}`,
+          providerErrors: failures.map((f) => ({ provider: f.provider, error: f.error })),
+        });
+        continue;
+      }
+
+      hasAtLeastOneSuccess = true;
+
+      if (failures.length > 0) {
+        this.logger.warn(
+          `Partial LLM failures for prompt ${prompt.id}: ${failures.map((f) => f.provider).join(', ')}`,
+        );
+      }
 
       const results: LLMResult[] = [];
-      for (const [provider, response] of llmResponses) {
+      for (const [provider, response] of successes) {
         const result = this.processLLMResponse(
           provider,
           response,
@@ -123,7 +151,15 @@ export class ExecuteProjectScanUseCase {
         isCitedByAny: scan.isCitedByAny,
         citationRate: scan.citationRate,
         wasSanitized: wasSanitized || undefined,
+        providerErrors:
+          failures.length > 0
+            ? failures.map((f) => ({ provider: f.provider, error: f.error }))
+            : undefined,
       });
+    }
+
+    if (!hasAtLeastOneSuccess && lastAllProvidersError) {
+      return Result.err(lastAllProvidersError);
     }
 
     await this.projectRepository.updateLastScannedAt(project.id, new Date());

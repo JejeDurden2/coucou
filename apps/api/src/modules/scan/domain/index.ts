@@ -10,3 +10,5 @@ export {
 export type { PromptAnalysisResult } from './services/prompt-sanitizer.service';
 export { SCAN_REPOSITORY } from './repositories/scan.repository';
 export type { ScanRepository, CreateScanData } from './repositories/scan.repository';
+export { AllProvidersFailedError } from './errors/scan.errors';
+export type { ProviderFailure } from './errors/scan.errors';

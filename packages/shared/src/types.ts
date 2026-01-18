@@ -100,6 +100,11 @@ export interface LLMResult {
   latencyMs: number;
 }
 
+export interface ProviderError {
+  provider: string;
+  error: string;
+}
+
 export interface Scan {
   id: string;
   promptId: string;
@@ -107,6 +112,9 @@ export interface Scan {
   results: LLMResult[];
   isCitedByAny: boolean;
   citationRate: number;
+  wasSanitized?: boolean;
+  skippedReason?: string;
+  providerErrors?: ProviderError[];
 }
 
 export interface ScanHistory {

@@ -1,9 +1,18 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { LLMProvider } from '@prisma/client';
 
-import type { LLMResponse, LLMService } from '../../application/ports/llm.port';
+import type {
+  LLMResponse,
+  LLMService,
+  LLMQueryResult,
+  LLMFailure,
+} from '../../application/ports/llm.port';
 import { OpenAILLMAdapter } from './openai-llm.adapter';
 import { AnthropicLLMAdapter } from './anthropic-llm.adapter';
+
+type QueryResult =
+  | { success: true; provider: LLMProvider; response: LLMResponse }
+  | { success: false; provider: LLMProvider; error: string };
 
 @Injectable()
 export class LLMServiceImpl implements LLMService {
@@ -14,41 +23,40 @@ export class LLMServiceImpl implements LLMService {
     private readonly anthropicAdapter: AnthropicLLMAdapter,
   ) {}
 
-  async queryAll(prompt: string): Promise<Map<LLMProvider, LLMResponse>> {
-    const results = new Map<LLMProvider, LLMResponse>();
-
+  async queryAll(prompt: string): Promise<LLMQueryResult> {
     const queries = [
-      this.queryWithFallback(this.openaiAdapter, prompt),
-      this.queryWithFallback(this.anthropicAdapter, prompt),
+      this.queryAdapter(this.openaiAdapter, prompt),
+      this.queryAdapter(this.anthropicAdapter, prompt),
     ];
 
-    const responses = await Promise.allSettled(queries);
+    const responses = await Promise.all(queries);
 
-    for (const response of responses) {
-      if (response.status === 'fulfilled' && response.value) {
-        results.set(response.value.provider, response.value.response);
+    const successes = new Map<LLMProvider, LLMResponse>();
+    const failures: LLMFailure[] = [];
+
+    for (const result of responses) {
+      if (result.success) {
+        successes.set(result.provider, result.response);
+      } else {
+        failures.push({ provider: result.provider, error: result.error });
       }
     }
 
-    return results;
+    return { successes, failures };
   }
 
-  private async queryWithFallback(
+  private async queryAdapter(
     adapter: OpenAILLMAdapter | AnthropicLLMAdapter,
     prompt: string,
-  ): Promise<{ provider: LLMProvider; response: LLMResponse } | null> {
+  ): Promise<QueryResult> {
+    const provider = adapter.getProvider();
     try {
       const response = await adapter.query(prompt);
-      return {
-        provider: adapter.getProvider(),
-        response,
-      };
+      return { success: true, provider, response };
     } catch (error) {
-      this.logger.error(
-        `Failed to query ${adapter.getProvider()}`,
-        error instanceof Error ? error.message : error,
-      );
-      return null;
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      this.logger.error(`Failed to query ${provider}: ${errorMessage}`);
+      return { success: false, provider, error: errorMessage };
     }
   }
 }

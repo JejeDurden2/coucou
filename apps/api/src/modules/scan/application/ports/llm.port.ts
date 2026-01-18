@@ -13,6 +13,16 @@ export interface LLMPort {
   getProvider(): LLMProvider;
 }
 
+export interface LLMFailure {
+  provider: LLMProvider;
+  error: string;
+}
+
+export interface LLMQueryResult {
+  successes: Map<LLMProvider, LLMResponse>;
+  failures: LLMFailure[];
+}
+
 export interface LLMService {
-  queryAll(prompt: string): Promise<Map<LLMProvider, LLMResponse>>;
+  queryAll(prompt: string): Promise<LLMQueryResult>;
 }
