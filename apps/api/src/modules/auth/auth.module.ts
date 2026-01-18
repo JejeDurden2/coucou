@@ -6,10 +6,13 @@ import { PassportModule } from '@nestjs/passport';
 import { USER_REPOSITORY } from './domain';
 import { PrismaUserRepository } from './infrastructure/persistence/prisma-user.repository';
 import {
+  DeleteAccountUseCase,
+  ExportDataUseCase,
   GetMeUseCase,
   LoginUseCase,
   RefreshTokenUseCase,
   RegisterUseCase,
+  UpdateProfileUseCase,
 } from './application/use-cases';
 import { AuthController } from './presentation/controllers/auth.controller';
 import { JwtAuthGuard } from './presentation/guards/jwt-auth.guard';
@@ -35,6 +38,9 @@ import { JwtStrategy } from './presentation/strategies/jwt.strategy';
     LoginUseCase,
     GetMeUseCase,
     RefreshTokenUseCase,
+    DeleteAccountUseCase,
+    ExportDataUseCase,
+    UpdateProfileUseCase,
     // Strategies & Guards
     JwtStrategy,
     JwtAuthGuard,

@@ -78,6 +78,23 @@ class ApiClient {
     return this.fetch<User>('/auth/me');
   }
 
+  async updateProfile(name: string): Promise<User> {
+    return this.fetch<User>('/auth/me', {
+      method: 'PATCH',
+      body: JSON.stringify({ name }),
+    });
+  }
+
+  async exportData(): Promise<unknown> {
+    return this.fetch<unknown>('/auth/me/export');
+  }
+
+  async deleteAccount(): Promise<void> {
+    await this.fetch<void>('/auth/me', {
+      method: 'DELETE',
+    });
+  }
+
   // Projects
   async getProjects(): Promise<Project[]> {
     return this.fetch<Project[]>('/projects');

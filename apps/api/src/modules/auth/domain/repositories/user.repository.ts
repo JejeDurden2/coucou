@@ -13,4 +13,6 @@ export interface UserRepository {
   findByEmail(email: string): Promise<User | null>;
   create(data: CreateUserData): Promise<User>;
   updatePlan(userId: string, plan: string, stripeCustomerId?: string): Promise<User>;
+  updateName(userId: string, name: string): Promise<User>;
+  delete(userId: string): Promise<void>;
 }

@@ -47,4 +47,46 @@ export class PrismaUserRepository implements UserRepository {
     });
     return User.fromPersistence(user);
   }
+
+  async updateName(userId: string, name: string): Promise<User> {
+    const user = await this.prisma.user.update({
+      where: { id: userId },
+      data: { name },
+    });
+    return User.fromPersistence(user);
+  }
+
+  async delete(userId: string): Promise<void> {
+    // Delete in order: scans -> prompts -> projects -> subscriptions -> user
+    await this.prisma.$transaction(async (tx) => {
+      // Get all projects for the user
+      const projects = await tx.project.findMany({
+        where: { userId },
+        select: { id: true },
+      });
+      const projectIds = projects.map((p) => p.id);
+
+      // Get all prompts for these projects
+      const prompts = await tx.prompt.findMany({
+        where: { projectId: { in: projectIds } },
+        select: { id: true },
+      });
+      const promptIds = prompts.map((p) => p.id);
+
+      // Delete scans
+      await tx.scan.deleteMany({ where: { promptId: { in: promptIds } } });
+
+      // Delete prompts
+      await tx.prompt.deleteMany({ where: { projectId: { in: projectIds } } });
+
+      // Delete projects
+      await tx.project.deleteMany({ where: { userId } });
+
+      // Delete subscription
+      await tx.subscription.deleteMany({ where: { userId } });
+
+      // Delete user
+      await tx.user.delete({ where: { id: userId } });
+    });
+  }
 }

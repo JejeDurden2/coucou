@@ -27,3 +27,10 @@ export class RefreshTokenRequestDto {
   @IsString()
   refreshToken!: string;
 }
+
+export class UpdateProfileRequestDto {
+  @IsString()
+  @MinLength(2)
+  @MaxLength(100)
+  name!: string;
+}

@@ -15,6 +15,7 @@ export default function RegisterPage() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [acceptTerms, setAcceptTerms] = useState(false);
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
@@ -95,7 +96,27 @@ export default function RegisterPage() {
               autoComplete="new-password"
             />
           </div>
-          <Button type="submit" className="w-full" disabled={isLoading}>
+          <div className="flex items-start gap-3">
+            <input
+              type="checkbox"
+              id="terms"
+              checked={acceptTerms}
+              onChange={(e) => setAcceptTerms(e.target.checked)}
+              className="mt-1 h-4 w-4 rounded border-zinc-700 bg-zinc-900 text-cyan-400 focus:ring-cyan-400/50"
+              required
+            />
+            <label htmlFor="terms" className="text-sm text-muted-foreground">
+              J&apos;accepte les{' '}
+              <Link href="/terms" className="text-cyan-400 hover:underline" target="_blank">
+                Conditions Générales d&apos;Utilisation
+              </Link>{' '}
+              et la{' '}
+              <Link href="/privacy" className="text-cyan-400 hover:underline" target="_blank">
+                Politique de confidentialité
+              </Link>
+            </label>
+          </div>
+          <Button type="submit" className="w-full" disabled={isLoading || !acceptTerms}>
             {isLoading ? 'Création…' : 'Créer mon compte'}
           </Button>
         </form>
