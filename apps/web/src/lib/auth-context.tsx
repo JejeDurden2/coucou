@@ -16,9 +16,9 @@ interface AuthContextValue {
   user: User | null;
   isLoading: boolean;
   isAuthenticated: boolean;
-  login: (email: string, password: string) => Promise<void>;
-  register: (email: string, password: string, name: string) => Promise<void>;
-  loadUser: () => Promise<void>;
+  login: (email: string, password: string) => Promise<User>;
+  register: (email: string, password: string, name: string) => Promise<User>;
+  loadUser: () => Promise<User | null>;
   logout: () => Promise<void>;
 }
 
@@ -28,17 +28,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  const loadUser = useCallback(async () => {
+  const loadUser = useCallback(async (): Promise<User | null> => {
     try {
       const userData = await apiClient.getMe();
       setUser(userData);
+      return userData;
     } catch {
       // Try to refresh the token
       try {
         const userData = await apiClient.refreshToken();
         setUser(userData);
+        return userData;
       } catch {
         setUser(null);
+        return null;
       }
     } finally {
       setIsLoading(false);
@@ -49,15 +52,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     loadUser();
   }, [loadUser]);
 
-  const login = useCallback(async (email: string, password: string) => {
+  const login = useCallback(async (email: string, password: string): Promise<User> => {
     const userData = await apiClient.login(email, password);
     setUser(userData);
+    return userData;
   }, []);
 
   const register = useCallback(
-    async (email: string, password: string, name: string) => {
+    async (email: string, password: string, name: string): Promise<User> => {
       const userData = await apiClient.register(email, password, name);
       setUser(userData);
+      return userData;
     },
     [],
   );

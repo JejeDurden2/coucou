@@ -1,18 +1,20 @@
 'use client';
 
-import { useEffect } from 'react';
+import { Suspense, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context';
 
-export default function AuthCallbackPage() {
+function AuthCallbackContent() {
   const router = useRouter();
   const { loadUser } = useAuth();
 
   useEffect(() => {
     // Cookies are already set by the backend, just load the user
     loadUser()
-      .then(() => {
-        router.replace('/projects');
+      .then((userData) => {
+        // Redirect to onboarding if user has no projects, otherwise to projects
+        const redirectPath = userData?.projectCount === 0 ? '/onboarding' : '/projects';
+        router.replace(redirectPath);
       })
       .catch(() => {
         router.replace('/login?error=auth_failed');
@@ -26,5 +28,22 @@ export default function AuthCallbackPage() {
         <p className="text-muted-foreground">Connexion en cours...</p>
       </div>
     </div>
+  );
+}
+
+export default function AuthCallbackPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex min-h-screen items-center justify-center">
+          <div className="text-center">
+            <div className="mb-4 h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent mx-auto" />
+            <p className="text-muted-foreground">Connexion en cours...</p>
+          </div>
+        </div>
+      }
+    >
+      <AuthCallbackContent />
+    </Suspense>
   );
 }

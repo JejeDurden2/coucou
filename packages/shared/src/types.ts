@@ -22,6 +22,7 @@ export interface User {
   email: string;
   name: string;
   plan: Plan;
+  projectCount: number;
   createdAt: Date;
 }
 
@@ -182,6 +183,58 @@ export const PLAN_LIMITS: Record<Plan, PlanLimits> = {
     promptsPerProject: 50,
     scanFrequency: 'daily',
     retentionDays: 365 * 10, // "unlimited"
+  },
+};
+
+// ============================================
+// Pricing Configuration
+// ============================================
+
+export interface PlanPricing {
+  price: number;
+  period: 'month';
+  description: string;
+  features: string[];
+  isPopular?: boolean;
+}
+
+export const PLAN_PRICING: Record<Plan, PlanPricing> = {
+  [Plan.FREE]: {
+    price: 0,
+    period: 'month',
+    description: 'Pour tester la plateforme',
+    features: [
+      '1 projet',
+      '3 prompts par projet',
+      'Scans manuels',
+      'Historique 30 jours',
+    ],
+  },
+  [Plan.SOLO]: {
+    price: 29,
+    period: 'month',
+    description: 'Pour les entrepreneurs et freelances',
+    features: [
+      '5 projets',
+      '20 prompts par projet',
+      'Scans hebdomadaires automatiques',
+      'Historique 6 mois',
+      'Support email',
+    ],
+  },
+  [Plan.PRO]: {
+    price: 79,
+    period: 'month',
+    description: 'Pour les agences et grandes marques',
+    features: [
+      '15 projets',
+      '50 prompts par projet',
+      'Scans quotidiens automatiques',
+      'Historique illimite',
+      'Support prioritaire',
+      'Export des donnees',
+    ],
+    isPopular: true,
   },
 };
 

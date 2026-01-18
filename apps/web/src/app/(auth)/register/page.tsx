@@ -27,9 +27,10 @@ export default function RegisterPage() {
 
     try {
       await register(email, password, name);
-      router.push('/projects');
+      // New users always go to onboarding for plan selection and first project
+      router.push('/onboarding');
     } catch {
-      setError('Une erreur est survenue. Veuillez réessayer.');
+      setError('Une erreur est survenue. Veuillez reessayer.');
     } finally {
       setIsLoading(false);
     }

@@ -22,6 +22,7 @@ export interface UserResponseDto {
   email: string;
   name: string;
   plan: Plan;
+  projectCount: number;
   createdAt: Date;
 }
 

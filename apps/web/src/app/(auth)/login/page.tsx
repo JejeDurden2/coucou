@@ -24,8 +24,9 @@ export default function LoginPage() {
     setIsLoading(true);
 
     try {
-      await login(email, password);
-      router.push('/projects');
+      const userData = await login(email, password);
+      // Redirect to onboarding if user has no projects, otherwise to projects
+      router.push(userData.projectCount === 0 ? '/onboarding' : '/projects');
     } catch {
       setError('Email ou mot de passe incorrect');
     } finally {

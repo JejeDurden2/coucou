@@ -4,6 +4,7 @@ import { ConfigService } from '@nestjs/config';
 import * as bcrypt from 'bcrypt';
 
 import { Result, UnauthorizedError } from '../../../../common';
+import { PrismaService } from '../../../../prisma';
 import { USER_REPOSITORY, type UserRepository } from '../../domain';
 import type { AuthResponseDto, JwtPayload, LoginDto } from '../dto/auth.dto';
 
@@ -14,6 +15,7 @@ export class LoginUseCase {
     private readonly userRepository: UserRepository,
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
+    private readonly prisma: PrismaService,
   ) {}
 
   async execute(dto: LoginDto): Promise<Result<AuthResponseDto, UnauthorizedError>> {
@@ -48,6 +50,10 @@ export class LoginUseCase {
       expiresIn: this.configService.get('JWT_REFRESH_EXPIRES_IN', '7d'),
     });
 
+    const projectCount = await this.prisma.project.count({
+      where: { userId: user.id },
+    });
+
     return Result.ok({
       accessToken,
       refreshToken,
@@ -56,6 +62,7 @@ export class LoginUseCase {
         email: user.email,
         name: user.name,
         plan: user.plan,
+        projectCount,
         createdAt: user.createdAt,
       },
     });

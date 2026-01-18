@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 
+import { PrismaService } from '../../../../prisma';
 import { USER_REPOSITORY, type UserRepository } from '../../domain';
 import type { AuthResponseDto, JwtPayload } from '../dto/auth.dto';
 import type { GoogleProfile } from '../../presentation/strategies/google.strategy';
@@ -13,6 +14,7 @@ export class GoogleAuthUseCase {
     private readonly userRepository: UserRepository,
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
+    private readonly prisma: PrismaService,
   ) {}
 
   async execute(profile: GoogleProfile): Promise<AuthResponseDto> {
@@ -55,6 +57,10 @@ export class GoogleAuthUseCase {
       expiresIn: this.configService.get('JWT_REFRESH_EXPIRES_IN', '7d'),
     });
 
+    const projectCount = await this.prisma.project.count({
+      where: { userId: user.id },
+    });
+
     return {
       accessToken,
       refreshToken,
@@ -63,6 +69,7 @@ export class GoogleAuthUseCase {
         email: user.email,
         name: user.name,
         plan: user.plan,
+        projectCount,
         createdAt: user.createdAt,
       },
     };
