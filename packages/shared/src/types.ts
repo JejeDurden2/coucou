@@ -204,8 +204,8 @@ export const PLAN_PRICING: Record<Plan, PlanPricing> = {
     period: 'month',
     description: 'Pour tester la plateforme',
     features: [
-      '1 projet',
-      '3 prompts par projet',
+      '1 marque',
+      '3 prompts',
       'Scans manuels',
       'Historique 30 jours',
     ],
@@ -215,8 +215,8 @@ export const PLAN_PRICING: Record<Plan, PlanPricing> = {
     period: 'month',
     description: 'Pour les entrepreneurs et freelances',
     features: [
-      '5 projets',
-      '20 prompts par projet',
+      '5 marques',
+      '20 prompts par marque',
       'Scans hebdomadaires automatiques',
       'Historique 6 mois',
       'Support email',
@@ -227,8 +227,8 @@ export const PLAN_PRICING: Record<Plan, PlanPricing> = {
     period: 'month',
     description: 'Pour les agences et grandes marques',
     features: [
-      '15 projets',
-      '50 prompts par projet',
+      '15 marques',
+      '50 prompts par marque',
       'Scans quotidiens automatiques',
       'Historique illimite',
       'Support prioritaire',

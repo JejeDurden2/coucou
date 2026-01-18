@@ -62,15 +62,15 @@ export default function DashboardLayout({ children }: DashboardLayoutProps): Rea
       <header className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="flex h-14 items-center justify-between px-4 md:px-6">
           <div className="flex items-center gap-6">
-            <Link href="/projects" className="flex items-center" aria-label="Accueil - Liste des projets">
+            <Link href="/projects" className="flex items-center" aria-label="Accueil - Liste des marques">
               <Logo size="sm" />
             </Link>
 
             {hasProjects ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="gap-2 text-sm font-medium" aria-label="Sélectionner un projet">
-                    {currentProject?.name ?? 'Sélectionner un projet'}
+                  <Button variant="ghost" className="gap-2 text-sm font-medium" aria-label="Sélectionner une marque">
+                    {currentProject?.brandName ?? 'Sélectionner une marque'}
                     <ChevronDown className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
                   </Button>
                 </DropdownMenuTrigger>
@@ -83,18 +83,13 @@ export default function DashboardLayout({ children }: DashboardLayoutProps): Rea
                         currentProjectId === project.id && 'bg-accent/10'
                       )}
                     >
-                      <div className="flex flex-col">
-                        <span className="font-medium">{project.name}</span>
-                        <span className="text-xs text-muted-foreground">
-                          {project.brandName}
-                        </span>
-                      </div>
+                      <span className="font-medium">{project.brandName}</span>
                     </DropdownMenuItem>
                   ))}
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={() => router.push('/projects/new')}>
                     <Zap className="mr-2 h-4 w-4" aria-hidden="true" />
-                    Nouveau projet
+                    Nouvelle marque
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>

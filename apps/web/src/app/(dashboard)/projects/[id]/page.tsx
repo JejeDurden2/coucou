@@ -69,9 +69,9 @@ export default function ProjectDashboardPage({ params }: ProjectDashboardPagePro
   if (!project) {
     return (
       <div className="text-center py-12">
-        <p className="text-muted-foreground">Projet non trouvé</p>
+        <p className="text-muted-foreground">Marque non trouvée</p>
         <Button className="mt-4" asChild>
-          <Link href="/projects">Retour aux projets</Link>
+          <Link href="/projects">Retour aux marques</Link>
         </Button>
       </div>
     );
@@ -89,15 +89,16 @@ export default function ProjectDashboardPage({ params }: ProjectDashboardPagePro
 
   return (
     <div className="space-y-6">
-      {/* Header with project info and scan button */}
+      {/* Header with brand info and scan button */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <div className="flex items-center gap-3">
-            <h1 className="text-xl font-semibold">{project.name}</h1>
-            <span className="text-sm text-muted-foreground">
-              {project.brandName}
-              {project.brandVariants.length > 0 && ` · ${project.brandVariants.join(', ')}`}
-            </span>
+            <h1 className="text-xl font-semibold">{project.brandName}</h1>
+            {project.brandVariants.length > 0 && (
+              <span className="text-sm text-muted-foreground">
+                {project.brandVariants.join(', ')}
+              </span>
+            )}
           </div>
           {stats?.lastScanAt ? (
             <p className="text-xs text-muted-foreground mt-1">

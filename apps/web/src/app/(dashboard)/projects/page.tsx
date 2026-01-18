@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Plus, FolderKanban, ChevronRight } from 'lucide-react';
+import { Plus, Tag, ChevronRight } from 'lucide-react';
 
 import { useProjects } from '@/hooks/use-projects';
 import { Button } from '@/components/ui/button';
@@ -14,35 +14,35 @@ export default function ProjectsPage(): React.ReactNode {
 
   const plan = user?.plan ?? Plan.FREE;
   const limits = PLAN_LIMITS[plan];
-  const canCreateProject = (projects?.length ?? 0) < limits.projects;
+  const canCreateBrand = (projects?.length ?? 0) < limits.projects;
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-semibold">Mes projets</h1>
+          <h1 className="text-xl font-semibold">Mes marques</h1>
           <p className="text-sm text-muted-foreground mt-1">
-            {projects?.length ?? 0} / {limits.projects} projet{limits.projects > 1 ? 's' : ''}
+            {projects?.length ?? 0} / {limits.projects} marque{limits.projects > 1 ? 's' : ''}
           </p>
         </div>
-        {canCreateProject ? (
+        {canCreateBrand ? (
           <Button asChild size="sm">
             <Link href="/projects/new">
               <Plus className="mr-2 h-4 w-4" aria-hidden="true" />
-              Nouveau projet
+              Nouvelle marque
             </Link>
           </Button>
         ) : null}
       </div>
 
-      {!canCreateProject ? (
+      {!canCreateBrand ? (
         <div className="rounded-lg border border-amber-500/30 bg-amber-500/5 px-4 py-3">
           <p className="text-sm text-amber-500">
             Limite atteinte.{' '}
             <Link href="/billing" className="underline hover:text-amber-400">
               Passez à un plan supérieur
             </Link>{' '}
-            pour créer plus de projets.
+            pour ajouter plus de marques.
           </p>
         </div>
       ) : null}
@@ -61,15 +61,15 @@ export default function ProjectsPage(): React.ReactNode {
         </div>
       ) : projects?.length === 0 ? (
         <div className="rounded-lg border border-dashed border-border p-12 text-center">
-          <FolderKanban className="mx-auto h-10 w-10 text-muted-foreground" aria-hidden="true" />
-          <h3 className="mt-4 font-medium">Aucun projet</h3>
+          <Tag className="mx-auto h-10 w-10 text-muted-foreground" aria-hidden="true" />
+          <h3 className="mt-4 font-medium">Aucune marque</h3>
           <p className="mt-1 text-sm text-muted-foreground">
-            Créez votre premier projet pour commencer à tracker votre visibilité IA.
+            Ajoutez votre première marque pour commencer à tracker votre visibilité IA.
           </p>
           <Button className="mt-4" asChild size="sm">
             <Link href="/projects/new">
               <Plus className="mr-2 h-4 w-4" aria-hidden="true" />
-              Créer un projet
+              Ajouter une marque
             </Link>
           </Button>
         </div>
@@ -82,13 +82,12 @@ export default function ProjectsPage(): React.ReactNode {
               className="group flex items-center justify-between rounded-lg border border-border bg-card p-4 transition-colors hover:border-primary/50 hover:bg-card/80"
             >
               <div>
-                <h3 className="font-medium">{project.name}</h3>
-                <p className="text-sm text-muted-foreground">
-                  {project.brandName}
-                  {project.brandVariants.length > 0 ? (
-                    <span> · {project.brandVariants.join(', ')}</span>
-                  ) : null}
-                </p>
+                <h3 className="font-medium">{project.brandName}</h3>
+                {project.brandVariants.length > 0 ? (
+                  <p className="text-sm text-muted-foreground">
+                    {project.brandVariants.join(', ')}
+                  </p>
+                ) : null}
               </div>
               <div className="flex items-center gap-4">
                 <span className="text-xs text-muted-foreground">

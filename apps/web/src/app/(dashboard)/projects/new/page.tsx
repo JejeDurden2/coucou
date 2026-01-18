@@ -10,11 +10,10 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 
-export default function NewProjectPage() {
+export default function NewBrandPage() {
   const router = useRouter();
   const createProject = useCreateProject();
 
-  const [name, setName] = useState('');
   const [brandName, setBrandName] = useState('');
   const [domain, setDomain] = useState('');
   const [variantInput, setVariantInput] = useState('');
@@ -37,7 +36,7 @@ export default function NewProjectPage() {
 
     try {
       const project = await createProject.mutateAsync({
-        name,
+        name: brandName,
         brandName,
         brandVariants,
         domain: domain || undefined,
@@ -51,13 +50,13 @@ export default function NewProjectPage() {
   return (
     <div className="max-w-2xl mx-auto space-y-6">
       <div className="flex items-center gap-4">
-        <Button variant="ghost" size="icon" asChild aria-label="Retour aux projets">
+        <Button variant="ghost" size="icon" asChild aria-label="Retour aux marques">
           <Link href="/projects">
             <ArrowLeft className="h-5 w-5" aria-hidden="true" />
           </Link>
         </Button>
         <div>
-          <h1 className="text-2xl font-bold">Nouveau projet</h1>
+          <h1 className="text-2xl font-bold">Nouvelle marque</h1>
           <p className="text-muted-foreground">
             Configurez le tracking de visibilité pour votre marque
           </p>
@@ -66,31 +65,13 @@ export default function NewProjectPage() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Informations du projet</CardTitle>
+          <CardTitle>Votre marque</CardTitle>
           <CardDescription>
-            Ces informations seront utilisées pour détecter les mentions de votre
-            marque dans les réponses IA.
+            Renseignez le nom de votre marque et ses variantes pour un tracking précis.
           </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="space-y-2">
-              <label htmlFor="name" className="text-sm font-medium">
-                Nom du projet
-              </label>
-              <Input
-                id="name"
-                placeholder="Ex: Ma Boutique"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                required
-                autoComplete="off"
-              />
-              <p className="text-xs text-muted-foreground">
-                Pour vous organiser - non utilisé dans les recherches
-              </p>
-            </div>
-
             <div className="space-y-2">
               <label htmlFor="brandName" className="text-sm font-medium">
                 Nom de la marque
@@ -110,7 +91,7 @@ export default function NewProjectPage() {
 
             <div className="space-y-2">
               <label htmlFor="variants" className="text-sm font-medium">
-                Variantes de la marque
+                Variantes (optionnel)
               </label>
               <div className="flex gap-2">
                 <Input
@@ -141,7 +122,7 @@ export default function NewProjectPage() {
                         className="ml-1 hover:text-destructive"
                         aria-label={`Supprimer ${variant}`}
                       >
-                        <X className="h-3 w-3" aria-hidden="true" />
+                        <X className="size-3" aria-hidden="true" />
                       </button>
                     </Badge>
                   ))}
@@ -175,7 +156,7 @@ export default function NewProjectPage() {
                 className="flex-1"
                 disabled={createProject.isPending}
               >
-                {createProject.isPending ? 'Création…' : 'Créer le projet'}
+                {createProject.isPending ? 'Création…' : 'Ajouter la marque'}
               </Button>
               <Button type="button" variant="outline" asChild>
                 <Link href="/projects">Annuler</Link>

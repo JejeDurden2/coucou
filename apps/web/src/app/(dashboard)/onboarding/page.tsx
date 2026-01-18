@@ -20,7 +20,7 @@ import {
 } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 
-type OnboardingStep = 'plan' | 'project';
+type OnboardingStep = 'plan' | 'brand';
 
 export default function OnboardingPage(): React.ReactNode {
   const router = useRouter();
@@ -30,7 +30,7 @@ export default function OnboardingPage(): React.ReactNode {
   // Determine initial step from URL params
   const stepParam = searchParams.get('step');
   const initialStep: OnboardingStep =
-    stepParam === 'project' ? 'project' : 'plan';
+    stepParam === 'brand' ? 'brand' : 'plan';
 
   const [step, setStep] = useState<OnboardingStep>(initialStep);
   const [selectedPlan, setSelectedPlan] = useState<Plan | null>(null);
@@ -39,16 +39,15 @@ export default function OnboardingPage(): React.ReactNode {
   const createCheckout = useCreateCheckout();
   const createProject = useCreateProject();
 
-  // Project form state
-  const [name, setName] = useState('');
+  // Brand form state
   const [brandName, setBrandName] = useState('');
   const [domain, setDomain] = useState('');
   const [variantInput, setVariantInput] = useState('');
   const [brandVariants, setBrandVariants] = useState<string[]>([]);
 
-  // If returning from Stripe checkout, refresh user and go to project step
+  // If returning from Stripe checkout, refresh user and go to brand step
   useEffect(() => {
-    if (stepParam === 'project') {
+    if (stepParam === 'brand') {
       loadUser();
     }
   }, [stepParam, loadUser]);
@@ -58,15 +57,15 @@ export default function OnboardingPage(): React.ReactNode {
     setLoadingPlan(plan);
 
     if (plan === Plan.FREE) {
-      // Skip Stripe, go directly to project creation
-      setStep('project');
+      // Skip Stripe, go directly to brand creation
+      setStep('brand');
       setLoadingPlan(null);
     } else {
       // Redirect to Stripe checkout
       const baseUrl = window.location.origin;
       createCheckout.mutate({
         plan,
-        successUrl: `${baseUrl}/onboarding?step=project`,
+        successUrl: `${baseUrl}/onboarding?step=brand`,
         cancelUrl: `${baseUrl}/onboarding`,
       });
     }
@@ -84,12 +83,12 @@ export default function OnboardingPage(): React.ReactNode {
     setBrandVariants(brandVariants.filter((v) => v !== variant));
   };
 
-  const handleCreateProject = async (e: React.FormEvent) => {
+  const handleCreateBrand = async (e: React.FormEvent) => {
     e.preventDefault();
 
     try {
       const project = await createProject.mutateAsync({
-        name,
+        name: brandName,
         brandName,
         brandVariants,
         domain: domain || undefined,
@@ -132,42 +131,24 @@ export default function OnboardingPage(): React.ReactNode {
           </div>
         )}
 
-        {step === 'project' && (
+        {step === 'brand' && (
           <div className="max-w-2xl mx-auto space-y-6">
             <div className="text-center space-y-2">
-              <h1 className="text-3xl font-bold text-balance">Creez votre premier projet</h1>
+              <h1 className="text-3xl font-bold text-balance">Ajoutez votre marque</h1>
               <p className="text-muted-foreground text-pretty">
-                Configurez le tracking de visibilite pour votre marque
+                Ces informations seront utilisees pour detecter les mentions dans les reponses IA
               </p>
             </div>
 
             <Card>
               <CardHeader>
-                <CardTitle>Informations du projet</CardTitle>
+                <CardTitle>Votre marque</CardTitle>
                 <CardDescription>
-                  Ces informations seront utilisees pour detecter les mentions
-                  de votre marque dans les reponses IA.
+                  Renseignez le nom de votre marque et ses variantes pour un tracking precis.
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <form onSubmit={handleCreateProject} className="space-y-6">
-                  <div className="space-y-2">
-                    <label htmlFor="name" className="text-sm font-medium">
-                      Nom du projet
-                    </label>
-                    <Input
-                      id="name"
-                      placeholder="Ex: Ma Boutique"
-                      value={name}
-                      onChange={(e) => setName(e.target.value)}
-                      required
-                      autoComplete="off"
-                    />
-                    <p className="text-xs text-muted-foreground">
-                      Pour vous organiser - non utilise dans les recherches
-                    </p>
-                  </div>
-
+                <form onSubmit={handleCreateBrand} className="space-y-6">
                   <div className="space-y-2">
                     <label htmlFor="brandName" className="text-sm font-medium">
                       Nom de la marque
@@ -258,7 +239,7 @@ export default function OnboardingPage(): React.ReactNode {
                   >
                     {createProject.isPending
                       ? 'Creation...'
-                      : 'Creer le projet et commencer'}
+                      : 'Commencer le tracking'}
                   </Button>
                 </form>
               </CardContent>
