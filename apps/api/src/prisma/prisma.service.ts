@@ -13,8 +13,12 @@ export class PrismaService
 
   constructor(private readonly configService: ConfigService) {
     const connectionString = configService.get<string>('DATABASE_URL');
+    const isProduction = configService.get('NODE_ENV') === 'production';
 
-    const pool = new pg.Pool({ connectionString });
+    const pool = new pg.Pool({
+      connectionString,
+      ssl: isProduction ? { rejectUnauthorized: false } : undefined,
+    });
     const adapter = new PrismaPg(pool);
 
     super({ adapter });
