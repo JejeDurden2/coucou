@@ -17,6 +17,8 @@ export interface ScanResponseDto {
   results: LLMResultDto[];
   isCitedByAny: boolean;
   citationRate: number;
+  wasSanitized?: boolean;
+  skippedReason?: string;
 }
 
 export interface ScanHistoryDto {

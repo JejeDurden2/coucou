@@ -7,6 +7,8 @@ import { PROMPT_REPOSITORY, type PromptRepository } from '../../../prompt';
 import {
   CompetitorExtractionService,
   MentionDetectionService,
+  PromptSanitizerService,
+  ThreatLevel,
   SCAN_REPOSITORY,
   type LLMResult,
   type ScanRepository,
@@ -59,7 +61,35 @@ export class ExecuteProjectScanUseCase {
     const scanResults: ScanResponseDto[] = [];
 
     for (const prompt of prompts) {
-      const llmResponses = await this.llmService.queryAll(prompt.content);
+      // Analyze prompt for potential injection attacks
+      const analysis = PromptSanitizerService.analyze(prompt.content);
+
+      // Block HIGH threat prompts entirely
+      if (analysis.level === ThreatLevel.HIGH) {
+        this.logger.warn(
+          `Blocked HIGH threat prompt for project ${projectId}: ${analysis.matchedPatterns.join(', ')}`,
+        );
+        scanResults.push({
+          id: '',
+          promptId: prompt.id,
+          executedAt: new Date(),
+          results: [],
+          isCitedByAny: false,
+          citationRate: 0,
+          skippedReason: `Prompt bloqué: contenu suspect détecté (${analysis.matchedPatterns.join(', ')})`,
+        });
+        continue;
+      }
+
+      // Log LOW threat prompts but continue with sanitized version
+      const wasSanitized = analysis.level === ThreatLevel.LOW;
+      if (wasSanitized) {
+        this.logger.log(
+          `Sanitized LOW threat prompt for project ${projectId}: ${analysis.matchedPatterns.join(', ')}`,
+        );
+      }
+
+      const llmResponses = await this.llmService.queryAll(analysis.sanitized);
 
       const results: LLMResult[] = [];
       for (const [provider, response] of llmResponses) {
@@ -92,6 +122,7 @@ export class ExecuteProjectScanUseCase {
         })),
         isCitedByAny: scan.isCitedByAny,
         citationRate: scan.citationRate,
+        wasSanitized: wasSanitized || undefined,
       });
     }
 

@@ -3,7 +3,6 @@ import { ConfigService } from '@nestjs/config';
 import { LLMProvider } from '@prisma/client';
 
 import type { LLMPort, LLMResponse } from '../../application/ports/llm.port';
-import { PromptSanitizerService } from '../../domain';
 
 const SYSTEM_PROMPT = `Tu es un assistant qui aide les utilisateurs à trouver des produits, services ou marques.
 
@@ -38,13 +37,7 @@ export class AnthropicLLMAdapter implements LLMPort {
   async query(prompt: string): Promise<LLMResponse> {
     const startTime = Date.now();
 
-    // Sanitize user prompt to prevent injection attacks
-    const sanitizedPrompt = PromptSanitizerService.sanitize(prompt);
-
-    if (PromptSanitizerService.containsDangerousContent(prompt)) {
-      this.logger.warn(`Potentially dangerous prompt detected: ${prompt.slice(0, 100)}...`);
-    }
-
+    // Note: Prompt sanitization is handled at the use-case level
     try {
       const response = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
@@ -57,7 +50,7 @@ export class AnthropicLLMAdapter implements LLMPort {
           model: this.model,
           max_tokens: 1000,
           system: SYSTEM_PROMPT,
-          messages: [{ role: 'user', content: sanitizedPrompt }],
+          messages: [{ role: 'user', content: prompt }],
         }),
       });
 
