@@ -143,13 +143,24 @@ export class GetDashboardStatsUseCase {
       (s) => s.executedAt >= fourteenDaysAgo && s.executedAt < sevenDaysAgo,
     );
 
-    const currentRate = this.calculateCitationRate(currentPeriodScans);
-    const previousRate = this.calculateCitationRate(previousPeriodScans);
+    // Calculate average rank for each period
+    const currentResults = currentPeriodScans.flatMap((s) => s.results);
+    const previousResults = previousPeriodScans.flatMap((s) => s.results);
+
+    const currentRank = this.calculateAverageRank(currentResults);
+    const previousRank = this.calculateAverageRank(previousResults);
+
+    // Delta: current - previous
+    // Positive delta = rank went up (worse), negative delta = rank went down (better)
+    let delta = 0;
+    if (currentRank !== null && previousRank !== null) {
+      delta = Math.round((currentRank - previousRank) * 10) / 10;
+    }
 
     return {
-      current: Math.round(currentRate * 10) / 10,
-      previous: Math.round(previousRate * 10) / 10,
-      delta: Math.round((currentRate - previousRate) * 10) / 10,
+      current: currentRank ?? 0,
+      previous: previousRank ?? 0,
+      delta,
     };
   }
 
