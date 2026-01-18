@@ -143,9 +143,9 @@ export class GetDashboardStatsUseCase {
     const competitorCounts = new Map<string, number>();
 
     for (const result of results) {
-      for (const competitor of result.competitors) {
-        const count = competitorCounts.get(competitor) ?? 0;
-        competitorCounts.set(competitor, count + 1);
+      for (const mention of result.competitorMentions) {
+        const count = competitorCounts.get(mention.name) ?? 0;
+        competitorCounts.set(mention.name, count + 1);
       }
     }
 
@@ -170,10 +170,10 @@ export class GetDashboardStatsUseCase {
       anthropicPositions: number[];
       openaiMentions: number;
       anthropicMentions: number;
-      contexts: string[];
+      allKeywords: string[];
       firstSeenAt: Date;
       lastSeenAt: Date;
-      lastContext: string | null;
+      lastKeywords: string[];
       currentPeriodMentions: number;
       previousPeriodMentions: number;
     }
@@ -184,8 +184,8 @@ export class GetDashboardStatsUseCase {
       name: string,
       scanDate: Date,
       provider: LLMProvider,
-      position: number | null,
-      context: string | null,
+      position: number,
+      keywords: string[],
       isCurrentPeriod: boolean,
       isPreviousPeriod: boolean,
     ): void => {
@@ -193,24 +193,19 @@ export class GetDashboardStatsUseCase {
 
       if (existing) {
         existing.totalMentions++;
-        if (position !== null) {
-          existing.positions.push(position);
-          if (provider === LLMProvider.OPENAI) {
-            existing.openaiPositions.push(position);
-          } else {
-            existing.anthropicPositions.push(position);
-          }
-        }
+        existing.positions.push(position);
         if (provider === LLMProvider.OPENAI) {
+          existing.openaiPositions.push(position);
           existing.openaiMentions++;
         } else {
+          existing.anthropicPositions.push(position);
           existing.anthropicMentions++;
         }
-        if (context) existing.contexts.push(context);
+        existing.allKeywords.push(...keywords);
         if (scanDate < existing.firstSeenAt) existing.firstSeenAt = scanDate;
         if (scanDate > existing.lastSeenAt) {
           existing.lastSeenAt = scanDate;
-          if (context !== null) existing.lastContext = context;
+          existing.lastKeywords = keywords;
         }
         if (isCurrentPeriod) existing.currentPeriodMentions++;
         if (isPreviousPeriod) existing.previousPeriodMentions++;
@@ -218,16 +213,15 @@ export class GetDashboardStatsUseCase {
         aggregations.set(name, {
           name,
           totalMentions: 1,
-          positions: position !== null ? [position] : [],
-          openaiPositions: position !== null && provider === LLMProvider.OPENAI ? [position] : [],
-          anthropicPositions:
-            position !== null && provider === LLMProvider.ANTHROPIC ? [position] : [],
+          positions: [position],
+          openaiPositions: provider === LLMProvider.OPENAI ? [position] : [],
+          anthropicPositions: provider === LLMProvider.ANTHROPIC ? [position] : [],
           openaiMentions: provider === LLMProvider.OPENAI ? 1 : 0,
           anthropicMentions: provider === LLMProvider.ANTHROPIC ? 1 : 0,
-          contexts: context ? [context] : [],
+          allKeywords: [...keywords],
           firstSeenAt: scanDate,
           lastSeenAt: scanDate,
-          lastContext: context,
+          lastKeywords: keywords,
           currentPeriodMentions: isCurrentPeriod ? 1 : 0,
           previousPeriodMentions: isPreviousPeriod ? 1 : 0,
         });
@@ -239,28 +233,13 @@ export class GetDashboardStatsUseCase {
       const isPreviousPeriod = scan.executedAt >= fourteenDaysAgo && scan.executedAt < sevenDaysAgo;
 
       for (const result of scan.results) {
-        const mentions = result.competitorMentions ?? [];
-        const fallbackCompetitors = mentions.length === 0 ? result.competitors : [];
-
-        for (const mention of mentions) {
+        for (const mention of result.competitorMentions) {
           updateAggregation(
             mention.name,
             scan.executedAt,
             result.provider,
             mention.position,
-            mention.context || null,
-            isCurrentPeriod,
-            isPreviousPeriod,
-          );
-        }
-
-        for (const competitor of fallbackCompetitors) {
-          updateAggregation(
-            competitor,
-            scan.executedAt,
-            result.provider,
-            null,
-            null,
+            mention.keywords,
             isCurrentPeriod,
             isPreviousPeriod,
           );
@@ -304,7 +283,15 @@ export class GetDashboardStatsUseCase {
           agg.previousPeriodMentions,
         );
 
-        const keywords = this.extractKeywords(agg.contexts, agg.name);
+        // Aggregate keywords by frequency
+        const keywordCounts = new Map<string, number>();
+        for (const kw of agg.allKeywords) {
+          keywordCounts.set(kw, (keywordCounts.get(kw) ?? 0) + 1);
+        }
+        const keywords = Array.from(keywordCounts.entries())
+          .sort((a, b) => b[1] - a[1])
+          .slice(0, 3)
+          .map(([kw]) => kw);
 
         return {
           name: agg.name,
@@ -319,64 +306,11 @@ export class GetDashboardStatsUseCase {
           keywords,
           firstSeenAt: agg.firstSeenAt,
           lastSeenAt: agg.lastSeenAt,
-          lastContext: agg.lastContext,
+          lastContext: agg.lastKeywords.join(', ') || null,
         };
       })
       .sort((a, b) => b.totalMentions - a.totalMentions)
       .slice(0, 10);
-  }
-
-  private extractKeywords(contexts: string[], _competitorName: string): string[] {
-    if (contexts.length === 0) return [];
-
-    // Common descriptive words to look for
-    const descriptivePatterns = [
-      /leader/i,
-      /premium/i,
-      /luxe/i,
-      /qualit[ée]/i,
-      /innovant/i,
-      /abordable/i,
-      /populaire/i,
-      /reconnu/i,
-      /expert/i,
-      /sp[ée]cialis[ée]/i,
-      /traditionnel/i,
-      /moderne/i,
-      /artisan/i,
-      /bio/i,
-      /durable/i,
-      /local/i,
-      /international/i,
-      /professionnel/i,
-      /fiable/i,
-      /rapide/i,
-      /efficace/i,
-      /simple/i,
-      /complet/i,
-      /original/i,
-      /unique/i,
-    ];
-
-    const keywordCounts = new Map<string, number>();
-
-    for (const context of contexts) {
-      const lowerContext = context.toLowerCase();
-
-      for (const pattern of descriptivePatterns) {
-        const match = lowerContext.match(pattern);
-        if (match) {
-          const keyword = match[0].toLowerCase();
-          keywordCounts.set(keyword, (keywordCounts.get(keyword) ?? 0) + 1);
-        }
-      }
-    }
-
-    // Return top 2 keywords by frequency
-    return Array.from(keywordCounts.entries())
-      .sort((a, b) => b[1] - a[1])
-      .slice(0, 2)
-      .map(([keyword]) => keyword);
   }
 
   private calculateCompetitorTrend(

@@ -1,13 +1,21 @@
 import type { LLMProvider } from '@prisma/client';
 
+export interface CompetitorDto {
+  name: string;
+  position: number;
+  keywords: string[];
+}
+
 export interface LLMResultDto {
   provider: LLMProvider;
   model: string;
   isCited: boolean;
-  citationContext: string | null;
   position: number | null;
-  competitors: string[];
+  brandKeywords: string[];
+  queryKeywords: string[];
+  competitors: CompetitorDto[];
   latencyMs: number;
+  parseSuccess: boolean;
 }
 
 export interface ProviderErrorDto {

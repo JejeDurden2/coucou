@@ -2,8 +2,8 @@ import type { LLMProvider } from '@prisma/client';
 
 export interface CompetitorMentionData {
   name: string;
-  position: number | null;
-  context: string;
+  position: number;
+  keywords: string[];
 }
 
 export interface LLMResult {
@@ -11,11 +11,16 @@ export interface LLMResult {
   model: string;
   rawResponse: string;
   isCited: boolean;
-  citationContext: string | null;
   position: number | null;
-  competitors: string[];
-  competitorMentions?: CompetitorMentionData[];
+  /** Brand's keywords if found in ranking */
+  brandKeywords: string[];
+  /** Keywords extracted from user query */
+  queryKeywords: string[];
+  /** Competitors with position and keywords */
+  competitorMentions: CompetitorMentionData[];
   latencyMs: number;
+  /** Whether JSON parsing succeeded */
+  parseSuccess: boolean;
 }
 
 export interface ScanProps {

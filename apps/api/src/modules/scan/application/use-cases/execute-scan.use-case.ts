@@ -6,8 +6,7 @@ import { PROJECT_REPOSITORY, type ProjectRepository } from '../../../project';
 import { PROMPT_REPOSITORY, type PromptRepository } from '../../../prompt';
 import {
   AllProvidersFailedError,
-  CompetitorExtractionService,
-  MentionDetectionService,
+  GEOResponseParserService,
   SCAN_REPOSITORY,
   type LLMResult,
   type ScanRepository,
@@ -100,10 +99,12 @@ export class ExecuteScanUseCase {
         provider: r.provider,
         model: r.model,
         isCited: r.isCited,
-        citationContext: r.citationContext,
         position: r.position,
-        competitors: r.competitors,
+        brandKeywords: r.brandKeywords,
+        queryKeywords: r.queryKeywords,
+        competitors: r.competitorMentions,
         latencyMs: r.latencyMs,
+        parseSuccess: r.parseSuccess,
       })),
       isCitedByAny: scan.isCitedByAny,
       citationRate: scan.citationRate,
@@ -120,27 +121,41 @@ export class ExecuteScanUseCase {
     brandName: string,
     brandVariants: string[],
   ): LLMResult {
-    const mentionResult = MentionDetectionService.detectMention(
-      response.content,
+    const parseResult = GEOResponseParserService.parse(response.content);
+
+    if (!parseResult.success || !parseResult.response) {
+      this.logger.warn(`Failed to parse GEO response from ${provider}: ${parseResult.error}`);
+      return {
+        provider,
+        model: response.model,
+        rawResponse: response.content,
+        isCited: false,
+        position: null,
+        brandKeywords: [],
+        queryKeywords: [],
+        competitorMentions: [],
+        latencyMs: response.latencyMs,
+        parseSuccess: false,
+      };
+    }
+
+    const insights = GEOResponseParserService.extractInsights(
+      parseResult.response,
       brandName,
       brandVariants,
-    );
-
-    const competitorMentions = CompetitorExtractionService.extractCompetitorMentions(
-      response.content,
-      brandName,
     );
 
     return {
       provider,
       model: response.model,
       rawResponse: response.content,
-      isCited: mentionResult.isCited,
-      citationContext: mentionResult.citationContext,
-      position: mentionResult.position,
-      competitors: competitorMentions.map((m) => m.name),
-      competitorMentions,
+      isCited: insights.position !== null,
+      position: insights.position,
+      brandKeywords: insights.brandKeywords,
+      queryKeywords: insights.queryKeywords,
+      competitorMentions: insights.competitors,
       latencyMs: response.latencyMs,
+      parseSuccess: true,
     };
   }
 }

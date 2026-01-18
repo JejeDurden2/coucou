@@ -1,9 +1,7 @@
 export { Scan } from './entities/scan.entity';
-export type { ScanProps, LLMResult } from './entities/scan.entity';
-export { MentionDetectionService } from './services/mention-detection.service';
-export type { MentionResult } from './services/mention-detection.service';
-export { CompetitorExtractionService } from './services/competitor-extraction.service';
-export type { CompetitorMention } from './services/competitor-extraction.service';
+export type { ScanProps, LLMResult, CompetitorMentionData } from './entities/scan.entity';
+export { GEOResponseParserService } from './services/geo-response-parser.service';
+export type { GEOResponse, GEOInsights, ParseResult } from './services/geo-response-parser.service';
 export { PromptSanitizerService, ThreatLevel } from './services/prompt-sanitizer.service';
 export type { PromptAnalysisResult } from './services/prompt-sanitizer.service';
 export { SCAN_REPOSITORY } from './repositories/scan.repository';

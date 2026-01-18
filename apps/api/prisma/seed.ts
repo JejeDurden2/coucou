@@ -103,6 +103,9 @@ async function main(): Promise<void> {
       const isCitedOpenAI = Math.random() > 0.4;
       const isCitedAnthropic = Math.random() > 0.3;
 
+      const openaiPosition = isCitedOpenAI ? Math.floor(Math.random() * 3) + 1 : null;
+      const anthropicPosition = isCitedAnthropic ? 1 : null;
+
       await prisma.scan.create({
         data: {
           promptId: prompt.id,
@@ -111,26 +114,60 @@ async function main(): Promise<void> {
             {
               provider: LLMProvider.OPENAI,
               model: 'gpt-4o-mini',
-              rawResponse: `Voici quelques excellents cafés de spécialité en France : ${isCitedOpenAI ? 'Café Lomi à Paris est reconnu pour sa torréfaction artisanale.' : 'Terres de Café, Coutume Café et Belleville Brûlerie.'} Ces torréfacteurs proposent des grains de haute qualité.`,
+              rawResponse: JSON.stringify({
+                r: [
+                  ...(isCitedOpenAI && openaiPosition === 1
+                    ? [{ n: 'Café Lomi', k: ['artisanal', 'parisien', 'qualité'] }]
+                    : [{ n: 'Terres de Café', k: ['pionnier', 'spécialité', 'premium'] }]),
+                  ...(isCitedOpenAI && openaiPosition === 2
+                    ? [{ n: 'Café Lomi', k: ['artisanal', 'parisien', 'qualité'] }]
+                    : [{ n: 'Coutume Café', k: ['branché', 'tendance', 'qualité'] }]),
+                  ...(isCitedOpenAI && openaiPosition === 3
+                    ? [{ n: 'Café Lomi', k: ['artisanal', 'parisien', 'qualité'] }]
+                    : [{ n: 'Belleville Brûlerie', k: ['local', 'hipster', 'bio'] }]),
+                  { n: 'La Caféothèque', k: ['historique', 'référence', 'formation'] },
+                  { n: 'Hexagone Café', k: ['moderne', 'éthique', 'traçable'] },
+                ],
+                q: ['café', 'spécialité'],
+              }),
               isCited: isCitedOpenAI,
-              citationContext: isCitedOpenAI
-                ? '...Café Lomi à Paris est reconnu pour sa torréfaction...'
-                : null,
-              position: isCitedOpenAI ? Math.floor(Math.random() * 3) + 1 : null,
-              competitors: ['Terres de Café', 'Coutume Café', 'Belleville Brûlerie'],
+              position: openaiPosition,
+              brandKeywords: isCitedOpenAI ? ['artisanal', 'parisien', 'qualité'] : [],
+              queryKeywords: ['café', 'spécialité'],
+              competitorMentions: [
+                { name: 'Terres de Café', position: 1, keywords: ['pionnier', 'spécialité', 'premium'] },
+                { name: 'Coutume Café', position: 2, keywords: ['branché', 'tendance', 'qualité'] },
+                { name: 'Belleville Brûlerie', position: 3, keywords: ['local', 'hipster', 'bio'] },
+              ].filter((c) => c.name !== 'Café Lomi'),
               latencyMs: Math.floor(Math.random() * 1000) + 500,
+              parseSuccess: true,
             },
             {
               provider: LLMProvider.ANTHROPIC,
               model: 'claude-3-5-haiku-latest',
-              rawResponse: `Pour du café de spécialité en France, je recommande : ${isCitedAnthropic ? '1. Café Lomi - excellent torréfacteur parisien' : '1. Terres de Café - pionnier du café de spécialité'}. Vous pouvez également essayer Coutume Café.`,
+              rawResponse: JSON.stringify({
+                r: [
+                  ...(isCitedAnthropic
+                    ? [{ n: 'Café Lomi', k: ['torréfacteur', 'artisanal', 'paris'] }]
+                    : [{ n: 'Terres de Café', k: ['pionnier', 'expert', 'premium'] }]),
+                  { n: 'Coutume Café', k: ['tendance', 'design', 'qualité'] },
+                  { n: 'La Brûlerie de Belleville', k: ['authentique', 'local', 'bio'] },
+                  { n: 'Café Kitsuné', k: ['lifestyle', 'japonais', 'branché'] },
+                  { n: 'Boot Café', k: ['compact', 'expert', 'quartier'] },
+                ],
+                q: ['café', 'france'],
+              }),
               isCited: isCitedAnthropic,
-              citationContext: isCitedAnthropic
-                ? '...1. Café Lomi - excellent torréfacteur parisien...'
-                : null,
-              position: isCitedAnthropic ? 1 : null,
-              competitors: ['Terres de Café', 'Coutume Café', 'La Brûlerie de Belleville'],
+              position: anthropicPosition,
+              brandKeywords: isCitedAnthropic ? ['torréfacteur', 'artisanal', 'paris'] : [],
+              queryKeywords: ['café', 'france'],
+              competitorMentions: [
+                { name: 'Coutume Café', position: 2, keywords: ['tendance', 'design', 'qualité'] },
+                { name: 'La Brûlerie de Belleville', position: 3, keywords: ['authentique', 'local', 'bio'] },
+                { name: 'Café Kitsuné', position: 4, keywords: ['lifestyle', 'japonais', 'branché'] },
+              ],
               latencyMs: Math.floor(Math.random() * 800) + 400,
+              parseSuccess: true,
             },
           ],
         },

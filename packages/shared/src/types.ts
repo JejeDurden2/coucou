@@ -90,14 +90,22 @@ export interface UpdatePromptInput {
 // Scan Types
 // ============================================
 
+export interface CompetitorMention {
+  name: string;
+  position: number;
+  keywords: string[];
+}
+
 export interface LLMResult {
   provider: LLMProvider;
   model: string;
   isCited: boolean;
-  citationContext: string | null;
   position: number | null;
-  competitors: string[];
+  brandKeywords: string[];
+  queryKeywords: string[];
+  competitors: CompetitorMention[];
   latencyMs: number;
+  parseSuccess: boolean;
 }
 
 export interface ProviderError {
