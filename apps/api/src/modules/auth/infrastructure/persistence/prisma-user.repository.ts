@@ -5,6 +5,7 @@ import { PrismaService } from '../../../../prisma';
 import { User } from '../../domain/entities/user.entity';
 import type {
   CreateUserData,
+  CreateOAuthUserData,
   UserRepository,
 } from '../../domain/repositories/user.repository';
 
@@ -22,12 +23,29 @@ export class PrismaUserRepository implements UserRepository {
     return user ? User.fromPersistence(user) : null;
   }
 
+  async findByGoogleId(googleId: string): Promise<User | null> {
+    const user = await this.prisma.user.findUnique({ where: { googleId } });
+    return user ? User.fromPersistence(user) : null;
+  }
+
   async create(data: CreateUserData): Promise<User> {
     const user = await this.prisma.user.create({
       data: {
         email: data.email,
         name: data.name,
         password: data.password,
+      },
+    });
+    return User.fromPersistence(user);
+  }
+
+  async createFromOAuth(data: CreateOAuthUserData): Promise<User> {
+    const user = await this.prisma.user.create({
+      data: {
+        email: data.email,
+        name: data.name,
+        googleId: data.googleId,
+        avatarUrl: data.avatarUrl,
       },
     });
     return User.fromPersistence(user);

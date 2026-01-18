@@ -7,6 +7,7 @@ import { useAuth } from '@/lib/auth-context';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Logo } from '@/components/ui/logo';
+import { GoogleButton } from '@/components/ui/google-button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 export default function RegisterPage() {
@@ -119,6 +120,17 @@ export default function RegisterPage() {
           <Button type="submit" className="w-full" disabled={isLoading || !acceptTerms}>
             {isLoading ? 'Création…' : 'Créer mon compte'}
           </Button>
+
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center">
+              <span className="w-full border-t" />
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="bg-card px-2 text-muted-foreground">ou</span>
+            </div>
+          </div>
+
+          <GoogleButton label="S'inscrire avec Google" />
         </form>
         <p className="mt-4 text-center text-sm text-muted-foreground">
           Déjà un compte ?{' '}

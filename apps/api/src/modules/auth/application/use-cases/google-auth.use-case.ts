@@ -1,14 +1,13 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import * as bcrypt from 'bcrypt';
 
-import { Result, UnauthorizedError } from '../../../../common';
 import { USER_REPOSITORY, type UserRepository } from '../../domain';
-import type { AuthResponseDto, JwtPayload, LoginDto } from '../dto/auth.dto';
+import type { AuthResponseDto, JwtPayload } from '../dto/auth.dto';
+import type { GoogleProfile } from '../../presentation/strategies/google.strategy';
 
 @Injectable()
-export class LoginUseCase {
+export class GoogleAuthUseCase {
   constructor(
     @Inject(USER_REPOSITORY)
     private readonly userRepository: UserRepository,
@@ -16,22 +15,25 @@ export class LoginUseCase {
     private readonly configService: ConfigService,
   ) {}
 
-  async execute(dto: LoginDto): Promise<Result<AuthResponseDto, UnauthorizedError>> {
-    const user = await this.userRepository.findByEmail(dto.email);
+  async execute(profile: GoogleProfile): Promise<AuthResponseDto> {
+    // Check if user exists by Google ID
+    let user = await this.userRepository.findByGoogleId(profile.id);
 
     if (!user) {
-      return Result.err(new UnauthorizedError('Invalid credentials'));
-    }
+      // Check if user exists by email (may have registered with email/password before)
+      user = await this.userRepository.findByEmail(profile.email);
 
-    // User registered via OAuth (no password)
-    if (!user.password) {
-      return Result.err(new UnauthorizedError('Invalid credentials'));
-    }
-
-    const isPasswordValid = await bcrypt.compare(dto.password, user.password);
-
-    if (!isPasswordValid) {
-      return Result.err(new UnauthorizedError('Invalid credentials'));
+      if (!user) {
+        // Create new user from OAuth
+        user = await this.userRepository.createFromOAuth({
+          email: profile.email,
+          name: profile.name,
+          googleId: profile.id,
+          avatarUrl: profile.picture,
+        });
+      }
+      // Note: If user exists with email but no googleId, they need to link accounts manually
+      // For MVP, we just create a new session for the existing user
     }
 
     const payload: JwtPayload = {
@@ -48,7 +50,7 @@ export class LoginUseCase {
       expiresIn: this.configService.get('JWT_REFRESH_EXPIRES_IN', '7d'),
     });
 
-    return Result.ok({
+    return {
       accessToken,
       refreshToken,
       user: {
@@ -58,6 +60,6 @@ export class LoginUseCase {
         plan: user.plan,
         createdAt: user.createdAt,
       },
-    });
+    };
   }
 }

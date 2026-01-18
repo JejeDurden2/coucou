@@ -4,7 +4,9 @@ export interface UserProps {
   id: string;
   email: string;
   name: string;
-  password: string;
+  password: string | null;
+  googleId: string | null;
+  avatarUrl: string | null;
   plan: Plan;
   stripeCustomerId: string | null;
   createdAt: Date;
@@ -34,8 +36,16 @@ export class User {
     return this.props.name;
   }
 
-  get password(): string {
+  get password(): string | null {
     return this.props.password;
+  }
+
+  get googleId(): string | null {
+    return this.props.googleId;
+  }
+
+  get avatarUrl(): string | null {
+    return this.props.avatarUrl;
   }
 
   get plan(): Plan {
@@ -59,6 +69,8 @@ export class User {
       id: this.props.id,
       email: this.props.email,
       name: this.props.name,
+      googleId: this.props.googleId,
+      avatarUrl: this.props.avatarUrl,
       plan: this.props.plan,
       stripeCustomerId: this.props.stripeCustomerId,
       createdAt: this.props.createdAt,

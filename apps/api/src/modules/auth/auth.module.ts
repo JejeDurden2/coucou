@@ -9,6 +9,7 @@ import {
   DeleteAccountUseCase,
   ExportDataUseCase,
   GetMeUseCase,
+  GoogleAuthUseCase,
   LoginUseCase,
   RefreshTokenUseCase,
   RegisterUseCase,
@@ -16,7 +17,9 @@ import {
 } from './application/use-cases';
 import { AuthController } from './presentation/controllers/auth.controller';
 import { JwtAuthGuard } from './presentation/guards/jwt-auth.guard';
+import { GoogleAuthGuard } from './presentation/guards/google-auth.guard';
 import { JwtStrategy } from './presentation/strategies/jwt.strategy';
+import { GoogleStrategy } from './presentation/strategies/google.strategy';
 
 @Module({
   imports: [
@@ -41,9 +44,12 @@ import { JwtStrategy } from './presentation/strategies/jwt.strategy';
     DeleteAccountUseCase,
     ExportDataUseCase,
     UpdateProfileUseCase,
+    GoogleAuthUseCase,
     // Strategies & Guards
     JwtStrategy,
+    GoogleStrategy,
     JwtAuthGuard,
+    GoogleAuthGuard,
     // Repository binding
     {
       provide: USER_REPOSITORY,

@@ -18,6 +18,7 @@ interface AuthContextValue {
   isAuthenticated: boolean;
   login: (email: string, password: string) => Promise<void>;
   register: (email: string, password: string, name: string) => Promise<void>;
+  setTokens: (accessToken: string, refreshToken: string) => Promise<void>;
   logout: () => void;
 }
 
@@ -83,6 +84,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(response.user);
   }, []);
 
+  const setTokens = useCallback(async (accessToken: string, refreshToken: string) => {
+    localStorage.setItem(ACCESS_TOKEN_KEY, accessToken);
+    localStorage.setItem(REFRESH_TOKEN_KEY, refreshToken);
+    apiClient.setAccessToken(accessToken);
+    const userData = await apiClient.getMe();
+    setUser(userData);
+  }, []);
+
   const logout = useCallback(() => {
     localStorage.removeItem(ACCESS_TOKEN_KEY);
     localStorage.removeItem(REFRESH_TOKEN_KEY);
@@ -97,9 +106,10 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       isAuthenticated: !!user,
       login,
       register,
+      setTokens,
       logout,
     }),
-    [user, isLoading, login, register, logout],
+    [user, isLoading, login, register, setTokens, logout],
   );
 
   return (

@@ -8,19 +8,25 @@ import {
   HttpStatus,
   Patch,
   Post,
+  Req,
+  Res,
   UseGuards,
 } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import type { Request, Response } from 'express';
 
 import type { AuthenticatedUser } from '../../application/dto/auth.dto';
 import {
   DeleteAccountUseCase,
   ExportDataUseCase,
   GetMeUseCase,
+  GoogleAuthUseCase,
   LoginUseCase,
   RefreshTokenUseCase,
   RegisterUseCase,
   UpdateProfileUseCase,
 } from '../../application/use-cases';
+import type { GoogleProfile } from '../strategies/google.strategy';
 import { CurrentUser } from '../decorators/current-user.decorator';
 import {
   LoginRequestDto,
@@ -29,6 +35,7 @@ import {
   UpdateProfileRequestDto,
 } from '../dto/auth-request.dto';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
+import { GoogleAuthGuard } from '../guards/google-auth.guard';
 
 @Controller('auth')
 export class AuthController {
@@ -40,6 +47,8 @@ export class AuthController {
     private readonly deleteAccountUseCase: DeleteAccountUseCase,
     private readonly exportDataUseCase: ExportDataUseCase,
     private readonly updateProfileUseCase: UpdateProfileUseCase,
+    private readonly googleAuthUseCase: GoogleAuthUseCase,
+    private readonly configService: ConfigService,
   ) {}
 
   @Post('register')
@@ -130,5 +139,29 @@ export class AuthController {
     }
 
     return;
+  }
+
+  @Get('google')
+  @UseGuards(GoogleAuthGuard)
+  googleAuth() {
+    // Guard redirects to Google
+  }
+
+  @Get('google/callback')
+  @UseGuards(GoogleAuthGuard)
+  async googleAuthCallback(@Req() req: Request, @Res() res: Response) {
+    const profile = req.user as GoogleProfile;
+    const { accessToken, refreshToken } = await this.googleAuthUseCase.execute(profile);
+
+    // Redirect to frontend with tokens
+    const frontendUrl = this.configService.get<string>(
+      'FRONTEND_URL',
+      'http://localhost:3000',
+    );
+    const callbackUrl = new URL('/auth/callback', frontendUrl);
+    callbackUrl.searchParams.set('accessToken', accessToken);
+    callbackUrl.searchParams.set('refreshToken', refreshToken);
+
+    res.redirect(callbackUrl.toString());
   }
 }
