@@ -1,6 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Plan } from '@prisma/client';
+import Stripe from 'stripe';
 
 interface StripeCheckoutSession {
   id: string;
@@ -40,6 +41,7 @@ interface StripeWebhookEvent {
 @Injectable()
 export class StripeService {
   private readonly logger = new Logger(StripeService.name);
+  private readonly stripe: Stripe;
   private readonly secretKey: string;
   private readonly webhookSecret: string;
   private readonly priceIds: Record<Exclude<Plan, 'FREE'>, string>;
@@ -53,6 +55,7 @@ export class StripeService {
       [Plan.SOLO]: this.configService.get<string>('STRIPE_PRICE_SOLO') ?? '',
       [Plan.PRO]: this.configService.get<string>('STRIPE_PRICE_PRO') ?? '',
     };
+    this.stripe = new Stripe(this.secretKey);
   }
 
   private async fetch<T>(
@@ -147,19 +150,29 @@ export class StripeService {
 
   constructWebhookEvent(
     payload: string,
-    _signature: string,
+    signature: string,
   ): StripeWebhookEvent | null {
-    // In production, you should verify the signature using the Stripe library
-    // For simplicity, we're just parsing the JSON here
-    // Install stripe package for proper signature verification
+    if (!this.webhookSecret) {
+      this.logger.error('Webhook secret not configured - rejecting webhook');
+      return null;
+    }
+
     try {
-      if (!this.webhookSecret) {
-        this.logger.warn('Webhook secret not configured, skipping verification');
-      }
-      // Basic signature check would go here with stripe library
-      return JSON.parse(payload) as StripeWebhookEvent;
+      const event = this.stripe.webhooks.constructEvent(
+        payload,
+        signature,
+        this.webhookSecret,
+      );
+      return {
+        type: event.type,
+        data: {
+          object: event.data.object as unknown as Record<string, unknown>,
+        },
+      };
     } catch (error) {
-      this.logger.error('Failed to construct webhook event', error);
+      this.logger.error(
+        `Webhook signature verification failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
+      );
       return null;
     }
   }

@@ -13,6 +13,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { Throttle } from '@nestjs/throttler';
 import type { Request, Response } from 'express';
 
 import type { AuthenticatedUser } from '../../application/dto/auth.dto';
@@ -52,6 +53,7 @@ export class AuthController {
   ) {}
 
   @Post('register')
+  @Throttle({ short: { limit: 3, ttl: 60000 } }) // 3 registrations per minute
   async register(@Body() dto: RegisterRequestDto) {
     const result = await this.registerUseCase.execute(dto);
 
@@ -67,6 +69,7 @@ export class AuthController {
 
   @Post('login')
   @HttpCode(HttpStatus.OK)
+  @Throttle({ short: { limit: 5, ttl: 60000 } }) // 5 login attempts per minute
   async login(@Body() dto: LoginRequestDto) {
     const result = await this.loginUseCase.execute(dto);
 

@@ -59,10 +59,14 @@ export class ScanController {
     @CurrentUser() user: AuthenticatedUser,
     @Query('limit') limit?: string,
   ) {
+    // Validate and cap limit to prevent DoS
+    const parsedLimit = limit ? parseInt(limit, 10) : 50;
+    const safeLimit = Math.min(Math.max(1, parsedLimit || 50), 100);
+
     const result = await this.getScanHistoryUseCase.execute(
       projectId,
       user.id,
-      limit ? parseInt(limit, 10) : 50,
+      safeLimit,
     );
 
     if (!result.ok) {

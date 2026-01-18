@@ -1,19 +1,19 @@
-import { IsEnum, IsString } from 'class-validator';
+import { IsEnum, IsUrl } from 'class-validator';
 import { Plan } from '@prisma/client';
 
 export class CreateCheckoutDto {
   @IsEnum(Plan)
   plan!: Plan;
 
-  @IsString()
+  @IsUrl({ require_protocol: true, protocols: ['https', 'http'] })
   successUrl!: string;
 
-  @IsString()
+  @IsUrl({ require_protocol: true, protocols: ['https', 'http'] })
   cancelUrl!: string;
 }
 
 export class CreatePortalDto {
-  @IsString()
+  @IsUrl({ require_protocol: true, protocols: ['https', 'http'] })
   returnUrl!: string;
 }
 
