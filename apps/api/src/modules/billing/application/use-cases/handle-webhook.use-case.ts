@@ -73,6 +73,9 @@ export class HandleWebhookUseCase {
     const priceId = subscription.items.data[0]?.price?.id;
     const plan = priceId ? this.stripeService.getPlanFromPriceId(priceId) : Plan.FREE;
 
+    const currentPeriodStart = this.toSafeDate(subscription.current_period_start);
+    const currentPeriodEnd = this.toSafeDate(subscription.current_period_end);
+
     await this.prisma.$transaction([
       this.prisma.subscription.upsert({
         where: { userId: user.id },
@@ -81,17 +84,17 @@ export class HandleWebhookUseCase {
           stripeSubscriptionId: session.subscription,
           status: this.mapStatus(subscription.status),
           plan,
-          currentPeriodStart: new Date(subscription.current_period_start * 1000),
-          currentPeriodEnd: new Date(subscription.current_period_end * 1000),
-          cancelAtPeriodEnd: subscription.cancel_at_period_end,
+          currentPeriodStart,
+          currentPeriodEnd,
+          cancelAtPeriodEnd: subscription.cancel_at_period_end ?? false,
         },
         update: {
           stripeSubscriptionId: session.subscription,
           status: this.mapStatus(subscription.status),
           plan,
-          currentPeriodStart: new Date(subscription.current_period_start * 1000),
-          currentPeriodEnd: new Date(subscription.current_period_end * 1000),
-          cancelAtPeriodEnd: subscription.cancel_at_period_end,
+          currentPeriodStart,
+          currentPeriodEnd,
+          cancelAtPeriodEnd: subscription.cancel_at_period_end ?? false,
         },
       }),
       this.prisma.user.update({
@@ -116,15 +119,18 @@ export class HandleWebhookUseCase {
     const priceId = subscription.items.data[0]?.price?.id;
     const plan = priceId ? this.stripeService.getPlanFromPriceId(priceId) : Plan.FREE;
 
+    const currentPeriodStart = this.toSafeDate(subscription.current_period_start);
+    const currentPeriodEnd = this.toSafeDate(subscription.current_period_end);
+
     await this.prisma.$transaction([
       this.prisma.subscription.update({
         where: { userId: user.id },
         data: {
           status: this.mapStatus(subscription.status),
           plan,
-          currentPeriodStart: new Date(subscription.current_period_start * 1000),
-          currentPeriodEnd: new Date(subscription.current_period_end * 1000),
-          cancelAtPeriodEnd: subscription.cancel_at_period_end,
+          currentPeriodStart,
+          currentPeriodEnd,
+          cancelAtPeriodEnd: subscription.cancel_at_period_end ?? false,
         },
       }),
       this.prisma.user.update({
@@ -171,5 +177,16 @@ export class HandleWebhookUseCase {
       default:
         return SubscriptionStatus.ACTIVE;
     }
+  }
+
+  /**
+   * Convert Unix timestamp (seconds) to Date, with fallback to now if invalid
+   */
+  private toSafeDate(unixTimestamp: number | undefined | null): Date {
+    if (!unixTimestamp || unixTimestamp <= 0) {
+      this.logger.warn(`Invalid timestamp received: ${unixTimestamp}, using current date`);
+      return new Date();
+    }
+    return new Date(unixTimestamp * 1000);
   }
 }
