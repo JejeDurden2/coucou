@@ -9,22 +9,33 @@ export const REFRESH_TOKEN_COOKIE = 'refresh_token';
 export class CookieService {
   private readonly isProduction: boolean;
   private readonly cookieDomain: string | undefined;
+  private readonly isCrossOrigin: boolean;
 
   constructor(private readonly configService: ConfigService) {
     this.isProduction = configService.get('NODE_ENV') === 'production';
     this.cookieDomain = configService.get<string>('COOKIE_DOMAIN');
+
+    // Detect cross-origin setup: frontend and API on different domains
+    // In this case we need SameSite=none for cookies to work
+    const frontendUrl = configService.get<string>('FRONTEND_URL', 'http://localhost:3000');
+    const apiUrl = configService.get<string>('API_URL', 'http://localhost:3001');
+    try {
+      const frontendHost = new URL(frontendUrl).hostname;
+      const apiHost = new URL(apiUrl).hostname;
+      this.isCrossOrigin = frontendHost !== apiHost;
+    } catch {
+      this.isCrossOrigin = false;
+    }
   }
 
   setAuthCookies(res: Response, accessToken: string, refreshToken: string): void {
-    // Use 'lax' for CSRF protection - allows cookies on same-site navigation
-    // but blocks cross-site POST requests (CSRF attacks)
-    // In production with cross-origin setup, we need 'none' + secure
-    // but only if COOKIE_DOMAIN is explicitly set for cross-domain auth
-    const useCrossOrigin = this.isProduction && Boolean(this.cookieDomain);
+    // For cross-origin setups (frontend and API on different domains),
+    // we need SameSite=none + Secure for cookies to be sent
+    // This is required for Vercel (frontend) + Railway (API) deployments
     const commonOptions = {
       httpOnly: true,
-      secure: this.isProduction,
-      sameSite: useCrossOrigin ? ('none' as const) : ('lax' as const),
+      secure: this.isProduction || this.isCrossOrigin,
+      sameSite: this.isCrossOrigin ? ('none' as const) : ('lax' as const),
       path: '/',
       ...(this.cookieDomain && { domain: this.cookieDomain }),
     };
@@ -43,11 +54,10 @@ export class CookieService {
   }
 
   clearAuthCookies(res: Response): void {
-    const useCrossOrigin = this.isProduction && Boolean(this.cookieDomain);
     const commonOptions = {
       httpOnly: true,
-      secure: this.isProduction,
-      sameSite: useCrossOrigin ? ('none' as const) : ('lax' as const),
+      secure: this.isProduction || this.isCrossOrigin,
+      sameSite: this.isCrossOrigin ? ('none' as const) : ('lax' as const),
       path: '/',
       ...(this.cookieDomain && { domain: this.cookieDomain }),
     };
