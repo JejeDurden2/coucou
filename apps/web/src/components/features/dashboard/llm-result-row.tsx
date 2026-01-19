@@ -4,46 +4,60 @@ import { cn } from '@/lib/utils';
 
 interface LLMResultRowProps {
   provider: LLMProvider;
+  model: string;
   isCited: boolean;
   position: number | null;
   citationContext?: string | null;
   className?: string;
 }
 
-const providerInfo: Record<LLMProvider, { name: string; logo: string; color: string }> = {
+const providerInfo: Record<LLMProvider, { color: string; icon: string }> = {
   [LLMProvider.OPENAI]: {
-    name: 'ChatGPT',
-    logo: '/logos/openai.svg',
     color: 'text-emerald-400',
+    icon: 'G',
   },
   [LLMProvider.ANTHROPIC]: {
-    name: 'Claude',
-    logo: '/logos/anthropic.svg',
     color: 'text-orange-400',
+    icon: 'C',
   },
 };
 
+const modelNames: Record<string, string> = {
+  'gpt-4o-mini': 'GPT-4o-mini',
+  'gpt-4o': 'GPT-4o',
+  'gpt-5.2': 'GPT-5.2',
+  'claude-sonnet-4-5-20250514': 'Claude Sonnet 4.5',
+  'claude-opus-4-5-20250514': 'Claude Opus 4.5',
+  'claude-3-5-haiku-latest': 'Claude Haiku',
+};
+
+function getModelDisplayName(model: string): string {
+  return modelNames[model] ?? model;
+}
+
 export function LLMResultRow({
   provider,
+  model,
   isCited,
   position,
   citationContext,
   className,
 }: LLMResultRowProps) {
   const info = providerInfo[provider];
+  const displayName = getModelDisplayName(model);
 
   return (
     <div className={cn('flex items-center gap-4 rounded-lg bg-slate-800/50 p-4', className)}>
-      <div className="flex items-center gap-3 min-w-[140px]">
+      <div className="flex items-center gap-3 min-w-[180px]">
         <div
           className={cn(
             'flex h-10 w-10 items-center justify-center rounded-lg bg-slate-700/50',
             info.color,
           )}
         >
-          <span className="text-lg font-bold">{provider === LLMProvider.OPENAI ? 'G' : 'C'}</span>
+          <span className="text-lg font-bold">{info.icon}</span>
         </div>
-        <span className="font-medium">{info.name}</span>
+        <span className="font-medium">{displayName}</span>
       </div>
 
       <div className="flex-1">

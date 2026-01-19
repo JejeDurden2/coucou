@@ -4,9 +4,9 @@ import { ConfigService } from '@nestjs/config';
 import { BaseOpenAIAdapter } from './base-openai.adapter';
 
 @Injectable()
-export class OpenAILLMAdapter extends BaseOpenAIAdapter {
-  protected readonly logger = new Logger(OpenAILLMAdapter.name);
-  protected readonly model = 'gpt-4o-mini';
+export class GPT4oLLMAdapter extends BaseOpenAIAdapter {
+  protected readonly logger = new Logger(GPT4oLLMAdapter.name);
+  protected readonly model = 'gpt-4o';
 
   constructor(configService: ConfigService) {
     super(configService);

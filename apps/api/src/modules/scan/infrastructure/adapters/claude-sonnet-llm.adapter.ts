@@ -4,9 +4,9 @@ import { ConfigService } from '@nestjs/config';
 import { BaseAnthropicAdapter } from './base-anthropic.adapter';
 
 @Injectable()
-export class AnthropicLLMAdapter extends BaseAnthropicAdapter {
-  protected readonly logger = new Logger(AnthropicLLMAdapter.name);
-  protected readonly model = 'claude-3-5-haiku-latest';
+export class ClaudeSonnetLLMAdapter extends BaseAnthropicAdapter {
+  protected readonly logger = new Logger(ClaudeSonnetLLMAdapter.name);
+  protected readonly model = 'claude-sonnet-4-5-20250514';
 
   constructor(configService: ConfigService) {
     super(configService);

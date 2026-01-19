@@ -1,19 +1,19 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import type { LLMProvider } from '@prisma/client';
+import type { Plan } from '@prisma/client';
 
 import { ForbiddenError, NotFoundError, Result } from '../../../../common';
 import { PROJECT_REPOSITORY, type ProjectRepository } from '../../../project';
 import { PROMPT_REPOSITORY, type PromptRepository } from '../../../prompt';
 import {
   AllProvidersFailedError,
-  GEOResponseParserService,
   SCAN_REPOSITORY,
   type LLMResult,
   type ScanRepository,
 } from '../../domain';
-import type { LLMService, LLMResponse } from '../ports/llm.port';
+import type { LLMService } from '../ports/llm.port';
 import { LLM_SERVICE } from '../ports/llm.port';
 import type { ScanResponseDto } from '../dto/scan.dto';
+import { LLMResponseProcessorService } from '../services/llm-response-processor.service';
 
 type ExecuteScanError = NotFoundError | ForbiddenError | AllProvidersFailedError;
 
@@ -30,11 +30,13 @@ export class ExecuteScanUseCase {
     private readonly scanRepository: ScanRepository,
     @Inject(LLM_SERVICE)
     private readonly llmService: LLMService,
+    private readonly responseProcessor: LLMResponseProcessorService,
   ) {}
 
   async execute(
     promptId: string,
     userId: string,
+    plan: Plan,
   ): Promise<Result<ScanResponseDto, ExecuteScanError>> {
     const prompt = await this.promptRepository.findById(promptId);
 
@@ -52,12 +54,12 @@ export class ExecuteScanUseCase {
       return Result.err(new ForbiddenError('You do not have access to this prompt'));
     }
 
-    this.logger.log(`Executing scan for prompt ${promptId}`);
+    this.logger.log(`Executing scan for prompt ${promptId} with plan ${plan}`);
 
-    const { successes, failures } = await this.llmService.queryAll(prompt.content);
+    const { successes, failures } = await this.llmService.queryByPlan(prompt.content, plan);
 
-    if (successes.size === 0) {
-      this.logger.error(`All LLM providers failed for prompt ${promptId}`);
+    if (successes.length === 0) {
+      this.logger.error(`All LLM models failed for prompt ${promptId}`);
       return Result.err(
         new AllProvidersFailedError(
           failures.map((f) => ({ provider: f.provider, error: f.error })),
@@ -67,20 +69,13 @@ export class ExecuteScanUseCase {
 
     if (failures.length > 0) {
       this.logger.warn(
-        `Partial LLM failures for prompt ${promptId}: ${failures.map((f) => f.provider).join(', ')}`,
+        `Partial LLM failures for prompt ${promptId}: ${failures.map((f) => `${f.provider}/${f.model}`).join(', ')}`,
       );
     }
 
-    const results: LLMResult[] = [];
-    for (const [provider, response] of successes) {
-      const result = this.processLLMResponse(
-        provider,
-        response,
-        project.brandName,
-        project.brandVariants,
-      );
-      results.push(result);
-    }
+    const results: LLMResult[] = successes.map((response) =>
+      this.responseProcessor.process(response, project.brandName, project.brandVariants),
+    );
 
     const scan = await this.scanRepository.create({
       promptId,
@@ -113,49 +108,5 @@ export class ExecuteScanUseCase {
           ? failures.map((f) => ({ provider: f.provider, error: f.error }))
           : undefined,
     });
-  }
-
-  private processLLMResponse(
-    provider: LLMProvider,
-    response: LLMResponse,
-    brandName: string,
-    brandVariants: string[],
-  ): LLMResult {
-    const parseResult = GEOResponseParserService.parse(response.content);
-
-    if (!parseResult.success || !parseResult.response) {
-      this.logger.warn(`Failed to parse GEO response from ${provider}: ${parseResult.error}`);
-      return {
-        provider,
-        model: response.model,
-        rawResponse: response.content,
-        isCited: false,
-        position: null,
-        brandKeywords: [],
-        queryKeywords: [],
-        competitorMentions: [],
-        latencyMs: response.latencyMs,
-        parseSuccess: false,
-      };
-    }
-
-    const insights = GEOResponseParserService.extractInsights(
-      parseResult.response,
-      brandName,
-      brandVariants,
-    );
-
-    return {
-      provider,
-      model: response.model,
-      rawResponse: response.content,
-      isCited: insights.position !== null,
-      position: insights.position,
-      brandKeywords: insights.brandKeywords,
-      queryKeywords: insights.queryKeywords,
-      competitorMentions: insights.competitors,
-      latencyMs: response.latencyMs,
-      parseSuccess: true,
-    };
   }
 }

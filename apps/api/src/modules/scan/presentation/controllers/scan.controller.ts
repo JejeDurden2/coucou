@@ -19,7 +19,7 @@ export class ScanController {
 
   @Post('prompts/:promptId/scan')
   async scanPrompt(@Param('promptId') promptId: string, @CurrentUser() user: AuthenticatedUser) {
-    const result = await this.executeScanUseCase.execute(promptId, user.id);
+    const result = await this.executeScanUseCase.execute(promptId, user.id, user.plan);
 
     if (!result.ok) {
       throw new HttpException(result.error.toJSON(), result.error.statusCode);
@@ -30,7 +30,7 @@ export class ScanController {
 
   @Post('projects/:projectId/scans')
   async scanProject(@Param('projectId') projectId: string, @CurrentUser() user: AuthenticatedUser) {
-    const result = await this.executeProjectScanUseCase.execute(projectId, user.id);
+    const result = await this.executeProjectScanUseCase.execute(projectId, user.id, user.plan);
 
     if (!result.ok) {
       throw new HttpException(result.error.toJSON(), result.error.statusCode);

@@ -1,62 +1,84 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { LLMProvider } from '@prisma/client';
+import { LLMProvider, Plan } from '@prisma/client';
+import { LLMModel, PLAN_MODELS } from '@coucou-ia/shared';
 
 import type {
   LLMResponse,
   LLMService,
   LLMQueryResult,
   LLMFailure,
+  LLMPort,
 } from '../../application/ports/llm.port';
 import { OpenAILLMAdapter } from './openai-llm.adapter';
 import { AnthropicLLMAdapter } from './anthropic-llm.adapter';
+import { GPT4oLLMAdapter } from './gpt4o-llm.adapter';
+import { GPT52LLMAdapter } from './gpt52-llm.adapter';
+import { ClaudeSonnetLLMAdapter } from './claude-sonnet-llm.adapter';
+import { ClaudeOpusLLMAdapter } from './claude-opus-llm.adapter';
 
 type QueryResult =
-  | { success: true; provider: LLMProvider; response: LLMResponse }
-  | { success: false; provider: LLMProvider; error: string };
+  | { success: true; response: LLMResponse }
+  | { success: false; provider: LLMProvider; model: string; error: string };
 
 @Injectable()
 export class LLMServiceImpl implements LLMService {
   private readonly logger = new Logger(LLMServiceImpl.name);
+  private readonly adaptersByModel: Map<string, LLMPort>;
 
   constructor(
     private readonly openaiAdapter: OpenAILLMAdapter,
     private readonly anthropicAdapter: AnthropicLLMAdapter,
-  ) {}
+    private readonly gpt4oAdapter: GPT4oLLMAdapter,
+    private readonly gpt52Adapter: GPT52LLMAdapter,
+    private readonly claudeSonnetAdapter: ClaudeSonnetLLMAdapter,
+    private readonly claudeOpusAdapter: ClaudeOpusLLMAdapter,
+  ) {
+    this.adaptersByModel = new Map<string, LLMPort>([
+      [LLMModel.GPT_4O_MINI, this.openaiAdapter],
+      [LLMModel.GPT_4O, this.gpt4oAdapter],
+      [LLMModel.GPT_5_2, this.gpt52Adapter],
+      [LLMModel.CLAUDE_SONNET_4_5, this.claudeSonnetAdapter],
+      [LLMModel.CLAUDE_OPUS_4_5, this.claudeOpusAdapter],
+    ]);
+  }
 
   async queryAll(prompt: string): Promise<LLMQueryResult> {
-    const queries = [
-      this.queryAdapter(this.openaiAdapter, prompt),
-      this.queryAdapter(this.anthropicAdapter, prompt),
-    ];
+    return this.queryByPlan(prompt, Plan.PRO);
+  }
 
+  async queryByPlan(prompt: string, plan: Plan): Promise<LLMQueryResult> {
+    const allowedModels = PLAN_MODELS[plan];
+    const adapters = allowedModels
+      .map((model) => this.adaptersByModel.get(model))
+      .filter((adapter): adapter is LLMPort => adapter !== undefined);
+
+    const queries = adapters.map((adapter) => this.queryAdapter(adapter, prompt));
     const responses = await Promise.all(queries);
 
-    const successes = new Map<LLMProvider, LLMResponse>();
+    const successes: LLMResponse[] = [];
     const failures: LLMFailure[] = [];
 
     for (const result of responses) {
       if (result.success) {
-        successes.set(result.provider, result.response);
+        successes.push(result.response);
       } else {
-        failures.push({ provider: result.provider, error: result.error });
+        failures.push({ provider: result.provider, model: result.model, error: result.error });
       }
     }
 
     return { successes, failures };
   }
 
-  private async queryAdapter(
-    adapter: OpenAILLMAdapter | AnthropicLLMAdapter,
-    prompt: string,
-  ): Promise<QueryResult> {
+  private async queryAdapter(adapter: LLMPort, prompt: string): Promise<QueryResult> {
     const provider = adapter.getProvider();
+    const model = adapter.getModel();
     try {
       const response = await adapter.query(prompt);
-      return { success: true, provider, response };
+      return { success: true, response };
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : String(error);
-      this.logger.error(`Failed to query ${provider}: ${errorMessage}`);
-      return { success: false, provider, error: errorMessage };
+      this.logger.error(`Failed to query ${provider} (${model}): ${errorMessage}`);
+      return { success: false, provider, model, error: errorMessage };
     }
   }
 }

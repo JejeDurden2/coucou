@@ -1,28 +1,32 @@
-import type { LLMProvider } from '@prisma/client';
+import type { LLMProvider, Plan } from '@prisma/client';
 
 export const LLM_SERVICE = Symbol('LLM_SERVICE');
 
 export interface LLMResponse {
   content: string;
   model: string;
+  provider: LLMProvider;
   latencyMs: number;
 }
 
 export interface LLMPort {
   query(prompt: string): Promise<LLMResponse>;
   getProvider(): LLMProvider;
+  getModel(): string;
 }
 
 export interface LLMFailure {
   provider: LLMProvider;
+  model: string;
   error: string;
 }
 
 export interface LLMQueryResult {
-  successes: Map<LLMProvider, LLMResponse>;
+  successes: LLMResponse[];
   failures: LLMFailure[];
 }
 
 export interface LLMService {
   queryAll(prompt: string): Promise<LLMQueryResult>;
+  queryByPlan(prompt: string, plan: Plan): Promise<LLMQueryResult>;
 }

@@ -10,13 +10,13 @@ export interface PlanLimits {
 export const PLAN_LIMITS: Record<Plan, PlanLimits> = {
   [Plan.FREE]: {
     projects: 1,
-    promptsPerProject: 3,
-    scanFrequency: 'manual',
+    promptsPerProject: 2,
+    scanFrequency: 'weekly',
     retentionDays: 30,
   },
   [Plan.SOLO]: {
     projects: 5,
-    promptsPerProject: 20,
+    promptsPerProject: 10,
     scanFrequency: 'weekly',
     retentionDays: 180,
   },

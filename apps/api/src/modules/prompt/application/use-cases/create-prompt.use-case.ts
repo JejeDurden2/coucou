@@ -7,8 +7,8 @@ import { PROMPT_REPOSITORY, type PromptRepository } from '../../domain';
 import type { CreatePromptDto, PromptResponseDto } from '../dto/prompt.dto';
 
 const PROMPT_LIMITS: Record<Plan, number> = {
-  FREE: 3,
-  SOLO: 20,
+  FREE: 2,
+  SOLO: 10,
   PRO: 50,
 };
 

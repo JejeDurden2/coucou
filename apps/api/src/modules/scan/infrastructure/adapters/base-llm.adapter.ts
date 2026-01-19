@@ -24,6 +24,10 @@ export abstract class BaseLLMAdapter implements LLMPort {
 
   abstract getProvider(): LLMProvider;
 
+  getModel(): string {
+    return this.model;
+  }
+
   async query(prompt: string): Promise<LLMResponse> {
     const startTime = Date.now();
 
@@ -42,6 +46,7 @@ export abstract class BaseLLMAdapter implements LLMPort {
       return {
         content: this.extractContent(data),
         model: this.model,
+        provider: this.getProvider(),
         latencyMs,
       };
     } catch (error) {

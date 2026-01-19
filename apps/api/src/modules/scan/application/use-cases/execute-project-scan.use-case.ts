@@ -1,21 +1,21 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import type { LLMProvider } from '@prisma/client';
+import type { Plan } from '@prisma/client';
 
 import { ForbiddenError, NotFoundError, Result } from '../../../../common';
 import { PROJECT_REPOSITORY, type ProjectRepository } from '../../../project';
 import { PROMPT_REPOSITORY, type PromptRepository } from '../../../prompt';
 import {
   AllProvidersFailedError,
-  GEOResponseParserService,
   PromptSanitizerService,
   ThreatLevel,
   SCAN_REPOSITORY,
   type LLMResult,
   type ScanRepository,
 } from '../../domain';
-import type { LLMService, LLMResponse } from '../ports/llm.port';
+import type { LLMService } from '../ports/llm.port';
 import { LLM_SERVICE } from '../ports/llm.port';
 import type { ScanResponseDto } from '../dto/scan.dto';
+import { LLMResponseProcessorService } from '../services/llm-response-processor.service';
 
 type ExecuteProjectScanError = NotFoundError | ForbiddenError | AllProvidersFailedError;
 
@@ -32,11 +32,13 @@ export class ExecuteProjectScanUseCase {
     private readonly scanRepository: ScanRepository,
     @Inject(LLM_SERVICE)
     private readonly llmService: LLMService,
+    private readonly responseProcessor: LLMResponseProcessorService,
   ) {}
 
   async execute(
     projectId: string,
     userId: string,
+    plan: Plan,
   ): Promise<Result<ScanResponseDto[], ExecuteProjectScanError>> {
     const project = await this.projectRepository.findById(projectId);
 
@@ -74,7 +76,7 @@ export class ExecuteProjectScanUseCase {
           results: [],
           isCitedByAny: false,
           citationRate: 0,
-          skippedReason: `Prompt bloqué: contenu suspect détecté (${analysis.matchedPatterns.join(', ')})`,
+          skippedReason: `Prompt bloque: contenu suspect detecte (${analysis.matchedPatterns.join(', ')})`,
         });
         continue;
       }
@@ -86,11 +88,11 @@ export class ExecuteProjectScanUseCase {
         );
       }
 
-      const { successes, failures } = await this.llmService.queryAll(analysis.sanitized);
+      const { successes, failures } = await this.llmService.queryByPlan(analysis.sanitized, plan);
 
-      if (successes.size === 0) {
+      if (successes.length === 0) {
         this.logger.error(
-          `All LLM providers failed for prompt ${prompt.id}: ${failures.map((f) => `${f.provider}: ${f.error}`).join(', ')}`,
+          `All LLM models failed for prompt ${prompt.id}: ${failures.map((f) => `${f.provider}/${f.model}: ${f.error}`).join(', ')}`,
         );
         lastAllProvidersError = new AllProvidersFailedError(
           failures.map((f) => ({ provider: f.provider, error: f.error })),
@@ -102,7 +104,7 @@ export class ExecuteProjectScanUseCase {
           results: [],
           isCitedByAny: false,
           citationRate: 0,
-          skippedReason: `Échec des fournisseurs LLM: ${failures.map((f) => f.provider).join(', ')}`,
+          skippedReason: `Echec des modeles LLM: ${failures.map((f) => `${f.provider}/${f.model}`).join(', ')}`,
           providerErrors: failures.map((f) => ({ provider: f.provider, error: f.error })),
         });
         continue;
@@ -112,20 +114,13 @@ export class ExecuteProjectScanUseCase {
 
       if (failures.length > 0) {
         this.logger.warn(
-          `Partial LLM failures for prompt ${prompt.id}: ${failures.map((f) => f.provider).join(', ')}`,
+          `Partial LLM failures for prompt ${prompt.id}: ${failures.map((f) => `${f.provider}/${f.model}`).join(', ')}`,
         );
       }
 
-      const results: LLMResult[] = [];
-      for (const [provider, response] of successes) {
-        const result = this.processLLMResponse(
-          provider,
-          response,
-          project.brandName,
-          project.brandVariants,
-        );
-        results.push(result);
-      }
+      const results: LLMResult[] = successes.map((response) =>
+        this.responseProcessor.process(response, project.brandName, project.brandVariants),
+      );
 
       const scan = await this.scanRepository.create({
         promptId: prompt.id,
@@ -166,49 +161,5 @@ export class ExecuteProjectScanUseCase {
     this.logger.log(`Completed ${scanResults.length} scans for project ${projectId}`);
 
     return Result.ok(scanResults);
-  }
-
-  private processLLMResponse(
-    provider: LLMProvider,
-    response: LLMResponse,
-    brandName: string,
-    brandVariants: string[],
-  ): LLMResult {
-    const parseResult = GEOResponseParserService.parse(response.content);
-
-    if (!parseResult.success || !parseResult.response) {
-      this.logger.warn(`Failed to parse GEO response from ${provider}: ${parseResult.error}`);
-      return {
-        provider,
-        model: response.model,
-        rawResponse: response.content,
-        isCited: false,
-        position: null,
-        brandKeywords: [],
-        queryKeywords: [],
-        competitorMentions: [],
-        latencyMs: response.latencyMs,
-        parseSuccess: false,
-      };
-    }
-
-    const insights = GEOResponseParserService.extractInsights(
-      parseResult.response,
-      brandName,
-      brandVariants,
-    );
-
-    return {
-      provider,
-      model: response.model,
-      rawResponse: response.content,
-      isCited: insights.position !== null,
-      position: insights.position,
-      brandKeywords: insights.brandKeywords,
-      queryKeywords: insights.queryKeywords,
-      competitorMentions: insights.competitors,
-      latencyMs: response.latencyMs,
-      parseSuccess: true,
-    };
   }
 }

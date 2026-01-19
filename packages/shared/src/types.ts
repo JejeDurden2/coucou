@@ -13,6 +13,14 @@ export enum LLMProvider {
   ANTHROPIC = 'ANTHROPIC',
 }
 
+export enum LLMModel {
+  GPT_4O_MINI = 'gpt-4o-mini',
+  GPT_4O = 'gpt-4o',
+  GPT_5_2 = 'gpt-5.2',
+  CLAUDE_SONNET_4_5 = 'claude-sonnet-4-5-20250514',
+  CLAUDE_OPUS_4_5 = 'claude-opus-4-5-20250514',
+}
+
 // ============================================
 // User Types
 // ============================================
@@ -224,13 +232,13 @@ export interface PlanLimits {
 export const PLAN_LIMITS: Record<Plan, PlanLimits> = {
   [Plan.FREE]: {
     projects: 1,
-    promptsPerProject: 3,
-    scanFrequency: 'manual',
+    promptsPerProject: 2,
+    scanFrequency: 'weekly',
     retentionDays: 30,
   },
   [Plan.SOLO]: {
     projects: 5,
-    promptsPerProject: 20,
+    promptsPerProject: 10,
     scanFrequency: 'weekly',
     retentionDays: 180,
   },
@@ -240,6 +248,18 @@ export const PLAN_LIMITS: Record<Plan, PlanLimits> = {
     scanFrequency: 'daily',
     retentionDays: 365 * 10, // "unlimited"
   },
+};
+
+export const PLAN_MODELS: Record<Plan, LLMModel[]> = {
+  [Plan.FREE]: [LLMModel.GPT_4O_MINI],
+  [Plan.SOLO]: [LLMModel.GPT_4O_MINI, LLMModel.GPT_4O, LLMModel.CLAUDE_SONNET_4_5],
+  [Plan.PRO]: [
+    LLMModel.GPT_4O_MINI,
+    LLMModel.GPT_4O,
+    LLMModel.GPT_5_2,
+    LLMModel.CLAUDE_SONNET_4_5,
+    LLMModel.CLAUDE_OPUS_4_5,
+  ],
 };
 
 // ============================================
@@ -259,7 +279,13 @@ export const PLAN_PRICING: Record<Plan, PlanPricing> = {
     price: 0,
     period: 'month',
     description: 'Pour tester la plateforme',
-    features: ['1 marque', '3 prompts', 'Scans manuels', 'Historique 30 jours'],
+    features: [
+      '1 marque',
+      '2 prompts',
+      'GPT-4o-mini',
+      '1 scan/prompt/semaine',
+      'Historique 30 jours',
+    ],
   },
   [Plan.SOLO]: {
     price: 29,
@@ -267,8 +293,9 @@ export const PLAN_PRICING: Record<Plan, PlanPricing> = {
     description: 'Pour les entrepreneurs et freelances',
     features: [
       '5 marques',
-      '20 prompts par marque',
-      'Scans hebdomadaires automatiques',
+      '10 prompts par marque',
+      'GPT-4o-mini, GPT-4o, Claude Sonnet 4.5',
+      '1 scan/prompt/semaine',
       'Historique 6 mois',
       'Support email',
     ],
@@ -280,9 +307,10 @@ export const PLAN_PRICING: Record<Plan, PlanPricing> = {
     features: [
       '15 marques',
       '50 prompts par marque',
-      'Scans quotidiens automatiques',
+      'Tous les modèles + Claude Opus 4.5, GPT-5.2',
+      '1 scan/prompt/jour',
       'Historique illimité',
-      'Support prioritaire',
+      'Support prioritaire (réponse 24h)',
       'Export des données',
     ],
     isPopular: true,
