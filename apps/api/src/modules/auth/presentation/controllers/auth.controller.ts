@@ -44,6 +44,8 @@ import { GoogleAuthGuard } from '../guards/google-auth.guard';
 
 @Controller('auth')
 export class AuthController {
+  private readonly allowedRedirectHosts: Set<string>;
+
   constructor(
     private readonly registerUseCase: RegisterUseCase,
     private readonly loginUseCase: LoginUseCase,
@@ -57,7 +59,30 @@ export class AuthController {
     private readonly resetPasswordUseCase: ResetPasswordUseCase,
     private readonly configService: ConfigService,
     private readonly cookieService: CookieService,
-  ) {}
+  ) {
+    // Build allowlist of valid redirect hosts from FRONTEND_URL
+    this.allowedRedirectHosts = new Set(
+      (configService.get<string>('FRONTEND_URL', 'http://localhost:3000'))
+        .split(',')
+        .map((url) => {
+          try {
+            return new URL(url.trim()).host;
+          } catch {
+            return null;
+          }
+        })
+        .filter((host): host is string => host !== null),
+    );
+  }
+
+  private isValidRedirectUrl(url: string): boolean {
+    try {
+      const parsed = new URL(url);
+      return this.allowedRedirectHosts.has(parsed.host);
+    } catch {
+      return false;
+    }
+  }
 
   @Post('register')
   @Throttle({ short: { limit: 3, ttl: 60000 } }) // 3 registrations per minute
@@ -223,8 +248,14 @@ export class AuthController {
     // Set HttpOnly cookies
     this.cookieService.setAuthCookies(res, accessToken, refreshToken);
 
-    // Redirect to frontend without tokens in URL
+    // Validate redirect URL to prevent open redirect attacks
     const frontendUrl = this.configService.get<string>('FRONTEND_URL', 'http://localhost:3000');
-    res.redirect(`${frontendUrl}/auth/callback`);
+    const redirectUrl = `${frontendUrl}/auth/callback`;
+
+    if (!this.isValidRedirectUrl(redirectUrl)) {
+      throw new HttpException('Invalid redirect URL', HttpStatus.BAD_REQUEST);
+    }
+
+    res.redirect(redirectUrl);
   }
 }

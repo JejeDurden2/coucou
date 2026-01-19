@@ -15,11 +15,20 @@ export class DeletePromptUseCase {
     private readonly projectRepository: ProjectRepository,
   ) {}
 
-  async execute(promptId: string, userId: string): Promise<Result<void, DeletePromptError>> {
+  async execute(
+    projectId: string,
+    promptId: string,
+    userId: string,
+  ): Promise<Result<void, DeletePromptError>> {
     const prompt = await this.promptRepository.findById(promptId);
 
     if (!prompt) {
       return Result.err(new NotFoundError('Prompt', promptId));
+    }
+
+    // Validate that prompt belongs to the requested project (prevents IDOR)
+    if (prompt.projectId !== projectId) {
+      return Result.err(new ForbiddenError('Prompt does not belong to this project'));
     }
 
     const project = await this.projectRepository.findById(prompt.projectId);

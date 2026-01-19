@@ -84,3 +84,21 @@ export class PlanLimitError extends DomainError {
     });
   }
 }
+
+export class ExternalServiceError extends DomainError {
+  readonly code = 'EXTERNAL_SERVICE_ERROR';
+  readonly statusCode = 502;
+
+  constructor(service: string, message = 'External service unavailable') {
+    super(message, { service });
+  }
+}
+
+export class ConfigurationError extends DomainError {
+  readonly code = 'CONFIGURATION_ERROR';
+  readonly statusCode = 500;
+
+  constructor(message: string) {
+    super(message);
+  }
+}

@@ -16,11 +16,15 @@ export class CookieService {
   }
 
   setAuthCookies(res: Response, accessToken: string, refreshToken: string): void {
-    // Cross-origin cookies require sameSite: 'none' and secure: true
+    // Use 'lax' for CSRF protection - allows cookies on same-site navigation
+    // but blocks cross-site POST requests (CSRF attacks)
+    // In production with cross-origin setup, we need 'none' + secure
+    // but only if COOKIE_DOMAIN is explicitly set for cross-domain auth
+    const useCrossOrigin = this.isProduction && Boolean(this.cookieDomain);
     const commonOptions = {
       httpOnly: true,
       secure: this.isProduction,
-      sameSite: this.isProduction ? ('none' as const) : ('lax' as const),
+      sameSite: useCrossOrigin ? ('none' as const) : ('lax' as const),
       path: '/',
       ...(this.cookieDomain && { domain: this.cookieDomain }),
     };
@@ -39,10 +43,11 @@ export class CookieService {
   }
 
   clearAuthCookies(res: Response): void {
+    const useCrossOrigin = this.isProduction && Boolean(this.cookieDomain);
     const commonOptions = {
       httpOnly: true,
       secure: this.isProduction,
-      sameSite: this.isProduction ? ('none' as const) : ('lax' as const),
+      sameSite: useCrossOrigin ? ('none' as const) : ('lax' as const),
       path: '/',
       ...(this.cookieDomain && { domain: this.cookieDomain }),
     };

@@ -60,11 +60,12 @@ export class PromptController {
 
   @Patch('projects/:projectId/prompts/:id')
   async update(
+    @Param('projectId') projectId: string,
     @Param('id') id: string,
     @CurrentUser() user: AuthenticatedUser,
     @Body() dto: UpdatePromptRequestDto,
   ) {
-    const result = await this.updatePromptUseCase.execute(id, user.id, dto);
+    const result = await this.updatePromptUseCase.execute(projectId, id, user.id, dto);
 
     if (!result.ok) {
       throw new HttpException(result.error.toJSON(), result.error.statusCode);
@@ -75,8 +76,12 @@ export class PromptController {
 
   @Delete('projects/:projectId/prompts/:id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  async delete(@Param('id') id: string, @CurrentUser() user: AuthenticatedUser) {
-    const result = await this.deletePromptUseCase.execute(id, user.id);
+  async delete(
+    @Param('projectId') projectId: string,
+    @Param('id') id: string,
+    @CurrentUser() user: AuthenticatedUser,
+  ) {
+    const result = await this.deletePromptUseCase.execute(projectId, id, user.id);
 
     if (!result.ok) {
       throw new HttpException(result.error.toJSON(), result.error.statusCode);

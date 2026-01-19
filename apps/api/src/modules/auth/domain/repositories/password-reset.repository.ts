@@ -14,4 +14,10 @@ export interface PasswordResetRepository {
   findByToken(token: string): Promise<PasswordResetToken | null>;
   markAsUsed(id: string): Promise<void>;
   deleteExpiredTokens(userId: string): Promise<void>;
+  /**
+   * Atomically validates and marks a token as used in a single transaction.
+   * Returns the token if valid and successfully marked, null otherwise.
+   * Prevents TOCTOU race conditions.
+   */
+  consumeToken(token: string): Promise<PasswordResetToken | null>;
 }

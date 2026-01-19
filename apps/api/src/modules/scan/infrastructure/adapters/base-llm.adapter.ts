@@ -19,7 +19,6 @@ export const LLM_CONFIG = {
 
 export abstract class BaseLLMAdapter implements LLMPort {
   protected abstract readonly logger: Logger;
-  protected abstract readonly apiKey: string;
   protected abstract readonly model: string;
 
   abstract getProvider(): LLMProvider;

@@ -21,18 +21,12 @@ export class ResetPasswordUseCase {
   ) {}
 
   async execute(token: string, newPassword: string): Promise<Result<void, ResetPasswordError>> {
-    const resetToken = await this.passwordResetRepository.findByToken(token);
+    // Atomically consume token to prevent TOCTOU race condition
+    // This validates and marks the token as used in a single transaction
+    const resetToken = await this.passwordResetRepository.consumeToken(token);
 
     if (!resetToken) {
-      return Result.err(new ValidationError(['Token invalide ou expire']));
-    }
-
-    if (resetToken.usedAt) {
-      return Result.err(new ValidationError(['Ce lien a deja ete utilise']));
-    }
-
-    if (resetToken.expiresAt < new Date()) {
-      return Result.err(new ValidationError(['Ce lien a expire']));
+      return Result.err(new ValidationError(['Token invalide, expire ou deja utilise']));
     }
 
     // Hash new password
@@ -40,9 +34,6 @@ export class ResetPasswordUseCase {
 
     // Update user password
     await this.userRepository.updatePassword(resetToken.userId, hashedPassword);
-
-    // Mark token as used
-    await this.passwordResetRepository.markAsUsed(resetToken.id);
 
     return Result.ok(undefined);
   }

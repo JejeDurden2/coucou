@@ -17,6 +17,7 @@ export class UpdatePromptUseCase {
   ) {}
 
   async execute(
+    projectId: string,
     promptId: string,
     userId: string,
     dto: UpdatePromptDto,
@@ -25,6 +26,11 @@ export class UpdatePromptUseCase {
 
     if (!prompt) {
       return Result.err(new NotFoundError('Prompt', promptId));
+    }
+
+    // Validate that prompt belongs to the requested project (prevents IDOR)
+    if (prompt.projectId !== projectId) {
+      return Result.err(new ForbiddenError('Prompt does not belong to this project'));
     }
 
     const project = await this.projectRepository.findById(prompt.projectId);

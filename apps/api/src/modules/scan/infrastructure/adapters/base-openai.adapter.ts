@@ -18,11 +18,11 @@ const OpenAIResponseSchema = z.object({
 export abstract class BaseOpenAIAdapter extends BaseLLMAdapter {
   protected abstract readonly logger: Logger;
   protected abstract readonly model: string;
-  protected readonly apiKey: string;
+  private readonly configService: ConfigService;
 
   constructor(configService: ConfigService) {
     super();
-    this.apiKey = configService.get<string>('OPENAI_API_KEY') ?? '';
+    this.configService = configService;
   }
 
   getProvider(): LLMProvider {
@@ -30,11 +30,13 @@ export abstract class BaseOpenAIAdapter extends BaseLLMAdapter {
   }
 
   protected callApi(prompt: string): Promise<Response> {
+    // Retrieve API key at call time to avoid storing in memory
+    const apiKey = this.configService.get<string>('OPENAI_API_KEY') ?? '';
     return fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${this.apiKey}`,
+        Authorization: `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
         model: this.model,

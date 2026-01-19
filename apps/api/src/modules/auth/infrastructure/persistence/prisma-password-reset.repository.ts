@@ -41,4 +41,38 @@ export class PrismaPasswordResetRepository implements PasswordResetRepository {
       },
     });
   }
+
+  async consumeToken(token: string): Promise<PasswordResetToken | null> {
+    // Use a transaction with optimistic locking to prevent TOCTOU race condition
+    return this.prisma.$transaction(async (tx) => {
+      const resetToken = await tx.passwordResetToken.findUnique({
+        where: { token },
+      });
+
+      if (!resetToken) {
+        return null;
+      }
+
+      // Check if already used or expired
+      if (resetToken.usedAt !== null || resetToken.expiresAt < new Date()) {
+        return null;
+      }
+
+      // Atomically mark as used only if still unused (optimistic lock)
+      const updated = await tx.passwordResetToken.updateMany({
+        where: {
+          id: resetToken.id,
+          usedAt: null, // Only update if still unused
+        },
+        data: { usedAt: new Date() },
+      });
+
+      // If no rows updated, another request already consumed the token
+      if (updated.count === 0) {
+        return null;
+      }
+
+      return resetToken;
+    });
+  }
 }

@@ -1,4 +1,5 @@
 import { Controller, Get, HttpException, Param, Post, Query, UseGuards } from '@nestjs/common';
+import { Throttle } from '@nestjs/throttler';
 
 import type { AuthenticatedUser } from '../../../auth';
 import { CurrentUser, JwtAuthGuard } from '../../../auth';
@@ -18,6 +19,7 @@ export class ScanController {
   ) {}
 
   @Post('prompts/:promptId/scan')
+  @Throttle({ scan: { limit: 20, ttl: 3600000 } }) // 20 scans per hour per user
   async scanPrompt(@Param('promptId') promptId: string, @CurrentUser() user: AuthenticatedUser) {
     const result = await this.executeScanUseCase.execute(promptId, user.id, user.plan);
 
@@ -29,6 +31,7 @@ export class ScanController {
   }
 
   @Post('projects/:projectId/scans')
+  @Throttle({ scan: { limit: 10, ttl: 3600000 } }) // 10 project scans per hour per user
   async scanProject(@Param('projectId') projectId: string, @CurrentUser() user: AuthenticatedUser) {
     const result = await this.executeProjectScanUseCase.execute(projectId, user.id, user.plan);
 

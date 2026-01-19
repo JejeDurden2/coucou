@@ -17,11 +17,11 @@ const AnthropicResponseSchema = z.object({
 export abstract class BaseAnthropicAdapter extends BaseLLMAdapter {
   protected abstract readonly logger: Logger;
   protected abstract readonly model: string;
-  protected readonly apiKey: string;
+  private readonly configService: ConfigService;
 
   constructor(configService: ConfigService) {
     super();
-    this.apiKey = configService.get<string>('ANTHROPIC_API_KEY') ?? '';
+    this.configService = configService;
   }
 
   getProvider(): LLMProvider {
@@ -29,11 +29,13 @@ export abstract class BaseAnthropicAdapter extends BaseLLMAdapter {
   }
 
   protected callApi(prompt: string): Promise<Response> {
+    // Retrieve API key at call time to avoid storing in memory
+    const apiKey = this.configService.get<string>('ANTHROPIC_API_KEY') ?? '';
     return fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'x-api-key': this.apiKey,
+        'x-api-key': apiKey,
         'anthropic-version': '2023-06-01',
       },
       body: JSON.stringify({

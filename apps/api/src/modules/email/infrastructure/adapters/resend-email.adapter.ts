@@ -2,6 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Resend } from 'resend';
 
+import { ExternalServiceError } from '../../../../common';
 import type { EmailPort, SendEmailOptions } from '../../application/ports/email.port';
 
 @Injectable()
@@ -38,8 +39,8 @@ export class ResendEmailAdapter implements EmailPort {
       });
 
       if (result.error) {
-        this.logger.error(`Failed to send email to ${options.to}: ${result.error.message}`);
-        throw new Error(result.error.message);
+        this.logger.error(`Failed to send email to ${options.to}`);
+        throw new ExternalServiceError('Resend', 'Email service unavailable');
       }
 
       this.logger.log(`Email sent to ${options.to}: ${options.subject}`);

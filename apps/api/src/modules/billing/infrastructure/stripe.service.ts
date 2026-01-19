@@ -3,6 +3,8 @@ import { ConfigService } from '@nestjs/config';
 import { Plan } from '@prisma/client';
 import Stripe from 'stripe';
 
+import { ConfigurationError, ExternalServiceError } from '../../../common';
+
 interface StripeCheckoutSession {
   id: string;
   url: string | null;
@@ -68,9 +70,9 @@ export class StripeService {
     });
 
     if (!response.ok) {
-      const error = await response.text();
-      this.logger.error(`Stripe API error: ${error}`);
-      throw new Error(`Stripe API error: ${response.status}`);
+      // Log status code only, not response body (may contain sensitive data)
+      this.logger.error(`Stripe API error: status ${response.status}`);
+      throw new ExternalServiceError('Stripe', 'Payment service unavailable');
     }
 
     return response.json() as Promise<T>;
@@ -98,7 +100,7 @@ export class StripeService {
   ): Promise<StripeCheckoutSession> {
     const priceId = this.priceIds[plan];
     if (!priceId) {
-      throw new Error(`No price ID configured for plan: ${plan}`);
+      throw new ConfigurationError(`Missing Stripe price configuration for plan: ${plan}`);
     }
 
     return this.fetch<StripeCheckoutSession>('/checkout/sessions', {

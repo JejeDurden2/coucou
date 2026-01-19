@@ -35,6 +35,11 @@ import { PrismaModule } from './prisma';
         ttl: 60000, // 1 minute
         limit: 100, // 100 requests per minute
       },
+      {
+        name: 'scan',
+        ttl: 3600000, // 1 hour
+        limit: 50, // 50 scan operations per hour (global fallback)
+      },
     ]),
     PrismaModule,
     EmailModule,
