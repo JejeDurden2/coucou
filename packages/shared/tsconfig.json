@@ -2,7 +2,9 @@
   "extends": "@coucou-ia/config/typescript/base",
   "compilerOptions": {
     "outDir": "./dist",
-    "rootDir": "./src"
+    "rootDir": "./src",
+    "module": "CommonJS",
+    "moduleResolution": "node"
   },
   "include": ["src/**/*"]
 }

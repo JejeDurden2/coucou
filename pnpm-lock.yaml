@@ -104,6 +104,9 @@ importers:
       stripe:
         specifier: ^20.2.0
         version: 20.2.0(@types/node@22.19.7)
+      zod:
+        specifier: ^4.3.5
+        version: 4.3.5
     devDependencies:
       '@coucou-ia/config':
         specifier: workspace:*

@@ -27,6 +27,5 @@ export interface LLMQueryResult {
 }
 
 export interface LLMService {
-  queryAll(prompt: string): Promise<LLMQueryResult>;
   queryByPlan(prompt: string, plan: Plan): Promise<LLMQueryResult>;
 }

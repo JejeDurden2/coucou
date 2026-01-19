@@ -185,22 +185,4 @@ export class PromptSanitizerService {
       matchedPatterns,
     };
   }
-
-  /**
-   * Legacy method for backward compatibility.
-   * @deprecated Use analyze() instead
-   */
-  static sanitize(prompt: string): string {
-    const result = this.analyze(prompt);
-    return result.level === ThreatLevel.HIGH ? '' : result.sanitized;
-  }
-
-  /**
-   * Legacy method for backward compatibility.
-   * @deprecated Use analyze() instead
-   */
-  static containsDangerousContent(prompt: string): boolean {
-    const result = this.analyze(prompt);
-    return result.level !== ThreatLevel.NONE;
-  }
 }

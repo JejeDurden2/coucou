@@ -1,12 +1,19 @@
 import { Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { LLMProvider } from '@prisma/client';
+import { z } from 'zod';
 
 import { BaseLLMAdapter, SYSTEM_PROMPT, LLM_CONFIG } from './base-llm.adapter';
 
-interface OpenAIResponse {
-  choices?: Array<{ message?: { content?: string } }>;
-}
+const OpenAIResponseSchema = z.object({
+  choices: z.array(
+    z.object({
+      message: z.object({
+        content: z.string().nullable(),
+      }),
+    }),
+  ),
+});
 
 export abstract class BaseOpenAIAdapter extends BaseLLMAdapter {
   protected abstract readonly logger: Logger;
@@ -42,7 +49,11 @@ export abstract class BaseOpenAIAdapter extends BaseLLMAdapter {
   }
 
   protected extractContent(data: unknown): string {
-    const response = data as OpenAIResponse;
-    return response.choices?.[0]?.message?.content ?? '';
+    const result = OpenAIResponseSchema.safeParse(data);
+    if (!result.success) {
+      this.logger.error(`Invalid OpenAI response format: ${result.error.message}`);
+      throw new Error(`Invalid OpenAI response format: ${result.error.message}`);
+    }
+    return result.data.choices[0]?.message?.content ?? '';
   }
 }

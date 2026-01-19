@@ -1,12 +1,18 @@
 import { Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { LLMProvider } from '@prisma/client';
+import { z } from 'zod';
 
 import { BaseLLMAdapter, SYSTEM_PROMPT, LLM_CONFIG } from './base-llm.adapter';
 
-interface AnthropicResponse {
-  content?: Array<{ type: string; text?: string }>;
-}
+const AnthropicResponseSchema = z.object({
+  content: z.array(
+    z.object({
+      type: z.string(),
+      text: z.string().optional(),
+    }),
+  ),
+});
 
 export abstract class BaseAnthropicAdapter extends BaseLLMAdapter {
   protected abstract readonly logger: Logger;
@@ -40,8 +46,12 @@ export abstract class BaseAnthropicAdapter extends BaseLLMAdapter {
   }
 
   protected extractContent(data: unknown): string {
-    const response = data as AnthropicResponse;
-    const firstContent = response.content?.[0];
+    const result = AnthropicResponseSchema.safeParse(data);
+    if (!result.success) {
+      this.logger.error(`Invalid Anthropic response format: ${result.error.message}`);
+      throw new Error(`Invalid Anthropic response format: ${result.error.message}`);
+    }
+    const firstContent = result.data.content[0];
     return firstContent?.type === 'text' ? (firstContent.text ?? '') : '';
   }
 }
