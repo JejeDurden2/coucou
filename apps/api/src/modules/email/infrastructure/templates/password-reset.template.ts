@@ -18,19 +18,19 @@ export function generatePasswordResetEmail(data: PasswordResetEmailData): {
   text: string;
 } {
   const content = `
-    ${createHeading('Reinitialisation de votre mot de passe', 1)}
+    ${createHeading('Réinitialisation de votre mot de passe', 1)}
 
     ${createParagraph(`Bonjour ${data.userName},`)}
 
-    ${createParagraph(`Vous avez demande a reinitialiser votre mot de passe. Cliquez sur le bouton ci-dessous pour choisir un nouveau mot de passe.`)}
+    ${createParagraph(`Vous avez demandé à réinitialiser votre mot de passe. Cliquez sur le bouton ci-dessous pour choisir un nouveau mot de passe.`)}
 
-    ${createButton('Reinitialiser mon mot de passe', data.resetUrl)}
+    ${createButton('Réinitialiser mon mot de passe', data.resetUrl)}
 
     ${createInfoBox(
       `
       <p style="margin: 0; font-size: 13px; color: ${EMAIL_COLORS.text};">
         Ce lien expire dans <strong>${data.expiresInMinutes} minutes</strong>.
-        Si vous n'avez pas demande cette reinitialisation, ignorez cet email.
+        Si vous n'avez pas demandé cette réinitialisation, ignorez cet email.
       </p>
       `,
       'warning',
@@ -43,23 +43,23 @@ export function generatePasswordResetEmail(data: PasswordResetEmailData): {
   `;
 
   const html = wrapInBaseTemplate(content, {
-    previewText: 'Reinitialisation de votre mot de passe Coucou',
+    previewText: 'Réinitialisation de votre mot de passe Coucou',
   });
 
   const text = `
-Reinitialisation de votre mot de passe
+Réinitialisation de votre mot de passe
 
 Bonjour ${data.userName},
 
-Vous avez demande a reinitialiser votre mot de passe. Cliquez sur le lien ci-dessous pour choisir un nouveau mot de passe :
+Vous avez demandé à réinitialiser votre mot de passe. Cliquez sur le lien ci-dessous pour choisir un nouveau mot de passe :
 
 ${data.resetUrl}
 
 Ce lien expire dans ${data.expiresInMinutes} minutes.
-Si vous n'avez pas demande cette reinitialisation, ignorez cet email.
+Si vous n'avez pas demandé cette réinitialisation, ignorez cet email.
 
 --
-Coucou - Votre visibilite dans les IA
+Coucou - Votre visibilité dans les IA
 https://coucou-ia.com
 `.trim();
 

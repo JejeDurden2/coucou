@@ -18,7 +18,7 @@ export function generateWelcomeEmail(data: WelcomeEmailData): { html: string; te
 
     ${createParagraph(`Bonjour ${data.userName},`)}
 
-    ${createParagraph(`Merci de rejoindre Coucou ! Vous venez de faire un premier pas important vers une meilleure visibilite de votre marque dans les reponses des IA.`)}
+    ${createParagraph(`Merci de rejoindre Coucou ! Vous venez de faire un premier pas important vers une meilleure visibilité de votre marque dans les réponses des IA.`)}
 
     ${createInfoBox(
       `
@@ -26,9 +26,9 @@ export function generateWelcomeEmail(data: WelcomeEmailData): { html: string; te
         Pourquoi c'est important ?
       </p>
       <ul style="margin: 0; padding-left: 20px; color: ${EMAIL_COLORS.text}; font-size: 14px; line-height: 1.8;">
-        <li><strong>40% des recherches</strong> passent desormais par les IA (ChatGPT, Claude...)</li>
+        <li><strong>40% des recherches</strong> passent désormais par les IA (ChatGPT, Claude...)</li>
         <li>Les utilisateurs font confiance aux recommandations de l'IA</li>
-        <li>Etre cite = plus de visibilite et de conversions</li>
+        <li>Être cité = plus de visibilité et de conversions</li>
       </ul>
       `,
       'success',
@@ -37,21 +37,21 @@ export function generateWelcomeEmail(data: WelcomeEmailData): { html: string; te
     ${createHeading('Premiers pas', 3)}
 
     <ol style="margin: 0 0 24px; padding-left: 20px; color: ${EMAIL_COLORS.text}; font-size: 14px; line-height: 2;">
-      <li>Creez votre premier projet avec votre nom de marque</li>
+      <li>Créez votre premier projet avec votre nom de marque</li>
       <li>Ajoutez des prompts que vos clients pourraient poser</li>
-      <li>Lancez un scan pour voir si vous etes cite</li>
-      <li>Suivez vos recommandations pour ameliorer votre visibilite</li>
+      <li>Lancez un scan pour voir si vous êtes cité</li>
+      <li>Suivez vos recommandations pour améliorer votre visibilité</li>
     </ol>
 
-    ${createButton('Acceder a mon dashboard', data.loginUrl)}
+    ${createButton('Accéder à mon dashboard', data.loginUrl)}
 
     <p style="margin: 24px 0 0; font-size: 13px; color: ${EMAIL_COLORS.textMuted}; text-align: center;">
-      Des questions ? Repondez directement a cet email.
+      Des questions ? Répondez directement à cet email.
     </p>
   `;
 
   const html = wrapInBaseTemplate(content, {
-    previewText: 'Bienvenue sur Coucou ! Decouvrez comment ameliorer votre visibilite dans les IA.',
+    previewText: 'Bienvenue sur Coucou ! Découvrez comment améliorer votre visibilité dans les IA.',
   });
 
   const text = `
@@ -59,25 +59,25 @@ Bienvenue sur Coucou !
 
 Bonjour ${data.userName},
 
-Merci de rejoindre Coucou ! Vous venez de faire un premier pas important vers une meilleure visibilite de votre marque dans les reponses des IA.
+Merci de rejoindre Coucou ! Vous venez de faire un premier pas important vers une meilleure visibilité de votre marque dans les réponses des IA.
 
 POURQUOI C'EST IMPORTANT ?
-- 40% des recherches passent desormais par les IA (ChatGPT, Claude...)
+- 40% des recherches passent désormais par les IA (ChatGPT, Claude...)
 - Les utilisateurs font confiance aux recommandations de l'IA
-- Etre cite = plus de visibilite et de conversions
+- Être cité = plus de visibilité et de conversions
 
 PREMIERS PAS :
-1. Creez votre premier projet avec votre nom de marque
+1. Créez votre premier projet avec votre nom de marque
 2. Ajoutez des prompts que vos clients pourraient poser
-3. Lancez un scan pour voir si vous etes cite
-4. Suivez vos recommandations pour ameliorer votre visibilite
+3. Lancez un scan pour voir si vous êtes cité
+4. Suivez vos recommandations pour améliorer votre visibilité
 
-Accedez a votre dashboard : ${data.loginUrl}
+Accédez à votre dashboard : ${data.loginUrl}
 
-Des questions ? Repondez directement a cet email.
+Des questions ? Répondez directement à cet email.
 
 --
-Coucou - Votre visibilite dans les IA
+Coucou - Votre visibilité dans les IA
 https://coucou-ia.com
 `.trim();
 
