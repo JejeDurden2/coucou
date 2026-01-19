@@ -1,6 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { LLMProvider, Plan } from '@prisma/client';
-import { LLMModel, PLAN_MODELS } from '@coucou-ia/shared';
 
 import type {
   LLMResponse,
@@ -15,6 +14,26 @@ import { GPT4oLLMAdapter } from './gpt4o-llm.adapter';
 import { GPT52LLMAdapter } from './gpt52-llm.adapter';
 import { ClaudeSonnetLLMAdapter } from './claude-sonnet-llm.adapter';
 import { ClaudeOpusLLMAdapter } from './claude-opus-llm.adapter';
+
+const LLM_MODELS = {
+  GPT_4O_MINI: 'gpt-4o-mini',
+  GPT_4O: 'gpt-4o',
+  GPT_5_2: 'gpt-5.2',
+  CLAUDE_SONNET_4_5: 'claude-sonnet-4-5-20250514',
+  CLAUDE_OPUS_4_5: 'claude-opus-4-5-20250514',
+} as const;
+
+const PLAN_MODELS: Record<Plan, string[]> = {
+  [Plan.FREE]: [LLM_MODELS.GPT_4O_MINI],
+  [Plan.SOLO]: [LLM_MODELS.GPT_4O_MINI, LLM_MODELS.GPT_4O, LLM_MODELS.CLAUDE_SONNET_4_5],
+  [Plan.PRO]: [
+    LLM_MODELS.GPT_4O_MINI,
+    LLM_MODELS.GPT_4O,
+    LLM_MODELS.GPT_5_2,
+    LLM_MODELS.CLAUDE_SONNET_4_5,
+    LLM_MODELS.CLAUDE_OPUS_4_5,
+  ],
+};
 
 type QueryResult =
   | { success: true; response: LLMResponse }
@@ -34,11 +53,11 @@ export class LLMServiceImpl implements LLMService {
     private readonly claudeOpusAdapter: ClaudeOpusLLMAdapter,
   ) {
     this.adaptersByModel = new Map<string, LLMPort>([
-      [LLMModel.GPT_4O_MINI, this.openaiAdapter],
-      [LLMModel.GPT_4O, this.gpt4oAdapter],
-      [LLMModel.GPT_5_2, this.gpt52Adapter],
-      [LLMModel.CLAUDE_SONNET_4_5, this.claudeSonnetAdapter],
-      [LLMModel.CLAUDE_OPUS_4_5, this.claudeOpusAdapter],
+      [LLM_MODELS.GPT_4O_MINI, this.openaiAdapter],
+      [LLM_MODELS.GPT_4O, this.gpt4oAdapter],
+      [LLM_MODELS.GPT_5_2, this.gpt52Adapter],
+      [LLM_MODELS.CLAUDE_SONNET_4_5, this.claudeSonnetAdapter],
+      [LLM_MODELS.CLAUDE_OPUS_4_5, this.claudeOpusAdapter],
     ]);
   }
 
