@@ -7,8 +7,8 @@
 ### Design Principles
 
 - **Clean and flat**: No gradients, solid colors only
-- **Dark-first**: Deep space backgrounds let content shine
-- **Subtle accents**: Cyan for primary actions, violet for secondary
+- **Dark-first**: Deep zinc backgrounds let content shine
+- **Single accent**: Violet for all primary actions
 - **Smooth motion**: Simple transitions that feel premium
 
 ---
@@ -19,66 +19,91 @@
 
 ```css
 :root {
-  /* Coucou IA Brand Colors */
-  --background: 8 10 18; /* #080a12 - deep space black */
-  --foreground: 237 242 247; /* #edf2f7 - primary text */
-  --card: 15 20 35; /* #0f1423 - card backgrounds */
-  --card-foreground: 237 242 247; /* #edf2f7 - card text */
+  /* Background - Deep zinc */
+  --background: 9 9 11; /* #09090b */
+  --foreground: 250 250 250; /* #fafafa */
 
-  --primary: 6 182 212; /* #06b6d4 - cyan-500, CTAs */
-  --primary-foreground: 8 10 18; /* #080a12 - text on primary */
-  --secondary: 139 92 246; /* #8b5cf6 - violet-500, accents */
-  --secondary-foreground: 237 242 247;
+  /* Cards - Elevated surfaces */
+  --card: 24 24 27; /* #18181b */
+  --card-foreground: 250 250 250;
+  --card-hover: 39 39 42; /* #27272a */
+  --popover: 24 24 27;
+  --popover-foreground: 250 250 250;
 
-  --success: 34 197 94; /* #22c55e - emerald-500 */
-  --destructive: 244 63 94; /* #f43f5e - rose-500 */
+  /* Primary/Accent - Violet #8B5CF6 (single accent color) */
+  --primary: 139 92 246; /* #8b5cf6 - violet-500 */
+  --primary-foreground: 250 250 250;
 
-  --muted: 30 40 60; /* #1e283c - muted backgrounds */
-  --muted-foreground: 148 163 184; /* #94a3b8 - slate-400, secondary text */
+  /* Secondary - Zinc tone */
+  --secondary: 39 39 42; /* #27272a */
+  --secondary-foreground: 250 250 250;
 
-  --border: 30 40 60; /* #1e283c - default borders */
-  --input: 20 30 50; /* #141e32 - input backgrounds */
-  --ring: 6 182 212; /* #06b6d4 - focus rings */
-  --accent: 30 40 60; /* #1e283c - accent backgrounds */
+  /* Muted - Zinc tones */
+  --muted: 39 39 42; /* #27272a */
+  --muted-foreground: 161 161 170; /* #a1a1aa - zinc-400 */
+
+  /* Accent - Same as primary */
+  --accent: 139 92 246;
+  --accent-foreground: 250 250 250;
+  --accent-muted: 139 92 246; /* Use with /12 opacity */
+
+  /* LLM colors - Neutralized (both gray) */
+  --chatgpt: 113 113 122; /* #71717a - zinc-500 */
+  --claude: 113 113 122; /* #71717a - zinc-500 */
+
+  /* Semantic - Only for deltas */
+  --success: 34 197 94; /* #22c55e - green-500 */
+  --success-foreground: 250 250 250;
+  --destructive: 239 68 68; /* #ef4444 - red-500 */
+  --destructive-foreground: 250 250 250;
+  --warning: 251 191 36; /* #fbbf24 - amber-400 */
+  --warning-foreground: 9 9 11;
+
+  /* Borders and inputs */
+  --border: 39 39 42; /* #27272a */
+  --input: 24 24 27; /* #18181b */
+  --ring: 139 92 246; /* #8b5cf6 */
+  --radius: 0.5rem; /* 8px */
 }
 ```
 
 ### Semantic Mappings
 
-| Semantic Token     | RGB Value   | Hex     | Usage                    |
-| ------------------ | ----------- | ------- | ------------------------ |
-| `primary`          | 6 182 212   | #06b6d4 | CTAs, links, focus rings |
-| `secondary`        | 139 92 246  | #8b5cf6 | Accents, badges          |
-| `success`          | 34 197 94   | #22c55e | Cited states             |
-| `destructive`      | 244 63 94   | #f43f5e | Absent states, errors    |
-| `background`       | 8 10 18     | #080a12 | Page background          |
-| `foreground`       | 237 242 247 | #edf2f7 | Primary text             |
-| `muted-foreground` | 148 163 184 | #94a3b8 | Secondary text           |
+| Semantic Token     | RGB Value     | Hex     | Usage                         |
+| ------------------ | ------------- | ------- | ----------------------------- |
+| `primary`          | 139 92 246    | #8b5cf6 | CTAs, links, focus rings      |
+| `success`          | 34 197 94     | #22c55e | Positive deltas, cited states |
+| `destructive`      | 239 68 68     | #ef4444 | Negative deltas, errors       |
+| `warning`          | 251 191 36    | #fbbf24 | Warnings, caution states      |
+| `background`       | 9 9 11        | #09090b | Page background               |
+| `foreground`       | 250 250 250   | #fafafa | Primary text                  |
+| `muted-foreground` | 161 161 170   | #a1a1aa | Secondary text                |
+| `card`             | 24 24 27      | #18181b | Card backgrounds              |
+| `border`           | 39 39 42      | #27272a | Default borders               |
 
 ### Tailwind Usage
 
 ```tsx
-// Primary button (solid cyan)
+// Primary button (solid violet)
 <Button>Get Started</Button>
-// → bg-cyan-500 text-slate-900 hover:bg-cyan-400
+// → bg-primary text-primary-foreground hover:bg-primary/90
 
 // Outline button
 <Button variant="outline">Learn More</Button>
-// → border border-cyan-500/30 hover:bg-cyan-500/10
+// → border border-input hover:bg-accent hover:text-accent-foreground
 
 // Links
-<a className="text-muted-foreground hover:text-cyan-400 transition-colors">
+<a className="text-muted-foreground hover:text-primary transition-colors">
 
 // Cards
 <Card>
-// → bg-card/80 backdrop-blur-sm border-cyan-500/10
+// → bg-card border-border
 
 // Accent text
-<span className="text-cyan-400">
-<span className="text-violet-400">
+<span className="text-primary">
 
-// Brand text (no gradients)
-<h1 className="text-cyan-400">
+// Muted text
+<span className="text-muted-foreground">
 ```
 
 ---
@@ -117,73 +142,50 @@
 
 ---
 
-## Glass Effects
-
-### Card Glass
-
-```tsx
-<Card>
-// → rounded-xl border border-cyan-500/10 bg-[rgb(15_20_35/0.8)] backdrop-blur-sm
-```
-
-### Navigation Glass
-
-```tsx
-<header className="bg-background/80 backdrop-blur-xl border-b border-cyan-500/10">
-```
-
-### Section Background
-
-```tsx
-<section className="bg-[rgb(12_15_25)]">
-```
-
----
-
 ## Component Patterns
 
 ### Buttons
 
 ```tsx
-// Primary (default) - solid color, no gradient
+// Primary (default) - solid violet
 <Button>Primary Action</Button>
-// → bg-cyan-500 text-slate-900 hover:bg-cyan-400 font-semibold
+// → bg-primary text-primary-foreground hover:bg-primary/90
 
 // Outline
 <Button variant="outline">Secondary</Button>
-// → border border-cyan-500/30 bg-transparent hover:bg-cyan-500/10
+// → border border-input bg-background hover:bg-accent
 
 // Ghost
 <Button variant="ghost">Subtle</Button>
-// → hover:bg-cyan-500/10 hover:text-cyan-400
+// → hover:bg-accent hover:text-accent-foreground
 
 // Destructive
 <Button variant="destructive">Delete</Button>
-// → bg-rose-500 text-white hover:bg-rose-600
+// → bg-destructive text-destructive-foreground hover:bg-destructive/90
 
 // Secondary
 <Button variant="secondary">Secondary</Button>
-// → bg-violet-500 text-white hover:bg-violet-400
+// → bg-secondary text-secondary-foreground hover:bg-secondary/80
 ```
 
 ### Badges
 
 ```tsx
-// Default (cyan)
+// Default
 <Badge>Default</Badge>
-// → bg-cyan-500/20 text-cyan-400 border border-cyan-500/30
+// → bg-primary text-primary-foreground
 
-// Secondary (violet)
+// Secondary
 <Badge variant="secondary">Secondary</Badge>
-// → bg-violet-500/20 text-violet-400 border border-violet-500/30
+// → bg-secondary text-secondary-foreground
 
-// Success (emerald)
-<Badge variant="success">Cité #1</Badge>
-// → bg-emerald-500/20 text-emerald-400 border border-emerald-500/30
+// Outline
+<Badge variant="outline">Outline</Badge>
+// → border text-foreground
 
-// Destructive (rose)
-<Badge variant="destructive">Absent</Badge>
-// → bg-rose-500/20 text-rose-400 border border-rose-500/30
+// Destructive
+<Badge variant="destructive">Error</Badge>
+// → bg-destructive text-destructive-foreground
 ```
 
 ### Cards
@@ -195,14 +197,14 @@
   </CardHeader>
   <CardContent>Content</CardContent>
 </Card>
-// → rounded-xl border-cyan-500/10 bg-card/80 backdrop-blur-sm hover:border-cyan-500/20
+// → rounded-lg border bg-card text-card-foreground
 ```
 
 ### Inputs
 
 ```tsx
 <Input placeholder="Email" />
-// → bg-input border-border rounded-lg focus:ring-2 focus:ring-cyan-500/50
+// → bg-input border-border rounded-md focus-visible:ring-ring
 ```
 
 ### Stat Card
@@ -213,30 +215,30 @@
     <div className="flex items-start justify-between">
       <div className="space-y-2">
         <p className="text-sm text-muted-foreground">Label</p>
-        <p className="text-3xl font-bold tracking-tight">42%</p>
+        <p className="text-3xl font-bold tracking-tight tabular-nums">42%</p>
       </div>
-      <div className="rounded-xl bg-cyan-500/10 p-3 border border-cyan-500/20">
-        <Icon className="h-6 w-6 text-cyan-400" />
+      <div className="rounded-xl bg-primary/10 p-3">
+        <Icon className="size-6 text-primary" />
       </div>
     </div>
   </CardContent>
 </Card>
 ```
 
-### Citation Badge
+### Citation Status
 
 ```tsx
-// Cited
-<Badge variant="success" className="gap-1">
-  <Check className="h-3 w-3" aria-hidden="true" />
-  <span>Cité #1</span>
-</Badge>
+// Cited (positive)
+<span className="text-success">Cité #1</span>
 
-// Absent
-<Badge variant="destructive" className="gap-1">
-  <X className="h-3 w-3" aria-hidden="true" />
-  <span>Absent</span>
-</Badge>
+// Absent (negative)
+<span className="text-destructive">Absent</span>
+
+// Delta positive
+<span className="text-success">+5</span>
+
+// Delta negative
+<span className="text-destructive">-3</span>
 ```
 
 ### Progress Bars
@@ -244,7 +246,7 @@
 ```tsx
 // Solid color, no gradient
 <div className="h-2 rounded-full bg-muted overflow-hidden">
-  <div className="h-full rounded-full bg-cyan-500" style={{ width: '75%' }} />
+  <div className="h-full rounded-full bg-primary" style={{ width: '75%' }} />
 </div>
 ```
 
@@ -269,31 +271,35 @@
 
 | Token          | Value  | Usage          |
 | -------------- | ------ | -------------- |
-| `--radius`     | 12px   | Base radius    |
-| `rounded-lg`   | 12px   | Cards, modals  |
-| `rounded-xl`   | 16px   | Large cards    |
+| `--radius`     | 0.5rem | Base radius    |
+| `rounded-md`   | 6px    | Inputs         |
+| `rounded-lg`   | 8px    | Cards, modals  |
+| `rounded-xl`   | 12px   | Large cards    |
 | `rounded-full` | 9999px | Pills, avatars |
 
 ---
 
 ## Animations
 
-```typescript
-animation: {
-  'fade-in': 'fadeIn 0.5s ease-out',
-  'slide-up': 'slideUp 0.5s ease-out',
-  'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-}
+```css
+/* Custom animations in globals.css */
+@keyframes wave { ... }
+@keyframes count-up { ... }
+@keyframes glow-pulse { ... }
+
+.animate-wave       /* 0.5s ease-in-out */
+.animate-count-up   /* 0.5s ease-out */
+.animate-glow-pulse /* 2s infinite */
 ```
 
 ### Transitions
 
 ```tsx
-transition - colors; // Color changes
-transition - all; // All properties
-duration - 200; // Fast (200ms)
-duration - 300; // Normal (300ms)
-duration - 500; // Slow (500ms)
+transition-colors  // Color changes
+transition-all     // All properties
+duration-200       // Fast (200ms)
+duration-300       // Normal (300ms)
+duration-500       // Slow (500ms)
 ```
 
 ---
@@ -320,38 +326,29 @@ This design system is **dark-mode only**. The color scheme meta tag is set:
 ### Focus States
 
 ```css
-focus-visible:outline-none
-focus-visible:ring-2
-focus-visible:ring-cyan-500/50
-focus-visible:ring-offset-2
-focus-visible:ring-offset-background
+:focus-visible {
+  @apply outline-none ring-2 ring-primary/50 ring-offset-2 ring-offset-background;
+}
 ```
 
 ### Reduced Motion
 
-```css
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    transition-duration: 0.01ms !important;
-  }
-}
-```
+Respect `prefers-reduced-motion` for animations.
 
 ---
 
 ## Key Rules
 
 1. **No gradients**: Use solid colors only for buttons, backgrounds, and progress bars
-2. **Text colors**: Use `text-foreground` for primary, `text-muted-foreground` for secondary
-3. **Accent colors**: Cyan (`cyan-400/500`) for primary, violet (`violet-400/500`) for secondary
-4. **CTAs**: Use solid `bg-cyan-500` with `text-slate-900`
-5. **Links**: Use `text-muted-foreground hover:text-cyan-400`
-6. **Cards**: Use glass effect with `bg-card/80 backdrop-blur-sm border-cyan-500/10`
-7. **Transitions**: Always `duration-200` or `duration-300`
-8. **Borders**: Use `border-cyan-500/10` for subtle, `border-cyan-500/30` for emphasis
-9. **Spacing**: Generous - sections get `py-20`, cards get `p-6`
-10. **Focus rings**: Use `ring-cyan-500/50`
-11. **Icons**: Always add `aria-hidden="true"` to decorative icons
+2. **Single accent**: Violet (`primary`) for all interactive elements
+3. **Text colors**: Use `text-foreground` for primary, `text-muted-foreground` for secondary
+4. **Semantic colors**: `success`/`destructive` only for deltas and status indicators
+5. **CTAs**: Use `bg-primary text-primary-foreground`
+6. **Links**: Use `text-muted-foreground hover:text-primary`
+7. **Cards**: Use `bg-card border-border`
+8. **Transitions**: Always `duration-200` or `duration-300`
+9. **Borders**: Use `border-border` for default, `border-primary/20` for emphasis
+10. **Spacing**: Generous - sections get `py-20`, cards get `p-6`
+11. **Focus rings**: Use `ring-primary/50`
+12. **Icons**: Always add `aria-hidden="true"` to decorative icons
+13. **Numbers**: Use `tabular-nums` for data alignment
