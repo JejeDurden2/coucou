@@ -28,22 +28,22 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL('https://coucou-ia.com'),
   title: {
-    default: 'Coucou IA - Votre marque est-elle visible dans les réponses IA ?',
+    default: 'Coucou IA - Outil GEO pour améliorer votre visibilité dans ChatGPT et Claude',
     template: '%s | Coucou IA',
   },
   description:
-    "Surveillez et améliorez la visibilité de votre marque dans les réponses de ChatGPT, Claude et autres IA. Découvrez si l'IA recommande votre entreprise.",
+    'Outil GEO français pour surveiller et améliorer la visibilité de votre marque dans ChatGPT et Claude. Gratuit pour démarrer. +500 marques utilisent Coucou IA.',
   keywords: [
-    'visibilité IA',
-    'ChatGPT',
-    'Claude',
     'GEO',
     'Generative Engine Optimization',
-    'marque IA',
+    'visibilité IA',
+    'visibilité ChatGPT',
+    'visibilité Claude',
     'SEO IA',
-    'recommandation IA',
+    'référencement IA',
+    'marque ChatGPT',
     'monitoring LLM',
-    'brand visibility AI',
+    'optimisation IA',
   ],
   authors: [{ name: 'Coucou IA' }],
   creator: 'Coucou IA',
@@ -69,24 +69,15 @@ export const metadata: Metadata = {
     locale: 'fr_FR',
     url: 'https://coucou-ia.com',
     siteName: 'Coucou IA',
-    title: 'Coucou IA - Votre marque est-elle visible dans les réponses IA ?',
+    title: 'Coucou IA - Outil GEO pour améliorer votre visibilité dans ChatGPT et Claude',
     description:
-      'Surveillez et améliorez la visibilité de votre marque dans les réponses de ChatGPT, Claude et autres IA.',
-    images: [
-      {
-        url: '/og-image.svg',
-        width: 1200,
-        height: 630,
-        alt: 'Coucou IA - Monitoring de visibilité IA',
-      },
-    ],
+      'Surveillez et améliorez la visibilité de votre marque dans les réponses de ChatGPT et Claude. Le GEO, c\'est le nouveau SEO.',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Coucou IA - Votre marque est-elle visible dans les réponses IA ?',
+    title: 'Coucou IA - Outil GEO pour améliorer votre visibilité dans ChatGPT et Claude',
     description:
-      'Surveillez et améliorez la visibilité de votre marque dans les réponses de ChatGPT, Claude et autres IA.',
-    images: ['/twitter-image.svg'],
+      'Surveillez et améliorez la visibilité de votre marque dans les réponses de ChatGPT et Claude. Le GEO, c\'est le nouveau SEO.',
     creator: '@coucouia',
   },
   alternates: {

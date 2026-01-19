@@ -169,9 +169,9 @@ export default function LandingPage() {
             </Badge>
 
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6 text-balance">
-              <span className="text-primary">L&apos;IA parle-t-elle</span>
+              <span className="text-primary">GEO :</span> Améliorez votre
               <br />
-              de vous ?
+              visibilité dans ChatGPT et Claude
             </h1>
 
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-8 text-pretty">
@@ -254,6 +254,105 @@ export default function LandingPage() {
                   </p>
                 </CardContent>
               </Card>
+            </div>
+          </div>
+        </section>
+
+        {/* GEO Educational Section */}
+        <section id="geo" className="py-20 px-4 scroll-mt-20">
+          <div className="container mx-auto max-w-4xl">
+            <div className="text-center mb-12">
+              <Badge className="mb-4">Le GEO expliqué</Badge>
+              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-balance">
+                Qu&apos;est-ce que le GEO ?
+              </h2>
+            </div>
+
+            <div className="prose prose-invert prose-zinc max-w-none">
+              <p className="text-lg text-muted-foreground mb-6 text-pretty">
+                Le <strong className="text-foreground">GEO (Generative Engine Optimization)</strong> est
+                l&apos;optimisation de la visibilité de votre marque dans les réponses générées par les
+                intelligences artificielles comme ChatGPT, Claude, Gemini ou Perplexity. C&apos;est
+                l&apos;équivalent du SEO pour l&apos;ère de l&apos;IA conversationnelle.
+              </p>
+
+              <div className="grid md:grid-cols-2 gap-6 mb-8">
+                <Card className="bg-zinc-900/50">
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-base">SEO traditionnel</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-sm text-muted-foreground">
+                      Optimise votre position dans les résultats de recherche Google. L&apos;utilisateur
+                      voit une liste de liens et choisit lequel visiter.
+                    </p>
+                  </CardContent>
+                </Card>
+                <Card className="bg-primary/5 border-primary/20">
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-base">GEO (nouveau)</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-sm text-muted-foreground">
+                      Optimise si et comment votre marque est mentionnée dans les réponses IA.
+                      L&apos;utilisateur reçoit une recommandation directe.
+                    </p>
+                  </CardContent>
+                </Card>
+              </div>
+
+              <h3 className="text-xl font-semibold mb-4">Pourquoi le GEO est crucial en 2025</h3>
+
+              <p className="text-muted-foreground mb-4 text-pretty">
+                Les utilisateurs changent leur façon de chercher de l&apos;information. Au lieu de taper
+                des mots-clés dans Google, ils posent des questions à ChatGPT : &quot;Quel est le
+                meilleur outil pour gérer mes factures ?&quot;, &quot;Quelle marque de chaussures de
+                running me recommandes-tu ?&quot;
+              </p>
+
+              <p className="text-muted-foreground mb-4 text-pretty">
+                Si votre marque n&apos;apparaît pas dans ces réponses, vous êtes invisible pour une part
+                croissante de vos clients potentiels. Les LLM ne fonctionnent pas comme Google : ils
+                synthétisent l&apos;information et recommandent directement des solutions. Être cité en
+                premier peut générer <strong className="text-foreground">+40% de conversions</strong>.
+              </p>
+
+              <h3 className="text-xl font-semibold mb-4 mt-8">Comment améliorer votre GEO</h3>
+
+              <ul className="space-y-3 text-muted-foreground">
+                <li className="flex items-start gap-3">
+                  <Check className="size-5 text-primary mt-0.5 shrink-0" aria-hidden="true" />
+                  <span>
+                    <strong className="text-foreground">Mesurez votre visibilité actuelle</strong> — Avant
+                    d&apos;optimiser, il faut savoir où vous en êtes. Coucou IA interroge les LLM avec
+                    vos prompts métier.
+                  </span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <Check className="size-5 text-primary mt-0.5 shrink-0" aria-hidden="true" />
+                  <span>
+                    <strong className="text-foreground">Renforcez votre présence sur les sources citées</strong>{' '}
+                    — Les LLM puisent dans des sources indexées. Soyez présent sur Wikipedia, les sites
+                    d&apos;autorité, et les annuaires de votre secteur.
+                  </span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <Check className="size-5 text-primary mt-0.5 shrink-0" aria-hidden="true" />
+                  <span>
+                    <strong className="text-foreground">Créez du contenu structuré et factuel</strong> — Les IA
+                    privilégient les informations claires, chiffrées et bien organisées. Utilisez des
+                    listes, des tableaux comparatifs, des données vérifiables.
+                  </span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <Check className="size-5 text-primary mt-0.5 shrink-0" aria-hidden="true" />
+                  <span>
+                    <strong className="text-foreground">Analysez vos concurrents</strong> — Identifiez qui est
+                    cité à votre place et comprenez pourquoi. Coucou IA détecte automatiquement les
+                    marques concurrentes mentionnées.
+                  </span>
+                </li>
+              </ul>
             </div>
           </div>
         </section>
@@ -470,26 +569,6 @@ export default function LandingPage() {
               </ul>
             </div>
             <div>
-              <h4 className="font-medium mb-4">Ressources</h4>
-              <ul className="space-y-2 text-sm text-muted-foreground">
-                <li>
-                  <Link href="/blog" className="hover:text-foreground">
-                    Blog
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/docs" className="hover:text-foreground">
-                    Documentation
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/changelog" className="hover:text-foreground">
-                    Changelog
-                  </Link>
-                </li>
-              </ul>
-            </div>
-            <div>
               <h4 className="font-medium mb-4">Légal</h4>
               <ul className="space-y-2 text-sm text-muted-foreground">
                 <li>
@@ -500,11 +579,6 @@ export default function LandingPage() {
                 <li>
                   <Link href="/terms" className="hover:text-foreground">
                     CGU
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/mentions" className="hover:text-foreground">
-                    Mentions légales
                   </Link>
                 </li>
               </ul>
@@ -576,6 +650,32 @@ export default function LandingPage() {
                 text: faq.answer,
               },
             })),
+          }),
+        }}
+      />
+      {/* JSON-LD Schema - Organization */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'Organization',
+            name: 'Coucou IA',
+            url: 'https://coucou-ia.com',
+            logo: 'https://coucou-ia.com/logo.png',
+            description:
+              'Outil GEO français pour surveiller et améliorer la visibilité de votre marque dans ChatGPT et Claude.',
+            foundingDate: '2024',
+            sameAs: [
+              'https://twitter.com/coucouia',
+              'https://linkedin.com/company/coucouia',
+            ],
+            contactPoint: {
+              '@type': 'ContactPoint',
+              contactType: 'customer service',
+              email: 'contact@coucou-ia.com',
+              availableLanguage: ['French'],
+            },
           }),
         }}
       />
