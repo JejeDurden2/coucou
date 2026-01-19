@@ -6,11 +6,9 @@ import {
   Check,
   ChevronDown,
   Eye,
-  Gauge,
   Shield,
   Sparkles,
   TrendingUp,
-  Users,
 } from 'lucide-react';
 import { Plan, PLAN_PRICING } from '@coucou-ia/shared';
 import { Button } from '@/components/ui/button';
@@ -169,9 +167,9 @@ export default function LandingPage() {
             </Badge>
 
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6 text-balance">
-              <span className="text-primary">GEO :</span> Améliorez votre
+              <span className="text-primary">L&apos;IA parle-t-elle</span>
               <br />
-              visibilité dans ChatGPT et Claude
+              de vous ?
             </h1>
 
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-8 text-pretty">
@@ -189,22 +187,22 @@ export default function LandingPage() {
                 </Link>
               </Button>
               <Button size="lg" variant="outline" asChild>
-                <Link href="#demo">Voir la démo</Link>
+                <Link href="#features">Découvrir</Link>
               </Button>
             </div>
 
-            {/* Social proof */}
-            <div className="flex items-center justify-center gap-8 text-sm text-muted-foreground">
+            {/* Product benefits */}
+            <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-muted-foreground">
               <div className="flex items-center gap-2">
-                <Users className="h-4 w-4" aria-hidden="true" />
-                <span>500+ marques suivies</span>
+                <Eye className="size-4" aria-hidden="true" />
+                <span>Multi-LLM</span>
               </div>
               <div className="flex items-center gap-2">
-                <Gauge className="h-4 w-4" aria-hidden="true" />
-                <span>10M+ scans effectués</span>
+                <BarChart3 className="size-4" aria-hidden="true" />
+                <span>Analyse concurrentielle</span>
               </div>
               <div className="flex items-center gap-2">
-                <Shield className="h-4 w-4" aria-hidden="true" />
+                <Shield className="size-4" aria-hidden="true" />
                 <span>RGPD compliant</span>
               </div>
             </div>
