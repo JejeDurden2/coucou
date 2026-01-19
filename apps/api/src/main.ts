@@ -46,7 +46,9 @@ function validateOriginUrl(url: string): boolean {
 }
 
 async function bootstrap(): Promise<void> {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    rawBody: true, // Required for Stripe webhook signature verification
+  });
   const logger = new Logger('Bootstrap');
 
   // Validate required environment variables
