@@ -20,7 +20,6 @@ import { useCreatePrompt, useDeletePrompt } from '@/hooks/use-prompts';
 import { useDashboardStats, useRecommendations, useTriggerScan } from '@/hooks/use-dashboard';
 import { useAuth } from '@/lib/auth-context';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -34,6 +33,7 @@ import {
 import { CompetitorsList, RecommendationsPanel } from '@/components/features/dashboard';
 import { StatCard } from '@/components/features/dashboard/stat-card';
 import { getModelDisplayName } from '@/components/features/dashboard/llm-result-row';
+import { AddPromptModal } from '@/components/features/dashboard/add-prompt-modal';
 import { LLMProvider, getScanAvailability, Plan, PLAN_LIMITS } from '@coucou-ia/shared';
 import { cn } from '@/lib/utils';
 import { formatRelativeTime, formatRelativeTimeFuture } from '@/lib/format';
@@ -91,16 +91,11 @@ export default function ProjectDashboardPage({
 
   const userPlan = (user?.plan as Plan) ?? Plan.FREE;
 
-  const [newPrompt, setNewPrompt] = useState('');
   const [showAddPrompt, setShowAddPrompt] = useState(false);
   const [promptToDelete, setPromptToDelete] = useState<string | null>(null);
 
-  async function handleAddPrompt(e: React.FormEvent): Promise<void> {
-    e.preventDefault();
-    if (!newPrompt.trim()) return;
-
-    await createPrompt.mutateAsync({ content: newPrompt.trim() });
-    setNewPrompt('');
+  async function handleAddPrompt(content: string): Promise<void> {
+    await createPrompt.mutateAsync({ content });
     setShowAddPrompt(false);
   }
 
@@ -243,34 +238,6 @@ export default function ProjectDashboardPage({
           </Button>
         </div>
 
-        {/* Add Prompt Form */}
-        {showAddPrompt ? (
-          <form onSubmit={handleAddPrompt} className="flex gap-2">
-            <Input
-              placeholder="Ex: Quels sont les meilleurs cafés à Paris…"
-              value={newPrompt}
-              onChange={(e) => setNewPrompt(e.target.value)}
-              className="flex-1"
-              autoComplete="off"
-              aria-label="Nouveau prompt à tracker"
-            />
-            <Button type="submit" disabled={createPrompt.isPending} size="sm">
-              Ajouter
-            </Button>
-            <Button
-              type="button"
-              variant="ghost"
-              size="sm"
-              onClick={() => {
-                setShowAddPrompt(false);
-                setNewPrompt('');
-              }}
-            >
-              Annuler
-            </Button>
-          </form>
-        ) : null}
-
         {/* Prompts Table */}
         <div className="rounded-lg border border-border overflow-hidden overflow-x-auto">
           <table className="w-full">
@@ -381,6 +348,14 @@ export default function ProjectDashboardPage({
           userPlan={userPlan}
         />
       ) : null}
+
+      {/* Add Prompt Modal */}
+      <AddPromptModal
+        open={showAddPrompt}
+        onOpenChange={setShowAddPrompt}
+        onSubmit={handleAddPrompt}
+        isPending={createPrompt.isPending}
+      />
 
       {/* Delete Prompt AlertDialog */}
       <AlertDialog
