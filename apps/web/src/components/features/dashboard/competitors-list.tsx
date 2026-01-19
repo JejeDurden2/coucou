@@ -33,7 +33,6 @@ function EnrichedCompetitorsList({
 }) {
   const [showAll, setShowAll] = useState(false);
   const displayedCompetitors = showAll ? competitors : competitors.slice(0, maxItems);
-  const maxMentions = Math.max(...competitors.map((c) => c.totalMentions), 1);
   const remainingCount = competitors.length - maxItems;
 
   return (
@@ -57,7 +56,6 @@ function EnrichedCompetitorsList({
                 key={competitor.name}
                 competitor={competitor}
                 rank={index + 1}
-                maxMentions={maxMentions}
               />
             ))}
             {remainingCount > 0 && !showAll && (

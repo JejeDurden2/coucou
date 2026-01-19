@@ -36,6 +36,10 @@ class ApiClient {
       throw new ApiClientError(error.code, error.message, response.status);
     }
 
+    if (response.status === 204) {
+      return undefined as T;
+    }
+
     return response.json() as Promise<T>;
   }
 

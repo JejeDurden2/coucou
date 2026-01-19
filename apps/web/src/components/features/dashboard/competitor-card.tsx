@@ -1,14 +1,12 @@
 'use client';
 
-import { useState, useCallback, memo } from 'react';
+import { memo } from 'react';
 import { TrendingUp, TrendingDown, Minus, Sparkles, EyeOff } from 'lucide-react';
 import type { EnrichedCompetitor } from '@coucou-ia/shared';
-import { cn } from '@/lib/utils';
 
 interface CompetitorCardProps {
   competitor: EnrichedCompetitor;
   rank: number;
-  maxMentions: number;
 }
 
 function TrendBadge({
@@ -89,11 +87,11 @@ function KeywordBadges({ keywords }: { keywords: string[] }) {
   if (keywords.length === 0) return null;
 
   return (
-    <div className="flex flex-wrap gap-1">
+    <div className="flex flex-wrap gap-1.5">
       {keywords.map((keyword) => (
         <span
           key={keyword}
-          className="px-1.5 py-0.5 rounded text-[10px] font-medium bg-muted text-muted-foreground capitalize"
+          className="px-2 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary capitalize"
         >
           {keyword}
         </span>
@@ -105,36 +103,9 @@ function KeywordBadges({ keywords }: { keywords: string[] }) {
 export const CompetitorCard = memo(function CompetitorCard({
   competitor,
   rank,
-  maxMentions,
 }: CompetitorCardProps) {
-  const [isExpanded, setIsExpanded] = useState(false);
-  const mentionProgress = (competitor.totalMentions / maxMentions) * 100;
-  const hasDetails = competitor.keywords.length > 0 || competitor.lastContext;
-
-  const handleToggle = useCallback(() => setIsExpanded((prev) => !prev), []);
-
-  const handleKeyDown = useCallback(
-    (e: React.KeyboardEvent) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        handleToggle();
-      }
-    },
-    [handleToggle],
-  );
-
   return (
-    <div
-      className={cn(
-        'rounded-lg border border-border bg-card p-4 transition-colors duration-200',
-        hasDetails && 'cursor-pointer hover:border-primary/50',
-        isExpanded && 'border-primary/50 bg-primary/5',
-      )}
-      onClick={hasDetails ? handleToggle : undefined}
-      role={hasDetails ? 'button' : undefined}
-      tabIndex={hasDetails ? 0 : undefined}
-      onKeyDown={hasDetails ? handleKeyDown : undefined}
-    >
+    <div className="rounded-lg border border-border bg-card p-4">
       <div className="flex items-start justify-between mb-3">
         <div className="flex items-center gap-2">
           <span className="text-sm font-medium text-muted-foreground tabular-nums">#{rank}</span>
@@ -152,45 +123,16 @@ export const CompetitorCard = memo(function CompetitorCard({
         <TrendBadge trend={competitor.trend} percentage={competitor.trendPercentage} />
       </div>
 
-      <div className="space-y-2 mb-3">
-        <div className="flex items-center justify-between text-sm">
-          <span className="text-muted-foreground">Citations</span>
-          <span className="font-semibold text-foreground tabular-nums">
-            {competitor.totalMentions}
-          </span>
+      {competitor.keywords.length > 0 && (
+        <div className="mb-3">
+          <KeywordBadges keywords={competitor.keywords} />
         </div>
-        <div className="h-1.5 rounded-full bg-muted overflow-hidden">
-          <div
-            className="h-full w-full origin-left rounded-full bg-primary transition-transform duration-500"
-            style={{ transform: `scaleX(${mentionProgress / 100})` }}
-          />
-        </div>
-      </div>
+      )}
 
       <ProviderPositions
         openai={competitor.statsByProvider.openai}
         anthropic={competitor.statsByProvider.anthropic}
       />
-
-      {isExpanded && (
-        <div className="mt-3 pt-3 border-t border-border space-y-2">
-          <KeywordBadges keywords={competitor.keywords} />
-          {competitor.lastContext && (
-            <div className="text-xs">
-              <p className="text-muted-foreground mb-1">Dernier contexte :</p>
-              <p className="text-foreground/80 italic line-clamp-3">
-                &quot;{competitor.lastContext}&quot;
-              </p>
-            </div>
-          )}
-        </div>
-      )}
-
-      {hasDetails && !isExpanded && (
-        <p className="text-[10px] text-muted-foreground/60 mt-2 text-center">
-          Cliquer pour plus de détails
-        </p>
-      )}
     </div>
   );
 });
