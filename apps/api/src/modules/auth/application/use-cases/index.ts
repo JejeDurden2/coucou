@@ -6,3 +6,5 @@ export { DeleteAccountUseCase } from './delete-account.use-case';
 export { ExportDataUseCase } from './export-data.use-case';
 export { UpdateProfileUseCase } from './update-profile.use-case';
 export { GoogleAuthUseCase } from './google-auth.use-case';
+export { ForgotPasswordUseCase } from './forgot-password.use-case';
+export { ResetPasswordUseCase } from './reset-password.use-case';

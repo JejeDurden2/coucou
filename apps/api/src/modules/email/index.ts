@@ -4,3 +4,7 @@ export {
   generateWelcomeEmail,
   type WelcomeEmailData,
 } from './infrastructure/templates/welcome.template';
+export {
+  generatePasswordResetEmail,
+  type PasswordResetEmailData,
+} from './infrastructure/templates/password-reset.template';

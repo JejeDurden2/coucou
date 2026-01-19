@@ -24,5 +24,6 @@ export interface UserRepository {
   linkGoogleAccount(userId: string, googleId: string, avatarUrl?: string): Promise<User>;
   updatePlan(userId: string, plan: string, stripeCustomerId?: string): Promise<User>;
   updateName(userId: string, name: string): Promise<User>;
+  updatePassword(userId: string, hashedPassword: string): Promise<User>;
   delete(userId: string): Promise<void>;
 }

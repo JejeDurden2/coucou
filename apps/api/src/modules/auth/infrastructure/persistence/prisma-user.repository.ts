@@ -84,6 +84,14 @@ export class PrismaUserRepository implements UserRepository {
     return User.fromPersistence(user);
   }
 
+  async updatePassword(userId: string, hashedPassword: string): Promise<User> {
+    const user = await this.prisma.user.update({
+      where: { id: userId },
+      data: { password: hashedPassword },
+    });
+    return User.fromPersistence(user);
+  }
+
   async delete(userId: string): Promise<void> {
     // Delete in order: scans -> prompts -> projects -> subscriptions -> user
     await this.prisma.$transaction(async (tx) => {

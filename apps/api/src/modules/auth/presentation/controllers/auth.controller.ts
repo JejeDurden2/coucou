@@ -20,19 +20,23 @@ import type { AuthenticatedUser } from '../../application/dto/auth.dto';
 import {
   DeleteAccountUseCase,
   ExportDataUseCase,
+  ForgotPasswordUseCase,
   GetMeUseCase,
   GoogleAuthUseCase,
   LoginUseCase,
   RefreshTokenUseCase,
   RegisterUseCase,
+  ResetPasswordUseCase,
   UpdateProfileUseCase,
 } from '../../application/use-cases';
 import { CookieService, REFRESH_TOKEN_COOKIE } from '../../infrastructure/services/cookie.service';
 import type { GoogleProfile } from '../strategies/google.strategy';
 import { CurrentUser } from '../decorators/current-user.decorator';
 import {
+  ForgotPasswordRequestDto,
   LoginRequestDto,
   RegisterRequestDto,
+  ResetPasswordRequestDto,
   UpdateProfileRequestDto,
 } from '../dto/auth-request.dto';
 import { JwtAuthGuard } from '../guards/jwt-auth.guard';
@@ -49,6 +53,8 @@ export class AuthController {
     private readonly exportDataUseCase: ExportDataUseCase,
     private readonly updateProfileUseCase: UpdateProfileUseCase,
     private readonly googleAuthUseCase: GoogleAuthUseCase,
+    private readonly forgotPasswordUseCase: ForgotPasswordUseCase,
+    private readonly resetPasswordUseCase: ResetPasswordUseCase,
     private readonly configService: ConfigService,
     private readonly cookieService: CookieService,
   ) {}
@@ -94,6 +100,30 @@ export class AuthController {
     this.cookieService.setAuthCookies(res, result.value.accessToken, result.value.refreshToken);
 
     return { user: result.value.user };
+  }
+
+  @Post('forgot-password')
+  @HttpCode(HttpStatus.OK)
+  @Throttle({ short: { limit: 3, ttl: 60000 } }) // 3 requests per minute
+  async forgotPassword(@Body() dto: ForgotPasswordRequestDto) {
+    await this.forgotPasswordUseCase.execute(dto.email);
+    // Always return success to prevent email enumeration
+    return {
+      message: 'Si un compte existe avec cet email, vous recevrez un lien de reinitialisation.',
+    };
+  }
+
+  @Post('reset-password')
+  @HttpCode(HttpStatus.OK)
+  @Throttle({ short: { limit: 5, ttl: 60000 } }) // 5 attempts per minute
+  async resetPassword(@Body() dto: ResetPasswordRequestDto) {
+    const result = await this.resetPasswordUseCase.execute(dto.token, dto.password);
+
+    if (!result.ok) {
+      throw new HttpException(result.error.toJSON(), result.error.statusCode);
+    }
+
+    return { message: 'Votre mot de passe a ete reinitialise avec succes.' };
   }
 
   @Get('me')

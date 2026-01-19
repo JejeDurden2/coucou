@@ -3,17 +3,20 @@ import { ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 
-import { USER_REPOSITORY } from './domain';
+import { USER_REPOSITORY, PASSWORD_RESET_REPOSITORY } from './domain';
 import { PrismaUserRepository } from './infrastructure/persistence/prisma-user.repository';
+import { PrismaPasswordResetRepository } from './infrastructure/persistence/prisma-password-reset.repository';
 import { CookieService } from './infrastructure/services/cookie.service';
 import {
   DeleteAccountUseCase,
   ExportDataUseCase,
+  ForgotPasswordUseCase,
   GetMeUseCase,
   GoogleAuthUseCase,
   LoginUseCase,
   RefreshTokenUseCase,
   RegisterUseCase,
+  ResetPasswordUseCase,
   UpdateProfileUseCase,
 } from './application/use-cases';
 import { AuthController } from './presentation/controllers/auth.controller';
@@ -46,6 +49,8 @@ import { GoogleStrategy } from './presentation/strategies/google.strategy';
     ExportDataUseCase,
     UpdateProfileUseCase,
     GoogleAuthUseCase,
+    ForgotPasswordUseCase,
+    ResetPasswordUseCase,
     // Strategies & Guards
     JwtStrategy,
     GoogleStrategy,
@@ -53,10 +58,14 @@ import { GoogleStrategy } from './presentation/strategies/google.strategy';
     GoogleAuthGuard,
     // Infrastructure services
     CookieService,
-    // Repository binding
+    // Repository bindings
     {
       provide: USER_REPOSITORY,
       useClass: PrismaUserRepository,
+    },
+    {
+      provide: PASSWORD_RESET_REPOSITORY,
+      useClass: PrismaPasswordResetRepository,
     },
   ],
   exports: [USER_REPOSITORY, JwtAuthGuard, JwtStrategy, CookieService],

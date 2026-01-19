@@ -38,3 +38,22 @@ export class UpdateProfileRequestDto {
   @MaxLength(100)
   name!: string;
 }
+
+export class ForgotPasswordRequestDto {
+  @IsEmail()
+  email!: string;
+}
+
+export class ResetPasswordRequestDto {
+  @IsString()
+  token!: string;
+
+  @IsString()
+  @MinLength(8)
+  @MaxLength(100)
+  @Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/, {
+    message:
+      'Password must contain at least one lowercase letter, one uppercase letter, and one number',
+  })
+  password!: string;
+}
