@@ -2,11 +2,19 @@
 
 import { memo } from 'react';
 import { TrendingUp, TrendingDown, Minus, Sparkles, EyeOff } from 'lucide-react';
-import type { EnrichedCompetitor } from '@coucou-ia/shared';
+import {
+  type EnrichedCompetitor,
+  type CompetitorModelStats,
+  type Plan,
+  PLAN_MODELS,
+  type LLMModel,
+} from '@coucou-ia/shared';
+import { getModelDisplayName } from './llm-result-row';
 
 interface CompetitorCardProps {
   competitor: EnrichedCompetitor;
   rank: number;
+  userPlan: Plan;
 }
 
 function TrendBadge({
@@ -50,35 +58,36 @@ function TrendBadge({
   );
 }
 
-function ProviderPositions({
-  openai,
-  anthropic,
+function ModelPositions({
+  statsByModel,
+  userPlan,
 }: {
-  openai: { mentions: number; averagePosition: number | null };
-  anthropic: { mentions: number; averagePosition: number | null };
+  statsByModel: CompetitorModelStats[];
+  userPlan: Plan;
 }) {
+  const allowedModels = PLAN_MODELS[userPlan];
+  const filteredStats = statsByModel.filter((s) =>
+    allowedModels.includes(s.model as LLMModel),
+  );
+
+  if (filteredStats.length === 0) {
+    return null;
+  }
+
   return (
-    <div className="flex justify-between text-xs text-muted-foreground">
-      <div className="flex items-center gap-1.5">
-        <span>ChatGPT</span>
-        {openai.averagePosition !== null ? (
-          <span className="font-medium text-foreground tabular-nums">
-            #{openai.averagePosition}
-          </span>
-        ) : (
-          <EyeOff className="h-3 w-3" aria-hidden="true" />
-        )}
-      </div>
-      <div className="flex items-center gap-1.5">
-        <span>Claude</span>
-        {anthropic.averagePosition !== null ? (
-          <span className="font-medium text-foreground tabular-nums">
-            #{anthropic.averagePosition}
-          </span>
-        ) : (
-          <EyeOff className="h-3 w-3" aria-hidden="true" />
-        )}
-      </div>
+    <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground">
+      {filteredStats.map((stat) => (
+        <div key={stat.model} className="flex items-center gap-1.5">
+          <span>{getModelDisplayName(stat.model)}</span>
+          {stat.averagePosition !== null ? (
+            <span className="font-medium text-foreground tabular-nums">
+              #{stat.averagePosition}
+            </span>
+          ) : (
+            <EyeOff className="h-3 w-3" aria-hidden="true" />
+          )}
+        </div>
+      ))}
     </div>
   );
 }
@@ -103,6 +112,7 @@ function KeywordBadges({ keywords }: { keywords: string[] }) {
 export const CompetitorCard = memo(function CompetitorCard({
   competitor,
   rank,
+  userPlan,
 }: CompetitorCardProps) {
   return (
     <div className="rounded-lg border border-border bg-card p-4">
@@ -129,10 +139,7 @@ export const CompetitorCard = memo(function CompetitorCard({
         </div>
       )}
 
-      <ProviderPositions
-        openai={competitor.statsByProvider.openai}
-        anthropic={competitor.statsByProvider.anthropic}
-      />
+      <ModelPositions statsByModel={competitor.statsByModel} userPlan={userPlan} />
     </div>
   );
 });

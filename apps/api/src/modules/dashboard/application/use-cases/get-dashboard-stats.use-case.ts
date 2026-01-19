@@ -270,14 +270,16 @@ export class GetDashboardStatsUseCase {
     const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
     const fourteenDaysAgo = new Date(now.getTime() - 14 * 24 * 60 * 60 * 1000);
 
+    interface ModelStats {
+      mentions: number;
+      positions: number[];
+    }
+
     interface CompetitorAggregation {
       name: string;
       totalMentions: number;
       positions: number[];
-      openaiPositions: number[];
-      anthropicPositions: number[];
-      openaiMentions: number;
-      anthropicMentions: number;
+      modelStats: Map<string, ModelStats>;
       allKeywords: string[];
       firstSeenAt: Date;
       lastSeenAt: Date;
@@ -291,7 +293,7 @@ export class GetDashboardStatsUseCase {
     const updateAggregation = (
       name: string,
       scanDate: Date,
-      provider: LLMProvider,
+      model: string,
       position: number,
       keywords: string[],
       isCurrentPeriod: boolean,
@@ -302,13 +304,12 @@ export class GetDashboardStatsUseCase {
       if (existing) {
         existing.totalMentions++;
         existing.positions.push(position);
-        if (provider === LLMProvider.OPENAI) {
-          existing.openaiPositions.push(position);
-          existing.openaiMentions++;
-        } else {
-          existing.anthropicPositions.push(position);
-          existing.anthropicMentions++;
-        }
+
+        const modelData = existing.modelStats.get(model) ?? { mentions: 0, positions: [] };
+        modelData.mentions++;
+        modelData.positions.push(position);
+        existing.modelStats.set(model, modelData);
+
         existing.allKeywords.push(...keywords);
         if (scanDate < existing.firstSeenAt) existing.firstSeenAt = scanDate;
         if (scanDate > existing.lastSeenAt) {
@@ -318,14 +319,14 @@ export class GetDashboardStatsUseCase {
         if (isCurrentPeriod) existing.currentPeriodMentions++;
         if (isPreviousPeriod) existing.previousPeriodMentions++;
       } else {
+        const modelStats = new Map<string, ModelStats>();
+        modelStats.set(model, { mentions: 1, positions: [position] });
+
         aggregations.set(name, {
           name,
           totalMentions: 1,
           positions: [position],
-          openaiPositions: provider === LLMProvider.OPENAI ? [position] : [],
-          anthropicPositions: provider === LLMProvider.ANTHROPIC ? [position] : [],
-          openaiMentions: provider === LLMProvider.OPENAI ? 1 : 0,
-          anthropicMentions: provider === LLMProvider.ANTHROPIC ? 1 : 0,
+          modelStats,
           allKeywords: [...keywords],
           firstSeenAt: scanDate,
           lastSeenAt: scanDate,
@@ -345,7 +346,7 @@ export class GetDashboardStatsUseCase {
           updateAggregation(
             mention.name,
             scan.executedAt,
-            result.provider,
+            result.model,
             mention.position,
             mention.keywords,
             isCurrentPeriod,
@@ -363,21 +364,16 @@ export class GetDashboardStatsUseCase {
               10
             : null;
 
-        const openaiAvgPosition =
-          agg.openaiPositions.length > 0
-            ? Math.round(
-                (agg.openaiPositions.reduce((a, b) => a + b, 0) / agg.openaiPositions.length) * 10,
-              ) / 10
-            : null;
-
-        const anthropicAvgPosition =
-          agg.anthropicPositions.length > 0
-            ? Math.round(
-                (agg.anthropicPositions.reduce((a, b) => a + b, 0) /
-                  agg.anthropicPositions.length) *
-                  10,
-              ) / 10
-            : null;
+        const statsByModel = Array.from(agg.modelStats.entries()).map(([model, data]) => ({
+          model,
+          mentions: data.mentions,
+          averagePosition:
+            data.positions.length > 0
+              ? Math.round(
+                  (data.positions.reduce((a, b) => a + b, 0) / data.positions.length) * 10,
+                ) / 10
+              : null,
+        }));
 
         const trend = this.calculateCompetitorTrend(
           agg.currentPeriodMentions,
@@ -405,10 +401,7 @@ export class GetDashboardStatsUseCase {
           name: agg.name,
           totalMentions: agg.totalMentions,
           averagePosition,
-          statsByProvider: {
-            openai: { mentions: agg.openaiMentions, averagePosition: openaiAvgPosition },
-            anthropic: { mentions: agg.anthropicMentions, averagePosition: anthropicAvgPosition },
-          },
+          statsByModel,
           trend,
           trendPercentage,
           keywords,

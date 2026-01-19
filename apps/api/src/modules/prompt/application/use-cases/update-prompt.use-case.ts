@@ -47,6 +47,7 @@ export class UpdatePromptUseCase {
       content: updated.content,
       category: updated.category,
       isActive: updated.isActive,
+      lastScannedAt: updated.lastScannedAt,
       createdAt: updated.createdAt,
       updatedAt: updated.updatedAt,
     });

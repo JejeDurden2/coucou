@@ -1,7 +1,7 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import type { Plan } from '@prisma/client';
+import { Plan } from '@prisma/client';
 
-import { ForbiddenError, NotFoundError, Result } from '../../../../common';
+import { ForbiddenError, NotFoundError, Result, ValidationError } from '../../../../common';
 import { PROJECT_REPOSITORY, type ProjectRepository } from '../../../project';
 import { PROMPT_REPOSITORY, type PromptRepository } from '../../../prompt';
 import {
@@ -15,7 +15,14 @@ import { LLM_SERVICE } from '../ports/llm.port';
 import type { ScanResponseDto } from '../dto/scan.dto';
 import { LLMResponseProcessorService } from '../services/llm-response-processor.service';
 
-type ExecuteScanError = NotFoundError | ForbiddenError | AllProvidersFailedError;
+// Scan cooldown periods by plan
+const SCAN_COOLDOWN_MS: Record<Plan, number> = {
+  [Plan.FREE]: 7 * 24 * 60 * 60 * 1000, // 7 days
+  [Plan.SOLO]: 7 * 24 * 60 * 60 * 1000, // 7 days
+  [Plan.PRO]: 24 * 60 * 60 * 1000, // 1 day
+};
+
+type ExecuteScanError = NotFoundError | ForbiddenError | AllProvidersFailedError | ValidationError;
 
 @Injectable()
 export class ExecuteScanUseCase {
@@ -54,6 +61,20 @@ export class ExecuteScanUseCase {
       return Result.err(new ForbiddenError('You do not have access to this prompt'));
     }
 
+    // Check scan cooldown based on plan
+    if (prompt.lastScannedAt !== null) {
+      const cooldownMs = SCAN_COOLDOWN_MS[plan];
+      const timeSinceLastScan = Date.now() - prompt.lastScannedAt.getTime();
+      if (timeSinceLastScan < cooldownMs) {
+        const cooldownLabel = plan === Plan.PRO ? 'jour' : 'semaine';
+        return Result.err(
+          new ValidationError([
+            `Ce prompt a déjà été scanné cette ${cooldownLabel}. Prochain scan disponible bientôt.`,
+          ]),
+        );
+      }
+    }
+
     this.logger.log(`Executing scan for prompt ${promptId} with plan ${plan}`);
 
     const { successes, failures } = await this.llmService.queryByPlan(prompt.content, plan);
@@ -82,7 +103,9 @@ export class ExecuteScanUseCase {
       results,
     });
 
-    await this.projectRepository.updateLastScannedAt(project.id, new Date());
+    const scanDate = new Date();
+    await this.promptRepository.updateLastScannedAt(promptId, scanDate);
+    await this.projectRepository.updateLastScannedAt(project.id, scanDate);
 
     this.logger.log(`Scan ${scan.id} completed for prompt ${promptId}`);
 

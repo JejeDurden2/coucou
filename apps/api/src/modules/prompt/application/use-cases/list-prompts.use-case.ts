@@ -39,6 +39,7 @@ export class ListPromptsUseCase {
         content: prompt.content,
         category: prompt.category,
         isActive: prompt.isActive,
+        lastScannedAt: prompt.lastScannedAt,
         createdAt: prompt.createdAt,
         updatedAt: prompt.updatedAt,
       })),

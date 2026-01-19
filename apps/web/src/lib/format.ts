@@ -20,3 +20,21 @@ export function formatRelativeTime(date: Date | string): string {
   const days = Math.floor(hours / HOURS_PER_DAY);
   return `il y a ${days}j`;
 }
+
+/**
+ * Format a future date as relative time in French
+ * @example formatRelativeTimeFuture(tomorrow) // "dans 1j"
+ */
+export function formatRelativeTimeFuture(date: Date | string): string {
+  const diffMs = new Date(date).getTime() - Date.now();
+  if (diffMs <= 0) return 'maintenant';
+
+  const minutes = Math.floor(diffMs / MS_PER_MINUTE);
+  if (minutes < MINUTES_PER_HOUR) return `dans ${minutes}min`;
+
+  const hours = Math.floor(minutes / MINUTES_PER_HOUR);
+  if (hours < HOURS_PER_DAY) return `dans ${hours}h`;
+
+  const days = Math.floor(hours / HOURS_PER_DAY);
+  return `dans ${days}j`;
+}

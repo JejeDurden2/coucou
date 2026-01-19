@@ -162,13 +162,12 @@ export class HandleWebhookUseCase {
   private mapStatus(stripeStatus: string): SubscriptionStatus {
     switch (stripeStatus) {
       case 'active':
+      case 'trialing': // No trial period - treat as active
         return SubscriptionStatus.ACTIVE;
       case 'past_due':
         return SubscriptionStatus.PAST_DUE;
       case 'canceled':
         return SubscriptionStatus.CANCELED;
-      case 'trialing':
-        return SubscriptionStatus.TRIALING;
       default:
         return SubscriptionStatus.ACTIVE;
     }

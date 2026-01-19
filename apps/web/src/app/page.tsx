@@ -73,7 +73,7 @@ const plans = [
     price: PLAN_PRICING[Plan.SOLO].price.toString(),
     description: PLAN_PRICING[Plan.SOLO].description,
     features: PLAN_PRICING[Plan.SOLO].features,
-    cta: 'Essai gratuit 14 jours',
+    cta: 'Choisir Solo',
     popular: false,
   },
   {
@@ -81,7 +81,7 @@ const plans = [
     price: PLAN_PRICING[Plan.PRO].price.toString(),
     description: PLAN_PRICING[Plan.PRO].description,
     features: PLAN_PRICING[Plan.PRO].features,
-    cta: 'Essai gratuit 14 jours',
+    cta: 'Choisir Pro',
     popular: PLAN_PRICING[Plan.PRO].isPopular ?? false,
   },
 ];
@@ -338,8 +338,7 @@ export default function LandingPage() {
                 Un plan pour chaque besoin
               </h2>
               <p className="text-muted-foreground max-w-2xl mx-auto text-pretty">
-                Commencez gratuitement, évoluez selon vos besoins. Tous les plans incluent un essai
-                gratuit de 14 jours.
+                Commencez gratuitement, évoluez selon vos besoins.
               </p>
             </div>
 

@@ -11,11 +11,14 @@ import {
   MessageSquare,
   BarChart3,
   EyeOff,
+  Clock,
+  CheckCircle2,
 } from 'lucide-react';
 
 import { useProject } from '@/hooks/use-projects';
 import { useCreatePrompt, useDeletePrompt } from '@/hooks/use-prompts';
 import { useDashboardStats, useRecommendations, useTriggerScan } from '@/hooks/use-dashboard';
+import { useAuth } from '@/lib/auth-context';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import {
@@ -31,9 +34,9 @@ import {
 import { CompetitorsList, RecommendationsPanel } from '@/components/features/dashboard';
 import { StatCard } from '@/components/features/dashboard/stat-card';
 import { getModelDisplayName } from '@/components/features/dashboard/llm-result-row';
-import { LLMProvider } from '@coucou-ia/shared';
+import { LLMProvider, getScanAvailability, Plan, PLAN_LIMITS } from '@coucou-ia/shared';
 import { cn } from '@/lib/utils';
-import { formatRelativeTime } from '@/lib/format';
+import { formatRelativeTime, formatRelativeTimeFuture } from '@/lib/format';
 
 interface PulsingDotProps {
   color: 'primary' | 'success' | 'cyan' | 'emerald';
@@ -78,12 +81,15 @@ export default function ProjectDashboardPage({
   params,
 }: ProjectDashboardPageProps): React.ReactNode {
   const { id } = use(params);
+  const { user } = useAuth();
   const { data: project, isLoading: projectLoading } = useProject(id);
   const { data: stats, isLoading: statsLoading } = useDashboardStats(id);
   const { data: recommendationsData } = useRecommendations(id);
   const triggerScan = useTriggerScan(id);
   const createPrompt = useCreatePrompt(id);
   const deletePrompt = useDeletePrompt(id);
+
+  const userPlan = (user?.plan as Plan) ?? Plan.FREE;
 
   const [newPrompt, setNewPrompt] = useState('');
   const [showAddPrompt, setShowAddPrompt] = useState(false);
@@ -222,10 +228,15 @@ export default function ProjectDashboardPage({
 
       {/* Main Content: Prompts Table */}
       <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <h2 className="text-sm font-medium text-muted-foreground uppercase">
-            Vos prompts ({promptCount})
-          </h2>
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h2 className="text-sm font-medium text-muted-foreground uppercase">
+              Vos prompts ({promptCount})
+            </h2>
+            <p className="text-xs text-muted-foreground mt-0.5">
+              Plan {userPlan} : 1 scan/prompt/{PLAN_LIMITS[userPlan].scanFrequency === 'daily' ? 'jour' : 'semaine'}
+            </p>
+          </div>
           <Button variant="outline" size="sm" onClick={() => setShowAddPrompt(true)}>
             <Plus className="mr-2 h-4 w-4" aria-hidden="true" />
             Ajouter
@@ -300,6 +311,7 @@ export default function ProjectDashboardPage({
                   const isCitedByAny = prompt.modelResults.some((r) => r.isCited);
                   // Build a Map for O(1) lookups instead of find() in loop
                   const resultsByModel = new Map(prompt.modelResults.map((r) => [r.model, r]));
+                  const scanAvailability = getScanAvailability(prompt.lastScanAt, userPlan);
                   return (
                     <tr
                       key={prompt.promptId}
@@ -313,12 +325,22 @@ export default function ProjectDashboardPage({
                         {isCitedByAny && (
                           <div className="absolute left-0 top-0 bottom-0 w-1 bg-success rounded-r" />
                         )}
-                        <p className="text-sm pl-2">{prompt.content}</p>
-                        {prompt.category ? (
-                          <span className="ml-2 inline-flex px-2 py-0.5 rounded-full text-[10px] bg-primary/10 text-primary">
-                            {prompt.category}
-                          </span>
-                        ) : null}
+                        <div className="pl-2">
+                          <p className="text-sm">{prompt.content}</p>
+                          <div className="flex items-center gap-2 mt-1">
+                            {prompt.category ? (
+                              <span className="inline-flex px-2 py-0.5 rounded-full text-[10px] bg-primary/10 text-primary">
+                                {prompt.category}
+                              </span>
+                            ) : null}
+                            <ScanAvailabilityBadge
+                              lastScanAt={prompt.lastScanAt}
+                              canScan={scanAvailability.canScan}
+                              nextAvailableAt={scanAvailability.nextAvailableAt}
+                              plan={userPlan}
+                            />
+                          </div>
+                        </div>
                       </td>
                       {availableModels.map((model) => (
                         <td key={model} className="px-4 py-3 text-center">
@@ -356,6 +378,7 @@ export default function ProjectDashboardPage({
           competitors={stats.topCompetitors}
           enrichedCompetitors={stats.enrichedCompetitors}
           maxItems={5}
+          userPlan={userPlan}
         />
       ) : null}
 
@@ -421,6 +444,53 @@ const CitationStatus = memo(function CitationStatus({
       <span className="size-3 rounded-full bg-destructive/20 flex items-center justify-center">
         <span className="size-1.5 rounded-full bg-destructive" />
       </span>
+    </span>
+  );
+});
+
+interface ScanAvailabilityBadgeProps {
+  lastScanAt: Date | null;
+  canScan: boolean;
+  nextAvailableAt: Date | null;
+  plan: Plan;
+}
+
+const ScanAvailabilityBadge = memo(function ScanAvailabilityBadge({
+  lastScanAt,
+  canScan,
+  nextAvailableAt,
+  plan,
+}: ScanAvailabilityBadgeProps): React.ReactNode {
+  const frequency = PLAN_LIMITS[plan].scanFrequency === 'daily' ? 'jour' : 'semaine';
+
+  // Never scanned
+  if (lastScanAt === null) {
+    return (
+      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] bg-muted text-muted-foreground">
+        <Clock className="size-3" aria-hidden="true" />
+        Jamais scanné
+      </span>
+    );
+  }
+
+  // Can scan now
+  if (canScan) {
+    return (
+      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] bg-success/10 text-success">
+        <CheckCircle2 className="size-3" aria-hidden="true" />
+        Scan disponible
+      </span>
+    );
+  }
+
+  // On cooldown
+  return (
+    <span
+      className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] bg-amber-500/10 text-amber-600"
+      title={`1 scan/${frequency} - Prochain scan ${nextAvailableAt ? formatRelativeTimeFuture(nextAvailableAt) : ''}`}
+    >
+      <Clock className="size-3" aria-hidden="true" />
+      {nextAvailableAt ? formatRelativeTimeFuture(nextAvailableAt) : `1/${frequency}`}
     </span>
   );
 });

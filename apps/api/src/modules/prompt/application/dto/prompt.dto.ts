@@ -15,6 +15,7 @@ export interface PromptResponseDto {
   content: string;
   category: string | null;
   isActive: boolean;
+  lastScannedAt: Date | null;
   createdAt: Date;
   updatedAt: Date;
 }

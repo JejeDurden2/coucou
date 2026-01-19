@@ -30,14 +30,10 @@ export interface TrendDto {
 
 export type CompetitorTrend = 'up' | 'down' | 'stable' | 'new';
 
-export interface CompetitorProviderStats {
+export interface CompetitorModelStatsDto {
+  model: string;
   mentions: number;
   averagePosition: number | null;
-}
-
-export interface CompetitorStatsByProvider {
-  openai: CompetitorProviderStats;
-  anthropic: CompetitorProviderStats;
 }
 
 export interface CompetitorDto {
@@ -49,7 +45,7 @@ export interface EnrichedCompetitorDto {
   name: string;
   totalMentions: number;
   averagePosition: number | null;
-  statsByProvider: CompetitorStatsByProvider;
+  statsByModel: CompetitorModelStatsDto[];
   trend: CompetitorTrend;
   trendPercentage: number | null;
   keywords: string[];

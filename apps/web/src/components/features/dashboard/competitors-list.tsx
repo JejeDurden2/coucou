@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import type { Competitor, EnrichedCompetitor } from '@coucou-ia/shared';
+import type { Competitor, EnrichedCompetitor, Plan } from '@coucou-ia/shared';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Users, Trophy, ChevronUp } from 'lucide-react';
 import { CompetitorCard } from './competitor-card';
@@ -10,15 +10,23 @@ interface CompetitorsListProps {
   competitors: Competitor[];
   enrichedCompetitors?: EnrichedCompetitor[];
   maxItems?: number;
+  userPlan: Plan;
 }
 
 export function CompetitorsList({
   competitors,
   enrichedCompetitors,
   maxItems = 5,
+  userPlan,
 }: CompetitorsListProps) {
   if (enrichedCompetitors && enrichedCompetitors.length > 0) {
-    return <EnrichedCompetitorsList competitors={enrichedCompetitors} maxItems={maxItems} />;
+    return (
+      <EnrichedCompetitorsList
+        competitors={enrichedCompetitors}
+        maxItems={maxItems}
+        userPlan={userPlan}
+      />
+    );
   }
 
   return <SimpleCompetitorsList competitors={competitors} maxItems={maxItems} />;
@@ -27,9 +35,11 @@ export function CompetitorsList({
 function EnrichedCompetitorsList({
   competitors,
   maxItems,
+  userPlan,
 }: {
   competitors: EnrichedCompetitor[];
   maxItems: number;
+  userPlan: Plan;
 }) {
   const [showAll, setShowAll] = useState(false);
   const displayedCompetitors = showAll ? competitors : competitors.slice(0, maxItems);
@@ -52,7 +62,12 @@ function EnrichedCompetitorsList({
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {displayedCompetitors.map((competitor, index) => (
-              <CompetitorCard key={competitor.name} competitor={competitor} rank={index + 1} />
+              <CompetitorCard
+                key={competitor.name}
+                competitor={competitor}
+                rank={index + 1}
+                userPlan={userPlan}
+              />
             ))}
             {remainingCount > 0 && !showAll && (
               <button

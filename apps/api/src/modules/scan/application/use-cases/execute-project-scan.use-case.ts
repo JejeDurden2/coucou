@@ -1,5 +1,5 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
-import type { Plan } from '@prisma/client';
+import { Plan } from '@prisma/client';
 
 import { ForbiddenError, NotFoundError, Result } from '../../../../common';
 import { PROJECT_REPOSITORY, type ProjectRepository } from '../../../project';
@@ -16,6 +16,13 @@ import type { LLMService } from '../ports/llm.port';
 import { LLM_SERVICE } from '../ports/llm.port';
 import type { ScanResponseDto } from '../dto/scan.dto';
 import { LLMResponseProcessorService } from '../services/llm-response-processor.service';
+
+// Scan cooldown periods by plan
+const SCAN_COOLDOWN_MS: Record<Plan, number> = {
+  [Plan.FREE]: 7 * 24 * 60 * 60 * 1000, // 7 days
+  [Plan.SOLO]: 7 * 24 * 60 * 60 * 1000, // 7 days
+  [Plan.PRO]: 24 * 60 * 60 * 1000, // 1 day
+};
 
 type ExecuteProjectScanError = NotFoundError | ForbiddenError | AllProvidersFailedError;
 
@@ -63,6 +70,25 @@ export class ExecuteProjectScanUseCase {
     let lastAllProvidersError: AllProvidersFailedError | null = null;
 
     for (const prompt of prompts) {
+      // Check scan cooldown based on plan
+      if (prompt.lastScannedAt !== null) {
+        const cooldownMs = SCAN_COOLDOWN_MS[plan];
+        const timeSinceLastScan = Date.now() - prompt.lastScannedAt.getTime();
+        if (timeSinceLastScan < cooldownMs) {
+          const cooldownLabel = plan === Plan.PRO ? 'jour' : 'semaine';
+          scanResults.push({
+            id: '',
+            promptId: prompt.id,
+            executedAt: new Date(),
+            results: [],
+            isCitedByAny: false,
+            citationRate: 0,
+            skippedReason: `Prompt déjà scanné cette ${cooldownLabel}`,
+          });
+          continue;
+        }
+      }
+
       const analysis = PromptSanitizerService.analyze(prompt.content);
 
       if (analysis.level === ThreatLevel.HIGH) {
@@ -76,7 +102,7 @@ export class ExecuteProjectScanUseCase {
           results: [],
           isCitedByAny: false,
           citationRate: 0,
-          skippedReason: `Prompt bloque: contenu suspect detecte (${analysis.matchedPatterns.join(', ')})`,
+          skippedReason: `Prompt bloqué: contenu suspect détecté (${analysis.matchedPatterns.join(', ')})`,
         });
         continue;
       }
@@ -126,6 +152,8 @@ export class ExecuteProjectScanUseCase {
         promptId: prompt.id,
         results,
       });
+
+      await this.promptRepository.updateLastScannedAt(prompt.id, new Date());
 
       scanResults.push({
         id: scan.id,

@@ -56,6 +56,13 @@ export class PrismaPromptRepository implements PromptRepository {
     return Prompt.fromPersistence(prompt);
   }
 
+  async updateLastScannedAt(id: string, date: Date): Promise<void> {
+    await this.prisma.prompt.update({
+      where: { id },
+      data: { lastScannedAt: date },
+    });
+  }
+
   async delete(id: string): Promise<void> {
     await this.prisma.prompt.delete({ where: { id } });
   }

@@ -21,5 +21,6 @@ export interface PromptRepository {
   countByProjectId(projectId: string): Promise<number>;
   create(data: CreatePromptData): Promise<Prompt>;
   update(id: string, data: UpdatePromptData): Promise<Prompt>;
+  updateLastScannedAt(id: string, date: Date): Promise<void>;
   delete(id: string): Promise<void>;
 }

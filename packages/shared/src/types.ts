@@ -79,6 +79,7 @@ export interface Prompt {
   content: string;
   category: string | null;
   isActive: boolean;
+  lastScannedAt: Date | null;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -170,21 +171,17 @@ export interface Competitor {
 
 export type CompetitorTrend = 'up' | 'down' | 'stable' | 'new';
 
-export interface CompetitorProviderStats {
+export interface CompetitorModelStats {
+  model: string;
   mentions: number;
   averagePosition: number | null;
-}
-
-export interface CompetitorStatsByProvider {
-  openai: CompetitorProviderStats;
-  anthropic: CompetitorProviderStats;
 }
 
 export interface EnrichedCompetitor {
   name: string;
   totalMentions: number;
   averagePosition: number | null;
-  statsByProvider: CompetitorStatsByProvider;
+  statsByModel: CompetitorModelStats[];
   trend: CompetitorTrend;
   trendPercentage: number | null;
   keywords: string[];
@@ -241,6 +238,7 @@ export interface PlanLimits {
   projects: number;
   promptsPerProject: number;
   scanFrequency: 'manual' | 'weekly' | 'daily';
+  scanCooldownMs: number;
   retentionDays: number;
 }
 
@@ -249,21 +247,51 @@ export const PLAN_LIMITS: Record<Plan, PlanLimits> = {
     projects: 1,
     promptsPerProject: 2,
     scanFrequency: 'weekly',
+    scanCooldownMs: 7 * 24 * 60 * 60 * 1000, // 7 days
     retentionDays: 30,
   },
   [Plan.SOLO]: {
     projects: 5,
     promptsPerProject: 10,
     scanFrequency: 'weekly',
+    scanCooldownMs: 7 * 24 * 60 * 60 * 1000, // 7 days
     retentionDays: 180,
   },
   [Plan.PRO]: {
     projects: 15,
     promptsPerProject: 50,
     scanFrequency: 'daily',
+    scanCooldownMs: 24 * 60 * 60 * 1000, // 1 day
     retentionDays: 365 * 10, // "unlimited"
   },
 };
+
+/**
+ * Calculate scan availability for a prompt based on plan limits
+ * @returns Object with canScan boolean and nextAvailableAt date (if applicable)
+ */
+export function getScanAvailability(
+  lastScannedAt: Date | null,
+  plan: Plan,
+): { canScan: boolean; nextAvailableAt: Date | null } {
+  if (lastScannedAt === null) {
+    return { canScan: true, nextAvailableAt: null };
+  }
+
+  const cooldownMs = PLAN_LIMITS[plan].scanCooldownMs;
+  const lastScanTime = new Date(lastScannedAt).getTime();
+  const nextAvailableTime = lastScanTime + cooldownMs;
+  const now = Date.now();
+
+  if (now >= nextAvailableTime) {
+    return { canScan: true, nextAvailableAt: null };
+  }
+
+  return {
+    canScan: false,
+    nextAvailableAt: new Date(nextAvailableTime),
+  };
+}
 
 export const PLAN_MODELS: Record<Plan, LLMModel[]> = {
   [Plan.FREE]: [LLMModel.GPT_4O_MINI],
@@ -298,7 +326,7 @@ export const PLAN_PRICING: Record<Plan, PlanPricing> = {
       '1 marque',
       '2 prompts',
       'GPT-4o-mini',
-      '1 scan/prompt/semaine',
+      '1 scan par prompt',
       'Historique 30 jours',
     ],
   },

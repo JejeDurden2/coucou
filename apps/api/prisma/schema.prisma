@@ -106,11 +106,12 @@ model Project {
 }
 
 model Prompt {
-  id        String  @id @default(cuid())
-  projectId String  @map("project_id")
-  content   String
-  category  String?
-  isActive  Boolean @default(true) @map("is_active")
+  id            String    @id @default(cuid())
+  projectId     String    @map("project_id")
+  content       String
+  category      String?
+  isActive      Boolean   @default(true) @map("is_active")
+  lastScannedAt DateTime? @map("last_scanned_at")
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")

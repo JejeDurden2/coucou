@@ -4,6 +4,7 @@ export interface PromptProps {
   content: string;
   category: string | null;
   isActive: boolean;
+  lastScannedAt: Date | null;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -37,6 +38,10 @@ export class Prompt {
 
   get isActive(): boolean {
     return this.props.isActive;
+  }
+
+  get lastScannedAt(): Date | null {
+    return this.props.lastScannedAt;
   }
 
   get createdAt(): Date {
