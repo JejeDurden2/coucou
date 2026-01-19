@@ -62,7 +62,11 @@ export class GenerateRecommendationsUseCase {
       improvementRec,
     ].filter((rec): rec is RecommendationDto => rec !== null);
 
-    const severityOrder: Record<RecommendationSeverity, number> = { critical: 0, warning: 1, info: 2 };
+    const severityOrder: Record<RecommendationSeverity, number> = {
+      critical: 0,
+      warning: 1,
+      info: 2,
+    };
     recommendations.sort((a, b) => severityOrder[a.severity] - severityOrder[b.severity]);
 
     return Result.ok({
@@ -89,7 +93,7 @@ export class GenerateRecommendationsUseCase {
         description: `Votre marque n'apparaît que dans ${Math.round(citationRate)}% des réponses IA. C'est significativement en dessous de la moyenne du marché.`,
         actionItems: [
           'Ajoutez 1 statistique vérifiable tous les 150-200 mots sur vos pages clés (+30-40% de citations)',
-          'Structurez chaque page avec des H2/H3 et des listes à puces (40% plus de chances d\'être cité)',
+          "Structurez chaque page avec des H2/H3 et des listes à puces (40% plus de chances d'être cité)",
           'Créez une page FAQ répondant directement aux questions de vos prompts',
           'Publiez un tableau comparatif de votre offre vs concurrents (4x plus de citations)',
           'Ajoutez le schema markup FAQ/Article/Organization sur vos pages principales',

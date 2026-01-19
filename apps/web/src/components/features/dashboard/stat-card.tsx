@@ -17,7 +17,6 @@ interface StatCardProps {
   className?: string;
 }
 
-
 interface TrendIndicatorProps {
   delta: number;
 }

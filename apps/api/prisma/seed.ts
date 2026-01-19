@@ -135,7 +135,11 @@ async function main(): Promise<void> {
               brandKeywords: isCitedOpenAI ? ['artisanal', 'parisien', 'qualité'] : [],
               queryKeywords: ['café', 'spécialité'],
               competitorMentions: [
-                { name: 'Terres de Café', position: 1, keywords: ['pionnier', 'spécialité', 'premium'] },
+                {
+                  name: 'Terres de Café',
+                  position: 1,
+                  keywords: ['pionnier', 'spécialité', 'premium'],
+                },
                 { name: 'Coutume Café', position: 2, keywords: ['branché', 'tendance', 'qualité'] },
                 { name: 'Belleville Brûlerie', position: 3, keywords: ['local', 'hipster', 'bio'] },
               ].filter((c) => c.name !== 'Café Lomi'),
@@ -163,8 +167,16 @@ async function main(): Promise<void> {
               queryKeywords: ['café', 'france'],
               competitorMentions: [
                 { name: 'Coutume Café', position: 2, keywords: ['tendance', 'design', 'qualité'] },
-                { name: 'La Brûlerie de Belleville', position: 3, keywords: ['authentique', 'local', 'bio'] },
-                { name: 'Café Kitsuné', position: 4, keywords: ['lifestyle', 'japonais', 'branché'] },
+                {
+                  name: 'La Brûlerie de Belleville',
+                  position: 3,
+                  keywords: ['authentique', 'local', 'bio'],
+                },
+                {
+                  name: 'Café Kitsuné',
+                  position: 4,
+                  keywords: ['lifestyle', 'japonais', 'branché'],
+                },
               ],
               latencyMs: Math.floor(Math.random() * 800) + 400,
               parseSuccess: true,

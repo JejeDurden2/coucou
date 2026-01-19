@@ -52,11 +52,7 @@ function EnrichedCompetitorsList({
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {displayedCompetitors.map((competitor, index) => (
-              <CompetitorCard
-                key={competitor.name}
-                competitor={competitor}
-                rank={index + 1}
-              />
+              <CompetitorCard key={competitor.name} competitor={competitor} rank={index + 1} />
             ))}
             {remainingCount > 0 && !showAll && (
               <button

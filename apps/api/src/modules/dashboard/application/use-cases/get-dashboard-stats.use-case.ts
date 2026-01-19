@@ -145,8 +145,7 @@ export class GetDashboardStatsUseCase {
 
     return Array.from(modelMap.entries()).map(([model, modelResults]) => {
       const citedCount = modelResults.filter((r) => r.isCited).length;
-      const citationRate =
-        modelResults.length > 0 ? (citedCount / modelResults.length) * 100 : 0;
+      const citationRate = modelResults.length > 0 ? (citedCount / modelResults.length) * 100 : 0;
 
       return {
         model,
@@ -204,10 +203,7 @@ export class GetDashboardStatsUseCase {
     const recentScans = scans.filter((s) => s.executedAt >= startDate);
 
     // Group scans by day (YYYY-MM-DD)
-    const scansByDay = new Map<
-      string,
-      Array<{ executedAt: Date; results: LLMResult[] }>
-    >();
+    const scansByDay = new Map<string, Array<{ executedAt: Date; results: LLMResult[] }>>();
 
     for (const scan of recentScans) {
       const dateKey = scan.executedAt.toISOString().split('T')[0];
@@ -228,9 +224,7 @@ export class GetDashboardStatsUseCase {
 
       if (dayScans.length > 0) {
         // Citation rate for the day
-        const citedCount = dayScans.filter((s) =>
-          s.results.some((r) => r.isCited),
-        ).length;
+        const citedCount = dayScans.filter((s) => s.results.some((r) => r.isCited)).length;
         const dayCitationRate = (citedCount / dayScans.length) * 100;
         citationRate.push({
           date: dateKey,
@@ -245,10 +239,7 @@ export class GetDashboardStatsUseCase {
         }
 
         // Mention count for the day (sum of all competitor mentions)
-        const dayMentions = dayResults.reduce(
-          (sum, r) => sum + r.competitorMentions.length,
-          0,
-        );
+        const dayMentions = dayResults.reduce((sum, r) => sum + r.competitorMentions.length, 0);
         mentionCount.push({ date: dateKey, value: dayMentions });
       }
     }

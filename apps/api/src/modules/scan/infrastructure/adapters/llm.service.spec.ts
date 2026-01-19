@@ -151,19 +151,34 @@ describe('LLMServiceImpl', () => {
       vi.spyOn(mockOpenaiAdapter, 'query').mockImplementation(async () => {
         await new Promise((resolve) => setTimeout(resolve, 50));
         delays.push(Date.now() - startTime);
-        return { content: '', model: LLMModel.GPT_4O_MINI, provider: 'OPENAI', latencyMs: 50 } as LLMResponse;
+        return {
+          content: '',
+          model: LLMModel.GPT_4O_MINI,
+          provider: 'OPENAI',
+          latencyMs: 50,
+        } as LLMResponse;
       });
 
       vi.spyOn(mockGpt4oAdapter, 'query').mockImplementation(async () => {
         await new Promise((resolve) => setTimeout(resolve, 50));
         delays.push(Date.now() - startTime);
-        return { content: '', model: LLMModel.GPT_4O, provider: 'OPENAI', latencyMs: 50 } as LLMResponse;
+        return {
+          content: '',
+          model: LLMModel.GPT_4O,
+          provider: 'OPENAI',
+          latencyMs: 50,
+        } as LLMResponse;
       });
 
       vi.spyOn(mockClaudeSonnetAdapter, 'query').mockImplementation(async () => {
         await new Promise((resolve) => setTimeout(resolve, 50));
         delays.push(Date.now() - startTime);
-        return { content: '', model: LLMModel.CLAUDE_SONNET_4_5, provider: 'ANTHROPIC', latencyMs: 50 } as LLMResponse;
+        return {
+          content: '',
+          model: LLMModel.CLAUDE_SONNET_4_5,
+          provider: 'ANTHROPIC',
+          latencyMs: 50,
+        } as LLMResponse;
       });
 
       await service.queryByPlan('test prompt', Plan.SOLO);

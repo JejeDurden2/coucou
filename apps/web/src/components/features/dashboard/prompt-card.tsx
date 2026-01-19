@@ -23,21 +23,31 @@ interface PromptCardProps {
   disabled?: boolean;
 }
 
-function PositionIndicator({ result, provider }: { result: ProviderResult | null; provider: 'chatgpt' | 'claude' }) {
+function PositionIndicator({
+  result,
+  provider,
+}: {
+  result: ProviderResult | null;
+  provider: 'chatgpt' | 'claude';
+}) {
   if (!result) {
     return <EyeOff className="h-3 w-3 text-muted-foreground" aria-label="Pas encore scanné" />;
   }
 
   if (result.isCited) {
     return (
-      <span className={cn(
-        'inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-medium',
-        provider === 'chatgpt' ? 'bg-chatgpt/20 text-chatgpt' : 'bg-claude/20 text-claude',
-      )}>
-        <span className={cn(
-          'h-2 w-2 rounded-full',
-          provider === 'chatgpt' ? 'bg-chatgpt' : 'bg-claude',
-        )} />
+      <span
+        className={cn(
+          'inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-medium',
+          provider === 'chatgpt' ? 'bg-chatgpt/20 text-chatgpt' : 'bg-claude/20 text-claude',
+        )}
+      >
+        <span
+          className={cn(
+            'h-2 w-2 rounded-full',
+            provider === 'chatgpt' ? 'bg-chatgpt' : 'bg-claude',
+          )}
+        />
         #{result.position}
       </span>
     );

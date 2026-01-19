@@ -48,7 +48,9 @@ export const Sparkline = memo(function Sparkline({
       return { x, y };
     });
 
-    const linePoints = points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x.toFixed(1)} ${p.y.toFixed(1)}`).join(' ');
+    const linePoints = points
+      .map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x.toFixed(1)} ${p.y.toFixed(1)}`)
+      .join(' ');
 
     const areaPoints = [
       `M ${points[0].x.toFixed(1)} ${(height - padding).toFixed(1)}`,
@@ -74,12 +76,7 @@ export const Sparkline = memo(function Sparkline({
       className={cn('overflow-visible', className)}
       aria-hidden="true"
     >
-      {showArea && (
-        <path
-          d={areaPath}
-          fill={colors.fill}
-        />
-      )}
+      {showArea && <path d={areaPath} fill={colors.fill} />}
       <path
         d={linePath}
         fill="none"

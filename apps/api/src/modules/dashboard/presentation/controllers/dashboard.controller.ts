@@ -2,7 +2,10 @@ import { Controller, Get, HttpException, Param, UseGuards } from '@nestjs/common
 
 import type { AuthenticatedUser } from '../../../auth';
 import { CurrentUser, JwtAuthGuard } from '../../../auth';
-import { GetDashboardStatsUseCase, GenerateRecommendationsUseCase } from '../../application/use-cases';
+import {
+  GetDashboardStatsUseCase,
+  GenerateRecommendationsUseCase,
+} from '../../application/use-cases';
 
 @Controller('projects/:projectId/dashboard')
 @UseGuards(JwtAuthGuard)

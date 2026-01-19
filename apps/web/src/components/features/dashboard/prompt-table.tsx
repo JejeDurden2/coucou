@@ -55,9 +55,7 @@ export function PromptTable({ prompts, onTriggerScan, onDelete, isLoading }: Pro
         <tbody className="divide-y divide-cyan-500/10">
           {prompts.map((prompt) => {
             // Build a Map for O(1) lookups instead of find() in loop
-            const resultsByModel = new Map(
-              prompt.modelResults.map((r) => [r.model, r]),
-            );
+            const resultsByModel = new Map(prompt.modelResults.map((r) => [r.model, r]));
             return (
               <tr
                 key={prompt.promptId}
@@ -84,33 +82,33 @@ export function PromptTable({ prompts, onTriggerScan, onDelete, isLoading }: Pro
                     </td>
                   );
                 })}
-              <td className="px-4 py-4 text-right">
-                <div className="flex items-center justify-end gap-1">
-                  {onTriggerScan && (
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => onTriggerScan(prompt.promptId)}
-                      disabled={isLoading}
-                      aria-label="Lancer un scan"
-                    >
-                      <Play className="h-4 w-4" aria-hidden="true" />
-                    </Button>
-                  )}
-                  {onDelete && (
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      onClick={() => onDelete(prompt.promptId)}
-                      disabled={isLoading}
-                      aria-label="Supprimer le prompt"
-                    >
-                      <Trash2 className="h-4 w-4 text-rose-400" aria-hidden="true" />
-                    </Button>
-                  )}
-                </div>
-              </td>
-            </tr>
+                <td className="px-4 py-4 text-right">
+                  <div className="flex items-center justify-end gap-1">
+                    {onTriggerScan && (
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => onTriggerScan(prompt.promptId)}
+                        disabled={isLoading}
+                        aria-label="Lancer un scan"
+                      >
+                        <Play className="h-4 w-4" aria-hidden="true" />
+                      </Button>
+                    )}
+                    {onDelete && (
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => onDelete(prompt.promptId)}
+                        disabled={isLoading}
+                        aria-label="Supprimer le prompt"
+                      >
+                        <Trash2 className="h-4 w-4 text-rose-400" aria-hidden="true" />
+                      </Button>
+                    )}
+                  </div>
+                </td>
+              </tr>
             );
           })}
         </tbody>

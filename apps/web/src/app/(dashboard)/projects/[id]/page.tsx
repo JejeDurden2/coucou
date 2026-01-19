@@ -2,7 +2,16 @@
 
 import { use, useState, memo } from 'react';
 import Link from 'next/link';
-import { Radar, Plus, RefreshCw, Trash2, Trophy, MessageSquare, BarChart3, EyeOff } from 'lucide-react';
+import {
+  Radar,
+  Plus,
+  RefreshCw,
+  Trash2,
+  Trophy,
+  MessageSquare,
+  BarChart3,
+  EyeOff,
+} from 'lucide-react';
 
 import { useProject } from '@/hooks/use-projects';
 import { useCreatePrompt, useDeletePrompt } from '@/hooks/use-prompts';
@@ -290,9 +299,7 @@ export default function ProjectDashboardPage({
                 stats?.promptStats.map((prompt) => {
                   const isCitedByAny = prompt.modelResults.some((r) => r.isCited);
                   // Build a Map for O(1) lookups instead of find() in loop
-                  const resultsByModel = new Map(
-                    prompt.modelResults.map((r) => [r.model, r]),
-                  );
+                  const resultsByModel = new Map(prompt.modelResults.map((r) => [r.model, r]));
                   return (
                     <tr
                       key={prompt.promptId}
@@ -393,7 +400,9 @@ const CitationStatus = memo(function CitationStatus({
   result,
 }: CitationStatusProps): React.ReactNode {
   if (!result) {
-    return <EyeOff className="h-4 w-4 text-muted-foreground mx-auto" aria-label="Pas encore scanné" />;
+    return (
+      <EyeOff className="h-4 w-4 text-muted-foreground mx-auto" aria-label="Pas encore scanné" />
+    );
   }
 
   if (result.isCited) {
@@ -401,9 +410,7 @@ const CitationStatus = memo(function CitationStatus({
       <span className="inline-flex items-center gap-1.5">
         <PulsingDot color="success" size="md" />
         {result.position !== null && (
-          <span className="font-medium tabular-nums text-success text-xs">
-            #{result.position}
-          </span>
+          <span className="font-medium tabular-nums text-success text-xs">#{result.position}</span>
         )}
       </span>
     );

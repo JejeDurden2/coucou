@@ -25,9 +25,7 @@ export function Logo({ className, variant = 'full', size = 'md' }: LogoProps) {
   }
 
   if (variant === 'text') {
-    return (
-      <span className={cn('font-bold text-foreground', text, className)}>Coucou IA</span>
-    );
+    return <span className={cn('font-bold text-foreground', text, className)}>Coucou IA</span>;
   }
 
   return (
