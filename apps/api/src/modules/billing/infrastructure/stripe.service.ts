@@ -92,6 +92,23 @@ export class StripeService {
     return customer.id;
   }
 
+  async customerExists(customerId: string): Promise<boolean> {
+    try {
+      const response = await fetch(`${this.baseUrl}/customers/${customerId}`, {
+        headers: {
+          Authorization: `Bearer ${this.secretKey}`,
+        },
+      });
+      if (!response.ok) {
+        return false;
+      }
+      const customer = (await response.json()) as { deleted?: boolean };
+      return !customer.deleted;
+    } catch {
+      return false;
+    }
+  }
+
   async createCheckoutSession(
     customerId: string,
     plan: Exclude<Plan, 'FREE'>,

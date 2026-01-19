@@ -41,8 +41,8 @@ export class CreateCheckoutUseCase {
 
     let customerId = user.stripeCustomerId;
 
-    // Create Stripe customer if not exists
-    if (!customerId) {
+    // Create Stripe customer if not exists or if the stored customer is invalid
+    if (!customerId || !(await this.stripeService.customerExists(customerId))) {
       customerId = await this.stripeService.createCustomer(user.email, user.name);
       await this.userRepository.updatePlan(userId, user.plan, customerId);
     }
