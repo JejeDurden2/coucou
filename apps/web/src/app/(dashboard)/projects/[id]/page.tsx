@@ -21,16 +21,10 @@ import {
 } from '@/components/ui/alert-dialog';
 import { CompetitorsList, RecommendationsPanel } from '@/components/features/dashboard';
 import { StatCard } from '@/components/features/dashboard/stat-card';
-import { LLMProvider, type ProviderBreakdown } from '@coucou-ia/shared';
+import { getModelDisplayName } from '@/components/features/dashboard/llm-result-row';
+import { LLMProvider } from '@coucou-ia/shared';
 import { cn } from '@/lib/utils';
 import { formatRelativeTime } from '@/lib/format';
-
-function getProviderBreakdown(
-  breakdown: ProviderBreakdown[] | undefined,
-  provider: LLMProvider,
-): ProviderBreakdown | undefined {
-  return breakdown?.find((b) => b.provider === provider);
-}
 
 interface PulsingDotProps {
   color: 'primary' | 'success' | 'cyan' | 'emerald';
@@ -46,8 +40,8 @@ const DOT_COLORS = {
 } as const;
 
 const DOT_SIZES = {
-  sm: 'h-2 w-2',
-  md: 'h-3 w-3',
+  sm: 'size-2',
+  md: 'size-3',
 } as const;
 
 function PulsingDot({ color, size = 'sm' }: PulsingDotProps): React.ReactNode {
@@ -127,10 +121,12 @@ export default function ProjectDashboardPage({
     );
   }
 
-  const openaiBreakdown = getProviderBreakdown(stats?.breakdown, LLMProvider.OPENAI);
-  const anthropicBreakdown = getProviderBreakdown(stats?.breakdown, LLMProvider.ANTHROPIC);
-
   const promptCount = stats?.promptStats?.length ?? 0;
+  const modelBreakdown = stats?.modelBreakdown ?? [];
+  // Get unique models from all prompt results for table columns
+  const availableModels = Array.from(
+    new Set(stats?.promptStats?.flatMap((p) => p.modelResults.map((r) => r.model)) ?? []),
+  );
   const hasPrompts = promptCount > 0;
 
   return (
@@ -139,7 +135,7 @@ export default function ProjectDashboardPage({
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-3">
           {/* Brand Avatar */}
-          <div className="h-10 w-10 rounded-lg bg-gradient-to-br from-primary/20 to-secondary/20 border border-primary/20 flex items-center justify-center flex-shrink-0">
+          <div className="size-10 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center flex-shrink-0">
             <span className="text-lg font-bold text-primary">
               {project.brandName.charAt(0).toUpperCase()}
             </span>
@@ -198,18 +194,15 @@ export default function ProjectDashboardPage({
           trend={stats?.trend ? { delta: stats.trend.delta } : undefined}
           sparklineData={stats?.trends?.averageRank?.map((p) => p.value)}
         />
-        <StatCard
-          icon={MessageSquare}
-          label="ChatGPT"
-          value={openaiBreakdown?.averageRank ?? null}
-          gradient="chatgpt"
-        />
-        <StatCard
-          icon={MessageSquare}
-          label="Claude"
-          value={anthropicBreakdown?.averageRank ?? null}
-          gradient="claude"
-        />
+        {modelBreakdown.map((model) => (
+          <StatCard
+            key={model.model}
+            icon={MessageSquare}
+            label={getModelDisplayName(model.model)}
+            value={model.averageRank}
+            gradient={model.provider === LLMProvider.OPENAI ? 'chatgpt' : 'claude'}
+          />
+        ))}
         <StatCard
           icon={BarChart3}
           label="Total scans"
@@ -221,7 +214,7 @@ export default function ProjectDashboardPage({
       {/* Main Content: Prompts Table */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <h2 className="text-sm font-medium text-muted-foreground uppercase tracking-wide">
+          <h2 className="text-sm font-medium text-muted-foreground uppercase">
             Vos prompts ({promptCount})
           </h2>
           <Button variant="outline" size="sm" onClick={() => setShowAddPrompt(true)}>
@@ -259,27 +252,29 @@ export default function ProjectDashboardPage({
         ) : null}
 
         {/* Prompts Table */}
-        <div className="rounded-lg border border-border overflow-hidden">
+        <div className="rounded-lg border border-border overflow-hidden overflow-x-auto">
           <table className="w-full">
             <thead>
               <tr className="border-b border-border bg-muted/30">
-                <th className="text-left text-xs font-medium text-muted-foreground uppercase tracking-wide px-4 py-3">
+                <th className="text-left text-xs font-medium text-muted-foreground uppercase px-4 py-3">
                   Prompt
                 </th>
-                <th className="text-center text-xs font-medium text-muted-foreground uppercase tracking-wide px-4 py-3 w-28">
-                  ChatGPT
-                </th>
-                <th className="text-center text-xs font-medium text-muted-foreground uppercase tracking-wide px-4 py-3 w-28">
-                  Claude
-                </th>
+                {availableModels.map((model) => (
+                  <th
+                    key={model}
+                    className="text-center text-xs font-medium text-muted-foreground uppercase px-4 py-3 w-24"
+                  >
+                    {getModelDisplayName(model)}
+                  </th>
+                ))}
                 <th className="w-12" />
               </tr>
             </thead>
             <tbody>
               {!hasPrompts ? (
                 <tr>
-                  <td colSpan={4} className="px-4 py-12 text-center">
-                    <div className="mx-auto w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
+                  <td colSpan={availableModels.length + 2} className="px-4 py-12 text-center">
+                    <div className="mx-auto size-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
                       <MessageSquare
                         className="h-8 w-8 text-primary opacity-50"
                         aria-hidden="true"
@@ -293,7 +288,11 @@ export default function ProjectDashboardPage({
                 </tr>
               ) : (
                 stats?.promptStats.map((prompt) => {
-                  const isCitedByAny = prompt.openai?.isCited || prompt.anthropic?.isCited;
+                  const isCitedByAny = prompt.modelResults.some((r) => r.isCited);
+                  // Build a Map for O(1) lookups instead of find() in loop
+                  const resultsByModel = new Map(
+                    prompt.modelResults.map((r) => [r.model, r]),
+                  );
                   return (
                     <tr
                       key={prompt.promptId}
@@ -314,12 +313,11 @@ export default function ProjectDashboardPage({
                           </span>
                         ) : null}
                       </td>
-                      <td className="px-4 py-3 text-center">
-                        <CitationStatus result={prompt.openai} />
-                      </td>
-                      <td className="px-4 py-3 text-center">
-                        <CitationStatus result={prompt.anthropic} />
-                      </td>
+                      {availableModels.map((model) => (
+                        <td key={model} className="px-4 py-3 text-center">
+                          <CitationStatus result={resultsByModel.get(model) ?? null} />
+                        </td>
+                      ))}
                       <td className="px-4 py-3">
                         <Button
                           variant="ghost"
@@ -413,8 +411,8 @@ const CitationStatus = memo(function CitationStatus({
 
   return (
     <span className="inline-flex items-center text-destructive">
-      <span className="h-3 w-3 rounded-full bg-destructive/20 flex items-center justify-center">
-        <span className="h-1.5 w-1.5 rounded-full bg-destructive" />
+      <span className="size-3 rounded-full bg-destructive/20 flex items-center justify-center">
+        <span className="size-1.5 rounded-full bg-destructive" />
       </span>
     </span>
   );

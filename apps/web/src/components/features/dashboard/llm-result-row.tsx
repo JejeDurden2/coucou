@@ -22,17 +22,17 @@ const providerInfo: Record<LLMProvider, { color: string; icon: string }> = {
   },
 };
 
-const modelNames: Record<string, string> = {
+export const MODEL_DISPLAY_NAMES: Record<string, string> = {
   'gpt-4o-mini': 'GPT-4o-mini',
   'gpt-4o': 'GPT-4o',
   'gpt-5.2': 'GPT-5.2',
-  'claude-sonnet-4-5-20250514': 'Claude Sonnet 4.5',
-  'claude-opus-4-5-20250514': 'Claude Opus 4.5',
+  'claude-sonnet-4-5-20250514': 'Claude Sonnet',
+  'claude-opus-4-5-20250514': 'Claude Opus',
   'claude-3-5-haiku-latest': 'Claude Haiku',
 };
 
-function getModelDisplayName(model: string): string {
-  return modelNames[model] ?? model;
+export function getModelDisplayName(model: string): string {
+  return MODEL_DISPLAY_NAMES[model] ?? model;
 }
 
 export function LLMResultRow({

@@ -7,6 +7,21 @@ export interface ProviderBreakdownDto {
   totalScans: number;
 }
 
+export interface ModelBreakdownDto {
+  model: string;
+  provider: LLMProvider;
+  citationRate: number;
+  averageRank: number | null;
+  totalScans: number;
+}
+
+export interface ModelResultDto {
+  model: string;
+  provider: LLMProvider;
+  isCited: boolean;
+  position: number | null;
+}
+
 export interface TrendDto {
   current: number;
   previous: number;
@@ -48,8 +63,7 @@ export interface PromptStatDto {
   content: string;
   category: string | null;
   lastScanAt: Date | null;
-  openai: { isCited: boolean; position: number | null } | null;
-  anthropic: { isCited: boolean; position: number | null } | null;
+  modelResults: ModelResultDto[];
 }
 
 export interface TimeSeriesPointDto {
@@ -67,6 +81,7 @@ export interface DashboardStatsDto {
   globalScore: number;
   averageRank: number | null;
   breakdown: ProviderBreakdownDto[];
+  modelBreakdown: ModelBreakdownDto[];
   trend: TrendDto;
   trends: TimeSeriesTrendsDto;
   topCompetitors: CompetitorDto[];

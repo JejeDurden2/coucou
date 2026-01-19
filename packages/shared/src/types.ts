@@ -149,6 +149,14 @@ export interface ProviderBreakdown {
   totalScans: number;
 }
 
+export interface ModelBreakdown {
+  model: string;
+  provider: LLMProvider;
+  citationRate: number;
+  averageRank: number | null;
+  totalScans: number;
+}
+
 export interface Trend {
   current: number;
   previous: number;
@@ -185,13 +193,19 @@ export interface EnrichedCompetitor {
   lastContext: string | null;
 }
 
+export interface ModelResult {
+  model: string;
+  provider: LLMProvider;
+  isCited: boolean;
+  position: number | null;
+}
+
 export interface PromptStat {
   promptId: string;
   content: string;
   category: string | null;
   lastScanAt: Date | null;
-  openai: { isCited: boolean; position: number | null } | null;
-  anthropic: { isCited: boolean; position: number | null } | null;
+  modelResults: ModelResult[];
 }
 
 export interface TimeSeriesPoint {
@@ -209,6 +223,7 @@ export interface DashboardStats {
   globalScore: number;
   averageRank: number | null;
   breakdown: ProviderBreakdown[];
+  modelBreakdown: ModelBreakdown[];
   trend: Trend;
   trends: TimeSeriesTrends;
   topCompetitors: Competitor[];

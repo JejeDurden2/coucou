@@ -10,6 +10,7 @@ import type {
   CompetitorTrend,
   DashboardStatsDto,
   EnrichedCompetitorDto,
+  ModelBreakdownDto,
   PromptStatDto,
   ProviderBreakdownDto,
   TimeSeriesPointDto,
@@ -57,6 +58,9 @@ export class GetDashboardStatsUseCase {
     // Calculate breakdown by provider
     const breakdown = this.calculateProviderBreakdown(allResults);
 
+    // Calculate breakdown by model
+    const modelBreakdown = this.calculateModelBreakdown(allResults);
+
     // Calculate trend (last 7 days vs previous 7 days)
     const trend = this.calculateTrend(scans);
 
@@ -70,7 +74,7 @@ export class GetDashboardStatsUseCase {
     const enrichedCompetitors = this.aggregateEnrichedCompetitors(scans);
 
     // Get per-prompt stats with latest scan results
-    const promptStats = await this.getPromptStats(prompts, scans);
+    const promptStats = this.getPromptStats(prompts, scans);
 
     const lastScan = scans.length > 0 ? scans[0] : null;
 
@@ -78,6 +82,7 @@ export class GetDashboardStatsUseCase {
       globalScore: Math.round(globalScore * 10) / 10,
       averageRank,
       breakdown,
+      modelBreakdown,
       trend,
       trends,
       topCompetitors,
@@ -129,6 +134,30 @@ export class GetDashboardStatsUseCase {
     });
   }
 
+  private calculateModelBreakdown(results: LLMResult[]): ModelBreakdownDto[] {
+    const modelMap = new Map<string, LLMResult[]>();
+
+    for (const r of results) {
+      const existing = modelMap.get(r.model) ?? [];
+      existing.push(r);
+      modelMap.set(r.model, existing);
+    }
+
+    return Array.from(modelMap.entries()).map(([model, modelResults]) => {
+      const citedCount = modelResults.filter((r) => r.isCited).length;
+      const citationRate =
+        modelResults.length > 0 ? (citedCount / modelResults.length) * 100 : 0;
+
+      return {
+        model,
+        provider: modelResults[0].provider,
+        citationRate: Math.round(citationRate * 10) / 10,
+        averageRank: this.calculateAverageRank(modelResults),
+        totalScans: modelResults.length,
+      };
+    });
+  }
+
   private calculateTrend(scans: Array<{ executedAt: Date; results: LLMResult[] }>): {
     current: number;
     previous: number;
@@ -162,12 +191,6 @@ export class GetDashboardStatsUseCase {
       previous: previousRank ?? 0,
       delta,
     };
-  }
-
-  private calculateCitationRate(scans: Array<{ results: LLMResult[] }>): number {
-    if (scans.length === 0) return 0;
-    const citedCount = scans.filter((s) => s.results.some((r) => r.isCited)).length;
-    return (citedCount / scans.length) * 100;
   }
 
   private calculateTimeSeriesTrends(
@@ -446,28 +469,28 @@ export class GetDashboardStatsUseCase {
     return Math.round(((currentMentions - previousMentions) / previousMentions) * 100);
   }
 
-  private async getPromptStats(
+  private getPromptStats(
     prompts: Array<{ id: string; content: string; category: string | null }>,
     scans: Array<{ promptId: string; executedAt: Date; results: LLMResult[] }>,
-  ): Promise<PromptStatDto[]> {
+  ): PromptStatDto[] {
     return prompts.map((prompt) => {
       const promptScans = scans.filter((s) => s.promptId === prompt.id);
       const latestScan = promptScans[0];
 
-      const openaiResult = latestScan?.results.find((r) => r.provider === LLMProvider.OPENAI);
-      const anthropicResult = latestScan?.results.find((r) => r.provider === LLMProvider.ANTHROPIC);
+      const modelResults =
+        latestScan?.results.map((r) => ({
+          model: r.model,
+          provider: r.provider,
+          isCited: r.isCited,
+          position: r.position,
+        })) ?? [];
 
       return {
         promptId: prompt.id,
         content: prompt.content,
         category: prompt.category,
         lastScanAt: latestScan?.executedAt ?? null,
-        openai: openaiResult
-          ? { isCited: openaiResult.isCited, position: openaiResult.position }
-          : null,
-        anthropic: anthropicResult
-          ? { isCited: anthropicResult.isCited, position: anthropicResult.position }
-          : null,
+        modelResults,
       };
     });
   }
