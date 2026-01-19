@@ -163,9 +163,9 @@ export default function LandingPage() {
         {/* Hero Section */}
         <section className="relative pt-32 pb-20 px-4 overflow-hidden grid-pattern">
           <div className="container mx-auto max-w-5xl text-center relative z-10">
-            <Badge className="mb-6" variant="secondary">
+            <Badge className="mb-6" variant="outline">
               <Sparkles className="mr-1 h-3 w-3" aria-hidden="true" />
-              Nouveau: Support de Claude 4
+              Nouveau: Support de GPT-5.2
             </Badge>
 
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6 text-balance">
@@ -305,21 +305,26 @@ export default function LandingPage() {
               </p>
             </div>
 
-            <div className="grid md:grid-cols-3 gap-8">
-              {steps.map((step, index) => (
-                <div key={step.number} className="relative">
-                  {index < steps.length - 1 && (
-                    <div className="hidden md:block absolute top-8 left-full w-full h-[2px] bg-zinc-700 -translate-x-1/2" />
-                  )}
-                  <div className="text-center">
-                    <div className="size-16 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center mx-auto mb-4 text-2xl font-bold text-primary tabular-nums">
-                      {step.number}
-                    </div>
-                    <h3 className="text-lg font-semibold mb-2">{step.title}</h3>
-                    <p className="text-sm text-muted-foreground">{step.description}</p>
+            <div className="grid md:grid-cols-3 gap-8 relative">
+              {steps.map((step) => (
+                <div key={step.number} className="text-center">
+                  <div className="size-16 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center mx-auto mb-4 text-2xl font-bold text-primary tabular-nums">
+                    {step.number}
                   </div>
+                  <h3 className="text-lg font-semibold mb-2">{step.title}</h3>
+                  <p className="text-sm text-muted-foreground">{step.description}</p>
                 </div>
               ))}
+              <div
+                aria-hidden="true"
+                className="hidden md:block absolute top-8 h-[2px] bg-zinc-700"
+                style={{ left: 'calc(33.333% + 2rem)', right: 'calc(66.666% + 2rem)' }}
+              />
+              <div
+                aria-hidden="true"
+                className="hidden md:block absolute top-8 h-[2px] bg-zinc-700"
+                style={{ left: 'calc(66.666% + 2rem)', right: 'calc(33.333% + 2rem)' }}
+              />
             </div>
           </div>
         </section>
