@@ -46,77 +46,8 @@ export default function RegisterPage() {
         <CardDescription>Commencez gratuitement avec 1 projet et 3 prompts</CardDescription>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          {error && (
-            <div className="rounded-lg bg-destructive/10 p-3 text-sm text-destructive">{error}</div>
-          )}
-          <div className="space-y-2">
-            <label htmlFor="name" className="text-sm font-medium">
-              Nom
-            </label>
-            <Input
-              id="name"
-              type="text"
-              placeholder="Votre nom"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required
-              autoComplete="name"
-            />
-          </div>
-          <div className="space-y-2">
-            <label htmlFor="email" className="text-sm font-medium">
-              Email
-            </label>
-            <Input
-              id="email"
-              type="email"
-              placeholder="vous@entreprise.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              autoComplete="email"
-              spellCheck={false}
-            />
-          </div>
-          <div className="space-y-2">
-            <label htmlFor="password" className="text-sm font-medium">
-              Mot de passe
-            </label>
-            <Input
-              id="password"
-              type="password"
-              placeholder="Minimum 8 caractères"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              minLength={8}
-              required
-              autoComplete="new-password"
-            />
-          </div>
-          <div className="flex items-start gap-3">
-            <input
-              type="checkbox"
-              id="terms"
-              checked={acceptTerms}
-              onChange={(e) => setAcceptTerms(e.target.checked)}
-              className="mt-1 h-4 w-4 rounded border-zinc-700 bg-zinc-900 text-cyan-400 focus:ring-cyan-400/50"
-              required
-            />
-            <label htmlFor="terms" className="text-sm text-muted-foreground">
-              J&apos;accepte les{' '}
-              <Link href="/terms" className="text-cyan-400 hover:underline" target="_blank">
-                Conditions Générales d&apos;Utilisation
-              </Link>{' '}
-              et la{' '}
-              <Link href="/privacy" className="text-cyan-400 hover:underline" target="_blank">
-                Politique de confidentialité
-              </Link>
-            </label>
-          </div>
-          <Button type="submit" className="w-full" disabled={isLoading || !acceptTerms}>
-            {isLoading ? 'Création…' : 'Créer mon compte'}
-          </Button>
+        <div className="space-y-4">
+          <GoogleButton label="S'inscrire avec Google" />
 
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
@@ -127,8 +58,81 @@ export default function RegisterPage() {
             </div>
           </div>
 
-          <GoogleButton label="S'inscrire avec Google" />
-        </form>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {error && (
+              <div className="rounded-lg bg-destructive/10 p-3 text-sm text-destructive">
+                {error}
+              </div>
+            )}
+            <div className="space-y-2">
+              <label htmlFor="name" className="text-sm font-medium">
+                Nom
+              </label>
+              <Input
+                id="name"
+                type="text"
+                placeholder="Votre nom"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+                autoComplete="name"
+              />
+            </div>
+            <div className="space-y-2">
+              <label htmlFor="email" className="text-sm font-medium">
+                Email
+              </label>
+              <Input
+                id="email"
+                type="email"
+                placeholder="vous@entreprise.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                autoComplete="email"
+                spellCheck={false}
+              />
+            </div>
+            <div className="space-y-2">
+              <label htmlFor="password" className="text-sm font-medium">
+                Mot de passe
+              </label>
+              <Input
+                id="password"
+                type="password"
+                placeholder="Minimum 8 caractères"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                minLength={8}
+                required
+                autoComplete="new-password"
+              />
+            </div>
+            <div className="flex items-start gap-3">
+              <input
+                type="checkbox"
+                id="terms"
+                checked={acceptTerms}
+                onChange={(e) => setAcceptTerms(e.target.checked)}
+                className="mt-1 h-4 w-4 rounded border-zinc-700 bg-zinc-900 text-cyan-400 focus:ring-cyan-400/50"
+                required
+              />
+              <label htmlFor="terms" className="text-sm text-muted-foreground">
+                J&apos;accepte les{' '}
+                <Link href="/terms" className="text-cyan-400 hover:underline" target="_blank">
+                  Conditions Générales d&apos;Utilisation
+                </Link>{' '}
+                et la{' '}
+                <Link href="/privacy" className="text-cyan-400 hover:underline" target="_blank">
+                  Politique de confidentialité
+                </Link>
+              </label>
+            </div>
+            <Button type="submit" className="w-full" disabled={isLoading || !acceptTerms}>
+              {isLoading ? 'Création…' : 'Créer mon compte'}
+            </Button>
+          </form>
+        </div>
         <p className="mt-4 text-center text-sm text-muted-foreground">
           Déjà un compte ?{' '}
           <Link href="/login" className="text-primary hover:underline">

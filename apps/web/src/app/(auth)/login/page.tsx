@@ -44,50 +44,8 @@ export default function LoginPage() {
         <CardDescription>Connectez-vous pour accéder à votre dashboard</CardDescription>
       </CardHeader>
       <CardContent>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          {error && (
-            <div className="rounded-lg bg-destructive/10 p-3 text-sm text-destructive">{error}</div>
-          )}
-          <div className="space-y-2">
-            <label htmlFor="email" className="text-sm font-medium">
-              Email
-            </label>
-            <Input
-              id="email"
-              type="email"
-              placeholder="vous@entreprise.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              autoComplete="email"
-              spellCheck={false}
-            />
-          </div>
-          <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <label htmlFor="password" className="text-sm font-medium">
-                Mot de passe
-              </label>
-              <Link
-                href="/forgot-password"
-                className="text-xs text-muted-foreground hover:text-primary"
-              >
-                Mot de passe oublie ?
-              </Link>
-            </div>
-            <Input
-              id="password"
-              type="password"
-              placeholder="••••••••"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-              autoComplete="current-password"
-            />
-          </div>
-          <Button type="submit" className="w-full" disabled={isLoading}>
-            {isLoading ? 'Connexion…' : 'Se connecter'}
-          </Button>
+        <div className="space-y-4">
+          <GoogleButton label="Continuer avec Google" />
 
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
@@ -98,8 +56,54 @@ export default function LoginPage() {
             </div>
           </div>
 
-          <GoogleButton label="Continuer avec Google" />
-        </form>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {error && (
+              <div className="rounded-lg bg-destructive/10 p-3 text-sm text-destructive">
+                {error}
+              </div>
+            )}
+            <div className="space-y-2">
+              <label htmlFor="email" className="text-sm font-medium">
+                Email
+              </label>
+              <Input
+                id="email"
+                type="email"
+                placeholder="vous@entreprise.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                autoComplete="email"
+                spellCheck={false}
+              />
+            </div>
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <label htmlFor="password" className="text-sm font-medium">
+                  Mot de passe
+                </label>
+                <Link
+                  href="/forgot-password"
+                  className="text-xs text-muted-foreground hover:text-primary"
+                >
+                  Mot de passe oublie ?
+                </Link>
+              </div>
+              <Input
+                id="password"
+                type="password"
+                placeholder="••••••••"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                autoComplete="current-password"
+              />
+            </div>
+            <Button type="submit" className="w-full" disabled={isLoading}>
+              {isLoading ? 'Connexion…' : 'Se connecter'}
+            </Button>
+          </form>
+        </div>
         <p className="mt-4 text-center text-sm text-muted-foreground">
           Pas encore de compte ?{' '}
           <Link href="/register" className="text-primary hover:underline">
