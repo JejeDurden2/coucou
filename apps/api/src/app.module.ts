@@ -8,6 +8,7 @@ import { AppService } from './app.service';
 import { AuthModule } from './modules/auth';
 import { BillingModule } from './modules/billing/billing.module';
 import { DashboardModule } from './modules/dashboard';
+import { EmailModule } from './modules/email';
 import { ProjectModule } from './modules/project';
 import { PromptModule } from './modules/prompt';
 import { ScanModule } from './modules/scan';
@@ -36,6 +37,7 @@ import { PrismaModule } from './prisma';
       },
     ]),
     PrismaModule,
+    EmailModule,
     AuthModule,
     BillingModule,
     ProjectModule,

@@ -1,17 +1,22 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 
 import { PrismaService } from '../../../../prisma';
-import { USER_REPOSITORY, type UserRepository } from '../../domain';
+import { EMAIL_PORT, type EmailPort, generateWelcomeEmail } from '../../../email';
+import { USER_REPOSITORY, type UserRepository, type User } from '../../domain';
 import type { AuthResponseDto, JwtPayload } from '../dto/auth.dto';
 import type { GoogleProfile } from '../../presentation/strategies/google.strategy';
 
 @Injectable()
 export class GoogleAuthUseCase {
+  private readonly logger = new Logger(GoogleAuthUseCase.name);
+
   constructor(
     @Inject(USER_REPOSITORY)
     private readonly userRepository: UserRepository,
+    @Inject(EMAIL_PORT)
+    private readonly emailService: EmailPort,
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
     private readonly prisma: PrismaService,
@@ -20,6 +25,7 @@ export class GoogleAuthUseCase {
   async execute(profile: GoogleProfile): Promise<AuthResponseDto> {
     // Check if user exists by Google ID
     let user = await this.userRepository.findByGoogleId(profile.id);
+    let isNewUser = false;
 
     if (!user) {
       // Check if user exists by email (may have registered with email/password before)
@@ -36,7 +42,15 @@ export class GoogleAuthUseCase {
           googleId: profile.id,
           avatarUrl: profile.picture,
         });
+        isNewUser = true;
       }
+    }
+
+    // Send welcome email for new users (non-blocking)
+    if (isNewUser) {
+      this.sendWelcomeEmail(user).catch((error) => {
+        this.logger.error(`Failed to send welcome email to ${user.email}`, error);
+      });
     }
 
     const payload: JwtPayload = {
@@ -69,5 +83,20 @@ export class GoogleAuthUseCase {
         createdAt: user.createdAt,
       },
     };
+  }
+
+  private async sendWelcomeEmail(user: User): Promise<void> {
+    const frontendUrl = this.configService.get<string>('FRONTEND_URL', 'http://localhost:3000');
+    const { html, text } = generateWelcomeEmail({
+      userName: user.name ?? user.email.split('@')[0],
+      loginUrl: `${frontendUrl}/projects`,
+    });
+
+    await this.emailService.send({
+      to: user.email,
+      subject: 'Bienvenue sur Coucou - Votre visibilite IA commence ici',
+      html,
+      text,
+    });
   }
 }
