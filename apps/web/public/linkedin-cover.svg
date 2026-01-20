@@ -38,12 +38,8 @@
   </g>
 
   <!-- Brand name -->
-  <text x="210" y="215" font-family="system-ui, -apple-system, sans-serif" font-size="42" font-weight="700" fill="#fafafa">
-    coucou
-  </text>
-  <text x="347" y="215" font-family="system-ui, -apple-system, sans-serif" font-size="42" font-weight="700" fill="#8b5cf6">
-    IA
-  </text>
+  <text x="210" y="215" font-family="system-ui, -apple-system, sans-serif" font-size="42" font-weight="700" fill="#fafafa">coucou</text>
+  <text x="360" y="215" font-family="system-ui, -apple-system, sans-serif" font-size="42" font-weight="700" fill="#8b5cf6">IA</text>
 
   <!-- Tagline -->
   <text x="792" y="175" font-family="system-ui, -apple-system, sans-serif" font-size="56" font-weight="700" fill="#8b5cf6" text-anchor="middle">
