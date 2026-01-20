@@ -24,8 +24,8 @@
   <ellipse cx="1200" cy="198" rx="400" ry="200" fill="#8b5cf6" opacity="0.03"/>
   <ellipse cx="400" cy="198" rx="300" ry="150" fill="#8b5cf6" opacity="0.02"/>
 
-  <!-- Coucou IA Logo (scaled 2x from 48x48) -->
-  <g transform="translate(100, 150) scale(2)">
+  <!-- Coucou IA Logo - top right -->
+  <g transform="translate(1480, 30) scale(1.5)">
     <!-- Body - rounded speech bubble shape -->
     <path d="M8 20C8 12.268 14.268 6 22 6h4c7.732 0 14 6.268 14 14v4c0 7.732-6.268 14-14 14h-2l-6 6v-6.17C11.058 35.93 8 30.374 8 24v-4z" fill="#8B5CF6"/>
     <!-- Eye -->
@@ -37,34 +37,26 @@
     <path d="M14 22c2-4 6-6 10-6" stroke="#09090B" stroke-width="2" stroke-linecap="round" opacity="0.3"/>
   </g>
 
-  <!-- Brand name -->
-  <text x="210" y="215" font-family="system-ui, -apple-system, sans-serif" font-size="42" font-weight="700" fill="#fafafa">coucou</text>
-  <text x="360" y="215" font-family="system-ui, -apple-system, sans-serif" font-size="42" font-weight="700" fill="#8b5cf6">IA</text>
-
-  <!-- Tagline -->
-  <text x="792" y="175" font-family="system-ui, -apple-system, sans-serif" font-size="56" font-weight="700" fill="#8b5cf6" text-anchor="middle">
+  <!-- Tagline - centered -->
+  <text x="792" y="175" font-family="system-ui, -apple-system, sans-serif" font-size="64" font-weight="700" fill="#8b5cf6" text-anchor="middle">
     L'IA parle-t-elle
   </text>
-  <text x="792" y="245" font-family="system-ui, -apple-system, sans-serif" font-size="56" font-weight="700" fill="#fafafa" text-anchor="middle">
+  <text x="792" y="260" font-family="system-ui, -apple-system, sans-serif" font-size="64" font-weight="700" fill="#fafafa" text-anchor="middle">
     de votre marque ?
   </text>
 
   <!-- Subtitle -->
-  <text x="792" y="310" font-family="system-ui, -apple-system, sans-serif" font-size="24" fill="#a1a1aa" text-anchor="middle">
+  <text x="792" y="325" font-family="system-ui, -apple-system, sans-serif" font-size="24" fill="#a1a1aa" text-anchor="middle">
     Outil GEO pour surveiller votre visibilité dans ChatGPT et Claude
   </text>
 
-  <!-- URL -->
-  <text x="1464" y="360" font-family="system-ui, -apple-system, sans-serif" font-size="20" fill="#71717a" text-anchor="end">
+  <!-- URL - bottom left -->
+  <text x="120" y="360" font-family="system-ui, -apple-system, sans-serif" font-size="20" fill="#71717a">
     coucou-ia.com
   </text>
 
   <!-- Decorative elements -->
-  <circle cx="1450" cy="80" r="4" fill="#8b5cf6" opacity="0.6"/>
-  <circle cx="1480" cy="100" r="3" fill="#8b5cf6" opacity="0.4"/>
-  <circle cx="1420" cy="120" r="2" fill="#8b5cf6" opacity="0.3"/>
-
-  <circle cx="100" cy="320" r="3" fill="#8b5cf6" opacity="0.4"/>
-  <circle cx="130" cy="340" r="2" fill="#8b5cf6" opacity="0.3"/>
-  <circle cx="80" cy="350" r="2" fill="#8b5cf6" opacity="0.2"/>
+  <circle cx="100" cy="80" r="4" fill="#8b5cf6" opacity="0.6"/>
+  <circle cx="130" cy="100" r="3" fill="#8b5cf6" opacity="0.4"/>
+  <circle cx="80" cy="120" r="2" fill="#8b5cf6" opacity="0.3"/>
 </svg>
