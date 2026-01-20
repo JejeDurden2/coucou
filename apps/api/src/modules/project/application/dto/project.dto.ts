@@ -2,14 +2,14 @@ export interface CreateProjectDto {
   name: string;
   brandName: string;
   brandVariants: string[];
-  domain?: string;
+  domain: string;
 }
 
 export interface UpdateProjectDto {
   name?: string;
   brandName?: string;
   brandVariants?: string[];
-  domain?: string | null;
+  domain?: string;
 }
 
 export interface ProjectResponseDto {
@@ -17,7 +17,7 @@ export interface ProjectResponseDto {
   name: string;
   brandName: string;
   brandVariants: string[];
-  domain: string | null;
+  domain: string;
   lastScannedAt: Date | null;
   createdAt: Date;
   updatedAt: Date;

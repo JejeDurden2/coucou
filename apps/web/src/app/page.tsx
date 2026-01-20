@@ -594,7 +594,7 @@ export default function LandingPage() {
                 Twitter
               </Link>
               <Link
-                href="https://linkedin.com/company/coucouia"
+                href="https://linkedin.com/company/coucou-ia"
                 className="text-muted-foreground hover:text-foreground"
                 target="_blank"
                 rel="noopener noreferrer"

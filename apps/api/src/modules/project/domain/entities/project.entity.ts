@@ -1,10 +1,19 @@
+export interface BrandContext {
+  businessType: string;
+  locality: string | null;
+  mainOfferings: string[];
+  targetAudience: string;
+  extractedAt: string;
+}
+
 export interface ProjectProps {
   id: string;
   userId: string;
   name: string;
   brandName: string;
   brandVariants: string[];
-  domain: string | null;
+  domain: string;
+  brandContext: BrandContext | null;
   lastScannedAt: Date | null;
   createdAt: Date;
   updatedAt: Date;
@@ -41,8 +50,12 @@ export class Project {
     return this.props.brandVariants;
   }
 
-  get domain(): string | null {
+  get domain(): string {
     return this.props.domain;
+  }
+
+  get brandContext(): BrandContext | null {
+    return this.props.brandContext;
   }
 
   get lastScannedAt(): Date | null {

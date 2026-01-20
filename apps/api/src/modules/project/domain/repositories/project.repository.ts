@@ -1,4 +1,4 @@
-import type { Project } from '../entities/project.entity';
+import type { BrandContext, Project } from '../entities/project.entity';
 
 export const PROJECT_REPOSITORY = Symbol('PROJECT_REPOSITORY');
 
@@ -7,14 +7,14 @@ export interface CreateProjectData {
   name: string;
   brandName: string;
   brandVariants: string[];
-  domain?: string;
+  domain: string;
 }
 
 export interface UpdateProjectData {
   name?: string;
   brandName?: string;
   brandVariants?: string[];
-  domain?: string | null;
+  domain?: string;
 }
 
 export interface ProjectRepository {
@@ -24,5 +24,6 @@ export interface ProjectRepository {
   create(data: CreateProjectData): Promise<Project>;
   update(id: string, data: UpdateProjectData): Promise<Project>;
   updateLastScannedAt(id: string, date: Date): Promise<void>;
+  updateBrandContext(id: string, context: BrandContext): Promise<void>;
   delete(id: string): Promise<void>;
 }

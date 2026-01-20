@@ -8,6 +8,7 @@ import type {
   Scan,
   DashboardStats,
   RecommendationsResponse,
+  GeneratePromptsResponse,
   User,
   ApiError,
 } from '@coucou-ia/shared';
@@ -208,6 +209,14 @@ class ApiClient {
     return this.fetch<{ url: string }>('/billing/portal', {
       method: 'POST',
       body: JSON.stringify({ returnUrl }),
+    });
+  }
+
+  // Onboarding
+  async generateOnboardingPrompts(projectId: string): Promise<GeneratePromptsResponse> {
+    return this.fetch<GeneratePromptsResponse>('/onboarding/generate-prompts', {
+      method: 'POST',
+      body: JSON.stringify({ projectId }),
     });
   }
 }

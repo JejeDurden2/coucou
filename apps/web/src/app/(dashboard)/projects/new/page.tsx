@@ -39,7 +39,7 @@ export default function NewBrandPage() {
         name: brandName,
         brandName,
         brandVariants,
-        domain: domain || undefined,
+        domain,
       });
       router.push(`/projects/${project.id}`);
     } catch {
@@ -135,18 +135,19 @@ export default function NewBrandPage() {
 
             <div className="space-y-2">
               <label htmlFor="domain" className="text-sm font-medium">
-                Domaine (optionnel)
+                URL de votre site
               </label>
               <Input
                 id="domain"
-                inputMode="url"
-                placeholder="Ex: cafelomi.com"
+                type="url"
+                placeholder="https://cafelomi.com"
                 value={domain}
                 onChange={(e) => setDomain(e.target.value)}
+                required
                 autoComplete="off"
               />
               <p className="text-xs text-muted-foreground">
-                Sera aussi utilisé pour détecter les mentions
+                Sera utilisé pour analyser votre marque et détecter les mentions
               </p>
             </div>
 

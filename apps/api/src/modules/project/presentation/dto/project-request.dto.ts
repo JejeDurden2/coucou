@@ -27,9 +27,9 @@ export class CreateProjectRequestDto {
   @MaxLength(100, { each: true, message: 'Chaque variante doit faire maximum 100 caracteres' })
   brandVariants!: string[];
 
-  @IsOptional()
-  @IsUrl({ protocols: ['http', 'https'], require_protocol: true })
-  domain?: string;
+  @IsString()
+  @IsUrl({ protocols: ['http', 'https'], require_protocol: true }, { message: 'URL invalide (doit commencer par http:// ou https://)' })
+  domain!: string;
 }
 
 export class UpdateProjectRequestDto {
@@ -54,6 +54,7 @@ export class UpdateProjectRequestDto {
   brandVariants?: string[];
 
   @IsOptional()
+  @IsString()
   @IsUrl({ protocols: ['http', 'https'], require_protocol: true })
-  domain?: string | null;
+  domain?: string;
 }

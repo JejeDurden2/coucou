@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
+import type { Project as PrismaProject, Prisma } from '@prisma/client';
 
 import { PrismaService } from '../../../../prisma';
+import type { BrandContext, ProjectProps } from '../../domain/entities/project.entity';
 import { Project } from '../../domain/entities/project.entity';
 import type {
   CreateProjectData,
@@ -8,13 +10,28 @@ import type {
   UpdateProjectData,
 } from '../../domain/repositories/project.repository';
 
+function mapPrismaToProjectProps(prismaProject: PrismaProject): ProjectProps {
+  return {
+    id: prismaProject.id,
+    userId: prismaProject.userId,
+    name: prismaProject.name,
+    brandName: prismaProject.brandName,
+    brandVariants: prismaProject.brandVariants,
+    domain: prismaProject.domain,
+    brandContext: prismaProject.brandContext as BrandContext | null,
+    lastScannedAt: prismaProject.lastScannedAt,
+    createdAt: prismaProject.createdAt,
+    updatedAt: prismaProject.updatedAt,
+  };
+}
+
 @Injectable()
 export class PrismaProjectRepository implements ProjectRepository {
   constructor(private readonly prisma: PrismaService) {}
 
   async findById(id: string): Promise<Project | null> {
     const project = await this.prisma.project.findUnique({ where: { id } });
-    return project ? Project.fromPersistence(project) : null;
+    return project ? Project.fromPersistence(mapPrismaToProjectProps(project)) : null;
   }
 
   async findByUserId(userId: string): Promise<Project[]> {
@@ -22,7 +39,7 @@ export class PrismaProjectRepository implements ProjectRepository {
       where: { userId },
       orderBy: { createdAt: 'desc' },
     });
-    return projects.map((p) => Project.fromPersistence(p));
+    return projects.map((p) => Project.fromPersistence(mapPrismaToProjectProps(p)));
   }
 
   async countByUserId(userId: string): Promise<number> {
@@ -39,21 +56,28 @@ export class PrismaProjectRepository implements ProjectRepository {
         domain: data.domain,
       },
     });
-    return Project.fromPersistence(project);
+    return Project.fromPersistence(mapPrismaToProjectProps(project));
   }
 
   async update(id: string, data: UpdateProjectData): Promise<Project> {
     const project = await this.prisma.project.update({
       where: { id },
-      data,
+      data: data as Prisma.ProjectUpdateInput,
     });
-    return Project.fromPersistence(project);
+    return Project.fromPersistence(mapPrismaToProjectProps(project));
   }
 
   async updateLastScannedAt(id: string, date: Date): Promise<void> {
     await this.prisma.project.update({
       where: { id },
       data: { lastScannedAt: date },
+    });
+  }
+
+  async updateBrandContext(id: string, context: BrandContext): Promise<void> {
+    await this.prisma.project.update({
+      where: { id },
+      data: { brandContext: context as unknown as Prisma.InputJsonValue },
     });
   }
 

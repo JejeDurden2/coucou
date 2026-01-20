@@ -2,11 +2,12 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { X, Sparkles } from 'lucide-react';
+import { X, Sparkles, Loader2, Wand2 } from 'lucide-react';
 import { Plan } from '@coucou-ia/shared';
 
 import { useAuth } from '@/lib/auth-context';
 import { useCreateProject } from '@/hooks/use-projects';
+import { useGeneratePrompts } from '@/hooks/use-onboarding';
 import { useCreateCheckout } from '@/hooks/use-billing';
 import { PlanGrid } from '@/components/plan-card';
 import { Button } from '@/components/ui/button';
@@ -14,7 +15,7 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 
-type OnboardingStep = 'plan' | 'brand';
+type OnboardingStep = 'plan' | 'brand' | 'prompts';
 
 export default function OnboardingPage(): React.ReactNode {
   const router = useRouter();
@@ -28,9 +29,11 @@ export default function OnboardingPage(): React.ReactNode {
   const [step, setStep] = useState<OnboardingStep>(initialStep);
   const [selectedPlan, setSelectedPlan] = useState<Plan | null>(null);
   const [loadingPlan, setLoadingPlan] = useState<Plan | null>(null);
+  const [createdProjectId, setCreatedProjectId] = useState<string | null>(null);
 
   const createCheckout = useCreateCheckout();
   const createProject = useCreateProject();
+  const generatePrompts = useGeneratePrompts();
 
   // Brand form state
   const [brandName, setBrandName] = useState('');
@@ -84,11 +87,29 @@ export default function OnboardingPage(): React.ReactNode {
         name: brandName,
         brandName,
         brandVariants,
-        domain: domain || undefined,
+        domain,
       });
-      router.push(`/projects/${project.id}`);
+      setCreatedProjectId(project.id);
+      setStep('prompts');
     } catch {
       // Error handled by mutation
+    }
+  };
+
+  const handleGeneratePrompts = async () => {
+    if (!createdProjectId) return;
+    try {
+      await generatePrompts.mutateAsync(createdProjectId);
+      router.push(`/projects/${createdProjectId}`);
+    } catch {
+      // Fallback silencieux - erreur gérée par le hook, on redirige quand même
+      router.push(`/projects/${createdProjectId}`);
+    }
+  };
+
+  const handleSkipPrompts = () => {
+    if (createdProjectId) {
+      router.push(`/projects/${createdProjectId}`);
     }
   };
 
@@ -157,6 +178,24 @@ export default function OnboardingPage(): React.ReactNode {
                   </div>
 
                   <div className="space-y-2">
+                    <label htmlFor="domain" className="text-sm font-medium">
+                      Site web
+                    </label>
+                    <Input
+                      id="domain"
+                      type="url"
+                      placeholder="https://cafelomi.com"
+                      value={domain}
+                      onChange={(e) => setDomain(e.target.value)}
+                      required
+                      autoComplete="off"
+                    />
+                    <p className="text-xs text-muted-foreground">
+                      Utilisé pour analyser votre marque et générer des prompts pertinents
+                    </p>
+                  </div>
+
+                  <div className="space-y-2">
                     <label htmlFor="variants" className="text-sm font-medium">
                       Variantes de la marque
                     </label>
@@ -200,32 +239,72 @@ export default function OnboardingPage(): React.ReactNode {
                     </p>
                   </div>
 
-                  <div className="space-y-2">
-                    <label htmlFor="domain" className="text-sm font-medium">
-                      Domaine (optionnel)
-                    </label>
-                    <Input
-                      id="domain"
-                      inputMode="url"
-                      placeholder="Ex: cafelomi.com"
-                      value={domain}
-                      onChange={(e) => setDomain(e.target.value)}
-                      autoComplete="off"
-                    />
-                    <p className="text-xs text-muted-foreground">
-                      Sera aussi utilisé pour détecter les mentions
-                    </p>
-                  </div>
-
                   <Button
                     type="submit"
                     className="w-full"
                     size="lg"
-                    disabled={createProject.isPending}
+                    disabled={createProject.isPending || !domain}
                   >
-                    {createProject.isPending ? 'Création...' : 'Commencer le tracking'}
+                    {createProject.isPending ? 'Création...' : 'Continuer'}
                   </Button>
                 </form>
+              </CardContent>
+            </Card>
+          </div>
+        )}
+
+        {step === 'prompts' && (
+          <div className="max-w-2xl mx-auto space-y-6">
+            <div className="text-center space-y-2">
+              <div className="flex items-center justify-center gap-2 mb-4">
+                <Wand2 className="size-8 text-primary" aria-hidden="true" />
+              </div>
+              <h1 className="text-3xl font-bold text-balance">Générer vos prompts</h1>
+              <p className="text-muted-foreground text-pretty">
+                Nous pouvons analyser votre site web pour créer des prompts de recherche pertinents
+                automatiquement.
+              </p>
+            </div>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Génération automatique</CardTitle>
+                <CardDescription>
+                  Notre IA va analyser votre site pour comprendre votre activité et générer des
+                  questions que vos clients pourraient poser aux assistants IA.
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <Button
+                  onClick={handleGeneratePrompts}
+                  disabled={generatePrompts.isPending}
+                  className="w-full"
+                  size="lg"
+                >
+                  {generatePrompts.isPending ? (
+                    <>
+                      <Loader2
+                        className="mr-2 size-4 animate-spin motion-reduce:animate-none"
+                        aria-hidden="true"
+                      />
+                      Génération en cours...
+                    </>
+                  ) : (
+                    <>
+                      <Sparkles className="mr-2 size-4" aria-hidden="true" />
+                      Oui, générer mes prompts
+                    </>
+                  )}
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={handleSkipPrompts}
+                  disabled={generatePrompts.isPending}
+                  className="w-full"
+                  size="lg"
+                >
+                  Non, je les créerai manuellement
+                </Button>
               </CardContent>
             </Card>
           </div>
