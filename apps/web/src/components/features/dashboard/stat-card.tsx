@@ -15,10 +15,31 @@ interface StatCardProps {
   valueClassName?: string;
   subtitle?: string;
   className?: string;
+  /** Enable podium styling for ranks 1-3 (gold, silver, bronze) */
+  podiumStyle?: boolean;
 }
 
 interface TrendIndicatorProps {
   delta: number;
+}
+
+/** Get podium glass styling based on rank */
+function getPodiumStyle(value: string | number | null): string | undefined {
+  if (typeof value !== 'number') return undefined;
+  const rank = Math.round(value);
+  switch (rank) {
+    case 1:
+      // Gold - warm amber glow
+      return 'bg-amber-500/5 border-amber-500/20 shadow-[inset_0_1px_1px_rgba(251,191,36,0.1)]';
+    case 2:
+      // Silver - cool slate glow
+      return 'bg-slate-300/5 border-slate-400/20 shadow-[inset_0_1px_1px_rgba(148,163,184,0.1)]';
+    case 3:
+      // Bronze - warm orange glow
+      return 'bg-orange-600/5 border-orange-500/20 shadow-[inset_0_1px_1px_rgba(234,88,12,0.1)]';
+    default:
+      return undefined;
+  }
 }
 
 function TrendIndicator({ delta }: TrendIndicatorProps): React.ReactNode {
@@ -51,12 +72,16 @@ export const StatCard = memo(function StatCard({
   valueClassName,
   subtitle,
   className,
+  podiumStyle = false,
 }: StatCardProps) {
+  const podiumClass = podiumStyle ? getPodiumStyle(value) : undefined;
+
   return (
     <div
       className={cn(
         'relative rounded-lg border border-border bg-card p-4',
         'transition-colors duration-200 hover:bg-card-hover',
+        podiumClass,
         className,
       )}
     >

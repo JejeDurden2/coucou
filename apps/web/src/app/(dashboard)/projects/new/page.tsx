@@ -114,7 +114,7 @@ export default function NewBrandPage() {
               {brandVariants.length > 0 && (
                 <div className="flex flex-wrap gap-2 mt-2">
                   {brandVariants.map((variant) => (
-                    <Badge key={variant} variant="secondary" className="gap-1">
+                    <Badge key={variant} variant="outline" className="gap-1">
                       {variant}
                       <button
                         type="button"

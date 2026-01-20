@@ -203,6 +203,7 @@ export default function ProjectDashboardPage({
           gradient="gold"
           trend={stats?.trend ? { delta: stats.trend.delta } : undefined}
           sparklineData={stats?.trends?.averageRank?.map((p) => p.value)}
+          podiumStyle
         />
         {modelBreakdown.map((model) => (
           <StatCard
@@ -211,6 +212,7 @@ export default function ProjectDashboardPage({
             label={getModelDisplayName(model.model)}
             value={model.averageRank}
             gradient={model.provider === LLMProvider.OPENAI ? 'chatgpt' : 'claude'}
+            podiumStyle
           />
         ))}
         <StatCard
