@@ -169,7 +169,7 @@ export default function LandingPage() {
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6 text-balance">
               <span className="text-primary">L&apos;IA parle-t-elle</span>
               <br />
-              de vous ?
+              de votre marque ?
             </h1>
 
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-8 text-pretty">

@@ -1,0 +1,72 @@
+<svg width="1584" height="396" viewBox="0 0 1584 396" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="1584" height="396" fill="#09090b"/>
+
+  <!-- Subtle grid pattern -->
+  <defs>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#27272a" stroke-width="0.5"/>
+    </pattern>
+    <linearGradient id="fadeGrid" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#09090b" stop-opacity="1"/>
+      <stop offset="20%" stop-color="#09090b" stop-opacity="0"/>
+      <stop offset="80%" stop-color="#09090b" stop-opacity="0"/>
+      <stop offset="100%" stop-color="#09090b" stop-opacity="1"/>
+    </linearGradient>
+    <mask id="gridMask">
+      <rect width="1584" height="396" fill="white"/>
+      <rect width="1584" height="396" fill="url(#fadeGrid)"/>
+    </mask>
+  </defs>
+  <rect width="1584" height="396" fill="url(#grid)" mask="url(#gridMask)" opacity="0.5"/>
+
+  <!-- Accent glow -->
+  <ellipse cx="1200" cy="198" rx="400" ry="200" fill="#8b5cf6" opacity="0.03"/>
+  <ellipse cx="400" cy="198" rx="300" ry="150" fill="#8b5cf6" opacity="0.02"/>
+
+  <!-- Logo mark -->
+  <g transform="translate(120, 148)">
+    <!-- Speech bubble -->
+    <rect x="0" y="0" width="100" height="80" rx="16" fill="#8b5cf6"/>
+    <polygon points="20,80 35,100 50,80" fill="#8b5cf6"/>
+    <!-- AI dots -->
+    <circle cx="30" cy="40" r="8" fill="#fafafa"/>
+    <circle cx="50" cy="40" r="8" fill="#fafafa" opacity="0.7"/>
+    <circle cx="70" cy="40" r="8" fill="#fafafa" opacity="0.4"/>
+  </g>
+
+  <!-- Brand name -->
+  <text x="240" y="210" font-family="system-ui, -apple-system, sans-serif" font-size="48" font-weight="700" fill="#fafafa">
+    coucou
+  </text>
+  <text x="395" y="210" font-family="system-ui, -apple-system, sans-serif" font-size="48" font-weight="700" fill="#8b5cf6">
+    IA
+  </text>
+
+  <!-- Tagline -->
+  <text x="792" y="175" font-family="system-ui, -apple-system, sans-serif" font-size="56" font-weight="700" fill="#8b5cf6" text-anchor="middle">
+    L'IA parle-t-elle
+  </text>
+  <text x="792" y="245" font-family="system-ui, -apple-system, sans-serif" font-size="56" font-weight="700" fill="#fafafa" text-anchor="middle">
+    de votre marque ?
+  </text>
+
+  <!-- Subtitle -->
+  <text x="792" y="310" font-family="system-ui, -apple-system, sans-serif" font-size="24" fill="#a1a1aa" text-anchor="middle">
+    Outil GEO pour surveiller votre visibilité dans ChatGPT et Claude
+  </text>
+
+  <!-- URL -->
+  <text x="1464" y="360" font-family="system-ui, -apple-system, sans-serif" font-size="20" fill="#71717a" text-anchor="end">
+    coucou-ia.com
+  </text>
+
+  <!-- Decorative elements -->
+  <circle cx="1450" cy="80" r="4" fill="#8b5cf6" opacity="0.6"/>
+  <circle cx="1480" cy="100" r="3" fill="#8b5cf6" opacity="0.4"/>
+  <circle cx="1420" cy="120" r="2" fill="#8b5cf6" opacity="0.3"/>
+
+  <circle cx="100" cy="320" r="3" fill="#8b5cf6" opacity="0.4"/>
+  <circle cx="130" cy="340" r="2" fill="#8b5cf6" opacity="0.3"/>
+  <circle cx="80" cy="350" r="2" fill="#8b5cf6" opacity="0.2"/>
+</svg>
