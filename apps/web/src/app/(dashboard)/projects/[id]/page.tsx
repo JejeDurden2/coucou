@@ -13,6 +13,7 @@ import {
   EyeOff,
   Clock,
   CheckCircle2,
+  Lock,
 } from 'lucide-react';
 
 import { useProject } from '@/hooks/use-projects';
@@ -25,6 +26,7 @@ import {
 } from '@/hooks/use-dashboard';
 import { useAuth } from '@/lib/auth-context';
 import { Button } from '@/components/ui/button';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -39,6 +41,7 @@ import { CompetitorsList, RecommendationsPanel } from '@/components/features/das
 import { StatCard } from '@/components/features/dashboard/stat-card';
 import { getModelDisplayName } from '@/components/features/dashboard/llm-result-row';
 import { AddPromptModal } from '@/components/features/dashboard/add-prompt-modal';
+import { StatsContainer, StatsLockedBanner } from '@/components/features/stats';
 import { LLMProvider, getScanAvailability, Plan, PLAN_LIMITS } from '@coucou-ia/shared';
 import { cn } from '@/lib/utils';
 import { formatRelativeTime, formatRelativeTimeFuture } from '@/lib/format';
@@ -163,6 +166,8 @@ export default function ProjectDashboardPage({
   );
   const allOnCooldown = hasPrompts && scannablePromptIds.size === 0;
 
+  const userCanAccessStats = userPlan !== Plan.FREE;
+
   return (
     <div className="space-y-6">
       {/* Header with brand info and scan button */}
@@ -219,183 +224,204 @@ export default function ProjectDashboardPage({
         </Button>
       </div>
 
-      {/* Stats Row */}
-      <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-        <StatCard
-          icon={Trophy}
-          label="Rang moyen"
-          value={stats?.averageRank ?? null}
-          gradient="gold"
-          trend={stats?.trend ? { delta: stats.trend.delta } : undefined}
-          sparklineData={stats?.trends?.averageRank?.map((p) => p.value)}
-          podiumStyle
-        />
-        {modelBreakdown.map((model) => (
-          <StatCard
-            key={model.model}
-            icon={MessageSquare}
-            label={getModelDisplayName(model.model)}
-            value={model.averageRank}
-            gradient={model.provider === LLMProvider.OPENAI ? 'chatgpt' : 'claude'}
-            podiumStyle
-          />
-        ))}
-        <StatCard
-          icon={BarChart3}
-          label="Total scans"
-          value={stats?.totalScans?.toString() ?? '0'}
-          gradient="primary"
-        />
-      </div>
+      {/* Tabs */}
+      <Tabs defaultValue="overview" className="space-y-4">
+        <TabsList>
+          <TabsTrigger value="overview">Vue d'ensemble</TabsTrigger>
+          <TabsTrigger value="stats" className="gap-1.5">
+            Statistiques
+            {!userCanAccessStats && <Lock className="size-3" aria-hidden="true" />}
+          </TabsTrigger>
+        </TabsList>
 
-      {/* Main Content: Prompts Table */}
-      <div className="space-y-4">
-        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-          <div>
-            <h2 className="text-sm font-medium text-muted-foreground uppercase">
-              Vos prompts ({promptCount})
-            </h2>
-            <p className="text-xs text-muted-foreground mt-0.5">
-              Plan {userPlan} : 1 scan/prompt/{PLAN_LIMITS[userPlan].scanFrequency === 'daily' ? 'jour' : 'semaine'}
-            </p>
+        <TabsContent value="overview" className="space-y-6">
+          {/* Stats Row */}
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+            <StatCard
+              icon={Trophy}
+              label="Rang moyen"
+              value={stats?.averageRank ?? null}
+              gradient="gold"
+              trend={stats?.trend ? { delta: stats.trend.delta } : undefined}
+              sparklineData={stats?.trends?.averageRank?.map((p) => p.value)}
+              podiumStyle
+            />
+            {modelBreakdown.map((model) => (
+              <StatCard
+                key={model.model}
+                icon={MessageSquare}
+                label={getModelDisplayName(model.model)}
+                value={model.averageRank}
+                gradient={model.provider === LLMProvider.OPENAI ? 'chatgpt' : 'claude'}
+                podiumStyle
+              />
+            ))}
+            <StatCard
+              icon={BarChart3}
+              label="Total scans"
+              value={stats?.totalScans?.toString() ?? '0'}
+              gradient="primary"
+            />
           </div>
-          <Button variant="outline" size="sm" onClick={() => setShowAddPrompt(true)}>
-            <Plus className="mr-2 h-4 w-4" aria-hidden="true" />
-            Ajouter
-          </Button>
-        </div>
 
-        {/* Prompts Table */}
-        <div className="rounded-lg border border-border overflow-hidden overflow-x-auto">
-          <table className="w-full">
-            <thead>
-              <tr className="border-b border-border bg-muted/30">
-                <th className="text-left text-xs font-medium text-muted-foreground uppercase px-4 py-3">
-                  Prompt
-                </th>
-                {availableModels.map((model) => (
-                  <th
-                    key={model}
-                    className="text-center text-xs font-medium text-muted-foreground uppercase px-4 py-3 w-24"
-                  >
-                    {getModelDisplayName(model)}
-                  </th>
-                ))}
-                <th className="w-12" />
-              </tr>
-            </thead>
-            <tbody>
-              {!hasPrompts ? (
-                <tr>
-                  <td colSpan={availableModels.length + 2} className="px-4 py-12 text-center">
-                    <div className="mx-auto size-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
-                      <MessageSquare
-                        className="h-8 w-8 text-primary opacity-50"
-                        aria-hidden="true"
-                      />
-                    </div>
-                    <p className="text-muted-foreground">Aucun prompt configuré</p>
-                    <p className="text-sm text-muted-foreground mt-1">
-                      Ajoutez des prompts pour commencer à tracker votre visibilité
-                    </p>
-                  </td>
-                </tr>
-              ) : (
-                stats?.promptStats.map((prompt) => {
-                  const isCitedByAny = prompt.modelResults.some((r) => r.isCited);
-                  // Build a Map for O(1) lookups instead of find() in loop
-                  const resultsByModel = new Map(prompt.modelResults.map((r) => [r.model, r]));
-                  const scanAvailability = getScanAvailability(prompt.lastScanAt, userPlan);
-                  return (
-                    <tr
-                      key={prompt.promptId}
-                      className={cn(
-                        'border-b border-border last:border-0 hover:bg-primary/5 transition-colors relative',
-                        (statsLoading || deletePrompt.isPending) && 'opacity-50',
-                      )}
-                    >
-                      <td className="px-4 py-3 relative">
-                        {/* Left accent for cited rows */}
-                        {isCitedByAny && (
-                          <div className="absolute left-0 top-0 bottom-0 w-1 bg-success rounded-r" />
-                        )}
-                        <div className="pl-2">
-                          <p className="text-sm">{prompt.content}</p>
-                          <div className="flex items-center gap-2 mt-1">
-                            {prompt.category ? (
-                              <span className="inline-flex px-2 py-0.5 rounded-full text-[10px] bg-primary/10 text-primary">
-                                {prompt.category}
-                              </span>
-                            ) : null}
-                            <ScanAvailabilityBadge
-                              lastScanAt={prompt.lastScanAt}
-                              canScan={scanAvailability.canScan}
-                              nextAvailableAt={scanAvailability.nextAvailableAt}
-                              plan={userPlan}
-                            />
-                          </div>
+          {/* Main Content: Prompts Table */}
+          <div className="space-y-4">
+            <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <h2 className="text-sm font-medium text-muted-foreground uppercase">
+                  Vos prompts ({promptCount})
+                </h2>
+                <p className="text-xs text-muted-foreground mt-0.5">
+                  Plan {userPlan} : 1 scan/prompt/{PLAN_LIMITS[userPlan].scanFrequency === 'daily' ? 'jour' : 'semaine'}
+                </p>
+              </div>
+              <Button variant="outline" size="sm" onClick={() => setShowAddPrompt(true)}>
+                <Plus className="mr-2 h-4 w-4" aria-hidden="true" />
+                Ajouter
+              </Button>
+            </div>
+
+            {/* Prompts Table */}
+            <div className="rounded-lg border border-border overflow-hidden overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="border-b border-border bg-muted/30">
+                    <th className="text-left text-xs font-medium text-muted-foreground uppercase px-4 py-3">
+                      Prompt
+                    </th>
+                    {availableModels.map((model) => (
+                      <th
+                        key={model}
+                        className="text-center text-xs font-medium text-muted-foreground uppercase px-4 py-3 w-24"
+                      >
+                        {getModelDisplayName(model)}
+                      </th>
+                    ))}
+                    <th className="w-12" />
+                  </tr>
+                </thead>
+                <tbody>
+                  {!hasPrompts ? (
+                    <tr>
+                      <td colSpan={availableModels.length + 2} className="px-4 py-12 text-center">
+                        <div className="mx-auto size-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
+                          <MessageSquare
+                            className="h-8 w-8 text-primary opacity-50"
+                            aria-hidden="true"
+                          />
                         </div>
-                      </td>
-                      {availableModels.map((model) => (
-                        <td key={model} className="px-4 py-3 text-center">
-                          <CitationStatus result={resultsByModel.get(model) ?? null} />
-                        </td>
-                      ))}
-                      <td className="px-4 py-3">
-                        <div className="flex items-center gap-1">
-                          {scanAvailability.canScan && (
-                            <Button
-                              variant="ghost"
-                              size="icon"
-                              className="size-8 text-muted-foreground hover:text-primary"
-                              onClick={() => handleTriggerPromptScan(prompt.promptId)}
-                              disabled={scanningPromptId === prompt.promptId}
-                              aria-label="Scanner ce prompt"
-                            >
-                              {scanningPromptId === prompt.promptId ? (
-                                <RefreshCw
-                                  className="size-4 animate-spin motion-reduce:animate-none"
-                                  aria-hidden="true"
-                                />
-                              ) : (
-                                <Radar className="size-4" aria-hidden="true" />
-                              )}
-                            </Button>
-                          )}
-                          <Button
-                            variant="ghost"
-                            size="icon"
-                            className="size-8 text-muted-foreground hover:text-red-500"
-                            onClick={() => setPromptToDelete(prompt.promptId)}
-                            aria-label="Supprimer ce prompt"
-                          >
-                            <Trash2 className="size-4" aria-hidden="true" />
-                          </Button>
-                        </div>
+                        <p className="text-muted-foreground">Aucun prompt configuré</p>
+                        <p className="text-sm text-muted-foreground mt-1">
+                          Ajoutez des prompts pour commencer à tracker votre visibilité
+                        </p>
                       </td>
                     </tr>
-                  );
-                })
-              )}
-            </tbody>
-          </table>
-        </div>
-      </div>
+                  ) : (
+                    stats?.promptStats.map((prompt) => {
+                      const isCitedByAny = prompt.modelResults.some((r) => r.isCited);
+                      // Build a Map for O(1) lookups instead of find() in loop
+                      const resultsByModel = new Map(prompt.modelResults.map((r) => [r.model, r]));
+                      const scanAvailability = getScanAvailability(prompt.lastScanAt, userPlan);
+                      return (
+                        <tr
+                          key={prompt.promptId}
+                          className={cn(
+                            'border-b border-border last:border-0 hover:bg-primary/5 transition-colors relative',
+                            (statsLoading || deletePrompt.isPending) && 'opacity-50',
+                          )}
+                        >
+                          <td className="px-4 py-3 relative">
+                            {/* Left accent for cited rows */}
+                            {isCitedByAny && (
+                              <div className="absolute left-0 top-0 bottom-0 w-1 bg-success rounded-r" />
+                            )}
+                            <div className="pl-2">
+                              <p className="text-sm">{prompt.content}</p>
+                              <div className="flex items-center gap-2 mt-1">
+                                {prompt.category ? (
+                                  <span className="inline-flex px-2 py-0.5 rounded-full text-[10px] bg-primary/10 text-primary">
+                                    {prompt.category}
+                                  </span>
+                                ) : null}
+                                <ScanAvailabilityBadge
+                                  lastScanAt={prompt.lastScanAt}
+                                  canScan={scanAvailability.canScan}
+                                  nextAvailableAt={scanAvailability.nextAvailableAt}
+                                  plan={userPlan}
+                                />
+                              </div>
+                            </div>
+                          </td>
+                          {availableModels.map((model) => (
+                            <td key={model} className="px-4 py-3 text-center">
+                              <CitationStatus result={resultsByModel.get(model) ?? null} />
+                            </td>
+                          ))}
+                          <td className="px-4 py-3">
+                            <div className="flex items-center gap-1">
+                              {scanAvailability.canScan && (
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  className="size-8 text-muted-foreground hover:text-primary"
+                                  onClick={() => handleTriggerPromptScan(prompt.promptId)}
+                                  disabled={scanningPromptId === prompt.promptId}
+                                  aria-label="Scanner ce prompt"
+                                >
+                                  {scanningPromptId === prompt.promptId ? (
+                                    <RefreshCw
+                                      className="size-4 animate-spin motion-reduce:animate-none"
+                                      aria-hidden="true"
+                                    />
+                                  ) : (
+                                    <Radar className="size-4" aria-hidden="true" />
+                                  )}
+                                </Button>
+                              )}
+                              <Button
+                                variant="ghost"
+                                size="icon"
+                                className="size-8 text-muted-foreground hover:text-red-500"
+                                onClick={() => setPromptToDelete(prompt.promptId)}
+                                aria-label="Supprimer ce prompt"
+                              >
+                                <Trash2 className="size-4" aria-hidden="true" />
+                              </Button>
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    })
+                  )}
+                </tbody>
+              </table>
+            </div>
+          </div>
 
-      {/* Recommendations Section */}
-      {recommendationsData?.recommendations && recommendationsData.recommendations.length > 0 ? (
-        <RecommendationsPanel recommendations={recommendationsData.recommendations} />
-      ) : null}
+          {/* Recommendations Section */}
+          {recommendationsData?.recommendations && recommendationsData.recommendations.length > 0 ? (
+            <RecommendationsPanel recommendations={recommendationsData.recommendations} />
+          ) : null}
 
-      {/* Competitors Section */}
-      {stats && (stats.enrichedCompetitors?.length > 0 || stats.topCompetitors?.length > 0) ? (
-        <CompetitorsList
-          competitors={stats.topCompetitors}
-          enrichedCompetitors={stats.enrichedCompetitors}
-          maxItems={5}
-          userPlan={userPlan}
-        />
-      ) : null}
+          {/* Competitors Section */}
+          {stats && (stats.enrichedCompetitors?.length > 0 || stats.topCompetitors?.length > 0) ? (
+            <CompetitorsList
+              competitors={stats.topCompetitors}
+              enrichedCompetitors={stats.enrichedCompetitors}
+              maxItems={5}
+              userPlan={userPlan}
+            />
+          ) : null}
+        </TabsContent>
+
+        <TabsContent value="stats">
+          {userCanAccessStats ? (
+            <StatsContainer projectId={id} userPlan={userPlan} />
+          ) : (
+            <StatsLockedBanner />
+          )}
+        </TabsContent>
+      </Tabs>
 
       {/* Add Prompt Modal */}
       <AddPromptModal

@@ -1,0 +1,141 @@
+'use client';
+
+import { memo, useMemo } from 'react';
+import {
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+  CartesianGrid,
+  Legend,
+} from 'recharts';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { formatChartDate, type AggregationLevel } from '@/lib/format';
+
+interface CompetitorTrend {
+  name: string;
+  timeSeries: Array<{ date: string; value: number }>;
+}
+
+interface CompetitorChartProps {
+  data: CompetitorTrend[];
+  aggregation: AggregationLevel;
+}
+
+const COMPETITOR_COLORS = [
+  'hsl(346 77% 49%)',
+  'hsl(217 91% 60%)',
+  'hsl(262 83% 58%)',
+  'hsl(43 96% 56%)',
+  'hsl(172 66% 50%)',
+];
+
+export const CompetitorChart = memo(function CompetitorChart({
+  data,
+  aggregation,
+}: CompetitorChartProps) {
+  const { chartData, competitors } = useMemo(() => {
+    if (data.length === 0) return { chartData: [], competitors: [] };
+
+    // Get all unique dates
+    const allDates = new Set<string>();
+    for (const competitor of data) {
+      for (const point of competitor.timeSeries) {
+        allDates.add(point.date);
+      }
+    }
+
+    // Sort dates
+    const sortedDates = Array.from(allDates).sort();
+
+    // Build chart data
+    const chartData = sortedDates.map((date) => {
+      const entry: Record<string, string | number> = {
+        date,
+        label: formatChartDate(date, aggregation),
+      };
+      for (const competitor of data) {
+        const point = competitor.timeSeries.find((p) => p.date === date);
+        entry[competitor.name] = point?.value ?? 0;
+      }
+      return entry;
+    });
+
+    return { chartData, competitors: data.map((d) => d.name) };
+  }, [data, aggregation]);
+
+  if (competitors.length === 0) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-base">Concurrents</CardTitle>
+          <CardDescription>Aucune donnée disponible</CardDescription>
+        </CardHeader>
+      </Card>
+    );
+  }
+
+  return (
+    <Card>
+      <CardHeader className="pb-2">
+        <CardTitle className="text-base">Concurrents</CardTitle>
+        <CardDescription>
+          Top 5 concurrents les plus mentionnés
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <div className="h-64">
+          <ResponsiveContainer width="100%" height="100%">
+            <AreaChart data={chartData} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+              <XAxis
+                dataKey="label"
+                tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))' }}
+                tickLine={false}
+                axisLine={false}
+              />
+              <YAxis
+                tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))' }}
+                tickLine={false}
+                axisLine={false}
+              />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: 'hsl(var(--card))',
+                  border: '1px solid hsl(var(--border))',
+                  borderRadius: '8px',
+                  fontSize: '12px',
+                }}
+                labelStyle={{ color: 'hsl(var(--foreground))' }}
+                formatter={(value, name) => [
+                  `${value} mentions`,
+                  String(name),
+                ]}
+              />
+              <Legend
+                formatter={(value: string) => (
+                  <span className="text-xs text-muted-foreground truncate max-w-[100px]">
+                    {value}
+                  </span>
+                )}
+              />
+              {competitors.map((name, index) => (
+                <Area
+                  key={name}
+                  type="monotone"
+                  dataKey={name}
+                  stackId="1"
+                  stroke={COMPETITOR_COLORS[index % COMPETITOR_COLORS.length]}
+                  fill={COMPETITOR_COLORS[index % COMPETITOR_COLORS.length]}
+                  fillOpacity={0.6}
+                />
+              ))}
+            </AreaChart>
+          </ResponsiveContainer>
+        </div>
+      </CardContent>
+    </Card>
+  );
+});

@@ -38,3 +38,18 @@ export function formatRelativeTimeFuture(date: Date | string): string {
   const days = Math.floor(hours / HOURS_PER_DAY);
   return `dans ${days}j`;
 }
+
+export type AggregationLevel = 'day' | 'week' | 'month';
+
+/**
+ * Format a date string for chart display based on aggregation level
+ * @example formatChartDate('2024-01-15', 'day') // "15 janv."
+ * @example formatChartDate('2024-01-15', 'month') // "janv. 24"
+ */
+export function formatChartDate(dateStr: string, aggregation: AggregationLevel): string {
+  const date = new Date(dateStr);
+  if (aggregation === 'month') {
+    return date.toLocaleDateString('fr-FR', { month: 'short', year: '2-digit' });
+  }
+  return date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' });
+}

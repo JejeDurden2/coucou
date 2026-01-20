@@ -240,6 +240,49 @@ export interface DashboardStats {
 }
 
 // ============================================
+// Historical Stats Types
+// ============================================
+
+export type AggregationLevel = 'day' | 'week' | 'month';
+
+export interface HistoricalStats {
+  dateRange: { start: string; end: string };
+  effectiveDateRange: { start: string; end: string };
+  planLimit: { maxDays: number | null; isLimited: boolean };
+  aggregation: AggregationLevel;
+  citationRate: TimeSeriesPoint[];
+  averageRank: TimeSeriesPoint[];
+  rankByModel: Record<string, TimeSeriesPoint[]>;
+  competitorTrends: Array<{ name: string; timeSeries: TimeSeriesPoint[] }>;
+}
+
+/**
+ * Check if a plan can access stats
+ */
+export function canAccessStats(plan: Plan): boolean {
+  return plan !== Plan.FREE;
+}
+
+/**
+ * Get stats retention days by plan
+ * @returns number of days or null (unlimited for PRO)
+ */
+export function getStatsRetentionDays(plan: Plan): number | null {
+  if (plan === Plan.FREE) return null; // no access
+  if (plan === Plan.SOLO) return 30;
+  return null; // PRO = unlimited
+}
+
+/**
+ * Determine aggregation level based on date range
+ */
+export function getAggregationLevel(days: number): AggregationLevel {
+  if (days <= 90) return 'day';
+  if (days <= 365) return 'week';
+  return 'month';
+}
+
+// ============================================
 // Plan Limits
 // ============================================
 
@@ -339,25 +382,25 @@ export const PLAN_PRICING: Record<Plan, PlanPricing> = {
       '1 marque',
       '2 prompts',
       'GPT-4o-mini',
-      '1 scan par prompt',
-      'Historique 30 jours',
+      '1 scan/prompt/semaine',
     ],
   },
   [Plan.SOLO]: {
-    price: 29,
+    price: 39,
     period: 'month',
     description: 'Pour les entrepreneurs et freelances',
     features: [
       '5 marques',
       '10 prompts par marque',
       'GPT-4o-mini, GPT-4o, Claude Sonnet 4.5',
-      '1 scan/prompt/semaine',
-      'Historique 6 mois',
+      '2 scan/prompt/semaine',
+      'Historique 30 jours',
       'Support email',
     ],
+    isPopular: true,
   },
   [Plan.PRO]: {
-    price: 79,
+    price: 99,
     period: 'month',
     description: 'Pour les agences et grandes marques',
     features: [
@@ -368,7 +411,6 @@ export const PLAN_PRICING: Record<Plan, PlanPricing> = {
       'Historique illimité',
       'Support prioritaire 24h',
     ],
-    isPopular: true,
   },
 };
 

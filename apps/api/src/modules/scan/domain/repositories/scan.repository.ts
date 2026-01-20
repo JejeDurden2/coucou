@@ -11,6 +11,7 @@ export interface ScanRepository {
   findById(id: string): Promise<Scan | null>;
   findByPromptId(promptId: string, limit?: number): Promise<Scan[]>;
   findByProjectId(projectId: string, limit?: number): Promise<Scan[]>;
+  findByProjectIdInRange(projectId: string, startDate: Date, endDate: Date): Promise<Scan[]>;
   findLatestByProjectId(projectId: string): Promise<Scan | null>;
   create(data: CreateScanData): Promise<Scan>;
   deleteOlderThan(date: Date): Promise<number>;

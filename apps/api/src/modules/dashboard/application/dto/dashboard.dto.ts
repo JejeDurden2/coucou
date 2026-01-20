@@ -86,3 +86,23 @@ export interface DashboardStatsDto {
   totalScans: number;
   lastScanAt: Date | null;
 }
+
+// Historical Stats DTOs
+
+export type AggregationLevel = 'day' | 'week' | 'month';
+
+export interface CompetitorTrendDto {
+  name: string;
+  timeSeries: TimeSeriesPointDto[];
+}
+
+export interface HistoricalStatsDto {
+  dateRange: { start: string; end: string };
+  effectiveDateRange: { start: string; end: string };
+  planLimit: { maxDays: number | null; isLimited: boolean };
+  aggregation: AggregationLevel;
+  citationRate: TimeSeriesPointDto[];
+  averageRank: TimeSeriesPointDto[];
+  rankByModel: Record<string, TimeSeriesPointDto[]>;
+  competitorTrends: CompetitorTrendDto[];
+}

@@ -7,6 +7,7 @@ import type {
   UpdatePromptInput,
   Scan,
   DashboardStats,
+  HistoricalStats,
   RecommendationsResponse,
   GeneratePromptsResponse,
   User,
@@ -191,6 +192,19 @@ class ApiClient {
 
   async getRecommendations(projectId: string): Promise<RecommendationsResponse> {
     return this.fetch<RecommendationsResponse>(`/projects/${projectId}/dashboard/recommendations`);
+  }
+
+  async getHistoricalStats(
+    projectId: string,
+    startDate?: string,
+    endDate?: string,
+  ): Promise<HistoricalStats | null> {
+    const params = new URLSearchParams();
+    if (startDate) params.set('startDate', startDate);
+    if (endDate) params.set('endDate', endDate);
+    const query = params.toString();
+    const url = `/projects/${projectId}/dashboard/historical${query ? `?${query}` : ''}`;
+    return this.fetch<HistoricalStats | null>(url);
   }
 
   // Billing
