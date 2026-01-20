@@ -24,22 +24,24 @@
   <ellipse cx="1200" cy="198" rx="400" ry="200" fill="#8b5cf6" opacity="0.03"/>
   <ellipse cx="400" cy="198" rx="300" ry="150" fill="#8b5cf6" opacity="0.02"/>
 
-  <!-- Logo mark -->
-  <g transform="translate(120, 148)">
-    <!-- Speech bubble -->
-    <rect x="0" y="0" width="100" height="80" rx="16" fill="#8b5cf6"/>
-    <polygon points="20,80 35,100 50,80" fill="#8b5cf6"/>
-    <!-- AI dots -->
-    <circle cx="30" cy="40" r="8" fill="#fafafa"/>
-    <circle cx="50" cy="40" r="8" fill="#fafafa" opacity="0.7"/>
-    <circle cx="70" cy="40" r="8" fill="#fafafa" opacity="0.4"/>
+  <!-- Coucou IA Logo (scaled 2x from 48x48) -->
+  <g transform="translate(100, 150) scale(2)">
+    <!-- Body - rounded speech bubble shape -->
+    <path d="M8 20C8 12.268 14.268 6 22 6h4c7.732 0 14 6.268 14 14v4c0 7.732-6.268 14-14 14h-2l-6 6v-6.17C11.058 35.93 8 30.374 8 24v-4z" fill="#8B5CF6"/>
+    <!-- Eye -->
+    <circle cx="28" cy="20" r="4" fill="#09090B"/>
+    <circle cx="29.5" cy="18.5" r="1.5" fill="#FFFFFF"/>
+    <!-- Beak -->
+    <path d="M36 22l6 2-6 2v-4z" fill="#8B5CF6"/>
+    <!-- Wing detail -->
+    <path d="M14 22c2-4 6-6 10-6" stroke="#09090B" stroke-width="2" stroke-linecap="round" opacity="0.3"/>
   </g>
 
   <!-- Brand name -->
-  <text x="240" y="210" font-family="system-ui, -apple-system, sans-serif" font-size="48" font-weight="700" fill="#fafafa">
+  <text x="210" y="215" font-family="system-ui, -apple-system, sans-serif" font-size="42" font-weight="700" fill="#fafafa">
     coucou
   </text>
-  <text x="395" y="210" font-family="system-ui, -apple-system, sans-serif" font-size="48" font-weight="700" fill="#8b5cf6">
+  <text x="347" y="215" font-family="system-ui, -apple-system, sans-serif" font-size="42" font-weight="700" fill="#8b5cf6">
     IA
   </text>
 
