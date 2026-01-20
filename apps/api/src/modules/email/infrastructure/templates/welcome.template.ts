@@ -14,7 +14,7 @@ export interface WelcomeEmailData {
 
 export function generateWelcomeEmail(data: WelcomeEmailData): { html: string; text: string } {
   const content = `
-    ${createHeading('Bienvenue sur Coucou', 1)}
+    ${createHeading('Bienvenue sur Coucou IA', 1)}
 
     ${createParagraph(`Bonjour ${data.userName},`)}
 
@@ -51,15 +51,15 @@ export function generateWelcomeEmail(data: WelcomeEmailData): { html: string; te
   `;
 
   const html = wrapInBaseTemplate(content, {
-    previewText: 'Bienvenue sur Coucou ! Découvrez comment améliorer votre visibilité dans les IA.',
+    previewText: 'Bienvenue sur Coucou IA! Découvrez comment améliorer votre visibilité dans les IA.',
   });
 
   const text = `
-Bienvenue sur Coucou !
+Bienvenue sur Coucou IA !
 
 Bonjour ${data.userName},
 
-Merci de rejoindre Coucou ! Vous venez de faire un premier pas important vers une meilleure visibilité de votre marque dans les réponses des IA.
+Merci de rejoindre Coucou IA! Vous venez de faire un premier pas important vers une meilleure visibilité de votre marque dans les réponses des IA.
 
 POURQUOI C'EST IMPORTANT ?
 - 40% des recherches passent désormais par les IA (ChatGPT, Claude...)

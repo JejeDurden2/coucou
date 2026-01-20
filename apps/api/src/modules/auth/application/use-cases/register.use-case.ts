@@ -52,7 +52,7 @@ export class RegisterUseCase {
 
     await this.emailService.send({
       to: user.email,
-      subject: 'Bienvenue sur Coucou - Votre visibilite IA commence ici',
+      subject: 'Bienvenue sur Coucou IA - Votre visibilite IA commence ici',
       html,
       text,
     });
