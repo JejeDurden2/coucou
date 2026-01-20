@@ -17,7 +17,12 @@ import {
 
 import { useProject } from '@/hooks/use-projects';
 import { useCreatePrompt, useDeletePrompt } from '@/hooks/use-prompts';
-import { useDashboardStats, useRecommendations, useTriggerScan } from '@/hooks/use-dashboard';
+import {
+  useDashboardStats,
+  useRecommendations,
+  useTriggerScan,
+  useTriggerPromptScan,
+} from '@/hooks/use-dashboard';
 import { useAuth } from '@/lib/auth-context';
 import { Button } from '@/components/ui/button';
 import {
@@ -86,6 +91,7 @@ export default function ProjectDashboardPage({
   const { data: stats, isLoading: statsLoading } = useDashboardStats(id);
   const { data: recommendationsData } = useRecommendations(id);
   const triggerScan = useTriggerScan(id);
+  const triggerPromptScan = useTriggerPromptScan(id);
   const createPrompt = useCreatePrompt(id);
   const deletePrompt = useDeletePrompt(id);
 
@@ -93,6 +99,7 @@ export default function ProjectDashboardPage({
 
   const [showAddPrompt, setShowAddPrompt] = useState(false);
   const [promptToDelete, setPromptToDelete] = useState<string | null>(null);
+  const [scanningPromptId, setScanningPromptId] = useState<string | null>(null);
 
   async function handleAddPrompt(content: string): Promise<void> {
     await createPrompt.mutateAsync({ content });
@@ -101,6 +108,15 @@ export default function ProjectDashboardPage({
 
   async function handleTriggerScan(): Promise<void> {
     await triggerScan.mutateAsync();
+  }
+
+  async function handleTriggerPromptScan(promptId: string): Promise<void> {
+    setScanningPromptId(promptId);
+    try {
+      await triggerPromptScan.mutateAsync(promptId);
+    } finally {
+      setScanningPromptId(null);
+    }
   }
 
   async function handleConfirmDelete(): Promise<void> {
@@ -139,6 +155,14 @@ export default function ProjectDashboardPage({
   );
   const hasPrompts = promptCount > 0;
 
+  // Calculate scannable prompts (not on cooldown)
+  const scannablePromptIds = new Set(
+    stats?.promptStats
+      ?.filter((p) => getScanAvailability(p.lastScanAt, userPlan).canScan)
+      .map((p) => p.promptId) ?? [],
+  );
+  const allOnCooldown = hasPrompts && scannablePromptIds.size === 0;
+
   return (
     <div className="space-y-6">
       {/* Header with brand info and scan button */}
@@ -174,8 +198,9 @@ export default function ProjectDashboardPage({
         </div>
         <Button
           onClick={handleTriggerScan}
-          disabled={triggerScan.isPending || !hasPrompts}
+          disabled={triggerScan.isPending || !hasPrompts || allOnCooldown}
           size="sm"
+          title={allOnCooldown ? 'Tous les prompts sont en période de cooldown' : undefined}
         >
           {triggerScan.isPending ? (
             <>
@@ -188,7 +213,7 @@ export default function ProjectDashboardPage({
           ) : (
             <>
               <Radar className="mr-2 h-4 w-4" aria-hidden="true" />
-              Scanner
+              Scanner {scannablePromptIds.size > 0 && `(${scannablePromptIds.size})`}
             </>
           )}
         </Button>
@@ -317,15 +342,36 @@ export default function ProjectDashboardPage({
                         </td>
                       ))}
                       <td className="px-4 py-3">
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="size-8 text-muted-foreground hover:text-red-500"
-                          onClick={() => setPromptToDelete(prompt.promptId)}
-                          aria-label="Supprimer ce prompt"
-                        >
-                          <Trash2 className="size-4" aria-hidden="true" />
-                        </Button>
+                        <div className="flex items-center gap-1">
+                          {scanAvailability.canScan && (
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              className="size-8 text-muted-foreground hover:text-primary"
+                              onClick={() => handleTriggerPromptScan(prompt.promptId)}
+                              disabled={scanningPromptId === prompt.promptId}
+                              aria-label="Scanner ce prompt"
+                            >
+                              {scanningPromptId === prompt.promptId ? (
+                                <RefreshCw
+                                  className="size-4 animate-spin motion-reduce:animate-none"
+                                  aria-hidden="true"
+                                />
+                              ) : (
+                                <Radar className="size-4" aria-hidden="true" />
+                              )}
+                            </Button>
+                          )}
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            className="size-8 text-muted-foreground hover:text-red-500"
+                            onClick={() => setPromptToDelete(prompt.promptId)}
+                            aria-label="Supprimer ce prompt"
+                          >
+                            <Trash2 className="size-4" aria-hidden="true" />
+                          </Button>
+                        </div>
                       </td>
                     </tr>
                   );

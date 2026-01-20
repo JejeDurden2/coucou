@@ -173,6 +173,12 @@ class ApiClient {
     });
   }
 
+  async triggerPromptScan(promptId: string): Promise<Scan> {
+    return this.fetch<Scan>(`/prompts/${promptId}/scan`, {
+      method: 'POST',
+    });
+  }
+
   async getScans(projectId: string): Promise<Scan[]> {
     return this.fetch<Scan[]>(`/projects/${projectId}/scans`);
   }
