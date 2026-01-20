@@ -8,8 +8,11 @@ import {
   ChevronRight,
   Info,
   Lightbulb,
+  Search,
+  Layers,
   Target,
   TrendingDown,
+  TrendingUp,
   Users,
 } from 'lucide-react';
 import type { Recommendation, RecommendationType, RecommendationSeverity } from '@coucou-ia/shared';
@@ -47,8 +50,11 @@ const SEVERITY_CONFIG: Record<
 const TYPE_ICONS: Record<RecommendationType, typeof Target> = {
   low_citation: TrendingDown,
   competitor_dominance: Users,
-  provider_disparity: Target,
   prompt_weakness: Target,
+  keyword_gap: Search,
+  model_disparity: Layers,
+  position_drop: TrendingDown,
+  emerging_competitor: TrendingUp,
   improvement: Lightbulb,
 };
 

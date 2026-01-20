@@ -1,8 +1,11 @@
 export type RecommendationType =
   | 'low_citation'
   | 'competitor_dominance'
-  | 'provider_disparity'
   | 'prompt_weakness'
+  | 'keyword_gap'
+  | 'model_disparity'
+  | 'position_drop'
+  | 'emerging_competitor'
   | 'improvement';
 
 export type RecommendationSeverity = 'info' | 'warning' | 'critical';
