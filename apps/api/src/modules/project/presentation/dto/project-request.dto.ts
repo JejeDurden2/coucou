@@ -21,7 +21,6 @@ export class CreateProjectRequestDto {
   brandName!: string;
 
   @IsArray()
-  @ArrayMinSize(1, { message: 'Au moins une variante de marque est requise' })
   @ArrayMaxSize(20, { message: 'Maximum 20 variantes de marque autorisees' })
   @IsString({ each: true })
   @MaxLength(100, { each: true, message: 'Chaque variante doit faire maximum 100 caracteres' })
@@ -47,7 +46,6 @@ export class UpdateProjectRequestDto {
 
   @IsOptional()
   @IsArray()
-  @ArrayMinSize(1, { message: 'Au moins une variante de marque est requise' })
   @ArrayMaxSize(20, { message: 'Maximum 20 variantes de marque autorisees' })
   @IsString({ each: true })
   @MaxLength(100, { each: true, message: 'Chaque variante doit faire maximum 100 caracteres' })
