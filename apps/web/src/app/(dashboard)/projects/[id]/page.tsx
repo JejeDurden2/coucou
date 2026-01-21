@@ -14,6 +14,7 @@ import {
   Clock,
   CheckCircle2,
   Lock,
+  Users,
 } from 'lucide-react';
 
 import { useProject } from '@/hooks/use-projects';
@@ -27,6 +28,12 @@ import {
 import { useAuth } from '@/lib/auth-context';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -42,6 +49,10 @@ import { StatCard } from '@/components/features/dashboard/stat-card';
 import { getModelDisplayName } from '@/components/features/dashboard/llm-result-row';
 import { AddPromptModal } from '@/components/features/dashboard/add-prompt-modal';
 import { StatsContainer, StatsLockedBanner } from '@/components/features/stats';
+import {
+  CompetitorsContainer,
+  CompetitorsLockedBanner,
+} from '@/components/features/competitors';
 import { LLMProvider, getScanAvailability, Plan, PLAN_LIMITS } from '@coucou-ia/shared';
 import { cn } from '@/lib/utils';
 import { formatRelativeTime, formatRelativeTimeFuture } from '@/lib/format';
@@ -103,6 +114,7 @@ export default function ProjectDashboardPage({
   const [showAddPrompt, setShowAddPrompt] = useState(false);
   const [promptToDelete, setPromptToDelete] = useState<string | null>(null);
   const [scanningPromptId, setScanningPromptId] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState('overview');
 
   async function handleAddPrompt(content: string): Promise<void> {
     await createPrompt.mutateAsync({ content });
@@ -168,6 +180,19 @@ export default function ProjectDashboardPage({
 
   const userCanAccessStats = userPlan !== Plan.FREE;
 
+  // Compute scan button disabled reason
+  const getScanDisabledReason = (): string | null => {
+    if (triggerScan.isPending) return null;
+    if (!hasPrompts) return 'Ajoutez des prompts pour pouvoir scanner';
+    if (allOnCooldown) {
+      const frequency = PLAN_LIMITS[userPlan].scanFrequency === 'daily' ? 'jour' : 'semaine';
+      return `Tous les prompts sont en cooldown (1 scan/${frequency} par prompt)`;
+    }
+    return null;
+  };
+  const scanDisabledReason = getScanDisabledReason();
+  const isScanDisabled = triggerScan.isPending || !hasPrompts || allOnCooldown;
+
   return (
     <div className="space-y-6">
       {/* Header with brand info and scan button */}
@@ -201,33 +226,51 @@ export default function ProjectDashboardPage({
             ) : null}
           </div>
         </div>
-        <Button
-          onClick={handleTriggerScan}
-          disabled={triggerScan.isPending || !hasPrompts || allOnCooldown}
-          size="sm"
-          title={allOnCooldown ? 'Tous les prompts sont en période de cooldown' : undefined}
-        >
-          {triggerScan.isPending ? (
-            <>
-              <RefreshCw
-                className="mr-2 h-4 w-4 animate-spin motion-reduce:animate-none"
-                aria-hidden="true"
-              />
-              Scan en cours…
-            </>
-          ) : (
-            <>
-              <Radar className="mr-2 h-4 w-4" aria-hidden="true" />
-              Scanner {scannablePromptIds.size > 0 && `(${scannablePromptIds.size})`}
-            </>
-          )}
-        </Button>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <span className={isScanDisabled ? 'cursor-not-allowed' : undefined}>
+                <Button
+                  onClick={handleTriggerScan}
+                  disabled={isScanDisabled}
+                  size="sm"
+                  className={isScanDisabled ? 'pointer-events-none' : undefined}
+                >
+                  {triggerScan.isPending ? (
+                    <>
+                      <RefreshCw
+                        className="mr-2 h-4 w-4 animate-spin motion-reduce:animate-none"
+                        aria-hidden="true"
+                      />
+                      Scan en cours…
+                    </>
+                  ) : (
+                    <>
+                      <Radar className="mr-2 h-4 w-4" aria-hidden="true" />
+                      Scanner {scannablePromptIds.size > 0 && `(${scannablePromptIds.size})`}
+                    </>
+                  )}
+                </Button>
+              </span>
+            </TooltipTrigger>
+            {scanDisabledReason && (
+              <TooltipContent>
+                <p>{scanDisabledReason}</p>
+              </TooltipContent>
+            )}
+          </Tooltip>
+        </TooltipProvider>
       </div>
 
       {/* Tabs */}
-      <Tabs defaultValue="overview" className="space-y-4">
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
         <TabsList>
           <TabsTrigger value="overview">Vue d'ensemble</TabsTrigger>
+          <TabsTrigger value="competitors" className="gap-1.5">
+            <Users className="size-3" aria-hidden="true" />
+            Concurrents
+            {!userCanAccessStats && <Lock className="size-3" aria-hidden="true" />}
+          </TabsTrigger>
           <TabsTrigger value="stats" className="gap-1.5">
             Statistiques
             {!userCanAccessStats && <Lock className="size-3" aria-hidden="true" />}
@@ -408,10 +451,22 @@ export default function ProjectDashboardPage({
             <CompetitorsList
               competitors={stats.topCompetitors}
               enrichedCompetitors={stats.enrichedCompetitors}
-              maxItems={5}
+              maxItems={2}
               userPlan={userPlan}
+              onViewMore={() => setActiveTab('competitors')}
             />
           ) : null}
+        </TabsContent>
+
+        <TabsContent value="competitors">
+          {userCanAccessStats ? (
+            <CompetitorsContainer
+              competitors={stats?.enrichedCompetitors ?? []}
+              userPlan={userPlan}
+            />
+          ) : (
+            <CompetitorsLockedBanner />
+          )}
         </TabsContent>
 
         <TabsContent value="stats">

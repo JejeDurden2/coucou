@@ -9,21 +9,25 @@ import {
   PLAN_MODELS,
   type LLMModel,
 } from '@coucou-ia/shared';
-import { getModelDisplayName } from './llm-result-row';
+import { getModelDisplayName } from '@/components/features/dashboard/llm-result-row';
+import { formatRelativeTime } from '@/lib/format';
 
-interface CompetitorCardProps {
+// Shared types
+export interface CompetitorCardProps {
   competitor: EnrichedCompetitor;
   rank: number;
   userPlan: Plan;
+  showContext?: boolean;
+  showStats?: boolean;
 }
 
-function TrendBadge({
-  trend,
-  percentage,
-}: {
+// TrendBadge component
+interface TrendBadgeProps {
   trend: EnrichedCompetitor['trend'];
   percentage: number | null;
-}) {
+}
+
+export function TrendBadge({ trend, percentage }: TrendBadgeProps): React.ReactNode {
   if (trend === 'new') {
     return (
       <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-primary/12 text-primary">
@@ -58,17 +62,15 @@ function TrendBadge({
   );
 }
 
-function ModelPositions({
-  statsByModel,
-  userPlan,
-}: {
+// ModelPositions component
+interface ModelPositionsProps {
   statsByModel: CompetitorModelStats[];
   userPlan: Plan;
-}) {
+}
+
+export function ModelPositions({ statsByModel, userPlan }: ModelPositionsProps): React.ReactNode {
   const allowedModels = PLAN_MODELS[userPlan];
-  const filteredStats = statsByModel.filter((s) =>
-    allowedModels.includes(s.model as LLMModel),
-  );
+  const filteredStats = statsByModel.filter((s) => allowedModels.includes(s.model as LLMModel));
 
   if (filteredStats.length === 0) {
     return null;
@@ -80,9 +82,7 @@ function ModelPositions({
         <div key={stat.model} className="flex items-center gap-1.5">
           <span>{getModelDisplayName(stat.model)}</span>
           {stat.averagePosition !== null ? (
-            <span className="font-medium text-foreground tabular-nums">
-              #{stat.averagePosition}
-            </span>
+            <span className="font-medium text-foreground tabular-nums">#{stat.averagePosition}</span>
           ) : (
             <EyeOff className="h-3 w-3" aria-hidden="true" />
           )}
@@ -92,7 +92,12 @@ function ModelPositions({
   );
 }
 
-function KeywordBadges({ keywords }: { keywords: string[] }) {
+// KeywordBadges component
+interface KeywordBadgesProps {
+  keywords: string[];
+}
+
+export function KeywordBadges({ keywords }: KeywordBadgesProps): React.ReactNode {
   if (keywords.length === 0) return null;
 
   return (
@@ -109,20 +114,22 @@ function KeywordBadges({ keywords }: { keywords: string[] }) {
   );
 }
 
+// Unified CompetitorCard component
 export const CompetitorCard = memo(function CompetitorCard({
   competitor,
   rank,
   userPlan,
-}: CompetitorCardProps) {
+  showContext = false,
+  showStats = false,
+}: CompetitorCardProps): React.ReactNode {
   return (
-    <div className="rounded-lg border border-border bg-card p-4">
-      <div className="flex items-start justify-between mb-3">
+    <div className="rounded-lg border border-border bg-card p-4 space-y-3">
+      {/* Header */}
+      <div className="flex items-start justify-between">
         <div className="flex items-center gap-2">
           <span className="text-sm font-medium text-muted-foreground tabular-nums">#{rank}</span>
           <div>
-            <h4 className="font-semibold text-foreground truncate max-w-[140px]">
-              {competitor.name}
-            </h4>
+            <h4 className="font-semibold text-foreground">{competitor.name}</h4>
             {competitor.averagePosition !== null && (
               <p className="text-xs text-muted-foreground">
                 Rang moyen: {competitor.averagePosition}
@@ -133,13 +140,26 @@ export const CompetitorCard = memo(function CompetitorCard({
         <TrendBadge trend={competitor.trend} percentage={competitor.trendPercentage} />
       </div>
 
-      {competitor.keywords.length > 0 && (
-        <div className="mb-3">
-          <KeywordBadges keywords={competitor.keywords} />
+      {/* Stats (optional) */}
+      {showStats && (
+        <div className="flex items-center gap-4 text-xs text-muted-foreground">
+          <span>{competitor.totalMentions} mentions</span>
+          <span>Vu {formatRelativeTime(competitor.lastSeenAt)}</span>
         </div>
       )}
 
+      {/* Keywords */}
+      {competitor.keywords.length > 0 && <KeywordBadges keywords={competitor.keywords} />}
+
+      {/* Model positions */}
       <ModelPositions statsByModel={competitor.statsByModel} userPlan={userPlan} />
+
+      {/* Last context (optional) */}
+      {showContext && competitor.lastContext && (
+        <p className="text-xs text-muted-foreground italic line-clamp-2 border-l-2 border-muted pl-2">
+          &ldquo;{competitor.lastContext}&rdquo;
+        </p>
+      )}
     </div>
   );
 });
