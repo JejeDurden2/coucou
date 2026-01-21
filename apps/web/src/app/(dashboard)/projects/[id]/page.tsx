@@ -272,6 +272,7 @@ export default function ProjectDashboardPage({
             {!userCanAccessStats && <Lock className="size-3" aria-hidden="true" />}
           </TabsTrigger>
           <TabsTrigger value="stats" className="gap-1.5">
+            <BarChart3 className="size-3" aria-hidden="true" />
             Statistiques
             {!userCanAccessStats && <Lock className="size-3" aria-hidden="true" />}
           </TabsTrigger>
