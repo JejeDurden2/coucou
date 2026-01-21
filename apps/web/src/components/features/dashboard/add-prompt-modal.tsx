@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Lightbulb, Target, HelpCircle, CheckCircle2 } from 'lucide-react';
+import { Lightbulb, Target, HelpCircle, CheckCircle2, Tag } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -11,15 +11,22 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
+import { PROMPT_CATEGORIES, type PromptCategory } from '@coucou-ia/shared';
 import { cn } from '@/lib/utils';
 
 const MAX_CHARS = 500;
 const MIN_CHARS = 5;
 
+function getCharCountColor(count: number, max: number): string {
+  if (count > max) return 'text-destructive';
+  if (count > max * 0.9) return 'text-amber-500';
+  return 'text-muted-foreground';
+}
+
 interface AddPromptModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onSubmit: (content: string) => Promise<void>;
+  onSubmit: (content: string, category?: PromptCategory) => Promise<void>;
   isPending: boolean;
 }
 
@@ -30,6 +37,7 @@ export function AddPromptModal({
   isPending,
 }: AddPromptModalProps): React.ReactNode {
   const [content, setContent] = useState('');
+  const [category, setCategory] = useState<PromptCategory>();
   const charCount = content.length;
   const isValidLength = charCount >= MIN_CHARS && charCount <= MAX_CHARS;
 
@@ -37,13 +45,15 @@ export function AddPromptModal({
     e.preventDefault();
     if (!isValidLength || isPending) return;
 
-    await onSubmit(content.trim());
+    await onSubmit(content.trim(), category);
     setContent('');
+    setCategory(undefined);
   }
 
   function handleOpenChange(newOpen: boolean): void {
     if (!newOpen) {
       setContent('');
+      setCategory(undefined);
     }
     onOpenChange(newOpen);
   }
@@ -82,17 +92,36 @@ export function AddPromptModal({
                 {MIN_CHARS} caractères minimum
               </span>
               <span
-                className={cn(
-                  'tabular-nums',
-                  charCount > MAX_CHARS
-                    ? 'text-destructive'
-                    : charCount > MAX_CHARS * 0.9
-                      ? 'text-amber-500'
-                      : 'text-muted-foreground',
-                )}
+                className={cn('tabular-nums', getCharCountColor(charCount, MAX_CHARS))}
               >
                 {charCount}/{MAX_CHARS}
               </span>
+            </div>
+          </div>
+
+          {/* Category selector (optional) */}
+          <div className="space-y-2">
+            <div className="flex items-center gap-2 text-sm">
+              <Tag className="size-4 text-muted-foreground" aria-hidden="true" />
+              <span className="font-medium">Catégorie</span>
+              <span className="text-xs text-muted-foreground">(optionnel)</span>
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {PROMPT_CATEGORIES.map((cat) => (
+                <button
+                  key={cat}
+                  type="button"
+                  onClick={() => setCategory(category === cat ? undefined : cat)}
+                  className={cn(
+                    'px-3 py-1.5 rounded-full text-sm border transition-colors',
+                    category === cat
+                      ? 'bg-primary text-primary-foreground border-primary'
+                      : 'bg-background border-border hover:border-primary hover:text-primary',
+                  )}
+                >
+                  {cat}
+                </button>
+              ))}
             </div>
           </div>
 

@@ -69,7 +69,7 @@ export const RecommendationsSummary = memo(function RecommendationsSummary({
             <span
               className={`text-xs px-2 py-0.5 rounded-full ${SEVERITY_CONFIG.warning.bgClass} ${SEVERITY_CONFIG.warning.colorClass}`}
             >
-              {warningCount} attention
+              {warningCount} modérée{warningCount > 1 ? 's' : ''}
             </span>
           )}
         </div>

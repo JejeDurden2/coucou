@@ -82,6 +82,15 @@ export interface UpdateProjectInput {
 // Prompt Types
 // ============================================
 
+export const PROMPT_CATEGORIES = [
+  'Découverte',
+  'Comparaison',
+  'Intention d\'achat',
+  'Local',
+] as const;
+
+export type PromptCategory = (typeof PROMPT_CATEGORIES)[number];
+
 export interface Prompt {
   id: string;
   projectId: string;

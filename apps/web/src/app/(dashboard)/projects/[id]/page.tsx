@@ -59,7 +59,13 @@ import {
   RecommendationsContainer,
   RecommendationsLockedBanner,
 } from '@/components/features/recommendations';
-import { LLMProvider, getScanAvailability, Plan, PLAN_LIMITS } from '@coucou-ia/shared';
+import {
+  LLMProvider,
+  getScanAvailability,
+  Plan,
+  PLAN_LIMITS,
+  type PromptCategory,
+} from '@coucou-ia/shared';
 import { cn } from '@/lib/utils';
 import { formatRelativeTime, formatRelativeTimeFuture } from '@/lib/format';
 
@@ -122,8 +128,8 @@ export default function ProjectDashboardPage({
   const [scanningPromptId, setScanningPromptId] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState('overview');
 
-  async function handleAddPrompt(content: string): Promise<void> {
-    await createPrompt.mutateAsync({ content });
+  async function handleAddPrompt(content: string, category?: PromptCategory): Promise<void> {
+    await createPrompt.mutateAsync({ content, category });
     setShowAddPrompt(false);
   }
 
