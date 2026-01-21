@@ -9,6 +9,7 @@ import { AuthModule } from './modules/auth';
 import { BillingModule } from './modules/billing/billing.module';
 import { DashboardModule } from './modules/dashboard';
 import { EmailModule } from './modules/email';
+import { NotificationModule } from './modules/notification';
 import { OnboardingModule } from './modules/onboarding/onboarding.module';
 import { ProjectModule } from './modules/project';
 import { PromptModule } from './modules/prompt';
@@ -51,6 +52,7 @@ import { PrismaModule } from './prisma';
     ScanModule,
     DashboardModule,
     OnboardingModule,
+    NotificationModule,
   ],
   controllers: [AppController],
   providers: [

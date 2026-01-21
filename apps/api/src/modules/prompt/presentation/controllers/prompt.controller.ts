@@ -38,7 +38,9 @@ export class PromptController {
     @CurrentUser() user: AuthenticatedUser,
     @Body() dto: CreatePromptRequestDto,
   ) {
-    const result = await this.createPromptUseCase.execute(projectId, user.id, user.plan, dto);
+    const result = await this.createPromptUseCase.execute(projectId, user.id, user.plan, dto, {
+      email: user.email,
+    });
 
     if (!result.ok) {
       throw new HttpException(result.error.toJSON(), result.error.statusCode);

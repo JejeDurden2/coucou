@@ -1,7 +1,13 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { Plan, SubscriptionStatus } from '@prisma/client';
 
 import { PrismaService } from '../../../../prisma';
+import {
+  EMAIL_PORT,
+  type EmailPort,
+  generatePlanUpgradeEmail,
+} from '../../../email';
 import { StripeService } from '../../infrastructure/stripe.service';
 
 interface WebhookCheckoutSession {
@@ -33,6 +39,8 @@ export class HandleWebhookUseCase {
   constructor(
     private readonly prisma: PrismaService,
     private readonly stripeService: StripeService,
+    private readonly configService: ConfigService,
+    @Inject(EMAIL_PORT) private readonly emailPort: EmailPort,
   ) {}
 
   async execute(payload: string, signature: string): Promise<void> {
@@ -104,6 +112,31 @@ export class HandleWebhookUseCase {
     ]);
 
     this.logger.log(`Subscription created for user: ${user.id}, plan: ${plan}`);
+
+    // Send plan upgrade email (non-blocking)
+    if (plan !== Plan.FREE) {
+      this.sendPlanUpgradeEmail(user.email, user.name, plan).catch((error) => {
+        this.logger.error(`Failed to send plan upgrade email to ${user.email}`, error);
+      });
+    }
+  }
+
+  private async sendPlanUpgradeEmail(email: string, userName: string, plan: Plan): Promise<void> {
+    const frontendUrl = this.configService.get<string>('FRONTEND_URL') ?? 'https://coucou-ia.com';
+    const { html, text } = generatePlanUpgradeEmail({
+      userName,
+      planName: plan as 'SOLO' | 'PRO',
+      dashboardUrl: `${frontendUrl}/projects`,
+    });
+
+    await this.emailPort.send({
+      to: email,
+      subject: `Bienvenue sur le plan ${plan} - Vos nouvelles capacités`,
+      html,
+      text,
+    });
+
+    this.logger.log(`Plan upgrade email sent to ${email}`);
   }
 
   private async handleSubscriptionUpdated(subscription: WebhookSubscription): Promise<void> {

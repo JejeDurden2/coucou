@@ -36,7 +36,9 @@ export class ProjectController {
 
   @Post()
   async create(@CurrentUser() user: AuthenticatedUser, @Body() dto: CreateProjectRequestDto) {
-    const result = await this.createProjectUseCase.execute(user.id, user.plan, dto);
+    const result = await this.createProjectUseCase.execute(user.id, user.plan, dto, {
+      email: user.email,
+    });
 
     if (!result.ok) {
       throw new HttpException(result.error.toJSON(), result.error.statusCode);

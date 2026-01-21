@@ -8,3 +8,16 @@ export {
   generatePasswordResetEmail,
   type PasswordResetEmailData,
 } from './infrastructure/templates/password-reset.template';
+export {
+  generatePlanUpgradeEmail,
+  type PlanUpgradeEmailData,
+} from './infrastructure/templates/plan-upgrade.template';
+export {
+  generatePlanLimitEmail,
+  type PlanLimitEmailData,
+  type LimitType,
+} from './infrastructure/templates/plan-limit.template';
+export {
+  generateInactivityEmail,
+  type InactivityEmailData,
+} from './infrastructure/templates/inactivity.template';
