@@ -37,7 +37,7 @@ export class LLMServiceImpl implements LLMService {
       [LLMModel.GPT_4O_MINI, this.openaiAdapter],
       [LLMModel.GPT_4O, this.gpt4oAdapter],
       [LLMModel.GPT_5_2, this.gpt52Adapter],
-      [LLMModel.CLAUDE_SONNET_4_5, this.claudeSonnetAdapter],
+      [LLMModel.CLAUDE_SONNET_4, this.claudeSonnetAdapter],
       [LLMModel.CLAUDE_OPUS_4_5, this.claudeOpusAdapter],
     ]);
   }

@@ -26,8 +26,8 @@ export const MODEL_DISPLAY_NAMES: Record<string, string> = {
   'gpt-4o-mini': 'GPT-4o-mini',
   'gpt-4o': 'GPT-4o',
   'gpt-5.2': 'GPT-5.2',
-  'claude-sonnet-4-5-20250514': 'Claude Sonnet',
-  'claude-opus-4-5-20250514': 'Claude Opus',
+  'claude-sonnet-4-20250514': 'Claude Sonnet 4',
+  'claude-opus-4-5-20251101': 'Claude Opus 4.5',
   'claude-3-5-haiku-latest': 'Claude Haiku',
 };
 

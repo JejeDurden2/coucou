@@ -24,16 +24,16 @@ const MODEL_COLORS: Record<string, string> = {
   'gpt-4o-mini': 'hsl(var(--chatgpt))',
   'gpt-4o': 'hsl(142 76% 36%)',
   'gpt-5.2': 'hsl(142 76% 28%)',
-  'claude-sonnet-4-5-20250514': 'hsl(var(--claude))',
-  'claude-opus-4-5-20250514': 'hsl(24 94% 40%)',
+  'claude-sonnet-4-20250514': 'hsl(var(--claude))',
+  'claude-opus-4-5-20251101': 'hsl(24 94% 40%)',
 };
 
 const MODEL_LABELS: Record<string, string> = {
   'gpt-4o-mini': 'GPT-4o Mini',
   'gpt-4o': 'GPT-4o',
   'gpt-5.2': 'GPT-5.2',
-  'claude-sonnet-4-5-20250514': 'Claude Sonnet 4.5',
-  'claude-opus-4-5-20250514': 'Claude Opus 4.5',
+  'claude-sonnet-4-20250514': 'Claude Sonnet 4',
+  'claude-opus-4-5-20251101': 'Claude Opus 4.5',
 };
 
 export const ModelBreakdownChart = memo(function ModelBreakdownChart({

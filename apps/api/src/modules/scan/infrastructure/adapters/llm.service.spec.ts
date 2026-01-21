@@ -39,7 +39,7 @@ describe('LLMServiceImpl', () => {
     mockOpenaiAdapter = createMockAdapter(LLMModel.GPT_4O_MINI);
     mockGpt4oAdapter = createMockAdapter(LLMModel.GPT_4O);
     mockGpt52Adapter = createMockAdapter(LLMModel.GPT_5_2);
-    mockClaudeSonnetAdapter = createMockAdapter(LLMModel.CLAUDE_SONNET_4_5);
+    mockClaudeSonnetAdapter = createMockAdapter(LLMModel.CLAUDE_SONNET_4);
     mockClaudeOpusAdapter = createMockAdapter(LLMModel.CLAUDE_OPUS_4_5);
 
     service = new LLMServiceImpl(
@@ -133,13 +133,13 @@ describe('LLMServiceImpl', () => {
       expect(PLAN_MODELS[Plan.SOLO]).toEqual([
         LLMModel.GPT_4O_MINI,
         LLMModel.GPT_4O,
-        LLMModel.CLAUDE_SONNET_4_5,
+        LLMModel.CLAUDE_SONNET_4,
       ]);
       expect(PLAN_MODELS[Plan.PRO]).toEqual([
         LLMModel.GPT_4O_MINI,
         LLMModel.GPT_4O,
         LLMModel.GPT_5_2,
-        LLMModel.CLAUDE_SONNET_4_5,
+        LLMModel.CLAUDE_SONNET_4,
         LLMModel.CLAUDE_OPUS_4_5,
       ]);
     });
@@ -175,7 +175,7 @@ describe('LLMServiceImpl', () => {
         delays.push(Date.now() - startTime);
         return {
           content: '',
-          model: LLMModel.CLAUDE_SONNET_4_5,
+          model: LLMModel.CLAUDE_SONNET_4,
           provider: 'ANTHROPIC',
           latencyMs: 50,
         } as LLMResponse;

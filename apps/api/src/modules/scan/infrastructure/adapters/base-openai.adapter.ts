@@ -32,6 +32,13 @@ export abstract class BaseOpenAIAdapter extends BaseLLMAdapter {
   protected callApi(prompt: string): Promise<Response> {
     // Retrieve API key at call time to avoid storing in memory
     const apiKey = this.configService.get<string>('OPENAI_API_KEY') ?? '';
+
+    // GPT-5.x models require max_completion_tokens instead of max_tokens
+    const isGpt5Model = this.model.startsWith('gpt-5');
+    const tokenParam = isGpt5Model
+      ? { max_completion_tokens: LLM_CONFIG.maxTokens }
+      : { max_tokens: LLM_CONFIG.maxTokens };
+
     return fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -44,7 +51,7 @@ export abstract class BaseOpenAIAdapter extends BaseLLMAdapter {
           { role: 'system', content: SYSTEM_PROMPT },
           { role: 'user', content: prompt },
         ],
-        max_tokens: LLM_CONFIG.maxTokens,
+        ...tokenParam,
         temperature: LLM_CONFIG.temperature,
       }),
     });

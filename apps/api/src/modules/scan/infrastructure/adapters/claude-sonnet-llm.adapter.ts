@@ -7,7 +7,7 @@ import { BaseAnthropicAdapter } from './base-anthropic.adapter';
 @Injectable()
 export class ClaudeSonnetLLMAdapter extends BaseAnthropicAdapter {
   protected readonly logger = new Logger(ClaudeSonnetLLMAdapter.name);
-  protected readonly model = LLMModel.CLAUDE_SONNET_4_5;
+  protected readonly model = LLMModel.CLAUDE_SONNET_4;
 
   constructor(configService: ConfigService) {
     super(configService);
