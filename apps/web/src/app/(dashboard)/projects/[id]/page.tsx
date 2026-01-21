@@ -15,6 +15,7 @@ import {
   CheckCircle2,
   Lock,
   Users,
+  Lightbulb,
 } from 'lucide-react';
 
 import { useProject } from '@/hooks/use-projects';
@@ -44,7 +45,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import { CompetitorsList, RecommendationsPanel } from '@/components/features/dashboard';
+import { CompetitorsList } from '@/components/features/dashboard';
 import { StatCard } from '@/components/features/dashboard/stat-card';
 import { getModelDisplayName } from '@/components/features/dashboard/llm-result-row';
 import { AddPromptModal } from '@/components/features/dashboard/add-prompt-modal';
@@ -53,6 +54,11 @@ import {
   CompetitorsContainer,
   CompetitorsLockedBanner,
 } from '@/components/features/competitors';
+import {
+  RecommendationsSummary,
+  RecommendationsContainer,
+  RecommendationsLockedBanner,
+} from '@/components/features/recommendations';
 import { LLMProvider, getScanAvailability, Plan, PLAN_LIMITS } from '@coucou-ia/shared';
 import { cn } from '@/lib/utils';
 import { formatRelativeTime, formatRelativeTimeFuture } from '@/lib/format';
@@ -271,6 +277,11 @@ export default function ProjectDashboardPage({
             Concurrents
             {!userCanAccessStats && <Lock className="size-3" aria-hidden="true" />}
           </TabsTrigger>
+          <TabsTrigger value="recommendations" className="gap-1.5">
+            <Lightbulb className="size-3" aria-hidden="true" />
+            Recommandations
+            {!userCanAccessStats && <Lock className="size-3" aria-hidden="true" />}
+          </TabsTrigger>
           <TabsTrigger value="stats" className="gap-1.5">
             <BarChart3 className="size-3" aria-hidden="true" />
             Statistiques
@@ -443,8 +454,12 @@ export default function ProjectDashboardPage({
           </div>
 
           {/* Recommendations Section */}
-          {recommendationsData?.recommendations && recommendationsData.recommendations.length > 0 ? (
-            <RecommendationsPanel recommendations={recommendationsData.recommendations} />
+          {recommendationsData?.recommendations ? (
+            <RecommendationsSummary
+              recommendations={recommendationsData.recommendations}
+              maxItems={2}
+              onViewMore={() => setActiveTab('recommendations')}
+            />
           ) : null}
 
           {/* Competitors Section */}
@@ -467,6 +482,16 @@ export default function ProjectDashboardPage({
             />
           ) : (
             <CompetitorsLockedBanner />
+          )}
+        </TabsContent>
+
+        <TabsContent value="recommendations">
+          {userCanAccessStats ? (
+            <RecommendationsContainer
+              recommendations={recommendationsData?.recommendations ?? []}
+            />
+          ) : (
+            <RecommendationsLockedBanner />
           )}
         </TabsContent>
 
