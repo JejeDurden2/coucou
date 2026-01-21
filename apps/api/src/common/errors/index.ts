@@ -6,6 +6,7 @@ export {
   UnauthorizedError,
   ForbiddenError,
   PlanLimitError,
+  ScanLimitError,
   ExternalServiceError,
   ConfigurationError,
 } from './domain-error';

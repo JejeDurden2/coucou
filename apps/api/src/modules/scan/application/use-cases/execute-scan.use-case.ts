@@ -1,7 +1,13 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { Plan } from '@prisma/client';
 
-import { ForbiddenError, NotFoundError, Result, ValidationError } from '../../../../common';
+import {
+  ForbiddenError,
+  NotFoundError,
+  Result,
+  ScanLimitError,
+  ValidationError,
+} from '../../../../common';
 import { PROJECT_REPOSITORY, type ProjectRepository } from '../../../project';
 import { PROMPT_REPOSITORY, type PromptRepository } from '../../../prompt';
 import {
@@ -22,7 +28,20 @@ const SCAN_COOLDOWN_MS: Record<Plan, number> = {
   [Plan.PRO]: 24 * 60 * 60 * 1000, // 1 day
 };
 
-type ExecuteScanError = NotFoundError | ForbiddenError | AllProvidersFailedError | ValidationError;
+// Max scans per period (projects × prompts per project)
+// FREE: 1×2=2, SOLO: 5×10=50, PRO: 15×50=750
+const MAX_SCANS_PER_PERIOD: Record<Plan, number> = {
+  [Plan.FREE]: 2,
+  [Plan.SOLO]: 50,
+  [Plan.PRO]: 750,
+};
+
+type ExecuteScanError =
+  | NotFoundError
+  | ForbiddenError
+  | AllProvidersFailedError
+  | ValidationError
+  | ScanLimitError;
 
 @Injectable()
 export class ExecuteScanUseCase {
@@ -61,9 +80,18 @@ export class ExecuteScanUseCase {
       return Result.err(new ForbiddenError('You do not have access to this prompt'));
     }
 
-    // Check scan cooldown based on plan
+    // Check user-level scan quota for the period (prevents bypass via prompt deletion)
+    const cooldownMs = SCAN_COOLDOWN_MS[plan];
+    const periodStart = new Date(Date.now() - cooldownMs);
+    const recentScans = await this.scanRepository.countUserScansInPeriod(userId, periodStart);
+    const maxScans = MAX_SCANS_PER_PERIOD[plan];
+
+    if (recentScans >= maxScans) {
+      return Result.err(new ScanLimitError(recentScans, maxScans, plan));
+    }
+
+    // Check scan cooldown based on plan (per-prompt cooldown)
     if (prompt.lastScannedAt !== null) {
-      const cooldownMs = SCAN_COOLDOWN_MS[plan];
       const timeSinceLastScan = Date.now() - prompt.lastScannedAt.getTime();
       if (timeSinceLastScan < cooldownMs) {
         const cooldownLabel = plan === Plan.PRO ? 'jour' : 'semaine';

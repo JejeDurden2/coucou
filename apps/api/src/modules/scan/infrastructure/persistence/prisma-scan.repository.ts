@@ -61,6 +61,21 @@ export class PrismaScanRepository implements ScanRepository {
     return scan ? Scan.fromPersistence(scan) : null;
   }
 
+  async countUserScansInPeriod(userId: string, since: Date): Promise<number> {
+    return this.prisma.scan.count({
+      where: {
+        prompt: {
+          project: {
+            userId,
+          },
+        },
+        executedAt: {
+          gte: since,
+        },
+      },
+    });
+  }
+
   async create(data: CreateScanData): Promise<Scan> {
     const scan = await this.prisma.scan.create({
       data: {

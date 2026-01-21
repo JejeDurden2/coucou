@@ -85,6 +85,19 @@ export class PlanLimitError extends DomainError {
   }
 }
 
+export class ScanLimitError extends DomainError {
+  readonly code = 'SCAN_LIMIT_EXCEEDED';
+  readonly statusCode = 429;
+
+  constructor(current: number, limit: number, plan: string) {
+    super(`Limite de scans atteinte (${current}/${limit}) pour le plan ${plan}`, {
+      current,
+      limit,
+      plan,
+    });
+  }
+}
+
 export class ExternalServiceError extends DomainError {
   readonly code = 'EXTERNAL_SERVICE_ERROR';
   readonly statusCode = 502;

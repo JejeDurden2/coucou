@@ -1,7 +1,7 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { Plan } from '@prisma/client';
 
-import { ForbiddenError, NotFoundError, Result } from '../../../../common';
+import { ForbiddenError, NotFoundError, Result, ScanLimitError } from '../../../../common';
 import { PROJECT_REPOSITORY, type ProjectRepository } from '../../../project';
 import { PROMPT_REPOSITORY, type PromptRepository } from '../../../prompt';
 import {
@@ -24,7 +24,18 @@ const SCAN_COOLDOWN_MS: Record<Plan, number> = {
   [Plan.PRO]: 24 * 60 * 60 * 1000, // 1 day
 };
 
-type ExecuteProjectScanError = NotFoundError | ForbiddenError | AllProvidersFailedError;
+// Max scans per period (projects × prompts per project)
+const MAX_SCANS_PER_PERIOD: Record<Plan, number> = {
+  [Plan.FREE]: 2,
+  [Plan.SOLO]: 50,
+  [Plan.PRO]: 750,
+};
+
+type ExecuteProjectScanError =
+  | NotFoundError
+  | ForbiddenError
+  | AllProvidersFailedError
+  | ScanLimitError;
 
 @Injectable()
 export class ExecuteProjectScanUseCase {
@@ -55,6 +66,16 @@ export class ExecuteProjectScanUseCase {
 
     if (!project.belongsTo(userId)) {
       return Result.err(new ForbiddenError('You do not have access to this project'));
+    }
+
+    // Check user-level scan quota for the period (prevents bypass via prompt deletion)
+    const cooldownMs = SCAN_COOLDOWN_MS[plan];
+    const periodStart = new Date(Date.now() - cooldownMs);
+    const recentScans = await this.scanRepository.countUserScansInPeriod(userId, periodStart);
+    const maxScans = MAX_SCANS_PER_PERIOD[plan];
+
+    if (recentScans >= maxScans) {
+      return Result.err(new ScanLimitError(recentScans, maxScans, plan));
     }
 
     const prompts = await this.promptRepository.findActiveByProjectId(projectId);
