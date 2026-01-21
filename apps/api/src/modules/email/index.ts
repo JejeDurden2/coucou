@@ -21,3 +21,7 @@ export {
   generateInactivityEmail,
   type InactivityEmailData,
 } from './infrastructure/templates/inactivity.template';
+export {
+  generateNewUserNotificationEmail,
+  type NewUserNotificationEmailData,
+} from './infrastructure/templates/new-user-notification.template';

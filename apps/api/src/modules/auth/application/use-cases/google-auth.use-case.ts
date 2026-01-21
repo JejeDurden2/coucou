@@ -3,7 +3,12 @@ import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 
 import { PrismaService } from '../../../../prisma';
-import { EMAIL_PORT, type EmailPort, generateWelcomeEmail } from '../../../email';
+import {
+  EMAIL_PORT,
+  type EmailPort,
+  generateWelcomeEmail,
+  generateNewUserNotificationEmail,
+} from '../../../email';
 import { USER_REPOSITORY, type UserRepository, type User } from '../../domain';
 import type { AuthResponseDto, JwtPayload } from '../dto/auth.dto';
 import type { GoogleProfile } from '../../presentation/strategies/google.strategy';
@@ -46,10 +51,13 @@ export class GoogleAuthUseCase {
       }
     }
 
-    // Send welcome email for new users (non-blocking)
+    // Send welcome email and admin notification for new users (non-blocking)
     if (isNewUser) {
       this.sendWelcomeEmail(user).catch((error) => {
         this.logger.error(`Failed to send welcome email to ${user.email}`, error);
+      });
+      this.sendAdminNotification(user).catch((error) => {
+        this.logger.error(`Failed to send admin notification for ${user.email}`, error);
       });
     }
 
@@ -95,6 +103,22 @@ export class GoogleAuthUseCase {
     await this.emailService.send({
       to: user.email,
       subject: 'Bienvenue sur Coucou IA - Votre visibilite IA commence ici',
+      html,
+      text,
+    });
+  }
+
+  private async sendAdminNotification(user: User): Promise<void> {
+    const { html, text } = generateNewUserNotificationEmail({
+      userName: user.name ?? user.email.split('@')[0],
+      userEmail: user.email,
+      authMethod: 'google',
+      createdAt: new Date().toLocaleString('fr-FR', { timeZone: 'Europe/Paris' }),
+    });
+
+    await this.emailService.send({
+      to: 'jerome@coucou-ia.com',
+      subject: `Nouvel utilisateur : ${user.name ?? user.email}`,
       html,
       text,
     });

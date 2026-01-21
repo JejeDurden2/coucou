@@ -3,7 +3,12 @@ import { ConfigService } from '@nestjs/config';
 import * as bcrypt from 'bcrypt';
 
 import { ConflictError, Result } from '../../../../common';
-import { EMAIL_PORT, type EmailPort, generateWelcomeEmail } from '../../../email';
+import {
+  EMAIL_PORT,
+  type EmailPort,
+  generateWelcomeEmail,
+  generateNewUserNotificationEmail,
+} from '../../../email';
 import type { User } from '../../domain';
 import { USER_REPOSITORY, type UserRepository } from '../../domain';
 import type { RegisterDto } from '../dto/auth.dto';
@@ -40,6 +45,11 @@ export class RegisterUseCase {
       this.logger.error(`Failed to send welcome email to ${user.email}`, error);
     });
 
+    // Send admin notification (non-blocking)
+    this.sendAdminNotification(user).catch((error) => {
+      this.logger.error(`Failed to send admin notification for ${user.email}`, error);
+    });
+
     return Result.ok(user);
   }
 
@@ -53,6 +63,22 @@ export class RegisterUseCase {
     await this.emailService.send({
       to: user.email,
       subject: 'Bienvenue sur Coucou IA - Votre visibilite IA commence ici',
+      html,
+      text,
+    });
+  }
+
+  private async sendAdminNotification(user: User): Promise<void> {
+    const { html, text } = generateNewUserNotificationEmail({
+      userName: user.name ?? user.email.split('@')[0],
+      userEmail: user.email,
+      authMethod: 'email',
+      createdAt: new Date().toLocaleString('fr-FR', { timeZone: 'Europe/Paris' }),
+    });
+
+    await this.emailService.send({
+      to: 'jerome@coucou-ia.com',
+      subject: `Nouvel utilisateur : ${user.name ?? user.email}`,
       html,
       text,
     });
