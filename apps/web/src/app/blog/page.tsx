@@ -1,9 +1,10 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { Bird, ArrowLeft } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 
 import { getAllPosts } from '@/lib/blog';
 import { PostCard } from '@/components/blog';
+import { Logo } from '@/components/ui/logo';
 
 export const metadata: Metadata = {
   title: 'Blog',
@@ -26,9 +27,8 @@ export default function BlogPage(): React.ReactNode {
       <header className="border-b border-border">
         <div className="mx-auto max-w-5xl px-4 py-4">
           <div className="flex items-center justify-between">
-            <Link href="/" className="flex items-center gap-2 text-foreground hover:text-primary">
-              <Bird className="size-6 text-primary" aria-hidden="true" />
-              <span className="font-display font-semibold">Coucou IA</span>
+            <Link href="/" className="hover:opacity-80 transition-opacity">
+              <Logo size="sm" />
             </Link>
             <Link
               href="/"
@@ -68,9 +68,8 @@ export default function BlogPage(): React.ReactNode {
       <footer className="border-t border-border mt-20">
         <div className="mx-auto max-w-5xl px-4 py-8">
           <div className="flex flex-col items-center gap-4 text-center">
-            <Link href="/" className="flex items-center gap-2 text-foreground">
-              <Bird className="size-5 text-primary" aria-hidden="true" />
-              <span className="font-display font-semibold">Coucou IA</span>
+            <Link href="/" className="hover:opacity-80 transition-opacity">
+              <Logo size="sm" />
             </Link>
             <p className="text-sm text-muted-foreground">Votre visibilité dans les IA</p>
           </div>

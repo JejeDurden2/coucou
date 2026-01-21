@@ -1,10 +1,12 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import Image from 'next/image';
 import { notFound } from 'next/navigation';
-import { Bird, ArrowLeft, Calendar, Clock, User } from 'lucide-react';
+import { ArrowLeft, Calendar, Clock, User } from 'lucide-react';
 
 import { getPost, getAllPostSlugs } from '@/lib/blog';
 import { PostContent } from '@/components/blog';
+import { Logo } from '@/components/ui/logo';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -101,9 +103,8 @@ export default async function BlogPostPage({ params }: PageProps): Promise<React
         <header className="border-b border-border">
           <div className="mx-auto max-w-3xl px-4 py-4">
             <div className="flex items-center justify-between">
-              <Link href="/" className="flex items-center gap-2 text-foreground hover:text-primary">
-                <Bird className="size-6 text-primary" aria-hidden="true" />
-                <span className="font-display font-semibold">Coucou IA</span>
+              <Link href="/" className="hover:opacity-80 transition-opacity">
+                <Logo size="sm" />
               </Link>
               <Link
                 href="/blog"
@@ -158,10 +159,13 @@ export default async function BlogPostPage({ params }: PageProps): Promise<React
           {/* Featured Image */}
           {post.image && (
             <div className="mb-10 overflow-hidden rounded-xl border border-border">
-              <img
+              <Image
                 src={post.image}
                 alt={post.title}
+                width={1200}
+                height={675}
                 className="w-full h-auto object-cover aspect-video"
+                priority
               />
             </div>
           )}
@@ -190,9 +194,8 @@ export default async function BlogPostPage({ params }: PageProps): Promise<React
         <footer className="border-t border-border mt-20">
           <div className="mx-auto max-w-3xl px-4 py-8">
             <div className="flex flex-col items-center gap-4 text-center">
-              <Link href="/" className="flex items-center gap-2 text-foreground">
-                <Bird className="size-5 text-primary" aria-hidden="true" />
-                <span className="font-display font-semibold">Coucou IA</span>
+              <Link href="/" className="hover:opacity-80 transition-opacity">
+                <Logo size="sm" />
               </Link>
               <p className="text-sm text-muted-foreground">Votre visibilité dans les IA</p>
             </div>

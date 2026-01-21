@@ -1,10 +1,21 @@
 'use client';
 
+import { useMemo } from 'react';
+import DOMPurify from 'dompurify';
+
 interface PostContentProps {
   content: string;
 }
 
 export function PostContent({ content }: PostContentProps): React.ReactNode {
+  const sanitizedContent = useMemo(() => {
+    if (typeof window === 'undefined') return content;
+    return DOMPurify.sanitize(content, {
+      ADD_TAGS: ['iframe'],
+      ADD_ATTR: ['allow', 'allowfullscreen', 'frameborder', 'scrolling'],
+    });
+  }, [content]);
+
   return (
     <div
       className="prose prose-invert prose-zinc max-w-none
@@ -20,7 +31,7 @@ export function PostContent({ content }: PostContentProps): React.ReactNode {
         prose-ul:text-muted-foreground prose-ol:text-muted-foreground
         prose-li:marker:text-primary
         prose-img:rounded-xl prose-img:border prose-img:border-border"
-      dangerouslySetInnerHTML={{ __html: content }}
+      dangerouslySetInnerHTML={{ __html: sanitizedContent }}
     />
   );
 }

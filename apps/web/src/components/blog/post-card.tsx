@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { Calendar, Clock, User } from 'lucide-react';
 
 import type { BlogPostMeta } from '@/lib/blog';
@@ -19,9 +20,11 @@ export function PostCard({ post }: PostCardProps): React.ReactNode {
       <Link href={`/blog/${post.slug}`} className="block space-y-4">
         {post.image && (
           <div className="aspect-video overflow-hidden rounded-lg bg-muted">
-            <img
+            <Image
               src={post.image}
               alt={post.title}
+              width={1200}
+              height={675}
               className="h-full w-full object-cover transition-transform group-hover:scale-105"
             />
           </div>

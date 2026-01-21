@@ -145,6 +145,12 @@ export default function LandingPage() {
             >
               FAQ
             </Link>
+            <Link
+              href="/blog"
+              className="text-sm text-muted-foreground hover:text-primary transition-colors"
+            >
+              Blog
+            </Link>
           </div>
           <div className="flex items-center gap-4">
             <Button variant="ghost" asChild>
@@ -562,6 +568,11 @@ export default function LandingPage() {
                 <li>
                   <Link href="#faq" className="hover:text-foreground">
                     FAQ
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/blog" className="hover:text-foreground">
+                    Blog
                   </Link>
                 </li>
               </ul>
