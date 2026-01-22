@@ -4,7 +4,6 @@ import matter from 'gray-matter';
 import { remark } from 'remark';
 import html from 'remark-html';
 import remarkGfm from 'remark-gfm';
-import remarkBreaks from 'remark-breaks';
 import readingTime from 'reading-time';
 
 const BLOG_DIR = path.join(process.cwd(), 'content/blog');
@@ -92,7 +91,6 @@ export async function getPost(slug: string): Promise<BlogPost | null> {
 
   const processedContent = await remark()
     .use(remarkGfm) // Support for tables, strikethrough, etc.
-    .use(remarkBreaks) // Convert line breaks to <br>
     .use(html, { sanitize: false })
     .process(content);
   const htmlContent = processedContent.toString();
