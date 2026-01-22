@@ -131,6 +131,7 @@ pnpm db:studio              # Open Prisma Studio
 10. Add structured logging with context (traceId, spanId, relevant metadata)
 11. Use docker-compose for local dev, Neon for production
 12. **Self-review code before committing** (see code-quality skill)
+13. Trust PostToolUse hooks for formatting/linting — don't waste tokens re-running these commands
 
 ### NEVER
 
@@ -138,7 +139,7 @@ pnpm db:studio              # Open Prisma Studio
 14. Put business logic in controllers or components
 15. Skip validation (Zod on frontend, class-validator on backend)
 16. Hardcode values — use environment variables or constants
-17. Commit without running lint and type-check
+17. Run lint/format/type-check manually — hooks handle formatting and linting automatically after each file edit. Only run `pnpm type-check` before committing if you have doubts.
 18. Throw generic Error — use typed DomainError subclasses
 19. Log sensitive data (passwords, tokens, PII)
 20. Push code without self-review
