@@ -7,6 +7,7 @@ import {
   EMAIL_PORT,
   type EmailPort,
   generatePlanUpgradeEmail,
+  generateSubscriptionEndedEmail,
 } from '../../../email';
 import { StripeService } from '../../infrastructure/stripe.service';
 
@@ -68,14 +69,8 @@ export class HandleWebhookUseCase {
   }
 
   private async handleCheckoutCompleted(session: WebhookCheckoutSession): Promise<void> {
-    const user = await this.prisma.user.findFirst({
-      where: { stripeCustomerId: session.customer },
-    });
-
-    if (!user) {
-      this.logger.error(`User not found for customer: ${session.customer}`);
-      return;
-    }
+    const user = await this.findUserByStripeCustomerId(session.customer);
+    if (!user) return;
 
     const subscription = await this.stripeService.getSubscription(session.subscription);
     const priceId = subscription.items.data[0]?.price?.id;
@@ -140,18 +135,10 @@ export class HandleWebhookUseCase {
   }
 
   private async handleSubscriptionUpdated(subscription: WebhookSubscription): Promise<void> {
-    const user = await this.prisma.user.findFirst({
-      where: { stripeCustomerId: subscription.customer },
-    });
+    const user = await this.findUserByStripeCustomerId(subscription.customer);
+    if (!user) return;
 
-    if (!user) {
-      this.logger.error(`User not found for customer: ${subscription.customer}`);
-      return;
-    }
-
-    const priceId = subscription.items.data[0]?.price?.id;
-    const plan = priceId ? this.stripeService.getPlanFromPriceId(priceId) : Plan.FREE;
-
+    const plan = this.getPlanFromSubscription(subscription);
     const currentPeriodStart = this.toSafeDate(subscription.current_period_start);
     const currentPeriodEnd = this.toSafeDate(subscription.current_period_end);
 
@@ -176,14 +163,10 @@ export class HandleWebhookUseCase {
   }
 
   private async handleSubscriptionDeleted(subscription: WebhookSubscription): Promise<void> {
-    const user = await this.prisma.user.findFirst({
-      where: { stripeCustomerId: subscription.customer },
-    });
+    const user = await this.findUserByStripeCustomerId(subscription.customer);
+    if (!user) return;
 
-    if (!user) {
-      this.logger.error(`User not found for customer: ${subscription.customer}`);
-      return;
-    }
+    const previousPlan = user.plan;
 
     await this.prisma.$transaction([
       this.prisma.subscription.delete({
@@ -195,7 +178,54 @@ export class HandleWebhookUseCase {
       }),
     ]);
 
-    this.logger.log(`Subscription deleted for user: ${user.id}`);
+    this.logger.log(`Subscription deleted for user: ${user.id}, previousPlan: ${previousPlan}`);
+
+    // Send subscription ended email (non-blocking)
+    // TODO: Migrate to BullMQ when available
+    if (previousPlan === Plan.SOLO || previousPlan === Plan.PRO) {
+      this.sendSubscriptionEndedEmail(user.email, user.name, previousPlan).catch((error) => {
+        this.logger.error(`Failed to send subscription ended email to ${user.email}`, error);
+      });
+    }
+  }
+
+  private async sendSubscriptionEndedEmail(
+    email: string,
+    userName: string,
+    previousPlan: 'SOLO' | 'PRO',
+  ): Promise<void> {
+    const frontendUrl = this.configService.get<string>('FRONTEND_URL') ?? 'https://coucou-ia.com';
+    const { html, text } = generateSubscriptionEndedEmail({
+      userName,
+      previousPlan,
+      billingUrl: `${frontendUrl}/billing`,
+    });
+
+    await this.emailPort.send({
+      to: email,
+      subject: 'Votre abonnement Coucou IA a pris fin',
+      html,
+      text,
+    });
+
+    this.logger.log(`Subscription ended email sent to ${email}`);
+  }
+
+  private async findUserByStripeCustomerId(stripeCustomerId: string) {
+    const user = await this.prisma.user.findFirst({
+      where: { stripeCustomerId },
+    });
+
+    if (!user) {
+      this.logger.error(`User not found for customer: ${stripeCustomerId}`);
+    }
+
+    return user;
+  }
+
+  private getPlanFromSubscription(subscription: WebhookSubscription): Plan {
+    const priceId = subscription.items.data[0]?.price?.id;
+    return priceId ? this.stripeService.getPlanFromPriceId(priceId) : Plan.FREE;
   }
 
   private mapStatus(stripeStatus: string): SubscriptionStatus {

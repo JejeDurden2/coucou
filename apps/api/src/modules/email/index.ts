@@ -29,3 +29,7 @@ export {
   generatePlanDowngradeEmail,
   type PlanDowngradeEmailData,
 } from './infrastructure/templates/plan-downgrade.template';
+export {
+  generateSubscriptionEndedEmail,
+  type SubscriptionEndedEmailData,
+} from './infrastructure/templates/subscription-ended.template';
