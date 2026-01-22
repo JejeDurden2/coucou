@@ -17,11 +17,13 @@ import type { AuthenticatedUser } from '../../auth/application/dto/auth.dto';
 import { CreateCheckoutUseCase } from '../application/use-cases/create-checkout.use-case';
 import { CreatePortalUseCase } from '../application/use-cases/create-portal.use-case';
 import { HandleWebhookUseCase } from '../application/use-cases/handle-webhook.use-case';
+import { DowngradeSubscriptionUseCase } from '../application/use-cases/downgrade-subscription.use-case';
 import {
   CreateCheckoutDto,
   CreatePortalDto,
   type CheckoutSessionResponse,
   type PortalSessionResponse,
+  type DowngradeSubscriptionResponse,
 } from '../application/dto/billing.dto';
 
 @Controller('billing')
@@ -30,6 +32,7 @@ export class BillingController {
     private readonly createCheckoutUseCase: CreateCheckoutUseCase,
     private readonly createPortalUseCase: CreatePortalUseCase,
     private readonly handleWebhookUseCase: HandleWebhookUseCase,
+    private readonly downgradeSubscriptionUseCase: DowngradeSubscriptionUseCase,
   ) {}
 
   @Post('checkout')
@@ -61,6 +64,22 @@ export class BillingController {
     const result = await this.createPortalUseCase.execute({
       userId: user.id,
       returnUrl: dto.returnUrl,
+    });
+
+    if (!result.ok) {
+      throw result.error;
+    }
+
+    return result.value;
+  }
+
+  @Post('downgrade')
+  @UseGuards(JwtAuthGuard)
+  async downgradeSubscription(
+    @CurrentUser() user: AuthenticatedUser,
+  ): Promise<DowngradeSubscriptionResponse> {
+    const result = await this.downgradeSubscriptionUseCase.execute({
+      userId: user.id,
     });
 
     if (!result.ok) {

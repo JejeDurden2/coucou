@@ -25,3 +25,7 @@ export {
   generateNewUserNotificationEmail,
   type NewUserNotificationEmailData,
 } from './infrastructure/templates/new-user-notification.template';
+export {
+  generatePlanDowngradeEmail,
+  type PlanDowngradeEmailData,
+} from './infrastructure/templates/plan-downgrade.template';

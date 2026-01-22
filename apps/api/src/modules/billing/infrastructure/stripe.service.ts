@@ -148,6 +148,18 @@ export class StripeService {
     return this.fetch<StripeSubscription>(`/subscriptions/${subscriptionId}`);
   }
 
+  async updateSubscription(
+    subscriptionId: string,
+    params: { cancel_at_period_end: boolean },
+  ): Promise<StripeSubscription> {
+    return this.fetch<StripeSubscription>(`/subscriptions/${subscriptionId}`, {
+      method: 'POST',
+      body: this.toFormData({
+        cancel_at_period_end: params.cancel_at_period_end,
+      }),
+    });
+  }
+
   getPlanFromPriceId(priceId: string): Plan {
     for (const [plan, id] of Object.entries(this.priceIds)) {
       if (id === priceId) {

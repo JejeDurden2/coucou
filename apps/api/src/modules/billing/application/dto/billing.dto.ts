@@ -24,3 +24,10 @@ export interface CheckoutSessionResponse {
 export interface PortalSessionResponse {
   url: string;
 }
+
+export interface DowngradeSubscriptionResponse {
+  success: boolean;
+  effectiveDate: string;
+  currentPlan: Plan;
+  message: string;
+}
