@@ -4,6 +4,7 @@ import { ConfigService } from '@nestjs/config';
 
 import { EMAIL_QUEUE_NAME, defaultJobOptions } from './queue.config';
 import { EmailQueueService } from './email-queue.service';
+import { EmailProcessor } from './email.processor';
 
 @Global()
 @Module({
@@ -21,7 +22,7 @@ import { EmailQueueService } from './email-queue.service';
       defaultJobOptions,
     }),
   ],
-  providers: [EmailQueueService],
+  providers: [EmailQueueService, EmailProcessor],
   exports: [EmailQueueService],
 })
 export class QueueModule {}
