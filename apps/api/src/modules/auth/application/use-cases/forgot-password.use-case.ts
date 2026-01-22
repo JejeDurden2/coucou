@@ -3,7 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { randomBytes } from 'crypto';
 
 import { Result } from '../../../../common';
-import { EMAIL_PORT, type EmailPort, generatePasswordResetEmail } from '../../../email';
+import { EmailQueueService } from '../../../../infrastructure/queue';
 import {
   USER_REPOSITORY,
   type UserRepository,
@@ -22,8 +22,7 @@ export class ForgotPasswordUseCase {
     private readonly userRepository: UserRepository,
     @Inject(PASSWORD_RESET_REPOSITORY)
     private readonly passwordResetRepository: PasswordResetRepository,
-    @Inject(EMAIL_PORT)
-    private readonly emailService: EmailPort,
+    private readonly emailQueueService: EmailQueueService,
     private readonly configService: ConfigService,
   ) {}
 
@@ -51,33 +50,20 @@ export class ForgotPasswordUseCase {
 
     await this.passwordResetRepository.create(user.id, token, expiresAt);
 
-    // Send email (non-blocking)
-    this.sendPasswordResetEmail(user.email, user.name, token).catch((error) => {
-      this.logger.error(`Failed to send password reset email to ${email}`, error);
-    });
-
-    return Result.ok(undefined);
-  }
-
-  private async sendPasswordResetEmail(
-    email: string,
-    userName: string | null,
-    token: string,
-  ): Promise<void> {
     const frontendUrl = this.configService.get<string>('FRONTEND_URL', 'http://localhost:3000');
     const resetUrl = `${frontendUrl}/reset-password?token=${token}`;
 
-    const { html, text } = generatePasswordResetEmail({
-      userName: userName ?? email.split('@')[0],
-      resetUrl,
-      expiresInMinutes: TOKEN_EXPIRY_MINUTES,
+    // Send email via queue
+    await this.emailQueueService.addJob({
+      type: 'password-reset',
+      to: user.email,
+      data: {
+        userName: user.name ?? user.email.split('@')[0],
+        resetUrl,
+        expiresInMinutes: TOKEN_EXPIRY_MINUTES,
+      },
     });
 
-    await this.emailService.send({
-      to: email,
-      subject: 'Reinitialisation de votre mot de passe Coucou',
-      html,
-      text,
-    });
+    return Result.ok(undefined);
   }
 }

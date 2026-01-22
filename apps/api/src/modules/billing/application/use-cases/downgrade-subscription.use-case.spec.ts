@@ -14,14 +14,14 @@ import {
 import type { UserRepository } from '../../../auth/domain/repositories/user.repository';
 import type { SubscriptionRepository } from '../../domain/repositories/subscription.repository';
 import type { StripePort } from '../../domain/ports/stripe.port';
-import type { EmailPort } from '../../../email';
+import type { EmailQueueService } from '../../../../infrastructure/queue';
 
 describe('DowngradeSubscriptionUseCase', () => {
   let useCase: DowngradeSubscriptionUseCase;
   let mockUserRepository: Partial<UserRepository>;
   let mockSubscriptionRepository: Partial<SubscriptionRepository>;
   let mockStripePort: Partial<StripePort>;
-  let mockEmailPort: Partial<EmailPort>;
+  let mockEmailQueueService: Partial<EmailQueueService>;
   let mockConfigService: Partial<ConfigService>;
 
   beforeEach(() => {
@@ -38,8 +38,8 @@ describe('DowngradeSubscriptionUseCase', () => {
       cancelAtPeriodEnd: vi.fn(),
     };
 
-    mockEmailPort = {
-      send: vi.fn().mockResolvedValue(undefined),
+    mockEmailQueueService = {
+      addJob: vi.fn().mockResolvedValue(undefined),
     };
 
     mockConfigService = {
@@ -50,7 +50,7 @@ describe('DowngradeSubscriptionUseCase', () => {
       mockUserRepository as UserRepository,
       mockSubscriptionRepository as SubscriptionRepository,
       mockStripePort as StripePort,
-      mockEmailPort as EmailPort,
+      mockEmailQueueService as EmailQueueService,
       mockConfigService as ConfigService,
     );
   });

@@ -1,10 +1,11 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Plan, SubscriptionStatus } from '@prisma/client';
 
 import { Result } from '../../../../common/utils/result';
 import type { DomainError } from '../../../../common/errors/domain-error';
 import { NotFoundError } from '../../../../common/errors/domain-error';
+import { EmailQueueService } from '../../../../infrastructure/queue';
 import {
   USER_REPOSITORY,
   type UserRepository,
@@ -14,7 +15,6 @@ import {
   type SubscriptionRepository,
 } from '../../domain/repositories/subscription.repository';
 import { STRIPE_PORT, type StripePort } from '../../domain/ports/stripe.port';
-import { EMAIL_PORT, type EmailPort, generatePlanDowngradeEmail } from '../../../email';
 import {
   AlreadyOnFreePlanError,
   NoActiveSubscriptionError,
@@ -41,8 +41,6 @@ function isPaidPlan(plan: Plan): plan is PaidPlan {
 
 @Injectable()
 export class DowngradeSubscriptionUseCase {
-  private readonly logger = new Logger(DowngradeSubscriptionUseCase.name);
-
   constructor(
     @Inject(USER_REPOSITORY)
     private readonly userRepository: UserRepository,
@@ -50,8 +48,7 @@ export class DowngradeSubscriptionUseCase {
     private readonly subscriptionRepository: SubscriptionRepository,
     @Inject(STRIPE_PORT)
     private readonly stripePort: StripePort,
-    @Inject(EMAIL_PORT)
-    private readonly emailPort: EmailPort,
+    private readonly emailQueueService: EmailQueueService,
     private readonly configService: ConfigService,
   ) {}
 
@@ -96,8 +93,17 @@ export class DowngradeSubscriptionUseCase {
       cancelAtPeriodEnd: true,
     });
 
-    this.sendDowngradeEmail(user.email, user.name, user.plan, currentPeriodEnd).catch((error) => {
-      this.logger.error(`Failed to send downgrade email to ${user.email}`, error);
+    // Send downgrade email via queue
+    const frontendUrl = this.configService.get<string>('FRONTEND_URL') ?? 'https://coucou-ia.com';
+    await this.emailQueueService.addJob({
+      type: 'plan-downgrade',
+      to: user.email,
+      data: {
+        userName: user.name ?? user.email.split('@')[0],
+        currentPlan: user.plan,
+        effectiveDate: currentPeriodEnd.toISOString(),
+        dashboardUrl: `${frontendUrl}/projects`,
+      },
     });
 
     const effectiveDate = currentPeriodEnd.toISOString();
@@ -117,30 +123,5 @@ export class DowngradeSubscriptionUseCase {
       month: 'long',
       day: 'numeric',
     }).format(date);
-  }
-
-  private async sendDowngradeEmail(
-    email: string,
-    userName: string,
-    plan: PaidPlan,
-    effectiveDate: Date,
-  ): Promise<void> {
-    const frontendUrl = this.configService.get<string>('FRONTEND_URL') ?? 'https://coucou-ia.com';
-
-    const { html, text } = generatePlanDowngradeEmail({
-      userName,
-      currentPlan: plan,
-      effectiveDate: effectiveDate.toISOString(),
-      dashboardUrl: `${frontendUrl}/projects`,
-    });
-
-    await this.emailPort.send({
-      to: email,
-      subject: "Confirmation d'annulation de votre abonnement",
-      html,
-      text,
-    });
-
-    this.logger.log(`Downgrade email sent to ${email}`);
   }
 }

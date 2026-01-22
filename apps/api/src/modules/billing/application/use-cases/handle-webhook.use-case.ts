@@ -1,14 +1,9 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Plan, SubscriptionStatus } from '@prisma/client';
 
 import { PrismaService } from '../../../../prisma';
-import {
-  EMAIL_PORT,
-  type EmailPort,
-  generatePlanUpgradeEmail,
-  generateSubscriptionEndedEmail,
-} from '../../../email';
+import { EmailQueueService } from '../../../../infrastructure/queue';
 import { StripeService } from '../../infrastructure/stripe.service';
 
 interface WebhookCheckoutSession {
@@ -41,7 +36,7 @@ export class HandleWebhookUseCase {
     private readonly prisma: PrismaService,
     private readonly stripeService: StripeService,
     private readonly configService: ConfigService,
-    @Inject(EMAIL_PORT) private readonly emailPort: EmailPort,
+    private readonly emailQueueService: EmailQueueService,
   ) {}
 
   async execute(payload: string, signature: string): Promise<void> {
@@ -108,30 +103,19 @@ export class HandleWebhookUseCase {
 
     this.logger.log(`Subscription created for user: ${user.id}, plan: ${plan}`);
 
-    // Send plan upgrade email (non-blocking)
+    // Send plan upgrade email via queue
     if (plan !== Plan.FREE) {
-      this.sendPlanUpgradeEmail(user.email, user.name, plan).catch((error) => {
-        this.logger.error(`Failed to send plan upgrade email to ${user.email}`, error);
+      const frontendUrl = this.configService.get<string>('FRONTEND_URL') ?? 'https://coucou-ia.com';
+      await this.emailQueueService.addJob({
+        type: 'plan-upgrade',
+        to: user.email,
+        data: {
+          userName: user.name ?? user.email.split('@')[0],
+          planName: plan as 'SOLO' | 'PRO',
+          dashboardUrl: `${frontendUrl}/projects`,
+        },
       });
     }
-  }
-
-  private async sendPlanUpgradeEmail(email: string, userName: string, plan: Plan): Promise<void> {
-    const frontendUrl = this.configService.get<string>('FRONTEND_URL') ?? 'https://coucou-ia.com';
-    const { html, text } = generatePlanUpgradeEmail({
-      userName,
-      planName: plan as 'SOLO' | 'PRO',
-      dashboardUrl: `${frontendUrl}/projects`,
-    });
-
-    await this.emailPort.send({
-      to: email,
-      subject: `Bienvenue sur le plan ${plan} - Vos nouvelles capacités`,
-      html,
-      text,
-    });
-
-    this.logger.log(`Plan upgrade email sent to ${email}`);
   }
 
   private async handleSubscriptionUpdated(subscription: WebhookSubscription): Promise<void> {
@@ -180,35 +164,19 @@ export class HandleWebhookUseCase {
 
     this.logger.log(`Subscription deleted for user: ${user.id}, previousPlan: ${previousPlan}`);
 
-    // Send subscription ended email (non-blocking)
-    // TODO: Migrate to BullMQ when available
+    // Send subscription ended email via queue
     if (previousPlan === Plan.SOLO || previousPlan === Plan.PRO) {
-      this.sendSubscriptionEndedEmail(user.email, user.name, previousPlan).catch((error) => {
-        this.logger.error(`Failed to send subscription ended email to ${user.email}`, error);
+      const frontendUrl = this.configService.get<string>('FRONTEND_URL') ?? 'https://coucou-ia.com';
+      await this.emailQueueService.addJob({
+        type: 'subscription-ended',
+        to: user.email,
+        data: {
+          userName: user.name ?? user.email.split('@')[0],
+          previousPlan,
+          billingUrl: `${frontendUrl}/billing`,
+        },
       });
     }
-  }
-
-  private async sendSubscriptionEndedEmail(
-    email: string,
-    userName: string,
-    previousPlan: 'SOLO' | 'PRO',
-  ): Promise<void> {
-    const frontendUrl = this.configService.get<string>('FRONTEND_URL') ?? 'https://coucou-ia.com';
-    const { html, text } = generateSubscriptionEndedEmail({
-      userName,
-      previousPlan,
-      billingUrl: `${frontendUrl}/billing`,
-    });
-
-    await this.emailPort.send({
-      to: email,
-      subject: 'Votre abonnement Coucou IA a pris fin',
-      html,
-      text,
-    });
-
-    this.logger.log(`Subscription ended email sent to ${email}`);
   }
 
   private async findUserByStripeCustomerId(stripeCustomerId: string) {

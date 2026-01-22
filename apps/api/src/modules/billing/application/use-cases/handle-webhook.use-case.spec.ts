@@ -5,7 +5,7 @@ import { ConfigService } from '@nestjs/config';
 import { HandleWebhookUseCase } from './handle-webhook.use-case';
 import type { PrismaService } from '../../../../prisma';
 import type { StripeService } from '../../infrastructure/stripe.service';
-import type { EmailPort } from '../../../email';
+import type { EmailQueueService } from '../../../../infrastructure/queue';
 
 describe('HandleWebhookUseCase', () => {
   let useCase: HandleWebhookUseCase;
@@ -16,7 +16,7 @@ describe('HandleWebhookUseCase', () => {
   };
   let mockStripeService: Partial<StripeService>;
   let mockConfigService: Partial<ConfigService>;
-  let mockEmailPort: Partial<EmailPort>;
+  let mockEmailQueueService: Partial<EmailQueueService>;
 
   const createMockPrisma = () => {
     const mock = {
@@ -49,15 +49,15 @@ describe('HandleWebhookUseCase', () => {
       get: vi.fn().mockReturnValue('https://coucou-ia.com'),
     };
 
-    mockEmailPort = {
-      send: vi.fn().mockResolvedValue(undefined),
+    mockEmailQueueService = {
+      addJob: vi.fn().mockResolvedValue(undefined),
     };
 
     useCase = new HandleWebhookUseCase(
       mockPrisma as unknown as PrismaService,
       mockStripeService as unknown as StripeService,
       mockConfigService as unknown as ConfigService,
-      mockEmailPort as EmailPort,
+      mockEmailQueueService as EmailQueueService,
     );
   });
 
@@ -87,7 +87,7 @@ describe('HandleWebhookUseCase', () => {
         where: { stripeCustomerId: 'cus_123' },
       });
       expect(mockPrisma.$transaction).not.toHaveBeenCalled();
-      expect(mockEmailPort.send).not.toHaveBeenCalled();
+      expect(mockEmailQueueService.addJob).not.toHaveBeenCalled();
     });
 
     it('should downgrade SOLO user to FREE and send email', async () => {
@@ -118,10 +118,10 @@ describe('HandleWebhookUseCase', () => {
       // Wait for non-blocking email
       await new Promise((resolve) => setTimeout(resolve, 10));
 
-      expect(mockEmailPort.send).toHaveBeenCalledWith(
+      expect(mockEmailQueueService.addJob).toHaveBeenCalledWith(
         expect.objectContaining({
+          type: 'subscription-ended',
           to: 'test@test.com',
-          subject: 'Votre abonnement Coucou IA a pris fin',
         }),
       );
     });
@@ -155,10 +155,10 @@ describe('HandleWebhookUseCase', () => {
       // Wait for non-blocking email
       await new Promise((resolve) => setTimeout(resolve, 10));
 
-      expect(mockEmailPort.send).toHaveBeenCalledWith(
+      expect(mockEmailQueueService.addJob).toHaveBeenCalledWith(
         expect.objectContaining({
+          type: 'subscription-ended',
           to: 'pro@test.com',
-          subject: 'Votre abonnement Coucou IA a pris fin',
         }),
       );
     });
@@ -192,7 +192,7 @@ describe('HandleWebhookUseCase', () => {
       // Wait to ensure email is not sent
       await new Promise((resolve) => setTimeout(resolve, 10));
 
-      expect(mockEmailPort.send).not.toHaveBeenCalled();
+      expect(mockEmailQueueService.addJob).not.toHaveBeenCalled();
     });
 
     it('should succeed even if email fails', async () => {
@@ -218,7 +218,7 @@ describe('HandleWebhookUseCase', () => {
       mockPrisma.user.findFirst.mockResolvedValue(user);
       mockPrisma.subscription.delete.mockResolvedValue({});
       mockPrisma.user.update.mockResolvedValue({ ...user, plan: Plan.FREE });
-      (mockEmailPort.send as Mock).mockRejectedValue(new Error('Email service down'));
+      (mockEmailQueueService.addJob as Mock).mockRejectedValue(new Error('Email service down'));
 
       // Should not throw
       await expect(useCase.execute('payload', 'signature')).resolves.not.toThrow();
@@ -226,7 +226,7 @@ describe('HandleWebhookUseCase', () => {
       // Wait for non-blocking email attempt
       await new Promise((resolve) => setTimeout(resolve, 10));
 
-      expect(mockEmailPort.send).toHaveBeenCalled();
+      expect(mockEmailQueueService.addJob).toHaveBeenCalled();
     });
 
     it('should handle invalid webhook event', async () => {
