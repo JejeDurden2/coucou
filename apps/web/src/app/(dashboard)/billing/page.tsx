@@ -74,7 +74,7 @@ export default function BillingPage(): React.ReactNode {
         loadingPlan={loadingPlan}
       />
 
-      {currentPlan !== Plan.FREE && (
+      {currentPlan !== Plan.FREE && subscription?.status && (
         <div className="pt-4 border-t max-w-4xl space-y-4">
           <div className="flex items-center justify-between">
             <div>
@@ -95,15 +95,15 @@ export default function BillingPage(): React.ReactNode {
           <div className="flex items-center justify-between">
             <div>
               <h3 className="font-medium">
-                {subscription?.cancelAtPeriodEnd ? "Réactiver l'abonnement" : "Annuler l'abonnement"}
+                {subscription.cancelAtPeriodEnd ? "Réactiver l'abonnement" : "Annuler l'abonnement"}
               </h3>
               <p className="text-sm text-muted-foreground">
-                {subscription?.cancelAtPeriodEnd
+                {subscription.cancelAtPeriodEnd
                   ? "Votre abonnement est programmé pour s'arrêter. Vous pouvez le réactiver."
                   : "Vous conserverez l'accès jusqu'à la fin de votre période de facturation."}
               </p>
             </div>
-            {subscription?.cancelAtPeriodEnd ? (
+            {subscription.cancelAtPeriodEnd ? (
               <CancelDowngradeButton
                 onCancel={() => cancelDowngrade.mutate()}
                 isPending={cancelDowngrade.isPending}
@@ -111,7 +111,7 @@ export default function BillingPage(): React.ReactNode {
             ) : (
               <DowngradeModal
                 currentPlan={currentPlan}
-                currentPeriodEnd={subscription?.currentPeriodEnd ?? null}
+                currentPeriodEnd={subscription.currentPeriodEnd}
                 onConfirm={() => downgrade.mutate()}
                 isPending={downgrade.isPending}
               />
