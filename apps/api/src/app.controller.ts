@@ -1,9 +1,22 @@
 import { Controller, Get } from '@nestjs/common';
+
 import { AppService } from './app.service';
+import { EmailQueueService, type QueueHealthStatus } from './infrastructure/queue';
+
+interface HealthCheckResponse {
+  status: 'ok' | 'degraded';
+  timestamp: string;
+  services: {
+    redis: QueueHealthStatus;
+  };
+}
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor(
+    private readonly appService: AppService,
+    private readonly emailQueueService: EmailQueueService,
+  ) {}
 
   @Get()
   getHello(): string {
@@ -11,7 +24,13 @@ export class AppController {
   }
 
   @Get('health')
-  getHealth() {
-    return { status: 'ok', timestamp: new Date().toISOString() };
+  async getHealth(): Promise<HealthCheckResponse> {
+    const redis = await this.emailQueueService.getHealth();
+
+    return {
+      status: redis.status === 'healthy' ? 'ok' : 'degraded',
+      timestamp: new Date().toISOString(),
+      services: { redis },
+    };
   }
 }

@@ -1,0 +1,17 @@
+import type { DefaultJobOptions } from 'bullmq';
+
+export const EMAIL_QUEUE_NAME = 'email';
+
+export const defaultJobOptions: DefaultJobOptions = {
+  attempts: 3,
+  backoff: {
+    type: 'exponential',
+    delay: 1000, // 1s, 2s, 4s
+  },
+  removeOnComplete: {
+    age: 7 * 24 * 60 * 60, // 7 days in seconds
+  },
+  removeOnFail: {
+    age: 30 * 24 * 60 * 60, // 30 days in seconds
+  },
+};
