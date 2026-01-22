@@ -28,6 +28,14 @@ enum LLMProvider {
   ANTHROPIC
 }
 
+enum ScanJobStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  PARTIAL
+  FAILED
+}
+
 // ============================================
 // MODELS
 // ============================================
@@ -100,8 +108,9 @@ model Project {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  prompts Prompt[]
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  prompts  Prompt[]
+  scanJobs ScanJob[]
 
   @@index([userId])
   @@map("projects")
@@ -118,8 +127,9 @@ model Prompt {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  scans   Scan[]
+  project  Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  scans    Scan[]
+  scanJobs ScanJob[]
 
   @@index([projectId])
   @@map("prompts")
@@ -142,4 +152,28 @@ model Scan {
 
   @@index([promptId, executedAt])
   @@map("scans")
+}
+
+model ScanJob {
+  id               String        @id @default(cuid())
+  projectId        String        @map("project_id")
+  userId           String        @map("user_id")
+  promptId         String?       @map("prompt_id") // null = project scan, set = single prompt scan
+  status           ScanJobStatus @default(PENDING)
+  totalPrompts     Int           @map("total_prompts")
+  processedPrompts Int           @default(0) @map("processed_prompts")
+  successCount     Int           @default(0) @map("success_count")
+  failureCount     Int           @default(0) @map("failure_count")
+  errorMessage     String?       @map("error_message")
+  startedAt        DateTime?     @map("started_at")
+  completedAt      DateTime?     @map("completed_at")
+  createdAt        DateTime      @default(now()) @map("created_at")
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  prompt  Prompt? @relation(fields: [promptId], references: [id], onDelete: Cascade)
+
+  @@index([projectId, createdAt])
+  @@index([userId, status])
+  @@index([promptId])
+  @@map("scan_jobs")
 }

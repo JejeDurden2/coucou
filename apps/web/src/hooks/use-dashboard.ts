@@ -1,8 +1,11 @@
 'use client';
 
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useCallback } from 'react';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { toast } from 'sonner';
+import type { ScanJobStatusResponse } from '@coucou-ia/shared';
 import { apiClient, ApiClientError } from '@/lib/api-client';
+import { useScanJobPolling } from './use-scan-job-polling';
 
 export function useDashboardStats(projectId: string) {
   return useQuery({
@@ -30,54 +33,50 @@ export function useRecommendations(projectId: string) {
 }
 
 export function useTriggerScan(projectId: string) {
-  const queryClient = useQueryClient();
+  const onCompleted = useCallback((data: ScanJobStatusResponse) => {
+    toast.success('Scan terminé', {
+      description: `${data.successCount} prompt(s) analysé(s) avec succès.`,
+    });
+  }, []);
 
-  return useMutation({
+  const onPartial = useCallback((data: ScanJobStatusResponse) => {
+    toast.warning('Scan partiel terminé', {
+      description: `${data.successCount} succès, ${data.failureCount} échec(s).`,
+    });
+  }, []);
+
+  const onFailed = useCallback((data: ScanJobStatusResponse) => {
+    toast.error('Scan échoué', {
+      description: data.errorMessage || 'Une erreur est survenue.',
+    });
+  }, []);
+
+  const { startPolling, isPolling, scanProgress } = useScanJobPolling({
+    projectId,
+    onCompleted,
+    onPartial,
+    onFailed,
+  });
+
+  const triggerMutation = useMutation({
     mutationFn: () => apiClient.triggerScan(projectId),
     onSuccess: (data) => {
-      queryClient.invalidateQueries({
-        queryKey: ['projects', projectId, 'scans'],
-      });
-      queryClient.invalidateQueries({
-        queryKey: ['projects', projectId, 'stats'],
-      });
-      queryClient.invalidateQueries({
-        queryKey: ['projects', projectId, 'recommendations'],
-      });
-
-      const hasErrors = data.some((scan) => scan.providerErrors?.length);
-      const allSkipped = data.every((scan) => scan.skippedReason);
-      const cooldownSkips = data.filter((scan) => scan.skippedReason?.includes('cooldown'));
-      const allOnCooldown = cooldownSkips.length === data.length && data.length > 0;
-
-      if (allOnCooldown) {
-        toast.warning('Scan impossible', {
-          description: 'Tous les prompts sont en période de cooldown.',
-        });
-      } else if (allSkipped && data.length > 0) {
-        toast.warning('Scan terminé avec des erreurs', {
-          description: 'Tous les prompts ont été ignorés ou ont échoué.',
-        });
-      } else if (cooldownSkips.length > 0) {
-        const scannedCount = data.length - cooldownSkips.length;
-        toast.success('Scan partiel terminé', {
-          description: `${scannedCount} prompt(s) analysé(s). ${cooldownSkips.length} en cooldown.`,
-        });
-      } else if (hasErrors) {
-        toast.warning('Scan partiel terminé', {
-          description: 'Certains fournisseurs LLM ont échoué.',
-        });
-      } else {
-        toast.success('Scan terminé', {
-          description: `${data.length} prompt(s) analysé(s) avec succès.`,
-        });
+      if (data.totalPrompts === 0) {
+        toast.warning('Aucun prompt à scanner');
+        return;
       }
+      toast.info('Scan lancé', { description: 'Vous serez notifié des résultats.' });
+      startPolling(data.jobId);
     },
     onError: (error) => {
       if (error instanceof ApiClientError) {
         if (error.code === 'ALL_PROVIDERS_FAILED') {
           toast.error('Tous les fournisseurs LLM ont échoué', {
             description: 'Vérifiez la configuration des clés API.',
+          });
+        } else if (error.code === 'SCAN_LIMIT_EXCEEDED') {
+          toast.warning('Limite de scans atteinte', {
+            description: error.message,
           });
         } else {
           toast.error('Erreur lors du scan', {
@@ -91,43 +90,47 @@ export function useTriggerScan(projectId: string) {
       }
     },
   });
+
+  const isScanning = triggerMutation.isPending || isPolling;
+
+  return {
+    triggerScan: triggerMutation,
+    isScanning,
+    scanProgress,
+  };
 }
 
 export function useTriggerPromptScan(projectId: string) {
-  const queryClient = useQueryClient();
+  const onCompleted = useCallback(() => {
+    toast.success('Scan terminé', {
+      description: 'Le prompt a été analysé avec succès.',
+    });
+  }, []);
 
-  return useMutation({
+  const onPartial = useCallback(() => {
+    toast.warning('Scan partiel terminé', {
+      description: 'Certains fournisseurs LLM ont échoué.',
+    });
+  }, []);
+
+  const onFailed = useCallback((data: ScanJobStatusResponse) => {
+    toast.error('Scan échoué', {
+      description: data.errorMessage || 'Une erreur est survenue.',
+    });
+  }, []);
+
+  const { startPolling, isPolling, scanProgress } = useScanJobPolling({
+    projectId,
+    onCompleted,
+    onPartial,
+    onFailed,
+  });
+
+  const triggerMutation = useMutation({
     mutationFn: (promptId: string) => apiClient.triggerPromptScan(promptId),
     onSuccess: (data) => {
-      queryClient.invalidateQueries({
-        queryKey: ['projects', projectId, 'scans'],
-      });
-      queryClient.invalidateQueries({
-        queryKey: ['projects', projectId, 'stats'],
-      });
-      queryClient.invalidateQueries({
-        queryKey: ['projects', projectId, 'recommendations'],
-      });
-
-      if (data.skippedReason) {
-        if (data.skippedReason.includes('cooldown')) {
-          toast.warning('Scan impossible', {
-            description: 'Ce prompt est en période de cooldown.',
-          });
-        } else {
-          toast.warning('Scan ignoré', {
-            description: data.skippedReason,
-          });
-        }
-      } else if (data.providerErrors?.length) {
-        toast.warning('Scan partiel terminé', {
-          description: 'Certains fournisseurs LLM ont échoué.',
-        });
-      } else {
-        toast.success('Scan terminé', {
-          description: 'Le prompt a été analysé avec succès.',
-        });
-      }
+      toast.info('Scan lancé', { description: 'Vous serez notifié des résultats.' });
+      startPolling(data.jobId);
     },
     onError: (error) => {
       if (error instanceof ApiClientError) {
@@ -135,7 +138,7 @@ export function useTriggerPromptScan(projectId: string) {
           toast.error('Tous les fournisseurs LLM ont échoué', {
             description: 'Vérifiez la configuration des clés API.',
           });
-        } else if (error.code === 'SCAN_COOLDOWN') {
+        } else if (error.code === 'SCAN_COOLDOWN' || error.code === 'VALIDATION_ERROR') {
           toast.warning('Scan impossible', {
             description: 'Ce prompt est en période de cooldown.',
           });
@@ -151,4 +154,12 @@ export function useTriggerPromptScan(projectId: string) {
       }
     },
   });
+
+  const isScanning = triggerMutation.isPending || isPolling;
+
+  return {
+    triggerPromptScan: triggerMutation,
+    isScanning,
+    scanProgress,
+  };
 }

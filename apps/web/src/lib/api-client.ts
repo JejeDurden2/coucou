@@ -6,6 +6,8 @@ import type {
   CreatePromptInput,
   UpdatePromptInput,
   Scan,
+  ScanJobResponse,
+  ScanJobStatusResponse,
   DashboardStats,
   HistoricalStats,
   RecommendationsResponse,
@@ -173,14 +175,18 @@ class ApiClient {
   }
 
   // Scans
-  async triggerScan(projectId: string): Promise<Scan[]> {
-    return this.fetch<Scan[]>(`/projects/${projectId}/scans`, {
+  async triggerScan(projectId: string): Promise<ScanJobResponse> {
+    return this.fetch<ScanJobResponse>(`/projects/${projectId}/scans`, {
       method: 'POST',
     });
   }
 
-  async triggerPromptScan(promptId: string): Promise<Scan> {
-    return this.fetch<Scan>(`/prompts/${promptId}/scan`, {
+  async getScanJobStatus(projectId: string, jobId: string): Promise<ScanJobStatusResponse> {
+    return this.fetch<ScanJobStatusResponse>(`/projects/${projectId}/scan-jobs/${jobId}`);
+  }
+
+  async triggerPromptScan(promptId: string): Promise<ScanJobResponse> {
+    return this.fetch<ScanJobResponse>(`/prompts/${promptId}/scan`, {
       method: 'POST',
     });
   }

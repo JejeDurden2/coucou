@@ -116,8 +116,8 @@ export default function ProjectDashboardPage({
   const { data: project, isLoading: projectLoading } = useProject(id);
   const { data: stats, isLoading: statsLoading } = useDashboardStats(id);
   const { data: recommendationsData } = useRecommendations(id);
-  const triggerScan = useTriggerScan(id);
-  const triggerPromptScan = useTriggerPromptScan(id);
+  const { triggerScan, isScanning, scanProgress } = useTriggerScan(id);
+  const { triggerPromptScan } = useTriggerPromptScan(id);
   const createPrompt = useCreatePrompt(id);
   const deletePrompt = useDeletePrompt(id);
 
@@ -194,7 +194,7 @@ export default function ProjectDashboardPage({
 
   // Compute scan button disabled reason
   const getScanDisabledReason = (): string | null => {
-    if (triggerScan.isPending) return null;
+    if (isScanning) return null;
     if (!hasPrompts) return 'Ajoutez des prompts pour pouvoir scanner';
     if (allOnCooldown) {
       const frequency = PLAN_LIMITS[userPlan].scanFrequency === 'daily' ? 'jour' : 'semaine';
@@ -203,7 +203,7 @@ export default function ProjectDashboardPage({
     return null;
   };
   const scanDisabledReason = getScanDisabledReason();
-  const isScanDisabled = triggerScan.isPending || !hasPrompts || allOnCooldown;
+  const isScanDisabled = isScanning || !hasPrompts || allOnCooldown;
 
   return (
     <div className="space-y-6">
@@ -226,10 +226,12 @@ export default function ProjectDashboardPage({
               )}
             </div>
             {/* Scan Status */}
-            {triggerScan.isPending ? (
+            {isScanning ? (
               <span className="flex items-center gap-1.5 text-xs text-primary">
                 <PulsingDot color="primary" />
-                Scan en cours…
+                {scanProgress?.status === 'PROCESSING'
+                  ? `Analyse... ${Math.round((scanProgress.progress ?? 0) * 100)}%`
+                  : 'En attente...'}
               </span>
             ) : stats?.lastScanAt ? (
               <p className="text-xs text-muted-foreground">
@@ -248,13 +250,15 @@ export default function ProjectDashboardPage({
                   size="sm"
                   className={isScanDisabled ? 'pointer-events-none' : undefined}
                 >
-                  {triggerScan.isPending ? (
+                  {isScanning ? (
                     <>
                       <RefreshCw
                         className="mr-2 h-4 w-4 animate-spin motion-reduce:animate-none"
                         aria-hidden="true"
                       />
-                      Scan en cours…
+                      {scanProgress?.status === 'PROCESSING'
+                        ? `Analyse... ${Math.round((scanProgress.progress ?? 0) * 100)}%`
+                        : 'En attente...'}
                     </>
                   ) : (
                     <>

@@ -158,6 +158,34 @@ export interface ScanHistory {
 }
 
 // ============================================
+// Scan Job Types (async scan processing)
+// ============================================
+
+export type ScanJobStatus = 'PENDING' | 'PROCESSING' | 'COMPLETED' | 'PARTIAL' | 'FAILED';
+
+export interface ScanJobResponse {
+  jobId: string;
+  status: ScanJobStatus;
+  totalPrompts: number;
+  createdAt: string;
+}
+
+export interface ScanJobStatusResponse {
+  jobId: string;
+  status: ScanJobStatus;
+  totalPrompts: number;
+  processedPrompts: number;
+  successCount: number;
+  failureCount: number;
+  progress: number;
+  startedAt: string | null;
+  completedAt: string | null;
+  createdAt: string;
+  scans?: Scan[];
+  errorMessage?: string;
+}
+
+// ============================================
 // Dashboard Types
 // ============================================
 
