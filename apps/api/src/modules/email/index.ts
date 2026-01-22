@@ -33,3 +33,7 @@ export {
   generateSubscriptionEndedEmail,
   type SubscriptionEndedEmailData,
 } from './infrastructure/templates/subscription-ended.template';
+export {
+  generateAccountDeletedEmail,
+  type AccountDeletedEmailData,
+} from './infrastructure/templates/account-deleted.template';

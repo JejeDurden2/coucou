@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 
 import { PrismaModule } from '../../prisma';
 import { AuthModule } from '../auth/auth.module';
@@ -9,6 +9,8 @@ import { CreateCheckoutUseCase } from './application/use-cases/create-checkout.u
 import { CreatePortalUseCase } from './application/use-cases/create-portal.use-case';
 import { HandleWebhookUseCase } from './application/use-cases/handle-webhook.use-case';
 import { DowngradeSubscriptionUseCase } from './application/use-cases/downgrade-subscription.use-case';
+import { GetSubscriptionUseCase } from './application/use-cases/get-subscription.use-case';
+import { CancelDowngradeUseCase } from './application/use-cases/cancel-downgrade.use-case';
 import { BillingController } from './presentation/billing.controller';
 import { PlanLimitsService } from './domain/services/plan-limits.service';
 import { SubscriptionRepositoryAdapter } from './infrastructure/adapters/subscription.repository.adapter';
@@ -17,7 +19,7 @@ import { SUBSCRIPTION_REPOSITORY } from './domain/repositories/subscription.repo
 import { STRIPE_PORT } from './domain/ports/stripe.port';
 
 @Module({
-  imports: [PrismaModule, AuthModule, EmailModule],
+  imports: [PrismaModule, forwardRef(() => AuthModule), EmailModule],
   controllers: [BillingController],
   providers: [
     StripeService,
@@ -25,6 +27,8 @@ import { STRIPE_PORT } from './domain/ports/stripe.port';
     CreatePortalUseCase,
     HandleWebhookUseCase,
     DowngradeSubscriptionUseCase,
+    GetSubscriptionUseCase,
+    CancelDowngradeUseCase,
     {
       provide: PlanLimitsService,
       useValue: PlanLimitsService,
@@ -38,6 +42,6 @@ import { STRIPE_PORT } from './domain/ports/stripe.port';
       useClass: StripeAdapter,
     },
   ],
-  exports: [StripeService, PlanLimitsService],
+  exports: [StripeService, PlanLimitsService, SUBSCRIPTION_REPOSITORY, STRIPE_PORT],
 })
 export class BillingModule {}

@@ -125,4 +125,52 @@ export class PrismaUserRepository implements UserRepository {
       await tx.user.delete({ where: { id: userId } });
     });
   }
+
+  async anonymize(userId: string): Promise<void> {
+    await this.prisma.$transaction(async (tx) => {
+      // Get all projects for the user
+      const projects = await tx.project.findMany({
+        where: { userId },
+        select: { id: true },
+      });
+      const projectIds = projects.map((p) => p.id);
+
+      // Get all prompts for these projects
+      const prompts = await tx.prompt.findMany({
+        where: { projectId: { in: projectIds } },
+        select: { id: true },
+      });
+      const promptIds = prompts.map((p) => p.id);
+
+      // Delete scans
+      await tx.scan.deleteMany({ where: { promptId: { in: promptIds } } });
+
+      // Delete prompts
+      await tx.prompt.deleteMany({ where: { projectId: { in: projectIds } } });
+
+      // Delete projects
+      await tx.project.deleteMany({ where: { userId } });
+
+      // Delete subscription
+      await tx.subscription.deleteMany({ where: { userId } });
+
+      // Delete password reset tokens
+      await tx.passwordResetToken.deleteMany({ where: { userId } });
+
+      // Anonymize user data (soft delete)
+      await tx.user.update({
+        where: { id: userId },
+        data: {
+          email: `deleted-${userId}@anonymized.local`,
+          name: 'Utilisateur supprimé',
+          password: null,
+          googleId: null,
+          avatarUrl: null,
+          stripeCustomerId: null,
+          plan: 'FREE',
+          deletedAt: new Date(),
+        },
+      });
+    });
+  }
 }

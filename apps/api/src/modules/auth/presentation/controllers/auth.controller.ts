@@ -33,6 +33,7 @@ import { CookieService, REFRESH_TOKEN_COOKIE } from '../../infrastructure/servic
 import type { GoogleProfile } from '../strategies/google.strategy';
 import { CurrentUser } from '../decorators/current-user.decorator';
 import {
+  DeleteAccountRequestDto,
   ForgotPasswordRequestDto,
   LoginRequestDto,
   RegisterRequestDto,
@@ -222,15 +223,24 @@ export class AuthController {
 
   @Delete('me')
   @UseGuards(JwtAuthGuard)
-  @HttpCode(HttpStatus.NO_CONTENT)
-  async deleteAccount(@CurrentUser() user: AuthenticatedUser) {
-    const result = await this.deleteAccountUseCase.execute(user.id);
+  @HttpCode(HttpStatus.OK)
+  async deleteAccount(
+    @CurrentUser() user: AuthenticatedUser,
+    @Body() dto: DeleteAccountRequestDto,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    const result = await this.deleteAccountUseCase.execute({
+      userId: user.id,
+      confirmation: dto.confirmation,
+    });
 
     if (!result.ok) {
       throw new HttpException(result.error.toJSON(), result.error.statusCode);
     }
 
-    return;
+    this.cookieService.clearAuthCookies(res);
+
+    return result.value;
   }
 
   @Get('google')

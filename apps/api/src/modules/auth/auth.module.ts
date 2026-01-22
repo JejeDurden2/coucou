@@ -1,8 +1,10 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 
+import { BillingModule } from '../billing/billing.module';
+import { EmailModule } from '../email/email.module';
 import { USER_REPOSITORY, PASSWORD_RESET_REPOSITORY } from './domain';
 import { PrismaUserRepository } from './infrastructure/persistence/prisma-user.repository';
 import { PrismaPasswordResetRepository } from './infrastructure/persistence/prisma-password-reset.repository';
@@ -37,6 +39,8 @@ import { GoogleStrategy } from './presentation/strategies/google.strategy';
         },
       }),
     }),
+    forwardRef(() => BillingModule),
+    EmailModule,
   ],
   controllers: [AuthController],
   providers: [

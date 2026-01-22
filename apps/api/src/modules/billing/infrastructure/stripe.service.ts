@@ -160,6 +160,12 @@ export class StripeService {
     });
   }
 
+  async cancelSubscription(subscriptionId: string): Promise<StripeSubscription> {
+    return this.fetch<StripeSubscription>(`/subscriptions/${subscriptionId}?prorate=true`, {
+      method: 'DELETE',
+    });
+  }
+
   getPlanFromPriceId(priceId: string): Plan {
     for (const [plan, id] of Object.entries(this.priceIds)) {
       if (id === priceId) {

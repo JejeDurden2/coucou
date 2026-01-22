@@ -26,4 +26,5 @@ export interface UserRepository {
   updateName(userId: string, name: string): Promise<User>;
   updatePassword(userId: string, hashedPassword: string): Promise<User>;
   delete(userId: string): Promise<void>;
+  anonymize(userId: string): Promise<void>;
 }

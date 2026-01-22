@@ -57,3 +57,11 @@ export class ResetPasswordRequestDto {
   })
   password!: string;
 }
+
+export class DeleteAccountRequestDto {
+  @IsString()
+  @Matches(/^SUPPRIMER$/, {
+    message: 'Le texte de confirmation doit être "SUPPRIMER"',
+  })
+  confirmation!: string;
+}
