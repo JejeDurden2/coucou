@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   Headers,
   HttpCode,
   HttpStatus,
@@ -18,12 +19,16 @@ import { CreateCheckoutUseCase } from '../application/use-cases/create-checkout.
 import { CreatePortalUseCase } from '../application/use-cases/create-portal.use-case';
 import { HandleWebhookUseCase } from '../application/use-cases/handle-webhook.use-case';
 import { DowngradeSubscriptionUseCase } from '../application/use-cases/downgrade-subscription.use-case';
+import { GetSubscriptionUseCase } from '../application/use-cases/get-subscription.use-case';
+import { CancelDowngradeUseCase } from '../application/use-cases/cancel-downgrade.use-case';
 import {
   CreateCheckoutDto,
   CreatePortalDto,
   type CheckoutSessionResponse,
   type PortalSessionResponse,
+  type SubscriptionResponse,
   type DowngradeSubscriptionResponse,
+  type CancelDowngradeResponse,
 } from '../application/dto/billing.dto';
 
 @Controller('billing')
@@ -33,6 +38,8 @@ export class BillingController {
     private readonly createPortalUseCase: CreatePortalUseCase,
     private readonly handleWebhookUseCase: HandleWebhookUseCase,
     private readonly downgradeSubscriptionUseCase: DowngradeSubscriptionUseCase,
+    private readonly getSubscriptionUseCase: GetSubscriptionUseCase,
+    private readonly cancelDowngradeUseCase: CancelDowngradeUseCase,
   ) {}
 
   @Post('checkout')
@@ -73,12 +80,40 @@ export class BillingController {
     return result.value;
   }
 
+  @Get('subscription')
+  @UseGuards(JwtAuthGuard)
+  async getSubscription(@CurrentUser() user: AuthenticatedUser): Promise<SubscriptionResponse> {
+    const result = await this.getSubscriptionUseCase.execute({
+      userId: user.id,
+    });
+
+    if (!result.ok) {
+      throw result.error;
+    }
+
+    return result.value;
+  }
+
   @Post('downgrade')
   @UseGuards(JwtAuthGuard)
   async downgradeSubscription(
     @CurrentUser() user: AuthenticatedUser,
   ): Promise<DowngradeSubscriptionResponse> {
     const result = await this.downgradeSubscriptionUseCase.execute({
+      userId: user.id,
+    });
+
+    if (!result.ok) {
+      throw result.error;
+    }
+
+    return result.value;
+  }
+
+  @Post('cancel-downgrade')
+  @UseGuards(JwtAuthGuard)
+  async cancelDowngrade(@CurrentUser() user: AuthenticatedUser): Promise<CancelDowngradeResponse> {
+    const result = await this.cancelDowngradeUseCase.execute({
       userId: user.id,
     });
 

@@ -12,6 +12,9 @@ import type {
   GeneratePromptsResponse,
   User,
   ApiError,
+  SubscriptionInfo,
+  DowngradeResponse,
+  CancelDowngradeResponse,
 } from '@coucou-ia/shared';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001';
@@ -90,9 +93,10 @@ class ApiClient {
     return this.fetch<unknown>('/auth/me/export');
   }
 
-  async deleteAccount(): Promise<void> {
-    await this.fetch<void>('/auth/me', {
+  async deleteAccount(confirmation: string): Promise<{ message: string }> {
+    return this.fetch<{ message: string }>('/auth/me', {
       method: 'DELETE',
+      body: JSON.stringify({ confirmation }),
     });
   }
 
@@ -223,6 +227,22 @@ class ApiClient {
     return this.fetch<{ url: string }>('/billing/portal', {
       method: 'POST',
       body: JSON.stringify({ returnUrl }),
+    });
+  }
+
+  async getSubscription(): Promise<SubscriptionInfo> {
+    return this.fetch<SubscriptionInfo>('/billing/subscription');
+  }
+
+  async downgradeSubscription(): Promise<DowngradeResponse> {
+    return this.fetch<DowngradeResponse>('/billing/downgrade', {
+      method: 'POST',
+    });
+  }
+
+  async cancelDowngrade(): Promise<CancelDowngradeResponse> {
+    return this.fetch<CancelDowngradeResponse>('/billing/cancel-downgrade', {
+      method: 'POST',
     });
   }
 

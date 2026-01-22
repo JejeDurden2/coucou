@@ -474,3 +474,33 @@ export interface ApiError {
   timestamp: string;
   path: string;
 }
+
+// ============================================
+// Subscription Types
+// ============================================
+
+export enum SubscriptionStatus {
+  ACTIVE = 'ACTIVE',
+  PAST_DUE = 'PAST_DUE',
+  CANCELED = 'CANCELED',
+}
+
+export interface SubscriptionInfo {
+  plan: Plan;
+  status: SubscriptionStatus | null;
+  currentPeriodEnd: string | null;
+  cancelAtPeriodEnd: boolean;
+}
+
+export interface DowngradeResponse {
+  success: boolean;
+  effectiveDate: string;
+  currentPlan: Plan;
+  message: string;
+}
+
+export interface CancelDowngradeResponse {
+  success: boolean;
+  currentPlan: Plan;
+  message: string;
+}

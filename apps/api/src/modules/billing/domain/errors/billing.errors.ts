@@ -35,3 +35,12 @@ export class SubscriptionNotActiveError extends DomainError {
     super("L'abonnement n'est pas actif");
   }
 }
+
+export class SubscriptionNotPendingCancellationError extends DomainError {
+  readonly code = 'SUBSCRIPTION_NOT_PENDING_CANCELLATION' as const;
+  readonly statusCode = 400 as const;
+
+  constructor() {
+    super("L'abonnement n'est pas en cours d'annulation");
+  }
+}

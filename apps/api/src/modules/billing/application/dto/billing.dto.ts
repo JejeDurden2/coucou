@@ -1,5 +1,5 @@
 import { IsEnum, IsUrl } from 'class-validator';
-import { Plan } from '@prisma/client';
+import { Plan, SubscriptionStatus } from '@prisma/client';
 
 export class CreateCheckoutDto {
   @IsEnum(Plan)
@@ -25,9 +25,21 @@ export interface PortalSessionResponse {
   url: string;
 }
 
+export interface SubscriptionResponse {
+  plan: Plan;
+  status: SubscriptionStatus | null;
+  currentPeriodEnd: string | null;
+  cancelAtPeriodEnd: boolean;
+}
+
 export interface DowngradeSubscriptionResponse {
   success: boolean;
   effectiveDate: string;
+  currentPlan: Plan;
+  message: string;
+}
+
+export interface CancelDowngradeResponse {
   currentPlan: Plan;
   message: string;
 }
