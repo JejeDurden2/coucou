@@ -23,18 +23,26 @@ const SentimentResultSchema = z.object({
   kn: z.array(z.string()).min(1).max(10),
 });
 
-const SENTIMENT_SYSTEM_PROMPT = `Tu es un expert en analyse de perception de marque.
-Analyse la perception publique de la marque demandée et réponds UNIQUEMENT en JSON minifié.
+const SENTIMENT_SYSTEM_PROMPT = `Tu es un analyste senior en réputation de marque. Évalue la perception RÉELLE de la marque selon ces critères:
 
-Format de réponse attendu:
+SCORING STRICT (évite les scores neutres 65-75):
+- 85-100: Marque iconique, leader incontesté, forte communauté (Apple, Nike, Patagonia)
+- 70-84: Bonne réputation, quelques critiques mineures
+- 50-69: Perception mitigée, controverses ou problèmes connus
+- 30-49: Réputation dégradée, scandales ou critiques majeures
+- 0-29: Crise réputationnelle grave
+
+FACTEURS À ANALYSER:
+1. Notoriété et reconnaissance dans le domaine
+2. Qualité perçue des produits/services
+3. Controverses, scandales ou bad buzz récents
+4. Engagement et satisfaction client
+5. Position vs concurrents
+
+Réponds UNIQUEMENT en JSON minifié:
 {"s":score,"t":["theme1","theme2","theme3"],"kp":["positif1","positif2","positif3"],"kn":["negatif1","negatif2","negatif3"]}
 
-- s: score global de perception (0=très négatif, 100=très positif)
-- t: 3-5 thèmes/attributs associés à la marque
-- kp: 3-5 mots-clés positifs
-- kn: 3-5 mots-clés négatifs ou aspects à améliorer
-
-Pas de texte avant ou après le JSON. JSON uniquement.`;
+IMPORTANT: Sois PRÉCIS et DIFFÉRENCIÉ. Une marque inconnue ≠ 70%. Une startup récente = 40-55%. Un leader = 80+%.`;
 
 type ExecuteSentimentScanError = NotFoundError | ForbiddenError | AllSentimentProvidersFailedError;
 
@@ -84,7 +92,6 @@ export class ExecuteSentimentScanUseCase {
 
     const queryOptions: LLMQueryOptions = {
       systemPrompt: SENTIMENT_SYSTEM_PROMPT,
-      webSearch: true,
     };
 
     const [gptResult, claudeResult] = await Promise.all([
@@ -129,23 +136,22 @@ export class ExecuteSentimentScanUseCase {
     domain: string,
     brandContext: { businessType: string; targetAudience: string } | null,
   ): string {
-    const variantsStr = brandVariants.length > 0 ? brandVariants.join(', ') : 'aucune variante';
+    const variantsStr =
+      brandVariants.length > 0 ? ` (aussi connue comme: ${brandVariants.join(', ')})` : '';
     const contextStr = brandContext
-      ? `Contexte: ${brandContext.businessType}, cible ${brandContext.targetAudience}.`
+      ? `\nContexte business: ${brandContext.businessType}, audience cible: ${brandContext.targetAudience}.`
       : '';
 
-    return `Analyse la perception de la marque "${brandName}" (variantes: ${variantsStr}) dans le domaine ${domain}.
-${contextStr}
+    return `Marque: "${brandName}"${variantsStr}
+Domaine: ${domain}${contextStr}
 
-Réponds en JSON minifié uniquement:
-{"s":score_0_100,"t":["theme1","theme2","theme3"],"kp":["positif1","positif2","positif3"],"kn":["negatif1","negatif2","negatif3"]}
+Évalue cette marque selon:
+1. Est-elle connue/reconnue dans son domaine? (si inconnue = score bas 40-55)
+2. A-t-elle des controverses ou bad buzz connus?
+3. Quelle est sa réputation qualité?
+4. Comment se positionne-t-elle vs la concurrence?
 
-- s: score global de perception (0=très négatif, 100=très positif)
-- t: 3-5 thèmes/attributs associés à la marque
-- kp: 3-5 mots-clés positifs
-- kn: 3-5 mots-clés négatifs (ou aspects à améliorer)
-
-JSON uniquement, pas de texte hors JSON.`;
+JSON uniquement: {"s":score,"t":[themes],"kp":[positifs],"kn":[négatifs]}`;
   }
 
   private async queryWithRetry(
