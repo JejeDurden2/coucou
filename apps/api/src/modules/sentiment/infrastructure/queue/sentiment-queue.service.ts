@@ -4,6 +4,7 @@ import {
   type OnModuleInit,
   type OnModuleDestroy,
   Inject,
+  Optional,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectQueue } from '@nestjs/bullmq';
@@ -30,7 +31,7 @@ export class SentimentQueueService implements OnModuleInit, OnModuleDestroy {
     @Inject(SENTIMENT_SCAN_REPOSITORY)
     private readonly sentimentRepository: SentimentScanRepository,
     private readonly prisma: PrismaService,
-    private readonly configService: ConfigService,
+    @Optional() private readonly configService?: ConfigService,
   ) {}
 
   onModuleInit(): void {
@@ -44,7 +45,10 @@ export class SentimentQueueService implements OnModuleInit, OnModuleDestroy {
   }
 
   private setupEventListeners(): void {
-    const redisUrl = this.configService.get<string>('REDIS_URL', 'redis://localhost:6379');
+    const redisUrl =
+      this.configService?.get<string>('REDIS_URL') ??
+      process.env.REDIS_URL ??
+      'redis://localhost:6379';
 
     this.queueEvents = new QueueEvents(SENTIMENT_QUEUE_NAME, {
       connection: { url: redisUrl },
