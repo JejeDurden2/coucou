@@ -1,4 +1,12 @@
-import { IsEmail, IsString, MinLength, MaxLength, Matches } from 'class-validator';
+import {
+  IsEmail,
+  IsString,
+  MinLength,
+  MaxLength,
+  Matches,
+  IsBoolean,
+  Equals,
+} from 'class-validator';
 
 export class RegisterRequestDto {
   @IsEmail()
@@ -17,6 +25,10 @@ export class RegisterRequestDto {
       'Password must contain at least one lowercase letter, one uppercase letter, and one number',
   })
   password!: string;
+
+  @IsBoolean()
+  @Equals(true, { message: 'Vous devez accepter les conditions générales' })
+  acceptTerms!: boolean;
 }
 
 export class LoginRequestDto {

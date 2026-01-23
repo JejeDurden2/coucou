@@ -26,7 +26,7 @@ export default function RegisterPage() {
     setIsLoading(true);
 
     try {
-      await register(email, password, name);
+      await register(email, password, name, acceptTerms);
       // New users always go to onboarding for plan selection and first project
       router.push('/onboarding');
     } catch {
@@ -47,7 +47,17 @@ export default function RegisterPage() {
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          <GoogleButton label="S'inscrire avec Google" />
+          {error && (
+            <div className="rounded-lg bg-destructive/10 p-3 text-sm text-destructive">{error}</div>
+          )}
+
+          <GoogleButton
+            label="S'inscrire avec Google"
+            disabled={!acceptTerms}
+            onDisabledClick={() =>
+              setError('Veuillez accepter les conditions générales pour continuer.')
+            }
+          />
 
           <div className="relative">
             <div className="absolute inset-0 flex items-center">
@@ -59,11 +69,6 @@ export default function RegisterPage() {
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-4">
-            {error && (
-              <div className="rounded-lg bg-destructive/10 p-3 text-sm text-destructive">
-                {error}
-              </div>
-            )}
             <div className="space-y-2">
               <label htmlFor="name" className="text-sm font-medium">
                 Nom
@@ -113,7 +118,10 @@ export default function RegisterPage() {
                 type="checkbox"
                 id="terms"
                 checked={acceptTerms}
-                onChange={(e) => setAcceptTerms(e.target.checked)}
+                onChange={(e) => {
+                  setAcceptTerms(e.target.checked);
+                  if (e.target.checked) setError('');
+                }}
                 className="mt-1 h-4 w-4 rounded border-zinc-700 bg-zinc-900 text-cyan-400 focus:ring-cyan-400/50"
                 required
               />

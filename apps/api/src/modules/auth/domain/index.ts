@@ -7,3 +7,11 @@ export type {
   PasswordResetRepository,
   PasswordResetToken,
 } from './repositories/password-reset.repository';
+export { CONSENT_REPOSITORY } from './repositories/consent.repository';
+export type {
+  ConsentRepository,
+  ConsentLog,
+  LogConsentData,
+  ConsentType,
+  ConsentAction,
+} from './repositories/consent.repository';

@@ -1,11 +1,17 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import * as bcrypt from 'bcrypt';
+import { CURRENT_TERMS_VERSION, CURRENT_PRIVACY_VERSION } from '@coucou-ia/shared';
 
 import { ConflictError, Result } from '../../../../common';
 import { EmailQueueService } from '../../../../infrastructure/queue';
 import type { User } from '../../domain';
-import { USER_REPOSITORY, type UserRepository } from '../../domain';
+import {
+  USER_REPOSITORY,
+  CONSENT_REPOSITORY,
+  type UserRepository,
+  type ConsentRepository,
+} from '../../domain';
 import type { RegisterDto } from '../dto/auth.dto';
 
 @Injectable()
@@ -13,6 +19,8 @@ export class RegisterUseCase {
   constructor(
     @Inject(USER_REPOSITORY)
     private readonly userRepository: UserRepository,
+    @Inject(CONSENT_REPOSITORY)
+    private readonly consentRepository: ConsentRepository,
     private readonly emailQueueService: EmailQueueService,
     private readonly configService: ConfigService,
   ) {}
@@ -31,6 +39,26 @@ export class RegisterUseCase {
       name: dto.name,
       password: hashedPassword,
     });
+
+    // Log consent for RGPD compliance
+    await Promise.all([
+      this.consentRepository.logConsent({
+        userId: user.id,
+        type: 'TERMS_OF_SERVICE',
+        action: 'ACCEPTED',
+        version: CURRENT_TERMS_VERSION,
+        ipAddress: dto.ipAddress,
+        userAgent: dto.userAgent,
+      }),
+      this.consentRepository.logConsent({
+        userId: user.id,
+        type: 'PRIVACY_POLICY',
+        action: 'ACCEPTED',
+        version: CURRENT_PRIVACY_VERSION,
+        ipAddress: dto.ipAddress,
+        userAgent: dto.userAgent,
+      }),
+    ]);
 
     const frontendUrl = this.configService.get<string>('FRONTEND_URL', 'http://localhost:3000');
     const userName = user.name ?? user.email.split('@')[0];

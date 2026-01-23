@@ -51,10 +51,15 @@ class ApiClient {
   }
 
   // Auth
-  async register(email: string, password: string, name: string): Promise<User> {
+  async register(
+    email: string,
+    password: string,
+    name: string,
+    acceptTerms: boolean,
+  ): Promise<User> {
     const response = await this.fetch<AuthUserResponse>('/auth/register', {
       method: 'POST',
-      body: JSON.stringify({ email, password, name }),
+      body: JSON.stringify({ email, password, name, acceptTerms }),
     });
     return response.user;
   }

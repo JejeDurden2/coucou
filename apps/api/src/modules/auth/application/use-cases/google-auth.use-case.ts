@@ -1,6 +1,7 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
+import { CURRENT_TERMS_VERSION, CURRENT_PRIVACY_VERSION } from '@coucou-ia/shared';
 
 import { PrismaService } from '../../../../prisma';
 import {
@@ -9,7 +10,13 @@ import {
   generateWelcomeEmail,
   generateNewUserNotificationEmail,
 } from '../../../email';
-import { USER_REPOSITORY, type UserRepository, type User } from '../../domain';
+import {
+  USER_REPOSITORY,
+  CONSENT_REPOSITORY,
+  type UserRepository,
+  type User,
+  type ConsentRepository,
+} from '../../domain';
 import type { AuthResponseDto, JwtPayload } from '../dto/auth.dto';
 import type { GoogleProfile } from '../../presentation/strategies/google.strategy';
 
@@ -20,6 +27,8 @@ export class GoogleAuthUseCase {
   constructor(
     @Inject(USER_REPOSITORY)
     private readonly userRepository: UserRepository,
+    @Inject(CONSENT_REPOSITORY)
+    private readonly consentRepository: ConsentRepository,
     @Inject(EMAIL_PORT)
     private readonly emailService: EmailPort,
     private readonly jwtService: JwtService,
@@ -49,6 +58,28 @@ export class GoogleAuthUseCase {
         });
         isNewUser = true;
       }
+    }
+
+    // Log consent for RGPD compliance (new users only)
+    if (isNewUser && profile.termsAccepted) {
+      await Promise.all([
+        this.consentRepository.logConsent({
+          userId: user.id,
+          type: 'TERMS_OF_SERVICE',
+          action: 'ACCEPTED',
+          version: CURRENT_TERMS_VERSION,
+          ipAddress: profile.ipAddress,
+          userAgent: profile.userAgent,
+        }),
+        this.consentRepository.logConsent({
+          userId: user.id,
+          type: 'PRIVACY_POLICY',
+          action: 'ACCEPTED',
+          version: CURRENT_PRIVACY_VERSION,
+          ipAddress: profile.ipAddress,
+          userAgent: profile.userAgent,
+        }),
+      ]);
     }
 
     // Send welcome email and admin notification for new users (non-blocking)

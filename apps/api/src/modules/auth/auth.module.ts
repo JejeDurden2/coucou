@@ -5,9 +5,10 @@ import { PassportModule } from '@nestjs/passport';
 
 import { BillingModule } from '../billing/billing.module';
 import { EmailModule } from '../email/email.module';
-import { USER_REPOSITORY, PASSWORD_RESET_REPOSITORY } from './domain';
+import { USER_REPOSITORY, PASSWORD_RESET_REPOSITORY, CONSENT_REPOSITORY } from './domain';
 import { PrismaUserRepository } from './infrastructure/persistence/prisma-user.repository';
 import { PrismaPasswordResetRepository } from './infrastructure/persistence/prisma-password-reset.repository';
+import { PrismaConsentRepository } from './infrastructure/persistence/prisma-consent.repository';
 import { CookieService } from './infrastructure/services/cookie.service';
 import {
   DeleteAccountUseCase,
@@ -70,6 +71,10 @@ import { GoogleStrategy } from './presentation/strategies/google.strategy';
     {
       provide: PASSWORD_RESET_REPOSITORY,
       useClass: PrismaPasswordResetRepository,
+    },
+    {
+      provide: CONSENT_REPOSITORY,
+      useClass: PrismaConsentRepository,
     },
   ],
   exports: [USER_REPOSITORY, JwtAuthGuard, JwtStrategy, CookieService],

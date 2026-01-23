@@ -6,15 +6,32 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001';
 
 interface GoogleButtonProps {
   label?: string;
+  disabled?: boolean;
+  onDisabledClick?: () => void;
 }
 
-export function GoogleButton({ label = 'Continuer avec Google' }: GoogleButtonProps) {
+export function GoogleButton({
+  label = 'Continuer avec Google',
+  disabled = false,
+  onDisabledClick,
+}: GoogleButtonProps) {
   const handleClick = () => {
-    window.location.href = `${API_URL}/auth/google`;
+    if (disabled) {
+      onDisabledClick?.();
+      return;
+    }
+    // Pass termsAccepted=true to backend for RGPD consent logging
+    window.location.href = `${API_URL}/auth/google?termsAccepted=true`;
   };
 
   return (
-    <Button type="button" variant="outline" className="w-full" onClick={handleClick}>
+    <Button
+      type="button"
+      variant="outline"
+      className="w-full"
+      onClick={handleClick}
+      aria-disabled={disabled}
+    >
       <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">
         <path
           fill="currentColor"

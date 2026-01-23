@@ -63,7 +63,8 @@ export class AuthController {
   ) {
     // Build allowlist of valid redirect hosts from FRONTEND_URL
     this.allowedRedirectHosts = new Set(
-      (configService.get<string>('FRONTEND_URL', 'http://localhost:3000'))
+      configService
+        .get<string>('FRONTEND_URL', 'http://localhost:3000')
         .split(',')
         .map((url) => {
           try {
@@ -87,8 +88,18 @@ export class AuthController {
 
   @Post('register')
   @Throttle({ short: { limit: 3, ttl: 60000 } }) // 3 registrations per minute
-  async register(@Body() dto: RegisterRequestDto, @Res({ passthrough: true }) res: Response) {
-    const registerResult = await this.registerUseCase.execute(dto);
+  async register(
+    @Body() dto: RegisterRequestDto,
+    @Req() req: Request,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    const registerResult = await this.registerUseCase.execute({
+      email: dto.email,
+      name: dto.name,
+      password: dto.password,
+      ipAddress: req.ip ?? req.headers['x-forwarded-for']?.toString(),
+      userAgent: req.headers['user-agent'],
+    });
 
     if (!registerResult.ok) {
       throw new HttpException(registerResult.error.toJSON(), registerResult.error.statusCode);
