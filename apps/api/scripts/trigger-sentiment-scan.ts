@@ -12,7 +12,7 @@
 import { Plan } from '@prisma/client';
 
 import { bootstrapScript } from '../src/common';
-import { SentimentQueueService, SentimentScriptModule } from '../src/modules/sentiment';
+import { SentimentScriptModule, SentimentScriptQueueService } from '../src/modules/sentiment';
 import { PrismaService } from '../src/prisma';
 
 async function main(): Promise<void> {
@@ -24,7 +24,7 @@ async function main(): Promise<void> {
   }
 
   await bootstrapScript([SentimentScriptModule], async (app) => {
-    const sentimentQueue = app.get(SentimentQueueService);
+    const sentimentQueue = app.get(SentimentScriptQueueService);
     const prisma = app.get(PrismaService);
 
     if (args[0] === '--all') {
@@ -37,7 +37,7 @@ async function main(): Promise<void> {
 
 async function triggerForAllEligibleUsers(
   prisma: PrismaService,
-  sentimentQueue: SentimentQueueService,
+  sentimentQueue: SentimentScriptQueueService,
 ): Promise<void> {
   const projects = await prisma.project.findMany({
     where: {
@@ -71,7 +71,7 @@ async function triggerForAllEligibleUsers(
 async function triggerForUser(
   userId: string,
   prisma: PrismaService,
-  sentimentQueue: SentimentQueueService,
+  sentimentQueue: SentimentScriptQueueService,
 ): Promise<void> {
   const user = await prisma.user.findUnique({
     where: { id: userId },

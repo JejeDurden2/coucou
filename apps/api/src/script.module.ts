@@ -1,5 +1,4 @@
 import { DynamicModule, Module, Type } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
 import { BullModule } from '@nestjs/bullmq';
 
 import { PrismaModule } from './prisma';
@@ -8,7 +7,8 @@ import { PrismaModule } from './prisma';
  * Minimal module for running CLI scripts.
  *
  * Unlike AppModule, this module:
- * - Uses BullModule.forRoot() with direct process.env access (no async ConfigService)
+ * - Does NOT use ConfigModule (feature modules provide their own ConfigService)
+ * - Uses BullModule.forRoot() with direct process.env access
  * - Only loads PrismaModule globally
  * - Accepts feature modules via forFeature() for script-specific dependencies
  *
@@ -25,9 +25,6 @@ export class ScriptModule {
     return {
       module: ScriptModule,
       imports: [
-        // ConfigModule first - synchronous, makes ConfigService available
-        ConfigModule.forRoot({ isGlobal: true }),
-
         // PrismaModule - global database access
         PrismaModule,
 

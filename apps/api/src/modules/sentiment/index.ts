@@ -1,5 +1,5 @@
 export { SentimentModule } from './sentiment.module';
-export { SentimentScriptModule } from './sentiment-script.module';
+export { SentimentScriptModule, SentimentScriptQueueService } from './sentiment-script.module';
 export {
   SentimentScan,
   SENTIMENT_SCAN_REPOSITORY,

@@ -1,7 +1,11 @@
+import { config } from 'dotenv';
 import { INestApplicationContext, Logger, Type } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 
 import { ScriptModule } from '../script.module';
+
+// Load .env file before NestJS starts
+config();
 
 const logger = new Logger('ScriptBootstrap');
 
