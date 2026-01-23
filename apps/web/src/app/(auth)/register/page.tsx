@@ -27,6 +27,14 @@ export default function RegisterPage() {
 
     try {
       await register(email, password, name, acceptTerms);
+
+      // Track conversion event
+      if (typeof window !== 'undefined' && (window as any).dataLayer) {
+        (window as any).dataLayer.push({
+          event: 'conversion_event_subscribe_paid',
+        });
+      }
+
       // New users always go to onboarding for plan selection and first project
       router.push('/onboarding');
     } catch {
