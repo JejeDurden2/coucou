@@ -14,6 +14,7 @@ import {
   generatePlanDowngradeEmail,
   generateSubscriptionEndedEmail,
   generateAccountDeletedEmail,
+  generateSentimentReadyEmail,
 } from '../../modules/email';
 
 import { EMAIL_QUEUE_NAME } from './queue.config';
@@ -61,6 +62,10 @@ const EMAIL_CONFIG: Record<
   'account-deleted': {
     generator: generateAccountDeletedEmail as (data: never) => { html: string; text: string },
     subject: 'Confirmation de suppression de compte',
+  },
+  'sentiment-ready': {
+    generator: generateSentimentReadyEmail as (data: never) => { html: string; text: string },
+    subject: 'Votre analyse sentiment est prête',
   },
 };
 
