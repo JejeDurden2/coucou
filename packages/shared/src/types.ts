@@ -85,7 +85,7 @@ export interface UpdateProjectInput {
 export const PROMPT_CATEGORIES = [
   'Découverte',
   'Comparaison',
-  'Intention d\'achat',
+  "Intention d'achat",
   'Local',
 ] as const;
 
@@ -301,6 +301,13 @@ export function canAccessStats(plan: Plan): boolean {
 }
 
 /**
+ * Check if a plan can access sentiment analysis
+ */
+export function canAccessSentiment(plan: Plan): boolean {
+  return plan === Plan.SOLO || plan === Plan.PRO;
+}
+
+/**
  * Get stats retention days by plan
  * @returns number of days or null (unlimited for PRO)
  */
@@ -317,6 +324,45 @@ export function getAggregationLevel(days: number): AggregationLevel {
   if (days <= 90) return 'day';
   if (days <= 365) return 'week';
   return 'month';
+}
+
+// ============================================
+// Sentiment Analysis Types
+// ============================================
+
+export interface SentimentResult {
+  s: number; // score 0-100
+  t: string[]; // themes/attributs (3-5 items)
+  kp: string[]; // keywords positifs (3-5 items)
+  kn: string[]; // keywords négatifs (3-5 items)
+}
+
+export interface SentimentScanResults {
+  gpt: SentimentResult;
+  claude: SentimentResult;
+}
+
+export interface SentimentScan {
+  id: string;
+  projectId: string;
+  scannedAt: Date;
+  globalScore: number;
+  results: SentimentScanResults;
+  createdAt: Date;
+}
+
+export interface SentimentHistoryPoint {
+  date: Date;
+  score: number;
+}
+
+export interface SentimentHistory {
+  scans: SentimentHistoryPoint[];
+}
+
+export interface LatestSentimentResponse {
+  scan: SentimentScan | null;
+  nextScanDate: Date;
 }
 
 // ============================================
@@ -415,12 +461,7 @@ export const PLAN_PRICING: Record<Plan, PlanPricing> = {
     price: 0,
     period: 'month',
     description: 'Pour tester la plateforme',
-    features: [
-      '1 marque',
-      '2 prompts',
-      'GPT-4o-mini',
-      '1 scan/prompt/semaine',
-    ],
+    features: ['1 marque', '2 prompts', 'GPT-4o-mini', '1 scan/prompt/semaine'],
   },
   [Plan.SOLO]: {
     price: 39,

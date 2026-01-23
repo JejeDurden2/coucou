@@ -14,6 +14,7 @@ import { OnboardingModule } from './modules/onboarding/onboarding.module';
 import { ProjectModule } from './modules/project';
 import { PromptModule } from './modules/prompt';
 import { ScanModule } from './modules/scan';
+import { SentimentModule } from './modules/sentiment';
 import { QueueModule } from './infrastructure/queue';
 import { PrismaModule } from './prisma';
 
@@ -52,6 +53,7 @@ import { PrismaModule } from './prisma';
     ProjectModule,
     PromptModule,
     ScanModule,
+    SentimentModule,
     DashboardModule,
     OnboardingModule,
     NotificationModule,

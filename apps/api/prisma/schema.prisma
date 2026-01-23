@@ -119,9 +119,10 @@ model Project {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  prompts  Prompt[]
-  scanJobs ScanJob[]
+  user           User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  prompts        Prompt[]
+  scanJobs       ScanJob[]
+  sentimentScans SentimentScan[]
 
   @@index([userId])
   @@map("projects")
@@ -204,4 +205,19 @@ model ConsentLog {
 
   @@index([userId, type])
   @@map("consent_logs")
+}
+
+model SentimentScan {
+  id          String   @id @default(cuid())
+  projectId   String   @map("project_id")
+  scannedAt   DateTime @map("scanned_at")
+  globalScore Int      @map("global_score")
+  results     Json     // { gpt: { s, t, kp, kn }, claude: { s, t, kp, kn } }
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId, scannedAt])
+  @@map("sentiment_scans")
 }

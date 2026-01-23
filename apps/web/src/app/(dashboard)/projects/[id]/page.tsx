@@ -16,6 +16,7 @@ import {
   Lock,
   Users,
   Lightbulb,
+  Smile,
 } from 'lucide-react';
 
 import { useProject } from '@/hooks/use-projects';
@@ -29,12 +30,7 @@ import {
 import { useAuth } from '@/lib/auth-context';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -50,15 +46,13 @@ import { StatCard } from '@/components/features/dashboard/stat-card';
 import { getModelDisplayName } from '@/components/features/dashboard/llm-result-row';
 import { AddPromptModal } from '@/components/features/dashboard/add-prompt-modal';
 import { StatsContainer, StatsLockedBanner } from '@/components/features/stats';
-import {
-  CompetitorsContainer,
-  CompetitorsLockedBanner,
-} from '@/components/features/competitors';
+import { CompetitorsContainer, CompetitorsLockedBanner } from '@/components/features/competitors';
 import {
   RecommendationsSummary,
   RecommendationsContainer,
   RecommendationsLockedBanner,
 } from '@/components/features/recommendations';
+import { SentimentOverviewCard, SentimentTab } from '@/features/sentiment';
 import {
   LLMProvider,
   getScanAvailability,
@@ -297,6 +291,11 @@ export default function ProjectDashboardPage({
             Statistiques
             {!userCanAccessStats && <Lock className="size-3" aria-hidden="true" />}
           </TabsTrigger>
+          <TabsTrigger value="sentiment" className="gap-1.5">
+            <Smile className="size-3" aria-hidden="true" />
+            Sentiment
+            {!userCanAccessStats && <Lock className="size-3" aria-hidden="true" />}
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="overview" className="space-y-6">
@@ -327,6 +326,7 @@ export default function ProjectDashboardPage({
               value={stats?.totalScans?.toString() ?? '0'}
               gradient="primary"
             />
+            <SentimentOverviewCard projectId={id} userPlan={userPlan} />
           </div>
 
           {/* Main Content: Prompts Table */}
@@ -337,7 +337,8 @@ export default function ProjectDashboardPage({
                   Vos prompts ({promptCount})
                 </h2>
                 <p className="text-xs text-muted-foreground mt-0.5">
-                  Plan {userPlan} : 1 scan/prompt/{PLAN_LIMITS[userPlan].scanFrequency === 'daily' ? 'jour' : 'semaine'}
+                  Plan {userPlan} : 1 scan/prompt/
+                  {PLAN_LIMITS[userPlan].scanFrequency === 'daily' ? 'jour' : 'semaine'}
                 </p>
               </div>
               <Button variant="outline" size="sm" onClick={() => setShowAddPrompt(true)}>
@@ -511,6 +512,10 @@ export default function ProjectDashboardPage({
           ) : (
             <StatsLockedBanner />
           )}
+        </TabsContent>
+
+        <TabsContent value="sentiment">
+          <SentimentTab projectId={id} userPlan={userPlan} />
         </TabsContent>
       </Tabs>
 

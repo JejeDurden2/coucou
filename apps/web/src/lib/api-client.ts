@@ -17,6 +17,8 @@ import type {
   SubscriptionInfo,
   DowngradeResponse,
   CancelDowngradeResponse,
+  LatestSentimentResponse,
+  SentimentHistory,
 } from '@coucou-ia/shared';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001';
@@ -263,6 +265,15 @@ class ApiClient {
       method: 'POST',
       body: JSON.stringify({ projectId }),
     });
+  }
+
+  // Sentiment
+  async getLatestSentiment(projectId: string): Promise<LatestSentimentResponse> {
+    return this.fetch<LatestSentimentResponse>(`/projects/${projectId}/sentiment/latest`);
+  }
+
+  async getSentimentHistory(projectId: string): Promise<SentimentHistory> {
+    return this.fetch<SentimentHistory>(`/projects/${projectId}/sentiment/history`);
   }
 }
 
