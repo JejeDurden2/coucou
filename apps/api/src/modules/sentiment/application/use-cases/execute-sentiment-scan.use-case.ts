@@ -42,7 +42,7 @@ FACTEURS À ANALYSER:
 Réponds UNIQUEMENT en JSON minifié:
 {"s":score,"t":["theme1","theme2","theme3"],"kp":["positif1","positif2","positif3"],"kn":["negatif1","negatif2","negatif3"]}
 
-IMPORTANT: Sois PRÉCIS et DIFFÉRENCIÉ. Une marque inconnue ≠ 70%. Une startup récente = 40-55%. Un leader = 80+%.`;
+IMPORTANT: Sois PRÉCIS et DIFFÉRENCIÉ.`;
 
 type ExecuteSentimentScanError = NotFoundError | ForbiddenError | AllSentimentProvidersFailedError;
 
