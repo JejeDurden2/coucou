@@ -25,11 +25,14 @@ export const SentimentChart = memo(function SentimentChart({ projectId }: Sentim
 
   const chartData = useMemo(() => {
     if (!data?.scans) return [];
-    return data.scans.map((point) => ({
-      date: point.date,
-      label: formatChartDate(String(point.date), 'day'),
-      value: point.score,
-    }));
+    // Sort by date ascending (oldest first on left, newest last on right)
+    return [...data.scans]
+      .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+      .map((point) => ({
+        date: point.date,
+        label: formatChartDate(String(point.date), 'day'),
+        value: point.score,
+      }));
   }, [data?.scans]);
 
   // Loading state

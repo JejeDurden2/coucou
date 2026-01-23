@@ -44,7 +44,7 @@ export const ScoreCard = memo(function ScoreCard({ provider, score, themes }: Sc
           </span>
         </div>
         {themes.length > 0 && (
-          <div className="mt-3 flex flex-wrap gap-1.5">
+          <div className="mt-4 flex flex-wrap gap-1.5">
             {themes.slice(0, 3).map((theme) => (
               <Badge key={theme} variant="muted" className="text-xs">
                 {theme}
