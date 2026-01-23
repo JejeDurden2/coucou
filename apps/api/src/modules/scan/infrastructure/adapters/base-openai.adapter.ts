@@ -3,7 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { LLMProvider } from '@prisma/client';
 import { z } from 'zod';
 
-import { BaseLLMAdapter, SYSTEM_PROMPT, LLM_CONFIG } from './base-llm.adapter';
+import { BaseLLMAdapter, LLM_CONFIG } from './base-llm.adapter';
 
 const OpenAIResponseSchema = z.object({
   choices: z.array(
@@ -29,7 +29,7 @@ export abstract class BaseOpenAIAdapter extends BaseLLMAdapter {
     return LLMProvider.OPENAI;
   }
 
-  protected callApi(prompt: string): Promise<Response> {
+  protected callApi(prompt: string, systemPrompt: string): Promise<Response> {
     // Retrieve API key at call time to avoid storing in memory
     const apiKey = this.configService.get<string>('OPENAI_API_KEY') ?? '';
 
@@ -48,7 +48,7 @@ export abstract class BaseOpenAIAdapter extends BaseLLMAdapter {
       body: JSON.stringify({
         model: this.model,
         messages: [
-          { role: 'system', content: SYSTEM_PROMPT },
+          { role: 'system', content: systemPrompt },
           { role: 'user', content: prompt },
         ],
         ...tokenParam,

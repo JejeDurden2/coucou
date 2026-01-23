@@ -3,7 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { LLMProvider } from '@prisma/client';
 import { z } from 'zod';
 
-import { BaseLLMAdapter, SYSTEM_PROMPT, LLM_CONFIG } from './base-llm.adapter';
+import { BaseLLMAdapter, LLM_CONFIG } from './base-llm.adapter';
 
 const AnthropicResponseSchema = z.object({
   content: z.array(
@@ -28,7 +28,7 @@ export abstract class BaseAnthropicAdapter extends BaseLLMAdapter {
     return LLMProvider.ANTHROPIC;
   }
 
-  protected callApi(prompt: string): Promise<Response> {
+  protected callApi(prompt: string, systemPrompt: string): Promise<Response> {
     // Retrieve API key at call time to avoid storing in memory
     const apiKey = this.configService.get<string>('ANTHROPIC_API_KEY') ?? '';
     return fetch('https://api.anthropic.com/v1/messages', {
@@ -41,7 +41,7 @@ export abstract class BaseAnthropicAdapter extends BaseLLMAdapter {
       body: JSON.stringify({
         model: this.model,
         max_tokens: LLM_CONFIG.maxTokens,
-        system: SYSTEM_PROMPT,
+        system: systemPrompt,
         messages: [{ role: 'user', content: prompt }],
       }),
     });

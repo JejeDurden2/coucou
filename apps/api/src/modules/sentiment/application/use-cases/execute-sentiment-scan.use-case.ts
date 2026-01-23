@@ -4,7 +4,7 @@ import type { SentimentResult, SentimentScanResults } from '@coucou-ia/shared';
 
 import { ForbiddenError, NotFoundError, Result } from '../../../../common';
 import { PROJECT_REPOSITORY, type ProjectRepository } from '../../../project';
-import type { LLMPort, LLMResponse } from '../../../scan';
+import type { LLMPort, LLMQueryOptions, LLMResponse } from '../../../scan';
 import {
   AllSentimentProvidersFailedError,
   SENTIMENT_SCAN_REPOSITORY,
@@ -22,6 +22,19 @@ const SentimentResultSchema = z.object({
   kp: z.array(z.string()).min(1).max(10),
   kn: z.array(z.string()).min(1).max(10),
 });
+
+const SENTIMENT_SYSTEM_PROMPT = `Tu es un expert en analyse de perception de marque.
+Analyse la perception publique de la marque demandée et réponds UNIQUEMENT en JSON minifié.
+
+Format de réponse attendu:
+{"s":score,"t":["theme1","theme2","theme3"],"kp":["positif1","positif2","positif3"],"kn":["negatif1","negatif2","negatif3"]}
+
+- s: score global de perception (0=très négatif, 100=très positif)
+- t: 3-5 thèmes/attributs associés à la marque
+- kp: 3-5 mots-clés positifs
+- kn: 3-5 mots-clés négatifs ou aspects à améliorer
+
+Pas de texte avant ou après le JSON. JSON uniquement.`;
 
 type ExecuteSentimentScanError = NotFoundError | ForbiddenError | AllSentimentProvidersFailedError;
 
@@ -69,9 +82,11 @@ export class ExecuteSentimentScanUseCase {
 
     this.logger.log(`Executing sentiment scan for project ${projectId}`);
 
+    const queryOptions: LLMQueryOptions = { systemPrompt: SENTIMENT_SYSTEM_PROMPT };
+
     const [gptResult, claudeResult] = await Promise.all([
-      this.queryWithRetry(this.gpt52Adapter, prompt, 'gpt'),
-      this.queryWithRetry(this.claudeSonnetAdapter, prompt, 'claude'),
+      this.queryWithRetry(this.gpt52Adapter, prompt, 'gpt', queryOptions),
+      this.queryWithRetry(this.claudeSonnetAdapter, prompt, 'claude', queryOptions),
     ]);
 
     const successes: LLMQueryResult[] = [gptResult, claudeResult].filter((r) => r.result);
@@ -134,12 +149,13 @@ JSON uniquement, pas de texte hors JSON.`;
     adapter: LLMPort,
     prompt: string,
     provider: 'gpt' | 'claude',
+    options?: LLMQueryOptions,
   ): Promise<LLMQueryResult> {
     const maxRetries = 2;
 
     for (let attempt = 1; attempt <= maxRetries; attempt++) {
       try {
-        const response = await adapter.query(prompt);
+        const response = await adapter.query(prompt, options);
         const parsed = this.parseResponse(response);
         return { provider, result: parsed };
       } catch (error) {

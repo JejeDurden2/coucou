@@ -9,8 +9,12 @@ export interface LLMResponse {
   latencyMs: number;
 }
 
+export interface LLMQueryOptions {
+  systemPrompt?: string;
+}
+
 export interface LLMPort {
-  query(prompt: string): Promise<LLMResponse>;
+  query(prompt: string, options?: LLMQueryOptions): Promise<LLMResponse>;
   getProvider(): LLMProvider;
   getModel(): string;
 }

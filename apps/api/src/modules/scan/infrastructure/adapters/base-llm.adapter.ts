@@ -1,7 +1,7 @@
 import { Logger } from '@nestjs/common';
 import { LLMProvider } from '@prisma/client';
 
-import type { LLMPort, LLMResponse } from '../../application/ports/llm.port';
+import type { LLMPort, LLMQueryOptions, LLMResponse } from '../../application/ports/llm.port';
 
 export const SYSTEM_PROMPT = `Réponds en JSON uniquement. Top 5 marques pour la question posée.
 
@@ -27,11 +27,12 @@ export abstract class BaseLLMAdapter implements LLMPort {
     return this.model;
   }
 
-  async query(prompt: string): Promise<LLMResponse> {
+  async query(prompt: string, options?: LLMQueryOptions): Promise<LLMResponse> {
     const startTime = Date.now();
+    const systemPrompt = options?.systemPrompt ?? SYSTEM_PROMPT;
 
     try {
-      const response = await this.callApi(prompt);
+      const response = await this.callApi(prompt, systemPrompt);
 
       if (!response.ok) {
         const error = await response.text();
@@ -54,6 +55,6 @@ export abstract class BaseLLMAdapter implements LLMPort {
     }
   }
 
-  protected abstract callApi(prompt: string): Promise<Response>;
+  protected abstract callApi(prompt: string, systemPrompt: string): Promise<Response>;
   protected abstract extractContent(data: unknown): string;
 }
