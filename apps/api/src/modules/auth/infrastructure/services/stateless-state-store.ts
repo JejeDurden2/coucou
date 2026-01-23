@@ -77,32 +77,56 @@ export class StatelessStateStore {
         : (maybeCallback as VerifyCallback);
 
     try {
-      const [payload, signature] = providedState.split('.');
+      // Check if this is our signed format (payload.signature)
+      if (providedState.includes('.')) {
+        const [payload, signature] = providedState.split('.');
 
-      if (!payload || !signature) {
-        return callback(new Error('Invalid state format'), false, providedState);
+        if (!payload || !signature) {
+          return callback(new Error('Invalid state format'), false, providedState);
+        }
+
+        // Verify signature
+        const expectedSignature = this.sign(payload);
+        if (signature !== expectedSignature) {
+          return callback(new Error('Invalid state signature'), false, providedState);
+        }
+
+        // Decode and validate
+        const stateData: OAuthStateData = JSON.parse(
+          Buffer.from(payload, 'base64url').toString('utf-8'),
+        );
+
+        // Check expiration
+        if (Date.now() - stateData.timestamp > this.maxAge) {
+          return callback(new Error('State has expired'), false, providedState);
+        }
+
+        // Attach state data to request for use in strategy
+        (req as Request & { oauthStateData?: OAuthStateData }).oauthStateData = stateData;
+
+        callback(null, true, providedState);
+      } else {
+        // Legacy format: base64-encoded JSON from frontend (no signature)
+        // This handles the case where frontend redirects directly to Google
+        let termsAccepted = false;
+        try {
+          const decoded = JSON.parse(Buffer.from(providedState, 'base64').toString('utf-8'));
+          termsAccepted = decoded.termsAccepted === true;
+        } catch {
+          // Could not decode, default to false
+        }
+
+        // Create synthetic state data for the strategy
+        const stateData: OAuthStateData = {
+          nonce: 'legacy',
+          termsAccepted,
+          timestamp: Date.now(),
+        };
+
+        (req as Request & { oauthStateData?: OAuthStateData }).oauthStateData = stateData;
+
+        callback(null, true, providedState);
       }
-
-      // Verify signature
-      const expectedSignature = this.sign(payload);
-      if (signature !== expectedSignature) {
-        return callback(new Error('Invalid state signature'), false, providedState);
-      }
-
-      // Decode and validate
-      const stateData: OAuthStateData = JSON.parse(
-        Buffer.from(payload, 'base64url').toString('utf-8'),
-      );
-
-      // Check expiration
-      if (Date.now() - stateData.timestamp > this.maxAge) {
-        return callback(new Error('State has expired'), false, providedState);
-      }
-
-      // Attach state data to request for use in strategy
-      (req as Request & { oauthStateData?: OAuthStateData }).oauthStateData = stateData;
-
-      callback(null, true, providedState);
     } catch (error) {
       callback(error instanceof Error ? error : new Error(String(error)), false, providedState);
     }
