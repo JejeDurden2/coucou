@@ -28,10 +28,12 @@ export class ScriptModule {
         // PrismaModule - global database access
         PrismaModule,
 
-        // BullModule with direct env access (avoids async ConfigService race condition)
+        // BullModule with direct env access
+        // Use REDIS_PUBLIC_URL for scripts running outside Railway (railway run from local)
+        // Fall back to REDIS_URL for internal Railway services
         BullModule.forRoot({
           connection: {
-            url: process.env.REDIS_URL || 'redis://localhost:6379',
+            url: process.env.REDIS_PUBLIC_URL || process.env.REDIS_URL || 'redis://localhost:6379',
           },
         }),
 
