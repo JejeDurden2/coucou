@@ -66,6 +66,7 @@
     "@types/node": "^22.10.2",
     "@types/passport-google-oauth20": "^2.0.17",
     "@types/passport-jwt": "^4.0.1",
+    "@types/passport-oauth2": "^1.8.0",
     "@types/pg": "^8.16.0",
     "@vitest/coverage-v8": "^2.1.8",
     "eslint": "^9.39.2",

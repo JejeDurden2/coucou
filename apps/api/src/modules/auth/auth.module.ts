@@ -10,6 +10,7 @@ import { PrismaUserRepository } from './infrastructure/persistence/prisma-user.r
 import { PrismaPasswordResetRepository } from './infrastructure/persistence/prisma-password-reset.repository';
 import { PrismaConsentRepository } from './infrastructure/persistence/prisma-consent.repository';
 import { CookieService } from './infrastructure/services/cookie.service';
+import { StatelessStateStore } from './infrastructure/services/stateless-state-store';
 import {
   DeleteAccountUseCase,
   ExportDataUseCase,
@@ -63,6 +64,7 @@ import { GoogleStrategy } from './presentation/strategies/google.strategy';
     GoogleAuthGuard,
     // Infrastructure services
     CookieService,
+    StatelessStateStore,
     // Repository bindings
     {
       provide: USER_REPOSITORY,

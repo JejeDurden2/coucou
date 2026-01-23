@@ -4,6 +4,11 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Strategy, VerifyCallback } from 'passport-google-oauth20';
 import type { Request } from 'express';
 
+import {
+  StatelessStateStore,
+  type OAuthStateData,
+} from '../../infrastructure/services/stateless-state-store';
+
 export interface GoogleProfile {
   id: string;
   email: string;
@@ -16,19 +21,19 @@ export interface GoogleProfile {
 
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
-  constructor(configService: ConfigService) {
+  constructor(configService: ConfigService, statelessStateStore: StatelessStateStore) {
     super({
       clientID: configService.get<string>('GOOGLE_CLIENT_ID'),
       clientSecret: configService.get<string>('GOOGLE_CLIENT_SECRET'),
       callbackURL: configService.get<string>('GOOGLE_CALLBACK_URL'),
       scope: ['email', 'profile'],
       passReqToCallback: true,
-      state: true,
+      store: statelessStateStore,
     });
   }
 
   validate(
-    req: Request,
+    req: Request & { oauthStateData?: OAuthStateData },
     _accessToken: string,
     _refreshToken: string,
     profile: {
@@ -50,17 +55,8 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
       .join(' ');
     const name = profile.displayName || nameFromParts || 'User';
 
-    // Decode state parameter to get terms acceptance
-    let termsAccepted = false;
-    try {
-      const state = req.query.state as string;
-      if (state) {
-        const decoded = JSON.parse(Buffer.from(state, 'base64').toString());
-        termsAccepted = decoded.termsAccepted === true;
-      }
-    } catch {
-      // State parsing failed, default to false
-    }
+    // Get termsAccepted from the verified state (attached by StatelessStateStore)
+    const termsAccepted = req.oauthStateData?.termsAccepted ?? false;
 
     const googleProfile: GoogleProfile = {
       id: profile.id,
