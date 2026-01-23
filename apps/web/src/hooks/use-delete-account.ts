@@ -22,9 +22,7 @@ export function useDeleteAccount() {
     },
     onError: (error) => {
       const message =
-        error instanceof ApiClientError
-          ? error.message
-          : 'Erreur lors de la suppression du compte';
+        error instanceof ApiClientError ? error.message : 'Erreur lors de la suppression du compte';
       throw new Error(message);
     },
   });

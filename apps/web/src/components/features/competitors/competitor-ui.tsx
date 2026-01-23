@@ -82,7 +82,9 @@ export function ModelPositions({ statsByModel, userPlan }: ModelPositionsProps):
         <div key={stat.model} className="flex items-center gap-1.5">
           <span>{getModelDisplayName(stat.model)}</span>
           {stat.averagePosition !== null ? (
-            <span className="font-medium text-foreground tabular-nums">#{stat.averagePosition}</span>
+            <span className="font-medium text-foreground tabular-nums">
+              #{stat.averagePosition}
+            </span>
           ) : (
             <EyeOff className="h-3 w-3" aria-hidden="true" />
           )}

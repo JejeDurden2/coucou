@@ -1,9 +1,9 @@
 ---
-title: "GEO : le guide complet pour être visible sur ChatGPT et Claude en 2026"
+title: 'GEO : le guide complet pour être visible sur ChatGPT et Claude en 2026'
 description: "Découvrez le GEO (Generative Engine Optimization), le nouveau SEO de l'ère IA. Méthodes, outils et stratégies pour apparaître dans les réponses de ChatGPT."
-date: "2025-01-21"
-author: "Jérôme Demares"
-tags: ["GEO", "ChatGPT", "Claude", "Visibilité IA"]
+date: '2025-01-21'
+author: 'Jérôme Demares'
+tags: ['GEO', 'ChatGPT', 'Claude', 'Visibilité IA']
 ---
 
 Tu as passé des années à optimiser ton SEO. Tes pages rankent, ton trafic organique est stable. Et pourtant, quelque chose a changé.
@@ -18,12 +18,12 @@ Le GEO (Generative Engine Optimization) désigne l'ensemble des techniques visan
 
 C'est l'équivalent du SEO pour l'ère de l'IA. Mais avec une différence fondamentale : l'utilisateur ne voit plus une liste de liens. Il reçoit une recommandation directe.
 
-| SEO traditionnel | GEO |
-|------------------|-----|
-| Optimise ta position dans les résultats Google | Optimise si et comment ta marque est mentionnée par l'IA |
-| L'utilisateur voit 10 liens et choisit | L'utilisateur reçoit une réponse avec 1 à 3 recommandations |
-| Clic → visite → conversion | Recommandation → confiance immédiate → conversion |
-| Compétition sur les mots-clés | Compétition sur l'autorité et la pertinence perçue |
+| SEO traditionnel                               | GEO                                                         |
+| ---------------------------------------------- | ----------------------------------------------------------- |
+| Optimise ta position dans les résultats Google | Optimise si et comment ta marque est mentionnée par l'IA    |
+| L'utilisateur voit 10 liens et choisit         | L'utilisateur reçoit une réponse avec 1 à 3 recommandations |
+| Clic → visite → conversion                     | Recommandation → confiance immédiate → conversion           |
+| Compétition sur les mots-clés                  | Compétition sur l'autorité et la pertinence perçue          |
 
 ## Pourquoi le GEO est devenu incontournable en 2026
 
@@ -53,14 +53,14 @@ Quand un utilisateur demande "Quel est le meilleur outil de facturation pour fre
 
 Plusieurs facteurs déterminent quelles marques seront citées :
 
-| Facteur | Poids estimé | Comment l'optimiser |
-|---------|--------------|---------------------|
-| Présence sur les sources d'autorité | Élevé | Wikipedia, sites de référence, annuaires sectoriels |
-| Volume de mentions positives | Élevé | PR, avis clients, articles de presse |
-| Pertinence contextuelle | Élevé | Contenu spécifique au use case demandé |
-| Fraîcheur de l'information | Moyen | Mises à jour régulières, actualités récentes |
-| Structure du contenu | Moyen | Données factuelles, comparatifs, listes |
-| Backlinks et autorité de domaine | Moyen | SEO traditionnel, liens depuis sites reconnus |
+| Facteur                             | Poids estimé | Comment l'optimiser                                 |
+| ----------------------------------- | ------------ | --------------------------------------------------- |
+| Présence sur les sources d'autorité | Élevé        | Wikipedia, sites de référence, annuaires sectoriels |
+| Volume de mentions positives        | Élevé        | PR, avis clients, articles de presse                |
+| Pertinence contextuelle             | Élevé        | Contenu spécifique au use case demandé              |
+| Fraîcheur de l'information          | Moyen        | Mises à jour régulières, actualités récentes        |
+| Structure du contenu                | Moyen        | Données factuelles, comparatifs, listes             |
+| Backlinks et autorité de domaine    | Moyen        | SEO traditionnel, liens depuis sites reconnus       |
 
 ## Les 5 piliers d'une stratégie GEO efficace
 
@@ -69,6 +69,7 @@ Plusieurs facteurs déterminent quelles marques seront citées :
 Avant d'optimiser, tu dois savoir où tu en es. Pose à ChatGPT et Claude les questions que tes clients potentiels posent.
 
 Par exemple, si tu vends un logiciel de comptabilité, teste ces prompts :
+
 - "Quel logiciel de comptabilité pour une PME ?"
 - "Compare les meilleurs outils de facturation en France"
 - "Quelle alternative à [concurrent principal] ?"
@@ -115,14 +116,14 @@ Le SEO reste essentiel pour ton trafic organique Google, qui représente encore 
 
 D'ailleurs, les deux disciplines se renforcent mutuellement. Un bon SEO améliore ton autorité de domaine, ce qui influence positivement ta visibilité GEO. Un contenu optimisé pour le GEO (structuré, factuel, à jour) performe également bien en SEO.
 
-| Action | Impact SEO | Impact GEO |
-|--------|------------|------------|
-| Contenu structuré avec headers | ✅ Positif | ✅ Positif |
-| Backlinks depuis sites d'autorité | ✅ Positif | ✅ Positif |
-| Page Wikipedia | ➖ Neutre | ✅ Très positif |
-| Avis clients sur plateformes tierces | ➖ Neutre | ✅ Positif |
-| Données chiffrées et sourcées | ✅ Positif | ✅ Très positif |
-| Mots-clés dans les balises title | ✅ Très positif | ➖ Neutre |
+| Action                               | Impact SEO      | Impact GEO      |
+| ------------------------------------ | --------------- | --------------- |
+| Contenu structuré avec headers       | ✅ Positif      | ✅ Positif      |
+| Backlinks depuis sites d'autorité    | ✅ Positif      | ✅ Positif      |
+| Page Wikipedia                       | ➖ Neutre       | ✅ Très positif |
+| Avis clients sur plateformes tierces | ➖ Neutre       | ✅ Positif      |
+| Données chiffrées et sourcées        | ✅ Positif      | ✅ Très positif |
+| Mots-clés dans les balises title     | ✅ Très positif | ➖ Neutre       |
 
 ## Les erreurs à éviter en GEO
 

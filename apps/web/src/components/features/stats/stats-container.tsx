@@ -65,11 +65,7 @@ export function StatsContainer({ projectId, userPlan }: StatsContainerProps) {
   }
 
   if (!data) {
-    return (
-      <div className="text-center py-12 text-muted-foreground">
-        Aucune donnée disponible
-      </div>
-    );
+    return <div className="text-center py-12 text-muted-foreground">Aucune donnée disponible</div>;
   }
 
   return (

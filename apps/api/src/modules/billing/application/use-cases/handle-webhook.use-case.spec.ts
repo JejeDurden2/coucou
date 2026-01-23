@@ -32,7 +32,9 @@ describe('HandleWebhookUseCase', () => {
       $transaction: vi.fn(),
     };
     // Mock $transaction to execute all promises in the array
-    mock.$transaction.mockImplementation((operations: Promise<unknown>[]) => Promise.all(operations));
+    mock.$transaction.mockImplementation((operations: Promise<unknown>[]) =>
+      Promise.all(operations),
+    );
     return mock;
   };
 

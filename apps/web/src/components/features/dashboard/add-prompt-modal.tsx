@@ -88,12 +88,8 @@ export function AddPromptModal({
               />
             </div>
             <div className="flex items-center justify-between text-xs">
-              <span className="text-muted-foreground">
-                {MIN_CHARS} caractères minimum
-              </span>
-              <span
-                className={cn('tabular-nums', getCharCountColor(charCount, MAX_CHARS))}
-              >
+              <span className="text-muted-foreground">{MIN_CHARS} caractères minimum</span>
+              <span className={cn('tabular-nums', getCharCountColor(charCount, MAX_CHARS))}>
                 {charCount}/{MAX_CHARS}
               </span>
             </div>

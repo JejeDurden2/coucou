@@ -1,9 +1,4 @@
-import {
-  wrapInBaseTemplate,
-  createButton,
-  createParagraph,
-  createHeading,
-} from './base.template';
+import { wrapInBaseTemplate, createButton, createParagraph, createHeading } from './base.template';
 
 export interface InactivityEmailData {
   userName: string;

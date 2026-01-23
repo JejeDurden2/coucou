@@ -34,7 +34,8 @@ export function useCreatePortal() {
     onSuccess: (data) => {
       window.location.href = data.url;
     },
-    onError: (error) => handleMutationError(error, "Impossible d'accéder au portail de facturation."),
+    onError: (error) =>
+      handleMutationError(error, "Impossible d'accéder au portail de facturation."),
   });
 }
 

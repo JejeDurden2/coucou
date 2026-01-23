@@ -25,7 +25,10 @@ const PLAN_FEATURES = {
   },
 } as const;
 
-export function generatePlanUpgradeEmail(data: PlanUpgradeEmailData): { html: string; text: string } {
+export function generatePlanUpgradeEmail(data: PlanUpgradeEmailData): {
+  html: string;
+  text: string;
+} {
   const features = PLAN_FEATURES[data.planName];
 
   const content = `

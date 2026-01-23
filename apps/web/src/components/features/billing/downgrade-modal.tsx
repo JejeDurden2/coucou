@@ -51,7 +51,10 @@ export function DowngradeModal({
             <div className="space-y-4">
               <p>
                 {"Vous conserverez l'accès à toutes les fonctionnalités jusqu'au "}
-                <strong>{currentPeriodEnd ? formatDateFr(currentPeriodEnd) : 'fin de période'}</strong>.
+                <strong>
+                  {currentPeriodEnd ? formatDateFr(currentPeriodEnd) : 'fin de période'}
+                </strong>
+                .
               </p>
 
               <div className="rounded-lg border p-4 space-y-3">

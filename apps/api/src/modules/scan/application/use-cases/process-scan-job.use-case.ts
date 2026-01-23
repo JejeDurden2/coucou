@@ -139,8 +139,12 @@ export class ProcessScanJobUseCase {
     );
 
     return Result.ok({
-      status: finalStatus === ScanJobStatus.COMPLETED ? 'completed' :
-              finalStatus === ScanJobStatus.PARTIAL ? 'partial' : 'failed',
+      status:
+        finalStatus === ScanJobStatus.COMPLETED
+          ? 'completed'
+          : finalStatus === ScanJobStatus.PARTIAL
+            ? 'partial'
+            : 'failed',
       scansCreated,
       errorMessage: errorMessages.length > 0 ? errorMessages.join('; ') : undefined,
     });

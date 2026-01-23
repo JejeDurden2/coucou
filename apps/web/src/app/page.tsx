@@ -274,10 +274,10 @@ export default function LandingPage() {
 
             <div className="prose prose-invert prose-zinc max-w-none">
               <p className="text-lg text-muted-foreground mb-6 text-pretty">
-                Le <strong className="text-foreground">GEO (Generative Engine Optimization)</strong> est
-                l&apos;optimisation de la visibilité de votre marque dans les réponses générées par les
-                intelligences artificielles comme ChatGPT, Claude, Gemini ou Perplexity. C&apos;est
-                l&apos;équivalent du SEO pour l&apos;ère de l&apos;IA conversationnelle.
+                Le <strong className="text-foreground">GEO (Generative Engine Optimization)</strong>{' '}
+                est l&apos;optimisation de la visibilité de votre marque dans les réponses générées
+                par les intelligences artificielles comme ChatGPT, Claude, Gemini ou Perplexity.
+                C&apos;est l&apos;équivalent du SEO pour l&apos;ère de l&apos;IA conversationnelle.
               </p>
 
               <div className="grid md:grid-cols-2 gap-6 mb-8">
@@ -287,8 +287,8 @@ export default function LandingPage() {
                   </CardHeader>
                   <CardContent>
                     <p className="text-sm text-muted-foreground">
-                      Optimise votre position dans les résultats de recherche Google. L&apos;utilisateur
-                      voit une liste de liens et choisit lequel visiter.
+                      Optimise votre position dans les résultats de recherche Google.
+                      L&apos;utilisateur voit une liste de liens et choisit lequel visiter.
                     </p>
                   </CardContent>
                 </Card>
@@ -308,17 +308,18 @@ export default function LandingPage() {
               <h3 className="text-xl font-semibold mb-4">Pourquoi le GEO est crucial en 2025</h3>
 
               <p className="text-muted-foreground mb-4 text-pretty">
-                Les utilisateurs changent leur façon de chercher de l&apos;information. Au lieu de taper
-                des mots-clés dans Google, ils posent des questions à ChatGPT : &quot;Quel est le
-                meilleur outil pour gérer mes factures ?&quot;, &quot;Quelle marque de chaussures de
-                running me recommandes-tu ?&quot;
+                Les utilisateurs changent leur façon de chercher de l&apos;information. Au lieu de
+                taper des mots-clés dans Google, ils posent des questions à ChatGPT : &quot;Quel est
+                le meilleur outil pour gérer mes factures ?&quot;, &quot;Quelle marque de chaussures
+                de running me recommandes-tu ?&quot;
               </p>
 
               <p className="text-muted-foreground mb-4 text-pretty">
-                Si votre marque n&apos;apparaît pas dans ces réponses, vous êtes invisible pour une part
-                croissante de vos clients potentiels. Les LLM ne fonctionnent pas comme Google : ils
-                synthétisent l&apos;information et recommandent directement des solutions. Être cité en
-                premier peut générer <strong className="text-foreground">+40% de conversions</strong>.
+                Si votre marque n&apos;apparaît pas dans ces réponses, vous êtes invisible pour une
+                part croissante de vos clients potentiels. Les LLM ne fonctionnent pas comme Google
+                : ils synthétisent l&apos;information et recommandent directement des solutions.
+                Être cité en premier peut générer{' '}
+                <strong className="text-foreground">+40% de conversions</strong>.
               </p>
 
               <h3 className="text-xl font-semibold mb-4 mt-8">Comment améliorer votre GEO</h3>
@@ -327,33 +328,37 @@ export default function LandingPage() {
                 <li className="flex items-start gap-3">
                   <Check className="size-5 text-primary mt-0.5 shrink-0" aria-hidden="true" />
                   <span>
-                    <strong className="text-foreground">Mesurez votre visibilité actuelle</strong> — Avant
-                    d&apos;optimiser, il faut savoir où vous en êtes. Coucou IA interroge les LLM avec
-                    vos prompts métier.
+                    <strong className="text-foreground">Mesurez votre visibilité actuelle</strong> —
+                    Avant d&apos;optimiser, il faut savoir où vous en êtes. Coucou IA interroge les
+                    LLM avec vos prompts métier.
                   </span>
                 </li>
                 <li className="flex items-start gap-3">
                   <Check className="size-5 text-primary mt-0.5 shrink-0" aria-hidden="true" />
                   <span>
-                    <strong className="text-foreground">Renforcez votre présence sur les sources citées</strong>{' '}
-                    — Les LLM puisent dans des sources indexées. Soyez présent sur Wikipedia, les sites
-                    d&apos;autorité, et les annuaires de votre secteur.
+                    <strong className="text-foreground">
+                      Renforcez votre présence sur les sources citées
+                    </strong>{' '}
+                    — Les LLM puisent dans des sources indexées. Soyez présent sur Wikipedia, les
+                    sites d&apos;autorité, et les annuaires de votre secteur.
                   </span>
                 </li>
                 <li className="flex items-start gap-3">
                   <Check className="size-5 text-primary mt-0.5 shrink-0" aria-hidden="true" />
                   <span>
-                    <strong className="text-foreground">Créez du contenu structuré et factuel</strong> — Les IA
-                    privilégient les informations claires, chiffrées et bien organisées. Utilisez des
-                    listes, des tableaux comparatifs, des données vérifiables.
+                    <strong className="text-foreground">
+                      Créez du contenu structuré et factuel
+                    </strong>{' '}
+                    — Les IA privilégient les informations claires, chiffrées et bien organisées.
+                    Utilisez des listes, des tableaux comparatifs, des données vérifiables.
                   </span>
                 </li>
                 <li className="flex items-start gap-3">
                   <Check className="size-5 text-primary mt-0.5 shrink-0" aria-hidden="true" />
                   <span>
-                    <strong className="text-foreground">Analysez vos concurrents</strong> — Identifiez qui est
-                    cité à votre place et comprenez pourquoi. Coucou IA détecte automatiquement les
-                    marques concurrentes mentionnées.
+                    <strong className="text-foreground">Analysez vos concurrents</strong> —
+                    Identifiez qui est cité à votre place et comprenez pourquoi. Coucou IA détecte
+                    automatiquement les marques concurrentes mentionnées.
                   </span>
                 </li>
               </ul>
@@ -675,10 +680,7 @@ export default function LandingPage() {
             description:
               'Outil GEO français pour surveiller et améliorer la visibilité de votre marque dans ChatGPT et Claude.',
             foundingDate: '2024',
-            sameAs: [
-              'https://twitter.com/coucouia',
-              'https://linkedin.com/company/coucouia',
-            ],
+            sameAs: ['https://twitter.com/coucouia', 'https://linkedin.com/company/coucouia'],
             contactPoint: {
               '@type': 'ContactPoint',
               contactType: 'customer service',

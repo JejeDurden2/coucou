@@ -46,9 +46,7 @@ export const CitationRateChart = memo(function CitationRateChart({
     <Card>
       <CardHeader className="pb-2">
         <CardTitle className="text-base">Taux de citation</CardTitle>
-        <CardDescription>
-          Pourcentage de scans où votre marque est mentionnée
-        </CardDescription>
+        <CardDescription>Pourcentage de scans où votre marque est mentionnée</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="h-64">

@@ -26,7 +26,10 @@ export class CreateProjectRequestDto {
   brandVariants!: string[];
 
   @IsString()
-  @IsUrl({ protocols: ['http', 'https'], require_protocol: true }, { message: 'URL invalide (doit commencer par http:// ou https://)' })
+  @IsUrl(
+    { protocols: ['http', 'https'], require_protocol: true },
+    { message: 'URL invalide (doit commencer par http:// ou https://)' },
+  )
   domain!: string;
 }
 

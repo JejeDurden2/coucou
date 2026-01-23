@@ -88,9 +88,7 @@ export const ModelBreakdownChart = memo(function ModelBreakdownChart({
     <Card>
       <CardHeader className="pb-2">
         <CardTitle className="text-base">Rang par modèle</CardTitle>
-        <CardDescription>
-          Évolution du rang par modèle d'IA
-        </CardDescription>
+        <CardDescription>Évolution du rang par modèle d'IA</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="h-64">
@@ -138,7 +136,11 @@ export const ModelBreakdownChart = memo(function ModelBreakdownChart({
                   dataKey={model}
                   stroke={MODEL_COLORS[model] ?? 'hsl(var(--muted-foreground))'}
                   strokeWidth={2}
-                  dot={{ fill: MODEL_COLORS[model] ?? 'hsl(var(--muted-foreground))', strokeWidth: 0, r: 2 }}
+                  dot={{
+                    fill: MODEL_COLORS[model] ?? 'hsl(var(--muted-foreground))',
+                    strokeWidth: 0,
+                    r: 2,
+                  }}
                   activeDot={{ r: 4 }}
                   connectNulls
                 />

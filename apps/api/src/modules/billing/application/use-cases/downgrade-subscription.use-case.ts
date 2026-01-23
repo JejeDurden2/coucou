@@ -79,9 +79,7 @@ export class DowngradeSubscriptionUseCase {
       return Result.err(new SubscriptionAlreadyCancelingError());
     }
 
-    const stripeResult = await this.stripePort.cancelAtPeriodEnd(
-      subscription.stripeSubscriptionId,
-    );
+    const stripeResult = await this.stripePort.cancelAtPeriodEnd(subscription.stripeSubscriptionId);
 
     if (!stripeResult.ok) {
       return Result.err(stripeResult.error);

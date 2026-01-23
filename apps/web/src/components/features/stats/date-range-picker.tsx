@@ -46,7 +46,7 @@ export const DateRangePicker = memo(function DateRangePicker({
               !isSelected && 'text-muted-foreground hover:text-foreground',
               isDisabled && 'opacity-50 cursor-not-allowed',
             )}
-            title={isDisabled ? 'Passez à PRO pour accéder à plus d\'historique' : undefined}
+            title={isDisabled ? "Passez à PRO pour accéder à plus d'historique" : undefined}
           >
             {preset.label}
           </Button>

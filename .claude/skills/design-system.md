@@ -69,17 +69,17 @@
 
 ### Semantic Mappings
 
-| Semantic Token     | RGB Value     | Hex     | Usage                         |
-| ------------------ | ------------- | ------- | ----------------------------- |
-| `primary`          | 139 92 246    | #8b5cf6 | CTAs, links, focus rings      |
-| `success`          | 34 197 94     | #22c55e | Positive deltas, cited states |
-| `destructive`      | 239 68 68     | #ef4444 | Negative deltas, errors       |
-| `warning`          | 251 191 36    | #fbbf24 | Warnings, caution states      |
-| `background`       | 9 9 11        | #09090b | Page background               |
-| `foreground`       | 250 250 250   | #fafafa | Primary text                  |
-| `muted-foreground` | 161 161 170   | #a1a1aa | Secondary text                |
-| `card`             | 24 24 27      | #18181b | Card backgrounds              |
-| `border`           | 39 39 42      | #27272a | Default borders               |
+| Semantic Token     | RGB Value   | Hex     | Usage                         |
+| ------------------ | ----------- | ------- | ----------------------------- |
+| `primary`          | 139 92 246  | #8b5cf6 | CTAs, links, focus rings      |
+| `success`          | 34 197 94   | #22c55e | Positive deltas, cited states |
+| `destructive`      | 239 68 68   | #ef4444 | Negative deltas, errors       |
+| `warning`          | 251 191 36  | #fbbf24 | Warnings, caution states      |
+| `background`       | 9 9 11      | #09090b | Page background               |
+| `foreground`       | 250 250 250 | #fafafa | Primary text                  |
+| `muted-foreground` | 161 161 170 | #a1a1aa | Secondary text                |
+| `card`             | 24 24 27    | #18181b | Card backgrounds              |
+| `border`           | 39 39 42    | #27272a | Default borders               |
 
 ### Tailwind Usage
 
@@ -295,11 +295,11 @@
 ### Transitions
 
 ```tsx
-transition-colors  // Color changes
-transition-all     // All properties
-duration-200       // Fast (200ms)
-duration-300       // Normal (300ms)
-duration-500       // Slow (500ms)
+transition - colors; // Color changes
+transition - all; // All properties
+duration - 200; // Fast (200ms)
+duration - 300; // Normal (300ms)
+duration - 500; // Slow (500ms)
 ```
 
 ---

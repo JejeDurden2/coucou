@@ -21,9 +21,7 @@ export function SubscriptionStatusBadge({
   }
 
   if (cancelAtPeriodEnd && currentPeriodEnd) {
-    return (
-      <Badge variant="warning">Se termine le {formatDateFr(currentPeriodEnd)}</Badge>
-    );
+    return <Badge variant="warning">Se termine le {formatDateFr(currentPeriodEnd)}</Badge>;
   }
 
   switch (status) {

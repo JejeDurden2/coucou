@@ -40,14 +40,15 @@ function formatDateFr(dateString: string): string {
   }).format(new Date(dateString));
 }
 
-export function generatePlanDowngradeEmail(
-  data: PlanDowngradeEmailData,
-): { html: string; text: string } {
+export function generatePlanDowngradeEmail(data: PlanDowngradeEmailData): {
+  html: string;
+  text: string;
+} {
   const currentFeatures = PLAN_FEATURES[data.currentPlan];
   const formattedDate = formatDateFr(data.effectiveDate);
 
   const content = `
-    ${createHeading('Confirmation d\'annulation d\'abonnement', 1)}
+    ${createHeading("Confirmation d'annulation d'abonnement", 1)}
 
     ${createParagraph(`Bonjour ${data.userName},`)}
 
@@ -63,7 +64,7 @@ export function generatePlanDowngradeEmail(
       </tr>
     </table>
 
-    ${createParagraph('Vous conservez l\'accès à toutes les fonctionnalités de votre plan <strong>' + data.currentPlan + '</strong> jusqu\'à cette date.')}
+    ${createParagraph("Vous conservez l'accès à toutes les fonctionnalités de votre plan <strong>" + data.currentPlan + "</strong> jusqu'à cette date.")}
 
     <table role="presentation" style="width: 100%; border-collapse: collapse; margin: 24px 0; background-color: ${EMAIL_COLORS.cardHover}; border-radius: 8px;">
       <tr>
@@ -107,7 +108,7 @@ export function generatePlanDowngradeEmail(
       </tr>
     </table>
 
-    ${createParagraph('Vous avez changé d\'avis ? Vous pouvez réactiver votre abonnement à tout moment depuis votre tableau de bord.')}
+    ${createParagraph("Vous avez changé d'avis ? Vous pouvez réactiver votre abonnement à tout moment depuis votre tableau de bord.")}
 
     ${createButton('Accéder au dashboard', data.dashboardUrl)}
   `;

@@ -8,7 +8,9 @@ import { apiClient } from '@/lib/api-client';
 const TERMINAL_STATUSES = ['COMPLETED', 'PARTIAL', 'FAILED'] as const;
 
 function isTerminalStatus(status: string | undefined): boolean {
-  return status !== undefined && TERMINAL_STATUSES.includes(status as (typeof TERMINAL_STATUSES)[number]);
+  return (
+    status !== undefined && TERMINAL_STATUSES.includes(status as (typeof TERMINAL_STATUSES)[number])
+  );
 }
 
 export interface ScanJobPollingOptions {

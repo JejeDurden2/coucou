@@ -27,11 +27,10 @@ export const StatsLockedBanner = memo(function StatsLockedBanner() {
               <Lock className="size-6 text-primary" aria-hidden="true" />
             </div>
             <div className="space-y-2">
-              <h3 className="text-lg font-semibold text-balance">
-                Statistiques historiques
-              </h3>
+              <h3 className="text-lg font-semibold text-balance">Statistiques historiques</h3>
               <p className="text-sm text-muted-foreground text-pretty">
-                Visualisez l'évolution de votre visibilité IA dans le temps avec des graphiques détaillés.
+                Visualisez l'évolution de votre visibilité IA dans le temps avec des graphiques
+                détaillés.
               </p>
             </div>
             <div className="flex items-center gap-2 text-xs text-muted-foreground">
@@ -39,9 +38,7 @@ export const StatsLockedBanner = memo(function StatsLockedBanner() {
               <span>Taux de citation, rang, concurrents...</span>
             </div>
             <Button asChild className="w-full">
-              <Link href="/billing">
-                Passer à SOLO
-              </Link>
+              <Link href="/billing">Passer à SOLO</Link>
             </Button>
           </div>
         </CardContent>

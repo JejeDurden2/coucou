@@ -56,8 +56,8 @@ export const RecommendationsContainer = memo(function RecommendationsContainer({
             <div className="space-y-2">
               <h3 className="text-lg font-semibold">Excellent travail!</h3>
               <p className="text-sm text-muted-foreground max-w-md">
-                Aucune recommandation pour le moment. Continuez a scanner regulierement pour
-                obtenir des insights personnalises sur votre visibilite IA.
+                Aucune recommandation pour le moment. Continuez a scanner regulierement pour obtenir
+                des insights personnalises sur votre visibilite IA.
               </p>
             </div>
           </div>
@@ -191,9 +191,7 @@ function FilterButton({
       }
     >
       {label}
-      {count > 0 && (
-        <span className="ml-1 text-xs opacity-70">({count})</span>
-      )}
+      {count > 0 && <span className="ml-1 text-xs opacity-70">({count})</span>}
     </Button>
   );
 }

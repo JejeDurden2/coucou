@@ -81,9 +81,7 @@ export function DeleteAccountModal({
               <div className="mx-auto flex size-12 items-center justify-center rounded-full bg-destructive/10 mb-4">
                 <AlertTriangle className="size-6 text-destructive" aria-hidden="true" />
               </div>
-              <AlertDialogTitle className="text-center">
-                Supprimer votre compte ?
-              </AlertDialogTitle>
+              <AlertDialogTitle className="text-center">Supprimer votre compte ?</AlertDialogTitle>
               <AlertDialogDescription asChild>
                 <div className="space-y-4 text-left">
                   <p>Cette action est irréversible. Voici ce qui sera supprimé :</p>

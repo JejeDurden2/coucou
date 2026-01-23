@@ -13,10 +13,7 @@ export {
   type QueuePromptScanInput,
   type QueuePromptScanResponse,
 } from './queue-prompt-scan.use-case';
-export {
-  ProcessScanJobUseCase,
-  PROCESS_SCAN_JOB_USE_CASE,
-} from './process-scan-job.use-case';
+export { ProcessScanJobUseCase, PROCESS_SCAN_JOB_USE_CASE } from './process-scan-job.use-case';
 export {
   GetScanJobStatusUseCase,
   GET_SCAN_JOB_STATUS_USE_CASE,

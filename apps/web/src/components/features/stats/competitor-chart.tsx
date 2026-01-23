@@ -81,9 +81,7 @@ export const CompetitorChart = memo(function CompetitorChart({
     <Card>
       <CardHeader className="pb-2">
         <CardTitle className="text-base">Concurrents</CardTitle>
-        <CardDescription>
-          Top 5 concurrents les plus mentionnés
-        </CardDescription>
+        <CardDescription>Top 5 concurrents les plus mentionnés</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="h-64">
@@ -109,10 +107,7 @@ export const CompetitorChart = memo(function CompetitorChart({
                   fontSize: '12px',
                 }}
                 labelStyle={{ color: 'hsl(var(--foreground))' }}
-                formatter={(value, name) => [
-                  `${value} mentions`,
-                  String(name),
-                ]}
+                formatter={(value, name) => [`${value} mentions`, String(name)]}
               />
               <Legend
                 formatter={(value: string) => (

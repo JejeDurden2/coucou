@@ -45,11 +45,7 @@ Réponds UNIQUEMENT en JSON valide (sans markdown, sans \`\`\`):
 }
 `;
 
-const PROMPT_GENERATION_PROMPT = (
-  ctx: BrandContext,
-  brandName: string,
-  count: number,
-): string => `
+const PROMPT_GENERATION_PROMPT = (ctx: BrandContext, brandName: string, count: number): string => `
 Génère exactement ${count} prompts de recherche pour tracker la visibilité de "${brandName}" dans les réponses des LLMs (ChatGPT, Claude, etc).
 
 Contexte de la marque:

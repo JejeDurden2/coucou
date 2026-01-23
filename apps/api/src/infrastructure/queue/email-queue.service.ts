@@ -1,9 +1,4 @@
-import {
-  Injectable,
-  Logger,
-  type OnModuleInit,
-  type OnModuleDestroy,
-} from '@nestjs/common';
+import { Injectable, Logger, type OnModuleInit, type OnModuleDestroy } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectQueue } from '@nestjs/bullmq';
 import { Queue, QueueEvents } from 'bullmq';

@@ -304,7 +304,7 @@ describe('DowngradeSubscriptionUseCase', () => {
       if (result.ok) {
         expect(result.value.message).toContain('25 décembre 2026');
         expect(result.value.message).toContain('Votre abonnement sera annulé');
-        expect(result.value.message).toContain('Vous conservez l\'accès aux fonctionnalités SOLO');
+        expect(result.value.message).toContain("Vous conservez l'accès aux fonctionnalités SOLO");
       }
     });
   });

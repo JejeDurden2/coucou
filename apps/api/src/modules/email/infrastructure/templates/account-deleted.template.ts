@@ -1,17 +1,13 @@
-import {
-  wrapInBaseTemplate,
-  createParagraph,
-  createHeading,
-  EMAIL_COLORS,
-} from './base.template';
+import { wrapInBaseTemplate, createParagraph, createHeading, EMAIL_COLORS } from './base.template';
 
 export interface AccountDeletedEmailData {
   userName: string;
 }
 
-export function generateAccountDeletedEmail(
-  data: AccountDeletedEmailData,
-): { html: string; text: string } {
+export function generateAccountDeletedEmail(data: AccountDeletedEmailData): {
+  html: string;
+  text: string;
+} {
   const content = `
     ${createHeading('Confirmation de suppression de compte', 1)}
 
@@ -37,9 +33,9 @@ export function generateAccountDeletedEmail(
 
     ${createParagraph('Si vous aviez un abonnement actif, il a été annulé et vous recevrez un remboursement au prorata pour la période non utilisée.')}
 
-    ${createParagraph('Nous sommes désolés de vous voir partir. Si vous changez d\'avis, vous pourrez toujours créer un nouveau compte sur coucou-ia.com.')}
+    ${createParagraph("Nous sommes désolés de vous voir partir. Si vous changez d'avis, vous pourrez toujours créer un nouveau compte sur coucou-ia.com.")}
 
-    ${createParagraph('Merci d\'avoir utilisé Coucou.')}
+    ${createParagraph("Merci d'avoir utilisé Coucou.")}
   `;
 
   const html = wrapInBaseTemplate(content, {

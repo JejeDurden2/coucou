@@ -33,11 +33,7 @@ export class PrismaScanRepository implements ScanRepository {
     return scans.map((s) => Scan.fromPersistence(s));
   }
 
-  async findByProjectIdInRange(
-    projectId: string,
-    startDate: Date,
-    endDate: Date,
-  ): Promise<Scan[]> {
+  async findByProjectIdInRange(projectId: string, startDate: Date, endDate: Date): Promise<Scan[]> {
     const scans = await this.prisma.scan.findMany({
       where: {
         prompt: { projectId },

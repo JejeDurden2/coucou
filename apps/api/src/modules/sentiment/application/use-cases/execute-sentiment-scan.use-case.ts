@@ -1,4 +1,4 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger, forwardRef } from '@nestjs/common';
 import { z } from 'zod';
 import type { SentimentResult, SentimentScanResults } from '@coucou-ia/shared';
 
@@ -40,7 +40,9 @@ export class ExecuteSentimentScanUseCase {
     private readonly projectRepository: ProjectRepository,
     @Inject(SENTIMENT_SCAN_REPOSITORY)
     private readonly sentimentRepository: SentimentScanRepository,
+    @Inject(forwardRef(() => GPT52LLMAdapter))
     private readonly gpt52Adapter: GPT52LLMAdapter,
+    @Inject(forwardRef(() => ClaudeSonnetLLMAdapter))
     private readonly claudeSonnetAdapter: ClaudeSonnetLLMAdapter,
   ) {}
 

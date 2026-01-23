@@ -3,11 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import type { Plan } from '@prisma/client';
 
 import { PlanLimitError, Result } from '../../../../common';
-import {
-  EMAIL_PORT,
-  type EmailPort,
-  generatePlanLimitEmail,
-} from '../../../email';
+import { EMAIL_PORT, type EmailPort, generatePlanLimitEmail } from '../../../email';
 import { PROJECT_REPOSITORY, type ProjectRepository } from '../../domain';
 import type { CreateProjectDto, ProjectResponseDto } from '../dto/project.dto';
 

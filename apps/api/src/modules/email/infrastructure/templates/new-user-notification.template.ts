@@ -1,9 +1,4 @@
-import {
-  wrapInBaseTemplate,
-  createParagraph,
-  createHeading,
-  EMAIL_COLORS,
-} from './base.template';
+import { wrapInBaseTemplate, createParagraph, createHeading, EMAIL_COLORS } from './base.template';
 
 export interface NewUserNotificationEmailData {
   userName: string;
@@ -12,9 +7,10 @@ export interface NewUserNotificationEmailData {
   createdAt: string;
 }
 
-export function generateNewUserNotificationEmail(
-  data: NewUserNotificationEmailData,
-): { html: string; text: string } {
+export function generateNewUserNotificationEmail(data: NewUserNotificationEmailData): {
+  html: string;
+  text: string;
+} {
   const content = `
     ${createHeading('Nouvel utilisateur inscrit', 1)}
 

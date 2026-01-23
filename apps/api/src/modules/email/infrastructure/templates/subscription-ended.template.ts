@@ -19,9 +19,10 @@ const FREE_LIMITS = {
   scanFrequency: 'hebdomadaires',
 } as const;
 
-export function generateSubscriptionEndedEmail(
-  data: SubscriptionEndedEmailData,
-): { html: string; text: string } {
+export function generateSubscriptionEndedEmail(data: SubscriptionEndedEmailData): {
+  html: string;
+  text: string;
+} {
   const content = `
     ${createHeading('Votre abonnement a pris fin', 1)}
 

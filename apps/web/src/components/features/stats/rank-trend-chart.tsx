@@ -47,9 +47,7 @@ export const RankTrendChart = memo(function RankTrendChart({
     <Card>
       <CardHeader className="pb-2">
         <CardTitle className="text-base">Rang moyen</CardTitle>
-        <CardDescription>
-          Position moyenne de votre marque dans les réponses IA
-        </CardDescription>
+        <CardDescription>Position moyenne de votre marque dans les réponses IA</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="h-64">

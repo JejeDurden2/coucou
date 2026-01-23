@@ -71,13 +71,13 @@ export const metadata: Metadata = {
     siteName: 'Coucou IA',
     title: 'Coucou IA - Outil GEO pour améliorer votre visibilité dans ChatGPT et Claude',
     description:
-      'Surveillez et améliorez la visibilité de votre marque dans les réponses de ChatGPT et Claude. Le GEO, c\'est le nouveau SEO.',
+      "Surveillez et améliorez la visibilité de votre marque dans les réponses de ChatGPT et Claude. Le GEO, c'est le nouveau SEO.",
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Coucou IA - Outil GEO pour améliorer votre visibilité dans ChatGPT et Claude',
     description:
-      'Surveillez et améliorez la visibilité de votre marque dans les réponses de ChatGPT et Claude. Le GEO, c\'est le nouveau SEO.',
+      "Surveillez et améliorez la visibilité de votre marque dans les réponses de ChatGPT et Claude. Le GEO, c'est le nouveau SEO.",
     creator: '@coucouia',
   },
   alternates: {

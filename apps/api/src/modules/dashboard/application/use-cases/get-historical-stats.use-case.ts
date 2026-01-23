@@ -83,10 +83,30 @@ export class GetHistoricalStatsUseCase {
     const aggregation = this.getAggregationLevel(daysDiff);
 
     // Calculate time series data
-    const citationRate = this.calculateCitationRateSeries(scans, effectiveStart, effectiveEnd, aggregation);
-    const averageRank = this.calculateAverageRankSeries(scans, effectiveStart, effectiveEnd, aggregation);
-    const rankByModel = this.calculateRankByModelSeries(scans, effectiveStart, effectiveEnd, aggregation);
-    const competitorTrends = this.calculateCompetitorTrends(scans, effectiveStart, effectiveEnd, aggregation);
+    const citationRate = this.calculateCitationRateSeries(
+      scans,
+      effectiveStart,
+      effectiveEnd,
+      aggregation,
+    );
+    const averageRank = this.calculateAverageRankSeries(
+      scans,
+      effectiveStart,
+      effectiveEnd,
+      aggregation,
+    );
+    const rankByModel = this.calculateRankByModelSeries(
+      scans,
+      effectiveStart,
+      effectiveEnd,
+      aggregation,
+    );
+    const competitorTrends = this.calculateCompetitorTrends(
+      scans,
+      effectiveStart,
+      effectiveEnd,
+      aggregation,
+    );
 
     return Result.ok({
       dateRange: {

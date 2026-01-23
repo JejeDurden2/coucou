@@ -17,7 +17,7 @@ import { SentimentProcessor } from './infrastructure/queue/sentiment.processor';
 @Module({
   imports: [
     ProjectModule,
-    ScanModule,
+    forwardRef(() => ScanModule),
     ScheduleModule.forRoot(),
     BullModule.registerQueue({
       name: SENTIMENT_QUEUE_NAME,

@@ -280,8 +280,7 @@ export class GenerateRecommendationsUseCase {
 
     return Array.from(modelMap.entries()).map(([model, data]) => {
       const citedCount = data.results.filter((r) => r.isCited).length;
-      const citationRate =
-        data.results.length > 0 ? (citedCount / data.results.length) * 100 : 0;
+      const citationRate = data.results.length > 0 ? (citedCount / data.results.length) * 100 : 0;
 
       return {
         model,
@@ -309,8 +308,7 @@ export class GenerateRecommendationsUseCase {
 
     for (const scan of scans) {
       const isCurrentPeriod = scan.executedAt >= sevenDaysAgo;
-      const isPreviousPeriod =
-        scan.executedAt >= fourteenDaysAgo && scan.executedAt < sevenDaysAgo;
+      const isPreviousPeriod = scan.executedAt >= fourteenDaysAgo && scan.executedAt < sevenDaysAgo;
 
       for (const result of scan.results) {
         for (const mention of result.competitorMentions) {
@@ -347,8 +345,7 @@ export class GenerateRecommendationsUseCase {
         trendPercentage = agg.currentPeriodMentions > 0 ? 100 : null;
       } else {
         const change =
-          ((agg.currentPeriodMentions - agg.previousPeriodMentions) /
-            agg.previousPeriodMentions) *
+          ((agg.currentPeriodMentions - agg.previousPeriodMentions) / agg.previousPeriodMentions) *
           100;
         trendPercentage = Math.round(change);
         if (change > 10) {
@@ -414,8 +411,7 @@ export class GenerateRecommendationsUseCase {
       title: 'Opportunités de mots-clés détectées',
       description: `Vos concurrents sont cités sur ${gaps.length} thématiques où ${brandName} est absent.`,
       actionItems: gaps.map(
-        ([keyword, count]) =>
-          `Créez du contenu sur "${keyword}" (${count} mentions concurrents)`,
+        ([keyword, count]) => `Créez du contenu sur "${keyword}" (${count} mentions concurrents)`,
       ),
       metadata: { keywords: gaps.map((g) => g[0]) },
     };

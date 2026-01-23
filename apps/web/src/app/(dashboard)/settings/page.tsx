@@ -162,9 +162,7 @@ export default function SettingsPage(): React.ReactNode {
         <p className="text-sm text-muted-foreground mb-4">
           La suppression de votre compte est irréversible. Toutes vos données (projets, prompts,
           scans) seront définitivement supprimées.
-          {hasActiveSubscription && (
-            <> Votre abonnement sera annulé et remboursé au prorata.</>
-          )}
+          {hasActiveSubscription && <> Votre abonnement sera annulé et remboursé au prorata.</>}
         </p>
         <DeleteAccountModal
           userPlan={user?.plan ?? Plan.FREE}

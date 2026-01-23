@@ -51,7 +51,8 @@ export function generateWelcomeEmail(data: WelcomeEmailData): { html: string; te
   `;
 
   const html = wrapInBaseTemplate(content, {
-    previewText: 'Bienvenue sur Coucou IA! Découvrez comment améliorer votre visibilité dans les IA.',
+    previewText:
+      'Bienvenue sur Coucou IA! Découvrez comment améliorer votre visibilité dans les IA.',
   });
 
   const text = `

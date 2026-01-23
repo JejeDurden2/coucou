@@ -1,7 +1,13 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { Plan, ScanJobStatus } from '@prisma/client';
 
-import { ForbiddenError, NotFoundError, Result, ScanLimitError, ValidationError } from '../../../../common';
+import {
+  ForbiddenError,
+  NotFoundError,
+  Result,
+  ScanLimitError,
+  ValidationError,
+} from '../../../../common';
 import { ScanQueueService } from '../../../../infrastructure/queue';
 import { PROJECT_REPOSITORY, type ProjectRepository } from '../../../project';
 import { PROMPT_REPOSITORY, type PromptRepository } from '../../../prompt';

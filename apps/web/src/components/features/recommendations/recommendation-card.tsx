@@ -101,10 +101,7 @@ export const RecommendationCard = memo(function RecommendationCard({
   if (compact) {
     return (
       <div
-        className={cn(
-          'rounded-lg border bg-card p-3 flex items-start gap-3',
-          config.borderClass,
-        )}
+        className={cn('rounded-lg border bg-card p-3 flex items-start gap-3', config.borderClass)}
       >
         <div className={cn('p-1.5 rounded-md', config.bgClass)}>
           <SeverityIcon className={cn('h-4 w-4', config.colorClass)} aria-hidden="true" />

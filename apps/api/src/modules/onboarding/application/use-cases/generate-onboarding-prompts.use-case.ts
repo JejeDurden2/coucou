@@ -57,10 +57,7 @@ export class GenerateOnboardingPromptsUseCase {
     // 2. Extract brand context via web search
     let brandContext: BrandContext;
     try {
-      brandContext = await this.brandAnalyzer.extractContext(
-        project.domain,
-        project.brandName,
-      );
+      brandContext = await this.brandAnalyzer.extractContext(project.domain, project.brandName);
     } catch (error) {
       this.logger.warn(
         `Brand context extraction failed for ${project.domain}: ${error instanceof Error ? error.message : 'Unknown error'}`,
