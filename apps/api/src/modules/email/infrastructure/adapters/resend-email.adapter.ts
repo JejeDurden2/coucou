@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, Optional } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Resend } from 'resend';
 
@@ -10,20 +10,22 @@ export class ResendEmailAdapter implements EmailPort {
   private readonly logger = new Logger(ResendEmailAdapter.name);
   private readonly resend: Resend;
   private readonly fromEmail: string;
+  private readonly apiKey: string | undefined;
 
-  constructor(private readonly configService: ConfigService) {
-    const apiKey = this.configService.get<string>('RESEND_API_KEY');
-    if (!apiKey) {
+  constructor(@Optional() private readonly configService?: ConfigService) {
+    this.apiKey = configService?.get<string>('RESEND_API_KEY') ?? process.env.RESEND_API_KEY;
+    if (!this.apiKey) {
       this.logger.warn('RESEND_API_KEY not configured - emails will be logged only');
     }
-    this.resend = new Resend(apiKey);
-    this.fromEmail = this.configService.get<string>('EMAIL_FROM', 'Coucou <noreply@coucou-ia.com>');
+    this.resend = new Resend(this.apiKey);
+    this.fromEmail =
+      configService?.get<string>('EMAIL_FROM') ??
+      process.env.EMAIL_FROM ??
+      'Coucou <noreply@coucou-ia.com>';
   }
 
   async send(options: SendEmailOptions): Promise<void> {
-    const apiKey = this.configService.get<string>('RESEND_API_KEY');
-
-    if (!apiKey) {
+    if (!this.apiKey) {
       this.logger.log(`[DEV] Email would be sent to ${options.to}: ${options.subject}`);
       this.logger.debug(`[DEV] Email content: ${options.text ?? options.html}`);
       return;
