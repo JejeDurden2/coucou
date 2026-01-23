@@ -7,14 +7,17 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectQueue } from '@nestjs/bullmq';
-import { Cron, CronExpression } from '@nestjs/schedule';
+import { Cron } from '@nestjs/schedule';
 import { Queue, QueueEvents } from 'bullmq';
 import { Plan } from '@prisma/client';
 
-import { SENTIMENT_QUEUE_NAME, sentimentJobOptions } from './queue.config';
-import type { SentimentJobData } from './types/sentiment-job.types';
-import { PrismaService } from '../../prisma';
-import { SENTIMENT_SCAN_REPOSITORY, type SentimentScanRepository } from '../../modules/sentiment';
+import {
+  SENTIMENT_QUEUE_NAME,
+  sentimentJobOptions,
+} from '../../../../infrastructure/queue/queue.config';
+import type { SentimentJobData } from '../../../../infrastructure/queue/types/sentiment-job.types';
+import { PrismaService } from '../../../../prisma';
+import { SENTIMENT_SCAN_REPOSITORY, type SentimentScanRepository } from '../../domain';
 
 @Injectable()
 export class SentimentQueueService implements OnModuleInit, OnModuleDestroy {

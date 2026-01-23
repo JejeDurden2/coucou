@@ -3,11 +3,14 @@ import { Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import type { Job } from 'bullmq';
 
-import { SENTIMENT_QUEUE_NAME } from './queue.config';
-import { EmailQueueService } from './email-queue.service';
-import type { SentimentJobData, SentimentJobResult } from './types/sentiment-job.types';
-import { ExecuteSentimentScanUseCase } from '../../modules/sentiment';
-import { PrismaService } from '../../prisma';
+import { SENTIMENT_QUEUE_NAME } from '../../../../infrastructure/queue/queue.config';
+import { EmailQueueService } from '../../../../infrastructure/queue/email-queue.service';
+import type {
+  SentimentJobData,
+  SentimentJobResult,
+} from '../../../../infrastructure/queue/types/sentiment-job.types';
+import { ExecuteSentimentScanUseCase } from '../../application/use-cases';
+import { PrismaService } from '../../../../prisma';
 
 @Processor(SENTIMENT_QUEUE_NAME, {
   concurrency: 1, // Process 1 sentiment job at a time (LLM intensive)

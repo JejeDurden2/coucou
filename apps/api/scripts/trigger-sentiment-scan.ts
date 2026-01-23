@@ -11,7 +11,7 @@
 
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from '../src/app.module';
-import { SentimentQueueService } from '../src/infrastructure/queue/sentiment-queue.service';
+import { SentimentQueueService } from '../src/modules/sentiment';
 import { PrismaService } from '../src/prisma';
 import { Plan } from '@prisma/client';
 

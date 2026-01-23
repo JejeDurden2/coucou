@@ -3,8 +3,6 @@ export { EmailQueueService, type QueueHealthStatus } from './email-queue.service
 export { EmailProcessor } from './email.processor';
 export { ScanQueueService } from './scan-queue.service';
 export { ScanProcessor } from './scan.processor';
-export { SentimentProcessor } from './sentiment.processor';
-export { SentimentQueueService } from './sentiment-queue.service';
 export { EMAIL_QUEUE_NAME, SCAN_QUEUE_NAME, SENTIMENT_QUEUE_NAME } from './queue.config';
 export type { EmailJobData, EmailJobType, EmailJobResult } from './types/email-job.types';
 export type { ScanJobData, ScanJobResult } from './types/scan-job.types';

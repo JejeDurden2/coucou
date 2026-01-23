@@ -21,3 +21,5 @@ export type {
   SentimentHistoryDto,
   SentimentHistoryPointDto,
 } from './application/dto/sentiment.dto';
+export { SentimentQueueService } from './infrastructure/queue/sentiment-queue.service';
+export { SentimentProcessor } from './infrastructure/queue/sentiment.processor';
