@@ -32,7 +32,7 @@ export abstract class BaseLLMAdapter implements LLMPort {
     const systemPrompt = options?.systemPrompt ?? SYSTEM_PROMPT;
 
     try {
-      const response = await this.callApi(prompt, systemPrompt);
+      const response = await this.callApi(prompt, systemPrompt, options);
 
       if (!response.ok) {
         const error = await response.text();
@@ -55,6 +55,10 @@ export abstract class BaseLLMAdapter implements LLMPort {
     }
   }
 
-  protected abstract callApi(prompt: string, systemPrompt: string): Promise<Response>;
+  protected abstract callApi(
+    prompt: string,
+    systemPrompt: string,
+    options?: LLMQueryOptions,
+  ): Promise<Response>;
   protected abstract extractContent(data: unknown): string;
 }

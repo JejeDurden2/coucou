@@ -11,6 +11,7 @@ export interface LLMResponse {
 
 export interface LLMQueryOptions {
   systemPrompt?: string;
+  webSearch?: boolean;
 }
 
 export interface LLMPort {

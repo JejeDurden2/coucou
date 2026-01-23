@@ -82,7 +82,10 @@ export class ExecuteSentimentScanUseCase {
 
     this.logger.log(`Executing sentiment scan for project ${projectId}`);
 
-    const queryOptions: LLMQueryOptions = { systemPrompt: SENTIMENT_SYSTEM_PROMPT };
+    const queryOptions: LLMQueryOptions = {
+      systemPrompt: SENTIMENT_SYSTEM_PROMPT,
+      webSearch: true,
+    };
 
     const [gptResult, claudeResult] = await Promise.all([
       this.queryWithRetry(this.gpt52Adapter, prompt, 'gpt', queryOptions),

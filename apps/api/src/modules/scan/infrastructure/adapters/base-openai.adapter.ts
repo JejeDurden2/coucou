@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { LLMProvider } from '@prisma/client';
 import { z } from 'zod';
 
+import type { LLMQueryOptions } from '../../application/ports/llm.port';
 import { BaseLLMAdapter, LLM_CONFIG } from './base-llm.adapter';
 
 const OpenAIResponseSchema = z.object({
@@ -29,7 +30,11 @@ export abstract class BaseOpenAIAdapter extends BaseLLMAdapter {
     return LLMProvider.OPENAI;
   }
 
-  protected callApi(prompt: string, systemPrompt: string): Promise<Response> {
+  protected callApi(
+    prompt: string,
+    systemPrompt: string,
+    options?: LLMQueryOptions,
+  ): Promise<Response> {
     // Retrieve API key at call time to avoid storing in memory
     const apiKey = this.configService.get<string>('OPENAI_API_KEY') ?? '';
 
@@ -38,6 +43,9 @@ export abstract class BaseOpenAIAdapter extends BaseLLMAdapter {
     const tokenParam = isGpt5Model
       ? { max_completion_tokens: LLM_CONFIG.maxTokens }
       : { max_tokens: LLM_CONFIG.maxTokens };
+
+    // Add web search tool if enabled
+    const toolsParam = options?.webSearch ? { tools: [{ type: 'web_search_preview' }] } : {};
 
     return fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
@@ -52,6 +60,7 @@ export abstract class BaseOpenAIAdapter extends BaseLLMAdapter {
           { role: 'user', content: prompt },
         ],
         ...tokenParam,
+        ...toolsParam,
         temperature: LLM_CONFIG.temperature,
       }),
     });

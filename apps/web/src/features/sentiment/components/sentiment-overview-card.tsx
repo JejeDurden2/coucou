@@ -13,11 +13,13 @@ import { getSentimentVariant, variantTextStyles, variantBgStyles } from '../lib/
 interface SentimentOverviewCardProps {
   projectId: string;
   userPlan: Plan;
+  onNavigate?: () => void;
 }
 
 export const SentimentOverviewCard = memo(function SentimentOverviewCard({
   projectId,
   userPlan,
+  onNavigate,
 }: SentimentOverviewCardProps) {
   const isLocked = userPlan === Plan.FREE;
   const { data, isLoading } = useLatestSentiment(projectId);
@@ -52,10 +54,13 @@ export const SentimentOverviewCard = memo(function SentimentOverviewCard({
   // Loading state
   if (isLoading) {
     return (
-      <div
+      <button
+        type="button"
+        onClick={onNavigate}
         className={cn(
-          'relative rounded-lg border border-border bg-card p-4',
-          'transition-colors duration-200',
+          'relative rounded-lg border border-border bg-card p-4 w-full text-left',
+          'transition-colors duration-200 hover:bg-card-hover hover:border-primary/30',
+          'cursor-pointer',
         )}
       >
         <div className="flex items-start justify-between gap-3">
@@ -70,17 +75,20 @@ export const SentimentOverviewCard = memo(function SentimentOverviewCard({
             <Smile className="size-5" aria-hidden="true" />
           </div>
         </div>
-      </div>
+      </button>
     );
   }
 
   // No scan yet
   if (!data?.scan) {
     return (
-      <div
+      <button
+        type="button"
+        onClick={onNavigate}
         className={cn(
-          'relative rounded-lg border border-border bg-card p-4',
-          'transition-colors duration-200 hover:bg-card-hover',
+          'relative rounded-lg border border-border bg-card p-4 w-full text-left',
+          'transition-colors duration-200 hover:bg-card-hover hover:border-primary/30',
+          'cursor-pointer',
         )}
       >
         <div className="flex items-start justify-between gap-3">
@@ -107,7 +115,7 @@ export const SentimentOverviewCard = memo(function SentimentOverviewCard({
             <Smile className="size-5" aria-hidden="true" />
           </div>
         </div>
-      </div>
+      </button>
     );
   }
 
@@ -115,10 +123,13 @@ export const SentimentOverviewCard = memo(function SentimentOverviewCard({
   const { variant, icon: Icon } = getSentimentVariant(data.scan.globalScore);
 
   return (
-    <div
+    <button
+      type="button"
+      onClick={onNavigate}
       className={cn(
-        'relative rounded-lg border bg-card p-4',
-        'transition-colors duration-200 hover:bg-card-hover',
+        'relative rounded-lg border bg-card p-4 w-full text-left',
+        'transition-colors duration-200 hover:bg-card-hover hover:border-primary/30',
+        'cursor-pointer',
         variantBgStyles[variant],
       )}
     >
@@ -142,7 +153,6 @@ export const SentimentOverviewCard = memo(function SentimentOverviewCard({
               {Math.round(data.scan.globalScore)}%
             </p>
           </div>
-          <p className="text-xs text-muted-foreground mt-1">Perception IA</p>
         </div>
         <div
           className={cn(
@@ -154,6 +164,6 @@ export const SentimentOverviewCard = memo(function SentimentOverviewCard({
           <Icon className="size-5" aria-hidden="true" />
         </div>
       </div>
-    </div>
+    </button>
   );
 });

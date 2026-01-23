@@ -326,7 +326,11 @@ export default function ProjectDashboardPage({
               value={stats?.totalScans?.toString() ?? '0'}
               gradient="primary"
             />
-            <SentimentOverviewCard projectId={id} userPlan={userPlan} />
+            <SentimentOverviewCard
+              projectId={id}
+              userPlan={userPlan}
+              onNavigate={() => setActiveTab('sentiment')}
+            />
           </div>
 
           {/* Main Content: Prompts Table */}
