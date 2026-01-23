@@ -21,9 +21,8 @@ export interface BaseEmailData {
   previewText?: string;
 }
 
-// Logo SVG en base64 (violet gradient bird icon)
-const LOGO_SVG_BASE64 =
-  'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMiIgaGVpZ2h0PSIzMiIgdmlld0JveD0iMCAwIDI0IDI0IiBmaWxsPSJub25lIiBzdHJva2U9IiM4QjVDRjYiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNMTIgMTlsNy03IDMgNFYzaC0xMGE4IDggMCAwIDAtOCA4IDggOCAwIDAgMCA4IDgiLz48Y2lyY2xlIGN4PSIxMSIgY3k9IjgiIHI9IjIiLz48cGF0aCBkPSJNMiAxMmE4IDggMCAwIDAgOCA4Ii8+PC9zdmc+';
+// Logo hosted on the website (base64/data URIs are blocked by many email clients)
+const LOGO_URL = 'https://coucou-ia.com/logo.svg';
 
 /**
  * Wraps email content in the base template with Coucou branding
@@ -75,7 +74,7 @@ export function wrapInBaseTemplate(content: string, data?: BaseEmailData): strin
               <table role="presentation" style="border-collapse: collapse;">
                 <tr>
                   <td style="vertical-align: middle; padding-right: 8px;">
-                    <img src="${LOGO_SVG_BASE64}" alt="Coucou" width="32" height="32" style="display: block;" />
+                    <img src="${LOGO_URL}" alt="Coucou" width="32" height="32" style="display: block;" />
                   </td>
                   <td style="vertical-align: middle;">
                     <span style="font-size: 20px; font-weight: 700; color: ${EMAIL_COLORS.text};">Coucou</span>
