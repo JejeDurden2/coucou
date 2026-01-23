@@ -37,3 +37,7 @@ export {
   generateAccountDeletedEmail,
   type AccountDeletedEmailData,
 } from './infrastructure/templates/account-deleted.template';
+export {
+  generateSentimentReadyEmail,
+  type SentimentReadyEmailData,
+} from './infrastructure/templates/sentiment-ready.template';

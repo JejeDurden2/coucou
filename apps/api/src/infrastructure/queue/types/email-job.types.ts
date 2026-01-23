@@ -8,6 +8,7 @@ import type {
   PlanDowngradeEmailData,
   SubscriptionEndedEmailData,
   AccountDeletedEmailData,
+  SentimentReadyEmailData,
 } from '../../../modules/email';
 
 export type EmailJobType =
@@ -19,7 +20,8 @@ export type EmailJobType =
   | 'new-user-notification'
   | 'plan-downgrade'
   | 'subscription-ended'
-  | 'account-deleted';
+  | 'account-deleted'
+  | 'sentiment-ready';
 
 export type EmailJobData =
   | { type: 'welcome'; to: string; data: WelcomeEmailData }
@@ -30,7 +32,8 @@ export type EmailJobData =
   | { type: 'new-user-notification'; to: string; data: NewUserNotificationEmailData }
   | { type: 'plan-downgrade'; to: string; data: PlanDowngradeEmailData }
   | { type: 'subscription-ended'; to: string; data: SubscriptionEndedEmailData }
-  | { type: 'account-deleted'; to: string; data: AccountDeletedEmailData };
+  | { type: 'account-deleted'; to: string; data: AccountDeletedEmailData }
+  | { type: 'sentiment-ready'; to: string; data: SentimentReadyEmailData };
 
 export interface EmailJobResult {
   success: boolean;
