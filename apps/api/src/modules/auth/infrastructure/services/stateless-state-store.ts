@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Optional } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { createHmac, randomBytes } from 'crypto';
 import type { Request } from 'express';
@@ -22,8 +22,9 @@ export class StatelessStateStore {
   private readonly secret: string;
   private readonly maxAge = 10 * 60 * 1000; // 10 minutes
 
-  constructor(private readonly configService: ConfigService) {
-    this.secret = configService.get<string>('JWT_SECRET', 'oauth-state-secret');
+  constructor(@Optional() private readonly configService?: ConfigService) {
+    this.secret =
+      configService?.get<string>('JWT_SECRET') ?? process.env.JWT_SECRET ?? 'oauth-state-secret';
   }
 
   store(req: Request, callback: StoreCallback): void;

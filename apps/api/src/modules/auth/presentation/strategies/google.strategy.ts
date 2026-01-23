@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Optional } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy, VerifyCallback } from 'passport-google-oauth20';
@@ -21,11 +21,16 @@ export interface GoogleProfile {
 
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
-  constructor(configService: ConfigService, statelessStateStore: StatelessStateStore) {
+  constructor(
+    @Optional() configService: ConfigService | undefined,
+    statelessStateStore: StatelessStateStore,
+  ) {
     super({
-      clientID: configService.get<string>('GOOGLE_CLIENT_ID'),
-      clientSecret: configService.get<string>('GOOGLE_CLIENT_SECRET'),
-      callbackURL: configService.get<string>('GOOGLE_CALLBACK_URL'),
+      clientID: configService?.get<string>('GOOGLE_CLIENT_ID') ?? process.env.GOOGLE_CLIENT_ID,
+      clientSecret:
+        configService?.get<string>('GOOGLE_CLIENT_SECRET') ?? process.env.GOOGLE_CLIENT_SECRET,
+      callbackURL:
+        configService?.get<string>('GOOGLE_CALLBACK_URL') ?? process.env.GOOGLE_CALLBACK_URL,
       scope: ['email', 'profile'],
       passReqToCallback: true,
       store: statelessStateStore,
