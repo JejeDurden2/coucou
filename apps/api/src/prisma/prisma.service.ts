@@ -1,4 +1,4 @@
-import { Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
+import { Injectable, OnModuleDestroy, OnModuleInit, Optional } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PrismaPg } from '@prisma/adapter-pg';
 import { PrismaClient } from '@prisma/client';
@@ -8,9 +8,14 @@ import pg from 'pg';
 export class PrismaService extends PrismaClient implements OnModuleInit, OnModuleDestroy {
   private pool: pg.Pool;
 
-  constructor(private readonly configService: ConfigService) {
-    const connectionString = configService.get<string>('DATABASE_URL');
-    const isProduction = configService.get('NODE_ENV') === 'production';
+  constructor(@Optional() private readonly configService?: ConfigService) {
+    // Support both ConfigService injection and direct env access (for scripts)
+    const connectionString = configService?.get<string>('DATABASE_URL') ?? process.env.DATABASE_URL;
+    const isProduction = (configService?.get('NODE_ENV') ?? process.env.NODE_ENV) === 'production';
+
+    if (!connectionString) {
+      throw new Error('DATABASE_URL environment variable is not set');
+    }
 
     const pool = new pg.Pool({
       connectionString,
