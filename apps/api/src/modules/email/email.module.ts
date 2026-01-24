@@ -1,5 +1,6 @@
-import { Module, Global } from '@nestjs/common';
+import { Module, Global, forwardRef } from '@nestjs/common';
 
+import { QueueModule } from '../../infrastructure/queue/queue.module';
 import { EMAIL_PORT } from './application/ports/email.port';
 import { ResendEmailAdapter } from './infrastructure/adapters/resend-email.adapter';
 import { UnsubscribeController } from './infrastructure/controllers/unsubscribe.controller';
@@ -8,6 +9,7 @@ import { UnsubscribeTokenService } from './infrastructure/services/unsubscribe-t
 
 @Global()
 @Module({
+  imports: [forwardRef(() => QueueModule)],
   controllers: [UnsubscribeController],
   providers: [
     {
