@@ -1,7 +1,8 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { ScheduleModule } from '@nestjs/schedule';
 
 import { ScanProcessor } from '../../infrastructure/queue/scan.processor';
+import { AuthModule } from '../auth';
 import { ProjectModule } from '../project';
 import { PromptModule } from '../prompt';
 import { AutoScanService } from './infrastructure/auto-scan.service';
@@ -31,7 +32,7 @@ import { PrismaScanRepository } from './infrastructure/persistence/prisma-scan.r
 import { ScanController } from './presentation/controllers/scan.controller';
 
 @Module({
-  imports: [ProjectModule, PromptModule, ScheduleModule.forRoot()],
+  imports: [forwardRef(() => AuthModule), ProjectModule, PromptModule, ScheduleModule.forRoot()],
   controllers: [ScanController],
   providers: [
     // Use cases
