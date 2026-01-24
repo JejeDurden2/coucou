@@ -21,8 +21,8 @@ export interface BaseEmailData {
   previewText?: string;
 }
 
-// Logo hosted on the website (base64/data URIs are blocked by many email clients)
-const LOGO_URL = 'https://coucou-ia.com/logo.svg';
+// Logo hosted on the website (SVG not supported by most email clients, use PNG)
+const LOGO_URL = 'https://coucou-ia.com/logo-email.png';
 
 /**
  * Wraps email content in the base template with Coucou branding
