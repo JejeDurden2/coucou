@@ -2,11 +2,11 @@
 
 import { memo } from 'react';
 import Link from 'next/link';
-import { Smile, Lock, HelpCircle, Loader2 } from 'lucide-react';
+import { Smile, Lock, Loader2 } from 'lucide-react';
 import { Plan } from '@coucou-ia/shared';
 
 import { cn } from '@/lib/utils';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { InfoTooltip } from '@/components/ui/info-tooltip';
 import { useLatestSentiment } from '@/hooks/use-sentiment';
 import { getSentimentVariant, variantTextStyles, variantBgStyles } from '../lib/sentiment-variant';
 
@@ -93,19 +93,10 @@ export const SentimentOverviewCard = memo(function SentimentOverviewCard({
       >
         <div className="flex items-start justify-between gap-3">
           <div className="flex-1 min-w-0">
-            <div className="flex items-center gap-1">
-              <p className="text-xs text-muted-foreground mb-1">Sentiment IA</p>
-              <TooltipProvider>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <HelpCircle className="size-3 text-muted-foreground cursor-help" />
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Perception moyenne de votre marque par les IA</p>
-                  </TooltipContent>
-                </Tooltip>
-              </TooltipProvider>
-            </div>
+            <p className="text-xs text-muted-foreground mb-1 flex items-center gap-1">
+              Sentiment IA
+              <InfoTooltip term="sentiment" />
+            </p>
             <div className="flex items-baseline gap-2">
               <p className="text-2xl font-semibold text-muted-foreground">—</p>
             </div>
@@ -135,19 +126,10 @@ export const SentimentOverviewCard = memo(function SentimentOverviewCard({
     >
       <div className="flex items-start justify-between gap-3">
         <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-1">
-            <p className="text-xs text-muted-foreground mb-1">Sentiment IA</p>
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <HelpCircle className="size-3 text-muted-foreground cursor-help" />
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Perception moyenne de votre marque par les IA</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          </div>
+          <p className="text-xs text-muted-foreground mb-1 flex items-center gap-1">
+            Sentiment IA
+            <InfoTooltip term="sentiment" />
+          </p>
           <div className="flex items-baseline gap-2">
             <p className={cn('text-2xl font-semibold tabular-nums', variantTextStyles[variant])}>
               {Math.round(data.scan.globalScore)}%

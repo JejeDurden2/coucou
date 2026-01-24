@@ -2,6 +2,8 @@ import { memo } from 'react';
 import { cn } from '@/lib/utils';
 import { ArrowDown, ArrowUp, EyeOff, Minus, type LucideIcon } from 'lucide-react';
 import { Sparkline } from '@/components/ui/sparkline';
+import { InfoTooltip } from '@/components/ui/info-tooltip';
+import { type GlossaryTerm } from '@coucou-ia/shared';
 
 interface StatCardProps {
   label: string;
@@ -17,6 +19,8 @@ interface StatCardProps {
   className?: string;
   /** Enable podium styling for ranks 1-3 (gold, silver, bronze) */
   podiumStyle?: boolean;
+  /** Optional glossary term to show info tooltip */
+  tooltipTerm?: GlossaryTerm;
 }
 
 interface TrendIndicatorProps {
@@ -73,6 +77,7 @@ export const StatCard = memo(function StatCard({
   subtitle,
   className,
   podiumStyle = false,
+  tooltipTerm,
 }: StatCardProps) {
   const podiumClass = podiumStyle ? getPodiumStyle(value) : undefined;
 
@@ -87,7 +92,10 @@ export const StatCard = memo(function StatCard({
     >
       <div className="flex items-start justify-between gap-3">
         <div className="flex-1 min-w-0">
-          <p className="text-xs text-muted-foreground mb-1">{label}</p>
+          <p className="text-xs text-muted-foreground mb-1 flex items-center gap-1">
+            {label}
+            {tooltipTerm && <InfoTooltip term={tooltipTerm} />}
+          </p>
           <div className="flex items-baseline gap-2">
             <p
               className={cn(

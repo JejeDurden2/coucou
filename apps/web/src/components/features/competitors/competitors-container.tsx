@@ -4,6 +4,7 @@ import { memo, useMemo } from 'react';
 import { Trophy } from 'lucide-react';
 import { type EnrichedCompetitor, type Plan } from '@coucou-ia/shared';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { InfoTooltip } from '@/components/ui/info-tooltip';
 import { CompetitorCard } from './competitor-ui';
 
 interface CompetitorsContainerProps {
@@ -78,7 +79,10 @@ export const CompetitorsContainer = memo(function CompetitorsContainer({
         <CardHeader>
           <div className="flex items-center gap-2">
             <Trophy className="h-5 w-5 text-amber-500" aria-hidden="true" />
-            <CardTitle>Tous les concurrents</CardTitle>
+            <CardTitle className="flex items-center gap-1">
+              Tous les concurrents
+              <InfoTooltip term="competitor" />
+            </CardTitle>
           </div>
           <CardDescription>
             Analyse detaillee des marques concurrentes citees par les IA

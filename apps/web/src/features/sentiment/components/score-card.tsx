@@ -5,6 +5,7 @@ import { memo } from 'react';
 import { cn } from '@/lib/utils';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { InfoTooltip } from '@/components/ui/info-tooltip';
 import { getSentimentVariant, variantTextStyles } from '../lib/sentiment-variant';
 
 interface ScoreCardProps {
@@ -32,7 +33,10 @@ export const ScoreCard = memo(function ScoreCard({ provider, score, themes }: Sc
     <Card>
       <CardHeader className="pb-2">
         <div className="flex items-center justify-between">
-          <CardTitle className="text-sm font-medium">{config.label}</CardTitle>
+          <CardTitle className="text-sm font-medium flex items-center gap-1">
+            {config.label}
+            <InfoTooltip term="sentiment" />
+          </CardTitle>
           <Badge variant={config.badgeVariant}>{provider.toUpperCase()}</Badge>
         </div>
       </CardHeader>

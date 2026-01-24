@@ -5,6 +5,7 @@ import { Lightbulb, Filter, CheckCircle2 } from 'lucide-react';
 import type { Recommendation, RecommendationSeverity } from '@coucou-ia/shared';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { InfoTooltip } from '@/components/ui/info-tooltip';
 import { RecommendationCard, SEVERITY_CONFIG } from './recommendation-card';
 
 interface RecommendationsContainerProps {
@@ -86,7 +87,10 @@ export const RecommendationsContainer = memo(function RecommendationsContainer({
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div className="flex items-center gap-2">
               <Lightbulb className="h-5 w-5 text-amber-500" aria-hidden="true" />
-              <CardTitle>Toutes les recommandations</CardTitle>
+              <CardTitle className="flex items-center gap-1">
+                Toutes les recommandations
+                <InfoTooltip term="recommendation" />
+              </CardTitle>
             </div>
             <div className="flex items-center gap-2">
               <Filter className="h-4 w-4 text-muted-foreground" aria-hidden="true" />

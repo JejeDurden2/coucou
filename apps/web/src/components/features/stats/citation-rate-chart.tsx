@@ -12,6 +12,7 @@ import {
 } from 'recharts';
 import type { TimeSeriesPoint } from '@coucou-ia/shared';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { InfoTooltip } from '@/components/ui/info-tooltip';
 import { formatChartDate, type AggregationLevel } from '@/lib/format';
 
 interface CitationRateChartProps {
@@ -45,7 +46,10 @@ export const CitationRateChart = memo(function CitationRateChart({
   return (
     <Card>
       <CardHeader className="pb-2">
-        <CardTitle className="text-base">Taux de citation</CardTitle>
+        <CardTitle className="text-base flex items-center gap-1">
+          Taux de citation
+          <InfoTooltip term="citationRate" />
+        </CardTitle>
         <CardDescription>Pourcentage de scans où votre marque est mentionnée</CardDescription>
       </CardHeader>
       <CardContent>

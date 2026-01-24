@@ -43,6 +43,7 @@ import {
 } from '@/components/ui/alert-dialog';
 import { CompetitorsList } from '@/components/features/dashboard';
 import { StatCard } from '@/components/features/dashboard/stat-card';
+import { InfoTooltip } from '@/components/ui/info-tooltip';
 import { getModelDisplayName } from '@/components/features/dashboard/llm-result-row';
 import { AddPromptModal } from '@/components/features/dashboard/add-prompt-modal';
 import { StatsContainer, StatsLockedBanner } from '@/components/features/stats';
@@ -309,6 +310,7 @@ export default function ProjectDashboardPage({
               trend={stats?.trend ? { delta: stats.trend.delta } : undefined}
               sparklineData={stats?.trends?.averageRank?.map((p) => p.value)}
               podiumStyle
+              tooltipTerm="position"
             />
             {modelBreakdown.map((model) => (
               <StatCard
@@ -325,6 +327,7 @@ export default function ProjectDashboardPage({
               label="Total scans"
               value={stats?.totalScans?.toString() ?? '0'}
               gradient="primary"
+              tooltipTerm="scan"
             />
             <SentimentOverviewCard
               projectId={id}
@@ -337,8 +340,9 @@ export default function ProjectDashboardPage({
           <div className="space-y-4">
             <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
               <div>
-                <h2 className="text-sm font-medium text-muted-foreground uppercase">
+                <h2 className="text-sm font-medium text-muted-foreground uppercase flex items-center gap-1">
                   Vos prompts ({promptCount})
+                  <InfoTooltip term="prompt" />
                 </h2>
                 <p className="text-xs text-muted-foreground mt-0.5">
                   Plan {userPlan} : 1 scan/prompt/
