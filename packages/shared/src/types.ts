@@ -118,6 +118,15 @@ export interface UpdatePromptInput {
   isActive?: boolean;
 }
 
+export interface PromptPerformance {
+  promptId: string;
+  content: string;
+  category: PromptCategory | null;
+  citationRate: number;
+  averageRank: number;
+  trend: number;
+}
+
 // ============================================
 // Scan Types
 // ============================================
@@ -209,6 +218,13 @@ export interface ModelBreakdown {
   totalScans: number;
 }
 
+export type ModelTrend = 'up' | 'down' | 'stable';
+
+export interface ModelPerformance extends ModelBreakdown {
+  trend: ModelTrend;
+  trendPercentage: number | null;
+}
+
 export interface Trend {
   current: number;
   previous: number;
@@ -287,6 +303,53 @@ export interface DashboardStats {
 
 export type AggregationLevel = 'day' | 'week' | 'month';
 
+export interface MetricWithVariation {
+  current: number;
+  previous: number | null;
+  variation: number | null;
+}
+
+export interface HistoricalStatsSummary {
+  citationRate: MetricWithVariation;
+  averageRank: MetricWithVariation;
+  totalScans: MetricWithVariation;
+  competitorsCount: MetricWithVariation;
+}
+
+export type SimpleTrend = 'up' | 'down' | 'stable';
+
+export interface HistoricalModelBreakdown {
+  model: string;
+  citationRate: number;
+  averageRank: number | null;
+  trend: SimpleTrend;
+  scansCount: number;
+}
+
+export interface HistoricalPromptBreakdown {
+  promptId: string;
+  promptText: string;
+  category: string | null;
+  citationRate: number;
+  averageRank: number | null;
+  trend: SimpleTrend;
+}
+
+export interface HistoricalCompetitorRanking {
+  name: string;
+  mentions: number;
+  shareOfVoice: number;
+  trend: SimpleTrend;
+}
+
+export type InsightType = 'positive' | 'warning' | 'neutral';
+
+export interface HistoricalInsight {
+  type: InsightType;
+  message: string;
+  ctaType?: 'recommendations' | 'prompts';
+}
+
 export interface HistoricalStats {
   dateRange: { start: string; end: string };
   effectiveDateRange: { start: string; end: string };
@@ -296,6 +359,11 @@ export interface HistoricalStats {
   averageRank: TimeSeriesPoint[];
   rankByModel: Record<string, TimeSeriesPoint[]>;
   competitorTrends: Array<{ name: string; timeSeries: TimeSeriesPoint[] }>;
+  summary: HistoricalStatsSummary;
+  modelBreakdown: HistoricalModelBreakdown[];
+  promptBreakdown: HistoricalPromptBreakdown[];
+  competitorRanking: HistoricalCompetitorRanking[];
+  insight: HistoricalInsight;
 }
 
 /**

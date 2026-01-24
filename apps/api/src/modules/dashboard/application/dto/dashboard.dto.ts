@@ -96,6 +96,53 @@ export interface CompetitorTrendDto {
   timeSeries: TimeSeriesPointDto[];
 }
 
+export interface MetricWithVariationDto {
+  current: number;
+  previous: number | null;
+  variation: number | null;
+}
+
+export interface HistoricalStatsSummaryDto {
+  citationRate: MetricWithVariationDto;
+  averageRank: MetricWithVariationDto;
+  totalScans: MetricWithVariationDto;
+  competitorsCount: MetricWithVariationDto;
+}
+
+export type SimpleTrendDto = 'up' | 'down' | 'stable';
+
+export interface HistoricalModelBreakdownDto {
+  model: string;
+  citationRate: number;
+  averageRank: number | null;
+  trend: SimpleTrendDto;
+  scansCount: number;
+}
+
+export interface HistoricalPromptBreakdownDto {
+  promptId: string;
+  promptText: string;
+  category: string | null;
+  citationRate: number;
+  averageRank: number | null;
+  trend: SimpleTrendDto;
+}
+
+export interface HistoricalCompetitorRankingDto {
+  name: string;
+  mentions: number;
+  shareOfVoice: number;
+  trend: SimpleTrendDto;
+}
+
+export type InsightTypeDto = 'positive' | 'warning' | 'neutral';
+
+export interface HistoricalInsightDto {
+  type: InsightTypeDto;
+  message: string;
+  ctaType?: 'recommendations' | 'prompts';
+}
+
 export interface HistoricalStatsDto {
   dateRange: { start: string; end: string };
   effectiveDateRange: { start: string; end: string };
@@ -105,4 +152,9 @@ export interface HistoricalStatsDto {
   averageRank: TimeSeriesPointDto[];
   rankByModel: Record<string, TimeSeriesPointDto[]>;
   competitorTrends: CompetitorTrendDto[];
+  summary: HistoricalStatsSummaryDto;
+  modelBreakdown: HistoricalModelBreakdownDto[];
+  promptBreakdown: HistoricalPromptBreakdownDto[];
+  competitorRanking: HistoricalCompetitorRankingDto[];
+  insight: HistoricalInsightDto;
 }

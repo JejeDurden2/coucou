@@ -3,5 +3,7 @@ export { StatsLockedBanner } from './stats-locked-banner';
 export { DateRangePicker, type DatePreset } from './date-range-picker';
 export { CitationRateChart } from './citation-rate-chart';
 export { RankTrendChart } from './rank-trend-chart';
-export { ModelBreakdownChart } from './model-breakdown-chart';
+export { ModelPerformanceTable } from './model-performance-table';
 export { CompetitorChart } from './competitor-chart';
+export { PromptPerformanceTable } from './prompt-performance-table';
+export { CompetitorRankingTable } from './competitor-ranking-table';

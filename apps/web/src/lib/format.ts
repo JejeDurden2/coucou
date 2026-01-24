@@ -104,3 +104,58 @@ export function formatNextScanDate(date: Date | string): string {
   const dateStr = target.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long' });
   return `le ${dateStr} à ${timeStr}`;
 }
+
+/**
+ * Format a date for tooltip display (e.g., "22 janvier")
+ */
+export function formatTooltipDate(dateStr: string): string {
+  return new Date(dateStr).toLocaleDateString('fr-FR', {
+    day: 'numeric',
+    month: 'long',
+  });
+}
+
+/**
+ * Format a variation delta for display
+ * @example formatVariation(5.2) // "+5.2%"
+ * @example formatVariation(-3.1) // "-3.1%"
+ * @example formatVariation(null) // "—"
+ */
+export function formatVariation(delta: number | null): string {
+  if (delta === null) return '—';
+  const sign = delta >= 0 ? '+' : '';
+  return `${sign}${delta.toFixed(1)}%`;
+}
+
+interface DataPoint {
+  date: string;
+}
+
+const MS_PER_DAY = 86_400_000;
+
+/**
+ * Determine X-axis aggregation based on period length
+ * @returns 'day' if period < 30 days, 'week' otherwise
+ */
+export function getAxisAggregation(data: DataPoint[]): 'day' | 'week' {
+  if (data.length < 2) return 'day';
+
+  const firstDate = new Date(data[0].date).getTime();
+  const lastDate = new Date(data[data.length - 1].date).getTime();
+  const diffDays = (lastDate - firstDate) / MS_PER_DAY;
+
+  return diffDays < 30 ? 'day' : 'week';
+}
+
+/**
+ * Format date for X-axis based on aggregation
+ */
+export function formatAxisDate(dateStr: string, aggregation: 'day' | 'week'): string {
+  const date = new Date(dateStr);
+  if (aggregation === 'week') {
+    const startOfYear = new Date(date.getFullYear(), 0, 1);
+    const weekNum = Math.ceil(((date.getTime() - startOfYear.getTime()) / MS_PER_DAY + 1) / 7);
+    return `Sem. ${weekNum}`;
+  }
+  return date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' });
+}

@@ -1,27 +1,50 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import { Loader2, AlertCircle } from 'lucide-react';
-import { Plan } from '@coucou-ia/shared';
+import {
+  TrendingUp,
+  Trophy,
+  Radar,
+  Users,
+  BarChart3,
+  RefreshCw,
+  AlertCircle,
+  Download,
+} from 'lucide-react';
+import {
+  Plan,
+  type PromptPerformance,
+  type PromptCategory,
+  type HistoricalStats,
+} from '@coucou-ia/shared';
 import { useHistoricalStats } from '@/hooks/use-historical-stats';
 import { DateRangePicker, type DatePreset } from './date-range-picker';
 import { CitationRateChart } from './citation-rate-chart';
-import { RankTrendChart } from './rank-trend-chart';
-import { ModelBreakdownChart } from './model-breakdown-chart';
-import { CompetitorChart } from './competitor-chart';
+import { ModelPerformanceTable } from './model-performance-table';
+import { PromptPerformanceTable } from './prompt-performance-table';
+import { CompetitorRankingTable } from './competitor-ranking-table';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { KpiCard, KpiCardGrid } from '@/components/ui/kpi-card';
+import { InsightCard } from '@/components/ui/insight-card';
+import { Skeleton, SkeletonStatCard } from '@/components/ui/skeleton';
 
 interface StatsContainerProps {
   projectId: string;
   userPlan: Plan;
+  brandName: string;
+  projectName: string;
+  onNavigateToOverview: () => void;
 }
+
+type VariationType = 'increase' | 'decrease' | 'neutral';
 
 function getDateRange(preset: DatePreset): { start: string; end: string } | undefined {
   const now = new Date();
   const end = now.toISOString().split('T')[0];
 
   if (preset === 'all') {
-    return undefined; // Let API determine full range
+    return undefined;
   }
 
   const daysMap: Record<Exclude<DatePreset, 'all'>, number> = {
@@ -39,56 +62,272 @@ function getDateRange(preset: DatePreset): { start: string; end: string } | unde
   };
 }
 
-export function StatsContainer({ projectId, userPlan }: StatsContainerProps) {
-  const defaultPreset: DatePreset = userPlan === Plan.SOLO ? '30d' : '30d';
-  const [preset, setPreset] = useState<DatePreset>(defaultPreset);
+function getVariationType(variation: number | null): VariationType {
+  if (variation === null) return 'neutral';
+  if (variation > 0) return 'increase';
+  if (variation < 0) return 'decrease';
+  return 'neutral';
+}
+
+function generateCSV(data: HistoricalStats, projectName: string): void {
+  const BOM = '\uFEFF';
+  const SEP = ';';
+
+  // Get all unique models from rankByModel
+  const models = Object.keys(data.rankByModel);
+
+  // Build header row
+  const headers = ['Date', 'Taux citation (%)', 'Rang moyen', ...models.map((m) => `Rang ${m}`)];
+
+  // Build data rows from citationRate time series
+  const rows: string[][] = data.citationRate.map((point) => {
+    const date = point.date;
+    const citationValue = point.value.toFixed(1);
+
+    // Find matching averageRank for this date
+    const avgRankPoint = data.averageRank.find((r) => r.date === date);
+    const avgRank = avgRankPoint ? avgRankPoint.value.toFixed(1) : '';
+
+    // Find matching rank for each model
+    const modelRanks = models.map((model) => {
+      const modelData = data.rankByModel[model];
+      const modelPoint = modelData?.find((r) => r.date === date);
+      return modelPoint ? modelPoint.value.toFixed(1) : '';
+    });
+
+    return [date, citationValue, avgRank, ...modelRanks];
+  });
+
+  // Add empty row before competitors section
+  const emptyRow = Array(headers.length).fill('');
+
+  // Competitors section
+  const competitorLabels = ['Concurrent', 'Mentions', 'Part de voix (%)', 'Tendance'];
+  const competitorRows = data.competitorRanking.map((c) => [
+    c.name,
+    c.mentions.toString(),
+    c.shareOfVoice.toFixed(1),
+    c.trend,
+  ]);
+
+  // Combine all rows
+  const allRows = [headers, ...rows, emptyRow, competitorLabels, ...competitorRows];
+
+  // Convert to CSV string
+  const csvContent = BOM + allRows.map((row) => row.join(SEP)).join('\n');
+
+  // Generate filename
+  const today = new Date().toISOString().split('T')[0];
+  const sanitizedName = projectName.replace(/[^a-zA-Z0-9-_]/g, '-').toLowerCase();
+  const filename = `coucou-ia-stats-${sanitizedName}-${today}.csv`;
+
+  // Create blob and trigger download
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+}
+
+function LoadingSkeleton(): React.ReactElement {
+  return (
+    <div className="space-y-6">
+      {/* Header skeleton */}
+      <div className="flex items-center justify-between">
+        <Skeleton className="h-7 w-32" />
+        <Skeleton className="h-9 w-48" />
+      </div>
+
+      {/* KPIs skeleton */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <SkeletonStatCard />
+        <SkeletonStatCard />
+        <SkeletonStatCard />
+        <SkeletonStatCard />
+      </div>
+
+      {/* Insight skeleton */}
+      <Skeleton className="h-16 w-full rounded-lg" />
+
+      {/* Chart skeleton */}
+      <Skeleton className="h-[300px] w-full rounded-lg" />
+
+      {/* Tables skeleton */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <Skeleton className="h-[400px] w-full rounded-lg" />
+        <Skeleton className="h-[400px] w-full rounded-lg" />
+      </div>
+
+      {/* Competitors skeleton */}
+      <Skeleton className="h-[250px] w-full rounded-lg" />
+    </div>
+  );
+}
+
+interface ErrorStateProps {
+  onRetry: () => void;
+}
+
+function ErrorState({ onRetry }: ErrorStateProps): React.ReactElement {
+  return (
+    <div className="flex flex-col items-center justify-center py-12 gap-4">
+      <AlertCircle className="size-8 text-destructive" aria-hidden="true" />
+      <p className="text-destructive font-medium">Erreur lors du chargement des statistiques</p>
+      <Button variant="outline" onClick={onRetry}>
+        <RefreshCw className="size-4 mr-2" aria-hidden="true" />
+        Réessayer
+      </Button>
+    </div>
+  );
+}
+
+function EmptyState(): React.ReactElement {
+  return (
+    <div className="text-center py-12 text-muted-foreground">
+      <BarChart3 className="size-12 mx-auto mb-4 opacity-50" aria-hidden="true" />
+      <p className="font-medium">Aucune donnée disponible</p>
+      <p className="text-sm mt-1">Les statistiques apparaîtront après le premier scan</p>
+    </div>
+  );
+}
+
+const CTA_CONFIG: Record<string, { href: string; label: string }> = {
+  recommendations: { href: '#recommendations', label: 'Voir les recommandations' },
+  prompts: { href: '#prompts', label: 'Gérer les prompts' },
+};
+
+export function StatsContainer({
+  projectId,
+  userPlan,
+  brandName,
+  projectName,
+  onNavigateToOverview,
+}: StatsContainerProps): React.ReactElement {
+  const [preset, setPreset] = useState<DatePreset>('30d');
 
   const dateRange = useMemo(() => getDateRange(preset), [preset]);
-  const { data, isLoading, error } = useHistoricalStats(projectId, dateRange);
+  const { data, isLoading, error, refetch } = useHistoricalStats(projectId, dateRange);
 
   if (isLoading) {
-    return (
-      <div className="flex items-center justify-center py-12">
-        <Loader2 className="size-6 animate-spin text-muted-foreground" aria-hidden="true" />
-        <span className="ml-2 text-muted-foreground">Chargement des statistiques...</span>
-      </div>
-    );
+    return <LoadingSkeleton />;
   }
 
   if (error) {
-    return (
-      <div className="flex items-center justify-center py-12">
-        <AlertCircle className="size-5 text-destructive" aria-hidden="true" />
-        <span className="ml-2 text-destructive">Erreur lors du chargement des statistiques</span>
-      </div>
-    );
+    return <ErrorState onRetry={() => refetch()} />;
   }
 
   if (!data) {
-    return <div className="text-center py-12 text-muted-foreground">Aucune donnée disponible</div>;
+    return <EmptyState />;
   }
+
+  const avgCitation =
+    data.citationRate.length > 0
+      ? data.citationRate.reduce((sum, p) => sum + p.value, 0) / data.citationRate.length
+      : 0;
+
+  // Transform HistoricalPromptBreakdown to PromptPerformance
+  const promptPerformance: PromptPerformance[] = data.promptBreakdown.map((p) => ({
+    promptId: p.promptId,
+    content: p.promptText,
+    category: p.category as PromptCategory | null,
+    citationRate: p.citationRate,
+    averageRank: p.averageRank ?? 0,
+    trend: p.trend === 'up' ? 5 : p.trend === 'down' ? -5 : 0,
+  }));
+
+  const ctaConfig = data.insight.ctaType ? CTA_CONFIG[data.insight.ctaType] : undefined;
 
   return (
     <div className="space-y-6">
-      {/* Header with date picker */}
+      {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <h2 className="text-lg font-semibold">Historique</h2>
+          <h2 className="text-lg font-semibold">Statistiques</h2>
           {data.planLimit.isLimited && (
             <Badge variant="muted" className="text-xs">
               {data.planLimit.maxDays} jours max
             </Badge>
           )}
         </div>
-        <DateRangePicker value={preset} onChange={setPreset} userPlan={userPlan} />
+        <div className="flex items-center gap-2">
+          <DateRangePicker value={preset} onChange={setPreset} userPlan={userPlan} />
+          <Button variant="outline" size="sm" onClick={() => generateCSV(data, projectName)}>
+            <Download className="size-4 mr-2" aria-hidden="true" />
+            Exporter
+          </Button>
+        </div>
       </div>
 
-      {/* Charts grid */}
+      {/* KPIs */}
+      <KpiCardGrid>
+        <KpiCard
+          label="Taux de citation"
+          value={`${data.summary.citationRate.current.toFixed(1)}%`}
+          variation={data.summary.citationRate.variation ?? undefined}
+          variationType={getVariationType(data.summary.citationRate.variation)}
+          icon={TrendingUp}
+          tooltip="Pourcentage de scans où votre marque est citée"
+        />
+        <KpiCard
+          label="Rang moyen"
+          value={data.summary.averageRank.current.toFixed(1)}
+          variation={data.summary.averageRank.variation ?? undefined}
+          variationType={getVariationType(data.summary.averageRank.variation)}
+          invertColors
+          icon={Trophy}
+          tooltip="Position moyenne dans les résultats (1 = meilleur)"
+        />
+        <KpiCard
+          label="Scans totaux"
+          value={data.summary.totalScans.current}
+          variation={data.summary.totalScans.variation ?? undefined}
+          variationType={getVariationType(data.summary.totalScans.variation)}
+          icon={Radar}
+          tooltip="Nombre total de scans effectués sur la période"
+        />
+        <KpiCard
+          label="Concurrents"
+          value={data.summary.competitorsCount.current}
+          variation={data.summary.competitorsCount.variation ?? undefined}
+          variationType={getVariationType(data.summary.competitorsCount.variation)}
+          icon={Users}
+          tooltip="Nombre de concurrents détectés"
+        />
+      </KpiCardGrid>
+
+      {/* Insight */}
+      {data.insight.message && (
+        <InsightCard
+          type={data.insight.type}
+          message={data.insight.message}
+          ctaLabel={ctaConfig?.label}
+          ctaHref={ctaConfig?.href}
+        />
+      )}
+
+      {/* Hero Chart */}
+      <CitationRateChart data={data.citationRate} average={avgCitation} />
+
+      {/* Tables Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <CitationRateChart data={data.citationRate} aggregation={data.aggregation} />
-        <RankTrendChart data={data.averageRank} aggregation={data.aggregation} />
-        <ModelBreakdownChart data={data.rankByModel} aggregation={data.aggregation} />
-        <CompetitorChart data={data.competitorTrends} aggregation={data.aggregation} />
+        <ModelPerformanceTable data={data.modelBreakdown} userPlan={userPlan} />
+        <div className="rounded-lg border border-border bg-card p-4">
+          <h3 className="text-sm font-medium mb-4">Performance par prompt</h3>
+          <PromptPerformanceTable
+            data={promptPerformance}
+            onNavigateToOverview={onNavigateToOverview}
+          />
+        </div>
+      </div>
+
+      {/* Competitors */}
+      <div>
+        <h3 className="text-sm font-medium mb-4">Classement des concurrents</h3>
+        <CompetitorRankingTable data={data.competitorRanking} userBrandName={brandName} />
       </div>
     </div>
   );

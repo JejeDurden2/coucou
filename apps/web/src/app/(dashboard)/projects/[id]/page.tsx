@@ -521,7 +521,13 @@ export default function ProjectDashboardPage({
 
         <TabsContent value="stats">
           {userCanAccessStats ? (
-            <StatsContainer projectId={id} userPlan={userPlan} />
+            <StatsContainer
+              projectId={id}
+              userPlan={userPlan}
+              brandName={project.brandName}
+              projectName={project.brandName}
+              onNavigateToOverview={() => setActiveTab('overview')}
+            />
           ) : (
             <StatsLockedBanner />
           )}
