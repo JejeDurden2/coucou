@@ -4,12 +4,8 @@ import { ConfigService } from '@nestjs/config';
 import { CURRENT_TERMS_VERSION, CURRENT_PRIVACY_VERSION } from '@coucou-ia/shared';
 
 import { PrismaService } from '../../../../prisma';
-import {
-  EMAIL_PORT,
-  type EmailPort,
-  generateWelcomeEmail,
-  generateNewUserNotificationEmail,
-} from '../../../email';
+import { EmailQueueService } from '../../../../infrastructure/queue';
+import { EMAIL_PORT, type EmailPort, generateWelcomeEmail } from '../../../email';
 import {
   USER_REPOSITORY,
   CONSENT_REPOSITORY,
@@ -34,6 +30,7 @@ export class GoogleAuthUseCase {
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
     private readonly prisma: PrismaService,
+    private readonly emailQueueService: EmailQueueService,
   ) {}
 
   async execute(profile: GoogleProfile): Promise<AuthResponseDto> {
@@ -87,7 +84,7 @@ export class GoogleAuthUseCase {
       this.sendWelcomeEmail(user).catch((error) => {
         this.logger.error(`Failed to send welcome email to ${user.email}`, error);
       });
-      this.sendAdminNotification(user).catch((error) => {
+      this.emailQueueService.notifyNewUser(user, 'google').catch((error) => {
         this.logger.error(`Failed to send admin notification for ${user.email}`, error);
       });
     }
@@ -134,22 +131,6 @@ export class GoogleAuthUseCase {
     await this.emailService.send({
       to: user.email,
       subject: 'Bienvenue sur Coucou IA - Votre visibilite IA commence ici',
-      html,
-      text,
-    });
-  }
-
-  private async sendAdminNotification(user: User): Promise<void> {
-    const { html, text } = generateNewUserNotificationEmail({
-      userName: user.name ?? user.email.split('@')[0],
-      userEmail: user.email,
-      authMethod: 'google',
-      createdAt: new Date().toLocaleString('fr-FR', { timeZone: 'Europe/Paris' }),
-    });
-
-    await this.emailService.send({
-      to: 'jerome@coucou-ia.com',
-      subject: `Nouvel utilisateur : ${user.name ?? user.email}`,
       html,
       text,
     });

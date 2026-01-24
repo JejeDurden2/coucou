@@ -6,6 +6,8 @@ import { Queue, QueueEvents } from 'bullmq';
 import { EMAIL_QUEUE_NAME, defaultJobOptions } from './queue.config';
 import type { EmailJobData } from './types/email-job.types';
 
+const ADMIN_NOTIFICATION_EMAIL = 'jerome@coucou-ia.com';
+
 export interface QueueHealthStatus {
   status: 'healthy' | 'unhealthy';
   latencyMs?: number;
@@ -97,5 +99,24 @@ export class EmailQueueService implements OnModuleInit, OnModuleDestroy {
       });
       return { status: 'unhealthy' };
     }
+  }
+
+  async notifyNewUser(
+    user: {
+      name: string | null;
+      email: string;
+    },
+    authMethod: 'email' | 'google',
+  ): Promise<string> {
+    return this.addJob({
+      type: 'new-user-notification',
+      to: ADMIN_NOTIFICATION_EMAIL,
+      data: {
+        userName: user.name ?? user.email.split('@')[0],
+        userEmail: user.email,
+        authMethod,
+        createdAt: new Date().toLocaleString('fr-FR', { timeZone: 'Europe/Paris' }),
+      },
+    });
   }
 }

@@ -74,16 +74,7 @@ export class RegisterUseCase {
     });
 
     // Send admin notification via queue
-    await this.emailQueueService.addJob({
-      type: 'new-user-notification',
-      to: 'jerome@coucou-ia.com',
-      data: {
-        userName,
-        userEmail: user.email,
-        authMethod: 'email' as const,
-        createdAt: new Date().toLocaleString('fr-FR', { timeZone: 'Europe/Paris' }),
-      },
-    });
+    await this.emailQueueService.notifyNewUser(user, 'email');
 
     return Result.ok(user);
   }
