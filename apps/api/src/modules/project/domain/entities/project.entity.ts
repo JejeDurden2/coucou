@@ -15,6 +15,8 @@ export interface ProjectProps {
   domain: string;
   brandContext: BrandContext | null;
   lastScannedAt: Date | null;
+  lastAutoScanAt: Date | null;
+  nextAutoScanAt: Date | null;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -60,6 +62,14 @@ export class Project {
 
   get lastScannedAt(): Date | null {
     return this.props.lastScannedAt;
+  }
+
+  get lastAutoScanAt(): Date | null {
+    return this.props.lastAutoScanAt;
+  }
+
+  get nextAutoScanAt(): Date | null {
+    return this.props.nextAutoScanAt;
   }
 
   get createdAt(): Date {

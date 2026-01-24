@@ -19,6 +19,8 @@ export interface ProjectResponseDto {
   brandVariants: string[];
   domain: string;
   lastScannedAt: Date | null;
+  lastAutoScanAt: Date | null;
+  nextAutoScanAt: Date | null;
   createdAt: Date;
   updatedAt: Date;
 }

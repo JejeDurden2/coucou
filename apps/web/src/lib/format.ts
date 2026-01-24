@@ -53,3 +53,54 @@ export function formatChartDate(dateStr: string, aggregation: AggregationLevel):
   }
   return date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' });
 }
+
+const DAYS_FR = ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'];
+
+/**
+ * Format a future date for next scan display
+ * @example formatNextScanDate(today8h30) // "aujourd'hui à 8h30"
+ * @example formatNextScanDate(tomorrow9h30) // "demain à 9h30"
+ * @example formatNextScanDate(nextMonday) // "lundi à 9h30"
+ * @example formatNextScanDate(mondayNextWeek) // "lundi prochain à 9h30"
+ */
+export function formatNextScanDate(date: Date | string): string {
+  const target = new Date(date);
+  const now = new Date();
+
+  // Reset time for day comparison
+  const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const targetStart = new Date(target.getFullYear(), target.getMonth(), target.getDate());
+
+  const diffDays = Math.floor(
+    (targetStart.getTime() - todayStart.getTime()) / (1000 * 60 * 60 * 24),
+  );
+
+  // Format time as "8h30"
+  const hours = target.getHours();
+  const minutes = target.getMinutes();
+  const timeStr = minutes === 0 ? `${hours}h` : `${hours}h${String(minutes).padStart(2, '0')}`;
+
+  if (diffDays === 0) {
+    return `aujourd'hui à ${timeStr}`;
+  }
+
+  if (diffDays === 1) {
+    return `demain à ${timeStr}`;
+  }
+
+  const dayName = DAYS_FR[target.getDay()];
+
+  // Within the current week (2-6 days)
+  if (diffDays >= 2 && diffDays <= 6) {
+    return `${dayName} à ${timeStr}`;
+  }
+
+  // Next week (7-13 days)
+  if (diffDays >= 7 && diffDays <= 13) {
+    return `${dayName} prochain à ${timeStr}`;
+  }
+
+  // More than 2 weeks: show full date
+  const dateStr = target.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long' });
+  return `le ${dateStr} à ${timeStr}`;
+}

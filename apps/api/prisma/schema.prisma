@@ -64,6 +64,12 @@ model User {
   updatedAt DateTime  @updatedAt @map("updated_at")
   deletedAt DateTime? @map("deleted_at")
 
+  // Email notification fields
+  lastInactivityEmailAt     DateTime? @map("last_inactivity_email_at")
+  emailNotificationsEnabled Boolean   @default(true) @map("email_notifications_enabled")
+  lastScanAt                DateTime? @map("last_scan_at")
+  lastPostScanEmailAt       DateTime? @map("last_post_scan_email_at")
+
   projects            Project[]
   subscription        Subscription?
   passwordResetTokens PasswordResetToken[]
@@ -113,8 +119,10 @@ model Project {
   brandName     String    @map("brand_name")
   brandVariants String[]  @map("brand_variants")
   domain        String
-  brandContext  Json?     @map("brand_context")
-  lastScannedAt DateTime? @map("last_scanned_at")
+  brandContext   Json?     @map("brand_context")
+  lastScannedAt  DateTime? @map("last_scanned_at")
+  lastAutoScanAt DateTime? @map("last_auto_scan_at")
+  nextAutoScanAt DateTime? @map("next_auto_scan_at")
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")

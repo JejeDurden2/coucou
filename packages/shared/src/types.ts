@@ -32,6 +32,9 @@ export interface User {
   plan: Plan;
   projectCount: number;
   createdAt: Date;
+  lastInactivityEmailAt?: Date;
+  emailNotificationsEnabled: boolean;
+  lastScanAt?: Date;
 }
 
 export interface AuthResponse {
@@ -60,6 +63,8 @@ export interface Project {
   domain: string;
   brandContext: BrandContext | null;
   lastScannedAt: Date | null;
+  lastAutoScanAt: Date | null;
+  nextAutoScanAt: Date | null;
   createdAt: Date;
   updatedAt: Date;
 }

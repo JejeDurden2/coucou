@@ -20,6 +20,8 @@ function mapPrismaToProjectProps(prismaProject: PrismaProject): ProjectProps {
     domain: prismaProject.domain,
     brandContext: prismaProject.brandContext as BrandContext | null,
     lastScannedAt: prismaProject.lastScannedAt,
+    lastAutoScanAt: prismaProject.lastAutoScanAt,
+    nextAutoScanAt: prismaProject.nextAutoScanAt,
     createdAt: prismaProject.createdAt,
     updatedAt: prismaProject.updatedAt,
   };
@@ -71,6 +73,17 @@ export class PrismaProjectRepository implements ProjectRepository {
     await this.prisma.project.update({
       where: { id },
       data: { lastScannedAt: date },
+    });
+  }
+
+  async updateAutoScanDates(
+    id: string,
+    lastAutoScanAt: Date,
+    nextAutoScanAt: Date | null,
+  ): Promise<void> {
+    await this.prisma.project.update({
+      where: { id },
+      data: { lastAutoScanAt, nextAutoScanAt },
     });
   }
 

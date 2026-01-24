@@ -64,6 +64,8 @@ export class CreateProjectUseCase {
       brandVariants: project.brandVariants,
       domain: project.domain,
       lastScannedAt: project.lastScannedAt,
+      lastAutoScanAt: project.lastAutoScanAt,
+      nextAutoScanAt: project.nextAutoScanAt,
       createdAt: project.createdAt,
       updatedAt: project.updatedAt,
     });

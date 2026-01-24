@@ -24,6 +24,7 @@ export interface ProjectRepository {
   create(data: CreateProjectData): Promise<Project>;
   update(id: string, data: UpdateProjectData): Promise<Project>;
   updateLastScannedAt(id: string, date: Date): Promise<void>;
+  updateAutoScanDates(id: string, lastAutoScanAt: Date, nextAutoScanAt: Date | null): Promise<void>;
   updateBrandContext(id: string, context: BrandContext): Promise<void>;
   delete(id: string): Promise<void>;
 }

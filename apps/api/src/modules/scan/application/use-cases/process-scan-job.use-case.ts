@@ -1,10 +1,14 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { Plan, ScanJobStatus } from '@prisma/client';
 
 import { Result } from '../../../../common';
 import type { DomainError } from '../../../../common/errors/domain-error';
 import { NotFoundError } from '../../../../common/errors/domain-error';
+import { EmailQueueService } from '../../../../infrastructure/queue/email-queue.service';
 import type { ScanJobData, ScanJobResult } from '../../../../infrastructure/queue';
+import { USER_REPOSITORY, type UserRepository } from '../../../auth';
+import { UnsubscribeTokenService } from '../../../email/infrastructure/services/unsubscribe-token.service';
 import { PROJECT_REPOSITORY, type ProjectRepository } from '../../../project';
 import { PROMPT_REPOSITORY, type PromptRepository } from '../../../prompt';
 import {
@@ -37,13 +41,18 @@ export class ProcessScanJobUseCase {
     private readonly scanRepository: ScanRepository,
     @Inject(SCAN_JOB_REPOSITORY)
     private readonly scanJobRepository: ScanJobRepository,
+    @Inject(USER_REPOSITORY)
+    private readonly userRepository: UserRepository,
     @Inject(LLM_SERVICE)
     private readonly llmService: LLMService,
     private readonly responseProcessor: LLMResponseProcessorService,
+    private readonly emailQueueService: EmailQueueService,
+    private readonly unsubscribeTokenService: UnsubscribeTokenService,
+    private readonly configService: ConfigService,
   ) {}
 
   async execute(data: ScanJobData): Promise<Result<ScanJobResult, DomainError>> {
-    const { scanJobId, projectId, plan } = data;
+    const { scanJobId, projectId, userId, plan } = data;
 
     // Verify job exists
     const scanJob = await this.scanJobRepository.findById(scanJobId);
@@ -133,6 +142,12 @@ export class ProcessScanJobUseCase {
     });
 
     await this.projectRepository.updateLastScannedAt(project.id, new Date());
+    await this.userRepository.updateLastScanAt(userId, new Date());
+
+    // Send post-scan teaser email for SOLO/PRO users on auto scans
+    if (data.source === 'auto' && (plan === Plan.SOLO || plan === Plan.PRO)) {
+      await this.trySendPostScanEmail(userId, project);
+    }
 
     this.logger.log(
       `Completed scan job ${scanJobId}: status=${finalStatus}, scans=${scansCreated}`,
@@ -210,5 +225,62 @@ export class ProcessScanJobUseCase {
     await this.promptRepository.updateLastScannedAt(prompt.id, new Date());
 
     return { success: true };
+  }
+
+  private async trySendPostScanEmail(
+    userId: string,
+    project: { id: string; brandName: string },
+  ): Promise<void> {
+    try {
+      const user = await this.userRepository.findByIdWithEmailPrefs(userId);
+      if (!user) {
+        this.logger.warn(`User ${userId} not found for post-scan email`);
+        return;
+      }
+
+      // Check if user has email notifications enabled
+      if (!user.emailNotificationsEnabled) {
+        this.logger.debug(
+          `User ${userId} has email notifications disabled, skipping post-scan email`,
+        );
+        return;
+      }
+
+      // Check if we already sent an email today
+      if (user.lastPostScanEmailAt) {
+        const today = new Date();
+        const lastSent = new Date(user.lastPostScanEmailAt);
+        if (
+          lastSent.getFullYear() === today.getFullYear() &&
+          lastSent.getMonth() === today.getMonth() &&
+          lastSent.getDate() === today.getDate()
+        ) {
+          this.logger.debug(`User ${userId} already received post-scan email today, skipping`);
+          return;
+        }
+      }
+
+      const frontendUrl = this.configService.getOrThrow<string>('FRONTEND_URL');
+      const apiUrl = this.configService.getOrThrow<string>('API_URL');
+      const unsubscribeToken = this.unsubscribeTokenService.generateToken(userId);
+
+      await this.emailQueueService.addJob({
+        type: 'post-scan',
+        to: user.email,
+        data: {
+          firstName: user.name ?? user.email.split('@')[0],
+          projectName: project.brandName,
+          projectUrl: `${frontendUrl}/projects/${project.id}`,
+          unsubscribeUrl: `${apiUrl}/email/unsubscribe?token=${unsubscribeToken}`,
+        },
+      });
+
+      await this.userRepository.updateLastPostScanEmailAt(userId, new Date());
+
+      this.logger.log(`Post-scan email queued for user ${userId}`);
+    } catch (error) {
+      // Don't fail the scan if email fails
+      this.logger.error(`Failed to send post-scan email for user ${userId}:`, error);
+    }
   }
 }

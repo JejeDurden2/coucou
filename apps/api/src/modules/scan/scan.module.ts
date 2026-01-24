@@ -1,8 +1,10 @@
 import { Module } from '@nestjs/common';
+import { ScheduleModule } from '@nestjs/schedule';
 
 import { ScanProcessor } from '../../infrastructure/queue/scan.processor';
 import { ProjectModule } from '../project';
 import { PromptModule } from '../prompt';
+import { AutoScanService } from './infrastructure/auto-scan.service';
 import { SCAN_JOB_REPOSITORY, SCAN_REPOSITORY } from './domain';
 import { LLM_SERVICE } from './application/ports/llm.port';
 import { LLMResponseProcessorService } from './application/services/llm-response-processor.service';
@@ -29,7 +31,7 @@ import { PrismaScanRepository } from './infrastructure/persistence/prisma-scan.r
 import { ScanController } from './presentation/controllers/scan.controller';
 
 @Module({
-  imports: [ProjectModule, PromptModule],
+  imports: [ProjectModule, PromptModule, ScheduleModule.forRoot()],
   controllers: [ScanController],
   providers: [
     // Use cases
@@ -52,6 +54,8 @@ import { ScanController } from './presentation/controllers/scan.controller';
     },
     // Processor (domain-specific, registered here)
     ScanProcessor,
+    // Auto-scan cron service
+    AutoScanService,
     // LLM adapters
     OpenAILLMAdapter,
     AnthropicLLMAdapter,

@@ -37,6 +37,8 @@ export class UpdateProjectUseCase {
       brandVariants: updated.brandVariants,
       domain: updated.domain,
       lastScannedAt: updated.lastScannedAt,
+      lastAutoScanAt: updated.lastAutoScanAt,
+      nextAutoScanAt: updated.nextAutoScanAt,
       createdAt: updated.createdAt,
       updatedAt: updated.updatedAt,
     });

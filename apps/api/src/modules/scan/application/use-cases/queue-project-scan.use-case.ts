@@ -14,10 +14,13 @@ import {
   type ScanRepository,
 } from '../../domain';
 
+import type { ScanSource } from '../../../../infrastructure/queue/types/scan-job.types';
+
 export interface QueueProjectScanInput {
   projectId: string;
   userId: string;
   plan: Plan;
+  source?: ScanSource;
 }
 
 export interface QueueProjectScanResponse {
@@ -50,7 +53,7 @@ export class QueueProjectScanUseCase {
   async execute(
     input: QueueProjectScanInput,
   ): Promise<Result<QueueProjectScanResponse, QueueProjectScanError>> {
-    const { projectId, userId, plan } = input;
+    const { projectId, userId, plan, source } = input;
 
     const project = await this.projectRepository.findById(projectId);
 
@@ -108,6 +111,7 @@ export class QueueProjectScanUseCase {
       projectId,
       userId,
       plan,
+      source,
     });
 
     this.logger.log(

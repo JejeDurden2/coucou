@@ -69,6 +69,7 @@ export class ScanQueueService implements OnModuleInit, OnModuleDestroy {
       jobId: job.id,
       scanJobId: data.scanJobId,
       projectId: data.projectId,
+      source: data.source ?? 'manual',
     });
 
     return job.id ?? '';
