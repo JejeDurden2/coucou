@@ -438,7 +438,7 @@ export default function ProjectDashboardPage({
                           ))}
                           <td className="px-4 py-3">
                             <div className="flex items-center gap-1">
-                              {scanAvailability.canScan && (
+                              {userPlan === Plan.FREE && scanAvailability.canScan && (
                                 <Button
                                   variant="ghost"
                                   size="icon"
