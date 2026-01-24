@@ -63,6 +63,7 @@ import {
 } from '@coucou-ia/shared';
 import { cn } from '@/lib/utils';
 import { formatRelativeTime, formatRelativeTimeFuture } from '@/lib/format';
+import { NextScanInfo } from '@/components/features/dashboard/next-scan-info';
 
 interface PulsingDotProps {
   color: 'primary' | 'success' | 'cyan' | 'emerald';
@@ -235,42 +236,46 @@ export default function ProjectDashboardPage({
             ) : null}
           </div>
         </div>
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <span className={isScanDisabled ? 'cursor-not-allowed' : undefined}>
-                <Button
-                  onClick={handleTriggerScan}
-                  disabled={isScanDisabled}
-                  size="sm"
-                  className={isScanDisabled ? 'pointer-events-none' : undefined}
-                >
-                  {isScanning ? (
-                    <>
-                      <RefreshCw
-                        className="mr-2 h-4 w-4 animate-spin motion-reduce:animate-none"
-                        aria-hidden="true"
-                      />
-                      {scanProgress?.status === 'PROCESSING'
-                        ? `Analyse... ${Math.round((scanProgress.progress ?? 0) * 100)}%`
-                        : 'En attente...'}
-                    </>
-                  ) : (
-                    <>
-                      <Radar className="mr-2 h-4 w-4" aria-hidden="true" />
-                      Scanner {scannablePromptIds.size > 0 && `(${scannablePromptIds.size})`}
-                    </>
-                  )}
-                </Button>
-              </span>
-            </TooltipTrigger>
-            {scanDisabledReason && (
-              <TooltipContent>
-                <p>{scanDisabledReason}</p>
-              </TooltipContent>
-            )}
-          </Tooltip>
-        </TooltipProvider>
+        {userPlan === Plan.FREE ? (
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <span className={isScanDisabled ? 'cursor-not-allowed' : undefined}>
+                  <Button
+                    onClick={handleTriggerScan}
+                    disabled={isScanDisabled}
+                    size="sm"
+                    className={isScanDisabled ? 'pointer-events-none' : undefined}
+                  >
+                    {isScanning ? (
+                      <>
+                        <RefreshCw
+                          className="mr-2 h-4 w-4 animate-spin motion-reduce:animate-none"
+                          aria-hidden="true"
+                        />
+                        {scanProgress?.status === 'PROCESSING'
+                          ? `Analyse... ${Math.round((scanProgress.progress ?? 0) * 100)}%`
+                          : 'En attente...'}
+                      </>
+                    ) : (
+                      <>
+                        <Radar className="mr-2 h-4 w-4" aria-hidden="true" />
+                        Scanner {scannablePromptIds.size > 0 && `(${scannablePromptIds.size})`}
+                      </>
+                    )}
+                  </Button>
+                </span>
+              </TooltipTrigger>
+              {scanDisabledReason && (
+                <TooltipContent>
+                  <p>{scanDisabledReason}</p>
+                </TooltipContent>
+              )}
+            </Tooltip>
+          </TooltipProvider>
+        ) : (
+          <NextScanInfo nextAutoScanAt={project.nextAutoScanAt} />
+        )}
       </div>
 
       {/* Tabs */}
@@ -577,7 +582,18 @@ const CitationStatus = memo(function CitationStatus({
 }: CitationStatusProps): React.ReactNode {
   if (!result) {
     return (
-      <EyeOff className="h-4 w-4 text-muted-foreground mx-auto" aria-label="Pas encore scanné" />
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <span className="inline-flex mx-auto">
+              <EyeOff className="size-4 text-muted-foreground" aria-hidden="true" />
+            </span>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>Pas encore scanné</p>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
     );
   }
 
