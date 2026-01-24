@@ -7,6 +7,7 @@ import type {
   CreateUserData,
   CreateOAuthUserData,
   UserRepository,
+  UserEmailPrefs,
 } from '../../domain/repositories/user.repository';
 
 @Injectable()
@@ -90,6 +91,40 @@ export class PrismaUserRepository implements UserRepository {
       data: { password: hashedPassword },
     });
     return User.fromPersistence(user);
+  }
+
+  async updateLastScanAt(userId: string, date: Date): Promise<void> {
+    await this.prisma.user.update({
+      where: { id: userId },
+      data: { lastScanAt: date },
+    });
+  }
+
+  async findByIdWithEmailPrefs(userId: string): Promise<UserEmailPrefs | null> {
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+      select: {
+        email: true,
+        name: true,
+        emailNotificationsEnabled: true,
+        lastPostScanEmailAt: true,
+      },
+    });
+    return user;
+  }
+
+  async updateLastPostScanEmailAt(userId: string, date: Date): Promise<void> {
+    await this.prisma.user.update({
+      where: { id: userId },
+      data: { lastPostScanEmailAt: date },
+    });
+  }
+
+  async updateEmailNotificationsEnabled(userId: string, enabled: boolean): Promise<void> {
+    await this.prisma.user.update({
+      where: { id: userId },
+      data: { emailNotificationsEnabled: enabled },
+    });
   }
 
   async delete(userId: string): Promise<void> {

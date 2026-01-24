@@ -15,7 +15,8 @@ export class UserNotFoundError extends DomainError {
 }
 
 export interface UpdateProfileDto {
-  name: string;
+  name?: string;
+  emailNotificationsEnabled?: boolean;
 }
 
 @Injectable()
@@ -26,14 +27,24 @@ export class UpdateProfileUseCase {
   ) {}
 
   async execute(userId: string, dto: UpdateProfileDto): Promise<Result<User, UserNotFoundError>> {
-    const user = await this.userRepository.findById(userId);
+    let user = await this.userRepository.findById(userId);
 
     if (!user) {
       return Result.err(new UserNotFoundError());
     }
 
-    const updatedUser = await this.userRepository.updateName(userId, dto.name);
+    if (dto.name !== undefined) {
+      user = await this.userRepository.updateName(userId, dto.name);
+    }
 
-    return Result.ok(updatedUser);
+    if (dto.emailNotificationsEnabled !== undefined) {
+      await this.userRepository.updateEmailNotificationsEnabled(
+        userId,
+        dto.emailNotificationsEnabled,
+      );
+      user = (await this.userRepository.findById(userId))!;
+    }
+
+    return Result.ok(user);
   }
 }

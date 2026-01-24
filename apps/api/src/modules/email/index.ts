@@ -41,3 +41,7 @@ export {
   generateSentimentReadyEmail,
   type SentimentReadyEmailData,
 } from './infrastructure/templates/sentiment-ready.template';
+export {
+  generatePostScanEmail,
+  type PostScanEmailData,
+} from './infrastructure/templates/post-scan.template';

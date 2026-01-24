@@ -15,6 +15,7 @@ import {
   generateSubscriptionEndedEmail,
   generateAccountDeletedEmail,
   generateSentimentReadyEmail,
+  generatePostScanEmail,
 } from '../../modules/email';
 
 import { EMAIL_QUEUE_NAME } from './queue.config';
@@ -66,6 +67,10 @@ const EMAIL_CONFIG: Record<
   'sentiment-ready': {
     generator: generateSentimentReadyEmail as (data: never) => { html: string; text: string },
     subject: 'Votre analyse sentiment est prête',
+  },
+  'post-scan': {
+    generator: generatePostScanEmail as (data: never) => { html: string; text: string },
+    subject: 'Vos nouveaux résultats GEO sont disponibles',
   },
 };
 

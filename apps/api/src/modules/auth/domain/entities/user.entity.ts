@@ -9,6 +9,7 @@ export interface UserProps {
   avatarUrl: string | null;
   plan: Plan;
   stripeCustomerId: string | null;
+  emailNotificationsEnabled: boolean;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -56,6 +57,10 @@ export class User {
     return this.props.stripeCustomerId;
   }
 
+  get emailNotificationsEnabled(): boolean {
+    return this.props.emailNotificationsEnabled;
+  }
+
   get createdAt(): Date {
     return this.props.createdAt;
   }
@@ -73,6 +78,7 @@ export class User {
       avatarUrl: this.props.avatarUrl,
       plan: this.props.plan,
       stripeCustomerId: this.props.stripeCustomerId,
+      emailNotificationsEnabled: this.props.emailNotificationsEnabled,
       createdAt: this.props.createdAt,
       updatedAt: this.props.updatedAt,
     };

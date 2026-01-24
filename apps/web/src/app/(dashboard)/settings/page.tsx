@@ -8,13 +8,16 @@ import { Plan } from '@coucou-ia/shared';
 import { useAuth } from '@/lib/auth-context';
 import { apiClient } from '@/lib/api-client';
 import { useSubscription } from '@/hooks/use-billing';
+import { useUpdateEmailNotifications } from '@/hooks/use-user';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Switch } from '@/components/ui/switch';
 import { DeleteAccountModal } from '@/components/features/settings';
 
 export default function SettingsPage(): React.ReactNode {
   const { user } = useAuth();
   const { data: subscription } = useSubscription();
+  const updateEmailNotifications = useUpdateEmailNotifications();
   const [name, setName] = useState(user?.name ?? '');
   const [isLoading, setIsLoading] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
@@ -116,6 +119,33 @@ export default function SettingsPage(): React.ReactNode {
             {isLoading ? 'Enregistrement…' : 'Enregistrer'}
           </Button>
         </form>
+      </div>
+
+      <div className="rounded-lg border border-border bg-card p-6">
+        <h2 className="text-sm font-medium text-muted-foreground uppercase tracking-wide mb-4">
+          Notifications par email
+        </h2>
+        <p className="text-sm text-muted-foreground mb-4">
+          Recevez des emails pour rester informé de votre visibilité IA.
+        </p>
+        <div className="flex items-center justify-between">
+          <div className="space-y-0.5">
+            <p className="text-sm font-medium">Activer les notifications email</p>
+            <p className="text-sm text-muted-foreground">
+              {user?.plan === Plan.FREE
+                ? "Alertes d'inactivité quand vous n'avez pas scanné depuis 14 jours."
+                : 'Résultats de vos scans automatiques.'}
+            </p>
+          </div>
+          <Switch
+            checked={user?.emailNotificationsEnabled ?? true}
+            onCheckedChange={(checked) => updateEmailNotifications.mutate(checked)}
+            disabled={updateEmailNotifications.isPending}
+          />
+        </div>
+        <p className="text-xs text-muted-foreground mt-4">
+          Vous pouvez aussi vous désinscrire via le lien en bas de nos emails.
+        </p>
       </div>
 
       <div className="rounded-lg border border-border bg-card p-6">

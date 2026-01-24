@@ -53,6 +53,7 @@ export class RefreshTokenUseCase {
           name: user.name,
           plan: user.plan,
           projectCount,
+          emailNotificationsEnabled: user.emailNotificationsEnabled,
           createdAt: user.createdAt,
         },
       });

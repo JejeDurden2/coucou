@@ -30,6 +30,7 @@ export class GetMeUseCase {
       name: user.name,
       plan: user.plan,
       projectCount,
+      emailNotificationsEnabled: user.emailNotificationsEnabled,
       createdAt: user.createdAt,
     });
   }

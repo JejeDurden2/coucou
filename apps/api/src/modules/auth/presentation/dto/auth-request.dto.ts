@@ -6,6 +6,7 @@ import {
   Matches,
   IsBoolean,
   Equals,
+  IsOptional,
 } from 'class-validator';
 
 export class RegisterRequestDto {
@@ -45,10 +46,15 @@ export class RefreshTokenRequestDto {
 }
 
 export class UpdateProfileRequestDto {
+  @IsOptional()
   @IsString()
   @MinLength(2)
   @MaxLength(100)
-  name!: string;
+  name?: string;
+
+  @IsOptional()
+  @IsBoolean()
+  emailNotificationsEnabled?: boolean;
 }
 
 export class ForgotPasswordRequestDto {

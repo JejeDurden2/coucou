@@ -116,6 +116,7 @@ export class GoogleAuthUseCase {
         name: user.name,
         plan: user.plan,
         projectCount,
+        emailNotificationsEnabled: user.emailNotificationsEnabled,
         createdAt: user.createdAt,
       },
     };

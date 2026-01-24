@@ -98,6 +98,13 @@ class ApiClient {
     });
   }
 
+  async updateEmailNotifications(enabled: boolean): Promise<User> {
+    return this.fetch<User>('/auth/me', {
+      method: 'PATCH',
+      body: JSON.stringify({ emailNotificationsEnabled: enabled }),
+    });
+  }
+
   async exportData(): Promise<unknown> {
     return this.fetch<unknown>('/auth/me/export');
   }

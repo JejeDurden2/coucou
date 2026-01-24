@@ -25,6 +25,7 @@ export interface UserResponseDto {
   name: string;
   plan: Plan;
   projectCount: number;
+  emailNotificationsEnabled: boolean;
   createdAt: Date;
 }
 
