@@ -15,7 +15,7 @@ import { ProjectModule } from './modules/project';
 import { PromptModule } from './modules/prompt';
 import { ScanModule } from './modules/scan';
 import { SentimentModule } from './modules/sentiment';
-import { QueueModule } from './infrastructure/queue';
+import { QueueModule, BullBoardConfigModule } from './infrastructure/queue';
 import { PrismaModule } from './prisma';
 
 @Module({
@@ -54,6 +54,7 @@ import { PrismaModule } from './prisma';
     PromptModule,
     ScanModule,
     SentimentModule,
+    BullBoardConfigModule,
     DashboardModule,
     OnboardingModule,
     NotificationModule,
