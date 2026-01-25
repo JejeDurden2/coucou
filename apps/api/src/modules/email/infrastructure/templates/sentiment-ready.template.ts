@@ -11,31 +11,31 @@ export function generateSentimentReadyEmail(data: SentimentReadyEmailData): {
   text: string;
 } {
   const content = `
-    ${createHeading('Votre analyse sentiment est prête', 1)}
+    ${createHeading('Votre analyse de sentiment IA est prête', 1)}
 
     ${createParagraph(`Bonjour ${data.userName},`)}
 
-    ${createParagraph(`L'analyse sentiment de votre projet <strong>${data.brandName}</strong> est maintenant disponible.`)}
+    ${createParagraph(`L'analyse de sentiment IA de votre projet <strong>${data.brandName}</strong> est maintenant disponible.`)}
 
     ${createParagraph("Découvrez comment les IA perçoivent votre marque : thèmes associés, points positifs et axes d'amélioration.")}
 
-    ${createButton("Voir l'analyse", data.dashboardUrl)}
+    ${createButton("Consulter l'analyse", data.dashboardUrl)}
   `;
 
   const html = wrapInBaseTemplate(content, {
-    previewText: `L'analyse sentiment de ${data.brandName} est prête.`,
+    previewText: `L'analyse de sentiment IA de ${data.brandName} est prête.`,
   });
 
   const text = `
-Votre analyse sentiment est prête
+Votre analyse de sentiment IA est prête
 
 Bonjour ${data.userName},
 
-L'analyse sentiment de votre projet ${data.brandName} est maintenant disponible.
+L'analyse de sentiment IA de votre projet ${data.brandName} est maintenant disponible.
 
 Découvrez comment les IA perçoivent votre marque : thèmes associés, points positifs et axes d'amélioration.
 
-Voir l'analyse : ${data.dashboardUrl}
+Consulter l'analyse : ${data.dashboardUrl}
 
 --
 Coucou IA- Votre visibilité dans les IA

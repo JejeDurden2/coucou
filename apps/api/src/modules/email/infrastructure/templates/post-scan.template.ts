@@ -15,15 +15,15 @@ export interface PostScanEmailData {
 
 export function generatePostScanEmail(data: PostScanEmailData): { html: string; text: string } {
   const content = `
-    ${createHeading('Votre scan GEO est terminé', 1)}
+    ${createHeading('Votre rapport de visibilité IA est prêt', 1)}
 
     ${createParagraph(`Bonjour ${data.firstName},`)}
 
-    ${createParagraph(`Votre scan GEO pour <strong>${data.projectName}</strong> vient de se terminer.`)}
+    ${createParagraph(`Votre analyse pour <strong>${data.projectName}</strong> est terminée.`)}
 
     ${createParagraph(`Découvrez si votre visibilité a évolué et ce que les IA disent de votre marque.`)}
 
-    ${createButton('Voir mes résultats', data.projectUrl)}
+    ${createButton('Consulter mon rapport', data.projectUrl)}
 
     <p style="margin: 24px 0 0; font-size: 12px; color: ${EMAIL_COLORS.textMuted}; text-align: center;">
       <a href="${data.unsubscribeUrl}" style="color: ${EMAIL_COLORS.textMuted}; text-decoration: underline;">Se désinscrire des emails</a>
@@ -31,19 +31,19 @@ export function generatePostScanEmail(data: PostScanEmailData): { html: string; 
   `;
 
   const html = wrapInBaseTemplate(content, {
-    previewText: `Votre scan GEO pour ${data.projectName} est terminé. Découvrez vos résultats.`,
+    previewText: `Votre rapport de visibilité IA pour ${data.projectName} est prêt.`,
   });
 
   const text = `
-Votre scan GEO est terminé
+Votre rapport de visibilité IA est prêt
 
 Bonjour ${data.firstName},
 
-Votre scan GEO pour ${data.projectName} vient de se terminer.
+Votre analyse pour ${data.projectName} est terminée.
 
 Découvrez si votre visibilité a évolué et ce que les IA disent de votre marque.
 
-Voir mes résultats : ${data.projectUrl}
+Consulter mon rapport : ${data.projectUrl}
 
 --
 Se désinscrire : ${data.unsubscribeUrl}

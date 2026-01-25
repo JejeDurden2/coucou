@@ -92,11 +92,11 @@ export function DeleteAccountModal({
                     </li>
                     <li className="flex items-start gap-2">
                       <span className="text-destructive mt-0.5">•</span>
-                      <span>Votre historique de scans et statistiques</span>
+                      <span>Votre historique d'analyses et statistiques</span>
                     </li>
                     <li className="flex items-start gap-2">
                       <span className="text-destructive mt-0.5">•</span>
-                      <span>Vos prompts et recommandations</span>
+                      <span>Vos requêtes et recommandations</span>
                     </li>
                     {hasActiveSubscription && (
                       <li className="flex items-start gap-2">

@@ -15,9 +15,9 @@ export function NextScanInfo({ nextAutoScanAt }: NextScanInfoProps): React.React
     <div className="flex items-center gap-2 text-sm text-muted-foreground">
       <Clock className="size-4" aria-hidden="true" />
       {!nextAutoScanAt || isPast ? (
-        <span>Scan en cours de planification…</span>
+        <span>Analyse en cours de planification…</span>
       ) : (
-        <span>Prochain scan : {formatNextScanDate(nextAutoScanAt)}</span>
+        <span>Prochaine analyse : {formatNextScanDate(nextAutoScanAt)}</span>
       )}
     </div>
   );

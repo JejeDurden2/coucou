@@ -23,8 +23,8 @@ export function generateAccountDeletedEmail(data: AccountDeletedEmailData): {
           </p>
           <ul style="margin: 0; padding-left: 20px; font-size: 14px; color: ${EMAIL_COLORS.textMuted}; line-height: 1.8;">
             <li>Vos données personnelles</li>
-            <li>Vos projets et prompts</li>
-            <li>Votre historique de scans</li>
+            <li>Vos projets et requêtes</li>
+            <li>Votre historique d'analyses</li>
             <li>Votre abonnement (le cas échéant)</li>
           </ul>
         </td>
@@ -51,8 +51,8 @@ Nous vous confirmons que votre compte Coucou IA a bien été supprimé.
 
 Ce qui a été supprimé :
 - Vos données personnelles
-- Vos projets et prompts
-- Votre historique de scans
+- Vos projets et requêtes
+- Votre historique d'analyses
 - Votre abonnement (le cas échéant)
 
 Si vous aviez un abonnement actif, il a été annulé et vous recevrez un remboursement au prorata pour la période non utilisée.

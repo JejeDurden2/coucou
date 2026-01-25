@@ -196,7 +196,7 @@ export const ModelPerformanceTable = memo(function ModelPerformanceTable({
                     onSort={handleSort}
                   />
                   <SortableHeader
-                    label="Taux citation"
+                    label="Part de voix"
                     column="citationRate"
                     currentColumn={sortColumn}
                     direction={sortDirection}
@@ -204,7 +204,7 @@ export const ModelPerformanceTable = memo(function ModelPerformanceTable({
                     align="right"
                   />
                   <SortableHeader
-                    label="Rang moy."
+                    label="Position moy."
                     column="averageRank"
                     currentColumn={sortColumn}
                     direction={sortDirection}
@@ -220,7 +220,7 @@ export const ModelPerformanceTable = memo(function ModelPerformanceTable({
                     align="center"
                   />
                   <SortableHeader
-                    label="Scans"
+                    label="Analyses"
                     column="scansCount"
                     currentColumn={sortColumn}
                     direction={sortDirection}

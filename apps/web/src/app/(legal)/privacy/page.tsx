@@ -47,8 +47,8 @@ export default function PrivacyPage(): React.ReactNode {
                 d&apos;authentification
               </li>
               <li>
-                <strong>Données d&apos;utilisation :</strong> projets créés, prompts configurés,
-                résultats de scans
+                <strong>Données d&apos;utilisation :</strong> projets créés, requêtes configurées,
+                résultats d&apos;analyses
               </li>
               <li>
                 <strong>Données de facturation :</strong> identifiant client Stripe (les données
@@ -95,10 +95,10 @@ export default function PrivacyPage(): React.ReactNode {
                 <strong>Stripe :</strong> traitement des paiements (certifié PCI-DSS)
               </li>
               <li>
-                <strong>OpenAI :</strong> exécution des scans ChatGPT
+                <strong>OpenAI :</strong> exécution des analyses ChatGPT
               </li>
               <li>
-                <strong>Anthropic :</strong> exécution des scans Claude
+                <strong>Anthropic :</strong> exécution des analyses Claude
               </li>
               <li>
                 <strong>Hébergeurs :</strong> Railway (API), Vercel (Frontend), Neon (Base de
@@ -118,7 +118,7 @@ export default function PrivacyPage(): React.ReactNode {
                 <strong>Données de compte :</strong> durée de l&apos;abonnement + 3 ans
               </li>
               <li>
-                <strong>Données de scan :</strong> selon votre plan (30 jours à illimité)
+                <strong>Données d&apos;analyse :</strong> selon votre plan (30 jours à illimité)
               </li>
               <li>
                 <strong>Données de facturation :</strong> 10 ans (obligation légale)

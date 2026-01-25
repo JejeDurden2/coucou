@@ -72,7 +72,7 @@ export function DowngradeModal({
                     </span>
                   </li>
                   <li className="flex justify-between">
-                    <span>Prompts par projet</span>
+                    <span>Requêtes par projet</span>
                     <span>
                       <span className="line-through text-muted-foreground mr-2">
                         {currentLimits.promptsPerProject}
@@ -81,7 +81,7 @@ export function DowngradeModal({
                     </span>
                   </li>
                   <li className="flex justify-between">
-                    <span>Fréquence de scan</span>
+                    <span>Fréquence d'analyse</span>
                     <span>
                       <span className="line-through text-muted-foreground mr-2">
                         {currentLimits.scanFrequency === 'daily' ? 'Quotidien' : 'Hebdomadaire'}

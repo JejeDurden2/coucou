@@ -191,10 +191,10 @@ export default function ProjectDashboardPage({
   // Compute scan button disabled reason
   const getScanDisabledReason = (): string | null => {
     if (isScanning) return null;
-    if (!hasPrompts) return 'Ajoutez des prompts pour pouvoir scanner';
+    if (!hasPrompts) return 'Ajoutez des prompts pour lancer une analyse';
     if (allOnCooldown) {
       const frequency = PLAN_LIMITS[userPlan].scanFrequency === 'daily' ? 'jour' : 'semaine';
-      return `Tous les prompts sont en cooldown (1 scan/${frequency} par prompt)`;
+      return `Tous les prompts sont en cooldown (1 analyse/${frequency} par prompt)`;
     }
     return null;
   };
@@ -231,7 +231,7 @@ export default function ProjectDashboardPage({
               </span>
             ) : stats?.lastScanAt ? (
               <p className="text-xs text-muted-foreground">
-                Dernier scan {formatRelativeTime(stats.lastScanAt)}
+                Dernière analyse {formatRelativeTime(stats.lastScanAt)}
               </p>
             ) : null}
           </div>
@@ -260,7 +260,7 @@ export default function ProjectDashboardPage({
                     ) : (
                       <>
                         <Radar className="mr-2 h-4 w-4" aria-hidden="true" />
-                        Scanner {scannablePromptIds.size > 0 && `(${scannablePromptIds.size})`}
+                        Analyser {scannablePromptIds.size > 0 && `(${scannablePromptIds.size})`}
                       </>
                     )}
                   </Button>
@@ -309,7 +309,7 @@ export default function ProjectDashboardPage({
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
             <StatCard
               icon={Trophy}
-              label="Rang moyen"
+              label="Position moyenne"
               value={stats?.averageRank ?? null}
               gradient="gold"
               trend={stats?.trend ? { delta: stats.trend.delta } : undefined}
@@ -329,7 +329,7 @@ export default function ProjectDashboardPage({
             ))}
             <StatCard
               icon={BarChart3}
-              label="Total scans"
+              label="Total analyses"
               value={stats?.totalScans?.toString() ?? '0'}
               gradient="primary"
               tooltipTerm="scan"
@@ -350,7 +350,7 @@ export default function ProjectDashboardPage({
                   <InfoTooltip term="prompt" />
                 </h2>
                 <p className="text-xs text-muted-foreground mt-0.5">
-                  Plan {userPlan} : 1 scan/prompt/
+                  Plan {userPlan} : 1 analyse/prompt/
                   {PLAN_LIMITS[userPlan].scanFrequency === 'daily' ? 'jour' : 'semaine'}
                 </p>
               </div>
@@ -389,9 +389,9 @@ export default function ProjectDashboardPage({
                             aria-hidden="true"
                           />
                         </div>
-                        <p className="text-muted-foreground">Aucun prompt configuré</p>
+                        <p className="text-muted-foreground">Aucune requête configurée</p>
                         <p className="text-sm text-muted-foreground mt-1">
-                          Ajoutez des prompts pour commencer à tracker votre visibilité
+                          Ajoutez des requêtes pour commencer à suivre votre visibilité
                         </p>
                       </td>
                     </tr>
@@ -445,7 +445,7 @@ export default function ProjectDashboardPage({
                                   className="size-8 text-muted-foreground hover:text-primary"
                                   onClick={() => handleTriggerPromptScan(prompt.promptId)}
                                   disabled={scanningPromptId === prompt.promptId}
-                                  aria-label="Scanner ce prompt"
+                                  aria-label="Analyser ce prompt"
                                 >
                                   {scanningPromptId === prompt.promptId ? (
                                     <RefreshCw
@@ -553,9 +553,9 @@ export default function ProjectDashboardPage({
       >
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Supprimer ce prompt ?</AlertDialogTitle>
+            <AlertDialogTitle>Supprimer cette requête ?</AlertDialogTitle>
             <AlertDialogDescription>
-              Cette action est irréversible. Le prompt et son historique de scans seront
+              Cette action est irréversible. La requête et son historique d'analyses seront
               définitivement supprimés.
             </AlertDialogDescription>
           </AlertDialogHeader>
@@ -596,7 +596,7 @@ const CitationStatus = memo(function CitationStatus({
             </span>
           </TooltipTrigger>
           <TooltipContent>
-            <p>Pas encore scanné</p>
+            <p>Pas encore analysé</p>
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>
@@ -643,7 +643,7 @@ const ScanAvailabilityBadge = memo(function ScanAvailabilityBadge({
     return (
       <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] bg-muted text-muted-foreground">
         <Clock className="size-3" aria-hidden="true" />
-        Jamais scanné
+        Jamais analysé
       </span>
     );
   }
@@ -653,7 +653,7 @@ const ScanAvailabilityBadge = memo(function ScanAvailabilityBadge({
     return (
       <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] bg-success/10 text-success">
         <CheckCircle2 className="size-3" aria-hidden="true" />
-        Scan disponible
+        Analyse disponible
       </span>
     );
   }
@@ -662,7 +662,7 @@ const ScanAvailabilityBadge = memo(function ScanAvailabilityBadge({
   return (
     <span
       className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] bg-amber-500/10 text-amber-600"
-      title={`1 scan/${frequency} - Prochain scan ${nextAvailableAt ? formatRelativeTimeFuture(nextAvailableAt) : ''}`}
+      title={`1 analyse/${frequency} - Prochaine analyse ${nextAvailableAt ? formatRelativeTimeFuture(nextAvailableAt) : ''}`}
     >
       <Clock className="size-3" aria-hidden="true" />
       {nextAvailableAt ? formatRelativeTimeFuture(nextAvailableAt) : `1/${frequency}`}

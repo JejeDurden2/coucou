@@ -13,8 +13,8 @@ export function useGeneratePrompts() {
     onSuccess: (data, projectId) => {
       queryClient.invalidateQueries({ queryKey: ['projects', projectId] });
       queryClient.invalidateQueries({ queryKey: ['projects', projectId, 'prompts'] });
-      toast.success('Prompts générés', {
-        description: `${data.prompts.length} prompts créés automatiquement.`,
+      toast.success('Requêtes générées', {
+        description: `${data.prompts.length} requêtes créées automatiquement.`,
       });
     },
     onError: (error) => {
@@ -24,7 +24,7 @@ export function useGeneratePrompts() {
         });
       } else {
         toast.error('Erreur de génération', {
-          description: 'Vous pouvez créer vos prompts manuellement.',
+          description: 'Vous pouvez créer vos requêtes manuellement.',
         });
       }
     },

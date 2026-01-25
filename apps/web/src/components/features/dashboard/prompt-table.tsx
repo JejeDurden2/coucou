@@ -18,9 +18,9 @@ export function PromptTable({ prompts, onTriggerScan, onDelete, isLoading }: Pro
   if (prompts.length === 0) {
     return (
       <div className="rounded-xl border border-cyan-500/10 bg-card/50 p-8 text-center">
-        <p className="text-muted-foreground">Aucun prompt configuré</p>
+        <p className="text-muted-foreground">Aucune requête configurée</p>
         <p className="text-sm text-muted-foreground mt-1">
-          Ajoutez des prompts pour commencer à tracker votre visibilité
+          Ajoutez des requêtes pour commencer à suivre votre visibilité
         </p>
       </div>
     );
@@ -90,7 +90,7 @@ export function PromptTable({ prompts, onTriggerScan, onDelete, isLoading }: Pro
                         size="icon"
                         onClick={() => onTriggerScan(prompt.promptId)}
                         disabled={isLoading}
-                        aria-label="Lancer un scan"
+                        aria-label="Lancer une analyse"
                       >
                         <Play className="h-4 w-4" aria-hidden="true" />
                       </Button>

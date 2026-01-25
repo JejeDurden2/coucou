@@ -168,11 +168,11 @@ export function PromptPerformanceTable({
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[40%]">Prompt</TableHead>
+            <TableHead className="w-[40%]">Requête</TableHead>
             <TableHead>Catégorie</TableHead>
             <TableHead className="text-right">
               <SortableHeader
-                label="Taux citation"
+                label="Part de voix"
                 sortKey="citationRate"
                 currentSortKey={sortKey}
                 sortOrder={sortOrder}
@@ -181,7 +181,7 @@ export function PromptPerformanceTable({
             </TableHead>
             <TableHead className="text-right">
               <SortableHeader
-                label="Rang moyen"
+                label="Position moy."
                 sortKey="averageRank"
                 currentSortKey={sortKey}
                 sortOrder={sortOrder}

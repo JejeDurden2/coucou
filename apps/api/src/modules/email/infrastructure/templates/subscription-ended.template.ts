@@ -42,7 +42,7 @@ export function generateSubscriptionEndedEmail(data: SubscriptionEndedEmailData)
               <td style="padding: 8px 0; font-size: 14px; color: ${EMAIL_COLORS.text}; text-align: right; font-weight: 500;">${FREE_LIMITS.projects}</td>
             </tr>
             <tr>
-              <td style="padding: 8px 0; font-size: 14px; color: ${EMAIL_COLORS.textMuted};">Prompts par projet</td>
+              <td style="padding: 8px 0; font-size: 14px; color: ${EMAIL_COLORS.textMuted};">Requêtes par projet</td>
               <td style="padding: 8px 0; font-size: 14px; color: ${EMAIL_COLORS.text}; text-align: right; font-weight: 500;">${FREE_LIMITS.promptsPerProject}</td>
             </tr>
             <tr>
@@ -50,7 +50,7 @@ export function generateSubscriptionEndedEmail(data: SubscriptionEndedEmailData)
               <td style="padding: 8px 0; font-size: 14px; color: ${EMAIL_COLORS.text}; text-align: right; font-weight: 500;">${FREE_LIMITS.models} (GPT-4o-mini)</td>
             </tr>
             <tr>
-              <td style="padding: 8px 0; font-size: 14px; color: ${EMAIL_COLORS.textMuted};">Scans</td>
+              <td style="padding: 8px 0; font-size: 14px; color: ${EMAIL_COLORS.textMuted};">Analyses</td>
               <td style="padding: 8px 0; font-size: 14px; color: ${EMAIL_COLORS.text}; text-align: right; font-weight: 500;">${FREE_LIMITS.scanFrequency}</td>
             </tr>
           </table>
@@ -78,9 +78,9 @@ Votre abonnement ${data.previousPlan} est maintenant terminé. Votre compte est 
 
 Avec le plan Gratuit, vous avez accès à :
 - ${FREE_LIMITS.projects} projet
-- ${FREE_LIMITS.promptsPerProject} prompts par projet
+- ${FREE_LIMITS.promptsPerProject} requêtes par projet
 - ${FREE_LIMITS.models} modèle IA (GPT-4o-mini uniquement)
-- Scans ${FREE_LIMITS.scanFrequency}
+- Analyses ${FREE_LIMITS.scanFrequency}
 
 Envie de retrouver toutes les fonctionnalités ? Vous pouvez upgrader à tout moment.
 

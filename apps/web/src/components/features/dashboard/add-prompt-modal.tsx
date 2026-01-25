@@ -62,7 +62,7 @@ export function AddPromptModal({
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent className="sm:max-w-[540px]">
         <DialogHeader>
-          <DialogTitle>Ajouter un prompt</DialogTitle>
+          <DialogTitle>Ajouter une requête</DialogTitle>
           <DialogDescription className="text-pretty">
             Entrez une question que vos clients pourraient poser à une IA pour trouver un service
             comme le vôtre.
@@ -125,7 +125,7 @@ export function AddPromptModal({
           <div className="rounded-lg border bg-muted/30 p-4 space-y-3">
             <div className="flex items-center gap-2 text-sm font-medium">
               <Lightbulb className="size-4 text-amber-500" aria-hidden="true" />
-              Conseils pour un bon prompt GEO
+              Conseils pour une bonne requête
             </div>
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li className="flex items-start gap-2">
@@ -152,7 +152,7 @@ export function AddPromptModal({
                 />
                 <span>
                   <strong className="text-foreground">Évitez les marques</strong> — Ne mentionnez
-                  pas votre marque dans le prompt pour des résultats objectifs
+                  pas votre marque dans la requête pour des résultats objectifs
                 </span>
               </li>
             </ul>
@@ -173,7 +173,7 @@ export function AddPromptModal({
               Annuler
             </Button>
             <Button type="submit" disabled={!isValidLength || isPending}>
-              {isPending ? 'Ajout…' : 'Ajouter le prompt'}
+              {isPending ? 'Ajout…' : 'Ajouter la requête'}
             </Button>
           </DialogFooter>
         </form>

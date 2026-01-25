@@ -28,22 +28,22 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL('https://coucou-ia.com'),
   title: {
-    default: 'Coucou IA - Outil GEO pour améliorer votre visibilité dans ChatGPT et Claude',
+    default: 'Coucou IA — Surveillance de votre visibilité dans la recherche IA',
     template: '%s | Coucou IA',
   },
   description:
-    'Outil GEO français pour surveiller et améliorer la visibilité de votre marque dans ChatGPT et Claude. Gratuit pour démarrer. +500 marques utilisent Coucou IA.',
+    'Analysez vos mentions sur ChatGPT, Claude et Gemini. Suivez votre part de voix IA et surveillez vos concurrents. Premier outil français de monitoring recherche IA. Essai gratuit.',
   keywords: [
+    'surveillance visibilité IA',
+    'monitoring recherche IA',
+    'mentions marque ChatGPT',
     'GEO',
+    'part de voix IA',
     'Generative Engine Optimization',
-    'visibilité IA',
     'visibilité ChatGPT',
     'visibilité Claude',
     'SEO IA',
-    'référencement IA',
-    'marque ChatGPT',
     'monitoring LLM',
-    'optimisation IA',
   ],
   authors: [{ name: 'Coucou IA' }],
   creator: 'Coucou IA',
@@ -69,15 +69,14 @@ export const metadata: Metadata = {
     locale: 'fr_FR',
     url: 'https://coucou-ia.com',
     siteName: 'Coucou IA',
-    title: 'Coucou IA - Outil GEO pour améliorer votre visibilité dans ChatGPT et Claude',
+    title: 'Coucou IA — Surveillance visibilité recherche IA',
     description:
-      "Surveillez et améliorez la visibilité de votre marque dans les réponses de ChatGPT et Claude. Le GEO, c'est le nouveau SEO.",
+      'Analysez vos mentions sur ChatGPT, Claude, Gemini. Premier outil français de monitoring recherche IA.',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Coucou IA - Outil GEO pour améliorer votre visibilité dans ChatGPT et Claude',
-    description:
-      "Surveillez et améliorez la visibilité de votre marque dans les réponses de ChatGPT et Claude. Le GEO, c'est le nouveau SEO.",
+    title: 'Coucou IA — Surveillance visibilité recherche IA',
+    description: 'Analysez vos mentions sur ChatGPT, Claude, Gemini. Premier outil français.',
     creator: '@coucouia',
   },
   alternates: {

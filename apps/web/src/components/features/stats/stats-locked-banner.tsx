@@ -35,7 +35,7 @@ export const StatsLockedBanner = memo(function StatsLockedBanner() {
             </div>
             <div className="flex items-center gap-2 text-xs text-muted-foreground">
               <TrendingUp className="size-4" aria-hidden="true" />
-              <span>Taux de citation, rang, concurrents...</span>
+              <span>Part de voix, position, benchmark...</span>
             </div>
             <Button asChild className="w-full">
               <Link href="/billing">Passer à SOLO</Link>

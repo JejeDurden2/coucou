@@ -19,19 +19,19 @@ import { Badge } from '@/components/ui/badge';
 const features = [
   {
     icon: Eye,
-    title: 'Monitoring multi-LLM',
+    title: 'Surveillance multi-plateformes',
     description:
-      "Trackez votre visibilité sur ChatGPT et Claude simultanément. Découvrez si l'IA recommande votre marque.",
+      "Analysez vos mentions sur ChatGPT, Claude et Gemini. Découvrez si l'IA recommande votre marque.",
   },
   {
     icon: BarChart3,
-    title: 'Analyse concurrentielle',
+    title: 'Benchmark concurrentiel',
     description:
-      'Identifiez automatiquement les marques concurrentes citées par les IA et leur fréquence.',
+      'Identifiez les marques qui vous devancent dans la recherche IA et leur fréquence.',
   },
   {
     icon: TrendingUp,
-    title: 'Suivi des tendances',
+    title: 'Évolution de votre visibilité',
     description:
       "Visualisez l'évolution de votre score de visibilité au fil du temps avec des rapports détaillés.",
   },
@@ -41,7 +41,7 @@ const steps = [
   {
     number: '1',
     title: 'Configurez votre marque',
-    description: 'Entrez le nom de votre marque et ses variantes pour un tracking précis.',
+    description: 'Entrez le nom de votre marque et ses variantes pour une surveillance précise.',
   },
   {
     number: '2',
@@ -91,9 +91,14 @@ const faqs = [
       "Le GEO (Generative Engine Optimization) consiste à optimiser la présence de votre marque dans les réponses générées par les IA comme ChatGPT ou Claude. C'est le nouveau SEO pour l'ère de l'intelligence artificielle.",
   },
   {
+    question: "Qu'est-ce que la recherche IA ?",
+    answer:
+      "La recherche IA désigne l'utilisation d'assistants conversationnels comme ChatGPT, Claude ou Gemini pour trouver des informations. Contrairement à Google qui affiche des liens, ces IA synthétisent l'information et recommandent directement des solutions.",
+  },
+  {
     question: 'Comment Coucou IA détecte les mentions de ma marque ?',
     answer:
-      'Notre système interroge les principaux LLM (ChatGPT, Claude) avec vos prompts personnalisés et analyse les réponses pour détecter si votre marque est citée, sa position dans les recommandations, et quels concurrents sont mentionnés.',
+      'Notre système interroge les principaux moteurs IA (ChatGPT, Claude) avec vos prompts personnalisés et analyse les réponses pour détecter si votre marque est citée, sa position dans les recommandations, et quels concurrents sont mentionnés.',
   },
   {
     question: 'Pourquoi est-ce important pour mon business ?',
@@ -101,9 +106,9 @@ const faqs = [
       "De plus en plus d'utilisateurs utilisent l'IA pour rechercher des produits et services. Si votre marque n'apparaît pas dans les réponses, vous perdez des clients potentiels. Coucou IA vous aide à mesurer et améliorer cette visibilité.",
   },
   {
-    question: 'À quelle fréquence les scans sont-ils effectués ?',
+    question: 'À quelle fréquence les analyses sont-elles effectuées ?',
     answer:
-      'La fréquence dépend de votre plan : manuellement pour le plan gratuit, hebdomadairement pour Solo, et quotidiennement pour Pro. Vous pouvez aussi lancer des scans manuels à tout moment.',
+      'La fréquence dépend de votre plan : manuellement pour le plan gratuit, hebdomadairement pour Solo, et quotidiennement pour Pro. Vous pouvez aussi lancer des analyses manuelles à tout moment.',
   },
   {
     question: 'Comment améliorer ma visibilité dans les réponses IA ?',
@@ -111,9 +116,9 @@ const faqs = [
       'Plusieurs facteurs influencent la visibilité IA : la présence sur les sources citées par les LLM, la notoriété de marque, le SEO traditionnel, et la qualité du contenu. Nos rapports vous guident sur les axes prioritaires.',
   },
   {
-    question: 'Quels LLM sont supportés par Coucou IA ?',
+    question: 'Quels moteurs IA sont supportés par Coucou IA ?',
     answer:
-      "Nous supportons actuellement ChatGPT (OpenAI) et Claude (Anthropic), les deux leaders du marché. D'autres modèles seront ajoutés prochainement (Gemini, Mistral, Llama).",
+      "Nous supportons actuellement ChatGPT (OpenAI) et Claude (Anthropic), les deux leaders du marché. D'autres moteurs IA seront ajoutés prochainement (Gemini, Mistral, Llama).",
   },
 ];
 
@@ -188,7 +193,7 @@ export default function LandingPage() {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
               <Button size="lg" asChild>
                 <Link href="/register">
-                  Essayer gratuitement
+                  Analyser ma marque gratuitement
                   <ArrowRight className="ml-2 h-4 w-4" aria-hidden="true" />
                 </Link>
               </Button>
@@ -201,11 +206,11 @@ export default function LandingPage() {
             <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-muted-foreground">
               <div className="flex items-center gap-2">
                 <Eye className="size-4" aria-hidden="true" />
-                <span>Multi-LLM</span>
+                <span>Multi-plateformes</span>
               </div>
               <div className="flex items-center gap-2">
                 <BarChart3 className="size-4" aria-hidden="true" />
-                <span>Analyse concurrentielle</span>
+                <span>Benchmark concurrentiel</span>
               </div>
               <div className="flex items-center gap-2">
                 <Shield className="size-4" aria-hidden="true" />
@@ -408,8 +413,8 @@ export default function LandingPage() {
               <Badge className="mb-4">Comment ça marche</Badge>
               <h2 className="text-3xl md:text-4xl font-bold mb-4 text-balance">3 étapes simples</h2>
               <p className="text-muted-foreground max-w-2xl mx-auto text-pretty">
-                Configurez votre tracking en quelques minutes et commencez à suivre votre visibilité
-                IA.
+                Configurez votre surveillance en quelques minutes et commencez à suivre votre
+                visibilité IA.
               </p>
             </div>
 
@@ -526,7 +531,7 @@ export default function LandingPage() {
                 Prêt à être visible par l&apos;IA ?
               </h2>
               <p className="text-muted-foreground mb-8 max-w-xl mx-auto text-pretty">
-                Rejoignez les 500+ marques qui utilisent Coucou IA pour tracker et améliorer leur
+                Rejoignez les 500+ marques qui utilisent Coucou IA pour surveiller et améliorer leur
                 présence dans les réponses de ChatGPT et Claude.
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -631,15 +636,12 @@ export default function LandingPage() {
             '@type': 'SoftwareApplication',
             name: 'Coucou IA',
             applicationCategory: 'BusinessApplication',
-            description:
-              "Surveillez et améliorez la visibilité de votre marque dans les réponses de ChatGPT, Claude et autres IA. Découvrez si l'IA recommande votre entreprise.",
+            description: 'Plateforme de surveillance de visibilité dans la recherche IA',
             operatingSystem: 'Web',
             offers: {
-              '@type': 'AggregateOffer',
-              lowPrice: '0',
-              highPrice: PLAN_PRICING[Plan.PRO].price.toString(),
+              '@type': 'Offer',
+              price: '0',
               priceCurrency: 'EUR',
-              offerCount: 3,
             },
             aggregateRating: {
               '@type': 'AggregateRating',

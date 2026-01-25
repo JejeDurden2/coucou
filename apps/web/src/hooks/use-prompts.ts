@@ -25,13 +25,13 @@ export function useCreatePrompt(projectId: string) {
       queryClient.invalidateQueries({
         queryKey: ['projects', projectId, 'stats'],
       });
-      toast.success('Prompt créé');
+      toast.success('Requête créée');
     },
     onError: (error) => {
       if (error instanceof ApiClientError) {
         if (error.code === 'PLAN_LIMIT_EXCEEDED') {
           toast.error('Limite atteinte', {
-            description: 'Passez à un plan supérieur pour créer plus de prompts.',
+            description: 'Passez à un plan supérieur pour créer plus de requêtes.',
           });
         } else {
           toast.error('Erreur', { description: error.message });
@@ -53,7 +53,7 @@ export function useUpdatePrompt(projectId: string) {
       queryClient.invalidateQueries({
         queryKey: ['projects', projectId, 'prompts'],
       });
-      toast.success('Prompt mis à jour');
+      toast.success('Requête mise à jour');
     },
     onError: (error) => {
       if (error instanceof ApiClientError) {
@@ -77,7 +77,7 @@ export function useDeletePrompt(projectId: string) {
       queryClient.invalidateQueries({
         queryKey: ['projects', projectId, 'stats'],
       });
-      toast.success('Prompt supprimé');
+      toast.success('Requête supprimée');
     },
     onError: (error) => {
       if (error instanceof ApiClientError) {

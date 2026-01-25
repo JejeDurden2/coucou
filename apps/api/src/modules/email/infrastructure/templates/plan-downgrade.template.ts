@@ -78,7 +78,7 @@ export function generatePlanDowngradeEmail(data: PlanDowngradeEmailData): {
               <td style="padding: 8px 0; font-size: 14px; color: ${EMAIL_COLORS.text}; text-align: right; font-weight: 500;">${currentFeatures.projects}</td>
             </tr>
             <tr>
-              <td style="padding: 8px 0; font-size: 14px; color: ${EMAIL_COLORS.textMuted};">Prompts par projet</td>
+              <td style="padding: 8px 0; font-size: 14px; color: ${EMAIL_COLORS.textMuted};">Requêtes par projet</td>
               <td style="padding: 8px 0; font-size: 14px; color: ${EMAIL_COLORS.text}; text-align: right; font-weight: 500;">${currentFeatures.promptsPerProject}</td>
             </tr>
             <tr>
@@ -96,7 +96,7 @@ export function generatePlanDowngradeEmail(data: PlanDowngradeEmailData): {
               <td style="padding: 8px 0; font-size: 14px; color: ${EMAIL_COLORS.warning}; text-align: right; font-weight: 500;">${FREE_LIMITS.projects}</td>
             </tr>
             <tr>
-              <td style="padding: 8px 0; font-size: 14px; color: ${EMAIL_COLORS.textMuted};">Prompts par projet</td>
+              <td style="padding: 8px 0; font-size: 14px; color: ${EMAIL_COLORS.textMuted};">Requêtes par projet</td>
               <td style="padding: 8px 0; font-size: 14px; color: ${EMAIL_COLORS.warning}; text-align: right; font-weight: 500;">${FREE_LIMITS.promptsPerProject}</td>
             </tr>
             <tr>
@@ -130,12 +130,12 @@ Vous conservez l'accès à toutes les fonctionnalités de votre plan ${data.curr
 
 Votre plan actuel (jusqu'au ${formattedDate}) :
 - ${currentFeatures.projects} projets
-- ${currentFeatures.promptsPerProject} prompts par projet
+- ${currentFeatures.promptsPerProject} requêtes par projet
 - ${currentFeatures.models} modèles IA
 
 Plan FREE (à partir du ${formattedDate}) :
 - ${FREE_LIMITS.projects} projet
-- ${FREE_LIMITS.promptsPerProject} prompts par projet
+- ${FREE_LIMITS.promptsPerProject} requêtes par projet
 - ${FREE_LIMITS.models} modèle IA
 
 Vous avez changé d'avis ? Vous pouvez réactiver votre abonnement à tout moment depuis votre tableau de bord.

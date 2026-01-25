@@ -19,7 +19,7 @@ export interface PlanLimitEmailData {
 
 const LIMIT_LABELS: Record<LimitType, string> = {
   projects: 'projets',
-  prompts: 'prompts',
+  prompts: 'requêtes',
 };
 
 const NEXT_PLAN_LIMITS = {
@@ -50,7 +50,7 @@ export function generatePlanLimitEmail(data: PlanLimitEmailData): { html: string
               <td style="padding: 8px 0; font-size: 14px; color: ${EMAIL_COLORS.text}; text-align: right; font-weight: 500;">${nextPlan.projects}</td>
             </tr>
             <tr>
-              <td style="padding: 8px 0; font-size: 14px; color: ${EMAIL_COLORS.textMuted};">Prompts par projet</td>
+              <td style="padding: 8px 0; font-size: 14px; color: ${EMAIL_COLORS.textMuted};">Requêtes par projet</td>
               <td style="padding: 8px 0; font-size: 14px; color: ${EMAIL_COLORS.text}; text-align: right; font-weight: 500;">${nextPlan.prompts}</td>
             </tr>
           </table>
@@ -74,7 +74,7 @@ Vous avez atteint la limite de ${data.maxAllowed} ${limitLabel} de votre plan ${
 
 Plan ${nextPlan.plan} :
 - ${nextPlan.projects} projets
-- ${nextPlan.prompts} prompts par projet
+- ${nextPlan.prompts} requêtes par projet
 
 Voir le plan ${nextPlan.plan} : ${data.upgradeUrl}
 

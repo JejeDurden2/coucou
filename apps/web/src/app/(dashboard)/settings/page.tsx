@@ -181,8 +181,8 @@ export default function SettingsPage(): React.ReactNode {
             <p className="text-sm font-medium">Activer les notifications email</p>
             <p className="text-sm text-muted-foreground">
               {user?.plan === Plan.FREE
-                ? "Alertes d'inactivité quand vous n'avez pas scanné depuis 14 jours."
-                : 'Résultats de vos scans automatiques.'}
+                ? "Alertes d'inactivité quand vous n'avez pas lancé d'analyse depuis 14 jours."
+                : 'Résultats de vos analyses automatiques.'}
             </p>
           </div>
           <Switch
@@ -236,7 +236,7 @@ export default function SettingsPage(): React.ReactNode {
         <h2 className="text-sm font-medium text-destructive uppercase mb-4">Zone de danger</h2>
         <p className="text-sm text-muted-foreground mb-4">
           La suppression de votre compte est irréversible. Toutes vos données (projets, prompts,
-          scans) seront définitivement supprimées.
+          analyses) seront définitivement supprimées.
           {hasActiveSubscription && <> Votre abonnement sera annulé et remboursé au prorata.</>}
         </p>
         <DeleteAccountModal

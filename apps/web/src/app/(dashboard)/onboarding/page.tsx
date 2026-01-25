@@ -155,7 +155,7 @@ export default function OnboardingPage(): React.ReactNode {
               <CardHeader>
                 <CardTitle>Votre marque</CardTitle>
                 <CardDescription>
-                  Renseignez le nom de votre marque et ses variantes pour un tracking précis.
+                  Renseignez le nom de votre marque et ses variantes pour une surveillance précise.
                 </CardDescription>
               </CardHeader>
               <CardContent>
@@ -173,7 +173,7 @@ export default function OnboardingPage(): React.ReactNode {
                       autoComplete="off"
                     />
                     <p className="text-xs text-muted-foreground">
-                      Le nom principal de votre marque à tracker
+                      Le nom principal de votre marque à surveiller
                     </p>
                   </div>
 
@@ -191,7 +191,7 @@ export default function OnboardingPage(): React.ReactNode {
                       autoComplete="off"
                     />
                     <p className="text-xs text-muted-foreground">
-                      Utilisé pour analyser votre marque et générer des prompts pertinents
+                      Utilisé pour analyser votre marque et générer des requêtes pertinentes
                     </p>
                   </div>
 
@@ -259,10 +259,10 @@ export default function OnboardingPage(): React.ReactNode {
               <div className="flex items-center justify-center gap-2 mb-4">
                 <Wand2 className="size-8 text-primary" aria-hidden="true" />
               </div>
-              <h1 className="text-3xl font-bold text-balance">Générer vos prompts</h1>
+              <h1 className="text-3xl font-bold text-balance">Générer vos requêtes</h1>
               <p className="text-muted-foreground text-pretty">
-                Nous pouvons analyser votre site web pour créer des prompts de recherche pertinents
-                automatiquement.
+                Nous pouvons analyser votre site web pour créer des requêtes de recherche
+                pertinentes automatiquement.
               </p>
             </div>
 
@@ -292,7 +292,7 @@ export default function OnboardingPage(): React.ReactNode {
                   ) : (
                     <>
                       <Sparkles className="mr-2 size-4" aria-hidden="true" />
-                      Oui, générer mes prompts
+                      Oui, générer mes requêtes
                     </>
                   )}
                 </Button>

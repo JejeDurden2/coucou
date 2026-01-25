@@ -50,9 +50,10 @@ export default function TermsPage(): React.ReactNode {
             <h2 className="text-xl font-semibold">3. Description du service</h2>
             <p className="text-muted-foreground">Coucou IA permet de :</p>
             <ul className="list-disc list-inside text-muted-foreground space-y-2">
-              <li>Configurer des prompts de recherche liés à votre marque</li>
+              <li>Configurer des requêtes de recherche liées à votre marque</li>
               <li>
-                Scanner les réponses de ChatGPT et Claude pour détecter les mentions de votre marque
+                Analyser les réponses de ChatGPT et Claude pour détecter les mentions de votre
+                marque
               </li>
               <li>Suivre l&apos;évolution de votre score de visibilité IA</li>
               <li>Identifier les marques concurrentes citées par les IA</li>
@@ -109,8 +110,9 @@ export default function TermsPage(): React.ReactNode {
             <h2 className="text-xl font-semibold">8. Limitation de responsabilité</h2>
             <p className="text-muted-foreground">
               Coucou IA est fourni &quot;en l&apos;état&quot;. Nous ne garantissons pas
-              l&apos;exactitude des résultats de scan, qui dépendent des réponses des LLM tiers.
-              Nous ne sommes pas responsables des décisions commerciales basées sur ces résultats.
+              l&apos;exactitude des résultats d&apos;analyse, qui dépendent des réponses des LLM
+              tiers. Nous ne sommes pas responsables des décisions commerciales basées sur ces
+              résultats.
             </p>
           </section>
 

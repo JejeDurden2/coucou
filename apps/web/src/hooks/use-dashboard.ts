@@ -34,19 +34,19 @@ export function useRecommendations(projectId: string) {
 
 export function useTriggerScan(projectId: string) {
   const onCompleted = useCallback((data: ScanJobStatusResponse) => {
-    toast.success('Scan terminé', {
+    toast.success('Analyse terminée', {
       description: `${data.successCount} prompt(s) analysé(s) avec succès.`,
     });
   }, []);
 
   const onPartial = useCallback((data: ScanJobStatusResponse) => {
-    toast.warning('Scan partiel terminé', {
+    toast.warning('Analyse partielle terminée', {
       description: `${data.successCount} succès, ${data.failureCount} échec(s).`,
     });
   }, []);
 
   const onFailed = useCallback((data: ScanJobStatusResponse) => {
-    toast.error('Scan échoué', {
+    toast.error('Analyse échouée', {
       description: data.errorMessage || 'Une erreur est survenue.',
     });
   }, []);
@@ -62,10 +62,10 @@ export function useTriggerScan(projectId: string) {
     mutationFn: () => apiClient.triggerScan(projectId),
     onSuccess: (data) => {
       if (data.totalPrompts === 0) {
-        toast.warning('Aucun prompt à scanner');
+        toast.warning('Aucune requête à analyser');
         return;
       }
-      toast.info('Scan lancé', { description: 'Vous serez notifié des résultats.' });
+      toast.info('Analyse lancée', { description: 'Vous serez notifié des résultats.' });
       startPolling(data.jobId);
     },
     onError: (error) => {
@@ -75,16 +75,16 @@ export function useTriggerScan(projectId: string) {
             description: 'Vérifiez la configuration des clés API.',
           });
         } else if (error.code === 'SCAN_LIMIT_EXCEEDED') {
-          toast.warning('Limite de scans atteinte', {
+          toast.warning("Limite d'analyses atteinte", {
             description: error.message,
           });
         } else {
-          toast.error('Erreur lors du scan', {
+          toast.error("Erreur lors de l'analyse", {
             description: error.message,
           });
         }
       } else {
-        toast.error('Erreur lors du scan', {
+        toast.error("Erreur lors de l'analyse", {
           description: 'Une erreur inattendue est survenue.',
         });
       }
@@ -102,19 +102,19 @@ export function useTriggerScan(projectId: string) {
 
 export function useTriggerPromptScan(projectId: string) {
   const onCompleted = useCallback(() => {
-    toast.success('Scan terminé', {
+    toast.success('Analyse terminée', {
       description: 'Le prompt a été analysé avec succès.',
     });
   }, []);
 
   const onPartial = useCallback(() => {
-    toast.warning('Scan partiel terminé', {
+    toast.warning('Analyse partielle terminée', {
       description: 'Certains fournisseurs LLM ont échoué.',
     });
   }, []);
 
   const onFailed = useCallback((data: ScanJobStatusResponse) => {
-    toast.error('Scan échoué', {
+    toast.error('Analyse échouée', {
       description: data.errorMessage || 'Une erreur est survenue.',
     });
   }, []);
@@ -129,7 +129,7 @@ export function useTriggerPromptScan(projectId: string) {
   const triggerMutation = useMutation({
     mutationFn: (promptId: string) => apiClient.triggerPromptScan(promptId),
     onSuccess: (data) => {
-      toast.info('Scan lancé', { description: 'Vous serez notifié des résultats.' });
+      toast.info('Analyse lancée', { description: 'Vous serez notifié des résultats.' });
       startPolling(data.jobId);
     },
     onError: (error) => {
@@ -139,16 +139,16 @@ export function useTriggerPromptScan(projectId: string) {
             description: 'Vérifiez la configuration des clés API.',
           });
         } else if (error.code === 'SCAN_COOLDOWN' || error.code === 'VALIDATION_ERROR') {
-          toast.warning('Scan impossible', {
+          toast.warning('Analyse impossible', {
             description: 'Ce prompt est en période de cooldown.',
           });
         } else {
-          toast.error('Erreur lors du scan', {
+          toast.error("Erreur lors de l'analyse", {
             description: error.message,
           });
         }
       } else {
-        toast.error('Erreur lors du scan', {
+        toast.error("Erreur lors de l'analyse", {
           description: 'Une erreur inattendue est survenue.',
         });
       }

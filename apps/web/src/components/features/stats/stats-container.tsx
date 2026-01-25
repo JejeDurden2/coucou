@@ -77,7 +77,7 @@ function generateCSV(data: HistoricalStats, projectName: string): void {
   const models = Object.keys(data.rankByModel);
 
   // Build header row
-  const headers = ['Date', 'Taux citation (%)', 'Rang moyen', ...models.map((m) => `Rang ${m}`)];
+  const headers = ['Date', 'Part de voix (%)', 'Position moy.', ...models.map((m) => `Rang ${m}`)];
 
   // Build data rows from citationRate time series
   const rows: string[][] = data.citationRate.map((point) => {
@@ -189,8 +189,8 @@ function EmptyState(): React.ReactElement {
   return (
     <div className="text-center py-12 text-muted-foreground">
       <BarChart3 className="size-12 mx-auto mb-4 opacity-50" aria-hidden="true" />
-      <p className="font-medium">Aucune donnée disponible</p>
-      <p className="text-sm mt-1">Les statistiques apparaîtront après le premier scan</p>
+      <p className="font-medium">Pas encore de données</p>
+      <p className="text-sm mt-1">Lancez votre première analyse pour voir les statistiques</p>
     </div>
   );
 }
@@ -265,37 +265,37 @@ export function StatsContainer({
       {/* KPIs */}
       <KpiCardGrid>
         <KpiCard
-          label="Taux de citation"
+          label="Part de voix IA"
           value={`${data.summary.citationRate.current.toFixed(1)}%`}
           variation={data.summary.citationRate.variation ?? undefined}
           variationType={getVariationType(data.summary.citationRate.variation)}
           icon={TrendingUp}
-          tooltip="Pourcentage de scans où votre marque est citée"
+          tooltip="Pourcentage de requêtes où votre marque est mentionnée"
         />
         <KpiCard
-          label="Rang moyen"
+          label="Position moyenne"
           value={data.summary.averageRank.current.toFixed(1)}
           variation={data.summary.averageRank.variation ?? undefined}
           variationType={getVariationType(data.summary.averageRank.variation)}
           invertColors
           icon={Trophy}
-          tooltip="Position moyenne dans les résultats (1 = meilleur)"
+          tooltip="Votre rang moyen quand vous êtes cité (1 = premier)"
         />
         <KpiCard
-          label="Scans totaux"
+          label="Analyses totales"
           value={data.summary.totalScans.current}
           variation={data.summary.totalScans.variation ?? undefined}
           variationType={getVariationType(data.summary.totalScans.variation)}
           icon={Radar}
-          tooltip="Nombre total de scans effectués sur la période"
+          tooltip="Nombre total d'analyses effectuées sur la période"
         />
         <KpiCard
-          label="Concurrents"
+          label="Benchmark concurrentiel"
           value={data.summary.competitorsCount.current}
           variation={data.summary.competitorsCount.variation ?? undefined}
           variationType={getVariationType(data.summary.competitorsCount.variation)}
           icon={Users}
-          tooltip="Nombre de concurrents détectés"
+          tooltip="Marques concurrentes mentionnées sur vos requêtes"
         />
       </KpiCardGrid>
 
@@ -316,7 +316,7 @@ export function StatsContainer({
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <ModelPerformanceTable data={data.modelBreakdown} userPlan={userPlan} />
         <div className="rounded-lg border border-border bg-card p-4">
-          <h3 className="text-sm font-medium mb-4">Performance par prompt</h3>
+          <h3 className="text-sm font-medium mb-4">Performance par requête</h3>
           <PromptPerformanceTable
             data={promptPerformance}
             onNavigateToOverview={onNavigateToOverview}
@@ -326,7 +326,7 @@ export function StatsContainer({
 
       {/* Competitors */}
       <div>
-        <h3 className="text-sm font-medium mb-4">Classement des concurrents</h3>
+        <h3 className="text-sm font-medium mb-4">Benchmark concurrents</h3>
         <CompetitorRankingTable data={data.competitorRanking} userBrandName={brandName} />
       </div>
     </div>

@@ -134,7 +134,7 @@ export const CompetitorCard = memo(function CompetitorCard({
             <h4 className="font-semibold text-foreground">{competitor.name}</h4>
             {competitor.averagePosition !== null && (
               <p className="text-xs text-muted-foreground">
-                Rang moyen: {competitor.averagePosition}
+                Position moyenne : {competitor.averagePosition}
               </p>
             )}
           </div>

@@ -21,13 +21,13 @@ export function InfoTooltip({ term, className }: InfoTooltipProps): React.ReactE
               'inline-flex items-center justify-center rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:ring-offset-2 focus-visible:ring-offset-background',
               className,
             )}
-            aria-label={`Information sur ${term}`}
+            aria-label={`Information sur ${GEO_GLOSSARY[term].label}`}
           >
             <HelpCircle className="size-3.5 text-muted-foreground" aria-hidden="true" />
           </button>
         </TooltipTrigger>
         <TooltipContent className="max-w-[280px] bg-card border border-border p-3 text-sm">
-          {GEO_GLOSSARY[term]}
+          {GEO_GLOSSARY[term].definition}
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>

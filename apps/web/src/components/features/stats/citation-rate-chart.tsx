@@ -88,7 +88,7 @@ export const CitationRateChart = memo(function CitationRateChart({
       <Card>
         <CardHeader className="pb-2">
           <CardTitle className="text-base flex items-center gap-1">
-            Taux de citation
+            Part de voix IA
             <InfoTooltip term="citationRate" />
           </CardTitle>
           <CardDescription>Aucune donnée pour cette période</CardDescription>
@@ -111,10 +111,10 @@ export const CitationRateChart = memo(function CitationRateChart({
     <Card>
       <CardHeader className="pb-2">
         <CardTitle className="text-base flex items-center gap-1">
-          Taux de citation
+          Part de voix IA
           <InfoTooltip term="citationRate" />
         </CardTitle>
-        <CardDescription>Pourcentage de scans où votre marque est mentionnée</CardDescription>
+        <CardDescription>Pourcentage de requêtes où votre marque est mentionnée</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="h-[300px]">

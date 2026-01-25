@@ -56,15 +56,15 @@ export const SentimentTab = memo(function SentimentTab({ projectId, userPlan }: 
               <Brain className="size-8 text-muted-foreground" aria-hidden="true" />
             </div>
             <div className="space-y-2">
-              <h3 className="text-lg font-semibold">Aucune analyse sentiment</h3>
+              <h3 className="text-lg font-semibold">Aucune analyse de sentiment</h3>
               <p className="text-sm text-muted-foreground max-w-md">
-                L'analyse sentiment sera effectuée automatiquement lors du prochain scan
+                L'analyse sentiment sera effectuée automatiquement lors de la prochaine analyse
                 hebdomadaire.
               </p>
             </div>
             {data?.nextScanDate && (
               <p className="text-xs text-muted-foreground">
-                Prochain scan : {formatRelativeTimeFuture(data.nextScanDate)}
+                Prochaine analyse : {formatRelativeTimeFuture(data.nextScanDate)}
               </p>
             )}
           </div>
@@ -112,12 +112,12 @@ export const SentimentTab = memo(function SentimentTab({ projectId, userPlan }: 
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 text-sm text-muted-foreground">
             <div className="flex items-center gap-2">
               <Calendar className="size-4" aria-hidden="true" />
-              <span>Dernier scan : {formatRelativeTime(scan.scannedAt)}</span>
+              <span>Dernière analyse : {formatRelativeTime(scan.scannedAt)}</span>
             </div>
             {nextScanDate && (
               <div className="flex items-center gap-2">
                 <Calendar className="size-4" aria-hidden="true" />
-                <span>Prochain scan : {formatRelativeTimeFuture(nextScanDate)}</span>
+                <span>Prochaine analyse : {formatRelativeTimeFuture(nextScanDate)}</span>
               </div>
             )}
           </div>

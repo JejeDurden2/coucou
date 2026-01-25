@@ -40,10 +40,10 @@ export const CompetitorsContainer = memo(function CompetitorsContainer({
               <Trophy className="size-8 text-muted-foreground" aria-hidden="true" />
             </div>
             <div className="space-y-2">
-              <h3 className="text-lg font-semibold">Aucun concurrent detecte</h3>
+              <h3 className="text-lg font-semibold">Aucun concurrent identifié</h3>
               <p className="text-sm text-muted-foreground max-w-md">
-                Lancez un scan pour decouvrir quels concurrents sont mentionnes par les IA sur vos
-                prompts.
+                Lancez une analyse pour découvrir quels concurrents sont mentionnés par les IA sur
+                vos requêtes.
               </p>
             </div>
           </div>
@@ -85,7 +85,7 @@ export const CompetitorsContainer = memo(function CompetitorsContainer({
             </CardTitle>
           </div>
           <CardDescription>
-            Analyse detaillee des marques concurrentes citees par les IA
+            Analyse détaillée des marques concurrentes citées par les IA
           </CardDescription>
         </CardHeader>
         <CardContent>

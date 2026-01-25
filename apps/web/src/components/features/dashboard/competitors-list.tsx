@@ -64,7 +64,7 @@ function EnrichedCompetitorsList({
       <CardContent>
         {displayedCompetitors.length === 0 ? (
           <p className="text-sm text-muted-foreground text-center py-8">
-            Aucun concurrent detecte. Lancez un scan pour analyser vos concurrents.
+            Aucun concurrent identifié. Lancez une analyse pour découvrir vos concurrents.
           </p>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -102,12 +102,14 @@ function SimpleCompetitorsList({
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between pb-2">
-        <CardTitle className="text-lg font-medium">Concurrents detectes</CardTitle>
+        <CardTitle className="text-lg font-medium">Benchmark concurrents</CardTitle>
         <Users className="h-5 w-5 text-muted-foreground" aria-hidden="true" />
       </CardHeader>
       <CardContent>
         {displayedCompetitors.length === 0 ? (
-          <p className="text-sm text-muted-foreground text-center py-4">Aucun concurrent detecte</p>
+          <p className="text-sm text-muted-foreground text-center py-4">
+            Aucun concurrent identifié
+          </p>
         ) : (
           <div className="space-y-3">
             {displayedCompetitors.map((competitor) => (

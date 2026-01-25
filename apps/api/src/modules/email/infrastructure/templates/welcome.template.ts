@@ -38,8 +38,8 @@ export function generateWelcomeEmail(data: WelcomeEmailData): { html: string; te
 
     <ol style="margin: 0 0 24px; padding-left: 20px; color: ${EMAIL_COLORS.text}; font-size: 14px; line-height: 2;">
       <li>Créez votre premier projet avec votre nom de marque</li>
-      <li>Ajoutez des prompts que vos clients pourraient poser</li>
-      <li>Lancez un scan pour voir si vous êtes cité</li>
+      <li>Ajoutez des requêtes que vos clients pourraient poser aux IA</li>
+      <li>Lancez une analyse pour voir si vous êtes cité</li>
       <li>Suivez vos recommandations pour améliorer votre visibilité</li>
     </ol>
 
@@ -69,8 +69,8 @@ POURQUOI C'EST IMPORTANT ?
 
 PREMIERS PAS :
 1. Créez votre premier projet avec votre nom de marque
-2. Ajoutez des prompts que vos clients pourraient poser
-3. Lancez un scan pour voir si vous êtes cité
+2. Ajoutez des requêtes que vos clients pourraient poser aux IA
+3. Lancez une analyse pour voir si vous êtes cité
 4. Suivez vos recommandations pour améliorer votre visibilité
 
 Accédez à votre dashboard : ${data.loginUrl}

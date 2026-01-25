@@ -57,8 +57,8 @@ export const RecommendationsContainer = memo(function RecommendationsContainer({
             <div className="space-y-2">
               <h3 className="text-lg font-semibold">Excellent travail!</h3>
               <p className="text-sm text-muted-foreground max-w-md">
-                Aucune recommandation pour le moment. Continuez a scanner regulierement pour obtenir
-                des insights personnalises sur votre visibilite IA.
+                Aucune recommandation disponible. Continuez à analyser régulièrement pour obtenir
+                des insights personnalisés sur votre visibilité IA.
               </p>
             </div>
           </div>
@@ -126,13 +126,13 @@ export const RecommendationsContainer = memo(function RecommendationsContainer({
             </div>
           </div>
           <CardDescription>
-            Actions concretes pour ameliorer votre visibilite dans les reponses IA
+            Actions concrètes pour améliorer votre visibilité dans les réponses IA
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-3">
           {filteredRecommendations.length === 0 ? (
             <p className="text-sm text-muted-foreground text-center py-8">
-              Aucune recommandation dans cette categorie
+              Aucune recommandation dans cette catégorie
             </p>
           ) : (
             filteredRecommendations.map((rec) => (

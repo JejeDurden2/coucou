@@ -36,7 +36,7 @@ export const RankTrendChart = memo(function RankTrendChart({
     return (
       <Card>
         <CardHeader>
-          <CardTitle className="text-base">Rang moyen</CardTitle>
+          <CardTitle className="text-base">Position moyenne</CardTitle>
           <CardDescription>Aucune donnée disponible</CardDescription>
         </CardHeader>
       </Card>
@@ -46,8 +46,8 @@ export const RankTrendChart = memo(function RankTrendChart({
   return (
     <Card>
       <CardHeader className="pb-2">
-        <CardTitle className="text-base">Rang moyen</CardTitle>
-        <CardDescription>Position moyenne de votre marque dans les réponses IA</CardDescription>
+        <CardTitle className="text-base">Position moyenne</CardTitle>
+        <CardDescription>Votre rang moyen quand vous êtes cité (1 = premier)</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="h-64">
@@ -76,7 +76,7 @@ export const RankTrendChart = memo(function RankTrendChart({
                   fontSize: '12px',
                 }}
                 labelStyle={{ color: 'hsl(var(--foreground))' }}
-                formatter={(value) => [`#${Number(value).toFixed(1)}`, 'Rang moyen']}
+                formatter={(value) => [`#${Number(value).toFixed(1)}`, 'Position']}
               />
               <ReferenceLine
                 y={3}

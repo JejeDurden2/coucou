@@ -49,7 +49,7 @@ export const CompetitorRankingTable = memo(function CompetitorRankingTable({
   if (data.length === 0) {
     return (
       <div className="rounded-xl border border-border bg-card/50 p-8 text-center">
-        <p className="text-muted-foreground">Aucun concurrent détecté</p>
+        <p className="text-muted-foreground">Aucun concurrent identifié</p>
       </div>
     );
   }

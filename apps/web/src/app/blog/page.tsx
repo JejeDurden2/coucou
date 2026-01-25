@@ -7,14 +7,19 @@ import { PostCard } from '@/components/blog';
 import { Logo } from '@/components/ui/logo';
 
 export const metadata: Metadata = {
-  title: 'Blog',
+  title: 'Blog GEO & Recherche IA — Guides et actualités',
   description:
-    'Articles et guides sur le GEO (Generative Engine Optimization) et la visibilité de votre marque dans ChatGPT, Claude et les autres IA.',
+    'Guides pratiques sur le GEO (Generative Engine Optimization), la recherche IA et la visibilité de marque sur ChatGPT, Claude, Gemini.',
   openGraph: {
-    title: 'Blog | Coucou IA',
+    title: 'Blog GEO & Recherche IA — Guides et actualités | Coucou IA',
     description:
-      'Articles et guides sur le GEO (Generative Engine Optimization) et la visibilité de votre marque dans les IA.',
+      'Guides pratiques sur le GEO, la recherche IA et la visibilité de marque sur ChatGPT, Claude, Gemini.',
     type: 'website',
+  },
+  twitter: {
+    title: 'Blog GEO & Recherche IA | Coucou IA',
+    description:
+      'Guides pratiques sur le GEO et la visibilité de marque sur ChatGPT, Claude, Gemini.',
   },
 };
 

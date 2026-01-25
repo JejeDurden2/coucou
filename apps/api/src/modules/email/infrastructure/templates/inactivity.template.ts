@@ -26,7 +26,7 @@ export function generateInactivityEmail(data: InactivityEmailData): { html: stri
 
     ${createButton('Vérifier ma visibilité', data.projectUrl)}
 
-    ${createInfoBox(`<p style="margin: 0; font-size: 14px; color: ${EMAIL_COLORS.text};">💡 Passez au plan Solo pour des scans automatiques et ne plus jamais rater une évolution.</p>`, 'primary')}
+    ${createInfoBox(`<p style="margin: 0; font-size: 14px; color: ${EMAIL_COLORS.text};">💡 Passez au plan Solo pour des analyses automatiques et ne plus jamais rater une évolution.</p>`, 'primary')}
 
     <p style="margin: 24px 0 0; font-size: 12px; color: ${EMAIL_COLORS.textMuted}; text-align: center;">
       <a href="${data.unsubscribeUrl}" style="color: ${EMAIL_COLORS.textMuted}; text-decoration: underline;">Se désinscrire des emails</a>
@@ -48,7 +48,7 @@ Les réponses de ChatGPT et Claude évoluent constamment. Vos concurrents sont p
 
 Vérifier ma visibilité : ${data.projectUrl}
 
-💡 Passez au plan Solo pour des scans automatiques et ne plus jamais rater une évolution.
+💡 Passez au plan Solo pour des analyses automatiques et ne plus jamais rater une évolution.
 
 --
 Se désinscrire : ${data.unsubscribeUrl}

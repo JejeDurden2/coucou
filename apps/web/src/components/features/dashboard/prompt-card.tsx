@@ -31,7 +31,7 @@ function PositionIndicator({
   provider: 'chatgpt' | 'claude';
 }) {
   if (!result) {
-    return <EyeOff className="h-3 w-3 text-muted-foreground" aria-label="Pas encore scanné" />;
+    return <EyeOff className="h-3 w-3 text-muted-foreground" aria-label="Pas encore analysé" />;
   }
 
   if (result.isCited) {

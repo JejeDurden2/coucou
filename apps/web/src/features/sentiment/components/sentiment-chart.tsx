@@ -41,7 +41,7 @@ export const SentimentChart = memo(function SentimentChart({ projectId }: Sentim
       <Card>
         <CardHeader className="pb-2">
           <CardTitle className="text-base">Évolution du sentiment</CardTitle>
-          <CardDescription>Score global au fil du temps</CardDescription>
+          <CardDescription>Score de visibilité au fil du temps</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="h-64 bg-muted animate-pulse rounded-lg" />
@@ -68,7 +68,7 @@ export const SentimentChart = memo(function SentimentChart({ projectId }: Sentim
       <Card>
         <CardHeader className="pb-2">
           <CardTitle className="text-base">Évolution du sentiment</CardTitle>
-          <CardDescription>Score global au fil du temps</CardDescription>
+          <CardDescription>Score de visibilité au fil du temps</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="flex flex-col items-center justify-center py-8 text-center">
@@ -76,7 +76,7 @@ export const SentimentChart = memo(function SentimentChart({ projectId }: Sentim
               <TrendingUp className="size-6 text-muted-foreground" aria-hidden="true" />
             </div>
             <p className="text-sm text-muted-foreground max-w-xs">
-              Pas assez de données pour afficher l'évolution. Revenez après le prochain scan.
+              Pas assez de données pour afficher l'évolution. Revenez après la prochaine analyse.
             </p>
           </div>
         </CardContent>
@@ -88,7 +88,7 @@ export const SentimentChart = memo(function SentimentChart({ projectId }: Sentim
     <Card>
       <CardHeader className="pb-2">
         <CardTitle className="text-base">Évolution du sentiment</CardTitle>
-        <CardDescription>Score global au fil du temps</CardDescription>
+        <CardDescription>Score de visibilité au fil du temps</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="h-64">

@@ -39,9 +39,9 @@ export const RecommendationsSummary = memo(function RecommendationsSummary({
               <CheckCircle2 className="size-6 text-success" aria-hidden="true" />
             </div>
             <div className="space-y-1">
-              <p className="text-sm font-medium">Aucune recommandation</p>
+              <p className="text-sm font-medium">Aucune recommandation disponible</p>
               <p className="text-xs text-muted-foreground">
-                Continuez a scanner pour obtenir des insights personnalises
+                Continuez à analyser pour obtenir des insights personnalisés
               </p>
             </div>
           </div>

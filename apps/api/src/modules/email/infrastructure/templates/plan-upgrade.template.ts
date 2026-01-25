@@ -50,7 +50,7 @@ export function generatePlanUpgradeEmail(data: PlanUpgradeEmailData): {
               <td style="padding: 8px 0; font-size: 14px; color: ${EMAIL_COLORS.text}; text-align: right; font-weight: 500;">${features.projects}</td>
             </tr>
             <tr>
-              <td style="padding: 8px 0; font-size: 14px; color: ${EMAIL_COLORS.textMuted};">Prompts par projet</td>
+              <td style="padding: 8px 0; font-size: 14px; color: ${EMAIL_COLORS.textMuted};">Requêtes par projet</td>
               <td style="padding: 8px 0; font-size: 14px; color: ${EMAIL_COLORS.text}; text-align: right; font-weight: 500;">${features.promptsPerProject}</td>
             </tr>
             <tr>
@@ -78,7 +78,7 @@ Votre compte a été mis à niveau vers le plan ${data.planName}.
 
 Votre plan inclut :
 - ${features.projects} projets
-- ${features.promptsPerProject} prompts par projet
+- ${features.promptsPerProject} requêtes par projet
 - ${features.models.length} modèles IA (${features.models.join(', ')})
 
 Accéder au dashboard : ${data.dashboardUrl}

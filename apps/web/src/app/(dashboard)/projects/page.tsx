@@ -89,8 +89,8 @@ export default function ProjectsPage(): React.ReactNode {
               <div className="flex items-center gap-4">
                 <span className="text-xs text-muted-foreground">
                   {project.lastScannedAt
-                    ? `Scanné le ${new Date(project.lastScannedAt).toLocaleDateString('fr-FR')}`
-                    : 'Jamais scanné'}
+                    ? `Analysé le ${new Date(project.lastScannedAt).toLocaleDateString('fr-FR')}`
+                    : 'Jamais analysé'}
                 </span>
                 <ChevronRight
                   className="h-4 w-4 text-muted-foreground transition-transform group-hover:translate-x-1"
