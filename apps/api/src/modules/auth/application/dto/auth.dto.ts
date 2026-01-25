@@ -27,6 +27,7 @@ export interface UserResponseDto {
   projectCount: number;
   emailNotificationsEnabled: boolean;
   createdAt: Date;
+  isOAuthUser: boolean;
 }
 
 export interface JwtPayload {

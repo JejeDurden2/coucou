@@ -19,3 +19,11 @@ export type {
   ConsentType,
   ConsentAction,
 } from './repositories/consent.repository';
+export { EMAIL_VALIDATOR_PORT } from './ports/email-validator.port';
+export type { EmailValidatorPort } from './ports/email-validator.port';
+export {
+  InvalidEmailFormatError,
+  InvalidEmailDomainError,
+  DisposableEmailError,
+} from './errors/email-validation.error';
+export type { EmailValidationError } from './errors/email-validation.error';

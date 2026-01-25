@@ -68,8 +68,7 @@ export class HandleWebhookUseCase {
     if (!user) return;
 
     const subscription = await this.stripeService.getSubscription(session.subscription);
-    const priceId = subscription.items.data[0]?.price?.id;
-    const plan = priceId ? this.stripeService.getPlanFromPriceId(priceId) : Plan.FREE;
+    const plan = this.getPlanFromSubscription(subscription);
 
     const currentPeriodStart = this.toSafeDate(subscription.current_period_start);
     const currentPeriodEnd = this.toSafeDate(subscription.current_period_end);
@@ -103,18 +102,22 @@ export class HandleWebhookUseCase {
 
     this.logger.log(`Subscription created for user: ${user.id}, plan: ${plan}`);
 
-    // Send plan upgrade email via queue
+    // Send plan upgrade email via queue (non-blocking)
     if (plan !== Plan.FREE) {
       const frontendUrl = this.configService.get<string>('FRONTEND_URL') ?? 'https://coucou-ia.com';
-      await this.emailQueueService.addJob({
-        type: 'plan-upgrade',
-        to: user.email,
-        data: {
-          userName: user.name ?? user.email.split('@')[0],
-          planName: plan as 'SOLO' | 'PRO',
-          dashboardUrl: `${frontendUrl}/projects`,
-        },
-      });
+      this.emailQueueService
+        .addJob({
+          type: 'plan-upgrade',
+          to: user.email,
+          data: {
+            userName: user.name ?? user.email.split('@')[0],
+            planName: plan as 'SOLO' | 'PRO',
+            dashboardUrl: `${frontendUrl}/projects`,
+          },
+        })
+        .catch((error) => {
+          this.logger.error(`Failed to queue plan upgrade email for ${user.email}`, error);
+        });
     }
   }
 
@@ -164,18 +167,22 @@ export class HandleWebhookUseCase {
 
     this.logger.log(`Subscription deleted for user: ${user.id}, previousPlan: ${previousPlan}`);
 
-    // Send subscription ended email via queue
+    // Send subscription ended email via queue (non-blocking)
     if (previousPlan === Plan.SOLO || previousPlan === Plan.PRO) {
       const frontendUrl = this.configService.get<string>('FRONTEND_URL') ?? 'https://coucou-ia.com';
-      await this.emailQueueService.addJob({
-        type: 'subscription-ended',
-        to: user.email,
-        data: {
-          userName: user.name ?? user.email.split('@')[0],
-          previousPlan,
-          billingUrl: `${frontendUrl}/billing`,
-        },
-      });
+      this.emailQueueService
+        .addJob({
+          type: 'subscription-ended',
+          to: user.email,
+          data: {
+            userName: user.name ?? user.email.split('@')[0],
+            previousPlan,
+            billingUrl: `${frontendUrl}/billing`,
+          },
+        })
+        .catch((error) => {
+          this.logger.error(`Failed to queue subscription ended email for ${user.email}`, error);
+        });
     }
   }
 
@@ -191,7 +198,7 @@ export class HandleWebhookUseCase {
     return user;
   }
 
-  private getPlanFromSubscription(subscription: WebhookSubscription): Plan {
+  private getPlanFromSubscription(subscription: Pick<WebhookSubscription, 'items'>): Plan {
     const priceId = subscription.items.data[0]?.price?.id;
     return priceId ? this.stripeService.getPlanFromPriceId(priceId) : Plan.FREE;
   }

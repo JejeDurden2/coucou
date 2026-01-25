@@ -47,6 +47,10 @@ export class RefreshTokenRequestDto {
 
 export class UpdateProfileRequestDto {
   @IsOptional()
+  @IsEmail()
+  email?: string;
+
+  @IsOptional()
   @IsString()
   @MinLength(2)
   @MaxLength(100)

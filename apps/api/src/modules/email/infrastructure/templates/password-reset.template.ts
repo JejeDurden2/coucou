@@ -59,7 +59,7 @@ Ce lien expire dans ${data.expiresInMinutes} minutes.
 Si vous n'avez pas demandé cette réinitialisation, ignorez cet email.
 
 --
-Coucou - Votre visibilité dans les IA
+Coucou IA- Votre visibilité dans les IA
 https://coucou-ia.com
 `.trim();
 

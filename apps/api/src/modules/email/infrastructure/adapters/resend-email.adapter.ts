@@ -21,7 +21,7 @@ export class ResendEmailAdapter implements EmailPort {
     this.fromEmail =
       configService?.get<string>('EMAIL_FROM') ??
       process.env.EMAIL_FROM ??
-      'Coucou <noreply@coucou-ia.com>';
+      'Coucou IA <jerome@coucou-ia.com>';
   }
 
   async send(options: SendEmailOptions): Promise<void> {

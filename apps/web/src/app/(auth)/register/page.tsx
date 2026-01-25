@@ -4,13 +4,15 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth-context';
+import { ApiClientError } from '@/lib/api-client';
+import { EMAIL_ERROR_MESSAGES } from '@/lib/email-errors';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Logo } from '@/components/ui/logo';
 import { GoogleButton } from '@/components/ui/google-button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
-export default function RegisterPage() {
+export default function RegisterPage(): React.ReactNode {
   const router = useRouter();
   const { register } = useAuth();
   const [name, setName] = useState('');
@@ -18,11 +20,13 @@ export default function RegisterPage() {
   const [password, setPassword] = useState('');
   const [acceptTerms, setAcceptTerms] = useState(false);
   const [error, setError] = useState('');
+  const [emailError, setEmailError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  async function handleSubmit(e: React.FormEvent): Promise<void> {
     e.preventDefault();
     setError('');
+    setEmailError('');
     setIsLoading(true);
 
     try {
@@ -37,12 +41,21 @@ export default function RegisterPage() {
 
       // New users always go to onboarding for plan selection and first project
       router.push('/onboarding');
-    } catch {
-      setError('Une erreur est survenue. Veuillez réessayer.');
+    } catch (err) {
+      if (err instanceof ApiClientError) {
+        const emailMsg = EMAIL_ERROR_MESSAGES[err.code];
+        if (emailMsg) {
+          setEmailError(emailMsg);
+        } else {
+          setError(err.message || 'Une erreur est survenue.');
+        }
+      } else {
+        setError('Une erreur est survenue. Veuillez réessayer.');
+      }
     } finally {
       setIsLoading(false);
     }
-  };
+  }
 
   return (
     <Card>
@@ -100,11 +113,15 @@ export default function RegisterPage() {
                 type="email"
                 placeholder="vous@entreprise.com"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  setEmailError('');
+                }}
                 required
                 autoComplete="email"
                 spellCheck={false}
               />
+              {emailError && <p className="text-sm text-destructive">{emailError}</p>}
             </div>
             <div className="space-y-2">
               <label htmlFor="password" className="text-sm font-medium">

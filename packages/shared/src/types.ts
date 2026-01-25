@@ -35,6 +35,7 @@ export interface User {
   lastInactivityEmailAt?: Date;
   emailNotificationsEnabled: boolean;
   lastScanAt?: Date;
+  isOAuthUser?: boolean;
 }
 
 export interface AuthResponse {

@@ -32,6 +32,7 @@ export class GetMeUseCase {
       projectCount,
       emailNotificationsEnabled: user.emailNotificationsEnabled,
       createdAt: user.createdAt,
+      isOAuthUser: !!user.googleId,
     });
   }
 }

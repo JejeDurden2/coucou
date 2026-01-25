@@ -18,7 +18,7 @@ export function generateWelcomeEmail(data: WelcomeEmailData): { html: string; te
 
     ${createParagraph(`Bonjour ${data.userName},`)}
 
-    ${createParagraph(`Merci de rejoindre Coucou ! Vous venez de faire un premier pas important vers une meilleure visibilité de votre marque dans les réponses des IA.`)}
+    ${createParagraph(`Merci de rejoindre Coucou IA! Vous venez de faire un premier pas important vers une meilleure visibilité de votre marque dans les réponses des IA.`)}
 
     ${createInfoBox(
       `
@@ -78,7 +78,7 @@ Accédez à votre dashboard : ${data.loginUrl}
 Des questions ? Répondez directement à cet email.
 
 --
-Coucou - Votre visibilité dans les IA
+Coucou IA- Votre visibilité dans les IA
 https://coucou-ia.com
 `.trim();
 

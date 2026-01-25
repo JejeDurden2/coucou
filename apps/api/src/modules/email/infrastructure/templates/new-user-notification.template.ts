@@ -57,7 +57,7 @@ Un nouvel utilisateur vient de s'inscrire sur Coucou IA.
 - Date : ${data.createdAt}
 
 --
-Coucou - Votre visibilité dans les IA
+Coucou IA- Votre visibilité dans les IA
 https://coucou-ia.com
 `.trim();
 

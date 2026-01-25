@@ -25,7 +25,7 @@ export interface BaseEmailData {
 const LOGO_URL = 'https://coucou-ia.com/logo-email.png';
 
 /**
- * Wraps email content in the base template with Coucou branding
+ * Wraps email content in the base template with Coucou IA branding
  */
 export function wrapInBaseTemplate(content: string, data?: BaseEmailData): string {
   const previewText = data?.previewText ?? '';
@@ -101,7 +101,7 @@ export function wrapInBaseTemplate(content: string, data?: BaseEmailData): strin
           <tr>
             <td align="center" style="padding-top: 32px;">
               <p style="margin: 0; font-size: 13px; color: ${EMAIL_COLORS.textMuted}; line-height: 1.5;">
-                Coucou - Votre visibilité dans les IA<br>
+                Coucou IA- Votre visibilité dans les IA<br>
                 <a href="https://coucou-ia.com" style="color: ${EMAIL_COLORS.textMuted}; text-decoration: underline;">coucou-ia.com</a>
               </p>
             </td>

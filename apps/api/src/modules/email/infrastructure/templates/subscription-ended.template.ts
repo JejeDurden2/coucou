@@ -89,7 +89,7 @@ Voir les plans : ${data.billingUrl}
 Des questions ? Répondez à cet email, nous sommes là pour vous aider.
 
 --
-Coucou - Votre visibilité dans les IA
+Coucou IA- Votre visibilité dans les IA
 https://coucou-ia.com
 `.trim();
 

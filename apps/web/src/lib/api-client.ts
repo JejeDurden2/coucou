@@ -91,10 +91,10 @@ class ApiClient {
     return this.fetch<User>('/auth/me');
   }
 
-  async updateProfile(name: string): Promise<User> {
+  async updateProfile(data: { name?: string; email?: string }): Promise<User> {
     return this.fetch<User>('/auth/me', {
       method: 'PATCH',
-      body: JSON.stringify({ name }),
+      body: JSON.stringify(data),
     });
   }
 

@@ -84,7 +84,7 @@ Votre plan inclut :
 Accéder au dashboard : ${data.dashboardUrl}
 
 --
-Coucou - Votre visibilité dans les IA
+Coucou IA- Votre visibilité dans les IA
 https://coucou-ia.com
 `.trim();
 

@@ -13,7 +13,7 @@ export function generateAccountDeletedEmail(data: AccountDeletedEmailData): {
 
     ${createParagraph(`Bonjour ${data.userName},`)}
 
-    ${createParagraph('Nous vous confirmons que votre compte Coucou a bien été supprimé.')}
+    ${createParagraph('Nous vous confirmons que votre compte Coucou IA a bien été supprimé.')}
 
     <table role="presentation" style="width: 100%; border-collapse: collapse; margin: 24px 0; background-color: ${EMAIL_COLORS.cardHover}; border-radius: 8px;">
       <tr>
@@ -39,7 +39,7 @@ export function generateAccountDeletedEmail(data: AccountDeletedEmailData): {
   `;
 
   const html = wrapInBaseTemplate(content, {
-    previewText: 'Votre compte Coucou a bien été supprimé.',
+    previewText: 'Votre compte Coucou IA a bien été supprimé.',
   });
 
   const text = `
@@ -47,7 +47,7 @@ Confirmation de suppression de compte
 
 Bonjour ${data.userName},
 
-Nous vous confirmons que votre compte Coucou a bien été supprimé.
+Nous vous confirmons que votre compte Coucou IA a bien été supprimé.
 
 Ce qui a été supprimé :
 - Vos données personnelles
@@ -62,7 +62,7 @@ Nous sommes désolés de vous voir partir. Si vous changez d'avis, vous pourrez 
 Merci d'avoir utilisé Coucou.
 
 --
-Coucou - Votre visibilité dans les IA
+Coucou IA - Votre visibilité dans les IA
 https://coucou-ia.com
 `.trim();
 

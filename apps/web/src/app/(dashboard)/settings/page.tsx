@@ -6,7 +6,8 @@ import { Download } from 'lucide-react';
 import { Plan } from '@coucou-ia/shared';
 
 import { useAuth } from '@/lib/auth-context';
-import { apiClient } from '@/lib/api-client';
+import { apiClient, ApiClientError } from '@/lib/api-client';
+import { EMAIL_ERROR_MESSAGES } from '@/lib/email-errors';
 import { useSubscription } from '@/hooks/use-billing';
 import { useUpdateEmailNotifications } from '@/hooks/use-user';
 import { Button } from '@/components/ui/button';
@@ -19,6 +20,8 @@ export default function SettingsPage(): React.ReactNode {
   const { data: subscription } = useSubscription();
   const updateEmailNotifications = useUpdateEmailNotifications();
   const [name, setName] = useState(user?.name ?? '');
+  const [email, setEmail] = useState(user?.email ?? '');
+  const [emailError, setEmailError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
@@ -32,12 +35,35 @@ export default function SettingsPage(): React.ReactNode {
     e.preventDefault();
     setIsLoading(true);
     setMessage(null);
+    setEmailError('');
 
     try {
-      await apiClient.updateProfile(name);
+      const updates: { name?: string; email?: string } = {};
+      if (name !== user?.name) updates.name = name;
+      if (!user?.isOAuthUser && email !== user?.email) updates.email = email;
+
+      if (Object.keys(updates).length === 0) {
+        setMessage({ type: 'success', text: 'Aucune modification' });
+        setIsLoading(false);
+        return;
+      }
+
+      await apiClient.updateProfile(updates);
       setMessage({ type: 'success', text: 'Profil mis à jour avec succès' });
-    } catch {
-      setMessage({ type: 'error', text: 'Erreur lors de la mise à jour du profil' });
+    } catch (err) {
+      if (err instanceof ApiClientError) {
+        const emailMsg = EMAIL_ERROR_MESSAGES[err.code];
+        if (emailMsg) {
+          setEmailError(emailMsg);
+        } else {
+          setMessage({
+            type: 'error',
+            text: err.message || 'Erreur lors de la mise à jour du profil',
+          });
+        }
+      } else {
+        setMessage({ type: 'error', text: 'Erreur lors de la mise à jour du profil' });
+      }
     } finally {
       setIsLoading(false);
     }
@@ -73,7 +99,7 @@ export default function SettingsPage(): React.ReactNode {
         <p className="text-sm text-muted-foreground mt-1">Gérez les informations de votre compte</p>
       </div>
 
-      {message ? (
+      {message && (
         <div
           className={`rounded-lg px-4 py-3 text-sm ${
             message.type === 'success'
@@ -83,25 +109,46 @@ export default function SettingsPage(): React.ReactNode {
         >
           {message.text}
         </div>
-      ) : null}
+      )}
 
       <div className="rounded-lg border border-border bg-card p-6">
-        <h2 className="text-sm font-medium text-muted-foreground uppercase tracking-wide mb-4">
-          Profil
-        </h2>
+        <h2 className="text-sm font-medium text-muted-foreground uppercase mb-4">Profil</h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
             <label htmlFor="email" className="text-sm font-medium">
               Email
             </label>
-            <Input
-              id="email"
-              type="email"
-              value={user?.email ?? ''}
-              disabled
-              className="bg-muted/50"
-            />
-            <p className="text-xs text-muted-foreground">L&apos;email ne peut pas être modifié</p>
+            {user?.isOAuthUser ? (
+              <>
+                <Input
+                  id="email"
+                  type="email"
+                  value={user?.email ?? ''}
+                  disabled
+                  className="bg-muted/50"
+                  autoComplete="email"
+                />
+                <p className="text-xs text-muted-foreground">
+                  L&apos;email ne peut pas être modifié pour les comptes liés à Google
+                </p>
+              </>
+            ) : (
+              <>
+                <Input
+                  id="email"
+                  type="email"
+                  value={email}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    setEmailError('');
+                  }}
+                  placeholder="vous@exemple.com"
+                  autoComplete="email"
+                  spellCheck={false}
+                />
+                {emailError && <p className="text-sm text-destructive">{emailError}</p>}
+              </>
+            )}
           </div>
           <div className="space-y-2">
             <label htmlFor="name" className="text-sm font-medium">
@@ -113,6 +160,7 @@ export default function SettingsPage(): React.ReactNode {
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Votre nom"
+              autoComplete="name"
             />
           </div>
           <Button type="submit" disabled={isLoading} size="sm">
@@ -122,7 +170,7 @@ export default function SettingsPage(): React.ReactNode {
       </div>
 
       <div className="rounded-lg border border-border bg-card p-6">
-        <h2 className="text-sm font-medium text-muted-foreground uppercase tracking-wide mb-4">
+        <h2 className="text-sm font-medium text-muted-foreground uppercase mb-4">
           Notifications par email
         </h2>
         <p className="text-sm text-muted-foreground mb-4">
@@ -141,6 +189,7 @@ export default function SettingsPage(): React.ReactNode {
             checked={user?.emailNotificationsEnabled ?? true}
             onCheckedChange={(checked) => updateEmailNotifications.mutate(checked)}
             disabled={updateEmailNotifications.isPending}
+            aria-label="Activer les notifications email"
           />
         </div>
         <p className="text-xs text-muted-foreground mt-4">
@@ -149,9 +198,7 @@ export default function SettingsPage(): React.ReactNode {
       </div>
 
       <div className="rounded-lg border border-border bg-card p-6">
-        <h2 className="text-sm font-medium text-muted-foreground uppercase tracking-wide mb-4">
-          Plan actuel
-        </h2>
+        <h2 className="text-sm font-medium text-muted-foreground uppercase mb-4">Plan actuel</h2>
         <div className="flex items-center justify-between">
           <div>
             <p className="font-medium">{user?.plan}</p>
@@ -166,7 +213,7 @@ export default function SettingsPage(): React.ReactNode {
       </div>
 
       <div className="rounded-lg border border-border bg-card p-6">
-        <h2 className="text-sm font-medium text-muted-foreground uppercase tracking-wide mb-4">
+        <h2 className="text-sm font-medium text-muted-foreground uppercase mb-4">
           Vos données (RGPD)
         </h2>
         <p className="text-sm text-muted-foreground mb-4">
@@ -186,9 +233,7 @@ export default function SettingsPage(): React.ReactNode {
       </div>
 
       <div className="rounded-lg border border-destructive/30 bg-destructive/5 p-6">
-        <h2 className="text-sm font-medium text-destructive uppercase tracking-wide mb-4">
-          Zone de danger
-        </h2>
+        <h2 className="text-sm font-medium text-destructive uppercase mb-4">Zone de danger</h2>
         <p className="text-sm text-muted-foreground mb-4">
           La suppression de votre compte est irréversible. Toutes vos données (projets, prompts,
           scans) seront définitivement supprimées.

@@ -79,7 +79,7 @@ Plan ${nextPlan.plan} :
 Voir le plan ${nextPlan.plan} : ${data.upgradeUrl}
 
 --
-Coucou - Votre visibilité dans les IA
+Coucou IA- Votre visibilité dans les IA
 https://coucou-ia.com
 `.trim();
 

@@ -9,8 +9,11 @@ import type { User } from '../../domain';
 import {
   USER_REPOSITORY,
   CONSENT_REPOSITORY,
+  EMAIL_VALIDATOR_PORT,
   type UserRepository,
   type ConsentRepository,
+  type EmailValidatorPort,
+  type EmailValidationError,
 } from '../../domain';
 import type { RegisterDto } from '../dto/auth.dto';
 
@@ -21,11 +24,19 @@ export class RegisterUseCase {
     private readonly userRepository: UserRepository,
     @Inject(CONSENT_REPOSITORY)
     private readonly consentRepository: ConsentRepository,
+    @Inject(EMAIL_VALIDATOR_PORT)
+    private readonly emailValidator: EmailValidatorPort,
     private readonly emailQueueService: EmailQueueService,
     private readonly configService: ConfigService,
   ) {}
 
-  async execute(dto: RegisterDto): Promise<Result<User, ConflictError>> {
+  async execute(dto: RegisterDto): Promise<Result<User, ConflictError | EmailValidationError>> {
+    // Validate email format, domain, and check for disposable emails
+    const emailResult = await this.emailValidator.validate(dto.email);
+    if (!emailResult.ok) {
+      return emailResult;
+    }
+
     const existingUser = await this.userRepository.findByEmail(dto.email);
 
     if (existingUser) {

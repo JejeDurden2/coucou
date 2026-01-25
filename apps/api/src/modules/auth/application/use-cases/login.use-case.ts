@@ -65,6 +65,7 @@ export class LoginUseCase {
         projectCount,
         emailNotificationsEnabled: user.emailNotificationsEnabled,
         createdAt: user.createdAt,
+        isOAuthUser: !!user.googleId,
       },
     });
   }
