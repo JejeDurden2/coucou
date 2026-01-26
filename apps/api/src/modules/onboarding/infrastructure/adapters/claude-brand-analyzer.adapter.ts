@@ -23,9 +23,10 @@ const GeneratedPromptsSchema = z.array(
 );
 
 const CONTEXT_EXTRACTION_PROMPT = (url: string, brandName: string): string => `
-Analyse le site ${url} pour la marque "${brandName}".
+Lis le site ${url} de la marque "${brandName}" et extrais-en les informations clés.
 
-Utilise web_search pour trouver des informations sur ce site et cette marque.
+Consulte directement cette URL pour comprendre l'activité, les offres et la cible de la marque.
+Ne fais pas de recherche web générale — base-toi uniquement sur le contenu du site.
 
 Réponds UNIQUEMENT en JSON valide (sans markdown, sans \`\`\`):
 {
@@ -68,7 +69,7 @@ export class ClaudeBrandAnalyzerAdapter implements BrandAnalyzerPort {
 
     const response = await this.anthropicClient.createMessage({
       model: 'claude-sonnet-4-5-20250929',
-      maxTokens: 512,
+      maxTokens: 1024,
       temperature: 0,
       messages: [{ role: 'user', content: CONTEXT_EXTRACTION_PROMPT(url, brandName) }],
       webSearch: true,
