@@ -71,6 +71,15 @@ Exemples de bons prompts:
 - "Quelles sont les alternatives à Notion pour la gestion de projet ?"
 `;
 
+const RETRY_CONFIG = {
+  maxRetries: 3,
+  baseDelayMs: 60_000,
+} as const;
+
+function sleep(ms: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 @Injectable()
 export class ClaudeBrandAnalyzerAdapter implements BrandAnalyzerPort {
   private readonly logger = new Logger(ClaudeBrandAnalyzerAdapter.name);
@@ -82,31 +91,30 @@ export class ClaudeBrandAnalyzerAdapter implements BrandAnalyzerPort {
 
     this.logger.log(`Extracting brand context for ${brandName} from ${url}`);
 
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01',
-        'anthropic-beta': 'web-search-2025-03-05',
-      },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 1024,
-        tools: [{ type: 'web_search_20250305', name: 'web_search' }],
-        messages: [
-          {
-            role: 'user',
-            content: CONTEXT_EXTRACTION_PROMPT(url, brandName),
+    const response = await this.callWithRetry(
+      () =>
+        fetch('https://api.anthropic.com/v1/messages', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': apiKey,
+            'anthropic-version': '2023-06-01',
+            'anthropic-beta': 'web-search-2025-03-05',
           },
-        ],
-      }),
-    });
-
-    if (!response.ok) {
-      this.logger.error(`Anthropic API error during context extraction: status ${response.status}`);
-      throw new Error(`API error: ${response.status}`);
-    }
+          body: JSON.stringify({
+            model: 'claude-sonnet-4-20250514',
+            max_tokens: 1024,
+            tools: [{ type: 'web_search_20250305', name: 'web_search' }],
+            messages: [
+              {
+                role: 'user',
+                content: CONTEXT_EXTRACTION_PROMPT(url, brandName),
+              },
+            ],
+          }),
+        }),
+      'context extraction',
+    );
 
     const data = await response.json();
     const textContent = this.extractTextContent(data);

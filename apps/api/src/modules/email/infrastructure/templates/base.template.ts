@@ -38,7 +38,7 @@ export function wrapInBaseTemplate(content: string, data?: BaseEmailData): strin
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="color-scheme" content="dark">
   <meta name="supported-color-schemes" content="dark">
-  <title>Coucou</title>
+  <title>Coucou IA</title>
   <!--[if mso]>
   <noscript>
     <xml>
@@ -74,10 +74,10 @@ export function wrapInBaseTemplate(content: string, data?: BaseEmailData): strin
               <table role="presentation" style="border-collapse: collapse;">
                 <tr>
                   <td style="vertical-align: middle; padding-right: 8px;">
-                    <img src="${LOGO_URL}" alt="Coucou" width="32" height="32" style="display: block;" />
+                    <img src="${LOGO_URL}" alt="Coucou IA" width="32" height="32" style="display: block;" />
                   </td>
                   <td style="vertical-align: middle;">
-                    <span style="font-size: 20px; font-weight: 700; color: ${EMAIL_COLORS.text};">Coucou</span>
+                    <span style="font-size: 20px; font-weight: 700; color: ${EMAIL_COLORS.text};">Coucou IA</span>
                   </td>
                 </tr>
               </table>
