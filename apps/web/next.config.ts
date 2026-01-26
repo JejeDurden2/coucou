@@ -4,7 +4,12 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   transpilePackages: ['@coucou-ia/shared'],
   experimental: {
-    optimizePackageImports: ['lucide-react', '@radix-ui/react-slot', 'class-variance-authority'],
+    optimizePackageImports: [
+      'lucide-react',
+      '@radix-ui/react-slot',
+      'class-variance-authority',
+      'recharts',
+    ],
   },
 };
 

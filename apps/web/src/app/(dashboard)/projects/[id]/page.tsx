@@ -1,18 +1,14 @@
 'use client';
 
-import { use, useState, memo } from 'react';
+import { use, useState } from 'react';
 import Link from 'next/link';
 import {
   Radar,
   Plus,
   RefreshCw,
   Trash2,
-  Trophy,
   MessageSquare,
   BarChart3,
-  EyeOff,
-  Clock,
-  CheckCircle2,
   Lock,
   Users,
   Lightbulb,
@@ -42,7 +38,6 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { CompetitorsList } from '@/components/features/dashboard';
-import { StatCard } from '@/components/features/dashboard/stat-card';
 import { InfoTooltip } from '@/components/ui/info-tooltip';
 import { getModelDisplayName } from '@/components/features/dashboard/llm-result-row';
 import { AddPromptModal } from '@/components/features/dashboard/add-prompt-modal';
@@ -53,51 +48,27 @@ import {
   RecommendationsContainer,
   RecommendationsLockedBanner,
 } from '@/components/features/recommendations';
-import { SentimentOverviewCard, SentimentTab } from '@/features/sentiment';
-import {
-  LLMProvider,
-  getScanAvailability,
-  Plan,
-  PLAN_LIMITS,
-  type PromptCategory,
-} from '@coucou-ia/shared';
+import { SentimentTab } from '@/features/sentiment';
+import { getScanAvailability, Plan, PLAN_LIMITS, type PromptCategory } from '@coucou-ia/shared';
 import { cn } from '@/lib/utils';
-import { formatRelativeTime, formatRelativeTimeFuture } from '@/lib/format';
+import { formatRelativeTime } from '@/lib/format';
 import { NextScanIndicator } from '@/components/dashboard/next-scan-indicator';
+import { KpiBentoSection } from '@/components/dashboard/kpi-cards';
+import { PulsingDot } from '@/components/ui/pulsing-dot';
+import { CitationStatus } from '@/components/dashboard/citation-status';
+import { ScanAvailabilityBadge } from '@/components/dashboard/scan-availability-badge';
 
-interface PulsingDotProps {
-  color: 'primary' | 'success' | 'cyan' | 'emerald';
-  size?: 'sm' | 'md';
+function formatScanProgress(
+  scanProgress: { status?: string; progress?: number } | undefined,
+): string {
+  if (scanProgress?.status === 'PROCESSING') {
+    return `Analyse... ${Math.round((scanProgress.progress ?? 0) * 100)}%`;
+  }
+  return 'En attente...';
 }
 
-const DOT_COLORS = {
-  primary: { ping: 'bg-primary', dot: 'bg-primary' },
-  success: { ping: 'bg-success', dot: 'bg-success' },
-  // Legacy
-  cyan: { ping: 'bg-chatgpt', dot: 'bg-chatgpt' },
-  emerald: { ping: 'bg-success', dot: 'bg-success' },
-} as const;
-
-const DOT_SIZES = {
-  sm: 'size-2',
-  md: 'size-3',
-} as const;
-
-function PulsingDot({ color, size = 'sm' }: PulsingDotProps): React.ReactNode {
-  const colors = DOT_COLORS[color];
-  const sizeClass = DOT_SIZES[size];
-
-  return (
-    <span className={cn('relative flex', sizeClass)}>
-      <span
-        className={cn(
-          'animate-ping absolute h-full w-full rounded-full opacity-75 motion-reduce:animate-none',
-          colors.ping,
-        )}
-      />
-      <span className={cn('relative rounded-full h-full w-full', colors.dot)} />
-    </span>
-  );
+function formatFrequency(plan: Plan): string {
+  return PLAN_LIMITS[plan].scanFrequency === 'daily' ? 'jour' : 'semaine';
 }
 
 interface ProjectDashboardPageProps {
@@ -171,14 +142,11 @@ export default function ProjectDashboardPage({
   }
 
   const promptCount = stats?.promptStats?.length ?? 0;
-  const modelBreakdown = stats?.modelBreakdown ?? [];
-  // Get unique models from all prompt results for table columns
   const availableModels = Array.from(
     new Set(stats?.promptStats?.flatMap((p) => p.modelResults.map((r) => r.model)) ?? []),
   );
   const hasPrompts = promptCount > 0;
 
-  // Calculate scannable prompts (not on cooldown)
   const scannablePromptIds = new Set(
     stats?.promptStats
       ?.filter((p) => getScanAvailability(p.lastScanAt, userPlan).canScan)
@@ -188,25 +156,21 @@ export default function ProjectDashboardPage({
 
   const userCanAccessStats = userPlan !== Plan.FREE;
 
-  // Compute scan button disabled reason
-  const getScanDisabledReason = (): string | null => {
+  function getScanDisabledReason(): string | null {
     if (isScanning) return null;
     if (!hasPrompts) return 'Ajoutez des prompts pour lancer une analyse';
     if (allOnCooldown) {
-      const frequency = PLAN_LIMITS[userPlan].scanFrequency === 'daily' ? 'jour' : 'semaine';
-      return `Tous les prompts sont en cooldown (1 analyse/${frequency} par prompt)`;
+      return `Tous les prompts sont en cooldown (1 analyse/${formatFrequency(userPlan)} par prompt)`;
     }
     return null;
-  };
+  }
   const scanDisabledReason = getScanDisabledReason();
   const isScanDisabled = isScanning || !hasPrompts || allOnCooldown;
 
   return (
     <div className="space-y-6">
-      {/* Header with brand info and scan button */}
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-center gap-3">
-          {/* Brand Avatar */}
           <div className="size-10 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center flex-shrink-0">
             <span className="text-lg font-bold text-primary">
               {project.brandName.charAt(0).toUpperCase()}
@@ -221,13 +185,10 @@ export default function ProjectDashboardPage({
                 </span>
               )}
             </div>
-            {/* Scan Status */}
             {isScanning ? (
               <span className="flex items-center gap-1.5 text-xs text-primary">
                 <PulsingDot color="primary" />
-                {scanProgress?.status === 'PROCESSING'
-                  ? `Analyse... ${Math.round((scanProgress.progress ?? 0) * 100)}%`
-                  : 'En attente...'}
+                {formatScanProgress(scanProgress)}
               </span>
             ) : stats?.lastScanAt ? (
               <p className="text-xs text-muted-foreground">
@@ -253,9 +214,7 @@ export default function ProjectDashboardPage({
                           className="mr-2 h-4 w-4 animate-spin motion-reduce:animate-none"
                           aria-hidden="true"
                         />
-                        {scanProgress?.status === 'PROCESSING'
-                          ? `Analyse... ${Math.round((scanProgress.progress ?? 0) * 100)}%`
-                          : 'En attente...'}
+                        {formatScanProgress(scanProgress)}
                       </>
                     ) : (
                       <>
@@ -278,7 +237,6 @@ export default function ProjectDashboardPage({
         )}
       </div>
 
-      {/* Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
         <TabsList>
           <TabsTrigger value="overview">Vue d'ensemble</TabsTrigger>
@@ -305,43 +263,13 @@ export default function ProjectDashboardPage({
         </TabsList>
 
         <TabsContent value="overview" className="space-y-6">
-          {/* Stats Row */}
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-            <StatCard
-              icon={Trophy}
-              label="Position moyenne"
-              value={stats?.averageRank ?? null}
-              gradient="gold"
-              trend={stats?.trend ? { delta: stats.trend.delta } : undefined}
-              sparklineData={stats?.trends?.averageRank?.map((p) => p.value)}
-              podiumStyle
-              tooltipTerm="position"
-            />
-            {modelBreakdown.map((model) => (
-              <StatCard
-                key={model.model}
-                icon={MessageSquare}
-                label={getModelDisplayName(model.model)}
-                value={model.averageRank}
-                gradient={model.provider === LLMProvider.OPENAI ? 'chatgpt' : 'claude'}
-                podiumStyle
-              />
-            ))}
-            <StatCard
-              icon={BarChart3}
-              label="Total analyses"
-              value={stats?.totalScans?.toString() ?? '0'}
-              gradient="primary"
-              tooltipTerm="scan"
-            />
-            <SentimentOverviewCard
-              projectId={id}
-              userPlan={userPlan}
-              onNavigate={() => setActiveTab('sentiment')}
-            />
-          </div>
+          <KpiBentoSection
+            stats={stats}
+            projectId={id}
+            userPlan={userPlan}
+            onNavigateToSentiment={() => setActiveTab('sentiment')}
+          />
 
-          {/* Main Content: Prompts Table */}
           <div className="space-y-4">
             <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
               <div>
@@ -350,8 +278,7 @@ export default function ProjectDashboardPage({
                   <InfoTooltip term="prompt" />
                 </h2>
                 <p className="text-xs text-muted-foreground mt-0.5">
-                  Plan {userPlan} : 1 analyse/prompt/
-                  {PLAN_LIMITS[userPlan].scanFrequency === 'daily' ? 'jour' : 'semaine'}
+                  Plan {userPlan} : 1 analyse/prompt/{formatFrequency(userPlan)}
                 </p>
               </div>
               <Button variant="outline" size="sm" onClick={() => setShowAddPrompt(true)}>
@@ -360,7 +287,6 @@ export default function ProjectDashboardPage({
               </Button>
             </div>
 
-            {/* Prompts Table */}
             <div className="rounded-lg border border-border overflow-hidden overflow-x-auto">
               <table className="w-full">
                 <thead>
@@ -398,7 +324,6 @@ export default function ProjectDashboardPage({
                   ) : (
                     stats?.promptStats.map((prompt) => {
                       const isCitedByAny = prompt.modelResults.some((r) => r.isCited);
-                      // Build a Map for O(1) lookups instead of find() in loop
                       const resultsByModel = new Map(prompt.modelResults.map((r) => [r.model, r]));
                       const scanAvailability = getScanAvailability(prompt.lastScanAt, userPlan);
                       return (
@@ -410,18 +335,17 @@ export default function ProjectDashboardPage({
                           )}
                         >
                           <td className="px-4 py-3 relative">
-                            {/* Left accent for cited rows */}
                             {isCitedByAny && (
                               <div className="absolute left-0 top-0 bottom-0 w-1 bg-success rounded-r" />
                             )}
                             <div className="pl-2">
                               <p className="text-sm">{prompt.content}</p>
                               <div className="flex items-center gap-2 mt-1">
-                                {prompt.category ? (
+                                {prompt.category && (
                                   <span className="inline-flex px-2 py-0.5 rounded-full text-[10px] bg-primary/10 text-primary">
                                     {prompt.category}
                                   </span>
-                                ) : null}
+                                )}
                                 <ScanAvailabilityBadge
                                   lastScanAt={prompt.lastScanAt}
                                   canScan={scanAvailability.canScan}
@@ -477,17 +401,15 @@ export default function ProjectDashboardPage({
             </div>
           </div>
 
-          {/* Recommendations Section */}
-          {recommendationsData?.recommendations ? (
+          {recommendationsData?.recommendations && (
             <RecommendationsSummary
               recommendations={recommendationsData.recommendations}
               maxItems={2}
               onViewMore={() => setActiveTab('recommendations')}
             />
-          ) : null}
+          )}
 
-          {/* Competitors Section */}
-          {stats && (stats.enrichedCompetitors?.length > 0 || stats.topCompetitors?.length > 0) ? (
+          {stats && (stats.enrichedCompetitors?.length > 0 || stats.topCompetitors?.length > 0) && (
             <CompetitorsList
               competitors={stats.topCompetitors}
               enrichedCompetitors={stats.enrichedCompetitors}
@@ -495,7 +417,7 @@ export default function ProjectDashboardPage({
               userPlan={userPlan}
               onViewMore={() => setActiveTab('competitors')}
             />
-          ) : null}
+          )}
         </TabsContent>
 
         <TabsContent value="competitors">
@@ -538,7 +460,6 @@ export default function ProjectDashboardPage({
         </TabsContent>
       </Tabs>
 
-      {/* Add Prompt Modal */}
       <AddPromptModal
         open={showAddPrompt}
         onOpenChange={setShowAddPrompt}
@@ -546,7 +467,6 @@ export default function ProjectDashboardPage({
         isPending={createPrompt.isPending}
       />
 
-      {/* Delete Prompt AlertDialog */}
       <AlertDialog
         open={promptToDelete !== null}
         onOpenChange={(open) => !open && setPromptToDelete(null)}
@@ -573,99 +493,3 @@ export default function ProjectDashboardPage({
     </div>
   );
 }
-
-interface CitationResult {
-  isCited: boolean;
-  position: number | null;
-}
-
-interface CitationStatusProps {
-  result: CitationResult | null;
-}
-
-const CitationStatus = memo(function CitationStatus({
-  result,
-}: CitationStatusProps): React.ReactNode {
-  if (!result) {
-    return (
-      <TooltipProvider>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <span className="inline-flex mx-auto">
-              <EyeOff className="size-4 text-muted-foreground" aria-hidden="true" />
-            </span>
-          </TooltipTrigger>
-          <TooltipContent>
-            <p>Pas encore analysé</p>
-          </TooltipContent>
-        </Tooltip>
-      </TooltipProvider>
-    );
-  }
-
-  if (result.isCited) {
-    return (
-      <span className="inline-flex items-center gap-1.5">
-        <PulsingDot color="success" size="md" />
-        {result.position !== null && (
-          <span className="font-medium tabular-nums text-success text-xs">#{result.position}</span>
-        )}
-      </span>
-    );
-  }
-
-  return (
-    <span className="inline-flex items-center text-destructive">
-      <span className="size-3 rounded-full bg-destructive/20 flex items-center justify-center">
-        <span className="size-1.5 rounded-full bg-destructive" />
-      </span>
-    </span>
-  );
-});
-
-interface ScanAvailabilityBadgeProps {
-  lastScanAt: Date | null;
-  canScan: boolean;
-  nextAvailableAt: Date | null;
-  plan: Plan;
-}
-
-const ScanAvailabilityBadge = memo(function ScanAvailabilityBadge({
-  lastScanAt,
-  canScan,
-  nextAvailableAt,
-  plan,
-}: ScanAvailabilityBadgeProps): React.ReactNode {
-  const frequency = PLAN_LIMITS[plan].scanFrequency === 'daily' ? 'jour' : 'semaine';
-
-  // Never scanned
-  if (lastScanAt === null) {
-    return (
-      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] bg-muted text-muted-foreground">
-        <Clock className="size-3" aria-hidden="true" />
-        Jamais analysé
-      </span>
-    );
-  }
-
-  // Can scan now
-  if (canScan) {
-    return (
-      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] bg-success/10 text-success">
-        <CheckCircle2 className="size-3" aria-hidden="true" />
-        Analyse disponible
-      </span>
-    );
-  }
-
-  // On cooldown
-  return (
-    <span
-      className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] bg-amber-500/10 text-amber-600"
-      title={`1 analyse/${frequency} - Prochaine analyse ${nextAvailableAt ? formatRelativeTimeFuture(nextAvailableAt) : ''}`}
-    >
-      <Clock className="size-3" aria-hidden="true" />
-      {nextAvailableAt ? formatRelativeTimeFuture(nextAvailableAt) : `1/${frequency}`}
-    </span>
-  );
-});
