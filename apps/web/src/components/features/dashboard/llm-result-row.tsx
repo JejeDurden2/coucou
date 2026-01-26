@@ -28,7 +28,7 @@ export const MODEL_DISPLAY_NAMES: Record<string, string> = {
   'gpt-5.2': 'GPT-5.2',
   'claude-sonnet-4-20250514': 'Claude Sonnet 4',
   'claude-opus-4-5-20251101': 'Claude Opus 4.5',
-  'claude-haiku-4-5-20251101': 'Claude Haiku 4.5',
+  'claude-haiku-4-5-20251001': 'Claude Haiku 4.5',
 };
 
 export function getModelDisplayName(model: string): string {

@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import type { SentimentResult } from '@coucou-ia/shared';
 import { LLMProvider } from '@prisma/client';
 
@@ -71,6 +71,8 @@ describe('ExecuteSentimentScanUseCase', () => {
   });
 
   beforeEach(() => {
+    vi.useFakeTimers();
+
     mockProjectRepository = {
       findById: vi.fn(),
     };
@@ -96,6 +98,10 @@ describe('ExecuteSentimentScanUseCase', () => {
       mockGpt52Adapter as unknown as GPT52LLMAdapter,
       mockAnthropicClient as unknown as AnthropicClientService,
     );
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
   });
 
   describe('execute', () => {
@@ -191,7 +197,9 @@ describe('ExecuteSentimentScanUseCase', () => {
       });
       (mockSentimentRepository.save as ReturnType<typeof vi.fn>).mockResolvedValue(savedScan);
 
-      const result = await useCase.execute('project-123', 'user-123');
+      const promise = useCase.execute('project-123', 'user-123');
+      await vi.advanceTimersByTimeAsync(5000);
+      const result = await promise;
 
       expect(result.ok).toBe(true);
       if (result.ok) {
@@ -240,7 +248,9 @@ describe('ExecuteSentimentScanUseCase', () => {
       );
       mockAnthropicClient.createMessage.mockRejectedValue(new Error('Claude API error'));
 
-      const result = await useCase.execute('project-123', 'user-123');
+      const promise = useCase.execute('project-123', 'user-123');
+      await vi.advanceTimersByTimeAsync(5000);
+      const result = await promise;
 
       expect(result.ok).toBe(false);
       if (!result.ok) {

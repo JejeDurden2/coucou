@@ -26,9 +26,17 @@ export class AnthropicClientService {
   private readonly logger = new Logger(AnthropicClientService.name);
   private client: Anthropic | null = null;
 
+  /** Timestamp of last web-search call — used for rate limiting (30k tokens/min budget) */
+  private lastWebSearchCallMs = 0;
+  private readonly WEB_SEARCH_MIN_INTERVAL_MS = 25_000; // ~2.4 web-search calls/min max
+
   constructor(private readonly configService: ConfigService) {}
 
   async createMessage(options: AnthropicMessageOptions): Promise<AnthropicTextResponse> {
+    if (options.webSearch) {
+      await this.waitForWebSearchSlot();
+    }
+
     const client = this.getClient();
 
     const tools: MessageCreateParamsNonStreaming['tools'] = options.webSearch
@@ -56,13 +64,28 @@ export class AnthropicClientService {
       ? await client.beta.messages.create({ ...params, betas })
       : await client.messages.create(params);
 
+    if (options.webSearch) {
+      this.lastWebSearchCallMs = Date.now();
+    }
+
     const text = this.extractTextContent(response.content);
+    const inputTokens = response.usage.input_tokens;
+    const outputTokens = response.usage.output_tokens;
+
+    this.logger.log({
+      message: 'Anthropic API call completed',
+      model: response.model,
+      inputTokens,
+      outputTokens,
+      totalTokens: inputTokens + outputTokens,
+      webSearch: options.webSearch ?? false,
+    });
 
     return {
       text,
       model: response.model,
-      inputTokens: response.usage.input_tokens,
-      outputTokens: response.usage.output_tokens,
+      inputTokens,
+      outputTokens,
     };
   }
 
@@ -78,6 +101,15 @@ export class AnthropicClientService {
     }
 
     return result.data;
+  }
+
+  private async waitForWebSearchSlot(): Promise<void> {
+    const elapsed = Date.now() - this.lastWebSearchCallMs;
+    if (elapsed < this.WEB_SEARCH_MIN_INTERVAL_MS) {
+      const waitMs = this.WEB_SEARCH_MIN_INTERVAL_MS - elapsed;
+      this.logger.log(`Rate limiter: waiting ${waitMs}ms before next web search call`);
+      await new Promise((r) => setTimeout(r, waitMs));
+    }
   }
 
   private getClient(): Anthropic {

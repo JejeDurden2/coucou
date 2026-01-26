@@ -34,10 +34,10 @@ export const scanJobOptions: DefaultJobOptions = {
 };
 
 export const sentimentJobOptions: DefaultJobOptions = {
-  attempts: 3,
+  attempts: 5,
   backoff: {
     type: 'exponential',
-    delay: 10000, // 10s, 20s, 40s (sentiment analysis is slower)
+    delay: 60000, // 60s, 120s, 240s, 480s, 960s (aligned with 1-min rate limit window)
   },
   removeOnComplete: {
     age: 7 * 24 * 60 * 60, // 7 days in seconds
@@ -48,7 +48,7 @@ export const sentimentJobOptions: DefaultJobOptions = {
 };
 
 export const onboardingJobOptions: DefaultJobOptions = {
-  attempts: 3,
+  attempts: 5,
   backoff: {
     type: 'exponential',
     delay: 60000, // 60s, 120s, 240s (rate limit window is 1 min)

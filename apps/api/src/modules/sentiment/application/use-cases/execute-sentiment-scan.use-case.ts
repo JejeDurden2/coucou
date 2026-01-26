@@ -207,6 +207,7 @@ JSON uniquement: {"s":score,"t":[themes],"kp":[positifs],"kn":[négatifs]}`;
           this.logger.warn(
             `Parse/API error from claude, retrying (attempt ${attempt}/${maxRetries})`,
           );
+          await new Promise((r) => setTimeout(r, 5000));
           continue;
         }
 

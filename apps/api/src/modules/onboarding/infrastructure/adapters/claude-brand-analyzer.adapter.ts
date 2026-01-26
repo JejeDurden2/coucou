@@ -88,7 +88,7 @@ export class ClaudeBrandAnalyzerAdapter implements BrandAnalyzerPort {
     this.logger.log(`Generating ${count} prompts for ${brandName}`);
 
     const response = await this.anthropicClient.createMessage({
-      model: 'claude-haiku-4-5-20251101',
+      model: 'claude-haiku-4-5-20251001',
       maxTokens: 1024,
       temperature: 0,
       messages: [{ role: 'user', content: PROMPT_GENERATION_PROMPT(context, brandName, count) }],
