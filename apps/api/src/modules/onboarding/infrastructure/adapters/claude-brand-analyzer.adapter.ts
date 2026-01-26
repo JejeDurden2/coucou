@@ -22,13 +22,15 @@ const GeneratedPromptsSchema = z.array(
   }),
 );
 
+const CONTEXT_EXTRACTION_SYSTEM = `Tu es un extracteur de données structurées. Tu réponds TOUJOURS en JSON valide, sans markdown, sans explication, sans texte autour. Uniquement le JSON.`;
+
 const CONTEXT_EXTRACTION_PROMPT = (url: string, brandName: string): string => `
 Lis le site ${url} de la marque "${brandName}" et extrais-en les informations clés.
 
 Consulte directement cette URL pour comprendre l'activité, les offres et la cible de la marque.
 Ne fais pas de recherche web générale — base-toi uniquement sur le contenu du site.
 
-Réponds UNIQUEMENT en JSON valide (sans markdown, sans \`\`\`):
+Format de réponse attendu (JSON uniquement):
 {
   "businessType": "type d'activité en 3-5 mots",
   "locality": "ville/quartier si commerce local, null si national/international",
@@ -71,9 +73,15 @@ export class ClaudeBrandAnalyzerAdapter implements BrandAnalyzerPort {
       model: 'claude-sonnet-4-5-20250929',
       maxTokens: 1024,
       temperature: 0,
+      system: CONTEXT_EXTRACTION_SYSTEM,
       messages: [{ role: 'user', content: CONTEXT_EXTRACTION_PROMPT(url, brandName) }],
       webSearch: true,
+      extractJSON: true,
     });
+
+    this.logger.debug(
+      `Raw brand context response for ${brandName}: ${response.text.slice(0, 500)}`,
+    );
 
     const parsed = this.anthropicClient.extractJson(response.text, BrandContextSchema);
 
