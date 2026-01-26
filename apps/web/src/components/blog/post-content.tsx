@@ -1,20 +1,21 @@
 'use client';
 
 import { useMemo } from 'react';
-import DOMPurify from 'dompurify';
+import DOMPurify from 'isomorphic-dompurify';
 
 interface PostContentProps {
   content: string;
 }
 
 export function PostContent({ content }: PostContentProps): React.ReactNode {
-  const sanitizedContent = useMemo(() => {
-    if (typeof window === 'undefined') return content;
-    return DOMPurify.sanitize(content, {
-      ADD_TAGS: ['iframe'],
-      ADD_ATTR: ['allow', 'allowfullscreen', 'frameborder', 'scrolling'],
-    });
-  }, [content]);
+  const sanitizedContent = useMemo(
+    () =>
+      DOMPurify.sanitize(content, {
+        ADD_TAGS: ['iframe'],
+        ADD_ATTR: ['allow', 'allowfullscreen', 'frameborder', 'scrolling'],
+      }),
+    [content],
+  );
 
   return (
     <div
