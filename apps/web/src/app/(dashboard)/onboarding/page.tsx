@@ -7,7 +7,7 @@ import { Plan } from '@coucou-ia/shared';
 
 import { useAuth } from '@/lib/auth-context';
 import { useCreateProject } from '@/hooks/use-projects';
-import { useGeneratePrompts } from '@/hooks/use-onboarding';
+import { useGeneratePrompts, useOnboardingJobPolling } from '@/hooks/use-onboarding';
 import { useCreateCheckout } from '@/hooks/use-billing';
 import { PlanGrid } from '@/components/plan-card';
 import { Button } from '@/components/ui/button';
@@ -34,6 +34,17 @@ export default function OnboardingPage(): React.ReactNode {
   const createCheckout = useCreateCheckout();
   const createProject = useCreateProject();
   const generatePrompts = useGeneratePrompts();
+  const onboardingPolling = useOnboardingJobPolling({
+    projectId: createdProjectId ?? '',
+    onCompleted: () => {
+      if (createdProjectId) {
+        router.push(`/projects/${createdProjectId}`);
+      }
+    },
+    onFailed: () => {
+      // Buttons re-enabled automatically when polling stops
+    },
+  });
 
   // Brand form state
   const [brandName, setBrandName] = useState('');
@@ -99,11 +110,10 @@ export default function OnboardingPage(): React.ReactNode {
   const handleGeneratePrompts = async () => {
     if (!createdProjectId) return;
     try {
-      await generatePrompts.mutateAsync(createdProjectId);
-      router.push(`/projects/${createdProjectId}`);
+      const { jobId } = await generatePrompts.mutateAsync(createdProjectId);
+      onboardingPolling.startPolling(jobId);
     } catch {
-      // Fallback silencieux - erreur gérée par le hook, on redirige quand même
-      router.push(`/projects/${createdProjectId}`);
+      // Error handled by mutation hook toast
     }
   };
 
@@ -275,36 +285,52 @@ export default function OnboardingPage(): React.ReactNode {
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                <Button
-                  onClick={handleGeneratePrompts}
-                  disabled={generatePrompts.isPending}
-                  className="w-full"
-                  size="lg"
-                >
-                  {generatePrompts.isPending ? (
-                    <>
-                      <Loader2
-                        className="mr-2 size-4 animate-spin motion-reduce:animate-none"
-                        aria-hidden="true"
-                      />
-                      Génération en cours...
-                    </>
-                  ) : (
-                    <>
-                      <Sparkles className="mr-2 size-4" aria-hidden="true" />
-                      Oui, générer mes requêtes
-                    </>
-                  )}
-                </Button>
-                <Button
-                  variant="outline"
-                  onClick={handleSkipPrompts}
-                  disabled={generatePrompts.isPending}
-                  className="w-full"
-                  size="lg"
-                >
-                  Non, je les créerai manuellement
-                </Button>
+                {onboardingPolling.isPolling ? (
+                  <div className="flex flex-col items-center gap-3 py-4">
+                    <Loader2
+                      className="size-8 animate-spin motion-reduce:animate-none text-primary"
+                      aria-hidden="true"
+                    />
+                    <p className="text-sm text-muted-foreground text-center">
+                      Analyse de votre site en cours...
+                      <br />
+                      Cela peut prendre quelques instants.
+                    </p>
+                  </div>
+                ) : (
+                  <>
+                    <Button
+                      onClick={handleGeneratePrompts}
+                      disabled={generatePrompts.isPending}
+                      className="w-full"
+                      size="lg"
+                    >
+                      {generatePrompts.isPending ? (
+                        <>
+                          <Loader2
+                            className="mr-2 size-4 animate-spin motion-reduce:animate-none"
+                            aria-hidden="true"
+                          />
+                          Lancement...
+                        </>
+                      ) : (
+                        <>
+                          <Sparkles className="mr-2 size-4" aria-hidden="true" />
+                          Oui, générer mes requêtes
+                        </>
+                      )}
+                    </Button>
+                    <Button
+                      variant="outline"
+                      onClick={handleSkipPrompts}
+                      disabled={generatePrompts.isPending}
+                      className="w-full"
+                      size="lg"
+                    >
+                      Non, je les créerai manuellement
+                    </Button>
+                  </>
+                )}
               </CardContent>
             </Card>
           </div>

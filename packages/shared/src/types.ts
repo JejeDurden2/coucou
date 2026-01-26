@@ -576,6 +576,15 @@ export interface GeneratePromptsResponse {
   prompts: Prompt[];
 }
 
+export interface EnqueuedJobResponse {
+  jobId: string;
+}
+
+export interface OnboardingJobStatusResponse {
+  status: string;
+  result?: { status: string; promptsCreated: number };
+}
+
 // ============================================
 // Recommendations Types
 // ============================================

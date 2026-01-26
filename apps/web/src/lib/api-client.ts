@@ -11,7 +11,8 @@ import type {
   DashboardStats,
   HistoricalStats,
   RecommendationsResponse,
-  GeneratePromptsResponse,
+  EnqueuedJobResponse,
+  OnboardingJobStatusResponse,
   User,
   ApiError,
   SubscriptionInfo,
@@ -267,11 +268,15 @@ class ApiClient {
   }
 
   // Onboarding
-  async generateOnboardingPrompts(projectId: string): Promise<GeneratePromptsResponse> {
-    return this.fetch<GeneratePromptsResponse>('/onboarding/generate-prompts', {
+  async generateOnboardingPrompts(projectId: string): Promise<EnqueuedJobResponse> {
+    return this.fetch<EnqueuedJobResponse>('/onboarding/generate-prompts', {
       method: 'POST',
       body: JSON.stringify({ projectId }),
     });
+  }
+
+  async getOnboardingJobStatus(jobId: string): Promise<OnboardingJobStatusResponse> {
+    return this.fetch<OnboardingJobStatusResponse>(`/onboarding/job/${jobId}/status`);
   }
 
   // Sentiment
