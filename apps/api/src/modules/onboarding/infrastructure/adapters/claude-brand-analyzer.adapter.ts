@@ -104,8 +104,7 @@ export class ClaudeBrandAnalyzerAdapter implements BrandAnalyzerPort {
     });
 
     if (!response.ok) {
-      const errorText = await response.text();
-      this.logger.error(`Anthropic API error: ${response.status} - ${errorText}`);
+      this.logger.error(`Anthropic API error during context extraction: status ${response.status}`);
       throw new Error(`API error: ${response.status}`);
     }
 
@@ -115,8 +114,8 @@ export class ClaudeBrandAnalyzerAdapter implements BrandAnalyzerPort {
 
     const parsed = BrandContextSchema.safeParse(jsonContent);
     if (!parsed.success) {
-      this.logger.error(`Invalid brand context format: ${parsed.error.message}`);
-      throw new Error(`Invalid response format: ${parsed.error.message}`);
+      this.logger.error('Invalid brand context format from Anthropic response');
+      throw new Error('Invalid response format from brand context extraction');
     }
 
     this.logger.log(`Successfully extracted brand context for ${brandName}`);
@@ -152,8 +151,7 @@ export class ClaudeBrandAnalyzerAdapter implements BrandAnalyzerPort {
     });
 
     if (!response.ok) {
-      const errorText = await response.text();
-      this.logger.error(`Anthropic API error: ${response.status} - ${errorText}`);
+      this.logger.error(`Anthropic API error during prompt generation: status ${response.status}`);
       throw new Error(`API error: ${response.status}`);
     }
 
@@ -163,8 +161,8 @@ export class ClaudeBrandAnalyzerAdapter implements BrandAnalyzerPort {
 
     const parsed = GeneratedPromptsSchema.safeParse(jsonContent);
     if (!parsed.success) {
-      this.logger.error(`Invalid prompts format: ${parsed.error.message}`);
-      throw new Error(`Invalid response format: ${parsed.error.message}`);
+      this.logger.error('Invalid prompts format from Anthropic response');
+      throw new Error('Invalid response format from prompt generation');
     }
 
     this.logger.log(`Successfully generated ${parsed.data.length} prompts for ${brandName}`);
@@ -174,7 +172,7 @@ export class ClaudeBrandAnalyzerAdapter implements BrandAnalyzerPort {
   private extractTextContent(data: unknown): string {
     const result = AnthropicResponseSchema.safeParse(data);
     if (!result.success) {
-      throw new Error(`Invalid Anthropic response format: ${result.error.message}`);
+      throw new Error('Invalid Anthropic response format');
     }
 
     const textBlock = result.data.content.find((block) => block.type === 'text');
@@ -214,7 +212,7 @@ export class ClaudeBrandAnalyzerAdapter implements BrandAnalyzerPort {
     try {
       return JSON.parse(jsonString);
     } catch {
-      throw new Error(`Failed to parse JSON: ${jsonString.slice(0, 100)}...`);
+      throw new Error('Failed to parse JSON from Anthropic response');
     }
   }
 }

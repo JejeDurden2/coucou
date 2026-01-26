@@ -12,6 +12,8 @@ import { PROJECT_REPOSITORY, type ProjectRepository } from '../../../project';
 import { PROMPT_REPOSITORY, type PromptRepository } from '../../../prompt';
 import {
   AllProvidersFailedError,
+  PromptSanitizerService,
+  ThreatLevel,
   SCAN_REPOSITORY,
   type LLMResult,
   type ScanRepository,
@@ -103,9 +105,26 @@ export class ExecuteScanUseCase {
       }
     }
 
+    const analysis = PromptSanitizerService.analyze(prompt.content);
+
+    if (analysis.level === ThreatLevel.HIGH) {
+      this.logger.warn(
+        `Blocked HIGH threat prompt ${promptId}: ${analysis.matchedPatterns.join(', ')}`,
+      );
+      return Result.err(
+        new ValidationError([`Contenu suspect détecté: ${analysis.matchedPatterns.join(', ')}`]),
+      );
+    }
+
+    if (analysis.level === ThreatLevel.LOW) {
+      this.logger.log(
+        `Sanitized LOW threat prompt ${promptId}: ${analysis.matchedPatterns.join(', ')}`,
+      );
+    }
+
     this.logger.log(`Executing scan for prompt ${promptId} with plan ${plan}`);
 
-    const { successes, failures } = await this.llmService.queryByPlan(prompt.content, plan);
+    const { successes, failures } = await this.llmService.queryByPlan(analysis.sanitized, plan);
 
     if (successes.length === 0) {
       this.logger.error(`All LLM models failed for prompt ${promptId}`);

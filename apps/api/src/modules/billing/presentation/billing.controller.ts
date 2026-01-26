@@ -10,6 +10,7 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
+import { SkipThrottle, Throttle } from '@nestjs/throttler';
 import type { Request } from 'express';
 
 import { JwtAuthGuard } from '../../auth/presentation/guards/jwt-auth.guard';
@@ -44,6 +45,7 @@ export class BillingController {
 
   @Post('checkout')
   @UseGuards(JwtAuthGuard)
+  @Throttle({ short: { limit: 5, ttl: 60000 } }) // 5 checkout sessions per minute
   async createCheckout(
     @CurrentUser() user: AuthenticatedUser,
     @Body() dto: CreateCheckoutDto,
@@ -64,6 +66,7 @@ export class BillingController {
 
   @Post('portal')
   @UseGuards(JwtAuthGuard)
+  @Throttle({ short: { limit: 5, ttl: 60000 } }) // 5 portal sessions per minute
   async createPortal(
     @CurrentUser() user: AuthenticatedUser,
     @Body() dto: CreatePortalDto,
@@ -96,6 +99,7 @@ export class BillingController {
 
   @Post('downgrade')
   @UseGuards(JwtAuthGuard)
+  @Throttle({ short: { limit: 3, ttl: 60000 } }) // 3 downgrade requests per minute
   async downgradeSubscription(
     @CurrentUser() user: AuthenticatedUser,
   ): Promise<DowngradeSubscriptionResponse> {
@@ -112,6 +116,7 @@ export class BillingController {
 
   @Post('cancel-downgrade')
   @UseGuards(JwtAuthGuard)
+  @Throttle({ short: { limit: 3, ttl: 60000 } }) // 3 cancel-downgrade requests per minute
   async cancelDowngrade(@CurrentUser() user: AuthenticatedUser): Promise<CancelDowngradeResponse> {
     const result = await this.cancelDowngradeUseCase.execute({
       userId: user.id,
@@ -126,6 +131,7 @@ export class BillingController {
 
   @Post('webhook')
   @HttpCode(HttpStatus.OK)
+  @SkipThrottle() // Stripe webhooks must not be throttled
   async handleWebhook(
     @Req() req: RawBodyRequest<Request>,
     @Headers('stripe-signature') signature: string,
