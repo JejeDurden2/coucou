@@ -75,8 +75,7 @@ export class ClaudeBrandAnalyzerAdapter implements BrandAnalyzerPort {
       temperature: 0,
       system: CONTEXT_EXTRACTION_SYSTEM,
       messages: [{ role: 'user', content: CONTEXT_EXTRACTION_PROMPT(url, brandName) }],
-      webSearch: true,
-      extractJSON: true,
+      webSearch: true
     });
 
     this.logger.debug(
