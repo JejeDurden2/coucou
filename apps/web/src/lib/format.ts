@@ -54,14 +54,11 @@ export function formatChartDate(dateStr: string, aggregation: AggregationLevel):
   return date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' });
 }
 
-const DAYS_FR = ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'];
-
 /**
  * Format a future date for next scan display
  * @example formatNextScanDate(today8h30) // "aujourd'hui à 8h30"
  * @example formatNextScanDate(tomorrow9h30) // "demain à 9h30"
- * @example formatNextScanDate(nextMonday) // "lundi à 9h30"
- * @example formatNextScanDate(mondayNextWeek) // "lundi prochain à 9h30"
+ * @example formatNextScanDate(nextMonday) // "Lun. 27 janv. à 9h30"
  */
 export function formatNextScanDate(date: Date | string): string {
   const target = new Date(date);
@@ -88,21 +85,13 @@ export function formatNextScanDate(date: Date | string): string {
     return `demain à ${timeStr}`;
   }
 
-  const dayName = DAYS_FR[target.getDay()];
-
-  // Within the current week (2-6 days)
-  if (diffDays >= 2 && diffDays <= 6) {
-    return `${dayName} à ${timeStr}`;
-  }
-
-  // Next week (7-13 days)
-  if (diffDays >= 7 && diffDays <= 13) {
-    return `${dayName} prochain à ${timeStr}`;
-  }
-
-  // More than 2 weeks: show full date
-  const dateStr = target.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long' });
-  return `le ${dateStr} à ${timeStr}`;
+  // >1 day: "Lun. 27 janv. à 9h30"
+  const dateStr = target.toLocaleDateString('fr-FR', {
+    weekday: 'short',
+    day: 'numeric',
+    month: 'short',
+  });
+  return `${dateStr.charAt(0).toUpperCase()}${dateStr.slice(1)} à ${timeStr}`;
 }
 
 /**

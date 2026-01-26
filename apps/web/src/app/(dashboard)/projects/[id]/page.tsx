@@ -63,7 +63,7 @@ import {
 } from '@coucou-ia/shared';
 import { cn } from '@/lib/utils';
 import { formatRelativeTime, formatRelativeTimeFuture } from '@/lib/format';
-import { NextScanInfo } from '@/components/features/dashboard/next-scan-info';
+import { NextScanIndicator } from '@/components/dashboard/next-scan-indicator';
 
 interface PulsingDotProps {
   color: 'primary' | 'success' | 'cyan' | 'emerald';
@@ -274,7 +274,7 @@ export default function ProjectDashboardPage({
             </Tooltip>
           </TooltipProvider>
         ) : (
-          <NextScanInfo nextAutoScanAt={project.nextAutoScanAt} />
+          <NextScanIndicator nextAutoScanAt={project.nextAutoScanAt} />
         )}
       </div>
 
