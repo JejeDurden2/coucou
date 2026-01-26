@@ -9,7 +9,7 @@ import type { ProjectRepository } from '../../../project';
 import type { SentimentScanRepository } from '../../domain';
 import type { LLMResponse } from '../../../scan';
 import type { GPT52LLMAdapter } from '../../../scan/infrastructure/adapters/gpt52-llm.adapter';
-import type { ClaudeSonnetLLMAdapter } from '../../../scan/infrastructure/adapters/claude-sonnet-llm.adapter';
+import type { AnthropicClientService } from '../../../../common/infrastructure/anthropic/anthropic-client.service';
 
 describe('ExecuteSentimentScanUseCase', () => {
   let useCase: ExecuteSentimentScanUseCase;
@@ -20,10 +20,9 @@ describe('ExecuteSentimentScanUseCase', () => {
     getProvider: ReturnType<typeof vi.fn>;
     getModel: ReturnType<typeof vi.fn>;
   };
-  let mockClaudeSonnetAdapter: {
-    query: ReturnType<typeof vi.fn>;
-    getProvider: ReturnType<typeof vi.fn>;
-    getModel: ReturnType<typeof vi.fn>;
+  let mockAnthropicClient: {
+    createMessage: ReturnType<typeof vi.fn>;
+    extractJson: ReturnType<typeof vi.fn>;
   };
 
   const mockProject = {
@@ -86,17 +85,16 @@ describe('ExecuteSentimentScanUseCase', () => {
       getModel: vi.fn().mockReturnValue('gpt-5.2'),
     };
 
-    mockClaudeSonnetAdapter = {
-      query: vi.fn(),
-      getProvider: vi.fn().mockReturnValue(LLMProvider.ANTHROPIC),
-      getModel: vi.fn().mockReturnValue('claude-sonnet-4'),
+    mockAnthropicClient = {
+      createMessage: vi.fn(),
+      extractJson: vi.fn(),
     };
 
     useCase = new ExecuteSentimentScanUseCase(
       mockProjectRepository as ProjectRepository,
       mockSentimentRepository as SentimentScanRepository,
       mockGpt52Adapter as unknown as GPT52LLMAdapter,
-      mockClaudeSonnetAdapter as unknown as ClaudeSonnetLLMAdapter,
+      mockAnthropicClient as unknown as AnthropicClientService,
     );
   });
 
@@ -129,9 +127,13 @@ describe('ExecuteSentimentScanUseCase', () => {
       (mockGpt52Adapter.query as ReturnType<typeof vi.fn>).mockResolvedValue(
         createLLMResponse(JSON.stringify(validGptResult), LLMProvider.OPENAI),
       );
-      (mockClaudeSonnetAdapter.query as ReturnType<typeof vi.fn>).mockResolvedValue(
-        createLLMResponse(JSON.stringify(validClaudeResult), LLMProvider.ANTHROPIC),
-      );
+      mockAnthropicClient.createMessage.mockResolvedValue({
+        text: JSON.stringify(validClaudeResult),
+        model: 'claude-sonnet-4-5-20250929',
+        inputTokens: 100,
+        outputTokens: 50,
+      });
+      mockAnthropicClient.extractJson.mockReturnValue(validClaudeResult);
 
       const savedScan = SentimentScan.fromPersistence({
         id: 'scan-123',
@@ -161,16 +163,23 @@ describe('ExecuteSentimentScanUseCase', () => {
           },
         }),
       );
+
+      // Verify Claude was called with web search enabled
+      expect(mockAnthropicClient.createMessage).toHaveBeenCalledWith(
+        expect.objectContaining({
+          webSearch: true,
+          model: 'claude-sonnet-4-5-20250929',
+          temperature: 0,
+        }),
+      );
     });
 
-    it('should succeed with single LLM when one fails', async () => {
+    it('should succeed with single LLM when Claude fails', async () => {
       (mockProjectRepository.findById as ReturnType<typeof vi.fn>).mockResolvedValue(mockProject);
       (mockGpt52Adapter.query as ReturnType<typeof vi.fn>).mockResolvedValue(
         createLLMResponse(JSON.stringify(validGptResult), LLMProvider.OPENAI),
       );
-      (mockClaudeSonnetAdapter.query as ReturnType<typeof vi.fn>).mockRejectedValue(
-        new Error('API timeout'),
-      );
+      mockAnthropicClient.createMessage.mockRejectedValue(new Error('API timeout'));
 
       const savedScan = SentimentScan.fromPersistence({
         id: 'scan-123',
@@ -190,7 +199,7 @@ describe('ExecuteSentimentScanUseCase', () => {
       }
     });
 
-    it('should retry on malformed JSON and succeed on second attempt', async () => {
+    it('should retry on malformed JSON from GPT and succeed on second attempt', async () => {
       (mockProjectRepository.findById as ReturnType<typeof vi.fn>).mockResolvedValue(mockProject);
 
       // GPT: first call returns malformed JSON, second returns valid
@@ -200,9 +209,13 @@ describe('ExecuteSentimentScanUseCase', () => {
           createLLMResponse(JSON.stringify(validGptResult), LLMProvider.OPENAI),
         );
 
-      (mockClaudeSonnetAdapter.query as ReturnType<typeof vi.fn>).mockResolvedValue(
-        createLLMResponse(JSON.stringify(validClaudeResult), LLMProvider.ANTHROPIC),
-      );
+      mockAnthropicClient.createMessage.mockResolvedValue({
+        text: JSON.stringify(validClaudeResult),
+        model: 'claude-sonnet-4-5-20250929',
+        inputTokens: 100,
+        outputTokens: 50,
+      });
+      mockAnthropicClient.extractJson.mockReturnValue(validClaudeResult);
 
       const savedScan = SentimentScan.fromPersistence({
         id: 'scan-123',
@@ -225,9 +238,7 @@ describe('ExecuteSentimentScanUseCase', () => {
       (mockGpt52Adapter.query as ReturnType<typeof vi.fn>).mockRejectedValue(
         new Error('GPT API error'),
       );
-      (mockClaudeSonnetAdapter.query as ReturnType<typeof vi.fn>).mockRejectedValue(
-        new Error('Claude API error'),
-      );
+      mockAnthropicClient.createMessage.mockRejectedValue(new Error('Claude API error'));
 
       const result = await useCase.execute('project-123', 'user-123');
 
@@ -239,7 +250,7 @@ describe('ExecuteSentimentScanUseCase', () => {
       }
     });
 
-    it('should parse JSON wrapped in markdown code blocks', async () => {
+    it('should parse JSON wrapped in markdown code blocks from GPT', async () => {
       (mockProjectRepository.findById as ReturnType<typeof vi.fn>).mockResolvedValue(mockProject);
 
       const wrappedJson = `\`\`\`json
@@ -249,9 +260,13 @@ ${JSON.stringify(validGptResult)}
       (mockGpt52Adapter.query as ReturnType<typeof vi.fn>).mockResolvedValue(
         createLLMResponse(wrappedJson, LLMProvider.OPENAI),
       );
-      (mockClaudeSonnetAdapter.query as ReturnType<typeof vi.fn>).mockResolvedValue(
-        createLLMResponse(JSON.stringify(validClaudeResult), LLMProvider.ANTHROPIC),
-      );
+      mockAnthropicClient.createMessage.mockResolvedValue({
+        text: JSON.stringify(validClaudeResult),
+        model: 'claude-sonnet-4-5-20250929',
+        inputTokens: 100,
+        outputTokens: 50,
+      });
+      mockAnthropicClient.extractJson.mockReturnValue(validClaudeResult);
 
       const savedScan = SentimentScan.fromPersistence({
         id: 'scan-123',

@@ -20,7 +20,6 @@ import {
   GetScanJobStatusUseCase,
   GET_SCAN_JOB_STATUS_USE_CASE,
 } from './application/use-cases';
-import { AnthropicLLMAdapter } from './infrastructure/adapters/anthropic-llm.adapter';
 import { ClaudeOpusLLMAdapter } from './infrastructure/adapters/claude-opus-llm.adapter';
 import { ClaudeSonnetLLMAdapter } from './infrastructure/adapters/claude-sonnet-llm.adapter';
 import { GPT4oLLMAdapter } from './infrastructure/adapters/gpt4o-llm.adapter';
@@ -59,7 +58,6 @@ import { ScanController } from './presentation/controllers/scan.controller';
     AutoScanService,
     // LLM adapters
     OpenAILLMAdapter,
-    AnthropicLLMAdapter,
     GPT4oLLMAdapter,
     GPT52LLMAdapter,
     ClaudeSonnetLLMAdapter,
@@ -80,12 +78,6 @@ import { ScanController } from './presentation/controllers/scan.controller';
       useClass: PrismaScanJobRepository,
     },
   ],
-  exports: [
-    SCAN_REPOSITORY,
-    SCAN_JOB_REPOSITORY,
-    LLM_SERVICE,
-    GPT52LLMAdapter,
-    ClaudeSonnetLLMAdapter,
-  ],
+  exports: [SCAN_REPOSITORY, SCAN_JOB_REPOSITORY, LLM_SERVICE, GPT52LLMAdapter],
 })
 export class ScanModule {}

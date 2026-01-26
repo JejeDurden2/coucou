@@ -3,8 +3,9 @@ import { z } from 'zod';
 import type { SentimentResult, SentimentScanResults } from '@coucou-ia/shared';
 
 import { ForbiddenError, NotFoundError, Result } from '../../../../common';
+import { AnthropicClientService } from '../../../../common/infrastructure/anthropic/anthropic-client.service';
 import { PROJECT_REPOSITORY, type ProjectRepository } from '../../../project';
-import type { LLMPort, LLMQueryOptions, LLMResponse } from '../../../scan';
+import type { LLMQueryOptions, LLMResponse } from '../../../scan';
 import {
   AllSentimentProvidersFailedError,
   SENTIMENT_SCAN_REPOSITORY,
@@ -14,7 +15,6 @@ import {
   type SentimentScanRepository,
 } from '../../domain';
 import { GPT52LLMAdapter } from '../../../scan/infrastructure/adapters/gpt52-llm.adapter';
-import { ClaudeSonnetLLMAdapter } from '../../../scan/infrastructure/adapters/claude-sonnet-llm.adapter';
 
 const SentimentResultSchema = z.object({
   s: z.number().min(0).max(100),
@@ -42,7 +42,7 @@ FACTEURS À ANALYSER:
 Réponds UNIQUEMENT en JSON minifié:
 {"s":score,"t":["theme1","theme2","theme3"],"kp":["positif1","positif2","positif3"],"kn":["negatif1","negatif2","negatif3"]}
 
-IMPORTANT: Sois PRÉCIS et DIFFÉRENCIÉ.`;
+IMPORTANT: Sois PRÉCIS et DIFFÉRENCIÉ. Utilise les résultats de ta recherche web pour étayer ton analyse.`;
 
 type ExecuteSentimentScanError = NotFoundError | ForbiddenError | AllSentimentProvidersFailedError;
 
@@ -51,6 +51,8 @@ interface LLMQueryResult {
   result?: SentimentResult;
   error?: string;
 }
+
+const CLAUDE_SENTIMENT_MODEL = 'claude-sonnet-4-5-20250929';
 
 @Injectable()
 export class ExecuteSentimentScanUseCase {
@@ -63,8 +65,7 @@ export class ExecuteSentimentScanUseCase {
     private readonly sentimentRepository: SentimentScanRepository,
     @Inject(forwardRef(() => GPT52LLMAdapter))
     private readonly gpt52Adapter: GPT52LLMAdapter,
-    @Inject(forwardRef(() => ClaudeSonnetLLMAdapter))
-    private readonly claudeSonnetAdapter: ClaudeSonnetLLMAdapter,
+    private readonly anthropicClient: AnthropicClientService,
   ) {}
 
   async execute(
@@ -90,13 +91,13 @@ export class ExecuteSentimentScanUseCase {
 
     this.logger.log(`Executing sentiment scan for project ${projectId}`);
 
-    const queryOptions: LLMQueryOptions = {
+    const gptOptions: LLMQueryOptions = {
       systemPrompt: SENTIMENT_SYSTEM_PROMPT,
     };
 
     const [gptResult, claudeResult] = await Promise.all([
-      this.queryWithRetry(this.gpt52Adapter, prompt, 'gpt', queryOptions),
-      this.queryWithRetry(this.claudeSonnetAdapter, prompt, 'claude', queryOptions),
+      this.queryGptWithRetry(prompt, gptOptions),
+      this.queryClaudeWithRetry(prompt),
     ]);
 
     const successes: LLMQueryResult[] = [gptResult, claudeResult].filter((r) => r.result);
@@ -154,49 +155,79 @@ Domaine: ${domain}${contextStr}
 JSON uniquement: {"s":score,"t":[themes],"kp":[positifs],"kn":[négatifs]}`;
   }
 
-  private async queryWithRetry(
-    adapter: LLMPort,
+  private async queryGptWithRetry(
     prompt: string,
-    provider: 'gpt' | 'claude',
-    options?: LLMQueryOptions,
+    options: LLMQueryOptions,
   ): Promise<LLMQueryResult> {
     const maxRetries = 2;
 
     for (let attempt = 1; attempt <= maxRetries; attempt++) {
       try {
-        const response = await adapter.query(prompt, options);
-        const parsed = this.parseResponse(response);
-        return { provider, result: parsed };
+        const response = await this.gpt52Adapter.query(prompt, options);
+        const parsed = this.parseGptResponse(response);
+        return { provider: 'gpt', result: parsed };
       } catch (error) {
         const isLastAttempt = attempt === maxRetries;
         const errorMessage = error instanceof Error ? error.message : String(error);
 
         if (error instanceof SentimentParseError && !isLastAttempt) {
+          this.logger.warn(`Parse error from gpt, retrying (attempt ${attempt}/${maxRetries})`);
+          continue;
+        }
+
+        this.logger.error(`gpt failed after ${attempt} attempts: ${errorMessage}`);
+        return { provider: 'gpt', error: errorMessage };
+      }
+    }
+
+    return { provider: 'gpt', error: 'Max retries exceeded' };
+  }
+
+  private async queryClaudeWithRetry(prompt: string): Promise<LLMQueryResult> {
+    const maxRetries = 2;
+
+    for (let attempt = 1; attempt <= maxRetries; attempt++) {
+      try {
+        const response = await this.anthropicClient.createMessage({
+          model: CLAUDE_SENTIMENT_MODEL,
+          maxTokens: 1024,
+          temperature: 0,
+          system: SENTIMENT_SYSTEM_PROMPT,
+          messages: [{ role: 'user', content: prompt }],
+          webSearch: true,
+        });
+
+        const parsed = this.anthropicClient.extractJson(response.text, SentimentResultSchema);
+        return { provider: 'claude', result: parsed };
+      } catch (error) {
+        const isLastAttempt = attempt === maxRetries;
+        const errorMessage = error instanceof Error ? error.message : String(error);
+
+        if (!isLastAttempt) {
           this.logger.warn(
-            `Parse error from ${provider}, retrying (attempt ${attempt}/${maxRetries})`,
+            `Parse/API error from claude, retrying (attempt ${attempt}/${maxRetries})`,
           );
           continue;
         }
 
-        this.logger.error(`${provider} failed after ${attempt} attempts: ${errorMessage}`);
-        return { provider, error: errorMessage };
+        this.logger.error(`claude failed after ${attempt} attempts: ${errorMessage}`);
+        return { provider: 'claude', error: errorMessage };
       }
     }
 
-    return { provider, error: 'Max retries exceeded' };
+    return { provider: 'claude', error: 'Max retries exceeded' };
   }
 
-  private parseResponse(response: LLMResponse): SentimentResult {
+  private parseGptResponse(response: LLMResponse): SentimentResult {
     const content = response.content.trim();
 
-    // Extract JSON from response (might be wrapped in markdown code blocks)
     const jsonMatch = content.match(/\{[\s\S]*\}/);
     if (!jsonMatch) {
       throw new SentimentParseError(response.provider, content);
     }
 
     try {
-      const parsed = JSON.parse(jsonMatch[0]);
+      const parsed: unknown = JSON.parse(jsonMatch[0]);
       const validated = SentimentResultSchema.safeParse(parsed);
 
       if (!validated.success) {
@@ -221,7 +252,6 @@ JSON uniquement: {"s":score,"t":[themes],"kp":[positifs],"kn":[négatifs]}`;
     gptResult: LLMQueryResult,
     claudeResult: LLMQueryResult,
   ): SentimentScanResults {
-    // Default empty result for failed providers
     const defaultResult: SentimentResult = { s: 0, t: [], kp: [], kn: [] };
 
     return {

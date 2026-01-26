@@ -5,7 +5,6 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import type { LLMPort, LLMResponse } from '../../application/ports/llm.port';
 import { LLMServiceImpl } from './llm.service';
 import { OpenAILLMAdapter } from './openai-llm.adapter';
-import { AnthropicLLMAdapter } from './anthropic-llm.adapter';
 import { GPT4oLLMAdapter } from './gpt4o-llm.adapter';
 import { GPT52LLMAdapter } from './gpt52-llm.adapter';
 import { ClaudeSonnetLLMAdapter } from './claude-sonnet-llm.adapter';
@@ -44,7 +43,6 @@ describe('LLMServiceImpl', () => {
 
     service = new LLMServiceImpl(
       mockOpenaiAdapter as unknown as OpenAILLMAdapter,
-      {} as AnthropicLLMAdapter,
       mockGpt4oAdapter as unknown as GPT4oLLMAdapter,
       mockGpt52Adapter as unknown as GPT52LLMAdapter,
       mockClaudeSonnetAdapter as unknown as ClaudeSonnetLLMAdapter,
@@ -95,7 +93,6 @@ describe('LLMServiceImpl', () => {
 
       service = new LLMServiceImpl(
         mockOpenaiAdapter as unknown as OpenAILLMAdapter,
-        {} as AnthropicLLMAdapter,
         failingGpt4oAdapter as unknown as GPT4oLLMAdapter,
         mockGpt52Adapter as unknown as GPT52LLMAdapter,
         mockClaudeSonnetAdapter as unknown as ClaudeSonnetLLMAdapter,
@@ -115,7 +112,6 @@ describe('LLMServiceImpl', () => {
 
       service = new LLMServiceImpl(
         failingOpenaiAdapter as unknown as OpenAILLMAdapter,
-        {} as AnthropicLLMAdapter,
         mockGpt4oAdapter as unknown as GPT4oLLMAdapter,
         mockGpt52Adapter as unknown as GPT52LLMAdapter,
         mockClaudeSonnetAdapter as unknown as ClaudeSonnetLLMAdapter,

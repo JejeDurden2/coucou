@@ -10,7 +10,6 @@ import type {
   LLMPort,
 } from '../../application/ports/llm.port';
 import { OpenAILLMAdapter } from './openai-llm.adapter';
-import { AnthropicLLMAdapter } from './anthropic-llm.adapter';
 import { GPT4oLLMAdapter } from './gpt4o-llm.adapter';
 import { GPT52LLMAdapter } from './gpt52-llm.adapter';
 import { ClaudeSonnetLLMAdapter } from './claude-sonnet-llm.adapter';
@@ -27,7 +26,6 @@ export class LLMServiceImpl implements LLMService {
 
   constructor(
     private readonly openaiAdapter: OpenAILLMAdapter,
-    private readonly anthropicAdapter: AnthropicLLMAdapter,
     private readonly gpt4oAdapter: GPT4oLLMAdapter,
     private readonly gpt52Adapter: GPT52LLMAdapter,
     private readonly claudeSonnetAdapter: ClaudeSonnetLLMAdapter,

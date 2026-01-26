@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { z } from 'zod';
 
+import { AnthropicClientService } from '../../../../common/infrastructure/anthropic/anthropic-client.service';
 import type {
   BrandAnalyzerPort,
   BrandContext,
@@ -21,15 +21,6 @@ const GeneratedPromptsSchema = z.array(
     category: z.string(),
   }),
 );
-
-const AnthropicResponseSchema = z.object({
-  content: z.array(
-    z.object({
-      type: z.string(),
-      text: z.string().optional(),
-    }),
-  ),
-});
 
 const CONTEXT_EXTRACTION_PROMPT = (url: string, brandName: string): string => `
 Analyse le site ${url} pour la marque "${brandName}".
@@ -66,63 +57,27 @@ Règles IMPORTANTES:
 - Varier les formulations et les angles
 `;
 
-const RETRY_CONFIG = {
-  maxRetries: 3,
-  baseDelayMs: 60_000,
-} as const;
-
-function sleep(ms: number): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
 @Injectable()
 export class ClaudeBrandAnalyzerAdapter implements BrandAnalyzerPort {
   private readonly logger = new Logger(ClaudeBrandAnalyzerAdapter.name);
 
-  constructor(private readonly configService: ConfigService) {}
+  constructor(private readonly anthropicClient: AnthropicClientService) {}
 
   async extractContext(url: string, brandName: string): Promise<BrandContext> {
-    const apiKey = this.configService.get<string>('ANTHROPIC_API_KEY') ?? '';
-
     this.logger.log(`Extracting brand context for ${brandName} from ${url}`);
 
-    const response = await this.callWithRetry(
-      () =>
-        fetch('https://api.anthropic.com/v1/messages', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'x-api-key': apiKey,
-            'anthropic-version': '2023-06-01',
-            'anthropic-beta': 'web-search-2025-03-05',
-          },
-          body: JSON.stringify({
-            model: 'claude-sonnet-4-20250514',
-            max_tokens: 512,
-            tools: [{ type: 'web_search_20250305', name: 'web_search' }],
-            messages: [
-              {
-                role: 'user',
-                content: CONTEXT_EXTRACTION_PROMPT(url, brandName),
-              },
-            ],
-          }),
-        }),
-      'context extraction',
-    );
+    const response = await this.anthropicClient.createMessage({
+      model: 'claude-sonnet-4-5-20250929',
+      maxTokens: 512,
+      temperature: 0,
+      messages: [{ role: 'user', content: CONTEXT_EXTRACTION_PROMPT(url, brandName) }],
+      webSearch: true,
+    });
 
-    const data = await response.json();
-    const textContent = this.extractTextContent(data);
-    const jsonContent = this.extractJson(textContent);
-
-    const parsed = BrandContextSchema.safeParse(jsonContent);
-    if (!parsed.success) {
-      this.logger.error('Invalid brand context format from Anthropic response');
-      throw new Error('Invalid response format from brand context extraction');
-    }
+    const parsed = this.anthropicClient.extractJson(response.text, BrandContextSchema);
 
     this.logger.log(`Successfully extracted brand context for ${brandName}`);
-    return parsed.data;
+    return parsed;
   }
 
   async generatePrompts(
@@ -130,125 +85,18 @@ export class ClaudeBrandAnalyzerAdapter implements BrandAnalyzerPort {
     brandName: string,
     count: number,
   ): Promise<GeneratedPrompt[]> {
-    const apiKey = this.configService.get<string>('ANTHROPIC_API_KEY') ?? '';
-
     this.logger.log(`Generating ${count} prompts for ${brandName}`);
 
-    const response = await this.callWithRetry(
-      () =>
-        fetch('https://api.anthropic.com/v1/messages', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'x-api-key': apiKey,
-            'anthropic-version': '2023-06-01',
-          },
-          body: JSON.stringify({
-            model: 'claude-haiku-3-5-20241022',
-            max_tokens: 1024,
-            messages: [
-              {
-                role: 'user',
-                content: PROMPT_GENERATION_PROMPT(context, brandName, count),
-              },
-            ],
-          }),
-        }),
-      'prompt generation',
-    );
+    const response = await this.anthropicClient.createMessage({
+      model: 'claude-haiku-4-5-20251101',
+      maxTokens: 1024,
+      temperature: 0,
+      messages: [{ role: 'user', content: PROMPT_GENERATION_PROMPT(context, brandName, count) }],
+    });
 
-    const data = await response.json();
-    const textContent = this.extractTextContent(data);
-    const jsonContent = this.extractJson(textContent);
+    const parsed = this.anthropicClient.extractJson(response.text, GeneratedPromptsSchema);
 
-    const parsed = GeneratedPromptsSchema.safeParse(jsonContent);
-    if (!parsed.success) {
-      this.logger.error('Invalid prompts format from Anthropic response');
-      throw new Error('Invalid response format from prompt generation');
-    }
-
-    this.logger.log(`Successfully generated ${parsed.data.length} prompts for ${brandName}`);
-    return parsed.data;
-  }
-
-  private extractTextContent(data: unknown): string {
-    const result = AnthropicResponseSchema.safeParse(data);
-    if (!result.success) {
-      throw new Error('Invalid Anthropic response format');
-    }
-
-    const textBlock = result.data.content.find((block) => block.type === 'text');
-    return textBlock?.text ?? '';
-  }
-
-  private async callWithRetry(
-    requestFn: () => Promise<Response>,
-    label: string,
-  ): Promise<Response> {
-    for (let attempt = 1; attempt <= RETRY_CONFIG.maxRetries; attempt++) {
-      const response = await requestFn();
-
-      if (response.ok) {
-        return response;
-      }
-
-      if (response.status === 429) {
-        const retryAfterHeader = response.headers.get('retry-after');
-        const delayMs = retryAfterHeader
-          ? parseInt(retryAfterHeader, 10) * 1000
-          : RETRY_CONFIG.baseDelayMs * attempt;
-
-        this.logger.warn(
-          `Rate limited on ${label}, attempt ${attempt}/${RETRY_CONFIG.maxRetries}, waiting ${delayMs}ms`,
-        );
-
-        if (attempt < RETRY_CONFIG.maxRetries) {
-          await sleep(delayMs);
-          continue;
-        }
-      }
-
-      this.logger.error(`Anthropic API error during ${label}: status ${response.status}`);
-      throw new Error(`API error: ${response.status}`);
-    }
-
-    throw new Error(`Max retries (${RETRY_CONFIG.maxRetries}) exceeded for ${label}`);
-  }
-
-  private extractJson(text: string): unknown {
-    // Remove potential markdown code blocks
-    let cleaned = text.trim();
-    if (cleaned.startsWith('```json')) {
-      cleaned = cleaned.slice(7);
-    } else if (cleaned.startsWith('```')) {
-      cleaned = cleaned.slice(3);
-    }
-    if (cleaned.endsWith('```')) {
-      cleaned = cleaned.slice(0, -3);
-    }
-    cleaned = cleaned.trim();
-
-    // Try to find JSON object or array
-    const jsonStart = cleaned.indexOf('{');
-    const arrayStart = cleaned.indexOf('[');
-
-    let startIndex: number;
-    if (jsonStart === -1 && arrayStart === -1) {
-      throw new Error('No JSON found in response');
-    } else if (jsonStart === -1) {
-      startIndex = arrayStart;
-    } else if (arrayStart === -1) {
-      startIndex = jsonStart;
-    } else {
-      startIndex = Math.min(jsonStart, arrayStart);
-    }
-
-    const jsonString = cleaned.slice(startIndex);
-
-    try {
-      return JSON.parse(jsonString);
-    } catch {
-      throw new Error('Failed to parse JSON from Anthropic response');
-    }
+    this.logger.log(`Successfully generated ${parsed.length} prompts for ${brandName}`);
+    return parsed;
   }
 }

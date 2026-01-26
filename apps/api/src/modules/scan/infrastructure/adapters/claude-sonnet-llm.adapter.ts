@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { LLMModel } from '@coucou-ia/shared';
 
+import { AnthropicClientService } from '../../../../common/infrastructure/anthropic/anthropic-client.service';
 import { BaseAnthropicAdapter } from './base-anthropic.adapter';
 
 @Injectable()
@@ -9,7 +9,7 @@ export class ClaudeSonnetLLMAdapter extends BaseAnthropicAdapter {
   protected readonly logger = new Logger(ClaudeSonnetLLMAdapter.name);
   protected readonly model = LLMModel.CLAUDE_SONNET_4;
 
-  constructor(configService: ConfigService) {
-    super(configService);
+  constructor(anthropicClient: AnthropicClientService) {
+    super(anthropicClient);
   }
 }
