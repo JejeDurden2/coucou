@@ -29,18 +29,22 @@ interface AuthUserResponse {
 }
 
 class ApiClient {
-  private async fetch<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
+  private isRefreshing: Promise<boolean> | null = null;
+
+  private async fetchRaw(endpoint: string, options: RequestInit = {}): Promise<Response> {
     const headers: HeadersInit = {
       'Content-Type': 'application/json',
       ...options.headers,
     };
 
-    const response = await fetch(`${API_URL}${endpoint}`, {
+    return fetch(`${API_URL}${endpoint}`, {
       ...options,
       headers,
       credentials: 'include',
     });
+  }
 
+  private async handleResponse<T>(response: Response): Promise<T> {
     if (!response.ok) {
       const error = (await response.json()) as ApiError;
       throw new ApiClientError(error.code, error.message, response.status);
@@ -51,6 +55,36 @@ class ApiClient {
     }
 
     return response.json() as Promise<T>;
+  }
+
+  private async attemptRefresh(): Promise<boolean> {
+    try {
+      const response = await this.fetchRaw('/auth/refresh', { method: 'POST' });
+      return response.ok;
+    } catch {
+      return false;
+    }
+  }
+
+  private async fetch<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
+    const response = await this.fetchRaw(endpoint, options);
+
+    if (response.status === 401 && !endpoint.startsWith('/auth/')) {
+      // Deduplicate concurrent refresh attempts
+      if (!this.isRefreshing) {
+        this.isRefreshing = this.attemptRefresh().finally(() => {
+          this.isRefreshing = null;
+        });
+      }
+
+      const refreshed = await this.isRefreshing;
+      if (refreshed) {
+        const retryResponse = await this.fetchRaw(endpoint, options);
+        return this.handleResponse<T>(retryResponse);
+      }
+    }
+
+    return this.handleResponse<T>(response);
   }
 
   // Auth
