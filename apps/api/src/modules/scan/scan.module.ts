@@ -1,7 +1,6 @@
 import { Module, forwardRef } from '@nestjs/common';
 import { ScheduleModule } from '@nestjs/schedule';
 
-import { ScanProcessor } from '../../infrastructure/queue/scan.processor';
 import { AuthModule } from '../auth';
 import { ProjectModule } from '../project';
 import { PromptModule } from '../prompt';
@@ -57,8 +56,6 @@ import { ScanController } from './presentation/controllers/scan.controller';
       provide: GET_SCAN_JOB_STATUS_USE_CASE,
       useClass: GetScanJobStatusUseCase,
     },
-    // Processor (domain-specific, registered here)
-    ScanProcessor,
     // Auto-scan cron service
     AutoScanService,
     // LLM adapters
@@ -89,6 +86,7 @@ import { ScanController } from './presentation/controllers/scan.controller';
     LLM_SERVICE,
     GPT52LLMAdapter,
     QUEUE_PROMPT_SCAN_USE_CASE,
+    PROCESS_SCAN_JOB_USE_CASE,
   ],
 })
 export class ScanModule {}

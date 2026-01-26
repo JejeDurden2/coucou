@@ -1,4 +1,5 @@
 export { QueueModule } from './queue.module';
+export { QueueProcessorModule } from './queue-processor.module';
 export { BullBoardConfigModule } from './bull-board.module';
 export { EmailQueueService, type QueueHealthStatus } from './email-queue.service';
 export { EmailProcessor } from './email.processor';

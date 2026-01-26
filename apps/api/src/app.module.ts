@@ -16,7 +16,7 @@ import { PromptModule } from './modules/prompt';
 import { ScanModule } from './modules/scan';
 import { SentimentModule } from './modules/sentiment';
 import { AnthropicModule } from './common/infrastructure/anthropic/anthropic.module';
-import { QueueModule, BullBoardConfigModule } from './infrastructure/queue';
+import { QueueModule, BullBoardConfigModule, QueueProcessorModule } from './infrastructure/queue';
 import { PrismaModule } from './prisma';
 
 @Module({
@@ -55,6 +55,7 @@ import { PrismaModule } from './prisma';
     ProjectModule,
     PromptModule,
     ScanModule,
+    QueueProcessorModule, // Must be after ScanModule to resolve dependencies
     SentimentModule,
     BullBoardConfigModule,
     DashboardModule,
