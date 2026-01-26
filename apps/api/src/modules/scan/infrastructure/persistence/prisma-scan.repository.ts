@@ -58,15 +58,14 @@ export class PrismaScanRepository implements ScanRepository {
   }
 
   async countUserScansInPeriod(userId: string, since: Date): Promise<number> {
-    return this.prisma.scan.count({
+    return this.prisma.scanJob.count({
       where: {
-        prompt: {
-          project: {
-            userId,
-          },
-        },
-        executedAt: {
+        userId,
+        createdAt: {
           gte: since,
+        },
+        status: {
+          in: ['COMPLETED', 'PARTIAL'],
         },
       },
     });

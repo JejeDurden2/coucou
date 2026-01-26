@@ -78,6 +78,12 @@ import { ScanController } from './presentation/controllers/scan.controller';
       useClass: PrismaScanJobRepository,
     },
   ],
-  exports: [SCAN_REPOSITORY, SCAN_JOB_REPOSITORY, LLM_SERVICE, GPT52LLMAdapter],
+  exports: [
+    SCAN_REPOSITORY,
+    SCAN_JOB_REPOSITORY,
+    LLM_SERVICE,
+    GPT52LLMAdapter,
+    QUEUE_PROMPT_SCAN_USE_CASE,
+  ],
 })
 export class ScanModule {}

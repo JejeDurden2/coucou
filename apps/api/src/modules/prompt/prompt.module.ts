@@ -1,6 +1,7 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 
 import { ProjectModule } from '../project';
+import { ScanModule } from '../scan';
 import { PROMPT_REPOSITORY } from './domain';
 import { PrismaPromptRepository } from './infrastructure/persistence/prisma-prompt.repository';
 import {
@@ -12,7 +13,7 @@ import {
 import { PromptController } from './presentation/controllers/prompt.controller';
 
 @Module({
-  imports: [ProjectModule],
+  imports: [ProjectModule, forwardRef(() => ScanModule)],
   controllers: [PromptController],
   providers: [
     // Use cases

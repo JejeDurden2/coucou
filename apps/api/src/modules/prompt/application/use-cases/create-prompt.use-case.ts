@@ -5,6 +5,10 @@ import type { Plan } from '@prisma/client';
 import { ForbiddenError, NotFoundError, PlanLimitError, Result } from '../../../../common';
 import { EMAIL_PORT, type EmailPort, generatePlanLimitEmail } from '../../../email';
 import { PROJECT_REPOSITORY, type ProjectRepository } from '../../../project';
+import {
+  QUEUE_PROMPT_SCAN_USE_CASE,
+  type QueuePromptScanUseCase,
+} from '../../../scan/application/use-cases';
 import { PROMPT_REPOSITORY, type PromptRepository } from '../../domain';
 import type { CreatePromptDto, PromptResponseDto } from '../dto/prompt.dto';
 
@@ -32,6 +36,8 @@ export class CreatePromptUseCase {
     private readonly projectRepository: ProjectRepository,
     @Inject(EMAIL_PORT)
     private readonly emailPort: EmailPort,
+    @Inject(QUEUE_PROMPT_SCAN_USE_CASE)
+    private readonly queuePromptScanUseCase: QueuePromptScanUseCase,
     private readonly configService: ConfigService,
   ) {}
 
@@ -71,6 +77,13 @@ export class CreatePromptUseCase {
       category: dto.category,
     });
 
+    // Auto-trigger scan for SOLO/PRO plans (non-blocking)
+    if (plan === 'SOLO' || plan === 'PRO') {
+      this.triggerAutoScan(prompt.id, userId, plan, userInfo?.email).catch((err) => {
+        this.logger.error(`Auto-scan failed for prompt ${prompt.id}:`, err);
+      });
+    }
+
     return Result.ok({
       id: prompt.id,
       projectId: prompt.projectId,
@@ -107,5 +120,34 @@ export class CreatePromptUseCase {
     });
 
     this.logger.log(`Plan limit email sent to ${userInfo.email}`);
+  }
+
+  private async triggerAutoScan(
+    promptId: string,
+    userId: string,
+    plan: Plan,
+    userEmail?: string,
+  ): Promise<void> {
+    const result = await this.queuePromptScanUseCase.execute({
+      promptId,
+      userId,
+      plan,
+    });
+
+    if (result.ok) {
+      this.logger.log(`Auto-scan queued for prompt ${promptId}: job ${result.value.jobId}`);
+    } else if (result.error.code === 'SCAN_LIMIT_EXCEEDED' && userEmail) {
+      // Send subtle notification to user if scan quota exceeded
+      const message = `Votre prompt a été créé. Le scan sera lancé lors de votre prochaine période.`;
+      await this.emailPort.send({
+        to: userEmail,
+        subject: 'Scan programmé',
+        html: `<p>${message}</p>`,
+        text: message,
+      });
+      this.logger.log(`Scan quota exceeded for user ${userId}, notification sent`);
+    } else {
+      this.logger.warn(`Auto-scan rejected for prompt ${promptId}: ${result.error.message}`);
+    }
   }
 }
