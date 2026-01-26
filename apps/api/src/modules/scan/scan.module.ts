@@ -1,6 +1,7 @@
 import { Module, forwardRef } from '@nestjs/common';
 import { ScheduleModule } from '@nestjs/schedule';
 
+import { ScanProcessor } from '../../infrastructure/queue/scan.processor';
 import { AuthModule } from '../auth';
 import { ProjectModule } from '../project';
 import { PromptModule } from '../prompt';
@@ -30,12 +31,7 @@ import { PrismaScanRepository } from './infrastructure/persistence/prisma-scan.r
 import { ScanController } from './presentation/controllers/scan.controller';
 
 @Module({
-  imports: [
-    forwardRef(() => AuthModule),
-    ProjectModule,
-    forwardRef(() => PromptModule),
-    ScheduleModule.forRoot(),
-  ],
+  imports: [AuthModule, ProjectModule, forwardRef(() => PromptModule), ScheduleModule.forRoot()],
   controllers: [ScanController],
   providers: [
     // Use cases
@@ -56,6 +52,8 @@ import { ScanController } from './presentation/controllers/scan.controller';
       provide: GET_SCAN_JOB_STATUS_USE_CASE,
       useClass: GetScanJobStatusUseCase,
     },
+    // Processor
+    ScanProcessor,
     // Auto-scan cron service
     AutoScanService,
     // LLM adapters
