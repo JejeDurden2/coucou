@@ -15,6 +15,7 @@ import { Button } from '@/components/ui/button';
 import { Logo } from '@/components/ui/logo';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Header } from '@/components/layout/header';
 
 const features = [
   {
@@ -125,48 +126,7 @@ const faqs = [
 export default function LandingPage() {
   return (
     <div className="min-h-dvh bg-background">
-      {/* Navigation */}
-      <header className="fixed top-0 left-0 right-0 z-50 border-b border-zinc-800 bg-zinc-950/80 backdrop-blur-xl">
-        <nav className="container mx-auto flex h-16 items-center justify-between px-4">
-          <Link href="/">
-            <Logo size="sm" />
-          </Link>
-          <div className="hidden md:flex items-center gap-8">
-            <Link
-              href="#features"
-              className="text-sm text-muted-foreground hover:text-primary transition-colors"
-            >
-              Fonctionnalités
-            </Link>
-            <Link
-              href="#pricing"
-              className="text-sm text-muted-foreground hover:text-primary transition-colors"
-            >
-              Tarifs
-            </Link>
-            <Link
-              href="#faq"
-              className="text-sm text-muted-foreground hover:text-primary transition-colors"
-            >
-              FAQ
-            </Link>
-            <Link
-              href="/blog"
-              className="text-sm text-muted-foreground hover:text-primary transition-colors"
-            >
-              Blog
-            </Link>
-          </div>
-          <div className="flex items-center gap-4">
-            <Button variant="ghost" asChild>
-              <Link href="/login">Connexion</Link>
-            </Button>
-            <Button asChild>
-              <Link href="/register">Commencer</Link>
-            </Button>
-          </div>
-        </nav>
-      </header>
+      <Header />
 
       <main>
         {/* Hero Section */}
