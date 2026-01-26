@@ -1,4 +1,4 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { forwardRef, Inject, Injectable, Logger } from '@nestjs/common';
 import { Plan } from '@prisma/client';
 
 import {
@@ -50,7 +50,7 @@ export class ExecuteScanUseCase {
   private readonly logger = new Logger(ExecuteScanUseCase.name);
 
   constructor(
-    @Inject(PROMPT_REPOSITORY)
+    @Inject(forwardRef(() => PROMPT_REPOSITORY))
     private readonly promptRepository: PromptRepository,
     @Inject(PROJECT_REPOSITORY)
     private readonly projectRepository: ProjectRepository,

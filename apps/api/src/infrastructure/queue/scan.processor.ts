@@ -1,5 +1,5 @@
 import { Processor, WorkerHost, OnWorkerEvent } from '@nestjs/bullmq';
-import { Inject, Logger, forwardRef } from '@nestjs/common';
+import { Inject, Logger } from '@nestjs/common';
 import type { Job } from 'bullmq';
 
 import { SCAN_QUEUE_NAME } from './queue.config';
@@ -16,7 +16,7 @@ export class ScanProcessor extends WorkerHost {
   private readonly logger = new Logger(ScanProcessor.name);
 
   constructor(
-    @Inject(forwardRef(() => PROCESS_SCAN_JOB_USE_CASE))
+    @Inject(PROCESS_SCAN_JOB_USE_CASE)
     private readonly processScanJobUseCase: ProcessScanJobUseCase,
   ) {
     super();

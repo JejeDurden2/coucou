@@ -1,4 +1,4 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { forwardRef, Inject, Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import type { Plan } from '@prisma/client';
 
@@ -36,7 +36,7 @@ export class CreatePromptUseCase {
     private readonly projectRepository: ProjectRepository,
     @Inject(EMAIL_PORT)
     private readonly emailPort: EmailPort,
-    @Inject(QUEUE_PROMPT_SCAN_USE_CASE)
+    @Inject(forwardRef(() => QUEUE_PROMPT_SCAN_USE_CASE))
     private readonly queuePromptScanUseCase: QueuePromptScanUseCase,
     private readonly configService: ConfigService,
   ) {}

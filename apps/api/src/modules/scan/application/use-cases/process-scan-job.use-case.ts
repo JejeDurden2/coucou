@@ -1,4 +1,4 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { forwardRef, Inject, Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Plan, ScanJobStatus } from '@prisma/client';
 
@@ -33,7 +33,7 @@ export class ProcessScanJobUseCase {
   private readonly logger = new Logger(ProcessScanJobUseCase.name);
 
   constructor(
-    @Inject(PROMPT_REPOSITORY)
+    @Inject(forwardRef(() => PROMPT_REPOSITORY))
     private readonly promptRepository: PromptRepository,
     @Inject(PROJECT_REPOSITORY)
     private readonly projectRepository: ProjectRepository,
