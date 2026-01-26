@@ -64,11 +64,6 @@ Règles IMPORTANTES:
 - Catégories possibles: "Découverte", "Comparaison", "Intention d'achat", "Local"
 - Questions avec une vraie intention utilisateur (pas génériques)
 - Varier les formulations et les angles
-
-Exemples de bons prompts:
-- "Quel est le meilleur restaurant italien à Lyon pour un dîner romantique ?"
-- "Quelle agence SEO recommandes-tu pour une startup B2B en France ?"
-- "Quelles sont les alternatives à Notion pour la gestion de projet ?"
 `;
 
 const RETRY_CONFIG = {
@@ -103,7 +98,7 @@ export class ClaudeBrandAnalyzerAdapter implements BrandAnalyzerPort {
           },
           body: JSON.stringify({
             model: 'claude-sonnet-4-20250514',
-            max_tokens: 1024,
+            max_tokens: 512,
             tools: [{ type: 'web_search_20250305', name: 'web_search' }],
             messages: [
               {
@@ -139,29 +134,28 @@ export class ClaudeBrandAnalyzerAdapter implements BrandAnalyzerPort {
 
     this.logger.log(`Generating ${count} prompts for ${brandName}`);
 
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01',
-      },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 4096,
-        messages: [
-          {
-            role: 'user',
-            content: PROMPT_GENERATION_PROMPT(context, brandName, count),
+    const response = await this.callWithRetry(
+      () =>
+        fetch('https://api.anthropic.com/v1/messages', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': apiKey,
+            'anthropic-version': '2023-06-01',
           },
-        ],
-      }),
-    });
-
-    if (!response.ok) {
-      this.logger.error(`Anthropic API error during prompt generation: status ${response.status}`);
-      throw new Error(`API error: ${response.status}`);
-    }
+          body: JSON.stringify({
+            model: 'claude-3-5-haiku-latest',
+            max_tokens: 1024,
+            messages: [
+              {
+                role: 'user',
+                content: PROMPT_GENERATION_PROMPT(context, brandName, count),
+              },
+            ],
+          }),
+        }),
+      'prompt generation',
+    );
 
     const data = await response.json();
     const textContent = this.extractTextContent(data);
@@ -185,6 +179,40 @@ export class ClaudeBrandAnalyzerAdapter implements BrandAnalyzerPort {
 
     const textBlock = result.data.content.find((block) => block.type === 'text');
     return textBlock?.text ?? '';
+  }
+
+  private async callWithRetry(
+    requestFn: () => Promise<Response>,
+    label: string,
+  ): Promise<Response> {
+    for (let attempt = 1; attempt <= RETRY_CONFIG.maxRetries; attempt++) {
+      const response = await requestFn();
+
+      if (response.ok) {
+        return response;
+      }
+
+      if (response.status === 429) {
+        const retryAfterHeader = response.headers.get('retry-after');
+        const delayMs = retryAfterHeader
+          ? parseInt(retryAfterHeader, 10) * 1000
+          : RETRY_CONFIG.baseDelayMs * attempt;
+
+        this.logger.warn(
+          `Rate limited on ${label}, attempt ${attempt}/${RETRY_CONFIG.maxRetries}, waiting ${delayMs}ms`,
+        );
+
+        if (attempt < RETRY_CONFIG.maxRetries) {
+          await sleep(delayMs);
+          continue;
+        }
+      }
+
+      this.logger.error(`Anthropic API error during ${label}: status ${response.status}`);
+      throw new Error(`API error: ${response.status}`);
+    }
+
+    throw new Error(`Max retries (${RETRY_CONFIG.maxRetries}) exceeded for ${label}`);
   }
 
   private extractJson(text: string): unknown {

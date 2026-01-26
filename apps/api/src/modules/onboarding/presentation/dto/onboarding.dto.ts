@@ -18,3 +18,12 @@ export interface GeneratePromptsResponseDto {
     updatedAt: Date;
   }[];
 }
+
+export interface EnqueuedJobResponseDto {
+  jobId: string;
+}
+
+export interface JobStatusResponseDto {
+  status: string;
+  result?: unknown;
+}
