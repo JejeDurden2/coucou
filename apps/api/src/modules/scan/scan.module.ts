@@ -1,7 +1,6 @@
 import { Module, forwardRef } from '@nestjs/common';
 import { ScheduleModule } from '@nestjs/schedule';
 
-import { ScanProcessor } from '../../infrastructure/queue/scan.processor';
 import { AuthModule } from '../auth';
 import { ProjectModule } from '../project';
 import { PromptModule } from '../prompt';
@@ -52,8 +51,6 @@ import { ScanController } from './presentation/controllers/scan.controller';
       provide: GET_SCAN_JOB_STATUS_USE_CASE,
       useClass: GetScanJobStatusUseCase,
     },
-    // Processor
-    ScanProcessor,
     // Auto-scan cron service
     AutoScanService,
     // LLM adapters

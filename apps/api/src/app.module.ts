@@ -17,6 +17,7 @@ import { ScanModule } from './modules/scan';
 import { SentimentModule } from './modules/sentiment';
 import { AnthropicModule } from './common/infrastructure/anthropic/anthropic.module';
 import { QueueModule, BullBoardConfigModule } from './infrastructure/queue';
+import { ProcessorsModule } from './infrastructure/processors.module';
 import { PrismaModule } from './prisma';
 
 @Module({
@@ -60,6 +61,7 @@ import { PrismaModule } from './prisma';
     OnboardingModule,
     NotificationModule,
     BullBoardConfigModule,
+    ProcessorsModule, // Must be last - contains BullMQ processors
   ],
   controllers: [AppController],
   providers: [
