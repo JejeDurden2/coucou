@@ -144,7 +144,7 @@ export class ClaudeBrandAnalyzerAdapter implements BrandAnalyzerPort {
             'anthropic-version': '2023-06-01',
           },
           body: JSON.stringify({
-            model: 'claude-3-5-haiku-latest',
+            model: 'claude-haiku-3-5-20241022',
             max_tokens: 1024,
             messages: [
               {

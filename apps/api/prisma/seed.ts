@@ -148,7 +148,7 @@ async function main(): Promise<void> {
             },
             {
               provider: LLMProvider.ANTHROPIC,
-              model: 'claude-3-5-haiku-latest',
+              model: 'claude-haiku-3-5-20241022',
               rawResponse: JSON.stringify({
                 r: [
                   ...(isCitedAnthropic
