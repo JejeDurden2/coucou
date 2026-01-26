@@ -16,6 +16,7 @@ import {
   generateAccountDeletedEmail,
   generateSentimentReadyEmail,
   generatePostScanEmail,
+  generateFirstAnalysisEmail,
 } from '../../modules/email';
 
 import { EMAIL_QUEUE_NAME } from './queue.config';
@@ -46,7 +47,11 @@ const EMAIL_CONFIG: Record<
   },
   inactivity: {
     generator: generateInactivityEmail as (data: never) => { html: string; text: string },
-    subject: 'Votre projet attend un nouveau scan',
+    subject: 'Votre projet attend une nouvelle analyse',
+  },
+  'first-analysis': {
+    generator: generateFirstAnalysisEmail as (data: never) => { html: string; text: string },
+    subject: 'Découvrez votre visibilité dans les IA',
   },
   'new-user-notification': {
     generator: generateNewUserNotificationEmail as (data: never) => { html: string; text: string },

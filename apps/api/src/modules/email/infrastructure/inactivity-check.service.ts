@@ -7,6 +7,7 @@ import { EmailQueueService } from '../../../infrastructure/queue';
 import { PrismaService } from '../../../prisma';
 import { UnsubscribeTokenService } from './services/unsubscribe-token.service';
 
+const FIRST_ANALYSIS_THRESHOLD_DAYS = 3;
 const INACTIVITY_THRESHOLD_DAYS = 14;
 const MIN_EMAIL_INTERVAL_DAYS = 7;
 const BATCH_SIZE = 100;
@@ -48,48 +49,26 @@ export class InactivityCheckService {
   async handleInactivityCheck(): Promise<void> {
     this.logger.log('Starting inactivity check cron job');
     const startTime = Date.now();
-    let emailsSent = 0;
+    let firstAnalysisEmailsSent = 0;
+    let inactivityEmailsSent = 0;
     let skipped = 0;
-    let offset = 0;
 
     try {
-      // Process in batches
-      let hasMore = true;
-      while (hasMore) {
-        const inactiveUsers = await this.findInactiveUsers(offset, BATCH_SIZE);
+      // First-time users (never launched an analysis, signed up 3+ days ago)
+      const firstTimeResult = await this.processBatch(
+        (skip, take) => this.findFirstTimeUsers(skip, take),
+        (user) => this.sendFirstAnalysisEmail(user),
+      );
+      firstAnalysisEmailsSent = firstTimeResult.sent;
+      skipped += firstTimeResult.skipped;
 
-        this.logger.log({
-          message: 'Inactivity check: processing batch',
-          offset,
-          batchSize: inactiveUsers.length,
-        });
-
-        if (inactiveUsers.length === 0) {
-          hasMore = false;
-          break;
-        }
-
-        for (const user of inactiveUsers) {
-          if (!user.project) {
-            skipped++;
-            continue;
-          }
-
-          try {
-            await this.sendInactivityEmail(user);
-            emailsSent++;
-          } catch (error) {
-            this.logger.error({
-              message: 'Inactivity check: failed to send email',
-              userId: user.id,
-              error: error instanceof Error ? error.message : String(error),
-            });
-          }
-        }
-
-        offset += BATCH_SIZE;
-        hasMore = inactiveUsers.length === BATCH_SIZE;
-      }
+      // Returning inactive users (last analysis > 14 days ago)
+      const returningResult = await this.processBatch(
+        (skip, take) => this.findReturningInactiveUsers(skip, take),
+        (user) => this.sendInactivityEmail(user),
+      );
+      inactivityEmailsSent = returningResult.sent;
+      skipped += returningResult.skipped;
     } catch (error) {
       this.logger.error({
         message: 'Inactivity check: critical error',
@@ -101,16 +80,64 @@ export class InactivityCheckService {
 
     this.logger.log({
       message: 'Inactivity check: completed',
-      emailsSent,
+      firstAnalysisEmailsSent,
+      inactivityEmailsSent,
       skipped,
       durationMs: duration,
     });
   }
 
-  private async findInactiveUsers(skip: number, take: number): Promise<InactiveUser[]> {
+  private async processBatch(
+    findUsers: (skip: number, take: number) => Promise<InactiveUser[]>,
+    sendEmail: (user: InactiveUser) => Promise<void>,
+  ): Promise<{ sent: number; skipped: number }> {
+    let sent = 0;
+    let skipped = 0;
+    let offset = 0;
+    let hasMore = true;
+
+    while (hasMore) {
+      const users = await findUsers(offset, BATCH_SIZE);
+
+      this.logger.log({
+        message: 'Inactivity check: processing batch',
+        offset,
+        batchSize: users.length,
+      });
+
+      if (users.length === 0) {
+        break;
+      }
+
+      for (const user of users) {
+        if (!user.project) {
+          skipped++;
+          continue;
+        }
+
+        try {
+          await sendEmail(user);
+          sent++;
+        } catch (error) {
+          this.logger.error({
+            message: 'Inactivity check: failed to send email',
+            userId: user.id,
+            error: error instanceof Error ? error.message : String(error),
+          });
+        }
+      }
+
+      offset += BATCH_SIZE;
+      hasMore = users.length === BATCH_SIZE;
+    }
+
+    return { sent, skipped };
+  }
+
+  private async findFirstTimeUsers(skip: number, take: number): Promise<InactiveUser[]> {
     const now = new Date();
-    const inactivityThreshold = new Date(
-      now.getTime() - INACTIVITY_THRESHOLD_DAYS * 24 * 60 * 60 * 1000,
+    const signupThreshold = new Date(
+      now.getTime() - FIRST_ANALYSIS_THRESHOLD_DAYS * 24 * 60 * 60 * 1000,
     );
     const emailIntervalThreshold = new Date(
       now.getTime() - MIN_EMAIL_INTERVAL_DAYS * 24 * 60 * 60 * 1000,
@@ -122,14 +149,11 @@ export class InactivityCheckService {
           plan: Plan.FREE,
           emailNotificationsEnabled: true,
           deletedAt: null,
-          OR: [{ lastScanAt: null }, { lastScanAt: { lt: inactivityThreshold } }],
-          AND: [
-            {
-              OR: [
-                { lastInactivityEmailAt: null },
-                { lastInactivityEmailAt: { lt: emailIntervalThreshold } },
-              ],
-            },
+          lastScanAt: null,
+          createdAt: { lt: signupThreshold },
+          OR: [
+            { lastInactivityEmailAt: null },
+            { lastInactivityEmailAt: { lt: emailIntervalThreshold } },
           ],
         },
         select: {
@@ -157,6 +181,83 @@ export class InactivityCheckService {
       );
   }
 
+  private async findReturningInactiveUsers(skip: number, take: number): Promise<InactiveUser[]> {
+    const now = new Date();
+    const inactivityThreshold = new Date(
+      now.getTime() - INACTIVITY_THRESHOLD_DAYS * 24 * 60 * 60 * 1000,
+    );
+    const emailIntervalThreshold = new Date(
+      now.getTime() - MIN_EMAIL_INTERVAL_DAYS * 24 * 60 * 60 * 1000,
+    );
+
+    return this.prisma.user
+      .findMany({
+        where: {
+          plan: Plan.FREE,
+          emailNotificationsEnabled: true,
+          deletedAt: null,
+          lastScanAt: { not: null, lt: inactivityThreshold },
+          OR: [
+            { lastInactivityEmailAt: null },
+            { lastInactivityEmailAt: { lt: emailIntervalThreshold } },
+          ],
+        },
+        select: {
+          id: true,
+          email: true,
+          name: true,
+          projects: {
+            take: 1,
+            orderBy: { createdAt: 'asc' },
+            select: {
+              id: true,
+              brandName: true,
+            },
+          },
+        },
+        skip,
+        take,
+        orderBy: { createdAt: 'asc' },
+      })
+      .then((users) =>
+        users.map((user) => ({
+          ...user,
+          project: user.projects[0] ?? null,
+        })),
+      );
+  }
+
+  private async sendFirstAnalysisEmail(user: InactiveUser): Promise<void> {
+    const project = user.project!;
+    const now = new Date();
+
+    const unsubscribeToken = this.unsubscribeTokenService.generateToken(user.id);
+    const firstName = user.name.split(' ')[0];
+
+    await this.emailQueueService.addJob({
+      type: 'first-analysis',
+      to: user.email,
+      data: {
+        firstName,
+        brandName: project.brandName,
+        projectUrl: `${this.frontendUrl}/projects/${project.id}`,
+        unsubscribeUrl: `${this.apiUrl}/email/unsubscribe?token=${unsubscribeToken}`,
+      },
+    });
+
+    await this.prisma.user.update({
+      where: { id: user.id },
+      data: { lastInactivityEmailAt: now },
+    });
+
+    this.logger.log({
+      message: 'Inactivity check: first-analysis email queued',
+      userId: user.id,
+      email: user.email,
+      projectId: project.id,
+    });
+  }
+
   private async sendInactivityEmail(user: InactiveUser): Promise<void> {
     const project = user.project!;
     const now = new Date();
@@ -181,7 +282,7 @@ export class InactivityCheckService {
     });
 
     this.logger.log({
-      message: 'Inactivity check: email queued',
+      message: 'Inactivity check: inactivity email queued',
       userId: user.id,
       email: user.email,
       projectId: project.id,

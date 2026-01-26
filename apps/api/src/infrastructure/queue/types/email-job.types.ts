@@ -4,6 +4,7 @@ import type {
   PlanUpgradeEmailData,
   PlanLimitEmailData,
   InactivityEmailData,
+  FirstAnalysisEmailData,
   NewUserNotificationEmailData,
   PlanDowngradeEmailData,
   SubscriptionEndedEmailData,
@@ -18,6 +19,7 @@ export type EmailJobType =
   | 'plan-upgrade'
   | 'plan-limit'
   | 'inactivity'
+  | 'first-analysis'
   | 'new-user-notification'
   | 'plan-downgrade'
   | 'subscription-ended'
@@ -31,6 +33,7 @@ export type EmailJobData =
   | { type: 'plan-upgrade'; to: string; data: PlanUpgradeEmailData }
   | { type: 'plan-limit'; to: string; data: PlanLimitEmailData }
   | { type: 'inactivity'; to: string; data: InactivityEmailData }
+  | { type: 'first-analysis'; to: string; data: FirstAnalysisEmailData }
   | { type: 'new-user-notification'; to: string; data: NewUserNotificationEmailData }
   | { type: 'plan-downgrade'; to: string; data: PlanDowngradeEmailData }
   | { type: 'subscription-ended'; to: string; data: SubscriptionEndedEmailData }

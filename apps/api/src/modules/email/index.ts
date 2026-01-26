@@ -45,3 +45,7 @@ export {
   generatePostScanEmail,
   type PostScanEmailData,
 } from './infrastructure/templates/post-scan.template';
+export {
+  generateFirstAnalysisEmail,
+  type FirstAnalysisEmailData,
+} from './infrastructure/templates/first-analysis.template';
