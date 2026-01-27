@@ -28,7 +28,7 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL('https://coucou-ia.com'),
   title: {
-    default: 'Coucou IA — Surveillance de votre visibilité dans la recherche IA',
+    default: 'Coucou IA | Surveillance de votre visibilité dans la recherche IA',
     template: '%s | Coucou IA',
   },
   description:
@@ -69,13 +69,13 @@ export const metadata: Metadata = {
     locale: 'fr_FR',
     url: 'https://coucou-ia.com',
     siteName: 'Coucou IA',
-    title: 'Coucou IA — Surveillance visibilité recherche IA',
+    title: 'Coucou IA | Surveillance visibilité recherche IA',
     description:
       'Analysez vos mentions sur ChatGPT et Claude. Premier outil français de monitoring recherche IA.',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Coucou IA — Surveillance visibilité recherche IA',
+    title: 'Coucou IA | Surveillance visibilité recherche IA',
     description: 'Analysez vos mentions sur ChatGPT et Claude. Premier outil français.',
     creator: '@coucouia',
   },

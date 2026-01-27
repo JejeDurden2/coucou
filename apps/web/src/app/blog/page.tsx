@@ -7,11 +7,11 @@ import { PostCard } from '@/components/blog';
 import { Logo } from '@/components/ui/logo';
 
 export const metadata: Metadata = {
-  title: 'Blog GEO & Recherche IA — Guides et actualités',
+  title: 'Blog GEO & Recherche IA | Guides et actualités',
   description:
     'Guides pratiques sur le GEO (Generative Engine Optimization), la recherche IA et la visibilité de marque sur ChatGPT et Claude.',
   openGraph: {
-    title: 'Blog GEO & Recherche IA — Guides et actualités | Coucou IA',
+    title: 'Blog GEO & Recherche IA : Guides et actualités | Coucou IA',
     description:
       'Guides pratiques sur le GEO, la recherche IA et la visibilité de marque sur ChatGPT et Claude.',
     type: 'website',

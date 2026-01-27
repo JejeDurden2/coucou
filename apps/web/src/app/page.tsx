@@ -78,7 +78,7 @@ export default function LandingPage() {
                 <p className="text-lg text-muted-foreground mx-auto mb-8 max-w-lg text-pretty lg:mx-0 lg:text-xl">
                   Mesurez si <span className="text-foreground font-medium">ChatGPT</span> et{' '}
                   <span className="text-foreground font-medium">Claude</span> recommandent votre
-                  marque — ou vos concurrents.
+                  marque, ou vos concurrents.
                 </p>
 
                 <div className="flex flex-col items-center gap-4 sm:flex-row lg:items-start mb-6">

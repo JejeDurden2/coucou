@@ -127,7 +127,7 @@ D'ailleurs, les deux disciplines se renforcent mutuellement. Un bon SEO amélior
 
 ## Les erreurs à éviter en GEO
 
-Certaines pratiques SEO classiques ne fonctionnent pas — voire nuisent — en GEO.
+Certaines pratiques SEO classiques ne fonctionnent pas en GEO, voire y nuisent.
 
 Le keyword stuffing n'a aucun effet sur les LLM. Ils comprennent le sens, pas les répétitions de mots-clés. Un contenu sur-optimisé pour Google peut paraître artificiel et être ignoré.
 

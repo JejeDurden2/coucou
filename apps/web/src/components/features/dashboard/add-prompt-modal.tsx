@@ -131,7 +131,7 @@ export function AddPromptModal({
               <li className="flex items-start gap-2">
                 <Target className="size-4 mt-0.5 text-primary flex-shrink-0" aria-hidden="true" />
                 <span>
-                  <strong className="text-foreground">Soyez spécifique</strong> — Incluez votre
+                  <strong className="text-foreground">Soyez spécifique</strong> : incluez votre
                   secteur, localisation ou cas d&apos;usage précis
                 </span>
               </li>
@@ -141,7 +141,7 @@ export function AddPromptModal({
                   aria-hidden="true"
                 />
                 <span>
-                  <strong className="text-foreground">Posez une vraie question</strong> — Formulez
+                  <strong className="text-foreground">Posez une vraie question</strong> : formulez
                   comme un utilisateur réel qui cherche une solution
                 </span>
               </li>
@@ -151,7 +151,7 @@ export function AddPromptModal({
                   aria-hidden="true"
                 />
                 <span>
-                  <strong className="text-foreground">Évitez les marques</strong> — Ne mentionnez
+                  <strong className="text-foreground">Évitez les marques</strong> : ne mentionnez
                   pas votre marque dans la requête pour des résultats objectifs
                 </span>
               </li>
