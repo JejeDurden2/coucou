@@ -7,6 +7,7 @@ import {
   Result,
   ScanLimitError,
   ValidationError,
+  withSpan,
 } from '../../../../common';
 import { PROJECT_REPOSITORY, type ProjectRepository } from '../../../project';
 import { PROMPT_REPOSITORY, type PromptRepository } from '../../../prompt';
@@ -66,117 +67,126 @@ export class ExecuteScanUseCase {
     userId: string,
     plan: Plan,
   ): Promise<Result<ScanResponseDto, ExecuteScanError>> {
-    const prompt = await this.promptRepository.findById(promptId);
+    return withSpan(
+      'scan-module',
+      'ExecuteScanUseCase.execute',
+      { 'scan.promptId': promptId, 'scan.userId': userId, 'scan.plan': plan },
+      async () => {
+        const prompt = await this.promptRepository.findById(promptId);
 
-    if (!prompt) {
-      return Result.err(new NotFoundError('Prompt', promptId));
-    }
+        if (!prompt) {
+          return Result.err(new NotFoundError('Prompt', promptId));
+        }
 
-    const project = await this.projectRepository.findById(prompt.projectId);
+        const project = await this.projectRepository.findById(prompt.projectId);
 
-    if (!project) {
-      return Result.err(new NotFoundError('Project', prompt.projectId));
-    }
+        if (!project) {
+          return Result.err(new NotFoundError('Project', prompt.projectId));
+        }
 
-    if (!project.belongsTo(userId)) {
-      return Result.err(new ForbiddenError('You do not have access to this prompt'));
-    }
+        if (!project.belongsTo(userId)) {
+          return Result.err(new ForbiddenError('You do not have access to this prompt'));
+        }
 
-    // Check user-level scan quota for the period (prevents bypass via prompt deletion)
-    const cooldownMs = SCAN_COOLDOWN_MS[plan];
-    const periodStart = new Date(Date.now() - cooldownMs);
-    const recentScans = await this.scanRepository.countUserScansInPeriod(userId, periodStart);
-    const maxScans = MAX_SCANS_PER_PERIOD[plan];
+        // Check user-level scan quota for the period (prevents bypass via prompt deletion)
+        const cooldownMs = SCAN_COOLDOWN_MS[plan];
+        const periodStart = new Date(Date.now() - cooldownMs);
+        const recentScans = await this.scanRepository.countUserScansInPeriod(userId, periodStart);
+        const maxScans = MAX_SCANS_PER_PERIOD[plan];
 
-    if (recentScans >= maxScans) {
-      return Result.err(new ScanLimitError(recentScans, maxScans, plan));
-    }
+        if (recentScans >= maxScans) {
+          return Result.err(new ScanLimitError(recentScans, maxScans, plan));
+        }
 
-    // Check scan cooldown based on plan (per-prompt cooldown)
-    if (prompt.lastScannedAt !== null) {
-      const timeSinceLastScan = Date.now() - prompt.lastScannedAt.getTime();
-      if (timeSinceLastScan < cooldownMs) {
-        const cooldownLabel = plan === Plan.PRO ? 'jour' : 'semaine';
-        return Result.err(
-          new ValidationError([
-            `Ce prompt a déjà été scanné cette ${cooldownLabel}. Prochain scan disponible bientôt.`,
-          ]),
+        // Check scan cooldown based on plan (per-prompt cooldown)
+        if (prompt.lastScannedAt !== null) {
+          const timeSinceLastScan = Date.now() - prompt.lastScannedAt.getTime();
+          if (timeSinceLastScan < cooldownMs) {
+            const cooldownLabel = plan === Plan.PRO ? 'jour' : 'semaine';
+            return Result.err(
+              new ValidationError([
+                `Ce prompt a déjà été scanné cette ${cooldownLabel}. Prochain scan disponible bientôt.`,
+              ]),
+            );
+          }
+        }
+
+        const analysis = PromptSanitizerService.analyze(prompt.content);
+
+        if (analysis.level === ThreatLevel.HIGH) {
+          this.logger.warn(
+            `Blocked HIGH threat prompt ${promptId}: ${analysis.matchedPatterns.join(', ')}`,
+          );
+          return Result.err(
+            new ValidationError([
+              `Contenu suspect détecté: ${analysis.matchedPatterns.join(', ')}`,
+            ]),
+          );
+        }
+
+        if (analysis.level === ThreatLevel.LOW) {
+          this.logger.log(
+            `Sanitized LOW threat prompt ${promptId}: ${analysis.matchedPatterns.join(', ')}`,
+          );
+        }
+
+        this.logger.log(`Executing scan for prompt ${promptId} with plan ${plan}`);
+
+        const { successes, failures } = await this.llmService.queryByPlan(analysis.sanitized, plan);
+
+        if (successes.length === 0) {
+          this.logger.error(`All LLM models failed for prompt ${promptId}`);
+          return Result.err(
+            new AllProvidersFailedError(
+              failures.map((f) => ({ provider: f.provider, error: f.error })),
+            ),
+          );
+        }
+
+        if (failures.length > 0) {
+          this.logger.warn(
+            `Partial LLM failures for prompt ${promptId}: ${failures.map((f) => `${f.provider}/${f.model}`).join(', ')}`,
+          );
+        }
+
+        const results: LLMResult[] = successes.map((response) =>
+          this.responseProcessor.process(response, project.brandName, project.brandVariants),
         );
-      }
-    }
 
-    const analysis = PromptSanitizerService.analyze(prompt.content);
+        const scan = await this.scanRepository.create({
+          promptId,
+          results,
+        });
 
-    if (analysis.level === ThreatLevel.HIGH) {
-      this.logger.warn(
-        `Blocked HIGH threat prompt ${promptId}: ${analysis.matchedPatterns.join(', ')}`,
-      );
-      return Result.err(
-        new ValidationError([`Contenu suspect détecté: ${analysis.matchedPatterns.join(', ')}`]),
-      );
-    }
+        const scanDate = new Date();
+        await this.promptRepository.updateLastScannedAt(promptId, scanDate);
+        await this.projectRepository.updateLastScannedAt(project.id, scanDate);
 
-    if (analysis.level === ThreatLevel.LOW) {
-      this.logger.log(
-        `Sanitized LOW threat prompt ${promptId}: ${analysis.matchedPatterns.join(', ')}`,
-      );
-    }
+        this.logger.log(`Scan ${scan.id} completed for prompt ${promptId}`);
 
-    this.logger.log(`Executing scan for prompt ${promptId} with plan ${plan}`);
-
-    const { successes, failures } = await this.llmService.queryByPlan(analysis.sanitized, plan);
-
-    if (successes.length === 0) {
-      this.logger.error(`All LLM models failed for prompt ${promptId}`);
-      return Result.err(
-        new AllProvidersFailedError(
-          failures.map((f) => ({ provider: f.provider, error: f.error })),
-        ),
-      );
-    }
-
-    if (failures.length > 0) {
-      this.logger.warn(
-        `Partial LLM failures for prompt ${promptId}: ${failures.map((f) => `${f.provider}/${f.model}`).join(', ')}`,
-      );
-    }
-
-    const results: LLMResult[] = successes.map((response) =>
-      this.responseProcessor.process(response, project.brandName, project.brandVariants),
+        return Result.ok({
+          id: scan.id,
+          promptId: scan.promptId,
+          executedAt: scan.executedAt,
+          results: scan.results.map((r) => ({
+            provider: r.provider,
+            model: r.model,
+            isCited: r.isCited,
+            position: r.position,
+            brandKeywords: r.brandKeywords,
+            queryKeywords: r.queryKeywords,
+            competitors: r.competitorMentions,
+            latencyMs: r.latencyMs,
+            parseSuccess: r.parseSuccess,
+          })),
+          isCitedByAny: scan.isCitedByAny,
+          citationRate: scan.citationRate,
+          providerErrors:
+            failures.length > 0
+              ? failures.map((f) => ({ provider: f.provider, error: f.error }))
+              : undefined,
+        });
+      },
     );
-
-    const scan = await this.scanRepository.create({
-      promptId,
-      results,
-    });
-
-    const scanDate = new Date();
-    await this.promptRepository.updateLastScannedAt(promptId, scanDate);
-    await this.projectRepository.updateLastScannedAt(project.id, scanDate);
-
-    this.logger.log(`Scan ${scan.id} completed for prompt ${promptId}`);
-
-    return Result.ok({
-      id: scan.id,
-      promptId: scan.promptId,
-      executedAt: scan.executedAt,
-      results: scan.results.map((r) => ({
-        provider: r.provider,
-        model: r.model,
-        isCited: r.isCited,
-        position: r.position,
-        brandKeywords: r.brandKeywords,
-        queryKeywords: r.queryKeywords,
-        competitors: r.competitorMentions,
-        latencyMs: r.latencyMs,
-        parseSuccess: r.parseSuccess,
-      })),
-      isCitedByAny: scan.isCitedByAny,
-      citationRate: scan.citationRate,
-      providerErrors:
-        failures.length > 0
-          ? failures.map((f) => ({ provider: f.provider, error: f.error }))
-          : undefined,
-    });
   }
 }

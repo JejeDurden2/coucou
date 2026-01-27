@@ -1,10 +1,14 @@
-import { Logger, ValidationPipe } from '@nestjs/common';
+import './tracing';
+
+import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
+import type { NestExpressApplication } from '@nestjs/platform-express';
 import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
 
 import { AppModule } from './app.module';
 import { AllExceptionsFilter } from './common/filters';
+import { LoggerService } from './common/logger';
 
 // Required environment variables for production
 const REQUIRED_ENV_VARS = ['DATABASE_URL', 'JWT_SECRET'] as const;
@@ -15,7 +19,7 @@ const REQUIRED_ENV_VARS_PRODUCTION = [
   'RESEND_API_KEY',
 ] as const;
 
-function validateEnvironment(logger: Logger): void {
+function validateEnvironment(logger: LoggerService): void {
   const isProduction = process.env.NODE_ENV === 'production';
   const requiredVars = isProduction ? REQUIRED_ENV_VARS_PRODUCTION : REQUIRED_ENV_VARS;
   const missing: string[] = [];
@@ -46,10 +50,16 @@ function validateOriginUrl(url: string): boolean {
 }
 
 async function bootstrap(): Promise<void> {
-  const app = await NestFactory.create(AppModule, {
+  const logger = new LoggerService();
+  logger.setContext('Bootstrap');
+
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
     rawBody: true, // Required for Stripe webhook signature verification
+    logger,
   });
-  const logger = new Logger('Bootstrap');
+
+  // Increase JSON body parser limit (default ~100kb, needed for base64 screenshot attachments)
+  app.useBodyParser('json', { limit: '10mb' });
 
   // Validate required environment variables
   validateEnvironment(logger);

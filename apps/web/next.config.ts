@@ -9,6 +9,7 @@ const nextConfig: NextConfig = {
       '@radix-ui/react-slot',
       'class-variance-authority',
       'recharts',
+      '@coucou-ia/shared',
     ],
   },
 };

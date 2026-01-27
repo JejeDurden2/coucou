@@ -2,7 +2,7 @@ import { Inject, Injectable, Logger, forwardRef } from '@nestjs/common';
 import { z } from 'zod';
 import type { SentimentResult, SentimentScanResults } from '@coucou-ia/shared';
 
-import { ForbiddenError, NotFoundError, Result } from '../../../../common';
+import { ForbiddenError, NotFoundError, Result, withSpan } from '../../../../common';
 import { AnthropicClientService } from '../../../../common/infrastructure/anthropic/anthropic-client.service';
 import { PROJECT_REPOSITORY, type ProjectRepository } from '../../../project';
 import type { LLMQueryOptions, LLMResponse } from '../../../scan';
@@ -84,63 +84,70 @@ export class ExecuteSentimentScanUseCase {
     projectId: string,
     userId: string,
   ): Promise<Result<SentimentScan, ExecuteSentimentScanError>> {
-    const project = await this.projectRepository.findById(projectId);
+    return withSpan(
+      'sentiment-module',
+      'ExecuteSentimentScanUseCase.execute',
+      { 'sentiment.projectId': projectId, 'sentiment.userId': userId },
+      async () => {
+        const project = await this.projectRepository.findById(projectId);
 
-    if (!project) {
-      return Result.err(new NotFoundError('Project', projectId));
-    }
+        if (!project) {
+          return Result.err(new NotFoundError('Project', projectId));
+        }
 
-    if (!project.belongsTo(userId)) {
-      return Result.err(new ForbiddenError("Vous n'avez pas accès à ce projet"));
-    }
+        if (!project.belongsTo(userId)) {
+          return Result.err(new ForbiddenError("Vous n'avez pas accès à ce projet"));
+        }
 
-    const prompt = this.buildPrompt(
-      project.brandName,
-      project.brandVariants,
-      project.domain,
-      project.brandContext,
+        const prompt = this.buildPrompt(
+          project.brandName,
+          project.brandVariants,
+          project.domain,
+          project.brandContext,
+        );
+
+        this.logger.log(`Executing sentiment scan for project ${projectId}`);
+
+        const gptOptions: LLMQueryOptions = {
+          systemPrompt: SENTIMENT_SYSTEM_PROMPT,
+        };
+
+        const [gptResult, claudeResult] = await Promise.all([
+          this.queryGptWithRetry(prompt, gptOptions),
+          this.queryClaudeWithRetry(prompt),
+        ]);
+
+        const successes: LLMQueryResult[] = [gptResult, claudeResult].filter((r) => r.result);
+        const failures: SentimentProviderFailure[] = [gptResult, claudeResult]
+          .filter((r) => r.error)
+          .map((r) => ({ provider: r.provider, error: r.error! }));
+
+        if (successes.length === 0) {
+          this.logger.error(`All LLM providers failed for sentiment scan on project ${projectId}`);
+          return Result.err(new AllSentimentProvidersFailedError(failures));
+        }
+
+        if (failures.length > 0) {
+          this.logger.warn(
+            `Partial LLM failures for sentiment scan: ${failures.map((f) => f.provider).join(', ')}`,
+          );
+        }
+
+        const globalScore = this.calculateGlobalScore(successes);
+        const results = this.buildResults(gptResult, claudeResult);
+
+        const scan = await this.sentimentRepository.save({
+          projectId,
+          scannedAt: new Date(),
+          globalScore,
+          results,
+        });
+
+        this.logger.log(`Sentiment scan ${scan.id} completed for project ${projectId}`);
+
+        return Result.ok(scan);
+      },
     );
-
-    this.logger.log(`Executing sentiment scan for project ${projectId}`);
-
-    const gptOptions: LLMQueryOptions = {
-      systemPrompt: SENTIMENT_SYSTEM_PROMPT,
-    };
-
-    const [gptResult, claudeResult] = await Promise.all([
-      this.queryGptWithRetry(prompt, gptOptions),
-      this.queryClaudeWithRetry(prompt),
-    ]);
-
-    const successes: LLMQueryResult[] = [gptResult, claudeResult].filter((r) => r.result);
-    const failures: SentimentProviderFailure[] = [gptResult, claudeResult]
-      .filter((r) => r.error)
-      .map((r) => ({ provider: r.provider, error: r.error! }));
-
-    if (successes.length === 0) {
-      this.logger.error(`All LLM providers failed for sentiment scan on project ${projectId}`);
-      return Result.err(new AllSentimentProvidersFailedError(failures));
-    }
-
-    if (failures.length > 0) {
-      this.logger.warn(
-        `Partial LLM failures for sentiment scan: ${failures.map((f) => f.provider).join(', ')}`,
-      );
-    }
-
-    const globalScore = this.calculateGlobalScore(successes);
-    const results = this.buildResults(gptResult, claudeResult);
-
-    const scan = await this.sentimentRepository.save({
-      projectId,
-      scannedAt: new Date(),
-      globalScore,
-      results,
-    });
-
-    this.logger.log(`Sentiment scan ${scan.id} completed for project ${projectId}`);
-
-    return Result.ok(scan);
   }
 
   private buildPrompt(

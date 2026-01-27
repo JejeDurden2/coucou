@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Download } from 'lucide-react';
+import { Download, HelpCircle } from 'lucide-react';
 import { Plan } from '@coucou-ia/shared';
 
 import { useAuth } from '@/lib/auth-context';
@@ -104,6 +104,8 @@ export default function SettingsPage(): React.ReactNode {
 
       {message && (
         <div
+          role="status"
+          aria-live="polite"
           className={cn(
             'rounded-lg px-4 py-3 text-sm',
             message.type === 'success'
@@ -201,6 +203,23 @@ export default function SettingsPage(): React.ReactNode {
         <p className="text-xs text-muted-foreground mt-4 text-pretty">
           Vous pouvez aussi vous désinscrire via le lien en bas de nos emails.
         </p>
+      </div>
+
+      <div className="rounded-lg border border-border bg-card p-6">
+        <h2 className="text-sm font-medium text-muted-foreground uppercase mb-4 text-balance">
+          Support
+        </h2>
+        <p className="text-sm text-muted-foreground mb-4 text-pretty">
+          {user?.plan === Plan.FREE
+            ? 'Consultez notre FAQ ou passez au plan Solo pour contacter le support.'
+            : 'Contactez notre équipe pour toute question ou signalement de bug.'}
+        </p>
+        <Button variant="outline" size="sm" asChild>
+          <Link href={user?.plan === Plan.FREE ? '/faq' : '/settings/support'}>
+            <HelpCircle className="mr-2 size-4" aria-hidden="true" />
+            {user?.plan === Plan.FREE ? 'Voir la FAQ' : 'Contacter le support'}
+          </Link>
+        </Button>
       </div>
 
       <div className="rounded-lg border border-border bg-card p-6">

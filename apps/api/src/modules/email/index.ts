@@ -1,5 +1,10 @@
 export { EmailModule } from './email.module';
-export { EMAIL_PORT, type EmailPort, type SendEmailOptions } from './application/ports/email.port';
+export {
+  EMAIL_PORT,
+  type EmailAttachment,
+  type EmailPort,
+  type SendEmailOptions,
+} from './application/ports/email.port';
 export {
   generateWelcomeEmail,
   type WelcomeEmailData,
@@ -49,3 +54,7 @@ export {
   generateFirstAnalysisEmail,
   type FirstAnalysisEmailData,
 } from './infrastructure/templates/first-analysis.template';
+export {
+  generateSupportRequestEmail,
+  type SupportRequestEmailData,
+} from './infrastructure/templates/support-request.template';

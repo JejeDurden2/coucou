@@ -26,7 +26,10 @@ export class ResendEmailAdapter implements EmailPort {
 
   async send(options: SendEmailOptions): Promise<void> {
     if (!this.apiKey) {
-      this.logger.log(`[DEV] Email would be sent to ${options.to}: ${options.subject}`);
+      this.logger.log(
+        `[DEV] Email would be sent to ${options.to}: ${options.subject}` +
+          (options.attachments?.length ? ` (${options.attachments.length} attachment(s))` : ''),
+      );
       this.logger.debug(`[DEV] Email content: ${options.text ?? options.html}`);
       return;
     }
@@ -38,6 +41,12 @@ export class ResendEmailAdapter implements EmailPort {
         subject: options.subject,
         html: options.html,
         text: options.text,
+        ...(options.attachments?.length && {
+          attachments: options.attachments.map((a) => ({
+            filename: a.filename,
+            content: a.content,
+          })),
+        }),
       });
 
       if (result.error) {

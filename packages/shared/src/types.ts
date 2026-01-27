@@ -659,3 +659,29 @@ export interface CancelDowngradeResponse {
   currentPlan: Plan;
   message: string;
 }
+
+// ─── 10. Support ───────────────────────────────────────────────
+
+export type SupportCategory = 'bug' | 'question' | 'billing' | 'other';
+
+export const SUPPORT_CATEGORIES: Record<SupportCategory, string> = {
+  bug: 'Bug',
+  question: 'Question',
+  billing: 'Facturation',
+  other: 'Autre',
+};
+
+export const SUPPORT_MAX_SCREENSHOT_SIZE = 5 * 1024 * 1024; // 5 MB
+
+export interface CreateSupportRequestInput {
+  category: SupportCategory;
+  subject: string;
+  message: string;
+  screenshot?: string;
+  projectId?: string;
+}
+
+export interface SupportRequestResponse {
+  success: boolean;
+  messageId?: string;
+}

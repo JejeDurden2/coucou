@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect } from 'react';
-import { LogOut, Settings, CreditCard, ChevronDown, Zap } from 'lucide-react';
+import { LogOut, Settings, CreditCard, HelpCircle, ChevronDown, Zap } from 'lucide-react';
 
 import { useAuth } from '@/lib/auth-context';
 import { useProjects } from '@/hooks/use-projects';
@@ -18,6 +18,8 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
 
+const PROJECT_ID_REGEX = /\/projects\/([^/]+)/;
+
 interface DashboardLayoutProps {
   children: React.ReactNode;
 }
@@ -28,7 +30,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps): Rea
   const { user, isLoading, isAuthenticated, logout } = useAuth();
   const { data: projects } = useProjects();
 
-  const projectIdMatch = pathname.match(/\/projects\/([^/]+)/);
+  const projectIdMatch = pathname.match(PROJECT_ID_REGEX);
   const currentProjectId = projectIdMatch?.[1];
   const currentProject = projects?.find((p) => p.id === currentProjectId);
 
@@ -41,7 +43,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps): Rea
   if (isLoading) {
     return (
       <div className="min-h-dvh flex items-center justify-center">
-        <div className="animate-pulse text-muted-foreground">Chargement...</div>
+        <div className="animate-pulse text-muted-foreground">Chargement&hellip;</div>
       </div>
     );
   }
@@ -70,36 +72,45 @@ export default function DashboardLayout({ children }: DashboardLayoutProps): Rea
               <Logo size="sm" />
             </Link>
 
-            {hasProjects ? (
+            {hasProjects && (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button
                     variant="ghost"
-                    className="gap-2 text-sm font-medium"
+                    className="gap-2 text-sm font-medium max-w-[200px]"
                     aria-label="Sélectionner une marque"
                   >
-                    {currentProject?.brandName ?? 'Sélectionner une marque'}
-                    <ChevronDown className="size-4 text-muted-foreground" aria-hidden="true" />
+                    <span className="truncate">
+                      {currentProject?.brandName ?? 'Sélectionner une marque'}
+                    </span>
+                    <ChevronDown
+                      className="size-4 shrink-0 text-muted-foreground"
+                      aria-hidden="true"
+                    />
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="start" className="w-56">
                   {projects.map((project) => (
                     <DropdownMenuItem
                       key={project.id}
-                      onClick={() => router.push(`/projects/${project.id}`)}
+                      asChild
                       className={cn(currentProjectId === project.id && 'bg-accent/10')}
                     >
-                      <span className="font-medium">{project.brandName}</span>
+                      <Link href={`/projects/${project.id}`}>
+                        <span className="font-medium">{project.brandName}</span>
+                      </Link>
                     </DropdownMenuItem>
                   ))}
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={() => router.push('/projects/new')}>
-                    <Zap className="mr-2 size-4" aria-hidden="true" />
-                    Nouvelle marque
+                  <DropdownMenuItem asChild>
+                    <Link href="/projects/new">
+                      <Zap className="mr-2 size-4" aria-hidden="true" />
+                      Nouvelle marque
+                    </Link>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
-            ) : null}
+            )}
           </div>
 
           <div className="flex items-center gap-2">
@@ -120,13 +131,23 @@ export default function DashboardLayout({ children }: DashboardLayoutProps): Rea
                   <p className="text-xs text-primary mt-1 text-pretty">Plan {user?.plan}</p>
                 </div>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => router.push('/settings')}>
-                  <Settings className="mr-2 size-4" aria-hidden="true" />
-                  Paramètres
+                <DropdownMenuItem asChild>
+                  <Link href="/settings">
+                    <Settings className="mr-2 size-4" aria-hidden="true" />
+                    Paramètres
+                  </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => router.push('/billing')}>
-                  <CreditCard className="mr-2 size-4" aria-hidden="true" />
-                  Facturation
+                <DropdownMenuItem asChild>
+                  <Link href="/billing">
+                    <CreditCard className="mr-2 size-4" aria-hidden="true" />
+                    Facturation
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link href="/settings/support">
+                    <HelpCircle className="mr-2 size-4" aria-hidden="true" />
+                    Support
+                  </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={handleLogout} className="text-red-500">

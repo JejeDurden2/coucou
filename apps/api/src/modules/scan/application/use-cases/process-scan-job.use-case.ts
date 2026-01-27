@@ -2,7 +2,7 @@ import { forwardRef, Inject, Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Plan, ScanJobStatus } from '@prisma/client';
 
-import { Result } from '../../../../common';
+import { Result, withSpan } from '../../../../common';
 import type { DomainError } from '../../../../common/errors/domain-error';
 import { NotFoundError } from '../../../../common/errors/domain-error';
 import { EmailQueueService } from '../../../../infrastructure/queue/email-queue.service';
@@ -52,117 +52,129 @@ export class ProcessScanJobUseCase {
   ) {}
 
   async execute(data: ScanJobData): Promise<Result<ScanJobResult, DomainError>> {
-    const { scanJobId, projectId, userId, plan } = data;
+    return withSpan(
+      'scan-module',
+      'ProcessScanJobUseCase.execute',
+      {
+        'scan.jobId': data.scanJobId,
+        'scan.projectId': data.projectId,
+        'scan.userId': data.userId,
+        'scan.plan': data.plan,
+      },
+      async () => {
+        const { scanJobId, projectId, userId, plan } = data;
 
-    // Verify job exists
-    const scanJob = await this.scanJobRepository.findById(scanJobId);
-    if (!scanJob) {
-      return Result.err(new NotFoundError('ScanJob', scanJobId));
-    }
-
-    // Mark job as processing
-    await this.scanJobRepository.update(scanJobId, {
-      status: ScanJobStatus.PROCESSING,
-      startedAt: new Date(),
-    });
-
-    this.logger.log(`Processing scan job ${scanJobId} for project ${projectId}`);
-
-    const project = await this.projectRepository.findById(projectId);
-    if (!project) {
-      await this.scanJobRepository.update(scanJobId, {
-        status: ScanJobStatus.FAILED,
-        errorMessage: `Project ${projectId} not found`,
-        completedAt: new Date(),
-      });
-      return Result.err(new NotFoundError('Project', projectId));
-    }
-
-    // Single prompt scan or project-wide scan
-    let prompts: Array<{ id: string; content: string; lastScannedAt: Date | null }>;
-    if (scanJob.promptId) {
-      const prompt = await this.promptRepository.findById(scanJob.promptId);
-      if (!prompt) {
-        await this.scanJobRepository.update(scanJobId, {
-          status: ScanJobStatus.FAILED,
-          errorMessage: `Prompt ${scanJob.promptId} not found`,
-          completedAt: new Date(),
-        });
-        return Result.err(new NotFoundError('Prompt', scanJob.promptId));
-      }
-      prompts = [prompt];
-    } else {
-      prompts = await this.promptRepository.findActiveByProjectId(projectId);
-    }
-
-    let scansCreated = 0;
-    let hasAtLeastOneSuccess = false;
-    const errorMessages: string[] = [];
-
-    for (const prompt of prompts) {
-      try {
-        const result = await this.processPrompt(prompt, project, plan);
-
-        // Increment progress
-        await this.scanJobRepository.incrementProgress(scanJobId, result.success);
-
-        if (result.success) {
-          hasAtLeastOneSuccess = true;
-          scansCreated++;
-        } else if (result.reason) {
-          this.logger.debug(`Prompt ${prompt.id} skipped: ${result.reason}`);
+        // Verify job exists
+        const scanJob = await this.scanJobRepository.findById(scanJobId);
+        if (!scanJob) {
+          return Result.err(new NotFoundError('ScanJob', scanJobId));
         }
-      } catch (error) {
-        await this.scanJobRepository.incrementProgress(scanJobId, false);
-        const errorMsg = error instanceof Error ? error.message : 'Unknown error';
-        errorMessages.push(`Prompt ${prompt.id}: ${errorMsg}`);
-        this.logger.error(`Error processing prompt ${prompt.id}:`, error);
-      }
-    }
 
-    // Determine final status
-    const updatedJob = await this.scanJobRepository.findById(scanJobId);
-    const totalProcessed = updatedJob?.processedPrompts ?? prompts.length;
-    const successCount = updatedJob?.successCount ?? 0;
-    const failureCount = updatedJob?.failureCount ?? 0;
+        // Mark job as processing
+        await this.scanJobRepository.update(scanJobId, {
+          status: ScanJobStatus.PROCESSING,
+          startedAt: new Date(),
+        });
 
-    let finalStatus: ScanJobStatus;
-    if (successCount === totalProcessed && failureCount === 0) {
-      finalStatus = ScanJobStatus.COMPLETED;
-    } else if (hasAtLeastOneSuccess) {
-      finalStatus = ScanJobStatus.PARTIAL;
-    } else {
-      finalStatus = ScanJobStatus.FAILED;
-    }
+        this.logger.log(`Processing scan job ${scanJobId} for project ${projectId}`);
 
-    await this.scanJobRepository.update(scanJobId, {
-      status: finalStatus,
-      completedAt: new Date(),
-      errorMessage: errorMessages.length > 0 ? errorMessages.join('; ') : undefined,
-    });
+        const project = await this.projectRepository.findById(projectId);
+        if (!project) {
+          await this.scanJobRepository.update(scanJobId, {
+            status: ScanJobStatus.FAILED,
+            errorMessage: `Project ${projectId} not found`,
+            completedAt: new Date(),
+          });
+          return Result.err(new NotFoundError('Project', projectId));
+        }
 
-    await this.projectRepository.updateLastScannedAt(project.id, new Date());
-    await this.userRepository.updateLastScanAt(userId, new Date());
+        // Single prompt scan or project-wide scan
+        let prompts: Array<{ id: string; content: string; lastScannedAt: Date | null }>;
+        if (scanJob.promptId) {
+          const prompt = await this.promptRepository.findById(scanJob.promptId);
+          if (!prompt) {
+            await this.scanJobRepository.update(scanJobId, {
+              status: ScanJobStatus.FAILED,
+              errorMessage: `Prompt ${scanJob.promptId} not found`,
+              completedAt: new Date(),
+            });
+            return Result.err(new NotFoundError('Prompt', scanJob.promptId));
+          }
+          prompts = [prompt];
+        } else {
+          prompts = await this.promptRepository.findActiveByProjectId(projectId);
+        }
 
-    // Send post-scan teaser email for SOLO/PRO users on auto scans
-    if (data.source === 'auto' && (plan === Plan.SOLO || plan === Plan.PRO)) {
-      await this.trySendPostScanEmail(userId, project);
-    }
+        let scansCreated = 0;
+        let hasAtLeastOneSuccess = false;
+        const errorMessages: string[] = [];
 
-    this.logger.log(
-      `Completed scan job ${scanJobId}: status=${finalStatus}, scans=${scansCreated}`,
+        for (const prompt of prompts) {
+          try {
+            const result = await this.processPrompt(prompt, project, plan);
+
+            // Increment progress
+            await this.scanJobRepository.incrementProgress(scanJobId, result.success);
+
+            if (result.success) {
+              hasAtLeastOneSuccess = true;
+              scansCreated++;
+            } else if (result.reason) {
+              this.logger.debug(`Prompt ${prompt.id} skipped: ${result.reason}`);
+            }
+          } catch (error) {
+            await this.scanJobRepository.incrementProgress(scanJobId, false);
+            const errorMsg = error instanceof Error ? error.message : 'Unknown error';
+            errorMessages.push(`Prompt ${prompt.id}: ${errorMsg}`);
+            this.logger.error(`Error processing prompt ${prompt.id}:`, error);
+          }
+        }
+
+        // Determine final status
+        const updatedJob = await this.scanJobRepository.findById(scanJobId);
+        const totalProcessed = updatedJob?.processedPrompts ?? prompts.length;
+        const successCount = updatedJob?.successCount ?? 0;
+        const failureCount = updatedJob?.failureCount ?? 0;
+
+        let finalStatus: ScanJobStatus;
+        if (successCount === totalProcessed && failureCount === 0) {
+          finalStatus = ScanJobStatus.COMPLETED;
+        } else if (hasAtLeastOneSuccess) {
+          finalStatus = ScanJobStatus.PARTIAL;
+        } else {
+          finalStatus = ScanJobStatus.FAILED;
+        }
+
+        await this.scanJobRepository.update(scanJobId, {
+          status: finalStatus,
+          completedAt: new Date(),
+          errorMessage: errorMessages.length > 0 ? errorMessages.join('; ') : undefined,
+        });
+
+        await this.projectRepository.updateLastScannedAt(project.id, new Date());
+        await this.userRepository.updateLastScanAt(userId, new Date());
+
+        // Send post-scan teaser email for SOLO/PRO users on auto scans
+        if (data.source === 'auto' && (plan === Plan.SOLO || plan === Plan.PRO)) {
+          await this.trySendPostScanEmail(userId, project);
+        }
+
+        this.logger.log(
+          `Completed scan job ${scanJobId}: status=${finalStatus}, scans=${scansCreated}`,
+        );
+
+        return Result.ok({
+          status:
+            finalStatus === ScanJobStatus.COMPLETED
+              ? 'completed'
+              : finalStatus === ScanJobStatus.PARTIAL
+                ? 'partial'
+                : 'failed',
+          scansCreated,
+          errorMessage: errorMessages.length > 0 ? errorMessages.join('; ') : undefined,
+        });
+      },
     );
-
-    return Result.ok({
-      status:
-        finalStatus === ScanJobStatus.COMPLETED
-          ? 'completed'
-          : finalStatus === ScanJobStatus.PARTIAL
-            ? 'partial'
-            : 'failed',
-      scansCreated,
-      errorMessage: errorMessages.length > 0 ? errorMessages.join('; ') : undefined,
-    });
   }
 
   private async processPrompt(

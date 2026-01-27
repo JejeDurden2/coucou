@@ -20,6 +20,8 @@ import type {
   CancelDowngradeResponse,
   LatestSentimentResponse,
   SentimentHistory,
+  CreateSupportRequestInput,
+  SupportRequestResponse,
 } from '@coucou-ia/shared';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001';
@@ -320,6 +322,14 @@ class ApiClient {
 
   async getSentimentHistory(projectId: string): Promise<SentimentHistory> {
     return this.fetch<SentimentHistory>(`/projects/${projectId}/sentiment/history`);
+  }
+
+  // Support
+  async sendSupportRequest(data: CreateSupportRequestInput): Promise<SupportRequestResponse> {
+    return this.fetch<SupportRequestResponse>('/support/contact', {
+      method: 'POST',
+      body: JSON.stringify(data),
+    });
   }
 }
 

@@ -5,6 +5,7 @@ import { APP_GUARD } from '@nestjs/core';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { LoggerModule } from './common/logger';
 import { AuthModule } from './modules/auth';
 import { BillingModule } from './modules/billing/billing.module';
 import { DashboardModule } from './modules/dashboard';
@@ -15,6 +16,7 @@ import { ProjectModule } from './modules/project';
 import { PromptModule } from './modules/prompt';
 import { ScanModule } from './modules/scan';
 import { SentimentModule } from './modules/sentiment';
+import { SupportModule } from './modules/support';
 import { AnthropicModule } from './common/infrastructure/anthropic/anthropic.module';
 import { QueueModule, BullBoardConfigModule } from './infrastructure/queue';
 import { ProcessorsModule } from './infrastructure/processors.module';
@@ -47,6 +49,7 @@ import { PrismaModule } from './prisma';
         limit: 50, // 50 scan operations per hour (global fallback)
       },
     ]),
+    LoggerModule,
     AnthropicModule,
     QueueModule,
     PrismaModule,
@@ -60,6 +63,7 @@ import { PrismaModule } from './prisma';
     DashboardModule,
     OnboardingModule,
     NotificationModule,
+    SupportModule,
     BullBoardConfigModule,
     ProcessorsModule, // Must be last - contains BullMQ processors
   ],

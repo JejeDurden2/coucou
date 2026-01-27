@@ -48,7 +48,13 @@ import {
   RecommendationsLockedBanner,
 } from '@/components/features/recommendations';
 import { SentimentTab } from '@/features/sentiment';
-import { getScanAvailability, Plan, PLAN_LIMITS, type PromptCategory, getModelDisplayName } from '@coucou-ia/shared';
+import {
+  getScanAvailability,
+  Plan,
+  PLAN_LIMITS,
+  type PromptCategory,
+  getModelDisplayName,
+} from '@coucou-ia/shared';
 import { cn } from '@/lib/utils';
 import { formatRelativeTime } from '@/lib/format';
 import { NextScanIndicator } from '@/components/dashboard/next-scan-indicator';
