@@ -19,7 +19,8 @@ import { ProblemSection } from '@/components/features/landing/problem-section';
 import { FeaturesSection } from '@/components/features/landing/features-section';
 import { HowItWorksSection } from '@/components/features/landing/how-it-works-section';
 import { DashboardMockup } from '@/components/landing/dashboard-mockup';
-import { FAQSection, faqs } from '@/components/landing/faq-section';
+import { faqs } from '@/components/landing/faq-data';
+import { FAQSection } from '@/components/landing/faq-section';
 import { MidPageCTA } from '@/components/landing/mid-page-cta';
 
 const plans = [
