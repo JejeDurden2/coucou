@@ -20,6 +20,7 @@ import { Logo } from '@/components/ui/logo';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Header } from '@/components/layout/header';
+import { ProblemSection } from '@/components/features/landing/problem-section';
 
 const features = [
   {
@@ -215,46 +216,7 @@ export default function LandingPage() {
         </section>
 
         {/* Problem Section */}
-        <section className="py-20 px-4 bg-zinc-900/50">
-          <div className="container mx-auto max-w-5xl">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-balance">
-                Le problème avec la recherche IA
-              </h2>
-              <p className="text-muted-foreground max-w-2xl mx-auto text-pretty">
-                De plus en plus de personnes utilisent l&apos;IA pour trouver des produits et
-                services. Si vous n&apos;êtes pas visible, vous êtes invisible.
-              </p>
-            </div>
-
-            <div className="grid md:grid-cols-3 gap-6">
-              <Card className="bg-red-500/5 border-red-500/20">
-                <CardContent className="pt-6">
-                  <div className="text-4xl font-bold text-red-500 mb-2 tabular-nums">67%</div>
-                  <p className="text-sm text-muted-foreground text-pretty">
-                    des utilisateurs font confiance aux recommandations de l&apos;IA
-                  </p>
-                </CardContent>
-              </Card>
-              <Card className="bg-amber-500/5 border-amber-500/20">
-                <CardContent className="pt-6">
-                  <div className="text-4xl font-bold text-amber-400 mb-2 tabular-nums">25%</div>
-                  <p className="text-sm text-muted-foreground text-pretty">
-                    de recherches Google en moins depuis l&apos;arrivée de ChatGPT
-                  </p>
-                </CardContent>
-              </Card>
-              <Card className="bg-primary/5 border-primary/20">
-                <CardContent className="pt-6">
-                  <div className="text-4xl font-bold text-primary mb-2 tabular-nums">+40%</div>
-                  <p className="text-sm text-muted-foreground text-pretty">
-                    de conversions pour les marques citées en premier par l&apos;IA
-                  </p>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-        </section>
+        <ProblemSection />
 
         {/* GEO Educational Section */}
         <section id="geo" className="py-20 px-4 scroll-mt-20">
