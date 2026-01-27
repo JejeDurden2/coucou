@@ -32,7 +32,7 @@ export function HowItWorksSection() {
         <div className="grid md:grid-cols-3 gap-8 relative">
           {STEPS.map((step) => (
             <div key={step.number} className="text-center">
-              <div className="text-6xl font-display text-primary/20 font-bold mb-4 tabular-nums">
+              <div className="text-6xl font-display text-primary/40 font-bold mb-4 tabular-nums">
                 {step.number}
               </div>
               <h3 className="text-lg font-semibold mb-2 text-balance">{step.title}</h3>

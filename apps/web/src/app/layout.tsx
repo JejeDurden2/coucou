@@ -32,7 +32,7 @@ export const metadata: Metadata = {
     template: '%s | Coucou IA',
   },
   description:
-    'Analysez vos mentions sur ChatGPT, Claude et Gemini. Suivez votre part de voix IA et surveillez vos concurrents. Premier outil français de monitoring recherche IA. Essai gratuit.',
+    'Analysez vos mentions sur ChatGPT et Claude. Suivez votre part de voix IA et surveillez vos concurrents. Premier outil français de monitoring recherche IA. Essai gratuit.',
   keywords: [
     'surveillance visibilité IA',
     'monitoring recherche IA',
@@ -71,12 +71,12 @@ export const metadata: Metadata = {
     siteName: 'Coucou IA',
     title: 'Coucou IA — Surveillance visibilité recherche IA',
     description:
-      'Analysez vos mentions sur ChatGPT, Claude, Gemini. Premier outil français de monitoring recherche IA.',
+      'Analysez vos mentions sur ChatGPT et Claude. Premier outil français de monitoring recherche IA.',
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Coucou IA — Surveillance visibilité recherche IA',
-    description: 'Analysez vos mentions sur ChatGPT, Claude, Gemini. Premier outil français.',
+    description: 'Analysez vos mentions sur ChatGPT et Claude. Premier outil français.',
     creator: '@coucouia',
   },
   alternates: {

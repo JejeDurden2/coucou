@@ -145,8 +145,8 @@ export default function LandingPage() {
               <p className="text-lg text-muted-foreground mb-6 text-pretty">
                 Le <strong className="text-foreground">GEO (Generative Engine Optimization)</strong>{' '}
                 est l&apos;optimisation de la visibilité de votre marque dans les réponses générées
-                par les intelligences artificielles comme ChatGPT, Claude, Gemini ou Perplexity.
-                C&apos;est l&apos;équivalent du SEO pour l&apos;ère de l&apos;IA conversationnelle.
+                par les intelligences artificielles comme ChatGPT et Claude. C&apos;est
+                l&apos;équivalent du SEO pour l&apos;ère de l&apos;IA conversationnelle.
               </p>
 
               <div className="grid md:grid-cols-2 gap-6 mb-8">
@@ -273,7 +273,9 @@ export default function LandingPage() {
                 >
                   {plan.popular && (
                     <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                      <Badge>Recommandé</Badge>
+                      <Badge className="bg-primary text-primary-foreground border-primary shadow-sm">
+                        Recommandé
+                      </Badge>
                     </div>
                   )}
                   <CardHeader>

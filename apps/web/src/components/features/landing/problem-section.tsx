@@ -42,6 +42,7 @@ const STATS: Stat[] = [
   },
 ];
 
+const STAT_TARGETS = STATS.map((s) => s.value);
 const ANIMATION_DURATION = 1500;
 
 function easeOutQuart(t: number): number {
@@ -106,8 +107,7 @@ export function ProblemSection() {
     };
   }, [handleIntersect]);
 
-  const targets = STATS.map((s) => s.value);
-  const displayValues = useCountUp(targets, isVisible);
+  const displayValues = useCountUp(STAT_TARGETS, isVisible);
 
   return (
     <section ref={sectionRef} className="py-20 px-4 bg-zinc-900/50">

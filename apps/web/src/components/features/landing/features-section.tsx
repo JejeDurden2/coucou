@@ -9,14 +9,14 @@ interface Feature {
   wide: boolean;
 }
 
-const LLM_PROVIDERS = ['ChatGPT', 'Claude', 'Gemini', 'Perplexity'];
+const LLM_PROVIDERS = ['ChatGPT', 'Claude'];
 
 const FEATURES: Feature[] = [
   {
     icon: Layers,
     title: 'Surveillance multi-LLM',
     description:
-      "Analysez vos mentions sur ChatGPT, Claude, Gemini et Perplexity en un seul dashboard. Détectez automatiquement si l'IA recommande votre marque ou vos concurrents.",
+      "Analysez vos mentions sur ChatGPT et Claude en un seul dashboard. Détectez automatiquement si l'IA recommande votre marque ou vos concurrents.",
     wide: true,
   },
   {
