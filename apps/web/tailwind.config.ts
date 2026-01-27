@@ -11,6 +11,7 @@ const config: Config = {
     extend: {
       fontFamily: {
         sans: ['var(--font-sans)', 'system-ui', 'sans-serif'],
+        display: ['var(--font-display)', 'system-ui', 'sans-serif'],
         mono: ['var(--font-mono)', 'monospace'],
       },
       colors: {
@@ -70,6 +71,7 @@ const config: Config = {
       animation: {
         wave: 'wave 0.5s ease-in-out',
         'count-up': 'count-up 0.5s ease-out forwards',
+        'fade-in-up': 'fade-in-up 0.6s ease-out forwards',
       },
     },
   },

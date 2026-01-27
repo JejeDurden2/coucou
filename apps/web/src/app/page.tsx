@@ -5,11 +5,9 @@ import {
   Bot,
   Building2,
   Check,
-  ChevronDown,
   Eye,
   Rocket,
   Search,
-  Shield,
   ShoppingBag,
   Sparkles,
   TrendingUp,
@@ -21,6 +19,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Header } from '@/components/layout/header';
 import { ProblemSection } from '@/components/features/landing/problem-section';
+import { DashboardMockup } from '@/components/landing/dashboard-mockup';
+import { MidPageCTA } from '@/components/landing/mid-page-cta';
 
 const features = [
   {
@@ -71,6 +71,7 @@ const plans = [
     features: PLAN_PRICING[Plan.FREE].features,
     cta: 'Commencer gratuitement',
     popular: false,
+    reassurance: 'Commencer sans engagement',
   },
   {
     name: 'Solo',
@@ -78,7 +79,8 @@ const plans = [
     description: PLAN_PRICING[Plan.SOLO].description,
     features: PLAN_PRICING[Plan.SOLO].features,
     cta: 'Choisir Solo',
-    popular: false,
+    popular: true,
+    reassurance: 'Annulable à tout moment',
   },
   {
     name: 'Pro',
@@ -86,7 +88,8 @@ const plans = [
     description: PLAN_PRICING[Plan.PRO].description,
     features: PLAN_PRICING[Plan.PRO].features,
     cta: 'Choisir Pro',
-    popular: PLAN_PRICING[Plan.PRO].isPopular ?? false,
+    popular: false,
+    reassurance: 'Support prioritaire inclus',
   },
 ];
 
@@ -135,58 +138,46 @@ export default function LandingPage() {
 
       <main>
         {/* Hero Section */}
-        <section className="relative pt-32 pb-20 px-4 overflow-hidden grid-pattern">
-          <div className="container mx-auto max-w-5xl text-center relative z-10">
-            <Badge className="mb-6" variant="outline">
-              <Sparkles className="mr-1 size-3" aria-hidden="true" />
-              Nouveau: Support de GPT-5.2
-            </Badge>
+        <section className="relative pt-24 pb-20 px-4 overflow-hidden grid-pattern lg:pt-32">
+          <div className="container mx-auto max-w-6xl relative z-10">
+            <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
+              {/* Left column - Text */}
+              <div className="text-center lg:text-left">
+                <Badge className="mb-6" variant="outline">
+                  <Sparkles className="mr-1 size-3" aria-hidden="true" />
+                  Nouveau : Support GPT-5.2 et Claude Opus 4.5
+                </Badge>
 
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 text-balance">
-              <span className="text-primary">L&apos;IA parle-t-elle</span>
-              <br />
-              de votre marque ?
-            </h1>
+                <h1 className="font-display text-4xl font-bold mb-6 text-balance md:text-5xl lg:text-6xl">
+                  L&apos;outil <span className="text-primary">GEO</span> pour surveiller votre
+                  visibilité IA
+                </h1>
 
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-8 text-pretty">
-              Surveillez et améliorez la visibilité de votre marque dans les réponses de{' '}
-              <span className="text-foreground font-medium">ChatGPT</span>,{' '}
-              <span className="text-foreground font-medium">Claude</span> et autres IA. Le GEO,
-              c&apos;est le nouveau SEO.
-            </p>
+                <p className="text-lg text-muted-foreground mx-auto mb-8 max-w-lg text-pretty lg:mx-0 lg:text-xl">
+                  Mesurez si <span className="text-foreground font-medium">ChatGPT</span> et{' '}
+                  <span className="text-foreground font-medium">Claude</span> recommandent votre
+                  marque — ou vos concurrents.
+                </p>
 
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
-              <Button size="lg" asChild>
-                <Link href="/register">
-                  Analyser ma marque gratuitement
-                  <ArrowRight className="ml-2 size-4" aria-hidden="true" />
-                </Link>
-              </Button>
-              <Button size="lg" variant="outline" asChild>
-                <Link href="#features">Découvrir</Link>
-              </Button>
-            </div>
+                <div className="flex flex-col items-center gap-4 sm:flex-row lg:items-start mb-6">
+                  <Button size="lg" asChild>
+                    <Link href="/register">
+                      Analyser ma marque gratuitement
+                      <ArrowRight className="ml-2 size-4" aria-hidden="true" />
+                    </Link>
+                  </Button>
+                </div>
 
-            {/* Product benefits */}
-            <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-muted-foreground">
-              <div className="flex items-center gap-2">
-                <Eye className="size-4" aria-hidden="true" />
-                <span>Multi-plateformes</span>
+                <p className="text-sm text-muted-foreground">
+                  Sans carte bancaire · Résultat en 2 minutes · RGPD compliant
+                </p>
               </div>
-              <div className="flex items-center gap-2">
-                <BarChart3 className="size-4" aria-hidden="true" />
-                <span>Benchmark concurrentiel</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Shield className="size-4" aria-hidden="true" />
-                <span>RGPD compliant</span>
+
+              {/* Right column - Dashboard Mockup */}
+              <div>
+                <DashboardMockup />
               </div>
             </div>
-          </div>
-
-          {/* Scroll indicator */}
-          <div className="absolute bottom-8 left-1/2 -translate-x-1/2">
-            <ChevronDown className="size-6 text-muted-foreground" aria-hidden="true" />
           </div>
         </section>
 
@@ -399,6 +390,9 @@ export default function LandingPage() {
           </div>
         </section>
 
+        {/* Mid-Page CTA */}
+        <MidPageCTA />
+
         {/* Pricing Section */}
         <section id="pricing" className="py-20 px-4 scroll-mt-20">
           <div className="container mx-auto max-w-6xl">
@@ -414,16 +408,25 @@ export default function LandingPage() {
 
             <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
               {plans.map((plan) => (
-                <Card key={plan.name} className={plan.popular ? 'border-primary/50 relative' : ''}>
+                <Card
+                  key={plan.name}
+                  className={
+                    plan.popular
+                      ? 'border-primary ring-1 ring-primary/20 relative order-first md:order-none'
+                      : ''
+                  }
+                >
                   {plan.popular && (
                     <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                      <Badge>Le plus populaire</Badge>
+                      <Badge>Recommandé</Badge>
                     </div>
                   )}
                   <CardHeader>
                     <CardTitle className="text-lg">{plan.name}</CardTitle>
                     <div className="mt-2">
-                      <span className="text-4xl font-bold tabular-nums">{plan.price}€</span>
+                      <span className="text-4xl font-display font-bold tabular-nums">
+                        {plan.price}€
+                      </span>
                       <span className="text-muted-foreground">/mois</span>
                     </div>
                     <p className="text-sm text-muted-foreground text-pretty">{plan.description}</p>
@@ -432,7 +435,7 @@ export default function LandingPage() {
                     <ul className="space-y-3 mb-6">
                       {plan.features.map((feature) => (
                         <li key={feature} className="flex items-center gap-2 text-sm">
-                          <Check className="size-4 text-primary" aria-hidden="true" />
+                          <Check className="size-4 text-success" aria-hidden="true" />
                           {feature}
                         </li>
                       ))}
@@ -444,6 +447,9 @@ export default function LandingPage() {
                     >
                       <Link href="/register">{plan.cta}</Link>
                     </Button>
+                    <p className="text-xs text-muted-foreground text-center mt-2">
+                      {plan.reassurance}
+                    </p>
                   </CardContent>
                 </Card>
               ))}
