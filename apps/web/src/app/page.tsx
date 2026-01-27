@@ -3,10 +3,14 @@ import {
   ArrowRight,
   BarChart3,
   Bot,
+  Building2,
   Check,
   ChevronDown,
   Eye,
+  Rocket,
+  Search,
   Shield,
+  ShoppingBag,
   Sparkles,
   TrendingUp,
 } from 'lucide-react';
@@ -182,6 +186,31 @@ export default function LandingPage() {
           {/* Scroll indicator */}
           <div className="absolute bottom-8 left-1/2 -translate-x-1/2">
             <ChevronDown className="size-6 text-muted-foreground" aria-hidden="true" />
+          </div>
+        </section>
+
+        {/* Social Proof Banner */}
+        <section className="py-12 px-4">
+          <div className="container mx-auto max-w-4xl text-center">
+            <p className="text-sm text-muted-foreground mb-6">
+              Conçu pour les équipes qui veulent prendre de l&apos;avance
+            </p>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {[
+                { icon: Rocket, label: 'Startups Tech' },
+                { icon: Search, label: 'Experts SEO' },
+                { icon: ShoppingBag, label: 'E-commerce' },
+                { icon: Building2, label: 'Agences Marketing' },
+              ].map(({ icon: Icon, label }) => (
+                <div
+                  key={label}
+                  className="flex items-center justify-center gap-2 px-4 py-3 rounded-xl border border-white/10 bg-white/5 backdrop-blur-md text-sm font-medium text-muted-foreground"
+                >
+                  <Icon className="size-4 text-primary" aria-hidden="true" />
+                  <span>{label}</span>
+                </div>
+              ))}
+            </div>
           </div>
         </section>
 
