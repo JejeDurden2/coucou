@@ -1,6 +1,7 @@
 'use client';
 
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { cn } from '@/lib/utils';
 
 interface Stat {
   value: number;
@@ -86,26 +87,24 @@ export function ProblemSection() {
   const sectionRef = useRef<HTMLElement>(null);
   const [isVisible, setIsVisible] = useState(false);
 
-  const handleIntersect = useCallback((entries: IntersectionObserverEntry[]) => {
-    if (entries[0]?.isIntersecting) {
-      setIsVisible(true);
-    }
-  }, []);
-
   useEffect(() => {
     const node = sectionRef.current;
     if (!node) return;
 
-    const observer = new IntersectionObserver(handleIntersect, {
-      threshold: 0.3,
-    });
+    const observer = new IntersectionObserver(
+      (entries, obs) => {
+        if (entries[0]?.isIntersecting) {
+          setIsVisible(true);
+          obs.disconnect();
+        }
+      },
+      { threshold: 0.3 },
+    );
 
     observer.observe(node);
 
-    return () => {
-      observer.unobserve(node);
-    };
-  }, [handleIntersect]);
+    return () => observer.disconnect();
+  }, []);
 
   const displayValues = useCountUp(STAT_TARGETS, isVisible);
 
@@ -126,10 +125,10 @@ export function ProblemSection() {
           {STATS.map((stat, i) => (
             <div
               key={stat.label}
-              className={`rounded-lg border p-6 backdrop-blur-sm ${stat.color}`}
+              className={cn('rounded-lg border p-6 backdrop-blur-sm', stat.color)}
             >
               <div
-                className={`font-display text-4xl font-bold tabular-nums mb-2 ${stat.textColor}`}
+                className={cn('font-display text-4xl font-bold tabular-nums mb-2', stat.textColor)}
               >
                 {stat.prefix}
                 {displayValues[i]}

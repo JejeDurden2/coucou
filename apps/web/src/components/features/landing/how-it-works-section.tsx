@@ -18,6 +18,11 @@ const STEPS = [
   },
 ];
 
+const CONNECTORS = [
+  { left: 'calc(16.666% + 3rem)', right: 'calc(50% + 3rem)' },
+  { left: 'calc(50% + 3rem)', right: 'calc(16.666% + 3rem)' },
+] as const;
+
 export function HowItWorksSection() {
   return (
     <section className="py-20 px-4 bg-zinc-900/50">
@@ -40,17 +45,14 @@ export function HowItWorksSection() {
             </div>
           ))}
 
-          {/* Dotted connectors — desktop only */}
-          <div
-            aria-hidden="true"
-            className="hidden md:block absolute top-8 border-t-2 border-dashed border-zinc-700"
-            style={{ left: 'calc(16.666% + 3rem)', right: 'calc(50% + 3rem)' }}
-          />
-          <div
-            aria-hidden="true"
-            className="hidden md:block absolute top-8 border-t-2 border-dashed border-zinc-700"
-            style={{ left: 'calc(50% + 3rem)', right: 'calc(16.666% + 3rem)' }}
-          />
+          {CONNECTORS.map((pos, i) => (
+            <div
+              key={i}
+              aria-hidden="true"
+              className="hidden md:block absolute top-8 border-t-2 border-dashed border-zinc-700"
+              style={{ left: pos.left, right: pos.right }}
+            />
+          ))}
         </div>
       </div>
     </section>

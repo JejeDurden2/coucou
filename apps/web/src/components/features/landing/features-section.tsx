@@ -1,6 +1,7 @@
 import { BarChart3, Heart, Layers, Lightbulb, TrendingUp } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import { cn } from '@/lib/utils';
 
 interface Feature {
   icon: LucideIcon;
@@ -9,7 +10,7 @@ interface Feature {
   wide: boolean;
 }
 
-const LLM_PROVIDERS = ['ChatGPT', 'Claude'];
+const LLM_PROVIDERS = ['ChatGPT', 'Claude'] as const;
 
 const FEATURES: Feature[] = [
   {
@@ -49,6 +50,44 @@ const FEATURES: Feature[] = [
   },
 ];
 
+function FeatureIcon({ icon: Icon }: { icon: LucideIcon }) {
+  return (
+    <div className="size-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
+      <Icon className="size-6 text-primary" aria-hidden="true" />
+    </div>
+  );
+}
+
+function FeatureContent({ feature }: { feature: Feature }) {
+  return (
+    <>
+      <FeatureIcon icon={feature.icon} />
+      <h3 className="text-lg font-semibold mb-2 text-balance">{feature.title}</h3>
+      <p className="text-sm text-muted-foreground text-pretty">{feature.description}</p>
+    </>
+  );
+}
+
+function WideFeatureContent({ feature }: { feature: Feature }) {
+  return (
+    <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-6">
+      <div>
+        <FeatureContent feature={feature} />
+      </div>
+      <div className="flex flex-wrap md:flex-col gap-2 md:shrink-0">
+        {LLM_PROVIDERS.map((provider) => (
+          <span
+            key={provider}
+            className="rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-medium text-muted-foreground"
+          >
+            {provider}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export function FeaturesSection() {
   return (
     <section id="features" className="py-20 px-4 scroll-mt-20">
@@ -68,38 +107,15 @@ export function FeaturesSection() {
           {FEATURES.map((feature) => (
             <div
               key={feature.title}
-              className={`group rounded-xl border border-white/10 bg-white/5 backdrop-blur-md p-6 hover:border-primary/30 transition-colors ${feature.wide ? 'md:col-span-2' : ''}`}
+              className={cn(
+                'group rounded-xl border border-white/10 bg-white/5 backdrop-blur-md p-6 hover:border-primary/30 transition-colors',
+                feature.wide && 'md:col-span-2',
+              )}
             >
               {feature.wide ? (
-                <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-6">
-                  <div>
-                    <div className="size-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
-                      <feature.icon className="size-6 text-primary" aria-hidden="true" />
-                    </div>
-                    <h3 className="text-lg font-semibold mb-2 text-balance">{feature.title}</h3>
-                    <p className="text-sm text-muted-foreground text-pretty">
-                      {feature.description}
-                    </p>
-                  </div>
-                  <div className="flex flex-wrap md:flex-col gap-2 md:shrink-0">
-                    {LLM_PROVIDERS.map((provider) => (
-                      <span
-                        key={provider}
-                        className="rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-medium text-muted-foreground"
-                      >
-                        {provider}
-                      </span>
-                    ))}
-                  </div>
-                </div>
+                <WideFeatureContent feature={feature} />
               ) : (
-                <>
-                  <div className="size-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
-                    <feature.icon className="size-6 text-primary" aria-hidden="true" />
-                  </div>
-                  <h3 className="text-lg font-semibold mb-2 text-balance">{feature.title}</h3>
-                  <p className="text-sm text-muted-foreground text-pretty">{feature.description}</p>
-                </>
+                <FeatureContent feature={feature} />
               )}
             </div>
           ))}

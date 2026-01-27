@@ -75,7 +75,6 @@
   }
 }
 
-/* Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -94,17 +93,14 @@
   background: rgb(63 63 70);
 }
 
-/* Selection - Violet tint */
 ::selection {
   background: rgb(var(--primary) / 0.2);
 }
 
-/* Focus - Violet ring */
 :focus-visible {
   @apply outline-none ring-2 ring-primary/50 ring-offset-2 ring-offset-background;
 }
 
-/* Custom animations */
 @keyframes wave {
   0%,
   100% {
@@ -129,14 +125,6 @@
   }
 }
 
-.animate-wave {
-  animation: wave 0.5s ease-in-out;
-}
-
-.animate-count-up {
-  animation: count-up 0.5s ease-out forwards;
-}
-
 @keyframes fade-in-up {
   from {
     opacity: 0;
@@ -145,5 +133,15 @@
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-wave,
+  .animate-count-up,
+  .animate-fade-in-up {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
   }
 }

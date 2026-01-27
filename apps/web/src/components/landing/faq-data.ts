@@ -1,4 +1,9 @@
-export const faqs = [
+interface FAQ {
+  question: string;
+  answer: string;
+}
+
+export const faqs: FAQ[] = [
   {
     question: "Qu'est-ce que le GEO (Generative Engine Optimization) ?",
     answer:

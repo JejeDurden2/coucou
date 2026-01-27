@@ -10,11 +10,18 @@ interface HeaderProps {
   variant?: 'default' | 'blog';
 }
 
-const NAV_LINKS = [
-  { label: 'Fonctionnalités', anchor: '#features' },
-  { label: 'Tarifs', anchor: '#pricing' },
-  { label: 'FAQ', anchor: '#faq' },
-] as const;
+interface NavLink {
+  label: string;
+  href: string;
+  isAbsolute?: boolean;
+}
+
+const NAV_LINKS: NavLink[] = [
+  { label: 'Fonctionnalités', href: '#features' },
+  { label: 'Tarifs', href: '#pricing' },
+  { label: 'FAQ', href: '#faq' },
+  { label: 'Blog', href: '/blog', isAbsolute: true },
+];
 
 export function Header({ variant = 'default' }: HeaderProps) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -25,33 +32,29 @@ export function Header({ variant = 'default' }: HeaderProps) {
     setMobileMenuOpen(false);
   }
 
+  function getHref(link: NavLink): string {
+    return link.isAbsolute ? link.href : `${anchorPrefix}${link.href}`;
+  }
+
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 border-b border-border bg-background/80 pt-[env(safe-area-inset-top)]">
+    <header className="fixed top-0 left-0 right-0 z-50 border-b border-border bg-background/80 backdrop-blur-sm pt-[env(safe-area-inset-top)]">
       <nav className="container mx-auto flex h-16 items-center justify-between px-4">
         <Link href="/" onClick={closeMobileMenu}>
           <Logo size="sm" />
         </Link>
 
-        {/* Desktop navigation */}
         <div className="hidden md:flex items-center gap-8">
           {NAV_LINKS.map((link) => (
             <Link
-              key={link.anchor}
-              href={`${anchorPrefix}${link.anchor}`}
+              key={link.href}
+              href={getHref(link)}
               className="text-sm text-muted-foreground hover:text-primary transition-colors"
             >
               {link.label}
             </Link>
           ))}
-          <Link
-            href="/blog"
-            className="text-sm text-muted-foreground hover:text-primary transition-colors"
-          >
-            Blog
-          </Link>
         </div>
 
-        {/* Desktop CTAs */}
         <div className="hidden md:flex items-center gap-4">
           <Button variant="ghost" asChild>
             <Link href="/login">Connexion</Link>
@@ -61,7 +64,6 @@ export function Header({ variant = 'default' }: HeaderProps) {
           </Button>
         </div>
 
-        {/* Mobile hamburger */}
         <button
           type="button"
           className="md:hidden p-2 text-muted-foreground hover:text-foreground transition-colors"
@@ -77,27 +79,19 @@ export function Header({ variant = 'default' }: HeaderProps) {
         </button>
       </nav>
 
-      {/* Mobile menu */}
       {mobileMenuOpen && (
         <div className="md:hidden border-t border-border bg-background">
           <div className="container mx-auto px-4 py-4 flex flex-col gap-4">
             {NAV_LINKS.map((link) => (
               <Link
-                key={link.anchor}
-                href={`${anchorPrefix}${link.anchor}`}
+                key={link.href}
+                href={getHref(link)}
                 className="text-sm text-muted-foreground hover:text-primary transition-colors py-2"
                 onClick={closeMobileMenu}
               >
                 {link.label}
               </Link>
             ))}
-            <Link
-              href="/blog"
-              className="text-sm text-muted-foreground hover:text-primary transition-colors py-2"
-              onClick={closeMobileMenu}
-            >
-              Blog
-            </Link>
 
             <div className="flex flex-col gap-3 pt-4 border-t border-border">
               <Button variant="ghost" asChild>

@@ -4,6 +4,19 @@ import { Badge } from '@/components/ui/badge';
 import { Sparkline } from '@/components/ui/sparkline';
 
 const POSITION_SPARKLINE = [3.2, 2.8, 2.5, 2.7, 2.3, 2.1, 2.0];
+const SENTIMENT_SCORE = 78;
+
+const GPT_MODELS = [
+  { name: 'GPT-4o', position: '2.3', color: 'text-slate-300' },
+  { name: 'GPT-5.2', position: '1.7', color: 'text-amber-400' },
+] as const;
+
+const CLAUDE_MODELS = [
+  { name: 'Sonnet 4', position: '1.6', color: 'text-amber-400' },
+  { name: 'Opus 4.5', position: '2.4', color: 'text-slate-300' },
+] as const;
+
+const SENTIMENT_TAGS = ['Marque reconnue', 'Prix compétitifs'] as const;
 
 export function DashboardMockup() {
   return (
@@ -13,7 +26,6 @@ export function DashboardMockup() {
       aria-hidden="true"
     >
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        {/* Position moyenne — col-span-2, podium amber */}
         <div className="col-span-2 rounded-xl border border-amber-500/20 bg-amber-500/5 p-5">
           <div className="flex items-start justify-between gap-3">
             <div className="min-w-0 flex-1">
@@ -32,36 +44,29 @@ export function DashboardMockup() {
           </div>
         </div>
 
-        {/* GPT-4o — compact, hidden mobile */}
-        <div className="hidden rounded-xl border border-border/50 bg-background/40 p-3 md:block">
-          <div className="mb-2 flex items-center gap-2 text-xs text-muted-foreground">
-            <MessageSquare className="size-3.5" aria-hidden="true" />
-            <span>GPT-4o</span>
+        {GPT_MODELS.map((model) => (
+          <div
+            key={model.name}
+            className="hidden rounded-xl border border-border/50 bg-background/40 p-3 md:block"
+          >
+            <div className="mb-2 flex items-center gap-2 text-xs text-muted-foreground">
+              <MessageSquare className="size-3.5" aria-hidden="true" />
+              <span>{model.name}</span>
+            </div>
+            <p className={`text-lg font-semibold tabular-nums font-mono ${model.color}`}>
+              <span className="text-sm text-muted-foreground">#</span>
+              {model.position}
+            </p>
           </div>
-          <p className="text-lg font-semibold tabular-nums font-mono text-slate-300">
-            <span className="text-sm text-muted-foreground">#</span>2.3
-          </p>
-        </div>
+        ))}
 
-        {/* GPT-5.2 — compact, hidden mobile */}
-        <div className="hidden rounded-xl border border-border/50 bg-background/40 p-3 md:block">
-          <div className="mb-2 flex items-center gap-2 text-xs text-muted-foreground">
-            <MessageSquare className="size-3.5" aria-hidden="true" />
-            <span>GPT-5.2</span>
-          </div>
-          <p className="text-lg font-semibold tabular-nums font-mono text-amber-400">
-            <span className="text-sm text-muted-foreground">#</span>1.7
-          </p>
-        </div>
-
-        {/* Sentiment IA — col-span-2 */}
         <div className="col-span-2 rounded-xl border border-border/50 bg-background/40 p-4">
           <div className="flex items-start justify-between gap-3">
             <div className="min-w-0 flex-1">
               <p className="mb-1 text-xs text-muted-foreground">Sentiment IA</p>
               <div className="flex items-baseline gap-2">
                 <span className="text-2xl font-semibold tabular-nums font-mono text-success">
-                  78%
+                  {SENTIMENT_SCORE}%
                 </span>
                 <span className="inline-flex items-center gap-0.5 text-xs font-medium text-destructive">
                   <TrendingDown className="size-3" aria-hidden="true" />
@@ -73,39 +78,35 @@ export function DashboardMockup() {
               <Heart className="size-4" aria-hidden="true" />
             </div>
           </div>
-          {/* Progress bar */}
           <div className="mt-3 h-1.5 w-full rounded-full bg-muted">
-            <div className="h-1.5 rounded-full bg-success" style={{ width: '78%' }} />
+            <div
+              className="h-1.5 rounded-full bg-success"
+              style={{ width: `${SENTIMENT_SCORE}%` }}
+            />
           </div>
-          {/* Tags */}
           <div className="mt-3 flex flex-wrap gap-1.5">
-            <Badge variant="outline" className="px-2 py-0.5 text-[10px]">
-              Marque reconnue
-            </Badge>
-            <Badge variant="outline" className="px-2 py-0.5 text-[10px]">
-              Prix compétitifs
-            </Badge>
+            {SENTIMENT_TAGS.map((tag) => (
+              <Badge key={tag} variant="outline" className="px-2 py-0.5 text-[10px]">
+                {tag}
+              </Badge>
+            ))}
           </div>
         </div>
 
-        {/* Positions Claude — hidden mobile, col-span-2 */}
         <div className="hidden rounded-xl border border-border/50 bg-background/40 p-4 md:col-span-2 md:block">
           <div className="flex items-start justify-between gap-3">
             <div className="min-w-0 flex-1">
               <p className="mb-2 text-xs text-muted-foreground">Positions Claude</p>
               <ul className="space-y-1.5">
-                <li className="flex items-baseline justify-between gap-2">
-                  <span className="text-sm text-foreground">Sonnet 4</span>
-                  <span className="text-lg font-semibold tabular-nums font-mono text-amber-400">
-                    <span className="text-sm text-muted-foreground">#</span>1.6
-                  </span>
-                </li>
-                <li className="flex items-baseline justify-between gap-2">
-                  <span className="text-sm text-foreground">Opus 4.5</span>
-                  <span className="text-lg font-semibold tabular-nums font-mono text-slate-300">
-                    <span className="text-sm text-muted-foreground">#</span>2.4
-                  </span>
-                </li>
+                {CLAUDE_MODELS.map((model) => (
+                  <li key={model.name} className="flex items-baseline justify-between gap-2">
+                    <span className="text-sm text-foreground">{model.name}</span>
+                    <span className={`text-lg font-semibold tabular-nums font-mono ${model.color}`}>
+                      <span className="text-sm text-muted-foreground">#</span>
+                      {model.position}
+                    </span>
+                  </li>
+                ))}
               </ul>
             </div>
             <div className="rounded-lg border border-border/50 bg-muted/50 p-2 text-muted-foreground">
@@ -115,7 +116,6 @@ export function DashboardMockup() {
         </div>
       </div>
 
-      {/* LLM Badges */}
       <div className="mt-4 flex items-center gap-2 border-t border-white/5 pt-4">
         <Badge variant="chatgpt">ChatGPT</Badge>
         <Badge variant="claude">Claude</Badge>
