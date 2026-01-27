@@ -38,7 +38,7 @@ describe('LLMServiceImpl', () => {
     mockOpenaiAdapter = createMockAdapter(LLMModel.GPT_4O_MINI);
     mockGpt4oAdapter = createMockAdapter(LLMModel.GPT_4O);
     mockGpt52Adapter = createMockAdapter(LLMModel.GPT_5_2);
-    mockClaudeSonnetAdapter = createMockAdapter(LLMModel.CLAUDE_SONNET_4);
+    mockClaudeSonnetAdapter = createMockAdapter(LLMModel.CLAUDE_SONNET_4_5);
     mockClaudeOpusAdapter = createMockAdapter(LLMModel.CLAUDE_OPUS_4_5);
 
     service = new LLMServiceImpl(
@@ -64,7 +64,7 @@ describe('LLMServiceImpl', () => {
       expect(result.successes[0].model).toBe(LLMModel.GPT_4O_MINI);
     });
 
-    it('should query GPT-4o-mini, GPT-4o, and Claude Sonnet for SOLO plan', async () => {
+    it('should query GPT-4o-mini, GPT-4o, and Claude Sonnet 4.5 for SOLO plan', async () => {
       const result = await service.queryByPlan('test prompt', Plan.SOLO);
 
       expect(mockOpenaiAdapter.query).toHaveBeenCalledWith('test prompt');
@@ -129,13 +129,13 @@ describe('LLMServiceImpl', () => {
       expect(PLAN_MODELS[Plan.SOLO]).toEqual([
         LLMModel.GPT_4O_MINI,
         LLMModel.GPT_4O,
-        LLMModel.CLAUDE_SONNET_4,
+        LLMModel.CLAUDE_SONNET_4_5,
       ]);
       expect(PLAN_MODELS[Plan.PRO]).toEqual([
         LLMModel.GPT_4O_MINI,
         LLMModel.GPT_4O,
         LLMModel.GPT_5_2,
-        LLMModel.CLAUDE_SONNET_4,
+        LLMModel.CLAUDE_SONNET_4_5,
         LLMModel.CLAUDE_OPUS_4_5,
       ]);
     });
@@ -171,7 +171,7 @@ describe('LLMServiceImpl', () => {
         delays.push(Date.now() - startTime);
         return {
           content: '',
-          model: LLMModel.CLAUDE_SONNET_4,
+          model: LLMModel.CLAUDE_SONNET_4_5,
           provider: 'ANTHROPIC',
           latencyMs: 50,
         } as LLMResponse;

@@ -17,7 +17,7 @@ export enum LLMModel {
   GPT_4O_MINI = 'gpt-4o-mini',
   GPT_4O = 'gpt-4o',
   GPT_5_2 = 'gpt-5.2',
-  CLAUDE_SONNET_4 = 'claude-sonnet-4-20250514',
+  CLAUDE_SONNET_4_5 = 'claude-sonnet-4-5-20250929',
   CLAUDE_OPUS_4_5 = 'claude-opus-4-5-20251101',
 }
 
@@ -508,12 +508,12 @@ export function getScanAvailability(
 
 export const PLAN_MODELS: Record<Plan, LLMModel[]> = {
   [Plan.FREE]: [LLMModel.GPT_4O_MINI],
-  [Plan.SOLO]: [LLMModel.GPT_4O_MINI, LLMModel.GPT_4O, LLMModel.CLAUDE_SONNET_4],
+  [Plan.SOLO]: [LLMModel.GPT_4O_MINI, LLMModel.GPT_4O, LLMModel.CLAUDE_SONNET_4_5],
   [Plan.PRO]: [
     LLMModel.GPT_4O_MINI,
     LLMModel.GPT_4O,
     LLMModel.GPT_5_2,
-    LLMModel.CLAUDE_SONNET_4,
+    LLMModel.CLAUDE_SONNET_4_5,
     LLMModel.CLAUDE_OPUS_4_5,
   ],
 };

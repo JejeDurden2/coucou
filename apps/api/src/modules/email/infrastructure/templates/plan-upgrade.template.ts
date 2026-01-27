@@ -16,12 +16,12 @@ const PLAN_FEATURES = {
   SOLO: {
     projects: 5,
     promptsPerProject: 10,
-    models: ['GPT-4o-mini', 'GPT-4o', 'Claude Sonnet 4'],
+    models: ['GPT-4o-mini', 'GPT-4o', 'Claude Sonnet 4.5'],
   },
   PRO: {
     projects: 15,
     promptsPerProject: 50,
-    models: ['GPT-4o-mini', 'GPT-4o', 'GPT-5.2', 'Claude Sonnet 4', 'Claude Opus 4.5'],
+    models: ['GPT-4o-mini', 'GPT-4o', 'GPT-5.2', 'Claude Sonnet 4.5', 'Claude Opus 4.5'],
   },
 } as const;
 

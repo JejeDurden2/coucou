@@ -65,7 +65,7 @@ describe('ExecuteSentimentScanUseCase', () => {
     provider: LLMProvider = LLMProvider.OPENAI,
   ): LLMResponse => ({
     content,
-    model: provider === LLMProvider.OPENAI ? 'gpt-5.2' : 'claude-sonnet-4',
+    model: provider === LLMProvider.OPENAI ? 'gpt-5.2' : 'claude-sonnet-4-5',
     provider,
     latencyMs: 500,
   });

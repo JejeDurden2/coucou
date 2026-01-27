@@ -466,11 +466,11 @@ describe('GetHistoricalStatsUseCase', () => {
       const currentScans = [
         createMockScan('prompt-1', new Date(now.getTime() - 5 * 24 * 60 * 60 * 1000), [
           createMockResult('gpt-4o', true, 1),
-          createMockResult('claude-sonnet-4', true, 2),
+          createMockResult('claude-sonnet-4-5', true, 2),
         ]),
         createMockScan('prompt-1', new Date(now.getTime() - 10 * 24 * 60 * 60 * 1000), [
           createMockResult('gpt-4o', true, 2),
-          createMockResult('claude-sonnet-4', false, null),
+          createMockResult('claude-sonnet-4-5', false, null),
         ]),
       ];
 
@@ -493,8 +493,8 @@ describe('GetHistoricalStatsUseCase', () => {
         expect(gpt?.citationRate).toBe(100);
         expect(gpt?.scansCount).toBe(2);
 
-        // claude-sonnet-4: 1/2 cited = 50%
-        const claude = breakdown.find((m) => m.model === 'claude-sonnet-4');
+        // claude-sonnet-4-5: 1/2 cited = 50%
+        const claude = breakdown.find((m) => m.model === 'claude-sonnet-4-5');
         expect(claude).toBeDefined();
         expect(claude?.citationRate).toBe(50);
         expect(claude?.scansCount).toBe(2);
