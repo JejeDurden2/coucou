@@ -1,16 +1,13 @@
 import Link from 'next/link';
 import {
   ArrowRight,
-  BarChart3,
   Bot,
   Building2,
   Check,
-  Eye,
   Rocket,
   Search,
   ShoppingBag,
   Sparkles,
-  TrendingUp,
 } from 'lucide-react';
 import { Plan, PLAN_PRICING } from '@coucou-ia/shared';
 import { Button } from '@/components/ui/button';
@@ -19,6 +16,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Header } from '@/components/layout/header';
 import { ProblemSection } from '@/components/features/landing/problem-section';
+import { HowItWorksSection } from '@/components/features/landing/how-it-works-section';
 import { DashboardMockup } from '@/components/landing/dashboard-mockup';
 import { MidPageCTA } from '@/components/landing/mid-page-cta';
 
@@ -40,26 +38,6 @@ const features = [
     title: 'Évolution de votre visibilité',
     description:
       "Visualisez l'évolution de votre score de visibilité au fil du temps avec des rapports détaillés.",
-  },
-];
-
-const steps = [
-  {
-    number: '1',
-    title: 'Configurez votre marque',
-    description: 'Entrez le nom de votre marque et ses variantes pour une surveillance précise.',
-  },
-  {
-    number: '2',
-    title: 'Définissez vos prompts',
-    description:
-      "Créez les questions que vos clients posent à l'IA pour trouver vos produits/services.",
-  },
-  {
-    number: '3',
-    title: 'Analysez vos résultats',
-    description:
-      'Consultez votre score de visibilité et les recommandations pour améliorer votre présence.',
   },
 ];
 
@@ -355,40 +333,7 @@ export default function LandingPage() {
         </section>
 
         {/* How it works */}
-        <section className="py-20 px-4 bg-zinc-900/50">
-          <div className="container mx-auto max-w-5xl">
-            <div className="text-center mb-12">
-              <Badge className="mb-4">Comment ça marche</Badge>
-              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-balance">3 étapes simples</h2>
-              <p className="text-muted-foreground max-w-2xl mx-auto text-pretty">
-                Configurez votre surveillance en quelques minutes et commencez à suivre votre
-                visibilité IA.
-              </p>
-            </div>
-
-            <div className="grid md:grid-cols-3 gap-8 relative">
-              {steps.map((step) => (
-                <div key={step.number} className="text-center">
-                  <div className="size-16 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center mx-auto mb-4 text-2xl font-bold text-primary tabular-nums">
-                    {step.number}
-                  </div>
-                  <h3 className="text-lg font-semibold mb-2 text-balance">{step.title}</h3>
-                  <p className="text-sm text-muted-foreground text-pretty">{step.description}</p>
-                </div>
-              ))}
-              <div
-                aria-hidden="true"
-                className="hidden md:block absolute top-8 h-[2px] bg-zinc-700"
-                style={{ left: 'calc(33.333% + 2rem)', right: 'calc(66.666% + 2rem)' }}
-              />
-              <div
-                aria-hidden="true"
-                className="hidden md:block absolute top-8 h-[2px] bg-zinc-700"
-                style={{ left: 'calc(66.666% + 2rem)', right: 'calc(33.333% + 2rem)' }}
-              />
-            </div>
-          </div>
-        </section>
+        <HowItWorksSection />
 
         {/* Mid-Page CTA */}
         <MidPageCTA />

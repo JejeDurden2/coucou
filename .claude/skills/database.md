@@ -130,8 +130,8 @@ DIRECT_URL="postgresql://postgres:postgres@localhost:5432/app_dev?schema=public"
 OTEL_EXPORTER_OTLP_ENDPOINT="http://localhost:4318"
 
 # apps/api/.env.production (PRODUCTION - Neon)
-DATABASE_URL="postgresql://user:pass@ep-xxx.eu-central-1.aws.neon.tech/neondb?sslmode=require"
-DIRECT_URL="postgresql://user:pass@ep-xxx.eu-central-1.aws.neon.tech/neondb?sslmode=require"
+DATABASE_URL="postgresql://user:pass@ep-xxx.eu-central-1.aws.neon.tech/neondb?sslmode=verify-full"
+DIRECT_URL="postgresql://user:pass@ep-xxx.eu-central-1.aws.neon.tech/neondb?sslmode=verify-full"
 ```
 
 ---
@@ -184,8 +184,8 @@ DATABASE_URL=$NEON_URL pnpm prisma migrate deploy
 
 ```bash
 # .env.example
-DATABASE_URL="postgresql://...@ep-xxx.eu-central-1.aws.neon.tech/anso?sslmode=require"           # Pooled connection (API runtime)
-DIRECT_URL="postgresql://...@ep-xxx.eu-central-1.aws.neon.tech/anso?sslmode=require&connection_limit=1"  # Direct connection (migrations)
+DATABASE_URL="postgresql://...@ep-xxx.eu-central-1.aws.neon.tech/anso?sslmode=verify-full"           # Pooled connection (API runtime)
+DIRECT_URL="postgresql://...@ep-xxx.eu-central-1.aws.neon.tech/anso?sslmode=verify-full&connection_limit=1"  # Direct connection (migrations)
 ```
 
 ### schema.prisma Configuration
