@@ -1,11 +1,11 @@
 import Link from 'next/link';
 import {
   ArrowRight,
-  Bot,
   Building2,
   Check,
   Rocket,
   Search,
+  ShieldCheck,
   ShoppingBag,
   Sparkles,
 } from 'lucide-react';
@@ -315,62 +315,43 @@ export default function LandingPage() {
         {/* FAQ Section */}
         <FAQSection />
 
-        {/* CTA Section */}
-        <section className="py-20 px-4">
-          <div className="container mx-auto max-w-4xl text-center">
-            <div className="rounded-3xl bg-primary/5 p-12 border border-primary/20">
-              <Bot className="size-12 mx-auto mb-6 text-primary" aria-hidden="true" />
-              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-balance">
-                Prêt à être visible par l&apos;IA ?
-              </h2>
-              <p className="text-muted-foreground mb-8 max-w-xl mx-auto text-pretty">
-                Rejoignez les 500+ marques qui utilisent Coucou IA pour surveiller et améliorer leur
-                présence dans les réponses de ChatGPT et Claude.
-              </p>
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                <Button size="lg" asChild>
-                  <Link href="/register">
-                    Créer mon compte gratuitement
-                    <ArrowRight className="ml-2 size-4" aria-hidden="true" />
-                  </Link>
-                </Button>
-              </div>
-              <p className="text-xs text-muted-foreground mt-4 text-pretty">
-                Pas de carte bancaire requise. Annulable à tout moment.
-              </p>
-            </div>
+        {/* Final CTA Section */}
+        <section className="bg-primary/5 border-t border-primary/10 py-20 px-4">
+          <div className="container mx-auto max-w-3xl text-center">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-balance">
+              Découvrez ce que l&apos;IA dit de votre marque
+            </h2>
+            <p className="text-muted-foreground mb-8 text-pretty">
+              Première analyse gratuite, sans carte bancaire.
+            </p>
+            <Button size="lg" asChild>
+              <Link href="/register">
+                Analyser ma marque maintenant
+                <ArrowRight className="ml-2 size-4" aria-hidden="true" />
+              </Link>
+            </Button>
           </div>
         </section>
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-zinc-800 py-12 px-4">
+      <footer className="bg-card border-t border-zinc-800 py-12 px-4">
         <div className="container mx-auto max-w-6xl">
-          <div className="grid md:grid-cols-4 gap-8 mb-8">
-            <div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
+            <div className="col-span-2 md:col-span-1">
               <Link href="/">
                 <Logo size="sm" />
               </Link>
               <p className="text-sm text-muted-foreground mt-2 text-pretty">
-                Surveillez et améliorez la visibilité de votre marque dans les réponses IA.
+                Surveillez votre visibilité dans la recherche IA.
               </p>
             </div>
             <div>
-              <h4 className="font-medium mb-4 text-balance">Produit</h4>
+              <h4 className="font-medium mb-4">Produit</h4>
               <ul className="space-y-2 text-sm text-muted-foreground">
-                <li>
-                  <Link href="#features" className="hover:text-foreground">
-                    Fonctionnalités
-                  </Link>
-                </li>
                 <li>
                   <Link href="#pricing" className="hover:text-foreground">
                     Tarifs
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#faq" className="hover:text-foreground">
-                    FAQ
                   </Link>
                 </li>
                 <li>
@@ -381,7 +362,17 @@ export default function LandingPage() {
               </ul>
             </div>
             <div>
-              <h4 className="font-medium mb-4 text-balance">Légal</h4>
+              <h4 className="font-medium mb-4">Ressources</h4>
+              <ul className="space-y-2 text-sm text-muted-foreground">
+                <li>
+                  <Link href="#geo" className="hover:text-foreground">
+                    Guide GEO
+                  </Link>
+                </li>
+              </ul>
+            </div>
+            <div>
+              <h4 className="font-medium mb-4">Légal</h4>
               <ul className="space-y-2 text-sm text-muted-foreground">
                 <li>
                   <Link href="/privacy" className="hover:text-foreground">
@@ -397,27 +388,11 @@ export default function LandingPage() {
             </div>
           </div>
           <div className="border-t border-zinc-800 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
-            <p className="text-sm text-muted-foreground text-pretty">
-              © 2026 Coucou IA. Tous droits réservés.
-            </p>
-            <div className="flex items-center gap-4">
-              <Link
-                href="https://twitter.com/coucouia"
-                className="text-muted-foreground hover:text-foreground"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                Twitter
-              </Link>
-              <Link
-                href="https://linkedin.com/company/coucou-ia"
-                className="text-muted-foreground hover:text-foreground"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                LinkedIn
-              </Link>
-            </div>
+            <p className="text-sm text-muted-foreground">© 2026 Coucou IA. Made in France 🇫🇷</p>
+            <Badge variant="outline">
+              <ShieldCheck className="mr-1 size-3" aria-hidden="true" />
+              RGPD
+            </Badge>
           </div>
         </div>
       </footer>
