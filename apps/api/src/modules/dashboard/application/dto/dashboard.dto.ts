@@ -45,6 +45,7 @@ export interface EnrichedCompetitorDto {
   name: string;
   totalMentions: number;
   averagePosition: number | null;
+  previousAveragePosition: number | null;
   statsByModel: CompetitorModelStatsDto[];
   trend: CompetitorTrend;
   trendPercentage: number | null;

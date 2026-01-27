@@ -427,6 +427,7 @@ export default function ProjectDashboardPage({
             <CompetitorsContainer
               competitors={stats?.enrichedCompetitors ?? []}
               userPlan={userPlan}
+              stats={stats}
             />
           ) : (
             <CompetitorsLockedBanner />

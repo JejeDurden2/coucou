@@ -249,6 +249,7 @@ export interface EnrichedCompetitor {
   name: string;
   totalMentions: number;
   averagePosition: number | null;
+  previousAveragePosition: number | null;
   statsByModel: CompetitorModelStats[];
   trend: CompetitorTrend;
   trendPercentage: number | null;

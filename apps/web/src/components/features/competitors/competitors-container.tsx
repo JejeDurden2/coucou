@@ -1,37 +1,24 @@
 'use client';
 
-import { memo, useMemo } from 'react';
+import { memo } from 'react';
 import { Trophy } from 'lucide-react';
-import { type EnrichedCompetitor, type Plan } from '@coucou-ia/shared';
+import { type DashboardStats, type EnrichedCompetitor, type Plan } from '@coucou-ia/shared';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { InfoTooltip } from '@/components/ui/info-tooltip';
-import { cn } from '@/lib/utils';
-import { CompetitorCard } from './competitor-ui';
+import { DashboardCompetitorCard } from '@/components/dashboard/competitor-card';
+import { CompetitorsBentoSection } from './competitors-bento-section';
 
 interface CompetitorsContainerProps {
   competitors: EnrichedCompetitor[];
   userPlan: Plan;
+  stats?: DashboardStats;
 }
 
 export const CompetitorsContainer = memo(function CompetitorsContainer({
   competitors,
   userPlan,
+  stats,
 }: CompetitorsContainerProps): React.ReactNode {
-  // Compute trend counts once
-  const trendCounts = useMemo(() => {
-    let newCount = 0;
-    let upCount = 0;
-    let downCount = 0;
-
-    for (const c of competitors) {
-      if (c.trend === 'new') newCount++;
-      else if (c.trend === 'up') upCount++;
-      else if (c.trend === 'down') downCount++;
-    }
-
-    return { newCount, upCount, downCount };
-  }, [competitors]);
-
   if (competitors.length === 0) {
     return (
       <Card>
@@ -55,25 +42,12 @@ export const CompetitorsContainer = memo(function CompetitorsContainer({
 
   return (
     <div className="space-y-6">
-      {/* Summary stats */}
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-        <SummaryStatCard label="Total concurrents" value={competitors.length} />
-        <SummaryStatCard
-          label="Nouveaux (7j)"
-          value={trendCounts.newCount}
-          valueClassName="text-primary"
-        />
-        <SummaryStatCard
-          label="En hausse"
-          value={trendCounts.upCount}
-          valueClassName="text-success"
-        />
-        <SummaryStatCard
-          label="En baisse"
-          value={trendCounts.downCount}
-          valueClassName="text-destructive"
-        />
-      </div>
+      <CompetitorsBentoSection
+        competitors={competitors}
+        userAverageRank={stats?.averageRank ?? null}
+        averageRankTrend={stats?.trend}
+        averageRankSparkline={stats?.trends?.averageRank}
+      />
 
       {/* Full competitors list */}
       <Card>
@@ -90,15 +64,13 @@ export const CompetitorsContainer = memo(function CompetitorsContainer({
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {competitors.map((competitor, index) => (
-              <CompetitorCard
+              <DashboardCompetitorCard
                 key={competitor.name}
                 competitor={competitor}
                 rank={index + 1}
                 userPlan={userPlan}
-                showContext
-                showStats
               />
             ))}
           </div>
@@ -107,21 +79,3 @@ export const CompetitorsContainer = memo(function CompetitorsContainer({
     </div>
   );
 });
-
-// Simple stat card for summary section
-interface SummaryStatCardProps {
-  label: string;
-  value: number;
-  valueClassName?: string;
-}
-
-function SummaryStatCard({ label, value, valueClassName }: SummaryStatCardProps): React.ReactNode {
-  return (
-    <Card>
-      <CardContent className="pt-4">
-        <p className="text-sm text-muted-foreground text-pretty">{label}</p>
-        <p className={cn('text-2xl font-bold tabular-nums', valueClassName)}>{value}</p>
-      </CardContent>
-    </Card>
-  );
-}

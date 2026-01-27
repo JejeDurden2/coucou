@@ -4,7 +4,7 @@ import type { Competitor, EnrichedCompetitor, Plan } from '@coucou-ia/shared';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Users, Trophy } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { CompetitorCard } from '@/components/features/competitors/competitor-ui';
+import { DashboardCompetitorCard } from '@/components/dashboard/competitor-card';
 
 interface CompetitorsListProps {
   competitors: Competitor[];
@@ -68,9 +68,9 @@ function EnrichedCompetitorsList({
             Aucun concurrent identifié. Lancez une analyse pour découvrir vos concurrents.
           </p>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {displayedCompetitors.map((competitor, index) => (
-              <CompetitorCard
+              <DashboardCompetitorCard
                 key={competitor.name}
                 competitor={competitor}
                 rank={index + 1}

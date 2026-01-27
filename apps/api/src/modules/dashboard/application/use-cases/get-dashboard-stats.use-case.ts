@@ -1,5 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { LLMProvider } from '@prisma/client';
+import { subDays } from 'date-fns';
 
 import { ForbiddenError, NotFoundError, Result } from '../../../../common';
 import { PROJECT_REPOSITORY, type ProjectRepository } from '../../../project';
@@ -163,8 +164,8 @@ export class GetDashboardStatsUseCase {
     delta: number;
   } {
     const now = new Date();
-    const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-    const fourteenDaysAgo = new Date(now.getTime() - 14 * 24 * 60 * 60 * 1000);
+    const sevenDaysAgo = subDays(now, 7);
+    const fourteenDaysAgo = subDays(now, 14);
 
     const currentPeriodScans = scans.filter((s) => s.executedAt >= sevenDaysAgo);
     const previousPeriodScans = scans.filter(
@@ -267,8 +268,8 @@ export class GetDashboardStatsUseCase {
     scans: Array<{ executedAt: Date; results: LLMResult[] }>,
   ): EnrichedCompetitorDto[] {
     const now = new Date();
-    const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-    const fourteenDaysAgo = new Date(now.getTime() - 14 * 24 * 60 * 60 * 1000);
+    const sevenDaysAgo = subDays(now, 7);
+    const fourteenDaysAgo = subDays(now, 14);
 
     interface ModelStats {
       mentions: number;
@@ -286,6 +287,8 @@ export class GetDashboardStatsUseCase {
       lastKeywords: string[];
       currentPeriodMentions: number;
       previousPeriodMentions: number;
+      currentPeriodPositions: number[];
+      previousPeriodPositions: number[];
     }
 
     const aggregations = new Map<string, CompetitorAggregation>();
@@ -316,8 +319,14 @@ export class GetDashboardStatsUseCase {
           existing.lastSeenAt = scanDate;
           existing.lastKeywords = keywords;
         }
-        if (isCurrentPeriod) existing.currentPeriodMentions++;
-        if (isPreviousPeriod) existing.previousPeriodMentions++;
+        if (isCurrentPeriod) {
+          existing.currentPeriodMentions++;
+          existing.currentPeriodPositions.push(position);
+        }
+        if (isPreviousPeriod) {
+          existing.previousPeriodMentions++;
+          existing.previousPeriodPositions.push(position);
+        }
       } else {
         const modelStats = new Map<string, ModelStats>();
         modelStats.set(model, { mentions: 1, positions: [position] });
@@ -333,6 +342,8 @@ export class GetDashboardStatsUseCase {
           lastKeywords: keywords,
           currentPeriodMentions: isCurrentPeriod ? 1 : 0,
           previousPeriodMentions: isPreviousPeriod ? 1 : 0,
+          currentPeriodPositions: isCurrentPeriod ? [position] : [],
+          previousPeriodPositions: isPreviousPeriod ? [position] : [],
         });
       }
     };
@@ -364,6 +375,21 @@ export class GetDashboardStatsUseCase {
               10
             : null;
 
+        const previousAveragePosition =
+          agg.previousPeriodPositions.length > 0
+            ? Math.round(
+                (agg.previousPeriodPositions.reduce((a, b) => a + b, 0) /
+                  agg.previousPeriodPositions.length) *
+                  10,
+              ) / 10
+            : null;
+
+        const currentAvgPosition =
+          agg.currentPeriodPositions.length > 0
+            ? agg.currentPeriodPositions.reduce((a, b) => a + b, 0) /
+              agg.currentPeriodPositions.length
+            : null;
+
         const statsByModel = Array.from(agg.modelStats.entries()).map(([model, data]) => ({
           model,
           mentions: data.mentions,
@@ -376,8 +402,8 @@ export class GetDashboardStatsUseCase {
         }));
 
         const trend = this.calculateCompetitorTrend(
-          agg.currentPeriodMentions,
-          agg.previousPeriodMentions,
+          currentAvgPosition,
+          previousAveragePosition,
           agg.firstSeenAt,
           sevenDaysAgo,
         );
@@ -401,6 +427,7 @@ export class GetDashboardStatsUseCase {
           name: agg.name,
           totalMentions: agg.totalMentions,
           averagePosition,
+          previousAveragePosition,
           statsByModel,
           trend,
           trendPercentage,
@@ -415,8 +442,8 @@ export class GetDashboardStatsUseCase {
   }
 
   private calculateCompetitorTrend(
-    currentMentions: number,
-    previousMentions: number,
+    currentAvgPosition: number | null,
+    previousAvgPosition: number | null,
     firstSeenAt: Date,
     sevenDaysAgo: Date,
   ): CompetitorTrend {
@@ -425,21 +452,16 @@ export class GetDashboardStatsUseCase {
       return 'new';
     }
 
-    // No previous data to compare
-    if (previousMentions === 0 && currentMentions === 0) {
+    // Cannot compare without both periods
+    if (currentAvgPosition === null || previousAvgPosition === null) {
       return 'stable';
     }
 
-    // Was not mentioned before, now mentioned
-    if (previousMentions === 0 && currentMentions > 0) {
-      return 'up';
-    }
+    // delta < 0 = position improved (lower number = better rank)
+    const delta = currentAvgPosition - previousAvgPosition;
 
-    // Calculate percentage change
-    const change = ((currentMentions - previousMentions) / previousMentions) * 100;
-
-    if (change > 10) return 'up';
-    if (change < -10) return 'down';
+    if (delta < -0.2) return 'up';
+    if (delta > 0.2) return 'down';
     return 'stable';
   }
 
