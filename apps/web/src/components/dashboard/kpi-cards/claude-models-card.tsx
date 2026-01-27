@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import { Bot } from 'lucide-react';
+import { Bot, EyeOff } from 'lucide-react';
 import { type ModelBreakdown } from '@coucou-ia/shared';
 
 import { cn } from '@/lib/utils';
@@ -55,7 +55,10 @@ export const ClaudeModelsCard = memo(function ClaudeModelsCard({
                         {model.averageRank.toFixed(1)}
                       </>
                     ) : (
-                      '—'
+                      <span className="inline-flex items-center gap-1.5 text-muted-foreground">
+                        <EyeOff className="h-8 w-8" aria-hidden="true" />
+                        <span className="text-lg">Non classé</span>
+                      </span>
                     )}
                   </span>
                 </li>
