@@ -39,7 +39,6 @@ import {
 } from '@/components/ui/alert-dialog';
 import { CompetitorsList } from '@/components/features/dashboard';
 import { InfoTooltip } from '@/components/ui/info-tooltip';
-import { getModelDisplayName } from '@/components/features/dashboard/llm-result-row';
 import { AddPromptModal } from '@/components/features/dashboard/add-prompt-modal';
 import { StatsContainer, StatsLockedBanner } from '@/components/features/stats';
 import { CompetitorsContainer, CompetitorsLockedBanner } from '@/components/features/competitors';
@@ -49,7 +48,7 @@ import {
   RecommendationsLockedBanner,
 } from '@/components/features/recommendations';
 import { SentimentTab } from '@/features/sentiment';
-import { getScanAvailability, Plan, PLAN_LIMITS, type PromptCategory } from '@coucou-ia/shared';
+import { getScanAvailability, Plan, PLAN_LIMITS, type PromptCategory, getModelDisplayName } from '@coucou-ia/shared';
 import { cn } from '@/lib/utils';
 import { formatRelativeTime } from '@/lib/format';
 import { NextScanIndicator } from '@/components/dashboard/next-scan-indicator';

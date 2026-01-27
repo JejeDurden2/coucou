@@ -1,9 +1,8 @@
 import { memo } from 'react';
 import { Bot, EyeOff } from 'lucide-react';
-import { type ModelBreakdown } from '@coucou-ia/shared';
+import { type ModelBreakdown, getModelDisplayName } from '@coucou-ia/shared';
 
 import { cn } from '@/lib/utils';
-import { getModelDisplayName } from '@/components/features/dashboard/llm-result-row';
 
 interface ClaudeModelsCardProps {
   models: ModelBreakdown[];

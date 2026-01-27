@@ -1,10 +1,9 @@
 'use client';
 
-import type { PromptStat } from '@coucou-ia/shared';
+import { type PromptStat, getModelDisplayName } from '@coucou-ia/shared';
 import { Play, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { CitationBadge } from './citation-badge';
-import { getModelDisplayName } from './llm-result-row';
 import { cn } from '@/lib/utils';
 
 interface PromptTableProps {

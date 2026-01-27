@@ -1,4 +1,4 @@
-import { LLMProvider } from '@coucou-ia/shared';
+import { LLMProvider, getModelDisplayName } from '@coucou-ia/shared';
 import { CitationBadge } from './citation-badge';
 import { cn } from '@/lib/utils';
 
@@ -21,20 +21,6 @@ const providerInfo: Record<LLMProvider, { color: string; icon: string }> = {
     icon: 'C',
   },
 };
-
-export const MODEL_DISPLAY_NAMES: Record<string, string> = {
-  'gpt-4o-mini': 'GPT-4o-mini',
-  'gpt-4o': 'GPT-4o',
-  'gpt-5.2': 'GPT-5.2',
-  'claude-sonnet-4-20250514': 'Claude Sonnet 4.5',
-  'claude-sonnet-4-5-20250929': 'Claude Sonnet 4.5',
-  'claude-opus-4-5-20251101': 'Claude Opus 4.5',
-  'claude-haiku-4-5-20251001': 'Claude Haiku 4.5',
-};
-
-export function getModelDisplayName(model: string): string {
-  return MODEL_DISPLAY_NAMES[model] ?? model;
-}
 
 export function LLMResultRow({
   provider,

@@ -2,3 +2,4 @@
 export * from './types';
 export * from './constants';
 export * from './glossary';
+export * from './model-registry';

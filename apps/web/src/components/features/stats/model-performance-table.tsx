@@ -16,10 +16,10 @@ import {
   type LLMModel,
   type HistoricalModelBreakdown,
   type SimpleTrend,
+  getModelDisplayName,
 } from '@coucou-ia/shared';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
-import { getModelDisplayName } from '@/components/features/dashboard/llm-result-row';
 import { cn } from '@/lib/utils';
 
 type SortColumn = 'model' | 'citationRate' | 'averageRank' | 'trend' | 'scansCount';

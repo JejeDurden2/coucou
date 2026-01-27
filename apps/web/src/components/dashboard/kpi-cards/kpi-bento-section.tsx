@@ -1,8 +1,12 @@
 import { MessageSquare, BarChart3 } from 'lucide-react';
-import { LLMProvider, type DashboardStats, type Plan } from '@coucou-ia/shared';
+import {
+  LLMProvider,
+  type DashboardStats,
+  type Plan,
+  getModelDisplayName,
+} from '@coucou-ia/shared';
 
 import { StatCard } from '@/components/features/dashboard/stat-card';
-import { getModelDisplayName } from '@/components/features/dashboard/llm-result-row';
 import { BentoGrid, BentoItem } from '@/components/dashboard/bento-grid';
 import { ClaudeModelsCard } from './claude-models-card';
 import { PositionCard } from './position-card';
