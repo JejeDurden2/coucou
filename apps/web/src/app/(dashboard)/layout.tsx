@@ -59,7 +59,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps): Rea
 
   return (
     <div className="min-h-dvh flex flex-col">
-      <header className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <header className="sticky top-0 z-50 border-b border-border bg-background">
         <div className="flex h-14 items-center justify-between px-4 md:px-6">
           <div className="flex items-center gap-6">
             <Link
@@ -79,7 +79,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps): Rea
                     aria-label="Sélectionner une marque"
                   >
                     {currentProject?.brandName ?? 'Sélectionner une marque'}
-                    <ChevronDown className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
+                    <ChevronDown className="size-4 text-muted-foreground" aria-hidden="true" />
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="start" className="w-56">
@@ -94,7 +94,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps): Rea
                   ))}
                   <DropdownMenuSeparator />
                   <DropdownMenuItem onClick={() => router.push('/projects/new')}>
-                    <Zap className="mr-2 h-4 w-4" aria-hidden="true" />
+                    <Zap className="mr-2 size-4" aria-hidden="true" />
                     Nouvelle marque
                   </DropdownMenuItem>
                 </DropdownMenuContent>
@@ -110,27 +110,27 @@ export default function DashboardLayout({ children }: DashboardLayoutProps): Rea
                     {user?.name?.charAt(0).toUpperCase()}
                   </div>
                   <span className="hidden md:inline text-sm">{user?.name}</span>
-                  <ChevronDown className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
+                  <ChevronDown className="size-4 text-muted-foreground" aria-hidden="true" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-56">
                 <div className="px-2 py-1.5">
-                  <p className="text-sm font-medium">{user?.name}</p>
-                  <p className="text-xs text-muted-foreground">{user?.email}</p>
-                  <p className="text-xs text-primary mt-1">Plan {user?.plan}</p>
+                  <p className="text-sm font-medium text-pretty">{user?.name}</p>
+                  <p className="text-xs text-muted-foreground text-pretty">{user?.email}</p>
+                  <p className="text-xs text-primary mt-1 text-pretty">Plan {user?.plan}</p>
                 </div>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={() => router.push('/settings')}>
-                  <Settings className="mr-2 h-4 w-4" aria-hidden="true" />
+                  <Settings className="mr-2 size-4" aria-hidden="true" />
                   Paramètres
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => router.push('/billing')}>
-                  <CreditCard className="mr-2 h-4 w-4" aria-hidden="true" />
+                  <CreditCard className="mr-2 size-4" aria-hidden="true" />
                   Facturation
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={handleLogout} className="text-red-500">
-                  <LogOut className="mr-2 h-4 w-4" aria-hidden="true" />
+                  <LogOut className="mr-2 size-4" aria-hidden="true" />
                   Déconnexion
                 </DropdownMenuItem>
               </DropdownMenuContent>

@@ -10,7 +10,7 @@ export const RecommendationsLockedBanner = memo(function RecommendationsLockedBa
   return (
     <div className="relative">
       {/* Blurred background placeholder */}
-      <div className="absolute inset-0 blur-sm opacity-30 pointer-events-none">
+      <div className="absolute inset-0 opacity-30 pointer-events-none">
         <div className="space-y-3 p-4">
           {Array.from({ length: 4 }, (_, i) => (
             <div key={i} className="h-24 bg-muted rounded-lg" />

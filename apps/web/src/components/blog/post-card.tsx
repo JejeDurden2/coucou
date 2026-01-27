@@ -25,7 +25,7 @@ export function PostCard({ post }: PostCardProps): React.ReactNode {
               alt={post.title}
               width={1200}
               height={675}
-              className="h-full w-full object-cover transition-transform group-hover:scale-105"
+              className="size-full object-cover"
             />
           </div>
         )}
@@ -44,11 +44,13 @@ export function PostCard({ post }: PostCardProps): React.ReactNode {
             </div>
           )}
 
-          <h2 className="text-xl font-semibold text-foreground group-hover:text-primary transition-colors">
+          <h2 className="text-balance text-xl font-semibold text-foreground group-hover:text-primary transition-colors">
             {post.title}
           </h2>
 
-          <p className="text-sm text-muted-foreground line-clamp-2">{post.description}</p>
+          <p className="text-pretty text-sm text-muted-foreground line-clamp-2">
+            {post.description}
+          </p>
 
           <div className="flex items-center gap-4 text-xs text-muted-foreground">
             <span className="flex items-center gap-1">

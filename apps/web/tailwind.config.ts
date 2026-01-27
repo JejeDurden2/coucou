@@ -1,4 +1,5 @@
 import type { Config } from 'tailwindcss';
+import typography from '@tailwindcss/typography';
 
 const config: Config = {
   content: [
@@ -69,10 +70,9 @@ const config: Config = {
       animation: {
         wave: 'wave 0.5s ease-in-out',
         'count-up': 'count-up 0.5s ease-out forwards',
-        'glow-pulse': 'glow-pulse 2s ease-in-out infinite',
       },
     },
   },
-  plugins: [require('@tailwindcss/typography')],
+  plugins: [typography],
 };
 export default config;

@@ -27,7 +27,7 @@ export const KeywordsList = memo(function KeywordsList({ positive, negative }: K
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           {/* Positive keywords */}
           <div className="space-y-2">
-            <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+            <p className="text-xs font-medium text-muted-foreground uppercase text-pretty">
               Points positifs
             </p>
             <ul className="space-y-1.5">
@@ -43,7 +43,7 @@ export const KeywordsList = memo(function KeywordsList({ positive, negative }: K
 
           {/* Negative keywords */}
           <div className="space-y-2">
-            <p className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+            <p className="text-xs font-medium text-muted-foreground uppercase text-pretty">
               Points négatifs
             </p>
             <ul className="space-y-1.5">

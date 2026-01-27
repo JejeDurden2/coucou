@@ -70,7 +70,7 @@ export function DeleteAccountModal({
           size="sm"
           className="border-destructive/50 text-destructive hover:bg-destructive/10"
         >
-          <Trash2 className="mr-2 h-4 w-4" aria-hidden="true" />
+          <Trash2 className="mr-2 size-4" aria-hidden="true" />
           Supprimer mon compte
         </Button>
       </AlertDialogTrigger>
@@ -141,7 +141,7 @@ export function DeleteAccountModal({
                 autoComplete="off"
               />
               {confirmationInput.length > 0 && !isConfirmationValid && (
-                <p className="text-sm text-destructive mt-2">
+                <p className="text-sm text-destructive mt-2 text-pretty">
                   Veuillez saisir exactement SUPPRIMER (en majuscules)
                 </p>
               )}

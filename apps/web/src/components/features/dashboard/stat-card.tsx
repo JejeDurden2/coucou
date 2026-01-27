@@ -30,7 +30,7 @@ function TrendIndicator({ delta }: TrendIndicatorProps): React.ReactNode {
   if (delta === 0) {
     return (
       <span className="inline-flex items-center text-xs text-muted-foreground">
-        <Minus className="h-3 w-3" aria-hidden="true" />
+        <Minus className="size-3" aria-hidden="true" />
       </span>
     );
   }
@@ -41,7 +41,7 @@ function TrendIndicator({ delta }: TrendIndicatorProps): React.ReactNode {
 
   return (
     <span className={cn('inline-flex items-center text-xs', colorClass)}>
-      <Icon className="h-3 w-3" aria-hidden="true" />
+      <Icon className="size-3" aria-hidden="true" />
     </span>
   );
 }
@@ -56,7 +56,7 @@ function StatValue({
   if (value === null) {
     return (
       <span className="inline-flex items-center gap-1.5 text-muted-foreground">
-        <EyeOff className={isLarge ? 'h-8 w-8' : 'h-5 w-5'} aria-hidden="true" />
+        <EyeOff className={isLarge ? 'size-8' : 'size-5'} aria-hidden="true" />
         <span className={isLarge ? 'text-lg' : 'text-sm'}>Non classé</span>
       </span>
     );
@@ -96,7 +96,7 @@ export const StatCard = memo(function StatCard({
     <div
       className={cn(
         'relative rounded-lg border border-border bg-card h-full',
-        'transition-colors duration-200 hover:bg-card-hover',
+        'hover:bg-card-hover',
         isLarge ? 'p-6' : 'p-4',
         podiumClass,
         className,
@@ -106,7 +106,7 @@ export const StatCard = memo(function StatCard({
         <div className="flex-1 min-w-0 flex flex-col">
           <p
             className={cn(
-              'text-muted-foreground mb-1 flex items-center gap-1',
+              'text-muted-foreground mb-1 flex items-center gap-1 text-pretty',
               isLarge ? 'text-sm' : 'text-xs',
             )}
           >
@@ -125,7 +125,7 @@ export const StatCard = memo(function StatCard({
             </p>
             {trend !== undefined && <TrendIndicator delta={trend.delta} />}
           </div>
-          {subtitle && <p className="text-xs text-muted-foreground mt-1">{subtitle}</p>}
+          {subtitle && <p className="text-xs text-muted-foreground mt-1 text-pretty">{subtitle}</p>}
           {sparklineData && sparklineData.length >= 2 && (
             <div className={cn('mt-auto', isLarge ? 'pt-4' : 'pt-2')}>
               <Sparkline
@@ -143,7 +143,7 @@ export const StatCard = memo(function StatCard({
             isLarge ? 'p-3' : 'p-2',
           )}
         >
-          <Icon className={isLarge ? 'h-8 w-8' : 'h-5 w-5'} aria-hidden="true" />
+          <Icon className={isLarge ? 'size-8' : 'size-5'} aria-hidden="true" />
         </div>
       </div>
     </div>

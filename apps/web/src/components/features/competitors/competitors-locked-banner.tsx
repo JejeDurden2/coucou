@@ -10,7 +10,7 @@ export const CompetitorsLockedBanner = memo(function CompetitorsLockedBanner() {
   return (
     <div className="relative">
       {/* Blurred background placeholder */}
-      <div className="absolute inset-0 blur-sm opacity-30 pointer-events-none">
+      <div className="absolute inset-0 opacity-30 pointer-events-none">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
           {Array.from({ length: 6 }, (_, i) => (
             <div key={i} className="h-36 bg-muted rounded-lg" />

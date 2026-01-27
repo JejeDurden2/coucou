@@ -49,7 +49,7 @@ export const CompetitorRankingTable = memo(function CompetitorRankingTable({
   if (data.length === 0) {
     return (
       <div className="rounded-xl border border-border bg-card/50 p-8 text-center">
-        <p className="text-muted-foreground">Aucun concurrent identifié</p>
+        <p className="text-muted-foreground text-pretty">Aucun concurrent identifié</p>
       </div>
     );
   }
@@ -83,7 +83,6 @@ export const CompetitorRankingTable = memo(function CompetitorRankingTable({
             <tr
               key={competitor.name}
               className={cn(
-                'transition-colors',
                 isUserRow(competitor.name) ? 'bg-primary/10' : 'bg-background/30 hover:bg-muted/50',
               )}
             >

@@ -11,7 +11,7 @@ export function CitationBadge({ isCited, position, showPosition = true }: Citati
   if (isCited) {
     return (
       <Badge variant="success" className="gap-1">
-        <Check className="h-3 w-3" aria-hidden="true" />
+        <Check className="size-3" aria-hidden="true" />
         <span>Cité{showPosition && position ? ` #${position}` : ''}</span>
       </Badge>
     );
@@ -19,7 +19,7 @@ export function CitationBadge({ isCited, position, showPosition = true }: Citati
 
   return (
     <Badge variant="destructive" className="gap-1">
-      <X className="h-3 w-3" aria-hidden="true" />
+      <X className="size-3" aria-hidden="true" />
       <span>Absent</span>
     </Badge>
   );

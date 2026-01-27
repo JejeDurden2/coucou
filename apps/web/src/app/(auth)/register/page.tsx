@@ -33,8 +33,9 @@ export default function RegisterPage(): React.ReactNode {
       await register(email, password, name, acceptTerms);
 
       // Track conversion event
-      if (typeof window !== 'undefined' && (window as any).dataLayer) {
-        (window as any).dataLayer.push({
+      if (typeof window !== 'undefined') {
+        const w = window as unknown as { dataLayer?: Record<string, unknown>[] };
+        w.dataLayer?.push({
           event: 'conversion_event_subscribe_paid',
         });
       }
@@ -121,7 +122,7 @@ export default function RegisterPage(): React.ReactNode {
                 autoComplete="email"
                 spellCheck={false}
               />
-              {emailError && <p className="text-sm text-destructive">{emailError}</p>}
+              {emailError && <p className="text-sm text-destructive text-pretty">{emailError}</p>}
             </div>
             <div className="space-y-2">
               <label htmlFor="password" className="text-sm font-medium">
@@ -147,16 +148,16 @@ export default function RegisterPage(): React.ReactNode {
                   setAcceptTerms(e.target.checked);
                   if (e.target.checked) setError('');
                 }}
-                className="mt-1 h-4 w-4 rounded border-zinc-700 bg-zinc-900 text-cyan-400 focus:ring-cyan-400/50"
+                className="mt-1 size-4 rounded border-zinc-700 bg-zinc-900 text-primary focus:ring-primary/50"
                 required
               />
               <label htmlFor="terms" className="text-sm text-muted-foreground">
                 J&apos;accepte les{' '}
-                <Link href="/terms" className="text-cyan-400 hover:underline" target="_blank">
+                <Link href="/terms" className="text-primary hover:underline" target="_blank">
                   Conditions Générales d&apos;Utilisation
                 </Link>{' '}
                 et la{' '}
-                <Link href="/privacy" className="text-cyan-400 hover:underline" target="_blank">
+                <Link href="/privacy" className="text-primary hover:underline" target="_blank">
                   Politique de confidentialité
                 </Link>
               </label>
@@ -166,7 +167,7 @@ export default function RegisterPage(): React.ReactNode {
             </Button>
           </form>
         </div>
-        <p className="mt-4 text-center text-sm text-muted-foreground">
+        <p className="mt-4 text-center text-sm text-muted-foreground text-pretty">
           Déjà un compte ?{' '}
           <Link href="/login" className="text-primary hover:underline">
             Se connecter

@@ -31,7 +31,7 @@ function PositionIndicator({
   provider: 'chatgpt' | 'claude';
 }) {
   if (!result) {
-    return <EyeOff className="h-3 w-3 text-muted-foreground" aria-label="Pas encore analysé" />;
+    return <EyeOff className="size-3 text-muted-foreground" aria-label="Pas encore analysé" />;
   }
 
   if (result.isCited) {
@@ -43,10 +43,7 @@ function PositionIndicator({
         )}
       >
         <span
-          className={cn(
-            'h-2 w-2 rounded-full',
-            provider === 'chatgpt' ? 'bg-chatgpt' : 'bg-claude',
-          )}
+          className={cn('size-2 rounded-full', provider === 'chatgpt' ? 'bg-chatgpt' : 'bg-claude')}
         />
         #{result.position}
       </span>
@@ -55,7 +52,7 @@ function PositionIndicator({
 
   return (
     <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs bg-destructive/10 text-destructive">
-      <span className="h-1.5 w-1.5 rounded-full bg-destructive" />
+      <span className="size-1.5 rounded-full bg-destructive" />
       Non cité
     </span>
   );
@@ -88,8 +85,7 @@ export const PromptCard = memo(function PromptCard({
   return (
     <div
       className={cn(
-        'rounded-lg border border-border bg-card transition-all duration-200',
-        'hover:border-primary/20 hover:shadow-lg hover:shadow-primary/5',
+        'rounded-lg border border-border bg-card',
         isCitedByAny && 'border-l-2 border-l-success',
         (isDeleting || disabled) && 'opacity-50 pointer-events-none',
       )}
@@ -108,7 +104,7 @@ export const PromptCard = memo(function PromptCard({
       >
         {/* Content */}
         <div className="flex-1 min-w-0">
-          <p className="text-sm text-foreground">{content}</p>
+          <p className="text-sm text-foreground text-pretty">{content}</p>
           {category && (
             <Badge variant="muted" className="mt-2 text-[10px]">
               {category}
@@ -132,10 +128,7 @@ export const PromptCard = memo(function PromptCard({
         <div className="flex items-center gap-2">
           {hasVerbatim && (
             <ChevronDown
-              className={cn(
-                'h-4 w-4 text-muted-foreground transition-transform duration-200',
-                isExpanded && 'rotate-180',
-              )}
+              className={cn('size-4 text-muted-foreground', isExpanded && 'rotate-180')}
             />
           )}
           {onDelete && (
@@ -161,10 +154,10 @@ export const PromptCard = memo(function PromptCard({
           {openai?.verbatim && (
             <div>
               <div className="flex items-center gap-2 mb-1">
-                <span className="h-2 w-2 rounded-full bg-chatgpt" />
+                <span className="size-2 rounded-full bg-chatgpt" />
                 <span className="text-xs font-medium text-chatgpt">ChatGPT</span>
               </div>
-              <p className="text-xs text-muted-foreground italic pl-4 border-l-2 border-chatgpt/30">
+              <p className="text-xs text-muted-foreground italic pl-4 border-l-2 border-chatgpt/30 text-pretty">
                 &quot;{openai.verbatim}&quot;
               </p>
             </div>
@@ -172,10 +165,10 @@ export const PromptCard = memo(function PromptCard({
           {anthropic?.verbatim && (
             <div>
               <div className="flex items-center gap-2 mb-1">
-                <span className="h-2 w-2 rounded-full bg-claude" />
+                <span className="size-2 rounded-full bg-claude" />
                 <span className="text-xs font-medium text-claude">Claude</span>
               </div>
-              <p className="text-xs text-muted-foreground italic pl-4 border-l-2 border-claude/30">
+              <p className="text-xs text-muted-foreground italic pl-4 border-l-2 border-claude/30 text-pretty">
                 &quot;{anthropic.verbatim}&quot;
               </p>
             </div>

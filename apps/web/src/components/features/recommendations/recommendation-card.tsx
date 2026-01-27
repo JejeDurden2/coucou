@@ -104,14 +104,14 @@ export const RecommendationCard = memo(function RecommendationCard({
         className={cn('rounded-lg border bg-card p-3 flex items-start gap-3', config.borderClass)}
       >
         <div className={cn('p-1.5 rounded-md', config.bgClass)}>
-          <SeverityIcon className={cn('h-4 w-4', config.colorClass)} aria-hidden="true" />
+          <SeverityIcon className={cn('size-4', config.colorClass)} aria-hidden="true" />
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
-            <TypeIcon className="h-3.5 w-3.5 text-muted-foreground" aria-hidden="true" />
-            <h3 className="text-sm font-medium truncate">{recommendation.title}</h3>
+            <TypeIcon className="size-3.5 text-muted-foreground" aria-hidden="true" />
+            <h3 className="text-sm font-medium truncate text-balance">{recommendation.title}</h3>
           </div>
-          <p className="text-xs text-muted-foreground mt-0.5 line-clamp-1">
+          <p className="text-xs text-muted-foreground mt-0.5 line-clamp-1 text-pretty">
             {recommendation.description}
           </p>
         </div>
@@ -120,12 +120,7 @@ export const RecommendationCard = memo(function RecommendationCard({
   }
 
   return (
-    <div
-      className={cn(
-        'rounded-lg border bg-card overflow-hidden transition-colors',
-        config.borderClass,
-      )}
-    >
+    <div className={cn('rounded-lg border bg-card overflow-hidden', config.borderClass)}>
       <button
         type="button"
         onClick={() => setIsExpanded(!isExpanded)}
@@ -133,12 +128,12 @@ export const RecommendationCard = memo(function RecommendationCard({
         aria-expanded={isExpanded}
       >
         <div className={cn('p-1.5 rounded-md mt-0.5', config.bgClass)}>
-          <SeverityIcon className={cn('h-4 w-4', config.colorClass)} aria-hidden="true" />
+          <SeverityIcon className={cn('size-4', config.colorClass)} aria-hidden="true" />
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 flex-wrap">
-            <TypeIcon className="h-3.5 w-3.5 text-muted-foreground" aria-hidden="true" />
-            <h3 className="text-sm font-medium">{recommendation.title}</h3>
+            <TypeIcon className="size-3.5 text-muted-foreground" aria-hidden="true" />
+            <h3 className="text-sm font-medium text-balance">{recommendation.title}</h3>
             <span
               className={cn(
                 'text-[10px] px-1.5 py-0.5 rounded-full font-medium',
@@ -149,13 +144,15 @@ export const RecommendationCard = memo(function RecommendationCard({
               {SEVERITY_LABELS[recommendation.severity]}
             </span>
           </div>
-          <p className="text-xs text-muted-foreground mt-1">{recommendation.description}</p>
+          <p className="text-xs text-muted-foreground mt-1 text-pretty">
+            {recommendation.description}
+          </p>
           {showActionItems && totalItems > 0 && (
             <div className="flex items-center gap-2 mt-2">
               <div className="h-1.5 flex-1 max-w-24 rounded-full bg-muted overflow-hidden">
                 <div
                   className={cn(
-                    'h-full rounded-full transition-[width] duration-300',
+                    'h-full rounded-full',
                     progress === 100 ? 'bg-success' : 'bg-primary',
                   )}
                   style={{ width: `${progress}%` }}
@@ -169,16 +166,16 @@ export const RecommendationCard = memo(function RecommendationCard({
         </div>
         <div className="text-muted-foreground mt-1">
           {isExpanded ? (
-            <ChevronDown className="h-4 w-4" aria-hidden="true" />
+            <ChevronDown className="size-4" aria-hidden="true" />
           ) : (
-            <ChevronRight className="h-4 w-4" aria-hidden="true" />
+            <ChevronRight className="size-4" aria-hidden="true" />
           )}
         </div>
       </button>
 
       {isExpanded && showActionItems && (
         <div className="px-4 pb-4 pt-1 border-t border-border bg-muted/20">
-          <p className="text-xs text-muted-foreground font-medium uppercase tracking-wide mb-2">
+          <p className="text-xs text-muted-foreground font-medium uppercase mb-2 text-pretty">
             Actions recommandees
           </p>
           <ul className="space-y-2">

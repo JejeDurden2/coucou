@@ -58,7 +58,7 @@ function VariationIndicator({
 
   return (
     <span className={cn('inline-flex items-center gap-0.5 text-xs font-medium', getColorClass())}>
-      <Icon className="h-3 w-3" aria-hidden="true" />
+      <Icon className="size-3" aria-hidden="true" />
       {sign}
       {formattedVariation}%
     </span>
@@ -137,7 +137,7 @@ export const KpiCard = memo(function KpiCard({
           </div>
         </div>
         <div className="rounded-lg p-2 border border-border bg-muted/50 text-muted-foreground">
-          <Icon className="h-5 w-5" aria-hidden="true" />
+          <Icon className="size-5" aria-hidden="true" />
         </div>
       </div>
     </div>

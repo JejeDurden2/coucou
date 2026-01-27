@@ -17,9 +17,9 @@ interface PromptTableProps {
 export function PromptTable({ prompts, onTriggerScan, onDelete, isLoading }: PromptTableProps) {
   if (prompts.length === 0) {
     return (
-      <div className="rounded-xl border border-cyan-500/10 bg-card/50 p-8 text-center">
-        <p className="text-muted-foreground">Aucune requête configurée</p>
-        <p className="text-sm text-muted-foreground mt-1">
+      <div className="rounded-xl border border-border bg-card/50 p-8 text-center">
+        <p className="text-muted-foreground text-pretty">Aucune requête configurée</p>
+        <p className="text-sm text-muted-foreground mt-1 text-pretty">
           Ajoutez des requêtes pour commencer à suivre votre visibilité
         </p>
       </div>
@@ -32,7 +32,7 @@ export function PromptTable({ prompts, onTriggerScan, onDelete, isLoading }: Pro
   );
 
   return (
-    <div className="rounded-xl border border-cyan-500/10 overflow-hidden overflow-x-auto">
+    <div className="rounded-xl border border-border overflow-hidden overflow-x-auto">
       <table className="w-full">
         <thead className="bg-card/80">
           <tr>
@@ -52,7 +52,7 @@ export function PromptTable({ prompts, onTriggerScan, onDelete, isLoading }: Pro
             </th>
           </tr>
         </thead>
-        <tbody className="divide-y divide-cyan-500/10">
+        <tbody className="divide-y divide-border">
           {prompts.map((prompt) => {
             // Build a Map for O(1) lookups instead of find() in loop
             const resultsByModel = new Map(prompt.modelResults.map((r) => [r.model, r]));
@@ -60,12 +60,12 @@ export function PromptTable({ prompts, onTriggerScan, onDelete, isLoading }: Pro
               <tr
                 key={prompt.promptId}
                 className={cn(
-                  'bg-background/30 hover:bg-cyan-500/5 transition-colors',
+                  'bg-background/30 hover:bg-muted/50 transition-colors',
                   isLoading && 'opacity-50',
                 )}
               >
                 <td className="px-4 py-4">
-                  <p className="text-sm font-medium line-clamp-2">{prompt.content}</p>
+                  <p className="text-sm font-medium line-clamp-2 text-pretty">{prompt.content}</p>
                   {prompt.category && (
                     <span className="text-xs text-muted-foreground">{prompt.category}</span>
                   )}
@@ -92,7 +92,7 @@ export function PromptTable({ prompts, onTriggerScan, onDelete, isLoading }: Pro
                         disabled={isLoading}
                         aria-label="Lancer une analyse"
                       >
-                        <Play className="h-4 w-4" aria-hidden="true" />
+                        <Play className="size-4" aria-hidden="true" />
                       </Button>
                     )}
                     {onDelete && (
@@ -103,7 +103,7 @@ export function PromptTable({ prompts, onTriggerScan, onDelete, isLoading }: Pro
                         disabled={isLoading}
                         aria-label="Supprimer le prompt"
                       >
-                        <Trash2 className="h-4 w-4 text-rose-400" aria-hidden="true" />
+                        <Trash2 className="size-4 text-destructive" aria-hidden="true" />
                       </Button>
                     )}
                   </div>

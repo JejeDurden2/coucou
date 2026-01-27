@@ -3,6 +3,7 @@
 import type { Competitor, EnrichedCompetitor, Plan } from '@coucou-ia/shared';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Users, Trophy } from 'lucide-react';
+import { cn } from '@/lib/utils';
 import { CompetitorCard } from '@/components/features/competitors/competitor-ui';
 
 interface CompetitorsListProps {
@@ -56,14 +57,14 @@ function EnrichedCompetitorsList({
     <Card>
       <CardHeader className="flex flex-row items-center justify-between pb-4">
         <div className="flex items-center gap-2">
-          <Trophy className="h-5 w-5 text-amber-500" aria-hidden="true" />
+          <Trophy className="size-5 text-amber-500" aria-hidden="true" />
           <CardTitle className="text-lg font-medium">Top Concurrents</CardTitle>
         </div>
         <span className="text-xs text-muted-foreground">7 derniers jours</span>
       </CardHeader>
       <CardContent>
         {displayedCompetitors.length === 0 ? (
-          <p className="text-sm text-muted-foreground text-center py-8">
+          <p className="text-sm text-muted-foreground text-center py-8 text-pretty">
             Aucun concurrent identifié. Lancez une analyse pour découvrir vos concurrents.
           </p>
         ) : (
@@ -103,11 +104,11 @@ function SimpleCompetitorsList({
     <Card>
       <CardHeader className="flex flex-row items-center justify-between pb-2">
         <CardTitle className="text-lg font-medium">Benchmark concurrents</CardTitle>
-        <Users className="h-5 w-5 text-muted-foreground" aria-hidden="true" />
+        <Users className="size-5 text-muted-foreground" aria-hidden="true" />
       </CardHeader>
       <CardContent>
         {displayedCompetitors.length === 0 ? (
-          <p className="text-sm text-muted-foreground text-center py-4">
+          <p className="text-sm text-muted-foreground text-center py-4 text-pretty">
             Aucun concurrent identifié
           </p>
         ) : (
@@ -143,14 +144,14 @@ function ViewMoreButton({ count, onClick, fullWidth }: ViewMoreButtonProps): Rea
 
   if (fullWidth) {
     return (
-      <button type="button" onClick={onClick} className={`${baseClass} w-full p-3`}>
+      <button type="button" onClick={onClick} className={cn(baseClass, 'w-full p-3')}>
         +{count} autre{count > 1 ? 's' : ''}
       </button>
     );
   }
 
   return (
-    <button type="button" onClick={onClick} className={`${baseClass} p-4 min-h-[120px]`}>
+    <button type="button" onClick={onClick} className={cn(baseClass, 'p-4 min-h-[120px]')}>
       +{count} autre{count > 1 ? 's' : ''}
     </button>
   );
@@ -168,13 +169,13 @@ function SimpleCompetitorRow({ name, count, maxCount }: SimpleCompetitorRowProps
     <div className="space-y-1">
       <div className="flex items-center justify-between text-sm">
         <span className="font-medium">{name}</span>
-        <span className="text-muted-foreground">
+        <span className="text-muted-foreground tabular-nums">
           {count} citation{count > 1 ? 's' : ''}
         </span>
       </div>
       <div className="h-1.5 rounded-full bg-muted overflow-hidden">
         <div
-          className="h-full rounded-full bg-primary transition-[width] duration-500"
+          className="h-full rounded-full bg-primary"
           style={{ width: `${(count / maxCount) * 100}%` }}
         />
       </div>

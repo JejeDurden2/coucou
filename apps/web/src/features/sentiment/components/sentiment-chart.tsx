@@ -44,7 +44,7 @@ export const SentimentChart = memo(function SentimentChart({ projectId }: Sentim
           <CardDescription>Score de visibilité au fil du temps</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="h-64 bg-muted animate-pulse rounded-lg" />
+          <div className="h-64 bg-muted animate-pulse motion-reduce:animate-none rounded-lg" />
         </CardContent>
       </Card>
     );
@@ -75,7 +75,7 @@ export const SentimentChart = memo(function SentimentChart({ projectId }: Sentim
             <div className="size-12 rounded-full bg-muted flex items-center justify-center mb-3">
               <TrendingUp className="size-6 text-muted-foreground" aria-hidden="true" />
             </div>
-            <p className="text-sm text-muted-foreground max-w-xs">
+            <p className="text-sm text-muted-foreground max-w-xs text-pretty">
               Pas assez de données pour afficher l'évolution. Revenez après la prochaine analyse.
             </p>
           </div>

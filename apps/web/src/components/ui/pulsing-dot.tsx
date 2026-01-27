@@ -24,11 +24,11 @@ export function PulsingDot({ color, size = 'sm' }: PulsingDotProps): React.React
     <span className={cn('relative flex', sizeClass)}>
       <span
         className={cn(
-          'animate-ping absolute h-full w-full rounded-full opacity-75 motion-reduce:animate-none',
+          'animate-ping absolute size-full rounded-full opacity-75 motion-reduce:animate-none',
           colorClass,
         )}
       />
-      <span className={cn('relative rounded-full h-full w-full', colorClass)} />
+      <span className={cn('relative rounded-full size-full', colorClass)} />
     </span>
   );
 }

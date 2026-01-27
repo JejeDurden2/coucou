@@ -104,7 +104,7 @@ export default function LoginPage() {
             </Button>
           </form>
         </div>
-        <p className="mt-4 text-center text-sm text-muted-foreground">
+        <p className="mt-4 text-center text-sm text-muted-foreground text-pretty">
           Pas encore de compte ?{' '}
           <Link href="/register" className="text-primary hover:underline">
             Créer un compte

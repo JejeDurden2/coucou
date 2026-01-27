@@ -10,7 +10,7 @@ export const StatsLockedBanner = memo(function StatsLockedBanner() {
   return (
     <div className="relative">
       {/* Blurred background placeholder */}
-      <div className="absolute inset-0 blur-sm opacity-30 pointer-events-none">
+      <div className="absolute inset-0 opacity-30 pointer-events-none">
         <div className="grid grid-cols-2 gap-4 p-4">
           <div className="h-48 bg-muted rounded-lg" />
           <div className="h-48 bg-muted rounded-lg" />

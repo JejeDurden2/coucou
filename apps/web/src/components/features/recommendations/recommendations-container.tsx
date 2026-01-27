@@ -6,6 +6,7 @@ import type { Recommendation, RecommendationSeverity } from '@coucou-ia/shared';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { InfoTooltip } from '@/components/ui/info-tooltip';
+import { cn } from '@/lib/utils';
 import { RecommendationCard, SEVERITY_CONFIG } from './recommendation-card';
 
 interface RecommendationsContainerProps {
@@ -55,8 +56,8 @@ export const RecommendationsContainer = memo(function RecommendationsContainer({
               <CheckCircle2 className="size-8 text-success" aria-hidden="true" />
             </div>
             <div className="space-y-2">
-              <h3 className="text-lg font-semibold">Excellent travail!</h3>
-              <p className="text-sm text-muted-foreground max-w-md">
+              <h3 className="text-lg font-semibold text-balance">Excellent travail!</h3>
+              <p className="text-sm text-muted-foreground max-w-md text-pretty">
                 Aucune recommandation disponible. Continuez à analyser régulièrement pour obtenir
                 des insights personnalisés sur votre visibilité IA.
               </p>
@@ -86,14 +87,14 @@ export const RecommendationsContainer = memo(function RecommendationsContainer({
         <CardHeader>
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div className="flex items-center gap-2">
-              <Lightbulb className="h-5 w-5 text-amber-500" aria-hidden="true" />
+              <Lightbulb className="size-5 text-amber-500" aria-hidden="true" />
               <CardTitle className="flex items-center gap-1">
                 Toutes les recommandations
                 <InfoTooltip term="recommendation" />
               </CardTitle>
             </div>
             <div className="flex items-center gap-2">
-              <Filter className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
+              <Filter className="size-4 text-muted-foreground" aria-hidden="true" />
               <div className="flex gap-1">
                 <FilterButton
                   label="Tout"
@@ -131,7 +132,7 @@ export const RecommendationsContainer = memo(function RecommendationsContainer({
         </CardHeader>
         <CardContent className="space-y-3">
           {filteredRecommendations.length === 0 ? (
-            <p className="text-sm text-muted-foreground text-center py-8">
+            <p className="text-sm text-muted-foreground text-center py-8 text-pretty">
               Aucune recommandation dans cette catégorie
             </p>
           ) : (
@@ -156,8 +157,8 @@ function SummaryStatCard({ label, value, valueClassName }: SummaryStatCardProps)
   return (
     <Card>
       <CardContent className="pt-4">
-        <p className="text-sm text-muted-foreground">{label}</p>
-        <p className={`text-2xl font-bold ${valueClassName ?? ''}`}>{value}</p>
+        <p className="text-sm text-muted-foreground text-pretty">{label}</p>
+        <p className={cn('text-2xl font-bold tabular-nums', valueClassName)}>{value}</p>
       </CardContent>
     </Card>
   );
@@ -190,7 +191,7 @@ function FilterButton({
       onClick={onClick}
       className={
         active && config
-          ? `${config.bgClass} ${config.colorClass} border-transparent hover:${config.bgClass}`
+          ? cn(config.bgClass, config.colorClass, 'border-transparent', `hover:${config.bgClass}`)
           : undefined
       }
     >

@@ -27,7 +27,7 @@ export default function BlogPage(): React.ReactNode {
   const posts = getAllPosts();
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-dvh bg-background">
       {/* Header */}
       <header className="border-b border-border">
         <div className="mx-auto max-w-5xl px-4 py-4">
@@ -49,16 +49,22 @@ export default function BlogPage(): React.ReactNode {
       {/* Main */}
       <main className="mx-auto max-w-5xl px-4 py-12">
         <div className="mb-12 text-center">
-          <h1 className="font-display text-4xl font-bold text-foreground">Blog</h1>
-          <p className="mt-4 text-lg text-muted-foreground">
+          <h1 className="font-display text-4xl font-bold text-foreground text-balance">Blog</h1>
+          <p className="mt-4 text-lg text-muted-foreground text-pretty">
             Guides et articles sur le GEO et la visibilité dans les IA
           </p>
         </div>
 
         {posts.length === 0 ? (
           <div className="text-center py-20">
-            <p className="text-muted-foreground">Aucun article pour le moment.</p>
-            <p className="mt-2 text-sm text-muted-foreground">Revenez bientôt !</p>
+            <p className="text-muted-foreground text-pretty">Aucun article pour le moment.</p>
+            <p className="mt-2 text-sm text-muted-foreground text-pretty">Revenez bientôt !</p>
+            <Link
+              href="/"
+              className="mt-6 inline-flex items-center justify-center rounded-lg bg-primary px-6 py-3 text-sm font-semibold text-primary-foreground hover:bg-primary/90"
+            >
+              Retour à l&apos;accueil
+            </Link>
           </div>
         ) : (
           <div className="grid gap-6 md:grid-cols-2">

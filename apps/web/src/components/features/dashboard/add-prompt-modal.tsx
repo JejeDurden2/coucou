@@ -62,7 +62,7 @@ export function AddPromptModal({
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent className="sm:max-w-[540px]">
         <DialogHeader>
-          <DialogTitle>Ajouter une requête</DialogTitle>
+          <DialogTitle className="text-balance">Ajouter une requête</DialogTitle>
           <DialogDescription className="text-pretty">
             Entrez une question que vos clients pourraient poser à une IA pour trouver un service
             comme le vôtre.
@@ -109,7 +109,7 @@ export function AddPromptModal({
                   type="button"
                   onClick={() => setCategory(category === cat ? undefined : cat)}
                   className={cn(
-                    'px-3 py-1.5 rounded-full text-sm border transition-colors',
+                    'px-3 py-1.5 rounded-full text-sm border',
                     category === cat
                       ? 'bg-primary text-primary-foreground border-primary'
                       : 'bg-background border-border hover:border-primary hover:text-primary',
@@ -157,7 +157,7 @@ export function AddPromptModal({
               </li>
             </ul>
             <div className="pt-2 border-t border-border/50">
-              <p className="text-xs text-muted-foreground">
+              <p className="text-xs text-muted-foreground text-pretty">
                 <strong className="text-foreground">Exemples :</strong>
               </p>
               <ul className="mt-1.5 space-y-1 text-xs text-muted-foreground">

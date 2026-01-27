@@ -26,7 +26,7 @@ export function Header({ variant = 'default' }: HeaderProps) {
   }
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 border-b border-zinc-800 bg-zinc-950/80 backdrop-blur-xl">
+    <header className="fixed top-0 left-0 right-0 z-50 border-b border-border bg-background/80 pt-[env(safe-area-inset-top)]">
       <nav className="container mx-auto flex h-16 items-center justify-between px-4">
         <Link href="/" onClick={closeMobileMenu}>
           <Logo size="sm" />
@@ -79,7 +79,7 @@ export function Header({ variant = 'default' }: HeaderProps) {
 
       {/* Mobile menu */}
       {mobileMenuOpen && (
-        <div className="md:hidden border-t border-zinc-800 bg-zinc-950">
+        <div className="md:hidden border-t border-border bg-background">
           <div className="container mx-auto px-4 py-4 flex flex-col gap-4">
             {NAV_LINKS.map((link) => (
               <Link
@@ -99,7 +99,7 @@ export function Header({ variant = 'default' }: HeaderProps) {
               Blog
             </Link>
 
-            <div className="flex flex-col gap-3 pt-4 border-t border-zinc-800">
+            <div className="flex flex-col gap-3 pt-4 border-t border-border">
               <Button variant="ghost" asChild>
                 <Link href="/login" onClick={closeMobileMenu}>
                   Connexion

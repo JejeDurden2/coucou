@@ -21,7 +21,7 @@ function DeltaIndicator({ delta }: { delta: number }): React.ReactNode {
   if (Math.abs(delta) < 0.1) {
     return (
       <span className="inline-flex items-center gap-1 text-sm text-muted-foreground">
-        <Minus className="h-4 w-4" aria-hidden="true" />
+        <Minus className="size-4" aria-hidden="true" />
       </span>
     );
   }
@@ -31,8 +31,13 @@ function DeltaIndicator({ delta }: { delta: number }): React.ReactNode {
   const colorClass = isImprovement ? 'text-success' : 'text-destructive';
 
   return (
-    <span className={cn('inline-flex items-center gap-0.5 text-sm font-medium', colorClass)}>
-      <Icon className="h-4 w-4" aria-hidden="true" />
+    <span
+      className={cn(
+        'inline-flex items-center gap-0.5 text-sm font-medium tabular-nums',
+        colorClass,
+      )}
+    >
+      <Icon className="size-4" aria-hidden="true" />
       {Math.abs(delta).toFixed(1)}
     </span>
   );
@@ -87,7 +92,7 @@ export const PositionCard = memo(function PositionCard({
     >
       <div className="flex items-start justify-between gap-3">
         <div className="flex-1 min-w-0">
-          <p className="text-sm text-muted-foreground mb-1 flex items-center gap-1">
+          <p className="text-sm text-muted-foreground mb-1 flex items-center gap-1 text-pretty">
             Position moyenne
             <InfoTooltip term="position" />
           </p>
@@ -95,11 +100,11 @@ export const PositionCard = memo(function PositionCard({
           <div className="flex items-baseline gap-3">
             {averageRank === null ? (
               <span className="inline-flex items-center gap-1.5 text-muted-foreground">
-                <EyeOff className="h-8 w-8" aria-hidden="true" />
+                <EyeOff className="size-8" aria-hidden="true" />
                 <span className="text-lg">Non classé</span>
               </span>
             ) : (
-              <p className="text-4xl font-bold tabular-nums text-foreground">
+              <p className="text-4xl font-bold tabular-nums text-foreground text-pretty">
                 <span className="text-2xl text-muted-foreground">#</span>
                 {averageRank.toFixed(1)}
               </p>
@@ -108,12 +113,12 @@ export const PositionCard = memo(function PositionCard({
           </div>
 
           {trend && averageRank !== null && (
-            <p className="text-xs text-muted-foreground mt-1">vs 7 derniers jours</p>
+            <p className="text-xs text-muted-foreground mt-1 text-pretty">vs 7 derniers jours</p>
           )}
         </div>
 
         <div className="rounded-lg p-3 border border-border bg-muted/50 text-muted-foreground">
-          <Trophy className="h-8 w-8" aria-hidden="true" />
+          <Trophy className="size-8" aria-hidden="true" />
         </div>
       </div>
 

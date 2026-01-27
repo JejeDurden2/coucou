@@ -44,7 +44,7 @@ export default function ForgotPasswordPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <p className="text-sm text-muted-foreground text-center mb-4">
+          <p className="text-sm text-muted-foreground text-center mb-4 text-pretty">
             L&apos;email peut prendre quelques minutes a arriver. Pensez a verifier vos spams.
           </p>
           <Link href="/login">
@@ -94,7 +94,7 @@ export default function ForgotPasswordPage() {
             {isLoading ? 'Envoi en cours...' : 'Envoyer le lien'}
           </Button>
         </form>
-        <p className="mt-4 text-center text-sm text-muted-foreground">
+        <p className="mt-4 text-center text-sm text-muted-foreground text-pretty">
           <Link href="/login" className="text-primary hover:underline">
             <ArrowLeft className="inline mr-1 size-3" />
             Retour a la connexion

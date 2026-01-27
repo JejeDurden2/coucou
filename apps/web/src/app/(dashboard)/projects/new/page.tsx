@@ -52,12 +52,12 @@ export default function NewBrandPage() {
       <div className="flex items-center gap-4">
         <Button variant="ghost" size="icon" asChild aria-label="Retour aux marques">
           <Link href="/projects">
-            <ArrowLeft className="h-5 w-5" aria-hidden="true" />
+            <ArrowLeft className="size-5" aria-hidden="true" />
           </Link>
         </Button>
         <div>
-          <h1 className="text-2xl font-bold">Nouvelle marque</h1>
-          <p className="text-muted-foreground">
+          <h1 className="text-2xl font-bold text-balance">Nouvelle marque</h1>
+          <p className="text-muted-foreground text-pretty">
             Configurez le tracking de visibilité pour votre marque
           </p>
         </div>
@@ -84,7 +84,7 @@ export default function NewBrandPage() {
                 required
                 autoComplete="off"
               />
-              <p className="text-xs text-muted-foreground">
+              <p className="text-xs text-muted-foreground text-pretty">
                 Le nom principal de votre marque à tracker
               </p>
             </div>
@@ -128,7 +128,7 @@ export default function NewBrandPage() {
                   ))}
                 </div>
               )}
-              <p className="text-xs text-muted-foreground">
+              <p className="text-xs text-muted-foreground text-pretty">
                 Autres façons dont votre marque peut être mentionnée
               </p>
             </div>
@@ -146,7 +146,7 @@ export default function NewBrandPage() {
                 required
                 autoComplete="off"
               />
-              <p className="text-xs text-muted-foreground">
+              <p className="text-xs text-muted-foreground text-pretty">
                 Sera utilisé pour analyser votre marque et détecter les mentions
               </p>
             </div>

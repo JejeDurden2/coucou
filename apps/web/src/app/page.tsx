@@ -133,11 +133,11 @@ export default function LandingPage() {
         <section className="relative pt-32 pb-20 px-4 overflow-hidden grid-pattern">
           <div className="container mx-auto max-w-5xl text-center relative z-10">
             <Badge className="mb-6" variant="outline">
-              <Sparkles className="mr-1 h-3 w-3" aria-hidden="true" />
+              <Sparkles className="mr-1 size-3" aria-hidden="true" />
               Nouveau: Support de GPT-5.2
             </Badge>
 
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6 text-balance">
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 text-balance">
               <span className="text-primary">L&apos;IA parle-t-elle</span>
               <br />
               de votre marque ?
@@ -154,7 +154,7 @@ export default function LandingPage() {
               <Button size="lg" asChild>
                 <Link href="/register">
                   Analyser ma marque gratuitement
-                  <ArrowRight className="ml-2 h-4 w-4" aria-hidden="true" />
+                  <ArrowRight className="ml-2 size-4" aria-hidden="true" />
                 </Link>
               </Button>
               <Button size="lg" variant="outline" asChild>
@@ -180,8 +180,8 @@ export default function LandingPage() {
           </div>
 
           {/* Scroll indicator */}
-          <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce motion-reduce:animate-none">
-            <ChevronDown className="h-6 w-6 text-muted-foreground" aria-hidden="true" />
+          <div className="absolute bottom-8 left-1/2 -translate-x-1/2">
+            <ChevronDown className="size-6 text-muted-foreground" aria-hidden="true" />
           </div>
         </section>
 
@@ -202,7 +202,7 @@ export default function LandingPage() {
               <Card className="bg-red-500/5 border-red-500/20">
                 <CardContent className="pt-6">
                   <div className="text-4xl font-bold text-red-500 mb-2 tabular-nums">67%</div>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-sm text-muted-foreground text-pretty">
                     des utilisateurs font confiance aux recommandations de l&apos;IA
                   </p>
                 </CardContent>
@@ -210,7 +210,7 @@ export default function LandingPage() {
               <Card className="bg-amber-500/5 border-amber-500/20">
                 <CardContent className="pt-6">
                   <div className="text-4xl font-bold text-amber-400 mb-2 tabular-nums">25%</div>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-sm text-muted-foreground text-pretty">
                     de recherches Google en moins depuis l&apos;arrivée de ChatGPT
                   </p>
                 </CardContent>
@@ -218,7 +218,7 @@ export default function LandingPage() {
               <Card className="bg-primary/5 border-primary/20">
                 <CardContent className="pt-6">
                   <div className="text-4xl font-bold text-primary mb-2 tabular-nums">+40%</div>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-sm text-muted-foreground text-pretty">
                     de conversions pour les marques citées en premier par l&apos;IA
                   </p>
                 </CardContent>
@@ -251,7 +251,7 @@ export default function LandingPage() {
                     <CardTitle className="text-base">SEO traditionnel</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-sm text-muted-foreground text-pretty">
                       Optimise votre position dans les résultats de recherche Google.
                       L&apos;utilisateur voit une liste de liens et choisit lequel visiter.
                     </p>
@@ -262,7 +262,7 @@ export default function LandingPage() {
                     <CardTitle className="text-base">GEO (nouveau)</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-sm text-muted-foreground text-pretty">
                       Optimise si et comment votre marque est mentionnée dans les réponses IA.
                       L&apos;utilisateur reçoit une recommandation directe.
                     </p>
@@ -270,7 +270,9 @@ export default function LandingPage() {
                 </Card>
               </div>
 
-              <h3 className="text-xl font-semibold mb-4">Pourquoi le GEO est crucial en 2025</h3>
+              <h3 className="text-xl font-semibold mb-4 text-balance">
+                Pourquoi le GEO est crucial en 2025
+              </h3>
 
               <p className="text-muted-foreground mb-4 text-pretty">
                 Les utilisateurs changent leur façon de chercher de l&apos;information. Au lieu de
@@ -287,7 +289,9 @@ export default function LandingPage() {
                 <strong className="text-foreground">+40% de conversions</strong>.
               </p>
 
-              <h3 className="text-xl font-semibold mb-4 mt-8">Comment améliorer votre GEO</h3>
+              <h3 className="text-xl font-semibold mb-4 mt-8 text-balance">
+                Comment améliorer votre GEO
+              </h3>
 
               <ul className="space-y-3 text-muted-foreground">
                 <li className="flex items-start gap-3">
@@ -353,12 +357,14 @@ export default function LandingPage() {
                 >
                   <CardHeader>
                     <div className="size-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
-                      <feature.icon className="h-6 w-6 text-primary" aria-hidden="true" />
+                      <feature.icon className="size-6 text-primary" aria-hidden="true" />
                     </div>
                     <CardTitle className="text-lg">{feature.title}</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-sm text-muted-foreground">{feature.description}</p>
+                    <p className="text-sm text-muted-foreground text-pretty">
+                      {feature.description}
+                    </p>
                   </CardContent>
                 </Card>
               ))}
@@ -384,8 +390,8 @@ export default function LandingPage() {
                   <div className="size-16 rounded-2xl bg-primary/10 border border-primary/20 flex items-center justify-center mx-auto mb-4 text-2xl font-bold text-primary tabular-nums">
                     {step.number}
                   </div>
-                  <h3 className="text-lg font-semibold mb-2">{step.title}</h3>
-                  <p className="text-sm text-muted-foreground">{step.description}</p>
+                  <h3 className="text-lg font-semibold mb-2 text-balance">{step.title}</h3>
+                  <p className="text-sm text-muted-foreground text-pretty">{step.description}</p>
                 </div>
               ))}
               <div
@@ -429,13 +435,13 @@ export default function LandingPage() {
                       <span className="text-4xl font-bold tabular-nums">{plan.price}€</span>
                       <span className="text-muted-foreground">/mois</span>
                     </div>
-                    <p className="text-sm text-muted-foreground">{plan.description}</p>
+                    <p className="text-sm text-muted-foreground text-pretty">{plan.description}</p>
                   </CardHeader>
                   <CardContent>
                     <ul className="space-y-3 mb-6">
                       {plan.features.map((feature) => (
                         <li key={feature} className="flex items-center gap-2 text-sm">
-                          <Check className="h-4 w-4 text-primary" aria-hidden="true" />
+                          <Check className="size-4 text-primary" aria-hidden="true" />
                           {feature}
                         </li>
                       ))}
@@ -474,7 +480,7 @@ export default function LandingPage() {
                     <CardTitle className="text-base font-medium">{faq.question}</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-sm text-muted-foreground">{faq.answer}</p>
+                    <p className="text-sm text-muted-foreground text-pretty">{faq.answer}</p>
                   </CardContent>
                 </Card>
               ))}
@@ -498,11 +504,11 @@ export default function LandingPage() {
                 <Button size="lg" asChild>
                   <Link href="/register">
                     Créer mon compte gratuitement
-                    <ArrowRight className="ml-2 h-4 w-4" aria-hidden="true" />
+                    <ArrowRight className="ml-2 size-4" aria-hidden="true" />
                   </Link>
                 </Button>
               </div>
-              <p className="text-xs text-muted-foreground mt-4">
+              <p className="text-xs text-muted-foreground mt-4 text-pretty">
                 Pas de carte bancaire requise. Annulable à tout moment.
               </p>
             </div>
@@ -523,7 +529,7 @@ export default function LandingPage() {
               </p>
             </div>
             <div>
-              <h4 className="font-medium mb-4">Produit</h4>
+              <h4 className="font-medium mb-4 text-balance">Produit</h4>
               <ul className="space-y-2 text-sm text-muted-foreground">
                 <li>
                   <Link href="#features" className="hover:text-foreground">
@@ -548,7 +554,7 @@ export default function LandingPage() {
               </ul>
             </div>
             <div>
-              <h4 className="font-medium mb-4">Légal</h4>
+              <h4 className="font-medium mb-4 text-balance">Légal</h4>
               <ul className="space-y-2 text-sm text-muted-foreground">
                 <li>
                   <Link href="/privacy" className="hover:text-foreground">
@@ -564,7 +570,9 @@ export default function LandingPage() {
             </div>
           </div>
           <div className="border-t border-zinc-800 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
-            <p className="text-sm text-muted-foreground">© 2026 Coucou IA. Tous droits réservés.</p>
+            <p className="text-sm text-muted-foreground text-pretty">
+              © 2026 Coucou IA. Tous droits réservés.
+            </p>
             <div className="flex items-center gap-4">
               <Link
                 href="https://twitter.com/coucouia"

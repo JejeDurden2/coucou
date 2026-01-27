@@ -12,6 +12,7 @@ import {
   ReferenceLine,
 } from 'recharts';
 import { TrendingUp } from 'lucide-react';
+import { cn } from '@/lib/utils';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { InfoTooltip } from '@/components/ui/info-tooltip';
 import {
@@ -59,9 +60,11 @@ function CustomChartTooltip({
 
   return (
     <div className="rounded-lg border border-border bg-card p-3 shadow-md">
-      <p className="text-sm font-medium text-foreground mb-1">{formatTooltipDate(entry.date)}</p>
-      <p className="text-lg font-semibold text-foreground">{entry.value.toFixed(1)}%</p>
-      <p className={`text-xs ${variationColor}`}>{formatVariation(variation)}</p>
+      <p className="text-sm font-medium text-foreground mb-1 text-pretty">
+        {formatTooltipDate(entry.date)}
+      </p>
+      <p className="text-lg font-semibold text-foreground text-pretty">{entry.value.toFixed(1)}%</p>
+      <p className={cn('text-xs', variationColor)}>{formatVariation(variation)}</p>
     </div>
   );
 }
@@ -98,7 +101,7 @@ export const CitationRateChart = memo(function CitationRateChart({
             <div className="size-12 rounded-full bg-muted flex items-center justify-center mb-3">
               <TrendingUp className="size-6 text-muted-foreground" aria-hidden="true" />
             </div>
-            <p className="text-sm text-muted-foreground max-w-xs">
+            <p className="text-sm text-muted-foreground max-w-xs text-pretty">
               Aucune donnée pour cette période
             </p>
           </div>

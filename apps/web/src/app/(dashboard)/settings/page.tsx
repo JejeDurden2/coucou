@@ -14,6 +14,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Switch } from '@/components/ui/switch';
 import { DeleteAccountModal } from '@/components/features/settings';
+import { cn } from '@/lib/utils';
 
 export default function SettingsPage(): React.ReactNode {
   const { user } = useAuth();
@@ -95,24 +96,29 @@ export default function SettingsPage(): React.ReactNode {
   return (
     <div className="max-w-lg space-y-6">
       <div>
-        <h1 className="text-xl font-semibold">Paramètres</h1>
-        <p className="text-sm text-muted-foreground mt-1">Gérez les informations de votre compte</p>
+        <h1 className="text-xl font-semibold text-balance">Paramètres</h1>
+        <p className="text-sm text-muted-foreground mt-1 text-pretty">
+          Gérez les informations de votre compte
+        </p>
       </div>
 
       {message && (
         <div
-          className={`rounded-lg px-4 py-3 text-sm ${
+          className={cn(
+            'rounded-lg px-4 py-3 text-sm',
             message.type === 'success'
               ? 'bg-emerald-500/10 text-emerald-500 border border-emerald-500/20'
-              : 'bg-red-500/10 text-red-500 border border-red-500/20'
-          }`}
+              : 'bg-red-500/10 text-red-500 border border-red-500/20',
+          )}
         >
           {message.text}
         </div>
       )}
 
       <div className="rounded-lg border border-border bg-card p-6">
-        <h2 className="text-sm font-medium text-muted-foreground uppercase mb-4">Profil</h2>
+        <h2 className="text-sm font-medium text-muted-foreground uppercase mb-4 text-balance">
+          Profil
+        </h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
             <label htmlFor="email" className="text-sm font-medium">
@@ -128,7 +134,7 @@ export default function SettingsPage(): React.ReactNode {
                   className="bg-muted/50"
                   autoComplete="email"
                 />
-                <p className="text-xs text-muted-foreground">
+                <p className="text-xs text-muted-foreground text-pretty">
                   L&apos;email ne peut pas être modifié pour les comptes liés à Google
                 </p>
               </>
@@ -146,7 +152,7 @@ export default function SettingsPage(): React.ReactNode {
                   autoComplete="email"
                   spellCheck={false}
                 />
-                {emailError && <p className="text-sm text-destructive">{emailError}</p>}
+                {emailError && <p className="text-sm text-destructive text-pretty">{emailError}</p>}
               </>
             )}
           </div>
@@ -170,16 +176,16 @@ export default function SettingsPage(): React.ReactNode {
       </div>
 
       <div className="rounded-lg border border-border bg-card p-6">
-        <h2 className="text-sm font-medium text-muted-foreground uppercase mb-4">
+        <h2 className="text-sm font-medium text-muted-foreground uppercase mb-4 text-balance">
           Notifications par email
         </h2>
-        <p className="text-sm text-muted-foreground mb-4">
+        <p className="text-sm text-muted-foreground mb-4 text-pretty">
           Recevez des emails pour rester informé de votre visibilité IA.
         </p>
         <div className="flex items-center justify-between">
           <div className="space-y-0.5">
-            <p className="text-sm font-medium">Activer les notifications email</p>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm font-medium text-pretty">Activer les notifications email</p>
+            <p className="text-sm text-muted-foreground text-pretty">
               {user?.plan === Plan.FREE
                 ? "Alertes d'inactivité quand vous n'avez pas lancé d'analyse depuis 14 jours."
                 : 'Résultats de vos analyses automatiques.'}
@@ -192,17 +198,19 @@ export default function SettingsPage(): React.ReactNode {
             aria-label="Activer les notifications email"
           />
         </div>
-        <p className="text-xs text-muted-foreground mt-4">
+        <p className="text-xs text-muted-foreground mt-4 text-pretty">
           Vous pouvez aussi vous désinscrire via le lien en bas de nos emails.
         </p>
       </div>
 
       <div className="rounded-lg border border-border bg-card p-6">
-        <h2 className="text-sm font-medium text-muted-foreground uppercase mb-4">Plan actuel</h2>
+        <h2 className="text-sm font-medium text-muted-foreground uppercase mb-4 text-balance">
+          Plan actuel
+        </h2>
         <div className="flex items-center justify-between">
           <div>
-            <p className="font-medium">{user?.plan}</p>
-            <p className="text-sm text-muted-foreground">
+            <p className="font-medium text-pretty">{user?.plan}</p>
+            <p className="text-sm text-muted-foreground text-pretty">
               {user?.plan === Plan.FREE ? 'Fonctionnalités limitées' : 'Accès complet'}
             </p>
           </div>
@@ -213,28 +221,30 @@ export default function SettingsPage(): React.ReactNode {
       </div>
 
       <div className="rounded-lg border border-border bg-card p-6">
-        <h2 className="text-sm font-medium text-muted-foreground uppercase mb-4">
+        <h2 className="text-sm font-medium text-muted-foreground uppercase mb-4 text-balance">
           Vos données (RGPD)
         </h2>
-        <p className="text-sm text-muted-foreground mb-4">
+        <p className="text-sm text-muted-foreground mb-4 text-pretty">
           Conformément au RGPD, vous pouvez exporter ou supprimer vos données à tout moment.
           Consultez notre{' '}
-          <Link href="/privacy" className="text-cyan-400 hover:underline">
+          <Link href="/privacy" className="text-primary hover:underline">
             Politique de confidentialité
           </Link>
           .
         </p>
         <div className="flex gap-3">
           <Button variant="outline" size="sm" onClick={handleExportData} disabled={isExporting}>
-            <Download className="mr-2 h-4 w-4" aria-hidden="true" />
+            <Download className="mr-2 size-4" aria-hidden="true" />
             {isExporting ? 'Export…' : 'Exporter mes données'}
           </Button>
         </div>
       </div>
 
       <div className="rounded-lg border border-destructive/30 bg-destructive/5 p-6">
-        <h2 className="text-sm font-medium text-destructive uppercase mb-4">Zone de danger</h2>
-        <p className="text-sm text-muted-foreground mb-4">
+        <h2 className="text-sm font-medium text-destructive uppercase mb-4 text-balance">
+          Zone de danger
+        </h2>
+        <p className="text-sm text-muted-foreground mb-4 text-pretty">
           La suppression de votre compte est irréversible. Toutes vos données (projets, prompts,
           analyses) seront définitivement supprimées.
           {hasActiveSubscription && <> Votre abonnement sera annulé et remboursé au prorata.</>}

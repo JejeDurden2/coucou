@@ -133,7 +133,7 @@ export default function ProjectDashboardPage({
   if (!project) {
     return (
       <div className="text-center py-12">
-        <p className="text-muted-foreground">Marque non trouvée</p>
+        <p className="text-muted-foreground text-pretty">Marque non trouvée</p>
         <Button className="mt-4" asChild>
           <Link href="/projects">Retour aux marques</Link>
         </Button>
@@ -178,7 +178,7 @@ export default function ProjectDashboardPage({
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h1 className="text-xl font-semibold">{project.brandName}</h1>
+              <h1 className="text-xl font-semibold text-balance">{project.brandName}</h1>
               {project.brandVariants.length > 0 && (
                 <span className="text-sm text-muted-foreground hidden sm:inline">
                   {project.brandVariants.join(', ')}
@@ -191,7 +191,7 @@ export default function ProjectDashboardPage({
                 {formatScanProgress(scanProgress)}
               </span>
             ) : stats?.lastScanAt ? (
-              <p className="text-xs text-muted-foreground">
+              <p className="text-xs text-muted-foreground text-pretty">
                 Dernière analyse {formatRelativeTime(stats.lastScanAt)}
               </p>
             ) : null}
@@ -211,14 +211,14 @@ export default function ProjectDashboardPage({
                     {isScanning ? (
                       <>
                         <RefreshCw
-                          className="mr-2 h-4 w-4 animate-spin motion-reduce:animate-none"
+                          className="mr-2 size-4 animate-spin motion-reduce:animate-none"
                           aria-hidden="true"
                         />
                         {formatScanProgress(scanProgress)}
                       </>
                     ) : (
                       <>
-                        <Radar className="mr-2 h-4 w-4" aria-hidden="true" />
+                        <Radar className="mr-2 size-4" aria-hidden="true" />
                         Analyser {scannablePromptIds.size > 0 && `(${scannablePromptIds.size})`}
                       </>
                     )}
@@ -227,7 +227,7 @@ export default function ProjectDashboardPage({
               </TooltipTrigger>
               {scanDisabledReason && (
                 <TooltipContent>
-                  <p>{scanDisabledReason}</p>
+                  <p className="text-pretty">{scanDisabledReason}</p>
                 </TooltipContent>
               )}
             </Tooltip>
@@ -273,16 +273,16 @@ export default function ProjectDashboardPage({
           <div className="space-y-4">
             <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
               <div>
-                <h2 className="text-sm font-medium text-muted-foreground uppercase flex items-center gap-1">
+                <h2 className="text-sm font-medium text-muted-foreground uppercase flex items-center gap-1 text-balance">
                   Vos prompts ({promptCount})
                   <InfoTooltip term="prompt" />
                 </h2>
-                <p className="text-xs text-muted-foreground mt-0.5">
+                <p className="text-xs text-muted-foreground mt-0.5 text-pretty">
                   Plan {userPlan} : 1 analyse/prompt/{formatFrequency(userPlan)}
                 </p>
               </div>
               <Button variant="outline" size="sm" onClick={() => setShowAddPrompt(true)}>
-                <Plus className="mr-2 h-4 w-4" aria-hidden="true" />
+                <Plus className="mr-2 size-4" aria-hidden="true" />
                 Ajouter
               </Button>
             </div>
@@ -311,12 +311,14 @@ export default function ProjectDashboardPage({
                       <td colSpan={availableModels.length + 2} className="px-4 py-12 text-center">
                         <div className="mx-auto size-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
                           <MessageSquare
-                            className="h-8 w-8 text-primary opacity-50"
+                            className="size-8 text-primary opacity-50"
                             aria-hidden="true"
                           />
                         </div>
-                        <p className="text-muted-foreground">Aucune requête configurée</p>
-                        <p className="text-sm text-muted-foreground mt-1">
+                        <p className="text-muted-foreground text-pretty">
+                          Aucune requête configurée
+                        </p>
+                        <p className="text-sm text-muted-foreground mt-1 text-pretty">
                           Ajoutez des requêtes pour commencer à suivre votre visibilité
                         </p>
                       </td>
@@ -339,7 +341,7 @@ export default function ProjectDashboardPage({
                               <div className="absolute left-0 top-0 bottom-0 w-1 bg-success rounded-r" />
                             )}
                             <div className="pl-2">
-                              <p className="text-sm">{prompt.content}</p>
+                              <p className="text-sm text-pretty">{prompt.content}</p>
                               <div className="flex items-center gap-2 mt-1">
                                 {prompt.category && (
                                   <span className="inline-flex px-2 py-0.5 rounded-full text-[10px] bg-primary/10 text-primary">

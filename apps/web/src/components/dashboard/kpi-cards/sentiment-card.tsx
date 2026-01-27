@@ -40,8 +40,13 @@ function SentimentDelta({ delta }: { delta: number }): React.ReactNode {
   const colorClass = isImprovement ? 'text-success' : 'text-destructive';
 
   return (
-    <span className={cn('inline-flex items-center gap-0.5 text-sm font-medium', colorClass)}>
-      <Icon className="h-4 w-4" aria-hidden="true" />
+    <span
+      className={cn(
+        'inline-flex items-center gap-0.5 text-sm font-medium tabular-nums',
+        colorClass,
+      )}
+    >
+      <Icon className="size-4" aria-hidden="true" />
       {Math.abs(delta)}%
     </span>
   );
@@ -83,8 +88,8 @@ export const SentimentBentoCard = memo(function SentimentBentoCard({
         )}
       >
         <Lock className="size-8 text-muted-foreground" aria-hidden="true" />
-        <p className="text-sm font-medium text-foreground">Sentiment IA</p>
-        <p className="text-xs text-muted-foreground">Disponible dès le plan Solo</p>
+        <p className="text-sm font-medium text-foreground text-pretty">Sentiment IA</p>
+        <p className="text-xs text-muted-foreground text-pretty">Disponible dès le plan Solo</p>
         <span className="text-xs font-medium text-primary">Débloquer</span>
       </Link>
     );
@@ -100,7 +105,7 @@ export const SentimentBentoCard = memo(function SentimentBentoCard({
         )}
       >
         <div className="flex items-center gap-2 text-muted-foreground">
-          <Loader2 className="size-5 animate-spin" aria-hidden="true" />
+          <Loader2 className="size-5 animate-spin motion-reduce:animate-none" aria-hidden="true" />
           <span className="text-sm">Chargement…</span>
         </div>
       </div>
@@ -120,13 +125,13 @@ export const SentimentBentoCard = memo(function SentimentBentoCard({
           className,
         )}
       >
-        <p className="text-sm text-muted-foreground mb-1 flex items-center gap-1">
+        <p className="text-sm text-muted-foreground mb-1 flex items-center gap-1 text-pretty">
           Sentiment IA
           <InfoTooltip term="sentiment" />
         </p>
-        <p className="text-2xl font-semibold text-muted-foreground">—</p>
+        <p className="text-2xl font-semibold text-muted-foreground text-pretty">—</p>
         {data?.nextScanDate && (
-          <p className="text-xs text-muted-foreground mt-1">
+          <p className="text-xs text-muted-foreground mt-1 text-pretty">
             Première analyse prévue {formatNextScanDate(data.nextScanDate)}
           </p>
         )}
@@ -154,20 +159,27 @@ export const SentimentBentoCard = memo(function SentimentBentoCard({
     >
       <div className="flex items-start justify-between gap-3">
         <div className="flex-1 min-w-0">
-          <p className="text-sm text-muted-foreground mb-1 flex items-center gap-1">
+          <p className="text-sm text-muted-foreground mb-1 flex items-center gap-1 text-pretty">
             Sentiment IA
             <InfoTooltip term="sentiment" />
           </p>
 
           <div className="flex items-baseline gap-3">
-            <p className={cn('text-4xl font-bold tabular-nums', variantTextStyles[variant])}>
+            <p
+              className={cn(
+                'text-4xl font-bold tabular-nums text-pretty',
+                variantTextStyles[variant],
+              )}
+            >
               {Math.round(score)}%
             </p>
             {delta !== null && <SentimentDelta delta={delta} />}
           </div>
 
           {delta !== null && (
-            <p className="text-xs text-muted-foreground mt-0.5">vs semaine précédente</p>
+            <p className="text-xs text-muted-foreground mt-0.5 text-pretty">
+              vs semaine précédente
+            </p>
           )}
         </div>
 
@@ -191,10 +203,7 @@ export const SentimentBentoCard = memo(function SentimentBentoCard({
         aria-label="Score sentiment"
       >
         <div
-          className={cn(
-            'h-2 rounded-full transition-all duration-500',
-            variantProgressColors[variant],
-          )}
+          className={cn('h-2 rounded-full', variantProgressColors[variant])}
           style={{ width: `${Math.min(score, 100)}%` }}
         />
       </div>

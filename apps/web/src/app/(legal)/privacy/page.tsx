@@ -10,8 +10,8 @@ export const metadata: Metadata = {
 
 export default function PrivacyPage(): React.ReactNode {
   return (
-    <div className="min-h-screen bg-background">
-      <header className="border-b border-zinc-800 py-4">
+    <div className="min-h-dvh bg-background">
+      <header className="border-b border-border py-4">
         <div className="container mx-auto px-4">
           <Link href="/">
             <Logo size="sm" />
@@ -20,13 +20,13 @@ export default function PrivacyPage(): React.ReactNode {
       </header>
 
       <main className="container mx-auto max-w-3xl px-4 py-12">
-        <h1 className="text-3xl font-bold mb-8">Politique de confidentialité</h1>
+        <h1 className="text-3xl font-bold mb-8 text-balance">Politique de confidentialité</h1>
 
         <div className="prose prose-invert prose-zinc max-w-none space-y-8">
           <p className="text-muted-foreground">Dernière mise à jour : 18 janvier 2026</p>
 
           <section className="space-y-4">
-            <h2 className="text-xl font-semibold">1. Responsable du traitement</h2>
+            <h2 className="text-xl font-semibold text-balance">1. Responsable du traitement</h2>
             <p className="text-muted-foreground">
               Coucou IA, société par actions simplifiée, dont le siège social est situé à Paris,
               France.
@@ -36,7 +36,7 @@ export default function PrivacyPage(): React.ReactNode {
           </section>
 
           <section className="space-y-4">
-            <h2 className="text-xl font-semibold">2. Données collectées</h2>
+            <h2 className="text-xl font-semibold text-balance">2. Données collectées</h2>
             <p className="text-muted-foreground">Nous collectons les données suivantes :</p>
             <ul className="list-disc list-inside text-muted-foreground space-y-2">
               <li>
@@ -58,7 +58,7 @@ export default function PrivacyPage(): React.ReactNode {
           </section>
 
           <section className="space-y-4">
-            <h2 className="text-xl font-semibold">3. Finalités du traitement</h2>
+            <h2 className="text-xl font-semibold text-balance">3. Finalités du traitement</h2>
             <p className="text-muted-foreground">Vos données sont traitées pour :</p>
             <ul className="list-disc list-inside text-muted-foreground space-y-2">
               <li>Fournir et améliorer nos services de tracking de visibilité IA</li>
@@ -70,7 +70,7 @@ export default function PrivacyPage(): React.ReactNode {
           </section>
 
           <section className="space-y-4">
-            <h2 className="text-xl font-semibold">4. Base légale du traitement</h2>
+            <h2 className="text-xl font-semibold text-balance">4. Base légale du traitement</h2>
             <ul className="list-disc list-inside text-muted-foreground space-y-2">
               <li>
                 <strong>Exécution du contrat :</strong> fourniture des services
@@ -88,7 +88,7 @@ export default function PrivacyPage(): React.ReactNode {
           </section>
 
           <section className="space-y-4">
-            <h2 className="text-xl font-semibold">5. Destinataires des données</h2>
+            <h2 className="text-xl font-semibold text-balance">5. Destinataires des données</h2>
             <p className="text-muted-foreground">Vos données peuvent être partagées avec :</p>
             <ul className="list-disc list-inside text-muted-foreground space-y-2">
               <li>
@@ -112,7 +112,7 @@ export default function PrivacyPage(): React.ReactNode {
           </section>
 
           <section className="space-y-4">
-            <h2 className="text-xl font-semibold">6. Durée de conservation</h2>
+            <h2 className="text-xl font-semibold text-balance">6. Durée de conservation</h2>
             <ul className="list-disc list-inside text-muted-foreground space-y-2">
               <li>
                 <strong>Données de compte :</strong> durée de l&apos;abonnement + 3 ans
@@ -130,7 +130,7 @@ export default function PrivacyPage(): React.ReactNode {
           </section>
 
           <section className="space-y-4">
-            <h2 className="text-xl font-semibold">7. Vos droits</h2>
+            <h2 className="text-xl font-semibold text-balance">7. Vos droits</h2>
             <p className="text-muted-foreground">
               Conformément au RGPD, vous disposez des droits suivants :
             </p>
@@ -157,7 +157,7 @@ export default function PrivacyPage(): React.ReactNode {
             </ul>
             <p className="text-muted-foreground">
               Pour exercer ces droits, rendez-vous dans{' '}
-              <Link href="/settings" className="text-cyan-400 hover:underline">
+              <Link href="/settings" className="text-primary hover:underline">
                 Paramètres
               </Link>{' '}
               ou contactez-nous à privacy@coucou-ia.com.
@@ -165,7 +165,7 @@ export default function PrivacyPage(): React.ReactNode {
           </section>
 
           <section className="space-y-4">
-            <h2 className="text-xl font-semibold">8. Sécurité</h2>
+            <h2 className="text-xl font-semibold text-balance">8. Sécurité</h2>
             <p className="text-muted-foreground">
               Nous mettons en œuvre des mesures techniques et organisationnelles appropriées pour
               protéger vos données : chiffrement des mots de passe (bcrypt), connexions HTTPS,
@@ -174,7 +174,7 @@ export default function PrivacyPage(): React.ReactNode {
           </section>
 
           <section className="space-y-4">
-            <h2 className="text-xl font-semibold">9. Cookies</h2>
+            <h2 className="text-xl font-semibold text-balance">9. Cookies</h2>
             <p className="text-muted-foreground">
               Nous utilisons uniquement des cookies essentiels au fonctionnement du service
               (authentification). Aucun cookie de tracking ou publicitaire n&apos;est utilisé.
@@ -182,7 +182,7 @@ export default function PrivacyPage(): React.ReactNode {
           </section>
 
           <section className="space-y-4">
-            <h2 className="text-xl font-semibold">10. Transferts internationaux</h2>
+            <h2 className="text-xl font-semibold text-balance">10. Transferts internationaux</h2>
             <p className="text-muted-foreground">
               Certains de nos prestataires (OpenAI, Anthropic, Stripe) sont situés aux États-Unis.
               Ces transferts sont encadrés par des clauses contractuelles types (CCT) approuvées par
@@ -191,10 +191,10 @@ export default function PrivacyPage(): React.ReactNode {
           </section>
 
           <section className="space-y-4">
-            <h2 className="text-xl font-semibold">11. Contact et réclamation</h2>
+            <h2 className="text-xl font-semibold text-balance">11. Contact et réclamation</h2>
             <p className="text-muted-foreground">
               Pour toute question relative à cette politique ou pour exercer vos droits :{' '}
-              <a href="mailto:privacy@coucou-ia.com" className="text-cyan-400 hover:underline">
+              <a href="mailto:privacy@coucou-ia.com" className="text-primary hover:underline">
                 privacy@coucou-ia.com
               </a>
             </p>
@@ -204,7 +204,7 @@ export default function PrivacyPage(): React.ReactNode {
                 href="https://www.cnil.fr"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-cyan-400 hover:underline"
+                className="text-primary hover:underline"
               >
                 www.cnil.fr
               </a>

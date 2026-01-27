@@ -98,7 +98,7 @@ export default async function BlogPostPage({ params }: PageProps): Promise<React
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
-      <div className="min-h-screen bg-background">
+      <div className="min-h-dvh bg-background">
         {/* Header */}
         <header className="border-b border-border">
           <div className="mx-auto max-w-3xl px-4 py-4">
@@ -134,11 +134,11 @@ export default async function BlogPostPage({ params }: PageProps): Promise<React
               </div>
             )}
 
-            <h1 className="font-display text-4xl font-bold text-foreground leading-tight">
+            <h1 className="font-display text-4xl font-bold text-foreground leading-tight text-balance">
               {post.title}
             </h1>
 
-            <p className="mt-4 text-lg text-muted-foreground">{post.description}</p>
+            <p className="mt-4 text-lg text-muted-foreground text-pretty">{post.description}</p>
 
             <div className="mt-6 flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
               <span className="flex items-center gap-1.5">
@@ -175,10 +175,10 @@ export default async function BlogPostPage({ params }: PageProps): Promise<React
 
           {/* Footer CTA */}
           <footer className="mt-16 rounded-xl border border-border bg-card p-8 text-center">
-            <h2 className="font-display text-xl font-semibold text-foreground">
+            <h2 className="font-display text-xl font-semibold text-foreground text-balance">
               Améliorez votre visibilité dans les IA
             </h2>
-            <p className="mt-2 text-muted-foreground">
+            <p className="mt-2 text-muted-foreground text-pretty">
               Découvrez si ChatGPT et Claude recommandent votre marque.
             </p>
             <Link

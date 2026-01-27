@@ -20,15 +20,15 @@ export default function ProjectsPage(): React.ReactNode {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-semibold">Mes marques</h1>
-          <p className="text-sm text-muted-foreground mt-1">
+          <h1 className="text-xl font-semibold text-balance">Mes marques</h1>
+          <p className="text-sm text-muted-foreground mt-1 text-pretty">
             {projects?.length ?? 0} / {limits.projects} marque{limits.projects > 1 ? 's' : ''}
           </p>
         </div>
         {canCreateBrand ? (
           <Button asChild size="sm">
             <Link href="/projects/new">
-              <Plus className="mr-2 h-4 w-4" aria-hidden="true" />
+              <Plus className="mr-2 size-4" aria-hidden="true" />
               Nouvelle marque
             </Link>
           </Button>
@@ -37,7 +37,7 @@ export default function ProjectsPage(): React.ReactNode {
 
       {!canCreateBrand ? (
         <div className="rounded-lg border border-amber-500/30 bg-amber-500/5 px-4 py-3">
-          <p className="text-sm text-amber-500">
+          <p className="text-sm text-amber-500 text-pretty">
             Limite atteinte.{' '}
             <Link href="/billing" className="underline hover:text-amber-400">
               Passez à un plan supérieur
@@ -58,14 +58,14 @@ export default function ProjectsPage(): React.ReactNode {
         </div>
       ) : projects?.length === 0 ? (
         <div className="rounded-lg border border-dashed border-border p-12 text-center">
-          <Tag className="mx-auto h-10 w-10 text-muted-foreground" aria-hidden="true" />
-          <h3 className="mt-4 font-medium">Aucune marque</h3>
-          <p className="mt-1 text-sm text-muted-foreground">
+          <Tag className="mx-auto size-10 text-muted-foreground" aria-hidden="true" />
+          <h3 className="mt-4 font-medium text-balance">Aucune marque</h3>
+          <p className="mt-1 text-sm text-muted-foreground text-pretty">
             Ajoutez votre première marque pour commencer à tracker votre visibilité IA.
           </p>
           <Button className="mt-4" asChild size="sm">
             <Link href="/projects/new">
-              <Plus className="mr-2 h-4 w-4" aria-hidden="true" />
+              <Plus className="mr-2 size-4" aria-hidden="true" />
               Ajouter une marque
             </Link>
           </Button>
@@ -79,9 +79,9 @@ export default function ProjectsPage(): React.ReactNode {
               className="group flex items-center justify-between rounded-lg border border-border bg-card p-4 transition-colors hover:border-primary/50 hover:bg-card/80"
             >
               <div>
-                <h3 className="font-medium">{project.brandName}</h3>
+                <h3 className="font-medium text-balance">{project.brandName}</h3>
                 {project.brandVariants.length > 0 ? (
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-sm text-muted-foreground text-pretty">
                     {project.brandVariants.join(', ')}
                   </p>
                 ) : null}
@@ -93,7 +93,7 @@ export default function ProjectsPage(): React.ReactNode {
                     : 'Jamais analysé'}
                 </span>
                 <ChevronRight
-                  className="h-4 w-4 text-muted-foreground transition-transform group-hover:translate-x-1"
+                  className="size-4 text-muted-foreground transition-transform group-hover:translate-x-1"
                   aria-hidden="true"
                 />
               </div>

@@ -58,7 +58,7 @@ function SortableHeader({
   return (
     <th
       className={cn(
-        'px-4 py-3 text-xs font-medium text-muted-foreground uppercase tracking-wider cursor-pointer hover:text-foreground transition-colors select-none',
+        'px-4 py-3 text-xs font-medium text-muted-foreground uppercase cursor-pointer hover:text-foreground select-none',
         align === 'center' && 'text-center',
         align === 'right' && 'text-right',
       )}
@@ -167,7 +167,7 @@ export const ModelPerformanceTable = memo(function ModelPerformanceTable({
             <div className="size-12 rounded-full bg-muted flex items-center justify-center mb-3">
               <BarChart3 className="size-6 text-muted-foreground" aria-hidden="true" />
             </div>
-            <p className="text-sm text-muted-foreground max-w-xs">
+            <p className="text-sm text-muted-foreground max-w-xs text-pretty">
               Aucune donnée pour cette période
             </p>
           </div>
@@ -237,7 +237,6 @@ export const ModelPerformanceTable = memo(function ModelPerformanceTable({
                     <tr
                       key={model.model}
                       className={cn(
-                        'transition-colors',
                         accessible
                           ? 'hover:bg-muted/50'
                           : 'opacity-50 cursor-not-allowed bg-muted/20',
@@ -271,7 +270,7 @@ export const ModelPerformanceTable = memo(function ModelPerformanceTable({
                       <Tooltip key={model.model} delayDuration={150}>
                         <TooltipTrigger asChild>{row}</TooltipTrigger>
                         <TooltipContent>
-                          <p>Disponible sur le plan Pro</p>
+                          <p className="text-pretty">Disponible sur le plan Pro</p>
                         </TooltipContent>
                       </Tooltip>
                     );

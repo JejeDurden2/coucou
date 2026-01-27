@@ -57,8 +57,8 @@ export function InsightCard({
       )}
     >
       <div className="flex items-start gap-3">
-        <Icon className={cn('h-5 w-5 shrink-0', config.iconClass)} aria-hidden="true" />
-        <p className="line-clamp-2 text-sm">{message}</p>
+        <Icon className={cn('size-5 shrink-0', config.iconClass)} aria-hidden="true" />
+        <p className="line-clamp-2 text-pretty text-sm">{message}</p>
       </div>
       {ctaLabel && ctaHref && (
         <Link href={ctaHref} className="shrink-0 text-sm font-medium text-primary hover:underline">

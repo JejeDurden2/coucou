@@ -22,6 +22,23 @@ interface SentimentTabProps {
 export const SentimentTab = memo(function SentimentTab({ projectId, userPlan }: SentimentTabProps) {
   const { data, isLoading, error } = useLatestSentiment(projectId);
 
+  const scan = data?.scan;
+  const gpt = scan?.results.gpt;
+  const claude = scan?.results.claude;
+
+  // Merge all unique themes and keywords from both providers
+  const mergedData = useMemo(
+    () =>
+      gpt && claude
+        ? {
+            themes: [...new Set([...gpt.t, ...claude.t])],
+            positiveKeywords: [...new Set([...gpt.kp, ...claude.kp])],
+            negativeKeywords: [...new Set([...gpt.kn, ...claude.kn])],
+          }
+        : null,
+    [gpt, claude],
+  );
+
   // Locked state for FREE users
   if (userPlan === Plan.FREE) {
     return <SentimentLockedBanner />;
@@ -31,7 +48,10 @@ export const SentimentTab = memo(function SentimentTab({ projectId, userPlan }: 
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <Loader2 className="size-6 animate-spin text-muted-foreground" aria-hidden="true" />
+        <Loader2
+          className="size-6 animate-spin motion-reduce:animate-none text-muted-foreground"
+          aria-hidden="true"
+        />
         <span className="ml-2 text-muted-foreground">Chargement de l'analyse sentiment...</span>
       </div>
     );
@@ -47,7 +67,7 @@ export const SentimentTab = memo(function SentimentTab({ projectId, userPlan }: 
   }
 
   // Empty state - no scan yet
-  if (!data?.scan) {
+  if (!scan || !mergedData) {
     return (
       <Card>
         <CardContent className="py-12">
@@ -56,14 +76,14 @@ export const SentimentTab = memo(function SentimentTab({ projectId, userPlan }: 
               <Brain className="size-8 text-muted-foreground" aria-hidden="true" />
             </div>
             <div className="space-y-2">
-              <h3 className="text-lg font-semibold">Aucune analyse de sentiment</h3>
-              <p className="text-sm text-muted-foreground max-w-md">
+              <h3 className="text-lg font-semibold text-balance">Aucune analyse de sentiment</h3>
+              <p className="text-sm text-muted-foreground max-w-md text-pretty">
                 L'analyse sentiment sera effectuée automatiquement lors de la prochaine analyse
                 hebdomadaire.
               </p>
             </div>
             {data?.nextScanDate && (
-              <p className="text-xs text-muted-foreground">
+              <p className="text-xs text-muted-foreground text-pretty">
                 Prochaine analyse : {formatRelativeTimeFuture(data.nextScanDate)}
               </p>
             )}
@@ -73,28 +93,15 @@ export const SentimentTab = memo(function SentimentTab({ projectId, userPlan }: 
     );
   }
 
-  // Data state - show full sentiment analysis
-  const { scan, nextScanDate } = data;
-  const { gpt, claude } = scan.results;
-
-  // Merge all unique themes and keywords from both providers
-  const mergedData = useMemo(
-    () => ({
-      themes: [...new Set([...gpt.t, ...claude.t])],
-      positiveKeywords: [...new Set([...gpt.kp, ...claude.kp])],
-      negativeKeywords: [...new Set([...gpt.kn, ...claude.kn])],
-    }),
-    [gpt.t, claude.t, gpt.kp, claude.kp, gpt.kn, claude.kn],
-  );
-
+  const { nextScanDate } = data;
   const { themes, positiveKeywords, negativeKeywords } = mergedData;
 
   return (
     <div className="space-y-6">
       {/* Scores by LLM */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <ScoreCard provider="gpt" score={gpt.s} themes={gpt.t} />
-        <ScoreCard provider="claude" score={claude.s} themes={claude.t} />
+        <ScoreCard provider="gpt" score={scan.results.gpt.s} themes={scan.results.gpt.t} />
+        <ScoreCard provider="claude" score={scan.results.claude.s} themes={scan.results.claude.t} />
       </div>
 
       {/* Combined themes */}

@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Logo } from '@/components/ui/logo';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Skeleton } from '@/components/ui/skeleton';
 import { apiClient, ApiClientError } from '@/lib/api-client';
 
 function ResetPasswordForm() {
@@ -157,7 +158,7 @@ function ResetPasswordForm() {
             {isLoading ? 'Modification...' : 'Modifier le mot de passe'}
           </Button>
         </form>
-        <p className="mt-4 text-center text-sm text-muted-foreground">
+        <p className="mt-4 text-center text-sm text-muted-foreground text-pretty">
           <Link href="/login" className="text-primary hover:underline">
             <ArrowLeft className="inline mr-1 size-3" />
             Retour a la connexion
@@ -182,7 +183,22 @@ export default function ResetPasswordPage() {
     <Suspense
       fallback={
         <Card>
-          <CardContent className="p-8 text-center text-muted-foreground">Chargement...</CardContent>
+          <CardHeader className="text-center space-y-4">
+            <Skeleton variant="circular" className="mx-auto size-12" />
+            <Skeleton variant="text" className="mx-auto w-48 h-6" />
+            <Skeleton variant="text" className="mx-auto w-64 h-4" />
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="space-y-2">
+              <Skeleton variant="text" className="w-32 h-4" />
+              <Skeleton className="w-full h-10" />
+            </div>
+            <div className="space-y-2">
+              <Skeleton variant="text" className="w-40 h-4" />
+              <Skeleton className="w-full h-10" />
+            </div>
+            <Skeleton className="w-full h-10" />
+          </CardContent>
         </Card>
       }
     >

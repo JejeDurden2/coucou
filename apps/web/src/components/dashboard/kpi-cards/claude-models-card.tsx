@@ -33,9 +33,9 @@ export const ClaudeModelsCard = memo(function ClaudeModelsCard({
     >
       <div className="flex items-start justify-between gap-3">
         <div className="flex-1 min-w-0">
-          <p className="text-xs text-muted-foreground mb-3">Positions Claude</p>
+          <p className="text-xs text-muted-foreground mb-3 text-pretty">Positions Claude</p>
           {models.length === 0 ? (
-            <p className="text-sm text-muted-foreground">Aucune donnée</p>
+            <p className="text-sm text-muted-foreground text-pretty">Aucune donnée</p>
           ) : (
             <ul className="space-y-2">
               {models.map((model) => (
@@ -56,7 +56,7 @@ export const ClaudeModelsCard = memo(function ClaudeModelsCard({
                       </>
                     ) : (
                       <span className="inline-flex items-center gap-1.5 text-muted-foreground">
-                        <EyeOff className="h-8 w-8" aria-hidden="true" />
+                        <EyeOff className="size-8" aria-hidden="true" />
                         <span className="text-lg">Non classé</span>
                       </span>
                     )}
@@ -67,7 +67,7 @@ export const ClaudeModelsCard = memo(function ClaudeModelsCard({
           )}
         </div>
         <div className="rounded-lg p-2 border border-border bg-muted/50 text-muted-foreground">
-          <Bot className="h-5 w-5" aria-hidden="true" />
+          <Bot className="size-5" aria-hidden="true" />
         </div>
       </div>
     </div>

@@ -56,8 +56,8 @@ export default function BillingPage(): React.ReactNode {
     <div className="space-y-6">
       <div className="flex items-center gap-3">
         <div>
-          <h1 className="text-xl font-semibold">Facturation</h1>
-          <p className="text-sm text-muted-foreground mt-1">Gérez votre abonnement</p>
+          <h1 className="text-xl font-semibold text-balance">Facturation</h1>
+          <p className="text-sm text-muted-foreground mt-1 text-pretty">Gérez votre abonnement</p>
         </div>
         {subscription && (
           <SubscriptionStatusBadge
@@ -78,8 +78,8 @@ export default function BillingPage(): React.ReactNode {
         <div className="pt-4 border-t max-w-4xl space-y-4">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="font-medium">Gérer votre abonnement</h3>
-              <p className="text-sm text-muted-foreground">
+              <h3 className="font-medium text-balance">Gérer votre abonnement</h3>
+              <p className="text-sm text-muted-foreground text-pretty">
                 Modifier votre moyen de paiement ou télécharger vos factures
               </p>
             </div>
@@ -94,10 +94,10 @@ export default function BillingPage(): React.ReactNode {
 
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="font-medium">
+              <h3 className="font-medium text-balance">
                 {subscription.cancelAtPeriodEnd ? "Réactiver l'abonnement" : "Annuler l'abonnement"}
               </h3>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-muted-foreground text-pretty">
                 {subscription.cancelAtPeriodEnd
                   ? "Votre abonnement est programmé pour s'arrêter. Vous pouvez le réactiver."
                   : "Vous conserverez l'accès jusqu'à la fin de votre période de facturation."}

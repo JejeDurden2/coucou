@@ -21,6 +21,7 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { cn } from '@/lib/utils';
 
 type SortKey = 'citationRate' | 'averageRank' | 'trend';
 type SortOrder = 'asc' | 'desc';
@@ -86,7 +87,7 @@ function TrendCell({ value }: { value: number }): React.ReactElement {
   const sign = value > 0 ? '+' : '';
 
   return (
-    <span className={`inline-flex items-center gap-1 tabular-nums ${getColorClass()}`}>
+    <span className={cn('inline-flex items-center gap-1 tabular-nums', getColorClass())}>
       {renderIcon()}
       {sign}
       {value.toFixed(1)}%
@@ -121,7 +122,7 @@ function SortableHeader({
     <button
       type="button"
       onClick={() => onSort(sortKey)}
-      className="inline-flex items-center gap-1 hover:text-foreground transition-colors"
+      className="inline-flex items-center gap-1 hover:text-foreground"
     >
       {label}
       {renderSortIcon()}

@@ -31,7 +31,7 @@ export function TrendBadge({ trend, percentage }: TrendBadgeProps): React.ReactN
   if (trend === 'new') {
     return (
       <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-primary/12 text-primary">
-        <Sparkles className="h-3 w-3" aria-hidden="true" />
+        <Sparkles className="size-3" aria-hidden="true" />
         NEW
       </span>
     );
@@ -40,7 +40,7 @@ export function TrendBadge({ trend, percentage }: TrendBadgeProps): React.ReactN
   if (trend === 'up') {
     return (
       <span className="inline-flex items-center gap-1 text-xs font-medium text-success">
-        <TrendingUp className="h-3 w-3" aria-hidden="true" />
+        <TrendingUp className="size-3" aria-hidden="true" />
         {percentage !== null ? `+${percentage}%` : null}
       </span>
     );
@@ -49,7 +49,7 @@ export function TrendBadge({ trend, percentage }: TrendBadgeProps): React.ReactN
   if (trend === 'down') {
     return (
       <span className="inline-flex items-center gap-1 text-xs font-medium text-destructive">
-        <TrendingDown className="h-3 w-3" aria-hidden="true" />
+        <TrendingDown className="size-3" aria-hidden="true" />
         {percentage !== null ? `${percentage}%` : null}
       </span>
     );
@@ -57,7 +57,7 @@ export function TrendBadge({ trend, percentage }: TrendBadgeProps): React.ReactN
 
   return (
     <span className="inline-flex items-center gap-1 text-xs font-medium text-muted-foreground">
-      <Minus className="h-3 w-3" aria-hidden="true" />
+      <Minus className="size-3" aria-hidden="true" />
     </span>
   );
 }
@@ -86,7 +86,7 @@ export function ModelPositions({ statsByModel, userPlan }: ModelPositionsProps):
               #{stat.averagePosition}
             </span>
           ) : (
-            <EyeOff className="h-3 w-3" aria-hidden="true" />
+            <EyeOff className="size-3" aria-hidden="true" />
           )}
         </div>
       ))}
@@ -131,9 +131,9 @@ export const CompetitorCard = memo(function CompetitorCard({
         <div className="flex items-center gap-2">
           <span className="text-sm font-medium text-muted-foreground tabular-nums">#{rank}</span>
           <div>
-            <h4 className="font-semibold text-foreground">{competitor.name}</h4>
+            <h4 className="font-semibold text-foreground text-balance">{competitor.name}</h4>
             {competitor.averagePosition !== null && (
-              <p className="text-xs text-muted-foreground">
+              <p className="text-xs text-muted-foreground text-pretty">
                 Position moyenne : {competitor.averagePosition}
               </p>
             )}
@@ -158,7 +158,7 @@ export const CompetitorCard = memo(function CompetitorCard({
 
       {/* Last context (optional) */}
       {showContext && competitor.lastContext && (
-        <p className="text-xs text-muted-foreground italic line-clamp-2 border-l-2 border-muted pl-2">
+        <p className="text-xs text-muted-foreground italic line-clamp-2 border-l-2 border-muted pl-2 text-pretty">
           &ldquo;{competitor.lastContext}&rdquo;
         </p>
       )}

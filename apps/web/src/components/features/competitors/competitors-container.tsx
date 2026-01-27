@@ -5,6 +5,7 @@ import { Trophy } from 'lucide-react';
 import { type EnrichedCompetitor, type Plan } from '@coucou-ia/shared';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { InfoTooltip } from '@/components/ui/info-tooltip';
+import { cn } from '@/lib/utils';
 import { CompetitorCard } from './competitor-ui';
 
 interface CompetitorsContainerProps {
@@ -40,8 +41,8 @@ export const CompetitorsContainer = memo(function CompetitorsContainer({
               <Trophy className="size-8 text-muted-foreground" aria-hidden="true" />
             </div>
             <div className="space-y-2">
-              <h3 className="text-lg font-semibold">Aucun concurrent identifié</h3>
-              <p className="text-sm text-muted-foreground max-w-md">
+              <h3 className="text-lg font-semibold text-balance">Aucun concurrent identifié</h3>
+              <p className="text-sm text-muted-foreground max-w-md text-pretty">
                 Lancez une analyse pour découvrir quels concurrents sont mentionnés par les IA sur
                 vos requêtes.
               </p>
@@ -78,7 +79,7 @@ export const CompetitorsContainer = memo(function CompetitorsContainer({
       <Card>
         <CardHeader>
           <div className="flex items-center gap-2">
-            <Trophy className="h-5 w-5 text-amber-500" aria-hidden="true" />
+            <Trophy className="size-5 text-amber-500" aria-hidden="true" />
             <CardTitle className="flex items-center gap-1">
               Tous les concurrents
               <InfoTooltip term="competitor" />
@@ -118,8 +119,8 @@ function SummaryStatCard({ label, value, valueClassName }: SummaryStatCardProps)
   return (
     <Card>
       <CardContent className="pt-4">
-        <p className="text-sm text-muted-foreground">{label}</p>
-        <p className={`text-2xl font-bold ${valueClassName ?? ''}`}>{value}</p>
+        <p className="text-sm text-muted-foreground text-pretty">{label}</p>
+        <p className={cn('text-2xl font-bold tabular-nums', valueClassName)}>{value}</p>
       </CardContent>
     </Card>
   );

@@ -46,10 +46,12 @@ export function DowngradeModal({
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Annuler votre abonnement {planName} ?</AlertDialogTitle>
+          <AlertDialogTitle className="text-balance">
+            Annuler votre abonnement {planName} ?
+          </AlertDialogTitle>
           <AlertDialogDescription asChild>
             <div className="space-y-4">
-              <p>
+              <p className="text-pretty">
                 {"Vous conserverez l'accès à toutes les fonctionnalités jusqu'au "}
                 <strong>
                   {currentPeriodEnd ? formatDateFr(currentPeriodEnd) : 'fin de période'}
@@ -58,7 +60,7 @@ export function DowngradeModal({
               </p>
 
               <div className="rounded-lg border p-4 space-y-3">
-                <p className="font-medium text-foreground">
+                <p className="font-medium text-foreground text-pretty">
                   Ce que vous perdrez avec le plan Gratuit :
                 </p>
                 <ul className="space-y-2 text-sm">

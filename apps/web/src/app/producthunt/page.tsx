@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { ArrowLeft, Check, Clock, Copy, ExternalLink, Sparkles } from 'lucide-react';
 import { Plan, PLAN_PRICING } from '@coucou-ia/shared';
 import { toast } from 'sonner';
+import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -86,7 +87,7 @@ export default function ProductHuntPage() {
   return (
     <div className="min-h-dvh bg-background">
       {/* Header */}
-      <header className="border-b border-border bg-card/50 backdrop-blur-xl">
+      <header className="border-b border-border bg-card">
         <div className="container mx-auto flex items-center justify-between px-4 py-4">
           <Link href="/" className="flex items-center gap-2">
             <Logo />
@@ -114,10 +115,10 @@ export default function ProductHuntPage() {
             Voir sur Product Hunt
             <ExternalLink className="size-3" aria-hidden="true" />
           </a>
-          <h1 className="mb-4 font-display text-4xl font-bold md:text-5xl">
+          <h1 className="mb-4 font-display text-4xl font-bold md:text-5xl text-balance">
             Offre exclusive Product Hunt
           </h1>
-          <p className="text-xl text-muted-foreground md:text-2xl">
+          <p className="text-xl text-muted-foreground md:text-2xl text-pretty">
             <span className="text-primary font-semibold">-50%</span> sur votre première année
           </p>
         </section>
@@ -125,14 +126,15 @@ export default function ProductHuntPage() {
         {/* Promo Code */}
         <section className="mx-auto mb-12 max-w-md">
           <div
-            className={`flex items-center justify-between rounded-lg border bg-card p-4 ${
-              isExpired ? 'border-border opacity-50' : 'border-primary/20'
-            }`}
+            className={cn(
+              'flex items-center justify-between rounded-lg border bg-card p-4',
+              isExpired ? 'border-border opacity-50' : 'border-primary/20',
+            )}
           >
             <div>
-              <p className="mb-1 text-xs text-muted-foreground">Code promo</p>
-              <p className="font-mono text-xl font-bold tracking-wider">{PROMO_CODE}</p>
-              {isExpired && <p className="mt-1 text-xs text-destructive">Expiré</p>}
+              <p className="mb-1 text-xs text-muted-foreground text-pretty">Code promo</p>
+              <p className="font-mono text-xl font-bold text-pretty">{PROMO_CODE}</p>
+              {isExpired && <p className="mt-1 text-xs text-destructive text-pretty">Expiré</p>}
             </div>
             <Button
               variant="outline"
@@ -158,7 +160,7 @@ export default function ProductHuntPage() {
           ) : isExpired ? (
             <div className="flex items-center justify-center gap-2 text-muted-foreground">
               <Clock className="size-5" aria-hidden="true" />
-              <p className="text-lg font-medium">Cette offre a expiré</p>
+              <p className="text-lg font-medium text-pretty">Cette offre a expiré</p>
             </div>
           ) : timeLeft ? (
             <div>
@@ -171,7 +173,7 @@ export default function ProductHuntPage() {
                 <span className="text-muted-foreground">:</span>
                 <span>{timeLeft.seconds}s</span>
               </div>
-              <p className="mt-2 text-sm text-muted-foreground">restants</p>
+              <p className="mt-2 text-sm text-muted-foreground text-pretty">restants</p>
             </div>
           ) : null}
         </section>
@@ -186,7 +188,7 @@ export default function ProductHuntPage() {
                 </div>
                 <CardHeader>
                   <CardTitle className="text-lg">{promoPlan.name}</CardTitle>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-sm text-muted-foreground text-pretty">
                     {PLAN_PRICING[promoPlan.plan].description}
                   </p>
                   <div className="mt-3">
@@ -198,7 +200,7 @@ export default function ProductHuntPage() {
                     </span>
                     <span className="text-muted-foreground">/mois</span>
                   </div>
-                  <p className="mt-1 text-sm text-success">
+                  <p className="mt-1 text-sm text-success text-pretty">
                     Économisez {promoPlan.savings}€ sur 12 mois
                   </p>
                 </CardHeader>
@@ -230,7 +232,7 @@ export default function ProductHuntPage() {
 
         {/* Footer note */}
         <section className="mb-16 text-center">
-          <p className="text-sm text-muted-foreground">
+          <p className="text-sm text-muted-foreground text-pretty">
             Le code <span className="font-mono font-medium text-foreground">{PROMO_CODE}</span> sera
             appliqué automatiquement lors de votre upgrade
           </p>

@@ -73,14 +73,6 @@
   .status-neutral {
     @apply text-muted-foreground;
   }
-
-  /* Glow effects */
-  .glow-primary {
-    box-shadow: 0 0 20px rgb(var(--primary) / 0.3);
-  }
-  .glow-success {
-    box-shadow: 0 0 20px rgb(var(--success) / 0.3);
-  }
 }
 
 /* Scrollbar */
@@ -137,24 +129,10 @@
   }
 }
 
-@keyframes glow-pulse {
-  0%,
-  100% {
-    box-shadow: 0 0 5px rgb(var(--primary) / 0.2);
-  }
-  50% {
-    box-shadow: 0 0 20px rgb(var(--primary) / 0.4);
-  }
-}
-
 .animate-wave {
   animation: wave 0.5s ease-in-out;
 }
 
 .animate-count-up {
   animation: count-up 0.5s ease-out forwards;
-}
-
-.animate-glow-pulse {
-  animation: glow-pulse 2s ease-in-out infinite;
 }

@@ -4,6 +4,7 @@ import { memo } from 'react';
 import { CheckCircle2, Lightbulb } from 'lucide-react';
 import type { Recommendation } from '@coucou-ia/shared';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { cn } from '@/lib/utils';
 import { RecommendationCard, SEVERITY_CONFIG } from './recommendation-card';
 
 interface RecommendationsSummaryProps {
@@ -39,8 +40,8 @@ export const RecommendationsSummary = memo(function RecommendationsSummary({
               <CheckCircle2 className="size-6 text-success" aria-hidden="true" />
             </div>
             <div className="space-y-1">
-              <p className="text-sm font-medium">Aucune recommandation disponible</p>
-              <p className="text-xs text-muted-foreground">
+              <p className="text-sm font-medium text-pretty">Aucune recommandation disponible</p>
+              <p className="text-xs text-muted-foreground text-pretty">
                 Continuez à analyser pour obtenir des insights personnalisés
               </p>
             </div>
@@ -54,20 +55,28 @@ export const RecommendationsSummary = memo(function RecommendationsSummary({
     <Card>
       <CardHeader className="flex flex-row items-center justify-between pb-4">
         <div className="flex items-center gap-2">
-          <Lightbulb className="h-5 w-5 text-amber-500" aria-hidden="true" />
+          <Lightbulb className="size-5 text-amber-500" aria-hidden="true" />
           <CardTitle className="text-lg font-medium">Recommandations</CardTitle>
         </div>
         <div className="flex items-center gap-2">
           {criticalCount > 0 && (
             <span
-              className={`text-xs px-2 py-0.5 rounded-full ${SEVERITY_CONFIG.critical.bgClass} ${SEVERITY_CONFIG.critical.colorClass}`}
+              className={cn(
+                'text-xs px-2 py-0.5 rounded-full',
+                SEVERITY_CONFIG.critical.bgClass,
+                SEVERITY_CONFIG.critical.colorClass,
+              )}
             >
               {criticalCount} critique{criticalCount > 1 ? 's' : ''}
             </span>
           )}
           {warningCount > 0 && (
             <span
-              className={`text-xs px-2 py-0.5 rounded-full ${SEVERITY_CONFIG.warning.bgClass} ${SEVERITY_CONFIG.warning.colorClass}`}
+              className={cn(
+                'text-xs px-2 py-0.5 rounded-full',
+                SEVERITY_CONFIG.warning.bgClass,
+                SEVERITY_CONFIG.warning.colorClass,
+              )}
             >
               {warningCount} modérée{warningCount > 1 ? 's' : ''}
             </span>
@@ -82,7 +91,7 @@ export const RecommendationsSummary = memo(function RecommendationsSummary({
           <button
             type="button"
             onClick={onViewMore}
-            className="w-full flex items-center justify-center rounded-lg border border-dashed border-muted-foreground/30 p-3 text-muted-foreground text-sm hover:border-primary hover:text-primary transition-colors cursor-pointer"
+            className="w-full flex items-center justify-center rounded-lg border border-dashed border-muted-foreground/30 p-3 text-muted-foreground text-sm hover:border-primary hover:text-primary cursor-pointer"
           >
             +{remainingCount} autre{remainingCount > 1 ? 's' : ''} recommandation
             {remainingCount > 1 ? 's' : ''}

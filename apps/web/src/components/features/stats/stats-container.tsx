@@ -176,7 +176,9 @@ function ErrorState({ onRetry }: ErrorStateProps): React.ReactElement {
   return (
     <div className="flex flex-col items-center justify-center py-12 gap-4">
       <AlertCircle className="size-8 text-destructive" aria-hidden="true" />
-      <p className="text-destructive font-medium">Erreur lors du chargement des statistiques</p>
+      <p className="text-destructive font-medium text-pretty">
+        Erreur lors du chargement des statistiques
+      </p>
       <Button variant="outline" onClick={onRetry}>
         <RefreshCw className="size-4 mr-2" aria-hidden="true" />
         Réessayer
@@ -189,8 +191,10 @@ function EmptyState(): React.ReactElement {
   return (
     <div className="text-center py-12 text-muted-foreground">
       <BarChart3 className="size-12 mx-auto mb-4 opacity-50" aria-hidden="true" />
-      <p className="font-medium">Pas encore de données</p>
-      <p className="text-sm mt-1">Lancez votre première analyse pour voir les statistiques</p>
+      <p className="font-medium text-pretty">Pas encore de données</p>
+      <p className="text-sm mt-1 text-pretty">
+        Lancez votre première analyse pour voir les statistiques
+      </p>
     </div>
   );
 }
@@ -246,7 +250,7 @@ export function StatsContainer({
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <h2 className="text-lg font-semibold">Statistiques</h2>
+          <h2 className="text-lg font-semibold text-balance">Statistiques</h2>
           {data.planLimit.isLimited && (
             <Badge variant="muted" className="text-xs">
               {data.planLimit.maxDays} jours max
@@ -316,7 +320,7 @@ export function StatsContainer({
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <ModelPerformanceTable data={data.modelBreakdown} userPlan={userPlan} />
         <div className="rounded-lg border border-border bg-card p-4">
-          <h3 className="text-sm font-medium mb-4">Performance par requête</h3>
+          <h3 className="text-sm font-medium mb-4 text-balance">Performance par requête</h3>
           <PromptPerformanceTable
             data={promptPerformance}
             onNavigateToOverview={onNavigateToOverview}
@@ -326,7 +330,7 @@ export function StatsContainer({
 
       {/* Competitors */}
       <div>
-        <h3 className="text-sm font-medium mb-4">Benchmark concurrents</h3>
+        <h3 className="text-sm font-medium mb-4 text-balance">Benchmark concurrents</h3>
         <CompetitorRankingTable data={data.competitorRanking} userBrandName={brandName} />
       </div>
     </div>
