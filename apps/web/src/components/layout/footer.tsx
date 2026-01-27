@@ -7,7 +7,7 @@ export function Footer() {
   return (
     <footer className="bg-card border-t border-zinc-800 py-12 px-4">
       <div className="container mx-auto max-w-6xl">
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-8 mb-8">
+        <div className="grid grid-cols-2 md:grid-cols-[2fr_1fr_1fr] gap-8 mb-8">
           <div className="col-span-2 md:col-span-1">
             <Link href="/">
               <Logo size="sm" />
