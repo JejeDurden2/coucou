@@ -1,0 +1,140 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a0a12"/>
+      <stop offset="100%" style="stop-color:#12121f"/>
+    </linearGradient>
+    <linearGradient id="purpleGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8B5CF6"/>
+      <stop offset="100%" style="stop-color:#A78BFA"/>
+    </linearGradient>
+    <linearGradient id="blueGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3B82F6"/>
+      <stop offset="100%" style="stop-color:#60A5FA"/>
+    </linearGradient>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bgGradient)"/>
+  
+  <!-- Decorative circles -->
+  <circle cx="200" cy="315" r="280" fill="#8B5CF6" opacity="0.03"/>
+  <circle cx="1000" cy="315" r="280" fill="#3B82F6" opacity="0.03"/>
+  
+  <!-- Grid pattern subtle -->
+  <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+    <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#ffffff" stroke-width="0.3" opacity="0.05"/>
+  </pattern>
+  <rect width="1200" height="630" fill="url(#grid)"/>
+  
+  <!-- Main title -->
+  <text x="600" y="80" text-anchor="middle" fill="#FFFFFF" font-family="system-ui, -apple-system, BlinkMacSystemFont, sans-serif" font-size="52" font-weight="800" letter-spacing="-1">
+    SEO vs GEO
+  </text>
+  <text x="600" y="120" text-anchor="middle" fill="#9CA3AF" font-family="system-ui, sans-serif" font-size="22" font-weight="400">
+    Deux stratégies complémentaires pour maximiser ta visibilité
+  </text>
+  
+  <!-- SEO Section -->
+  <rect x="60" y="170" width="500" height="380" rx="20" fill="#161625" stroke="#3B82F6" stroke-width="1.5" opacity="0.9"/>
+  
+  <!-- SEO Header -->
+  <rect x="60" y="170" width="500" height="65" rx="20" fill="url(#blueGlow)"/>
+  <rect x="60" y="215" width="500" height="20" fill="url(#blueGlow)"/>
+  <text x="310" y="215" text-anchor="middle" fill="#FFFFFF" font-family="system-ui, sans-serif" font-size="28" font-weight="700">
+    🔍 SEO
+  </text>
+  
+  <!-- SEO Subtitle -->
+  <text x="310" y="270" text-anchor="middle" fill="#60A5FA" font-family="system-ui, sans-serif" font-size="14" font-weight="600" letter-spacing="1">
+    SEARCH ENGINE OPTIMIZATION
+  </text>
+  
+  <!-- Google mockup -->
+  <rect x="100" y="295" width="420" height="220" rx="12" fill="#1a1a2e"/>
+  
+  <!-- Search bar -->
+  <rect x="120" y="315" width="380" height="40" rx="20" fill="#252540" stroke="#3B82F6" stroke-width="1"/>
+  <text x="145" y="342" fill="#6B7280" font-family="system-ui, sans-serif" font-size="14">meilleur outil CRM pour PME</text>
+  <circle cx="470" cy="335" r="12" fill="#3B82F6"/>
+  <text x="470" y="340" text-anchor="middle" fill="#FFFFFF" font-family="system-ui, sans-serif" font-size="14">→</text>
+  
+  <!-- Search results -->
+  <rect x="120" y="370" width="380" height="50" rx="8" fill="#252540"/>
+  <circle cx="145" cy="395" r="10" fill="#3B82F6" opacity="0.6"/>
+  <rect x="165" y="385" width="180" height="10" rx="3" fill="#FFFFFF" opacity="0.8"/>
+  <rect x="165" y="400" width="300" height="8" rx="3" fill="#6B7280" opacity="0.5"/>
+  
+  <rect x="120" y="430" width="380" height="50" rx="8" fill="#252540"/>
+  <circle cx="145" cy="455" r="10" fill="#3B82F6" opacity="0.4"/>
+  <rect x="165" y="445" width="150" height="10" rx="3" fill="#FFFFFF" opacity="0.6"/>
+  <rect x="165" y="460" width="280" height="8" rx="3" fill="#6B7280" opacity="0.4"/>
+  
+  <!-- Click indicator -->
+  <text x="310" y="520" text-anchor="middle" fill="#60A5FA" font-family="system-ui, sans-serif" font-size="13" font-weight="500">
+    ↑ L'utilisateur doit cliquer pour voir ton contenu
+  </text>
+  
+  <!-- VS Circle -->
+  <circle cx="600" cy="360" r="45" fill="#161625" stroke="#8B5CF6" stroke-width="2" filter="url(#glow)"/>
+  <text x="600" y="370" text-anchor="middle" fill="#FFFFFF" font-family="system-ui, sans-serif" font-size="26" font-weight="800">
+    VS
+  </text>
+  
+  <!-- GEO Section -->
+  <rect x="640" y="170" width="500" height="380" rx="20" fill="#161625" stroke="#8B5CF6" stroke-width="1.5" opacity="0.9"/>
+  
+  <!-- GEO Header -->
+  <rect x="640" y="170" width="500" height="65" rx="20" fill="url(#purpleGlow)"/>
+  <rect x="640" y="215" width="500" height="20" fill="url(#purpleGlow)"/>
+  <text x="890" y="215" text-anchor="middle" fill="#FFFFFF" font-family="system-ui, sans-serif" font-size="28" font-weight="700">
+    🤖 GEO
+  </text>
+  
+  <!-- GEO Subtitle -->
+  <text x="890" y="270" text-anchor="middle" fill="#A78BFA" font-family="system-ui, sans-serif" font-size="14" font-weight="600" letter-spacing="1">
+    GENERATIVE ENGINE OPTIMIZATION
+  </text>
+  
+  <!-- ChatGPT mockup -->
+  <rect x="680" y="295" width="420" height="220" rx="12" fill="#1a1a2e"/>
+  
+  <!-- Chat input -->
+  <rect x="700" y="315" width="380" height="40" rx="20" fill="#252540" stroke="#8B5CF6" stroke-width="1"/>
+  <text x="725" y="342" fill="#6B7280" font-family="system-ui, sans-serif" font-size="14">Quel est le meilleur CRM pour une PME ?</text>
+  
+  <!-- AI Response -->
+  <rect x="700" y="370" width="380" height="120" rx="12" fill="#252540"/>
+  
+  <!-- AI avatar -->
+  <circle cx="725" cy="395" r="15" fill="#8B5CF6"/>
+  <text x="725" y="400" text-anchor="middle" fill="#FFFFFF" font-family="system-ui, sans-serif" font-size="12" font-weight="700">AI</text>
+  
+  <!-- Response text -->
+  <rect x="750" y="385" width="310" height="8" rx="2" fill="#FFFFFF" opacity="0.7"/>
+  <rect x="750" y="400" width="280" height="8" rx="2" fill="#FFFFFF" opacity="0.5"/>
+  <rect x="750" y="415" width="300" height="8" rx="2" fill="#FFFFFF" opacity="0.5"/>
+  
+  <!-- Brand mention highlighted -->
+  <rect x="700" y="440" width="160" height="35" rx="8" fill="#8B5CF6" opacity="0.25"/>
+  <text x="780" y="463" text-anchor="middle" fill="#A78BFA" font-family="system-ui, sans-serif" font-size="13" font-weight="600">
+    ✨ Ta marque citée
+  </text>
+  
+  <!-- No click needed -->
+  <text x="890" y="520" text-anchor="middle" fill="#A78BFA" font-family="system-ui, sans-serif" font-size="13" font-weight="500">
+    ↑ Ta marque est recommandée directement
+  </text>
+  
+  <!-- Footer -->
+  <text x="600" y="590" text-anchor="middle" fill="#4B5563" font-family="system-ui, sans-serif" font-size="15">
+    coucou-ia.com — Surveillez votre visibilité dans la recherche IA
+  </text>
+</svg>

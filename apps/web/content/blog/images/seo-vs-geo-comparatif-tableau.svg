@@ -1,0 +1,128 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a0a12"/>
+      <stop offset="100%" style="stop-color:#12121f"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bgGrad3)"/>
+  
+  <!-- Title -->
+  <text x="600" y="50" text-anchor="middle" fill="#FFFFFF" font-family="system-ui, -apple-system, sans-serif" font-size="34" font-weight="800">
+    SEO vs GEO : comparatif en 7 points
+  </text>
+  
+  <!-- Table container -->
+  <rect x="60" y="80" width="1080" height="500" rx="16" fill="#161625" stroke="#2D2D44" stroke-width="1"/>
+  
+  <!-- Header row -->
+  <rect x="60" y="80" width="1080" height="55" rx="16" fill="#1E1E2E"/>
+  <rect x="60" y="115" width="1080" height="20" fill="#1E1E2E"/>
+  
+  <!-- Header texts -->
+  <text x="260" y="115" text-anchor="middle" fill="#6B7280" font-family="system-ui, sans-serif" font-size="14" font-weight="600">
+    CRITÈRE
+  </text>
+  <text x="560" y="115" text-anchor="middle" fill="#3B82F6" font-family="system-ui, sans-serif" font-size="16" font-weight="700">
+    🔍 SEO
+  </text>
+  <text x="900" y="115" text-anchor="middle" fill="#8B5CF6" font-family="system-ui, sans-serif" font-size="16" font-weight="700">
+    🤖 GEO
+  </text>
+  
+  <!-- Vertical dividers -->
+  <line x1="420" y1="80" x2="420" y2="580" stroke="#2D2D44" stroke-width="1"/>
+  <line x1="700" y1="80" x2="700" y2="580" stroke="#2D2D44" stroke-width="1"/>
+  
+  <!-- Row 1 - Objectif -->
+  <line x1="60" y1="145" x2="1140" y2="145" stroke="#2D2D44" stroke-width="1"/>
+  <text x="100" y="175" fill="#FFFFFF" font-family="system-ui, sans-serif" font-size="15" font-weight="600">
+    Objectif
+  </text>
+  <text x="560" y="175" text-anchor="middle" fill="#9CA3AF" font-family="system-ui, sans-serif" font-size="14">
+    Ranker en première page Google
+  </text>
+  <text x="900" y="175" text-anchor="middle" fill="#9CA3AF" font-family="system-ui, sans-serif" font-size="14">
+    Être mentionné par l'IA
+  </text>
+  
+  <!-- Row 2 - Format -->
+  <line x1="60" y1="205" x2="1140" y2="205" stroke="#2D2D44" stroke-width="1"/>
+  <text x="100" y="235" fill="#FFFFFF" font-family="system-ui, sans-serif" font-size="15" font-weight="600">
+    Format de résultat
+  </text>
+  <text x="560" y="235" text-anchor="middle" fill="#9CA3AF" font-family="system-ui, sans-serif" font-size="14">
+    Liste de liens cliquables
+  </text>
+  <text x="900" y="235" text-anchor="middle" fill="#9CA3AF" font-family="system-ui, sans-serif" font-size="14">
+    Réponse conversationnelle
+  </text>
+  
+  <!-- Row 3 - Métrique -->
+  <line x1="60" y1="265" x2="1140" y2="265" stroke="#2D2D44" stroke-width="1"/>
+  <text x="100" y="295" fill="#FFFFFF" font-family="system-ui, sans-serif" font-size="15" font-weight="600">
+    Métrique principale
+  </text>
+  <text x="560" y="295" text-anchor="middle" fill="#9CA3AF" font-family="system-ui, sans-serif" font-size="14">
+    Position dans les SERPs
+  </text>
+  <text x="900" y="295" text-anchor="middle" fill="#9CA3AF" font-family="system-ui, sans-serif" font-size="14">
+    Part de voix IA
+  </text>
+  
+  <!-- Row 4 - Contenu -->
+  <line x1="60" y1="325" x2="1140" y2="325" stroke="#2D2D44" stroke-width="1"/>
+  <text x="100" y="355" fill="#FFFFFF" font-family="system-ui, sans-serif" font-size="15" font-weight="600">
+    Optimisation contenu
+  </text>
+  <text x="560" y="355" text-anchor="middle" fill="#9CA3AF" font-family="system-ui, sans-serif" font-size="14">
+    Mots-clés, structure, balises
+  </text>
+  <text x="900" y="355" text-anchor="middle" fill="#9CA3AF" font-family="system-ui, sans-serif" font-size="14">
+    Clarté, expertise, citations
+  </text>
+  
+  <!-- Row 5 - Parcours -->
+  <line x1="60" y1="385" x2="1140" y2="385" stroke="#2D2D44" stroke-width="1"/>
+  <text x="100" y="415" fill="#FFFFFF" font-family="system-ui, sans-serif" font-size="15" font-weight="600">
+    Parcours utilisateur
+  </text>
+  <text x="560" y="415" text-anchor="middle" fill="#9CA3AF" font-family="system-ui, sans-serif" font-size="14">
+    Requête → Clic → Site
+  </text>
+  <text x="900" y="415" text-anchor="middle" fill="#9CA3AF" font-family="system-ui, sans-serif" font-size="14">
+    Question → Réponse directe
+  </text>
+  
+  <!-- Row 6 - Autorité -->
+  <line x1="60" y1="445" x2="1140" y2="445" stroke="#2D2D44" stroke-width="1"/>
+  <text x="100" y="475" fill="#FFFFFF" font-family="system-ui, sans-serif" font-size="15" font-weight="600">
+    Construction d'autorité
+  </text>
+  <text x="560" y="475" text-anchor="middle" fill="#9CA3AF" font-family="system-ui, sans-serif" font-size="14">
+    Backlinks, Domain Authority
+  </text>
+  <text x="900" y="475" text-anchor="middle" fill="#9CA3AF" font-family="system-ui, sans-serif" font-size="14">
+    Reconnaissance d'entité
+  </text>
+  
+  <!-- Row 7 - Outils -->
+  <line x1="60" y1="505" x2="1140" y2="505" stroke="#2D2D44" stroke-width="1"/>
+  <text x="100" y="535" fill="#FFFFFF" font-family="system-ui, sans-serif" font-size="15" font-weight="600">
+    Outils de mesure
+  </text>
+  <text x="560" y="535" text-anchor="middle" fill="#9CA3AF" font-family="system-ui, sans-serif" font-size="14">
+    GSC, Semrush, Ahrefs
+  </text>
+  <rect x="800" y="518" width="200" height="28" rx="6" fill="#8B5CF6" opacity="0.2"/>
+  <text x="900" y="538" text-anchor="middle" fill="#A78BFA" font-family="system-ui, sans-serif" font-size="14" font-weight="600">
+    Coucou IA ✨
+  </text>
+  
+  <!-- Footer -->
+  <text x="600" y="610" text-anchor="middle" fill="#4B5563" font-family="system-ui, sans-serif" font-size="14">
+    coucou-ia.com — Surveillez votre visibilité dans la recherche IA
+  </text>
+</svg>

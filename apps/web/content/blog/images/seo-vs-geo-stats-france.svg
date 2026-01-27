@@ -1,0 +1,132 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bgGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a0a12"/>
+      <stop offset="100%" style="stop-color:#12121f"/>
+    </linearGradient>
+    <linearGradient id="cardGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#1E1E2E"/>
+      <stop offset="100%" style="stop-color:#161625"/>
+    </linearGradient>
+    <linearGradient id="purpleAccent" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#8B5CF6"/>
+      <stop offset="100%" style="stop-color:#A78BFA"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bgGrad2)"/>
+  
+  <!-- Decorative elements -->
+  <circle cx="0" cy="315" r="400" fill="#8B5CF6" opacity="0.02"/>
+  <circle cx="1200" cy="315" r="400" fill="#8B5CF6" opacity="0.02"/>
+  
+  <!-- Title -->
+  <text x="600" y="55" text-anchor="middle" fill="#FFFFFF" font-family="system-ui, -apple-system, sans-serif" font-size="38" font-weight="800">
+    Pourquoi le GEO est devenu incontournable
+  </text>
+  <text x="600" y="90" text-anchor="middle" fill="#6B7280" font-family="system-ui, sans-serif" font-size="16">
+    Les chiffres clés en France — Sources : Ipsos-CESI, Similarweb, Seer Interactive
+  </text>
+  
+  <!-- Stat Card 1 - Users -->
+  <rect x="50" y="130" width="350" height="180" rx="16" fill="url(#cardGrad)" stroke="#2D2D44" stroke-width="1"/>
+  <rect x="50" y="130" width="350" height="4" rx="2" fill="url(#purpleAccent)"/>
+  <text x="225" y="195" text-anchor="middle" fill="#8B5CF6" font-family="system-ui, sans-serif" font-size="56" font-weight="800">
+    19,6M
+  </text>
+  <text x="225" y="235" text-anchor="middle" fill="#FFFFFF" font-family="system-ui, sans-serif" font-size="18" font-weight="600">
+    de Français utilisent
+  </text>
+  <text x="225" y="260" text-anchor="middle" fill="#FFFFFF" font-family="system-ui, sans-serif" font-size="18" font-weight="600">
+    ChatGPT régulièrement
+  </text>
+  <text x="225" y="295" text-anchor="middle" fill="#4B5563" font-family="system-ui, sans-serif" font-size="12">
+    SE Ranking FR, oct 2025
+  </text>
+  
+  <!-- Stat Card 2 - Youth -->
+  <rect x="425" y="130" width="350" height="180" rx="16" fill="url(#cardGrad)" stroke="#2D2D44" stroke-width="1"/>
+  <rect x="425" y="130" width="350" height="4" rx="2" fill="url(#purpleAccent)"/>
+  <text x="600" y="195" text-anchor="middle" fill="#8B5CF6" font-family="system-ui, sans-serif" font-size="56" font-weight="800">
+    77%
+  </text>
+  <text x="600" y="235" text-anchor="middle" fill="#FFFFFF" font-family="system-ui, sans-serif" font-size="18" font-weight="600">
+    des 18-24 ans utilisent
+  </text>
+  <text x="600" y="260" text-anchor="middle" fill="#FFFFFF" font-family="system-ui, sans-serif" font-size="18" font-weight="600">
+    l'IA pour leurs recherches
+  </text>
+  <text x="600" y="295" text-anchor="middle" fill="#4B5563" font-family="system-ui, sans-serif" font-size="12">
+    Ipsos-CESI, fév 2025
+  </text>
+  
+  <!-- Stat Card 3 - Trust -->
+  <rect x="800" y="130" width="350" height="180" rx="16" fill="url(#cardGrad)" stroke="#2D2D44" stroke-width="1"/>
+  <rect x="800" y="130" width="350" height="4" rx="2" fill="url(#purpleAccent)"/>
+  <text x="975" y="195" text-anchor="middle" fill="#8B5CF6" font-family="system-ui, sans-serif" font-size="56" font-weight="800">
+    67%
+  </text>
+  <text x="975" y="235" text-anchor="middle" fill="#FFFFFF" font-family="system-ui, sans-serif" font-size="18" font-weight="600">
+    font confiance aux
+  </text>
+  <text x="975" y="260" text-anchor="middle" fill="#FFFFFF" font-family="system-ui, sans-serif" font-size="18" font-weight="600">
+    recommandations IA
+  </text>
+  <text x="975" y="295" text-anchor="middle" fill="#4B5563" font-family="system-ui, sans-serif" font-size="12">
+    Études 2024-2025
+  </text>
+  
+  <!-- Stat Card 4 - Traffic growth -->
+  <rect x="50" y="340" width="350" height="180" rx="16" fill="url(#cardGrad)" stroke="#2D2D44" stroke-width="1"/>
+  <rect x="50" y="340" width="350" height="4" rx="2" fill="#A78BFA"/>
+  <text x="225" y="405" text-anchor="middle" fill="#A78BFA" font-family="system-ui, sans-serif" font-size="56" font-weight="800">
+    x25
+  </text>
+  <text x="225" y="445" text-anchor="middle" fill="#FFFFFF" font-family="system-ui, sans-serif" font-size="18" font-weight="600">
+    Trafic référent IA
+  </text>
+  <text x="225" y="470" text-anchor="middle" fill="#FFFFFF" font-family="system-ui, sans-serif" font-size="18" font-weight="600">
+    multiplié en 1 an
+  </text>
+  <text x="225" y="505" text-anchor="middle" fill="#4B5563" font-family="system-ui, sans-serif" font-size="12">
+    Similarweb, 2025
+  </text>
+  
+  <!-- Stat Card 5 - CTR boost -->
+  <rect x="425" y="340" width="350" height="180" rx="16" fill="url(#cardGrad)" stroke="#2D2D44" stroke-width="1"/>
+  <rect x="425" y="340" width="350" height="4" rx="2" fill="#A78BFA"/>
+  <text x="600" y="405" text-anchor="middle" fill="#A78BFA" font-family="system-ui, sans-serif" font-size="56" font-weight="800">
+    +35%
+  </text>
+  <text x="600" y="445" text-anchor="middle" fill="#FFFFFF" font-family="system-ui, sans-serif" font-size="18" font-weight="600">
+    de CTR si cité dans
+  </text>
+  <text x="600" y="470" text-anchor="middle" fill="#FFFFFF" font-family="system-ui, sans-serif" font-size="18" font-weight="600">
+    les AI Overviews
+  </text>
+  <text x="600" y="505" text-anchor="middle" fill="#4B5563" font-family="system-ui, sans-serif" font-size="12">
+    Seer Interactive, 2025
+  </text>
+  
+  <!-- CTA Card -->
+  <rect x="800" y="340" width="350" height="180" rx="16" fill="url(#purpleAccent)"/>
+  <text x="975" y="400" text-anchor="middle" fill="#FFFFFF" font-family="system-ui, sans-serif" font-size="22" font-weight="700">
+    Et ta marque ?
+  </text>
+  <text x="975" y="435" text-anchor="middle" fill="#FFFFFF" font-family="system-ui, sans-serif" font-size="16" opacity="0.9">
+    Est-elle visible dans
+  </text>
+  <text x="975" y="458" text-anchor="middle" fill="#FFFFFF" font-family="system-ui, sans-serif" font-size="16" opacity="0.9">
+    la recherche IA ?
+  </text>
+  <rect x="895" y="480" width="160" height="32" rx="16" fill="#FFFFFF"/>
+  <text x="975" y="502" text-anchor="middle" fill="#8B5CF6" font-family="system-ui, sans-serif" font-size="14" font-weight="700">
+    Analyser →
+  </text>
+  
+  <!-- Footer -->
+  <text x="600" y="600" text-anchor="middle" fill="#4B5563" font-family="system-ui, sans-serif" font-size="14">
+    coucou-ia.com — Le GEO, c'est le nouveau SEO
+  </text>
+</svg>
