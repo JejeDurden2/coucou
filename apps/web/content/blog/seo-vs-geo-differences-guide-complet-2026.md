@@ -43,8 +43,6 @@ Le succès se mesure en citations, en mentions de marque, et en position dans le
 
 ## SEO vs GEO : tableau comparatif des différences
 
-![Tableau comparatif SEO vs GEO en 7 critères](/blog/images/seo-vs-geo-comparatif-tableau.svg)
-
 | Critère                         | SEO                                          | GEO                                                       |
 | ------------------------------- | -------------------------------------------- | --------------------------------------------------------- |
 | **Objectif**                    | Ranker dans les résultats de recherche       | Être cité dans les réponses IA                            |
