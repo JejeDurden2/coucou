@@ -16,30 +16,11 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Header } from '@/components/layout/header';
 import { ProblemSection } from '@/components/features/landing/problem-section';
+import { FeaturesSection } from '@/components/features/landing/features-section';
 import { HowItWorksSection } from '@/components/features/landing/how-it-works-section';
 import { DashboardMockup } from '@/components/landing/dashboard-mockup';
+import { FAQSection, faqs } from '@/components/landing/faq-section';
 import { MidPageCTA } from '@/components/landing/mid-page-cta';
-
-const features = [
-  {
-    icon: Eye,
-    title: 'Surveillance multi-plateformes',
-    description:
-      "Analysez vos mentions sur ChatGPT, Claude et Gemini. Découvrez si l'IA recommande votre marque.",
-  },
-  {
-    icon: BarChart3,
-    title: 'Benchmark concurrentiel',
-    description:
-      'Identifiez les marques qui vous devancent dans la recherche IA et leur fréquence.',
-  },
-  {
-    icon: TrendingUp,
-    title: 'Évolution de votre visibilité',
-    description:
-      "Visualisez l'évolution de votre score de visibilité au fil du temps avec des rapports détaillés.",
-  },
-];
 
 const plans = [
   {
@@ -68,44 +49,6 @@ const plans = [
     cta: 'Choisir Pro',
     popular: false,
     reassurance: 'Support prioritaire inclus',
-  },
-];
-
-const faqs = [
-  {
-    question: "Qu'est-ce que la visibilité IA ou GEO ?",
-    answer:
-      "Le GEO (Generative Engine Optimization) consiste à optimiser la présence de votre marque dans les réponses générées par les IA comme ChatGPT ou Claude. C'est le nouveau SEO pour l'ère de l'intelligence artificielle.",
-  },
-  {
-    question: "Qu'est-ce que la recherche IA ?",
-    answer:
-      "La recherche IA désigne l'utilisation d'assistants conversationnels comme ChatGPT, Claude ou Gemini pour trouver des informations. Contrairement à Google qui affiche des liens, ces IA synthétisent l'information et recommandent directement des solutions.",
-  },
-  {
-    question: 'Comment Coucou IA détecte les mentions de ma marque ?',
-    answer:
-      'Notre système interroge les principaux moteurs IA (ChatGPT, Claude) avec vos prompts personnalisés et analyse les réponses pour détecter si votre marque est citée, sa position dans les recommandations, et quels concurrents sont mentionnés.',
-  },
-  {
-    question: 'Pourquoi est-ce important pour mon business ?',
-    answer:
-      "De plus en plus d'utilisateurs utilisent l'IA pour rechercher des produits et services. Si votre marque n'apparaît pas dans les réponses, vous perdez des clients potentiels. Coucou IA vous aide à mesurer et améliorer cette visibilité.",
-  },
-  {
-    question: 'À quelle fréquence les analyses sont-elles effectuées ?',
-    answer:
-      'La fréquence dépend de votre plan : manuellement pour le plan gratuit, hebdomadairement pour Solo, et quotidiennement pour Pro. Vous pouvez aussi lancer des analyses manuelles à tout moment.',
-  },
-  {
-    question: 'Comment améliorer ma visibilité dans les réponses IA ?',
-    answer:
-      'Plusieurs facteurs influencent la visibilité IA : la présence sur les sources citées par les LLM, la notoriété de marque, le SEO traditionnel, et la qualité du contenu. Nos rapports vous guident sur les axes prioritaires.',
-  },
-  {
-    question: 'Quels moteurs IA sont supportés par Coucou IA ?',
-    answer:
-      "Nous supportons actuellement ChatGPT (OpenAI) et Claude (Anthropic), les deux leaders du marché. D'autres moteurs IA seront ajoutés prochainement (Gemini, Mistral, Llama).",
   },
 ];
 
@@ -296,41 +239,7 @@ export default function LandingPage() {
         </section>
 
         {/* Features Section */}
-        <section id="features" className="py-20 px-4 scroll-mt-20">
-          <div className="container mx-auto max-w-5xl">
-            <div className="text-center mb-12">
-              <Badge className="mb-4">Fonctionnalités</Badge>
-              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-balance">
-                Tout ce qu&apos;il faut pour dominer le GEO
-              </h2>
-              <p className="text-muted-foreground max-w-2xl mx-auto text-pretty">
-                Coucou IA vous donne les outils pour comprendre et améliorer votre présence dans les
-                réponses des intelligences artificielles.
-              </p>
-            </div>
-
-            <div className="grid md:grid-cols-3 gap-6">
-              {features.map((feature) => (
-                <Card
-                  key={feature.title}
-                  className="group hover:border-primary/50 transition-colors"
-                >
-                  <CardHeader>
-                    <div className="size-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors">
-                      <feature.icon className="size-6 text-primary" aria-hidden="true" />
-                    </div>
-                    <CardTitle className="text-lg">{feature.title}</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-sm text-muted-foreground text-pretty">
-                      {feature.description}
-                    </p>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
-        </section>
+        <FeaturesSection />
 
         {/* How it works */}
         <HowItWorksSection />
@@ -403,32 +312,7 @@ export default function LandingPage() {
         </section>
 
         {/* FAQ Section */}
-        <section id="faq" className="py-20 px-4 bg-zinc-900/50 scroll-mt-20">
-          <div className="container mx-auto max-w-3xl">
-            <div className="text-center mb-12">
-              <Badge className="mb-4">FAQ</Badge>
-              <h2 className="text-3xl md:text-4xl font-bold mb-4 text-balance">
-                Questions fréquentes
-              </h2>
-              <p className="text-muted-foreground text-pretty">
-                Tout ce que vous devez savoir sur Coucou IA et la visibilité IA.
-              </p>
-            </div>
-
-            <div className="space-y-4">
-              {faqs.map((faq, index) => (
-                <Card key={index}>
-                  <CardHeader className="pb-2">
-                    <CardTitle className="text-base font-medium">{faq.question}</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-sm text-muted-foreground text-pretty">{faq.answer}</p>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
-        </section>
+        <FAQSection />
 
         {/* CTA Section */}
         <section className="py-20 px-4">
