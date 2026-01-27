@@ -12,6 +12,10 @@ export interface AnthropicMessageOptions {
   temperature?: number;
   webSearch?: boolean;
   webSearchMaxUses?: number;
+  outputFormat?: {
+    type: 'json_schema';
+    schema: Record<string, unknown>;
+  };
 }
 
 export interface AnthropicTextResponse {
@@ -49,7 +53,14 @@ export class AnthropicClientService {
         ]
       : undefined;
 
-    const betas: string[] | undefined = options.webSearch ? ['web-search-2025-03-05'] : undefined;
+    const betas: string[] | undefined =
+      options.webSearch && options.outputFormat
+        ? ['web-search-2025-03-05', 'structured-outputs-2025-11-13']
+        : options.webSearch
+          ? ['web-search-2025-03-05']
+          : options.outputFormat
+            ? ['structured-outputs-2025-11-13']
+            : undefined;
 
     const params: MessageCreateParamsNonStreaming = {
       model: options.model,
@@ -58,6 +69,7 @@ export class AnthropicClientService {
       ...(options.system && { system: options.system }),
       ...(options.temperature !== undefined && { temperature: options.temperature }),
       ...(tools && { tools }),
+      ...(options.outputFormat && { output_format: options.outputFormat }),
     };
 
     const response = betas
@@ -89,6 +101,10 @@ export class AnthropicClientService {
     };
   }
 
+  /**
+   * @deprecated Use outputFormat option in createMessage() instead for guaranteed valid JSON.
+   * This method is kept for backward compatibility with non-structured output calls.
+   */
   extractJson<T>(text: string, schema: ZodSchema<T>): T {
     const cleaned = this.stripMarkdownCodeBlocks(text);
     const jsonString = this.findJsonSubstring(cleaned);

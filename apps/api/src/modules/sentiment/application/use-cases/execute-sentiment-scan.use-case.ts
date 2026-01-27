@@ -39,10 +39,10 @@ FACTEURS À ANALYSER:
 4. Engagement et satisfaction client
 5. Position vs concurrents
 
-Réponds UNIQUEMENT en JSON minifié:
-{"s":score,"t":["theme1","theme2","theme3"],"kp":["positif1","positif2","positif3"],"kn":["negatif1","negatif2","negatif3"]}
+IMPORTANT: Sois PRÉCIS et DIFFÉRENCIÉ. Utilise les résultats de ta recherche web pour étayer ton analyse.
 
-IMPORTANT: Sois PRÉCIS et DIFFÉRENCIÉ. Utilise les résultats de ta recherche web pour étayer ton analyse.`;
+Réponds uniquement en JSON valide, sans markdown, sans backticks, sans texte avant ou après.
+Format JSON: {"s":score,"t":["theme1","theme2","theme3"],"kp":["positif1","positif2","positif3"],"kn":["negatif1","negatif2","negatif3"]}`;
 
 type ExecuteSentimentScanError = NotFoundError | ForbiddenError | AllSentimentProvidersFailedError;
 
@@ -53,6 +53,18 @@ interface LLMQueryResult {
 }
 
 const CLAUDE_SENTIMENT_MODEL = 'claude-sonnet-4-5-20250929';
+
+const SENTIMENT_JSON_SCHEMA = {
+  type: 'object',
+  properties: {
+    s: { type: 'number', minimum: 0, maximum: 100 },
+    t: { type: 'array', items: { type: 'string' }, minItems: 1, maxItems: 10 },
+    kp: { type: 'array', items: { type: 'string' }, minItems: 1, maxItems: 10 },
+    kn: { type: 'array', items: { type: 'string' }, minItems: 1, maxItems: 10 },
+  },
+  required: ['s', 't', 'kp', 'kn'],
+  additionalProperties: false,
+} as const;
 
 @Injectable()
 export class ExecuteSentimentScanUseCase {
@@ -195,10 +207,21 @@ JSON uniquement: {"s":score,"t":[themes],"kp":[positifs],"kn":[négatifs]}`;
           system: SENTIMENT_SYSTEM_PROMPT,
           messages: [{ role: 'user', content: prompt }],
           webSearch: true,
+          outputFormat: {
+            type: 'json_schema',
+            schema: SENTIMENT_JSON_SCHEMA,
+          },
         });
 
-        const parsed = this.anthropicClient.extractJson(response.text, SentimentResultSchema);
-        return { provider: 'claude', result: parsed };
+        // With structured outputs, response.text is guaranteed valid JSON matching the schema
+        const parsed: unknown = JSON.parse(response.text);
+        const validated = SentimentResultSchema.safeParse(parsed);
+
+        if (!validated.success) {
+          throw new Error(`Schema validation failed: ${validated.error.message}`);
+        }
+
+        return { provider: 'claude', result: validated.data };
       } catch (error) {
         const isLastAttempt = attempt === maxRetries;
         const errorMessage = error instanceof Error ? error.message : String(error);
