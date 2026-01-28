@@ -20,11 +20,18 @@ function buildTransport(): { targets: TransportTargetOptions[] } | undefined {
   return targets.length > 0 ? { targets } : undefined;
 }
 
+const transport = buildTransport();
+
 const pinoInstance: PinoLogger = pino({
   level: process.env.LOG_LEVEL || 'info',
-  formatters: {
-    level: (label) => ({ level: label }),
-  },
+  // formatters not allowed with multi-transport targets
+  ...(transport
+    ? {}
+    : {
+        formatters: {
+          level: (label) => ({ level: label }),
+        },
+      }),
   mixin() {
     const span = trace.getSpan(context.active());
     if (span) {
@@ -33,7 +40,7 @@ const pinoInstance: PinoLogger = pino({
     }
     return {};
   },
-  transport: buildTransport(),
+  transport,
 });
 
 @Injectable({ scope: Scope.TRANSIENT })
