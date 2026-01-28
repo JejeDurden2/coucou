@@ -25,13 +25,6 @@ function buildTransport(): { targets: TransportTargetOptions[] } | undefined {
 
 const transport = buildTransport();
 
-// Log transport configuration at startup (visible in Railway)
-const hasBetterStack = !!process.env.BETTERSTACK_SOURCE_TOKEN;
-console.log(
-  `[Logger] Initializing with transports: ${transport?.targets.map((t) => t.target).join(', ') || 'default'}` +
-    ` | BetterStack: ${hasBetterStack ? 'enabled' : 'disabled'}`,
-);
-
 const pinoInstance: PinoLogger = pino({
   level: process.env.LOG_LEVEL || 'info',
   // formatters not allowed with multi-transport targets
