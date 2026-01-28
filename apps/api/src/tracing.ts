@@ -25,6 +25,10 @@ function parseOtlpHeaders(): Record<string, string> | undefined {
 if (otlpEndpoint) {
   const headers = parseOtlpHeaders();
 
+  console.log('[Tracing] Initializing OpenTelemetry SDK');
+  console.log(`[Tracing] Endpoint: ${otlpEndpoint}`);
+  console.log(`[Tracing] Headers: ${headers ? Object.keys(headers).join(', ') : 'none'}`);
+
   const sdk = new NodeSDK({
     resource: resourceFromAttributes({
       [ATTR_SERVICE_NAME]: process.env.SERVICE_NAME || 'coucou-api',
@@ -49,6 +53,7 @@ if (otlpEndpoint) {
   });
 
   sdk.start();
+  console.log('[Tracing] OpenTelemetry SDK started');
 
   async function shutdown(): Promise<void> {
     try {
@@ -60,4 +65,6 @@ if (otlpEndpoint) {
 
   process.on('SIGTERM', shutdown);
   process.on('SIGINT', shutdown);
+} else {
+  console.log('[Tracing] OpenTelemetry disabled (OTEL_EXPORTER_OTLP_ENDPOINT not set)');
 }
