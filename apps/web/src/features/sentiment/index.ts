@@ -1,5 +1,4 @@
 export { SentimentTab } from './components/sentiment-tab';
-export { SentimentLockedBanner } from './components/sentiment-locked-banner';
 export {
   getSentimentVariant,
   variantTextStyles,

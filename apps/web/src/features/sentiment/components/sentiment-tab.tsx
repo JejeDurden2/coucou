@@ -8,7 +8,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { useLatestSentiment } from '@/hooks/use-sentiment';
 import { formatRelativeTime, formatRelativeTimeFuture } from '@/lib/format';
 
-import { SentimentLockedBanner } from './sentiment-locked-banner';
+import { FeatureLockedBanner } from '@/components/upgrade';
 import { ScoreCard } from './score-card';
 import { ThemesBadges } from './themes-badges';
 import { SentimentChart } from './sentiment-chart';
@@ -41,7 +41,7 @@ export const SentimentTab = memo(function SentimentTab({ projectId, userPlan }: 
 
   // Locked state for FREE users
   if (userPlan === Plan.FREE) {
-    return <SentimentLockedBanner />;
+    return <FeatureLockedBanner feature="sentiment" />;
   }
 
   // Loading state

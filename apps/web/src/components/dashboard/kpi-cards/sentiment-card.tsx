@@ -1,13 +1,13 @@
 'use client';
 
 import { memo, useMemo } from 'react';
-import Link from 'next/link';
 import { Lock, Loader2, ArrowUp, ArrowDown } from 'lucide-react';
 import { Plan } from '@coucou-ia/shared';
 
 import { cn } from '@/lib/utils';
 import { Badge } from '@/components/ui/badge';
 import { InfoTooltip } from '@/components/ui/info-tooltip';
+import { useUpgradeModal } from '@/hooks/use-upgrade';
 import { useLatestSentiment, useSentimentHistory } from '@/hooks/use-sentiment';
 import {
   getSentimentVariant,
@@ -59,6 +59,7 @@ export const SentimentBentoCard = memo(function SentimentBentoCard({
   className,
 }: SentimentBentoCardProps) {
   const isLocked = userPlan === Plan.FREE;
+  const { openUpgradeModal } = useUpgradeModal();
   const { data, isLoading } = useLatestSentiment(projectId);
   const { data: history } = useSentimentHistory(projectId);
 
@@ -78,12 +79,14 @@ export const SentimentBentoCard = memo(function SentimentBentoCard({
 
   if (isLocked) {
     return (
-      <Link
-        href="/billing"
+      <button
+        type="button"
+        onClick={() => openUpgradeModal('sentiment')}
         className={cn(
-          'relative rounded-lg border border-border bg-card p-4 h-full',
+          'relative rounded-lg border border-border bg-card p-4 h-full w-full',
           'flex flex-col items-center justify-center gap-2 text-center',
           'transition-colors duration-200 hover:bg-card-hover hover:border-primary/30',
+          'cursor-pointer',
           className,
         )}
       >
@@ -91,7 +94,7 @@ export const SentimentBentoCard = memo(function SentimentBentoCard({
         <p className="text-sm font-medium text-foreground text-pretty">Sentiment IA</p>
         <p className="text-xs text-muted-foreground text-pretty">Disponible dès le plan Solo</p>
         <span className="text-xs font-medium text-primary">Débloquer</span>
-      </Link>
+      </button>
     );
   }
 

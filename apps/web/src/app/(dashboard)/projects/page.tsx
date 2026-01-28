@@ -7,6 +7,7 @@ import { useProjects } from '@/hooks/use-projects';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/lib/auth-context';
 import { PLAN_LIMITS, Plan } from '@coucou-ia/shared';
+import { UsageNudge } from '@/components/upgrade';
 
 export default function ProjectsPage(): React.ReactNode {
   const { user } = useAuth();
@@ -36,15 +37,10 @@ export default function ProjectsPage(): React.ReactNode {
       </div>
 
       {!canCreateBrand ? (
-        <div className="rounded-lg border border-amber-500/30 bg-amber-500/5 px-4 py-3">
-          <p className="text-sm text-amber-500 text-pretty">
-            Limite atteinte.{' '}
-            <Link href="/billing" className="underline hover:text-amber-400">
-              Passez à un plan supérieur
-            </Link>{' '}
-            pour ajouter plus de marques.
-          </p>
-        </div>
+        <UsageNudge
+          type="project-limit"
+          context={{ current: projects?.length ?? 0, max: limits.projects }}
+        />
       ) : null}
 
       {isLoading ? (

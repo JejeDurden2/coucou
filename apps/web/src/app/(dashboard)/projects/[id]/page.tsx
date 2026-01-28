@@ -40,13 +40,14 @@ import {
 import { CompetitorsList } from '@/components/features/dashboard';
 import { InfoTooltip } from '@/components/ui/info-tooltip';
 import { AddPromptModal } from '@/components/features/dashboard/add-prompt-modal';
-import { StatsContainer, StatsLockedBanner } from '@/components/features/stats';
-import { CompetitorsContainer, CompetitorsLockedBanner } from '@/components/features/competitors';
+import { StatsContainer } from '@/components/features/stats';
+import { CompetitorsContainer } from '@/components/features/competitors';
 import {
   RecommendationsSummary,
   RecommendationsContainer,
-  RecommendationsLockedBanner,
 } from '@/components/features/recommendations';
+import { FeatureLockedBanner } from '@/components/upgrade';
+import { useUpgradeModal } from '@/hooks/use-upgrade';
 import { SentimentTab } from '@/features/sentiment';
 import {
   getScanAvailability,
@@ -94,6 +95,7 @@ export default function ProjectDashboardPage({
   const deletePrompt = useDeletePrompt(id);
 
   const userPlan = (user?.plan as Plan) ?? Plan.FREE;
+  const { openUpgradeModal, trackLockedTabClick } = useUpgradeModal();
 
   const [showAddPrompt, setShowAddPrompt] = useState(false);
   const [promptToDelete, setPromptToDelete] = useState<string | null>(null);
@@ -242,7 +244,26 @@ export default function ProjectDashboardPage({
         )}
       </div>
 
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-4">
+      <Tabs
+        value={activeTab}
+        onValueChange={(tab) => {
+          setActiveTab(tab);
+          if (!userCanAccessStats && tab !== 'overview') {
+            const featureMap: Record<
+              string,
+              'competitors' | 'recommendations' | 'stats' | 'sentiment'
+            > = {
+              competitors: 'competitors',
+              recommendations: 'recommendations',
+              stats: 'stats',
+              sentiment: 'sentiment',
+            };
+            const feature = featureMap[tab];
+            if (feature) trackLockedTabClick(feature);
+          }
+        }}
+        className="space-y-4"
+      >
         <TabsList>
           <TabsTrigger value="overview">Vue d'ensemble</TabsTrigger>
           <TabsTrigger value="competitors" className="gap-1.5">
@@ -406,6 +427,17 @@ export default function ProjectDashboardPage({
                 </tbody>
               </table>
             </div>
+
+            {userPlan === Plan.FREE && hasPrompts && (
+              <button
+                type="button"
+                onClick={() => openUpgradeModal('stats')}
+                className="flex items-center gap-2 text-xs text-muted-foreground hover:text-primary transition-colors cursor-pointer"
+              >
+                <Lock className="size-3" aria-hidden="true" />
+                <span>Résultats GPT-4o-mini uniquement. +2 modèles IA avec Solo</span>
+              </button>
+            )}
           </div>
 
           {recommendationsData?.recommendations && (
@@ -435,7 +467,7 @@ export default function ProjectDashboardPage({
               stats={stats}
             />
           ) : (
-            <CompetitorsLockedBanner />
+            <FeatureLockedBanner feature="competitors" />
           )}
         </TabsContent>
 
@@ -445,7 +477,7 @@ export default function ProjectDashboardPage({
               recommendations={recommendationsData?.recommendations ?? []}
             />
           ) : (
-            <RecommendationsLockedBanner />
+            <FeatureLockedBanner feature="recommendations" />
           )}
         </TabsContent>
 
@@ -459,7 +491,7 @@ export default function ProjectDashboardPage({
               onNavigateToOverview={() => setActiveTab('overview')}
             />
           ) : (
-            <StatsLockedBanner />
+            <FeatureLockedBanner feature="stats" />
           )}
         </TabsContent>
 
