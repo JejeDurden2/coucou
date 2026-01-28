@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Logo } from '@/components/ui/logo';
 import { GoogleButton } from '@/components/ui/google-button';
+import { PasswordInput } from '@/components/ui/password-input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 export default function LoginPage() {
@@ -16,11 +17,30 @@ export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [emailError, setEmailError] = useState('');
+  const [passwordError, setPasswordError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    setEmailError('');
+    setPasswordError('');
+
+    let hasFieldError = false;
+    if (!email.trim()) {
+      setEmailError('Veuillez saisir votre adresse email.');
+      hasFieldError = true;
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setEmailError("L'adresse email n'est pas valide.");
+      hasFieldError = true;
+    }
+    if (!password) {
+      setPasswordError('Veuillez saisir votre mot de passe.');
+      hasFieldError = true;
+    }
+    if (hasFieldError) return;
+
     setIsLoading(true);
 
     try {
@@ -56,10 +76,13 @@ export default function LoginPage() {
             </div>
           </div>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-4" noValidate>
             {error && (
               <div className="rounded-lg bg-destructive/10 p-3 text-sm text-destructive">
-                {error}
+                {error}{' '}
+                <Link href="/forgot-password" className="underline hover:text-destructive/80">
+                  Mot de passe oublié ?
+                </Link>
               </div>
             )}
             <div className="space-y-2">
@@ -71,11 +94,16 @@ export default function LoginPage() {
                 type="email"
                 placeholder="vous@entreprise.com"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  setEmailError('');
+                }}
                 required
                 autoComplete="email"
                 spellCheck={false}
+                autoFocus
               />
+              {emailError && <p className="text-sm text-destructive">{emailError}</p>}
             </div>
             <div className="space-y-2">
               <div className="flex items-center justify-between">
@@ -86,18 +114,21 @@ export default function LoginPage() {
                   href="/forgot-password"
                   className="text-xs text-muted-foreground hover:text-primary"
                 >
-                  Mot de passe oublie ?
+                  Mot de passe oublié ?
                 </Link>
               </div>
-              <Input
+              <PasswordInput
                 id="password"
-                type="password"
                 placeholder="••••••••"
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                onChange={(e) => {
+                  setPassword(e.target.value);
+                  setPasswordError('');
+                }}
                 required
                 autoComplete="current-password"
               />
+              {passwordError && <p className="text-sm text-destructive">{passwordError}</p>}
             </div>
             <Button type="submit" className="w-full" disabled={isLoading}>
               {isLoading ? 'Connexion…' : 'Se connecter'}

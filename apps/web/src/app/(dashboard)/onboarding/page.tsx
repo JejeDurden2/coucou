@@ -17,6 +17,43 @@ import { Badge } from '@/components/ui/badge';
 
 type OnboardingStep = 'plan' | 'brand' | 'prompts';
 
+const STEP_NUMBER: Record<OnboardingStep, number> = { plan: 1, brand: 2, prompts: 3 };
+const TOTAL_STEPS = 3;
+
+function StepIndicator({ current }: { current: OnboardingStep }) {
+  const stepNum = STEP_NUMBER[current];
+  return (
+    <div className="flex items-center justify-center gap-2 mb-6">
+      {Array.from({ length: TOTAL_STEPS }, (_, i) => {
+        const num = i + 1;
+        const isActive = num === stepNum;
+        const isDone = num < stepNum;
+        return (
+          <div key={num} className="flex items-center gap-2">
+            {i > 0 && (
+              <div className={`h-px w-8 ${isDone ? 'bg-primary' : 'bg-muted-foreground/30'}`} />
+            )}
+            <div
+              className={`flex size-7 items-center justify-center rounded-full text-xs font-medium ${
+                isActive
+                  ? 'bg-primary text-primary-foreground'
+                  : isDone
+                    ? 'bg-primary/20 text-primary'
+                    : 'bg-muted text-muted-foreground'
+              }`}
+            >
+              {num}
+            </div>
+          </div>
+        );
+      })}
+      <span className="ml-2 text-sm text-muted-foreground">
+        Étape {stepNum}/{TOTAL_STEPS}
+      </span>
+    </div>
+  );
+}
+
 export default function OnboardingPage(): React.ReactNode {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -132,6 +169,7 @@ export default function OnboardingPage(): React.ReactNode {
   return (
     <div className="min-h-[80vh] flex items-center justify-center p-4">
       <div className="w-full max-w-4xl">
+        <StepIndicator current={step} />
         {step === 'plan' && (
           <div className="space-y-8">
             <div className="text-center space-y-2">
