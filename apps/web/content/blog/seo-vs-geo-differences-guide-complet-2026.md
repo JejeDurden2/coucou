@@ -5,6 +5,7 @@ date: '2026-01-27'
 author: 'Jérôme Demares'
 tags: ['GEO', 'SEO', 'Recherche IA', 'Visibilité IA']
 image: '/blog/images/seo-vs-geo-hero.svg'
+imageAlt: 'Comparaison visuelle entre SEO traditionnel (résultats Google) et GEO (réponses ChatGPT)'
 ---
 
 Le SEO, tu connais. Mais connais-tu le GEO ? Depuis que ChatGPT et les autres moteurs de recherche IA (Claude, Gemini, Perplexity) ont explosé, une nouvelle discipline est apparue : le GEO, ou Generative Engine Optimization.

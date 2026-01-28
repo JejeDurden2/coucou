@@ -16,6 +16,7 @@ export interface BlogPostMeta {
   author: string;
   tags: string[];
   image?: string;
+  imageAlt?: string;
   readingTime: string;
 }
 
@@ -70,6 +71,7 @@ export function getPostMeta(slug: string): BlogPostMeta | null {
     author: data.author ?? 'Coucou IA',
     tags: data.tags ?? [],
     image: data.image,
+    imageAlt: data.imageAlt,
     readingTime: stats.text.replace('read', 'de lecture'),
   };
 }
@@ -103,6 +105,7 @@ export async function getPost(slug: string): Promise<BlogPost | null> {
     author: data.author ?? 'Coucou IA',
     tags: data.tags ?? [],
     image: data.image,
+    imageAlt: data.imageAlt,
     readingTime: stats.text.replace('read', 'de lecture'),
     content: htmlContent,
   };

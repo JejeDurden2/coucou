@@ -22,7 +22,7 @@ export function PostCard({ post }: PostCardProps): React.ReactNode {
           <div className="aspect-video overflow-hidden rounded-lg bg-muted">
             <Image
               src={post.image}
-              alt={post.title}
+              alt={post.imageAlt ?? post.title}
               width={1200}
               height={675}
               className="size-full object-cover"

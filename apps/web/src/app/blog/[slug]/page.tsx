@@ -4,8 +4,8 @@ import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { ArrowLeft, Calendar, Clock, User } from 'lucide-react';
 
-import { getPost, getAllPostSlugs } from '@/lib/blog';
-import { PostContent } from '@/components/blog';
+import { getPost, getAllPostSlugs, getAllPosts } from '@/lib/blog';
+import { PostCard, PostContent } from '@/components/blog';
 import { Logo } from '@/components/ui/logo';
 
 interface PageProps {
@@ -189,7 +189,7 @@ export default async function BlogPostPage({ params }: PageProps): Promise<React
             <div className="mb-10 overflow-hidden rounded-xl border border-border">
               <Image
                 src={post.image}
-                alt={post.title}
+                alt={post.imageAlt ?? post.title}
                 width={1200}
                 height={675}
                 className="w-full h-auto object-cover aspect-video"
@@ -200,6 +200,29 @@ export default async function BlogPostPage({ params }: PageProps): Promise<React
 
           {/* Content */}
           <PostContent content={post.content} />
+
+          {/* Related Posts */}
+          {(() => {
+            const allPosts = getAllPosts();
+            const related = allPosts
+              .filter((p) => p.slug !== slug && p.tags.some((t) => post.tags.includes(t)))
+              .slice(0, 2);
+
+            if (related.length === 0) return null;
+
+            return (
+              <section className="mt-16">
+                <h2 className="font-display text-2xl font-semibold text-foreground mb-6">
+                  Articles similaires
+                </h2>
+                <div className="grid gap-6 md:grid-cols-2">
+                  {related.map((p) => (
+                    <PostCard key={p.slug} post={p} />
+                  ))}
+                </div>
+              </section>
+            );
+          })()}
 
           {/* Footer CTA */}
           <footer className="mt-16 rounded-xl border border-border bg-card p-8 text-center">
