@@ -7,7 +7,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const posts = getAllPosts();
 
   // Use latest blog post date as proxy for blog listing / homepage freshness
-  const latestPostDate = posts.length > 0 ? new Date(posts[0].date) : new Date('2025-01-01');
+  const latestPostDate = posts.length > 0 ? new Date(posts[0].date) : new Date('2026-01-01');
 
   // Static pages
   const staticPages: MetadataRoute.Sitemap = [
@@ -25,19 +25,19 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
     {
       url: `${baseUrl}/producthunt`,
-      lastModified: new Date('2025-01-01'),
+      lastModified: new Date('2026-01-01'),
       changeFrequency: 'monthly',
       priority: 0.5,
     },
     {
       url: `${baseUrl}/privacy`,
-      lastModified: new Date('2025-01-01'),
+      lastModified: new Date('2026-01-01'),
       changeFrequency: 'yearly',
       priority: 0.3,
     },
     {
       url: `${baseUrl}/terms`,
-      lastModified: new Date('2025-01-01'),
+      lastModified: new Date('2026-01-01'),
       changeFrequency: 'yearly',
       priority: 0.3,
     },
