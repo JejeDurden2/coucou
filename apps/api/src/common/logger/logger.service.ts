@@ -7,6 +7,9 @@ function buildTransport(): { targets: TransportTargetOptions[] } | undefined {
 
   if (process.env.NODE_ENV === 'development') {
     targets.push({ target: 'pino-pretty', options: { colorize: true }, level: 'debug' });
+  } else {
+    // Production: stdout for Railway logs
+    targets.push({ target: 'pino/file', options: { destination: 1 }, level: 'info' });
   }
 
   if (process.env.BETTERSTACK_SOURCE_TOKEN) {
@@ -21,6 +24,13 @@ function buildTransport(): { targets: TransportTargetOptions[] } | undefined {
 }
 
 const transport = buildTransport();
+
+// Log transport configuration at startup (visible in Railway)
+const hasBetterStack = !!process.env.BETTERSTACK_SOURCE_TOKEN;
+console.log(
+  `[Logger] Initializing with transports: ${transport?.targets.map((t) => t.target).join(', ') || 'default'}` +
+    ` | BetterStack: ${hasBetterStack ? 'enabled' : 'disabled'}`,
+);
 
 const pinoInstance: PinoLogger = pino({
   level: process.env.LOG_LEVEL || 'info',
