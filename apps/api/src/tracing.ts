@@ -8,7 +8,23 @@ import { ATTR_SERVICE_NAME, ATTR_SERVICE_VERSION } from '@opentelemetry/semantic
 
 const otlpEndpoint = process.env.OTEL_EXPORTER_OTLP_ENDPOINT;
 
+function parseOtlpHeaders(): Record<string, string> | undefined {
+  const headersEnv = process.env.OTEL_EXPORTER_OTLP_HEADERS;
+  if (!headersEnv) return undefined;
+
+  const headers: Record<string, string> = {};
+  for (const pair of headersEnv.split(',')) {
+    const [key, ...valueParts] = pair.split('=');
+    if (key && valueParts.length > 0) {
+      headers[key.trim()] = valueParts.join('=').trim();
+    }
+  }
+  return Object.keys(headers).length > 0 ? headers : undefined;
+}
+
 if (otlpEndpoint) {
+  const headers = parseOtlpHeaders();
+
   const sdk = new NodeSDK({
     resource: resourceFromAttributes({
       [ATTR_SERVICE_NAME]: process.env.SERVICE_NAME || 'coucou-api',
@@ -16,10 +32,12 @@ if (otlpEndpoint) {
     }),
     traceExporter: new OTLPTraceExporter({
       url: `${otlpEndpoint}/v1/traces`,
+      headers,
     }),
     metricReader: new PeriodicExportingMetricReader({
       exporter: new OTLPMetricExporter({
         url: `${otlpEndpoint}/v1/metrics`,
+        headers,
       }),
       exportIntervalMillis: 30_000,
     }),
