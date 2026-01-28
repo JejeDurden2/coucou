@@ -30,6 +30,7 @@
     "@bull-board/express": "^6.16.4",
     "@bull-board/nestjs": "^6.16.4",
     "@coucou-ia/shared": "workspace:*",
+    "@logtail/pino": "^0.5.7",
     "@nestjs/bullmq": "^11.0.4",
     "@nestjs/common": "^10.4.15",
     "@nestjs/config": "^3.3.0",

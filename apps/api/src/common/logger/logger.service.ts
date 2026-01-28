@@ -1,6 +1,24 @@
 import { Injectable, LoggerService as NestLoggerService, Scope } from '@nestjs/common';
-import { pino, type Logger as PinoLogger } from 'pino';
+import { pino, type Logger as PinoLogger, type TransportTargetOptions } from 'pino';
 import { trace, context } from '@opentelemetry/api';
+
+function buildTransport(): { targets: TransportTargetOptions[] } | undefined {
+  const targets: TransportTargetOptions[] = [];
+
+  if (process.env.NODE_ENV === 'development') {
+    targets.push({ target: 'pino-pretty', options: { colorize: true }, level: 'debug' });
+  }
+
+  if (process.env.BETTERSTACK_SOURCE_TOKEN) {
+    targets.push({
+      target: '@logtail/pino',
+      options: { sourceToken: process.env.BETTERSTACK_SOURCE_TOKEN },
+      level: 'info',
+    });
+  }
+
+  return targets.length > 0 ? { targets } : undefined;
+}
 
 const pinoInstance: PinoLogger = pino({
   level: process.env.LOG_LEVEL || 'info',
@@ -15,10 +33,7 @@ const pinoInstance: PinoLogger = pino({
     }
     return {};
   },
-  transport:
-    process.env.NODE_ENV === 'development'
-      ? { target: 'pino-pretty', options: { colorize: true } }
-      : undefined,
+  transport: buildTransport(),
 });
 
 @Injectable({ scope: Scope.TRANSIENT })
@@ -29,6 +44,7 @@ export class LoggerService implements NestLoggerService {
     this.ctx = ctx;
   }
 
+  /** @deprecated Use info() with structured data instead */
   log(message: string, ...optionalParams: unknown[]): void {
     const data = this.extractData(optionalParams);
     pinoInstance.info({ context: this.ctx, ...data }, message);
@@ -38,36 +54,35 @@ export class LoggerService implements NestLoggerService {
     pinoInstance.info({ context: this.ctx, ...data }, message);
   }
 
-  error(message: string, ...optionalParams: unknown[]): void {
-    const first = optionalParams[0];
-    if (first instanceof Error) {
+  error(
+    message: string,
+    errorOrData?: Error | Record<string, unknown>,
+    data?: Record<string, unknown>,
+  ): void {
+    if (errorOrData instanceof Error) {
       pinoInstance.error(
         {
           context: this.ctx,
-          err: first,
-          stack: first.stack,
+          err: { message: errorOrData.message, name: errorOrData.name },
+          stack: errorOrData.stack,
+          ...data,
         },
         message,
       );
-    } else if (typeof first === 'string') {
-      pinoInstance.error({ context: this.ctx, stack: first }, message);
     } else {
-      pinoInstance.error({ context: this.ctx }, message);
+      pinoInstance.error({ context: this.ctx, ...errorOrData }, message);
     }
   }
 
-  warn(message: string, ...optionalParams: unknown[]): void {
-    const data = this.extractData(optionalParams);
+  warn(message: string, data?: Record<string, unknown>): void {
     pinoInstance.warn({ context: this.ctx, ...data }, message);
   }
 
-  debug(message: string, ...optionalParams: unknown[]): void {
-    const data = this.extractData(optionalParams);
+  debug(message: string, data?: Record<string, unknown>): void {
     pinoInstance.debug({ context: this.ctx, ...data }, message);
   }
 
-  verbose(message: string, ...optionalParams: unknown[]): void {
-    const data = this.extractData(optionalParams);
+  verbose(message: string, data?: Record<string, unknown>): void {
     pinoInstance.trace({ context: this.ctx, ...data }, message);
   }
 
