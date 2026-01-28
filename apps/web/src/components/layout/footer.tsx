@@ -20,7 +20,7 @@ export function Footer() {
             <h4 className="font-medium mb-4">Produit</h4>
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li>
-                <Link href="#pricing" className="hover:text-foreground">
+                <Link href="/#pricing" className="hover:text-foreground">
                   Tarifs
                 </Link>
               </li>

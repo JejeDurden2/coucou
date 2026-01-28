@@ -49,7 +49,7 @@ const ORG_SCHEMA = {
   '@type': 'Organization',
   name: 'Coucou IA',
   url: 'https://coucou-ia.com',
-  logo: 'https://coucou-ia.com/logo.png',
+  logo: 'https://coucou-ia.com/logo.svg',
   description:
     'Outil GEO français pour surveiller et améliorer la visibilité de votre marque dans ChatGPT et Claude.',
   foundingDate: '2024',

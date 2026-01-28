@@ -20,6 +20,9 @@ export const metadata: Metadata = {
     title: 'Blog GEO & Recherche IA | Coucou IA',
     description: 'Guides pratiques sur le GEO et la visibilité de marque sur ChatGPT et Claude.',
   },
+  alternates: {
+    canonical: 'https://coucou-ia.com/blog',
+  },
 };
 
 export default function BlogPage(): React.ReactNode {

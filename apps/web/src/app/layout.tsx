@@ -81,6 +81,7 @@ export const metadata: Metadata = {
   },
   alternates: {
     canonical: 'https://coucou-ia.com',
+    languages: { fr: 'https://coucou-ia.com' },
   },
 };
 
