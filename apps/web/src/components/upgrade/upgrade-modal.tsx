@@ -157,7 +157,7 @@ export const UpgradeModal = memo(function UpgradeModal({
             size="lg"
           >
             {checkout.isPending ? (
-              'Redirection...'
+              'Redirection…'
             ) : (
               <>
                 Passer à Solo — {soloPrice}€/mois

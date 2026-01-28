@@ -1,17 +1,11 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+import { Inject, Injectable } from '@nestjs/common';
 import type { Plan } from '@prisma/client';
 
 import { PlanLimitError, Result } from '../../../../common';
-import { EMAIL_PORT, type EmailPort, generatePlanLimitEmail } from '../../../email';
+import { PlanLimitNotificationService } from '../../../email';
+import { PLAN_LIMITS } from '../../../billing/domain/services/plan-limits.service';
 import { PROJECT_REPOSITORY, type ProjectRepository } from '../../domain';
 import type { CreateProjectDto, ProjectResponseDto } from '../dto/project.dto';
-
-const PROJECT_LIMITS: Record<Plan, number> = {
-  FREE: 1,
-  SOLO: 5,
-  PRO: 15,
-};
 
 interface UserInfo {
   email: string;
@@ -20,14 +14,10 @@ interface UserInfo {
 
 @Injectable()
 export class CreateProjectUseCase {
-  private readonly logger = new Logger(CreateProjectUseCase.name);
-
   constructor(
     @Inject(PROJECT_REPOSITORY)
     private readonly projectRepository: ProjectRepository,
-    @Inject(EMAIL_PORT)
-    private readonly emailPort: EmailPort,
-    private readonly configService: ConfigService,
+    private readonly planLimitNotification: PlanLimitNotificationService,
   ) {}
 
   async execute(
@@ -37,14 +27,11 @@ export class CreateProjectUseCase {
     userInfo?: UserInfo,
   ): Promise<Result<ProjectResponseDto, PlanLimitError>> {
     const currentCount = await this.projectRepository.countByUserId(userId);
-    const limit = PROJECT_LIMITS[plan];
+    const limit = PLAN_LIMITS[plan].projects;
 
     if (currentCount >= limit) {
-      // Send plan limit email (non-blocking) - only for FREE and SOLO
       if (userInfo && (plan === 'FREE' || plan === 'SOLO')) {
-        this.sendPlanLimitEmail(userInfo, plan, currentCount, limit).catch((error) => {
-          this.logger.error(`Failed to send plan limit email to ${userInfo.email}`, error);
-        });
+        this.planLimitNotification.notifyIfNeeded(userInfo, plan, 'projects', currentCount, limit);
       }
       return Result.err(new PlanLimitError('projects', limit, plan));
     }
@@ -56,6 +43,12 @@ export class CreateProjectUseCase {
       brandVariants: dto.brandVariants,
       domain: dto.domain,
     });
+
+    // Notify at 80% usage (non-blocking, handled internally)
+    const newCount = currentCount + 1;
+    if (userInfo && (plan === 'FREE' || plan === 'SOLO') && newCount < limit) {
+      this.planLimitNotification.notifyIfNeeded(userInfo, plan, 'projects', newCount, limit);
+    }
 
     return Result.ok({
       id: project.id,
@@ -69,31 +62,5 @@ export class CreateProjectUseCase {
       createdAt: project.createdAt,
       updatedAt: project.updatedAt,
     });
-  }
-
-  private async sendPlanLimitEmail(
-    userInfo: UserInfo,
-    plan: 'FREE' | 'SOLO',
-    currentUsage: number,
-    maxAllowed: number,
-  ): Promise<void> {
-    const frontendUrl = this.configService.get<string>('FRONTEND_URL') ?? 'https://coucou-ia.com';
-    const { html, text } = generatePlanLimitEmail({
-      userName: userInfo.name ?? userInfo.email.split('@')[0],
-      currentPlan: plan,
-      limitType: 'projects',
-      currentUsage,
-      maxAllowed,
-      upgradeUrl: `${frontendUrl}/settings/billing`,
-    });
-
-    await this.emailPort.send({
-      to: userInfo.email,
-      subject: `Vous avez atteint votre limite de projets`,
-      html,
-      text,
-    });
-
-    this.logger.log(`Plan limit email sent to ${userInfo.email}`);
   }
 }

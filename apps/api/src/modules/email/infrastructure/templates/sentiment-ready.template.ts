@@ -1,9 +1,16 @@
-import { wrapInBaseTemplate, createButton, createParagraph, createHeading } from './base.template';
+import {
+  wrapInBaseTemplate,
+  createButton,
+  createParagraph,
+  createHeading,
+  EMAIL_COLORS,
+} from './base.template';
 
 export interface SentimentReadyEmailData {
   userName: string;
   brandName: string;
   dashboardUrl: string;
+  unsubscribeUrl?: string;
 }
 
 export function generateSentimentReadyEmail(data: SentimentReadyEmailData): {
@@ -20,6 +27,14 @@ export function generateSentimentReadyEmail(data: SentimentReadyEmailData): {
     ${createParagraph("Découvrez comment les IA perçoivent votre marque : thèmes associés, points positifs et axes d'amélioration.")}
 
     ${createButton("Consulter l'analyse", data.dashboardUrl)}
+
+    ${
+      data.unsubscribeUrl
+        ? `<p style="margin: 24px 0 0; font-size: 12px; color: ${EMAIL_COLORS.textMuted}; text-align: center;">
+      <a href="${data.unsubscribeUrl}" style="color: ${EMAIL_COLORS.textMuted}; text-decoration: underline;">Se désinscrire des emails</a>
+    </p>`
+        : ''
+    }
   `;
 
   const html = wrapInBaseTemplate(content, {
@@ -37,7 +52,7 @@ Découvrez comment les IA perçoivent votre marque : thèmes associés, points p
 
 Consulter l'analyse : ${data.dashboardUrl}
 
---
+--${data.unsubscribeUrl ? `\nSe désinscrire : ${data.unsubscribeUrl}\n` : ''}
 Coucou IA- Votre visibilité dans les IA
 https://coucou-ia.com
 `.trim();

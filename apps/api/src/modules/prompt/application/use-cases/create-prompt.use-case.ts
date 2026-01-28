@@ -1,9 +1,9 @@
 import { forwardRef, Inject, Injectable, Logger } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import type { Plan } from '@prisma/client';
 
 import { ForbiddenError, NotFoundError, PlanLimitError, Result } from '../../../../common';
-import { EMAIL_PORT, type EmailPort, generatePlanLimitEmail } from '../../../email';
+import { EMAIL_PORT, type EmailPort, PlanLimitNotificationService } from '../../../email';
+import { PLAN_LIMITS } from '../../../billing/domain/services/plan-limits.service';
 import { PROJECT_REPOSITORY, type ProjectRepository } from '../../../project';
 import {
   QUEUE_PROMPT_SCAN_USE_CASE,
@@ -11,12 +11,6 @@ import {
 } from '../../../scan/application/use-cases';
 import { PROMPT_REPOSITORY, type PromptRepository } from '../../domain';
 import type { CreatePromptDto, PromptResponseDto } from '../dto/prompt.dto';
-
-const PROMPT_LIMITS: Record<Plan, number> = {
-  FREE: 2,
-  SOLO: 10,
-  PRO: 50,
-};
 
 type CreatePromptError = NotFoundError | ForbiddenError | PlanLimitError;
 
@@ -38,7 +32,7 @@ export class CreatePromptUseCase {
     private readonly emailPort: EmailPort,
     @Inject(forwardRef(() => QUEUE_PROMPT_SCAN_USE_CASE))
     private readonly queuePromptScanUseCase: QueuePromptScanUseCase,
-    private readonly configService: ConfigService,
+    private readonly planLimitNotification: PlanLimitNotificationService,
   ) {}
 
   async execute(
@@ -59,14 +53,11 @@ export class CreatePromptUseCase {
     }
 
     const currentCount = await this.promptRepository.countByProjectId(projectId);
-    const limit = PROMPT_LIMITS[plan];
+    const limit = PLAN_LIMITS[plan].promptsPerProject;
 
     if (currentCount >= limit) {
-      // Send plan limit email (non-blocking) - only for FREE and SOLO
       if (userInfo && (plan === 'FREE' || plan === 'SOLO')) {
-        this.sendPlanLimitEmail(userInfo, plan, currentCount, limit).catch((error) => {
-          this.logger.error(`Failed to send plan limit email to ${userInfo.email}`, error);
-        });
+        this.planLimitNotification.notifyIfNeeded(userInfo, plan, 'prompts', currentCount, limit);
       }
       return Result.err(new PlanLimitError('prompts per project', limit, plan));
     }
@@ -76,6 +67,12 @@ export class CreatePromptUseCase {
       content: dto.content,
       category: dto.category,
     });
+
+    // Notify at 80% usage (non-blocking, handled internally)
+    const newCount = currentCount + 1;
+    if (userInfo && (plan === 'FREE' || plan === 'SOLO') && newCount < limit) {
+      this.planLimitNotification.notifyIfNeeded(userInfo, plan, 'prompts', newCount, limit);
+    }
 
     // Auto-trigger scan for SOLO/PRO plans (non-blocking)
     if (plan === 'SOLO' || plan === 'PRO') {
@@ -96,32 +93,6 @@ export class CreatePromptUseCase {
     });
   }
 
-  private async sendPlanLimitEmail(
-    userInfo: UserInfo,
-    plan: 'FREE' | 'SOLO',
-    currentUsage: number,
-    maxAllowed: number,
-  ): Promise<void> {
-    const frontendUrl = this.configService.get<string>('FRONTEND_URL') ?? 'https://coucou-ia.com';
-    const { html, text } = generatePlanLimitEmail({
-      userName: userInfo.name ?? userInfo.email.split('@')[0],
-      currentPlan: plan,
-      limitType: 'prompts',
-      currentUsage,
-      maxAllowed,
-      upgradeUrl: `${frontendUrl}/settings/billing`,
-    });
-
-    await this.emailPort.send({
-      to: userInfo.email,
-      subject: `Vous avez atteint votre limite de prompts`,
-      html,
-      text,
-    });
-
-    this.logger.log(`Plan limit email sent to ${userInfo.email}`);
-  }
-
   private async triggerAutoScan(
     promptId: string,
     userId: string,
@@ -137,7 +108,6 @@ export class CreatePromptUseCase {
     if (result.ok) {
       this.logger.log(`Auto-scan queued for prompt ${promptId}: job ${result.value.jobId}`);
     } else if (result.error.code === 'SCAN_LIMIT_EXCEEDED' && userEmail) {
-      // Send subtle notification to user if scan quota exceeded
       const message = `Votre prompt a été créé. Le scan sera lancé lors de votre prochaine période.`;
       await this.emailPort.send({
         to: userEmail,

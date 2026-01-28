@@ -11,7 +11,7 @@ import { GoogleButton } from '@/components/ui/google-button';
 import { PasswordInput } from '@/components/ui/password-input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
-export default function LoginPage() {
+export default function LoginPage(): React.ReactNode {
   const router = useRouter();
   const { login } = useAuth();
   const [email, setEmail] = useState('');

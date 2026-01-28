@@ -6,25 +6,25 @@ const SAMPLE_RECOMMENDATIONS = [
     icon: AlertTriangle,
     severity: 'bg-destructive/10 text-destructive',
     title: 'Faible taux de citation sur GPT-4o',
-    description: 'Votre marque est rarement citée dans les réponses GPT-4o. Améliorez...',
+    description: 'Votre marque est rarement citée dans les réponses GPT-4o. Améliorez…',
   },
   {
     icon: Target,
     severity: 'bg-warning/10 text-warning',
     title: 'Concurrent X domine sur "meilleur outil"',
-    description: 'Le concurrent X est cité 3x plus souvent que vous sur ce prompt...',
+    description: 'Le concurrent X est cité 3x plus souvent que vous sur ce prompt…',
   },
   {
     icon: Lightbulb,
     severity: 'bg-primary/10 text-primary',
     title: 'Opportunité de contenu détectée',
-    description: "Les IA ne trouvent pas d'information sur votre tarification...",
+    description: "Les IA ne trouvent pas d'information sur votre tarification…",
   },
   {
     icon: TrendingDown,
     severity: 'bg-warning/10 text-warning',
     title: 'Position en baisse sur Claude',
-    description: 'Votre position moyenne a reculé de 2 places cette semaine...',
+    description: 'Votre position moyenne a reculé de 2 places cette semaine…',
   },
 ];
 

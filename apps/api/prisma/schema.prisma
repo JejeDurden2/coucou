@@ -69,12 +69,20 @@ model User {
   emailNotificationsEnabled Boolean   @default(true) @map("email_notifications_enabled")
   lastScanAt                DateTime? @map("last_scan_at")
   lastPostScanEmailAt       DateTime? @map("last_post_scan_email_at")
+  lastUpgradeEmailAt        DateTime? @map("last_upgrade_email_at")
+  lastWeeklyReportAt        DateTime? @map("last_weekly_report_at")
+  lastPaymentFailedAt       DateTime? @map("last_payment_failed_at")
+  previousPlan              Plan?     @map("previous_plan")
+  subscriptionEndedAt       DateTime? @map("subscription_ended_at")
 
   projects            Project[]
   subscription        Subscription?
   passwordResetTokens PasswordResetToken[]
   consentLogs         ConsentLog[]
 
+  @@index([lastUpgradeEmailAt])
+  @@index([subscriptionEndedAt])
+  @@index([previousPlan, subscriptionEndedAt])
   @@map("users")
 }
 

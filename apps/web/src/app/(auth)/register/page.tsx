@@ -226,7 +226,7 @@ export default function RegisterPage(): React.ReactNode {
                     setAcceptTerms(e.target.checked);
                     if (e.target.checked) setError('');
                   }}
-                  className="mt-1 size-4 rounded border-zinc-700 bg-zinc-900 text-primary focus:ring-primary/50"
+                  className="mt-1 size-4 rounded border-border bg-background text-primary focus:ring-primary/50"
                   required
                 />
                 <label htmlFor="terms" className="text-sm text-muted-foreground">

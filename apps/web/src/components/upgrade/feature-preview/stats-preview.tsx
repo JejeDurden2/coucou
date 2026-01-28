@@ -45,14 +45,15 @@ export const StatsPreview = memo(function StatsPreview() {
       <div className="h-48 rounded-lg border border-border bg-card p-3">
         <div className="h-3 w-32 bg-muted rounded mb-3" />
         <div className="space-y-3 mt-2">
-          {['GPT-4o', 'Claude', 'Gemini'].map((name) => (
+          {[
+            { name: 'GPT-4o', width: 72 },
+            { name: 'Claude', width: 65 },
+            { name: 'Gemini', width: 53 },
+          ].map(({ name, width }) => (
             <div key={name} className="flex items-center gap-2">
               <div className="h-3 w-16 bg-muted rounded" />
               <div className="flex-1 h-4 bg-muted/50 rounded-full">
-                <div
-                  className="h-4 bg-primary/20 rounded-full"
-                  style={{ width: `${40 + Math.random() * 40}%` }}
-                />
+                <div className="h-4 bg-primary/20 rounded-full" style={{ width: `${width}%` }} />
               </div>
             </div>
           ))}

@@ -5,6 +5,11 @@ export {
   type EmailPort,
   type SendEmailOptions,
 } from './application/ports/email.port';
+export { UnsubscribeTokenService } from './infrastructure/services/unsubscribe-token.service';
+export {
+  PlanLimitNotificationService,
+  type LimitResourceType,
+} from './infrastructure/services/plan-limit-notification.service';
 export {
   generateWelcomeEmail,
   type WelcomeEmailData,
@@ -58,3 +63,99 @@ export {
   generateSupportRequestEmail,
   type SupportRequestEmailData,
 } from './infrastructure/templates/support-request.template';
+export {
+  generateOnboardingCreateBrandEmail,
+  type OnboardingCreateBrandEmailData,
+} from './infrastructure/templates/onboarding-create-brand.template';
+export {
+  generateOnboardingFirstScanEmail,
+  type OnboardingFirstScanEmailData,
+} from './infrastructure/templates/onboarding-first-scan.template';
+export {
+  generateOnboardingCompetitorFomoEmail,
+  type OnboardingCompetitorFomoEmailData,
+} from './infrastructure/templates/onboarding-competitor-fomo.template';
+export {
+  generateOnboardingLastChanceEmail,
+  type OnboardingLastChanceEmailData,
+} from './infrastructure/templates/onboarding-last-chance.template';
+export {
+  generateWeeklyReportEmail,
+  type WeeklyReportEmailData,
+} from './infrastructure/templates/weekly-report.template';
+export {
+  generateDunningFirstEmail,
+  type DunningFirstEmailData,
+} from './infrastructure/templates/dunning-first.template';
+export {
+  generateDunningUrgentEmail,
+  type DunningUrgentEmailData,
+} from './infrastructure/templates/dunning-urgent.template';
+export {
+  generateDunningFinalEmail,
+  type DunningFinalEmailData,
+} from './infrastructure/templates/dunning-final.template';
+export {
+  generateUpgradeMultimodelEmail,
+  type UpgradeMultimodelEmailData,
+} from './infrastructure/templates/upgrade-multimodel.template';
+export {
+  generateUpgradeAutoscanEmail,
+  type UpgradeAutoscanEmailData,
+} from './infrastructure/templates/upgrade-autoscan.template';
+export {
+  generateUpgradeFinalEmail,
+  type UpgradeFinalEmailData,
+} from './infrastructure/templates/upgrade-final.template';
+export {
+  generateWinbackCheckinEmail,
+  type WinbackCheckinEmailData,
+} from './infrastructure/templates/winback-checkin.template';
+export {
+  generateWinbackValueEmail,
+  type WinbackValueEmailData,
+} from './infrastructure/templates/winback-value.template';
+export {
+  generateWinbackDiscountEmail,
+  type WinbackDiscountEmailData,
+} from './infrastructure/templates/winback-discount.template';
+export {
+  generateCancellationSurveyEmail,
+  type CancellationSurveyEmailData,
+} from './infrastructure/templates/cancellation-survey.template';
+export {
+  generatePostUpgradeWelcomeEmail,
+  type PostUpgradeWelcomeEmailData,
+} from './infrastructure/templates/post-upgrade-welcome.template';
+export {
+  generatePostUpgradeTipsEmail,
+  type PostUpgradeTipsEmailData,
+} from './infrastructure/templates/post-upgrade-tips.template';
+export {
+  generateMilestoneFirstCitationEmail,
+  type MilestoneFirstCitationEmailData,
+} from './infrastructure/templates/milestone-first-citation.template';
+export {
+  generateMilestoneScanCountEmail,
+  type MilestoneScanCountEmailData,
+} from './infrastructure/templates/milestone-scan-count.template';
+export {
+  generatePaidInactivityEmail,
+  type PaidInactivityEmailData,
+} from './infrastructure/templates/paid-inactivity.template';
+export {
+  generatePlanApproachingLimitEmail,
+  type PlanApproachingLimitEmailData,
+} from './infrastructure/templates/plan-approaching-limit.template';
+export {
+  generateNpsSurveyEmail,
+  type NpsSurveyEmailData,
+} from './infrastructure/templates/nps-survey.template';
+export {
+  generateFounderOutreachEmail,
+  type FounderOutreachEmailData,
+} from './infrastructure/templates/founder-outreach.template';
+export {
+  generateSoloToProNudgeEmail,
+  type SoloToProNudgeEmailData,
+} from './infrastructure/templates/solo-to-pro-nudge.template';

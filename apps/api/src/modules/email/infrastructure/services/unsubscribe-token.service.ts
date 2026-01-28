@@ -1,7 +1,9 @@
-import { createHmac } from 'crypto';
+import { createHmac, timingSafeEqual } from 'crypto';
 
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+
+const TOKEN_MAX_AGE_MS = 30 * 24 * 60 * 60 * 1000; // 30 days
 
 interface TokenPayload {
   userId: string;
@@ -16,10 +18,6 @@ export class UnsubscribeTokenService {
     this.secret = this.configService.getOrThrow<string>('JWT_SECRET');
   }
 
-  /**
-   * Generates a signed unsubscribe token containing the userId
-   * Format: base64url(payload).signature
-   */
   generateToken(userId: string): string {
     const payload: TokenPayload = {
       userId,
@@ -32,10 +30,6 @@ export class UnsubscribeTokenService {
     return `${payloadString}.${signature}`;
   }
 
-  /**
-   * Verifies and extracts the userId from the token
-   * Returns null if the token is invalid or tampered with
-   */
   verifyToken(token: string): { userId: string } | null {
     const parts = token.split('.');
     if (parts.length !== 2) {
@@ -45,7 +39,10 @@ export class UnsubscribeTokenService {
     const [payloadString, providedSignature] = parts;
     const expectedSignature = this.sign(payloadString);
 
-    if (providedSignature !== expectedSignature) {
+    // Timing-safe comparison to prevent timing attacks
+    const a = Buffer.from(providedSignature);
+    const b = Buffer.from(expectedSignature);
+    if (a.length !== b.length || !timingSafeEqual(a, b)) {
       return null;
     }
 
@@ -55,6 +52,14 @@ export class UnsubscribeTokenService {
       ) as TokenPayload;
 
       if (!payload.userId || typeof payload.userId !== 'string') {
+        return null;
+      }
+
+      // Reject expired tokens (30 days)
+      if (
+        typeof payload.timestamp === 'number' &&
+        Date.now() - payload.timestamp > TOKEN_MAX_AGE_MS
+      ) {
         return null;
       }
 

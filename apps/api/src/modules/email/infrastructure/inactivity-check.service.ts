@@ -9,6 +9,7 @@ import { UnsubscribeTokenService } from './services/unsubscribe-token.service';
 
 const FIRST_ANALYSIS_THRESHOLD_DAYS = 3;
 const INACTIVITY_THRESHOLD_DAYS = 14;
+const PAID_INACTIVITY_THRESHOLD_DAYS = 21;
 const MIN_EMAIL_INTERVAL_DAYS = 7;
 const BATCH_SIZE = 100;
 
@@ -85,6 +86,38 @@ export class InactivityCheckService {
       skipped,
       durationMs: duration,
     });
+  }
+
+  /**
+   * SOLO/PRO plan: Daily at 10:15 Paris time
+   * Sends re-engagement emails to inactive paid users
+   */
+  @Cron('15 10 * * *', {
+    name: 'inactivity-check-paid',
+    timeZone: 'Europe/Paris',
+  })
+  async handlePaidInactivityCheck(): Promise<void> {
+    this.logger.log('Starting paid inactivity check cron job');
+    const startTime = Date.now();
+
+    try {
+      const result = await this.processBatch(
+        (skip, take) => this.findPaidInactiveUsers(skip, take),
+        (user) => this.sendPaidInactivityEmail(user),
+      );
+
+      this.logger.log({
+        message: 'Paid inactivity check: completed',
+        emailsSent: result.sent,
+        skipped: result.skipped,
+        durationMs: Date.now() - startTime,
+      });
+    } catch (error) {
+      this.logger.error({
+        message: 'Paid inactivity check: critical error',
+        error: error instanceof Error ? error.message : String(error),
+      });
+    }
   }
 
   private async processBatch(
@@ -253,7 +286,6 @@ export class InactivityCheckService {
     this.logger.log({
       message: 'Inactivity check: first-analysis email queued',
       userId: user.id,
-      email: user.email,
       projectId: project.id,
     });
   }
@@ -284,7 +316,82 @@ export class InactivityCheckService {
     this.logger.log({
       message: 'Inactivity check: inactivity email queued',
       userId: user.id,
-      email: user.email,
+      projectId: project.id,
+    });
+  }
+
+  private async findPaidInactiveUsers(skip: number, take: number): Promise<InactiveUser[]> {
+    const now = new Date();
+    const inactivityThreshold = new Date(
+      now.getTime() - PAID_INACTIVITY_THRESHOLD_DAYS * 24 * 60 * 60 * 1000,
+    );
+    const emailIntervalThreshold = new Date(
+      now.getTime() - MIN_EMAIL_INTERVAL_DAYS * 24 * 60 * 60 * 1000,
+    );
+
+    return this.prisma.user
+      .findMany({
+        where: {
+          plan: { in: [Plan.SOLO, Plan.PRO] },
+          emailNotificationsEnabled: true,
+          deletedAt: null,
+          lastScanAt: { not: null, lt: inactivityThreshold },
+          OR: [
+            { lastInactivityEmailAt: null },
+            { lastInactivityEmailAt: { lt: emailIntervalThreshold } },
+          ],
+        },
+        select: {
+          id: true,
+          email: true,
+          name: true,
+          projects: {
+            take: 1,
+            orderBy: { createdAt: 'asc' },
+            select: {
+              id: true,
+              brandName: true,
+            },
+          },
+        },
+        skip,
+        take,
+        orderBy: { createdAt: 'asc' },
+      })
+      .then((users) =>
+        users.map((user) => ({
+          ...user,
+          project: user.projects[0] ?? null,
+        })),
+      );
+  }
+
+  private async sendPaidInactivityEmail(user: InactiveUser): Promise<void> {
+    const project = user.project!;
+    const now = new Date();
+
+    const unsubscribeToken = this.unsubscribeTokenService.generateToken(user.id);
+    const firstName = user.name.split(' ')[0];
+
+    await this.emailQueueService.addJob({
+      type: 'paid-inactivity',
+      to: user.email,
+      data: {
+        firstName,
+        brandName: project.brandName,
+        projectUrl: `${this.frontendUrl}/projects/${project.id}`,
+        unsubscribeUrl: `${this.apiUrl}/email/unsubscribe?token=${unsubscribeToken}`,
+      },
+    });
+
+    await this.prisma.user.update({
+      where: { id: user.id },
+      data: { lastInactivityEmailAt: now },
+    });
+
+    this.logger.log({
+      message: 'Paid inactivity check: email queued',
+      userId: user.id,
       projectId: project.id,
     });
   }

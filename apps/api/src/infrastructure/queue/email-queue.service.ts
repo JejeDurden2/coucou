@@ -68,7 +68,7 @@ export class EmailQueueService implements OnModuleInit, OnModuleDestroy {
     this.logger.log('Email queue event listeners initialized');
   }
 
-  async addJob(data: EmailJobData, options?: { delay?: number }): Promise<string> {
+  async addJob(data: EmailJobData, options?: { delay?: number; jobId?: string }): Promise<string> {
     const job = await this.emailQueue.add(data.type, data, {
       ...defaultJobOptions,
       ...options,

@@ -1,10 +1,13 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { Plan, SubscriptionStatus } from '@prisma/client';
+import { Plan, SubscriptionStatus, type User } from '@prisma/client';
 
 import { PrismaService } from '../../../../prisma';
 import { EmailQueueService } from '../../../../infrastructure/queue';
+import { UnsubscribeTokenService } from '../../../email';
 import { StripeService } from '../../infrastructure/stripe.service';
+
+const ONE_DAY_MS = 24 * 60 * 60 * 1000;
 
 interface WebhookCheckoutSession {
   id: string;
@@ -28,6 +31,13 @@ interface WebhookSubscription {
   };
 }
 
+interface WebhookInvoice {
+  id: string;
+  customer: string;
+  subscription: string;
+  status: string;
+}
+
 @Injectable()
 export class HandleWebhookUseCase {
   private readonly logger = new Logger(HandleWebhookUseCase.name);
@@ -37,6 +47,7 @@ export class HandleWebhookUseCase {
     private readonly stripeService: StripeService,
     private readonly configService: ConfigService,
     private readonly emailQueueService: EmailQueueService,
+    private readonly unsubscribeTokenService: UnsubscribeTokenService,
   ) {}
 
   async execute(payload: string, signature: string): Promise<void> {
@@ -57,6 +68,12 @@ export class HandleWebhookUseCase {
         break;
       case 'customer.subscription.deleted':
         await this.handleSubscriptionDeleted(event.data.object as unknown as WebhookSubscription);
+        break;
+      case 'invoice.payment_failed':
+        await this.handleInvoicePaymentFailed(event.data.object as unknown as WebhookInvoice);
+        break;
+      case 'invoice.paid':
+        await this.handleInvoicePaid(event.data.object as unknown as WebhookInvoice);
         break;
       default:
         this.logger.log(`Unhandled event type: ${event.type}`);
@@ -102,23 +119,65 @@ export class HandleWebhookUseCase {
 
     this.logger.log(`Subscription created for user: ${user.id}, plan: ${plan}`);
 
-    // Send plan upgrade email via queue (non-blocking)
     if (plan !== Plan.FREE) {
-      const frontendUrl = this.configService.get<string>('FRONTEND_URL') ?? 'https://coucou-ia.com';
-      this.emailQueueService
-        .addJob({
-          type: 'plan-upgrade',
-          to: user.email,
-          data: {
-            userName: user.name ?? user.email.split('@')[0],
-            planName: plan as 'SOLO' | 'PRO',
-            dashboardUrl: `${frontendUrl}/projects`,
-          },
-        })
-        .catch((error) => {
-          this.logger.error(`Failed to queue plan upgrade email for ${user.email}`, error);
-        });
+      this.queueEmailSafe(
+        () => this.queuePostUpgradeEmails(user, plan),
+        'post-upgrade email sequence',
+        user.id,
+      );
     }
+  }
+
+  private async queuePostUpgradeEmails(user: User, plan: Plan): Promise<void> {
+    const frontendUrl = this.configService.get<string>('FRONTEND_URL') ?? 'https://coucou-ia.com';
+    const apiUrl = this.configService.get<string>('API_URL') ?? 'https://api.coucou-ia.com';
+    const userName = user.name ?? user.email.split('@')[0];
+    const firstName = userName.split(' ')[0];
+    const dashboardUrl = `${frontendUrl}/projects`;
+    const unsubscribeToken = this.unsubscribeTokenService.generateToken(user.id);
+    const unsubscribeUrl = `${apiUrl}/email/unsubscribe?token=${unsubscribeToken}`;
+
+    // Immediate: plan upgrade confirmation
+    await this.emailQueueService.addJob({
+      type: 'plan-upgrade',
+      to: user.email,
+      data: { userName, planName: plan as 'SOLO' | 'PRO', dashboardUrl },
+    });
+
+    // Immediate: post-upgrade welcome with feature guidance
+    await this.emailQueueService.addJob({
+      type: 'post-upgrade-welcome',
+      to: user.email,
+      data: { userName, planName: plan as 'SOLO' | 'PRO', dashboardUrl },
+    });
+
+    // Delayed emails use deterministic jobIds to prevent duplicates on webhook retry
+    await this.emailQueueService.addJob(
+      {
+        type: 'post-upgrade-tips',
+        to: user.email,
+        data: { firstName, planName: plan as 'SOLO' | 'PRO', dashboardUrl, unsubscribeUrl },
+      },
+      { delay: 3 * ONE_DAY_MS, jobId: `post-upgrade-tips-${user.id}` },
+    );
+
+    await this.emailQueueService.addJob(
+      {
+        type: 'founder-outreach',
+        to: user.email,
+        data: { firstName, dashboardUrl },
+      },
+      { delay: 7 * ONE_DAY_MS, jobId: `founder-outreach-${user.id}` },
+    );
+
+    await this.emailQueueService.addJob(
+      {
+        type: 'nps-survey',
+        to: user.email,
+        data: { firstName, surveyUrl: `${frontendUrl}/nps`, unsubscribeUrl },
+      },
+      { delay: 30 * ONE_DAY_MS, jobId: `nps-survey-${user.id}` },
+    );
   }
 
   private async handleSubscriptionUpdated(subscription: WebhookSubscription): Promise<void> {
@@ -154,6 +213,7 @@ export class HandleWebhookUseCase {
     if (!user) return;
 
     const previousPlan = user.plan;
+    const now = new Date();
 
     await this.prisma.$transaction([
       this.prisma.subscription.delete({
@@ -161,38 +221,131 @@ export class HandleWebhookUseCase {
       }),
       this.prisma.user.update({
         where: { id: user.id },
-        data: { plan: Plan.FREE },
+        data: {
+          plan: Plan.FREE,
+          previousPlan,
+          subscriptionEndedAt: now,
+        },
       }),
     ]);
 
     this.logger.log(`Subscription deleted for user: ${user.id}, previousPlan: ${previousPlan}`);
 
-    // Send subscription ended email via queue (non-blocking)
     if (previousPlan === Plan.SOLO || previousPlan === Plan.PRO) {
       const frontendUrl = this.configService.get<string>('FRONTEND_URL') ?? 'https://coucou-ia.com';
-      this.emailQueueService
-        .addJob({
-          type: 'subscription-ended',
-          to: user.email,
-          data: {
-            userName: user.name ?? user.email.split('@')[0],
-            previousPlan,
-            billingUrl: `${frontendUrl}/billing`,
-          },
-        })
-        .catch((error) => {
-          this.logger.error(`Failed to queue subscription ended email for ${user.email}`, error);
-        });
+      const userName = user.name ?? user.email.split('@')[0];
+
+      this.queueEmailSafe(
+        () =>
+          this.emailQueueService.addJob({
+            type: 'subscription-ended',
+            to: user.email,
+            data: { userName, previousPlan, billingUrl: `${frontendUrl}/billing` },
+          }),
+        'subscription ended email',
+        user.id,
+      );
+
+      this.queueEmailSafe(
+        () =>
+          this.emailQueueService.addJob({
+            type: 'cancellation-survey',
+            to: user.email,
+            data: { userName, surveyUrl: `${frontendUrl}/billing?feedback=true` },
+          }),
+        'cancellation survey',
+        user.id,
+      );
     }
   }
 
-  private async findUserByStripeCustomerId(stripeCustomerId: string) {
+  private async handleInvoicePaymentFailed(invoice: WebhookInvoice): Promise<void> {
+    const user = await this.findUserByStripeCustomerId(invoice.customer);
+    if (!user) return;
+
+    // Skip if we already processed a payment failure within the last 24h (idempotency)
+    if (user.lastPaymentFailedAt) {
+      const elapsed = Date.now() - new Date(user.lastPaymentFailedAt).getTime();
+      if (elapsed < ONE_DAY_MS) {
+        this.logger.log(`Dunning already active for user: ${user.id}, skipping`);
+        return;
+      }
+    }
+
+    this.logger.log(`Invoice payment failed for user: ${user.id}`);
+
+    await this.prisma.user.update({
+      where: { id: user.id },
+      data: { lastPaymentFailedAt: new Date() },
+    });
+
+    const frontendUrl = this.configService.get<string>('FRONTEND_URL') ?? 'https://coucou-ia.com';
+    const userName = user.name ?? user.email.split('@')[0];
+    const billingUrl = `${frontendUrl}/billing`;
+    const planName = user.plan as 'SOLO' | 'PRO';
+
+    // Deterministic jobIds prevent duplicate emails on webhook retry
+    this.queueEmailSafe(
+      () =>
+        this.emailQueueService.addJob(
+          { type: 'dunning-first', to: user.email, data: { userName, planName, billingUrl } },
+          { jobId: `dunning-first-${user.id}` },
+        ),
+      'dunning-first',
+      user.id,
+    );
+
+    this.queueEmailSafe(
+      () =>
+        this.emailQueueService.addJob(
+          { type: 'dunning-urgent', to: user.email, data: { userName, planName, billingUrl } },
+          { delay: 3 * ONE_DAY_MS, jobId: `dunning-urgent-${user.id}` },
+        ),
+      'dunning-urgent',
+      user.id,
+    );
+
+    this.queueEmailSafe(
+      () =>
+        this.emailQueueService.addJob(
+          { type: 'dunning-final', to: user.email, data: { userName, planName, billingUrl } },
+          { delay: 7 * ONE_DAY_MS, jobId: `dunning-final-${user.id}` },
+        ),
+      'dunning-final',
+      user.id,
+    );
+  }
+
+  private async handleInvoicePaid(invoice: WebhookInvoice): Promise<void> {
+    const user = await this.findUserByStripeCustomerId(invoice.customer);
+    if (!user) return;
+
+    if (user.lastPaymentFailedAt) {
+      await this.prisma.user.update({
+        where: { id: user.id },
+        data: { lastPaymentFailedAt: null },
+      });
+      this.logger.log(`Payment recovered for user: ${user.id}`);
+    }
+  }
+
+  private queueEmailSafe(fn: () => Promise<unknown>, label: string, userId: string): void {
+    fn().catch((error) => {
+      this.logger.error({
+        message: `Failed to queue ${label}`,
+        userId,
+        error: error instanceof Error ? error.message : String(error),
+      });
+    });
+  }
+
+  private async findUserByStripeCustomerId(stripeCustomerId: string): Promise<User | null> {
     const user = await this.prisma.user.findFirst({
       where: { stripeCustomerId },
     });
 
     if (!user) {
-      this.logger.error(`User not found for customer: ${stripeCustomerId}`);
+      this.logger.error(`User not found for Stripe customer: ${stripeCustomerId}`);
     }
 
     return user;
@@ -206,7 +359,7 @@ export class HandleWebhookUseCase {
   private mapStatus(stripeStatus: string): SubscriptionStatus {
     switch (stripeStatus) {
       case 'active':
-      case 'trialing': // No trial period - treat as active
+      case 'trialing':
         return SubscriptionStatus.ACTIVE;
       case 'past_due':
         return SubscriptionStatus.PAST_DUE;
@@ -217,9 +370,6 @@ export class HandleWebhookUseCase {
     }
   }
 
-  /**
-   * Convert Unix timestamp (seconds) to Date, with fallback to now if invalid
-   */
   private toSafeDate(unixTimestamp: number | undefined | null): Date {
     if (!unixTimestamp || unixTimestamp <= 0) {
       this.logger.warn(`Invalid timestamp received: ${unixTimestamp}, using current date`);

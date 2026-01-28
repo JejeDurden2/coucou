@@ -16,7 +16,7 @@ export function generateWelcomeEmail(data: WelcomeEmailData): { html: string; te
   const content = `
     ${createHeading('Bienvenue sur Coucou IA', 1)}
 
-    ${createParagraph(`Bonjour ${data.userName},`)}
+    ${createParagraph(`Bonjour ${data.userName.split(' ')[0]},`)}
 
     ${createParagraph(`Merci de rejoindre Coucou IA! Vous venez de faire un premier pas important vers une meilleure visibilité de votre marque dans les réponses des IA.`)}
 
@@ -58,7 +58,7 @@ export function generateWelcomeEmail(data: WelcomeEmailData): { html: string; te
   const text = `
 Bienvenue sur Coucou IA !
 
-Bonjour ${data.userName},
+Bonjour ${data.userName.split(' ')[0]},
 
 Merci de rejoindre Coucou IA! Vous venez de faire un premier pas important vers une meilleure visibilité de votre marque dans les réponses des IA.
 

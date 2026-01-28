@@ -11,6 +11,30 @@ import type {
   AccountDeletedEmailData,
   SentimentReadyEmailData,
   PostScanEmailData,
+  OnboardingCreateBrandEmailData,
+  OnboardingFirstScanEmailData,
+  OnboardingCompetitorFomoEmailData,
+  OnboardingLastChanceEmailData,
+  WeeklyReportEmailData,
+  DunningFirstEmailData,
+  DunningUrgentEmailData,
+  DunningFinalEmailData,
+  UpgradeMultimodelEmailData,
+  UpgradeAutoscanEmailData,
+  UpgradeFinalEmailData,
+  WinbackCheckinEmailData,
+  WinbackValueEmailData,
+  WinbackDiscountEmailData,
+  CancellationSurveyEmailData,
+  PostUpgradeWelcomeEmailData,
+  PostUpgradeTipsEmailData,
+  MilestoneFirstCitationEmailData,
+  MilestoneScanCountEmailData,
+  PaidInactivityEmailData,
+  PlanApproachingLimitEmailData,
+  NpsSurveyEmailData,
+  FounderOutreachEmailData,
+  SoloToProNudgeEmailData,
 } from '../../../modules/email';
 
 export type EmailJobType =
@@ -25,7 +49,44 @@ export type EmailJobType =
   | 'subscription-ended'
   | 'account-deleted'
   | 'sentiment-ready'
-  | 'post-scan';
+  | 'post-scan'
+  // Onboarding drip
+  | 'onboarding-create-brand'
+  | 'onboarding-first-scan'
+  | 'onboarding-competitor-fomo'
+  | 'onboarding-last-chance'
+  // Weekly report
+  | 'weekly-report'
+  // Dunning
+  | 'dunning-first'
+  | 'dunning-urgent'
+  | 'dunning-final'
+  // Upgrade campaign
+  | 'upgrade-multimodel'
+  | 'upgrade-autoscan'
+  | 'upgrade-final'
+  // Win-back
+  | 'winback-checkin'
+  | 'winback-value'
+  | 'winback-discount'
+  // Cancellation
+  | 'cancellation-survey'
+  // Post-upgrade onboarding
+  | 'post-upgrade-welcome'
+  | 'post-upgrade-tips'
+  // Milestones
+  | 'milestone-first-citation'
+  | 'milestone-scan-count'
+  // Paid inactivity
+  | 'paid-inactivity'
+  // Approaching limit
+  | 'plan-approaching-limit'
+  // NPS
+  | 'nps-survey'
+  // Founder
+  | 'founder-outreach'
+  // Solo to Pro
+  | 'solo-to-pro-nudge';
 
 export type EmailJobData =
   | { type: 'welcome'; to: string; data: WelcomeEmailData }
@@ -39,7 +100,44 @@ export type EmailJobData =
   | { type: 'subscription-ended'; to: string; data: SubscriptionEndedEmailData }
   | { type: 'account-deleted'; to: string; data: AccountDeletedEmailData }
   | { type: 'sentiment-ready'; to: string; data: SentimentReadyEmailData }
-  | { type: 'post-scan'; to: string; data: PostScanEmailData };
+  | { type: 'post-scan'; to: string; data: PostScanEmailData }
+  // Onboarding drip
+  | { type: 'onboarding-create-brand'; to: string; data: OnboardingCreateBrandEmailData }
+  | { type: 'onboarding-first-scan'; to: string; data: OnboardingFirstScanEmailData }
+  | { type: 'onboarding-competitor-fomo'; to: string; data: OnboardingCompetitorFomoEmailData }
+  | { type: 'onboarding-last-chance'; to: string; data: OnboardingLastChanceEmailData }
+  // Weekly report
+  | { type: 'weekly-report'; to: string; data: WeeklyReportEmailData }
+  // Dunning
+  | { type: 'dunning-first'; to: string; data: DunningFirstEmailData }
+  | { type: 'dunning-urgent'; to: string; data: DunningUrgentEmailData }
+  | { type: 'dunning-final'; to: string; data: DunningFinalEmailData }
+  // Upgrade campaign
+  | { type: 'upgrade-multimodel'; to: string; data: UpgradeMultimodelEmailData }
+  | { type: 'upgrade-autoscan'; to: string; data: UpgradeAutoscanEmailData }
+  | { type: 'upgrade-final'; to: string; data: UpgradeFinalEmailData }
+  // Win-back
+  | { type: 'winback-checkin'; to: string; data: WinbackCheckinEmailData }
+  | { type: 'winback-value'; to: string; data: WinbackValueEmailData }
+  | { type: 'winback-discount'; to: string; data: WinbackDiscountEmailData }
+  // Cancellation
+  | { type: 'cancellation-survey'; to: string; data: CancellationSurveyEmailData }
+  // Post-upgrade onboarding
+  | { type: 'post-upgrade-welcome'; to: string; data: PostUpgradeWelcomeEmailData }
+  | { type: 'post-upgrade-tips'; to: string; data: PostUpgradeTipsEmailData }
+  // Milestones
+  | { type: 'milestone-first-citation'; to: string; data: MilestoneFirstCitationEmailData }
+  | { type: 'milestone-scan-count'; to: string; data: MilestoneScanCountEmailData }
+  // Paid inactivity
+  | { type: 'paid-inactivity'; to: string; data: PaidInactivityEmailData }
+  // Approaching limit
+  | { type: 'plan-approaching-limit'; to: string; data: PlanApproachingLimitEmailData }
+  // NPS
+  | { type: 'nps-survey'; to: string; data: NpsSurveyEmailData }
+  // Founder
+  | { type: 'founder-outreach'; to: string; data: FounderOutreachEmailData }
+  // Solo to Pro
+  | { type: 'solo-to-pro-nudge'; to: string; data: SoloToProNudgeEmailData };
 
 export interface EmailJobResult {
   success: boolean;

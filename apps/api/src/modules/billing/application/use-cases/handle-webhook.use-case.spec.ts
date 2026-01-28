@@ -6,6 +6,7 @@ import { HandleWebhookUseCase } from './handle-webhook.use-case';
 import type { PrismaService } from '../../../../prisma';
 import type { StripeService } from '../../infrastructure/stripe.service';
 import type { EmailQueueService } from '../../../../infrastructure/queue';
+import type { UnsubscribeTokenService } from '../../../email/infrastructure/services/unsubscribe-token.service';
 
 describe('HandleWebhookUseCase', () => {
   let useCase: HandleWebhookUseCase;
@@ -17,6 +18,7 @@ describe('HandleWebhookUseCase', () => {
   let mockStripeService: Partial<StripeService>;
   let mockConfigService: Partial<ConfigService>;
   let mockEmailQueueService: Partial<EmailQueueService>;
+  let mockUnsubscribeTokenService: Partial<UnsubscribeTokenService>;
 
   const createMockPrisma = () => {
     const mock = {
@@ -55,11 +57,16 @@ describe('HandleWebhookUseCase', () => {
       addJob: vi.fn().mockResolvedValue(undefined),
     };
 
+    mockUnsubscribeTokenService = {
+      generateToken: vi.fn().mockReturnValue('mock-token'),
+    };
+
     useCase = new HandleWebhookUseCase(
       mockPrisma as unknown as PrismaService,
       mockStripeService as unknown as StripeService,
       mockConfigService as unknown as ConfigService,
       mockEmailQueueService as EmailQueueService,
+      mockUnsubscribeTokenService as UnsubscribeTokenService,
     );
   });
 
@@ -114,7 +121,11 @@ describe('HandleWebhookUseCase', () => {
       });
       expect(mockPrisma.user.update).toHaveBeenCalledWith({
         where: { id: 'user-1' },
-        data: { plan: Plan.FREE },
+        data: {
+          plan: Plan.FREE,
+          previousPlan: Plan.SOLO,
+          subscriptionEndedAt: expect.any(Date),
+        },
       });
 
       // Wait for non-blocking email

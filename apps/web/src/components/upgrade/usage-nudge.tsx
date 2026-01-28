@@ -3,6 +3,7 @@
 import { memo, useState } from 'react';
 import { X, Sparkles } from 'lucide-react';
 
+import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { useUpgradeModal } from '@/hooks/use-upgrade';
 
@@ -66,7 +67,10 @@ export const UsageNudge = memo(function UsageNudge({ type, context, className }:
 
   return (
     <div
-      className={`rounded-lg border border-primary/20 bg-primary/5 px-4 py-3 flex items-center gap-3 ${className ?? ''}`}
+      className={cn(
+        'rounded-lg border border-primary/20 bg-primary/5 px-4 py-3 flex items-center gap-3',
+        className,
+      )}
     >
       <Sparkles className="size-4 text-primary shrink-0" aria-hidden="true" />
       <p className="text-sm text-foreground flex-1 text-pretty">{config.message}</p>
@@ -84,7 +88,7 @@ export const UsageNudge = memo(function UsageNudge({ type, context, className }:
         className="text-muted-foreground hover:text-foreground transition-colors shrink-0"
         aria-label="Fermer"
       >
-        <X className="size-4" />
+        <X className="size-4" aria-hidden="true" />
       </button>
     </div>
   );

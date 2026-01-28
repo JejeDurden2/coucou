@@ -13,6 +13,7 @@ export interface ScanRepository {
   findByProjectId(projectId: string, limit?: number): Promise<Scan[]>;
   findByProjectIdInRange(projectId: string, startDate: Date, endDate: Date): Promise<Scan[]>;
   findLatestByProjectId(projectId: string): Promise<Scan | null>;
+  countByProjectId(projectId: string): Promise<number>;
   countUserScansInPeriod(userId: string, since: Date): Promise<number>;
   create(data: CreateScanData): Promise<Scan>;
   deleteOlderThan(date: Date): Promise<number>;

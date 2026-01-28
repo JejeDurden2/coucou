@@ -44,12 +44,9 @@ export const CompetitorsPreview = memo(function CompetitorsPreview() {
               </div>
             </div>
             <div className="mt-3 flex gap-1">
-              {[...Array(3)].map((_, i) => (
+              {[68, 45, 82].map((width, i) => (
                 <div key={i} className="h-2 flex-1 bg-muted rounded-full">
-                  <div
-                    className="h-2 bg-primary/20 rounded-full"
-                    style={{ width: `${30 + Math.random() * 60}%` }}
-                  />
+                  <div className="h-2 bg-primary/20 rounded-full" style={{ width: `${width}%` }} />
                 </div>
               ))}
             </div>
