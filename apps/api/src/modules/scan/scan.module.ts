@@ -30,7 +30,12 @@ import { PrismaScanRepository } from './infrastructure/persistence/prisma-scan.r
 import { ScanController } from './presentation/controllers/scan.controller';
 
 @Module({
-  imports: [AuthModule, ProjectModule, forwardRef(() => PromptModule), ScheduleModule.forRoot()],
+  imports: [
+    AuthModule,
+    forwardRef(() => ProjectModule),
+    forwardRef(() => PromptModule),
+    ScheduleModule.forRoot(),
+  ],
   controllers: [ScanController],
   providers: [
     // Use cases

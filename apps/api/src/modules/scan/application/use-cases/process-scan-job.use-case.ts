@@ -10,7 +10,10 @@ import { EmailQueueService } from '../../../../infrastructure/queue/email-queue.
 import type { ScanJobData, ScanJobResult } from '../../../../infrastructure/queue';
 import { USER_REPOSITORY, type UserRepository } from '../../../auth';
 import { UnsubscribeTokenService } from '../../../email';
-import { PROJECT_REPOSITORY, type ProjectRepository } from '../../../project';
+import {
+  PROJECT_REPOSITORY,
+  type ProjectRepository,
+} from '../../../project/domain/repositories/project.repository';
 import { PROMPT_REPOSITORY, type PromptRepository } from '../../../prompt';
 import {
   getCooldownLabel,

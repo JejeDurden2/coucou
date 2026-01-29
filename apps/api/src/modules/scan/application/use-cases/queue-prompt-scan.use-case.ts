@@ -10,7 +10,10 @@ import {
 } from '../../../../common';
 import { LoggerService } from '../../../../common/logger';
 import { ScanQueueService } from '../../../../infrastructure/queue';
-import { PROJECT_REPOSITORY, type ProjectRepository } from '../../../project';
+import {
+  PROJECT_REPOSITORY,
+  type ProjectRepository,
+} from '../../../project/domain/repositories/project.repository';
 import { PROMPT_REPOSITORY, type PromptRepository } from '../../../prompt';
 import {
   getCooldownLabel,

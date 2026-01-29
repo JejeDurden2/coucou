@@ -4,7 +4,10 @@ import { Plan } from '@prisma/client';
 
 import { LoggerService } from '../../../common/logger';
 import { PrismaService } from '../../../prisma';
-import { PROJECT_REPOSITORY, type ProjectRepository } from '../../project';
+import {
+  PROJECT_REPOSITORY,
+  type ProjectRepository,
+} from '../../project/domain/repositories/project.repository';
 import {
   QUEUE_PROJECT_SCAN_USE_CASE,
   type QueueProjectScanUseCase,

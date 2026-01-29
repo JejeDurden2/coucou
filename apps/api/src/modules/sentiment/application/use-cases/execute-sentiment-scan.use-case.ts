@@ -5,7 +5,10 @@ import type { SentimentResult, SentimentScanResults } from '@coucou-ia/shared';
 import { ForbiddenError, NotFoundError, Result, withSpan } from '../../../../common';
 import { LoggerService } from '../../../../common/logger';
 import { AnthropicClientService } from '../../../../common/infrastructure/anthropic/anthropic-client.service';
-import { PROJECT_REPOSITORY, type ProjectRepository } from '../../../project';
+import {
+  PROJECT_REPOSITORY,
+  type ProjectRepository,
+} from '../../../project/domain/repositories/project.repository';
 import type { LLMQueryOptions, LLMResponse } from '../../../scan';
 import {
   AllSentimentProvidersFailedError,

@@ -1,7 +1,10 @@
 import { Inject, Injectable } from '@nestjs/common';
 
 import { ForbiddenError, NotFoundError, Result } from '../../../../common';
-import { PROJECT_REPOSITORY, type ProjectRepository } from '../../../project';
+import {
+  PROJECT_REPOSITORY,
+  type ProjectRepository,
+} from '../../../project/domain/repositories/project.repository';
 import { PROMPT_REPOSITORY, type PromptRepository } from '../../domain';
 import type { PromptResponseDto } from '../dto/prompt.dto';
 

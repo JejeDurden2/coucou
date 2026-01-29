@@ -3,7 +3,10 @@ import { LLMProvider } from '@prisma/client';
 import { subDays } from 'date-fns';
 
 import { ForbiddenError, NotFoundError, Result } from '../../../../common';
-import { PROJECT_REPOSITORY, type ProjectRepository } from '../../../project';
+import {
+  PROJECT_REPOSITORY,
+  type ProjectRepository,
+} from '../../../project/domain/repositories/project.repository';
 import { PROMPT_REPOSITORY, type PromptRepository } from '../../../prompt';
 import { SCAN_REPOSITORY, type ScanRepository, type LLMResult } from '../../../scan';
 import type {

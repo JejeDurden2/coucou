@@ -2,7 +2,10 @@ import { Inject, Injectable } from '@nestjs/common';
 import { LLMProvider } from '@prisma/client';
 
 import { ForbiddenError, NotFoundError, Result } from '../../../../common';
-import { PROJECT_REPOSITORY, type ProjectRepository } from '../../../project';
+import {
+  PROJECT_REPOSITORY,
+  type ProjectRepository,
+} from '../../../project/domain/repositories/project.repository';
 import { PROMPT_REPOSITORY, type PromptRepository } from '../../../prompt';
 import { SCAN_REPOSITORY, type ScanRepository, type LLMResult } from '../../../scan';
 import type {

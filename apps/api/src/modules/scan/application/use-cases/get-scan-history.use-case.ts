@@ -1,7 +1,10 @@
 import { Inject, Injectable } from '@nestjs/common';
 
 import { ForbiddenError, NotFoundError, Result } from '../../../../common';
-import { PROJECT_REPOSITORY, type ProjectRepository } from '../../../project';
+import {
+  PROJECT_REPOSITORY,
+  type ProjectRepository,
+} from '../../../project/domain/repositories/project.repository';
 import { SCAN_REPOSITORY, type ScanRepository } from '../../domain';
 import type { ScanHistoryDto } from '../dto/scan.dto';
 

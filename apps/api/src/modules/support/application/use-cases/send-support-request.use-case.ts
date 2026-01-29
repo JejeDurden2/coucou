@@ -11,7 +11,10 @@ import {
   type EmailPort,
   generateSupportRequestEmail,
 } from '../../../email';
-import { PROJECT_REPOSITORY, type ProjectRepository } from '../../../project';
+import {
+  PROJECT_REPOSITORY,
+  type ProjectRepository,
+} from '../../../project/domain/repositories/project.repository';
 import { SUPPORT_MAX_SCREENSHOT_SIZE, type SupportCategory } from '@coucou-ia/shared';
 
 const SUPPORT_EMAIL = 'support@coucou-ia.com';

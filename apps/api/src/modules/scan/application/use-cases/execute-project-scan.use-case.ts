@@ -3,7 +3,10 @@ import { Plan } from '@prisma/client';
 
 import { ForbiddenError, NotFoundError, Result, ScanLimitError } from '../../../../common';
 import { LoggerService } from '../../../../common/logger';
-import { PROJECT_REPOSITORY, type ProjectRepository } from '../../../project';
+import {
+  PROJECT_REPOSITORY,
+  type ProjectRepository,
+} from '../../../project/domain/repositories/project.repository';
 import { PROMPT_REPOSITORY, type PromptRepository } from '../../../prompt';
 import {
   AllProvidersFailedError,

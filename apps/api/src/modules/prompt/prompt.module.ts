@@ -13,7 +13,7 @@ import {
 import { PromptController } from './presentation/controllers/prompt.controller';
 
 @Module({
-  imports: [ProjectModule, forwardRef(() => ScanModule)],
+  imports: [forwardRef(() => ProjectModule), forwardRef(() => ScanModule)],
   controllers: [PromptController],
   providers: [
     // Use cases
