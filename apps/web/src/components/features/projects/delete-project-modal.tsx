@@ -126,8 +126,10 @@ export function DeleteProjectModal({
           >
             {deleteProject.isPending ? (
               <>
-                <Loader2 className="mr-2 size-4 animate-spin" aria-hidden="true" />
-                Suppression...
+                <div className="mr-2 animate-spin motion-reduce:animate-none">
+                  <Loader2 className="size-4" aria-hidden="true" />
+                </div>
+                Suppression…
               </>
             ) : (
               'Supprimer définitivement'

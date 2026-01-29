@@ -18,10 +18,7 @@ export function PromptGenerationStep({
   const analyzeBrand = useBrandAnalyze();
   const brandPolling = useBrandJobPolling({
     projectId,
-    onCompleted: () => onComplete(),
-    onFailed: () => {
-      // Buttons re-enabled automatically when polling stops
-    },
+    onCompleted: onComplete,
   });
 
   async function handleGenerate(): Promise<void> {
@@ -57,10 +54,9 @@ export function PromptGenerationStep({
         <CardContent className="space-y-4">
           {brandPolling.isPolling ? (
             <div className="flex flex-col items-center gap-3 py-4" aria-live="polite">
-              <Loader2
-                className="size-8 animate-spin motion-reduce:animate-none text-primary"
-                aria-hidden="true"
-              />
+              <div className="animate-spin motion-reduce:animate-none">
+                <Loader2 className="size-8 text-primary" aria-hidden="true" />
+              </div>
               <p className="text-sm text-muted-foreground text-center">
                 Analyse de votre site en cours…
                 <br />
@@ -77,10 +73,9 @@ export function PromptGenerationStep({
               >
                 {analyzeBrand.isPending ? (
                   <>
-                    <Loader2
-                      className="mr-2 size-4 animate-spin motion-reduce:animate-none"
-                      aria-hidden="true"
-                    />
+                    <div className="mr-2 animate-spin motion-reduce:animate-none">
+                      <Loader2 className="size-4" aria-hidden="true" />
+                    </div>
                     Lancement…
                   </>
                 ) : (

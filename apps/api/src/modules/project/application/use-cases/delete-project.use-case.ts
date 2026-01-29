@@ -27,14 +27,16 @@ export class DeleteProjectUseCase {
       return Result.err(new ForbiddenError('You do not have access to this project'));
     }
 
-    this.logger.info('Project deleted', {
-      projectId,
-      projectName: project.name,
-      brandName: project.brandName,
-      userId,
-    });
+    const { name: projectName, brandName } = project;
 
     await this.projectRepository.delete(projectId);
+
+    this.logger.info('Project deleted', {
+      projectId,
+      projectName,
+      brandName,
+      userId,
+    });
 
     return Result.ok(undefined);
   }

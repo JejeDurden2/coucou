@@ -1,33 +1,27 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 import type { OnboardingJobStatusResponse } from '@coucou-ia/shared';
 
 import { apiClient, ApiClientError } from '@/lib/api-client';
 
-const TERMINAL_STATUSES = ['completed', 'failed'] as const;
+const TERMINAL_STATUSES = new Set(['completed', 'failed']);
 
 function isTerminalStatus(status: string | undefined): boolean {
-  return (
-    status !== undefined && TERMINAL_STATUSES.includes(status as (typeof TERMINAL_STATUSES)[number])
-  );
+  return status !== undefined && TERMINAL_STATUSES.has(status);
 }
 
 export function useBrandAnalyze() {
   return useMutation({
     mutationFn: (projectId: string) => apiClient.analyzeBrand(projectId),
     onError: (error) => {
-      if (error instanceof ApiClientError) {
-        toast.error('Erreur de génération', {
-          description: error.message || "Impossible d'analyser votre site.",
-        });
-      } else {
-        toast.error('Erreur de génération', {
-          description: 'Vous pouvez créer vos requêtes manuellement.',
-        });
-      }
+      const description =
+        error instanceof ApiClientError && error.message
+          ? error.message
+          : 'Vous pouvez créer vos requêtes manuellement.';
+      toast.error('Erreur de génération', { description });
     },
   });
 }
@@ -46,9 +40,15 @@ export interface BrandJobPollingResult {
 }
 
 export function useBrandJobPolling(options: BrandJobPollingOptions): BrandJobPollingResult {
-  const { projectId, onCompleted, onFailed } = options;
+  const { projectId } = options;
   const queryClient = useQueryClient();
   const [pollingJobId, setPollingJobId] = useState<string | null>(null);
+
+  // Store callbacks in refs to avoid effect re-subscriptions
+  const onCompletedRef = useRef(options.onCompleted);
+  const onFailedRef = useRef(options.onFailed);
+  onCompletedRef.current = options.onCompleted;
+  onFailedRef.current = options.onFailed;
 
   const statusQuery = useQuery({
     queryKey: ['brand-job', projectId, pollingJobId],
@@ -78,16 +78,16 @@ export function useBrandJobPolling(options: BrandJobPollingOptions): BrandJobPol
       toast.success('Requêtes générées', {
         description: `${promptsCreated} requêtes créées automatiquement.`,
       });
-      onCompleted?.(data);
+      onCompletedRef.current?.(data);
       invalidateAndReset();
     } else if (data.status === 'failed') {
       toast.error('Erreur de génération', {
         description: 'Vous pouvez réessayer ou créer vos requêtes manuellement.',
       });
-      onFailed?.(data);
+      onFailedRef.current?.(data);
       invalidateAndReset();
     }
-  }, [statusQuery.data, pollingJobId, invalidateAndReset, onCompleted, onFailed]);
+  }, [statusQuery.data, pollingJobId, invalidateAndReset]);
 
   const startPolling = useCallback((jobId: string) => {
     setPollingJobId(jobId);
