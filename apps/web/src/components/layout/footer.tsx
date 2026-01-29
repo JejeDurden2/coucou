@@ -7,7 +7,7 @@ export function Footer() {
   return (
     <footer className="bg-card border-t border-zinc-800 py-12 px-4">
       <div className="container mx-auto max-w-6xl">
-        <div className="grid grid-cols-2 md:grid-cols-[2fr_1fr_1fr] gap-8 mb-8">
+        <div className="grid grid-cols-2 md:grid-cols-[2fr_1fr_1fr_1fr] gap-8 mb-8">
           <div className="col-span-2 md:col-span-1">
             <Link href="/">
               <Logo size="sm" />
@@ -27,6 +27,21 @@ export function Footer() {
               <li>
                 <Link href="/blog" className="hover:text-foreground">
                   Blog
+                </Link>
+              </li>
+            </ul>
+          </nav>
+          <nav aria-label="Ressources">
+            <h4 className="font-medium mb-4">Ressources</h4>
+            <ul className="space-y-2 text-sm text-muted-foreground">
+              <li>
+                <Link href="/lexique" className="hover:text-foreground">
+                  Lexique GEO
+                </Link>
+              </li>
+              <li>
+                <Link href="/geo-pour" className="hover:text-foreground">
+                  GEO par métier
                 </Link>
               </li>
             </ul>

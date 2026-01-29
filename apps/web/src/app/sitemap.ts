@@ -2,17 +2,23 @@ import type { MetadataRoute } from 'next';
 
 import { getAllPosts } from '@/lib/blog';
 import { getAllTerms } from '@/lib/glossary';
+import { getAllPersonas } from '@/lib/geo-pour';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = 'https://coucou-ia.com';
   const posts = getAllPosts();
   const terms = getAllTerms();
+  const personas = getAllPersonas();
 
   // Use latest blog post date as proxy for blog listing / homepage freshness
   const latestPostDate = posts.length > 0 ? new Date(posts[0].date) : new Date('2026-01-01');
   const latestTermDate =
     terms.length > 0
       ? new Date(Math.max(...terms.map((t) => new Date(t.lastUpdated).getTime())))
+      : new Date('2026-01-01');
+  const latestPersonaDate =
+    personas.length > 0
+      ? new Date(Math.max(...personas.map((p) => new Date(p.lastUpdated).getTime())))
       : new Date('2026-01-01');
 
   // Static pages
@@ -75,5 +81,23 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.6,
   }));
 
-  return [...staticPages, ...blogPages, ...lexiqueIndex, ...lexiquePages];
+  // GEO pour (personas) index
+  const geoIndex: MetadataRoute.Sitemap = [
+    {
+      url: `${baseUrl}/geo-pour`,
+      lastModified: latestPersonaDate,
+      changeFrequency: 'weekly',
+      priority: 0.8,
+    },
+  ];
+
+  // GEO pour (personas) pages
+  const geoPages: MetadataRoute.Sitemap = personas.map((persona) => ({
+    url: `${baseUrl}/geo-pour/${persona.slug}`,
+    lastModified: new Date(persona.lastUpdated),
+    changeFrequency: 'monthly',
+    priority: 0.7,
+  }));
+
+  return [...staticPages, ...blogPages, ...lexiqueIndex, ...lexiquePages, ...geoIndex, ...geoPages];
 }

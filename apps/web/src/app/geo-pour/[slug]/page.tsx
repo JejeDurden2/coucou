@@ -161,11 +161,11 @@ export default async function PersonaPage({ params }: PageProps): Promise<React.
                 <Logo size="sm" />
               </Link>
               <Link
-                href="/"
+                href="/geo-pour"
                 className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
               >
                 <ArrowLeft className="size-4" aria-hidden="true" />
-                Retour au site
+                Tous les métiers
               </Link>
             </div>
           </div>
@@ -179,6 +179,12 @@ export default async function PersonaPage({ params }: PageProps): Promise<React.
               <li>
                 <Link href="/" className="hover:text-foreground">
                   Accueil
+                </Link>
+              </li>
+              <li aria-hidden="true">/</li>
+              <li>
+                <Link href="/geo-pour" className="hover:text-foreground">
+                  GEO par métier
                 </Link>
               </li>
               <li aria-hidden="true">/</li>
