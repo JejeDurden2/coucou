@@ -2,6 +2,7 @@ import { Plan } from '@prisma/client';
 import { LLMModel, PLAN_MODELS } from '@coucou-ia/shared';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
+import type { LoggerService } from '../../../../common/logger';
 import type { LLMPort, LLMResponse } from '../../application/ports/llm.port';
 import { LLMServiceImpl } from './llm.service';
 import { OpenAILLMAdapter } from './openai-llm.adapter';
@@ -9,6 +10,17 @@ import { GPT4oLLMAdapter } from './gpt4o-llm.adapter';
 import { GPT52LLMAdapter } from './gpt52-llm.adapter';
 import { ClaudeSonnetLLMAdapter } from './claude-sonnet-llm.adapter';
 import { ClaudeOpusLLMAdapter } from './claude-opus-llm.adapter';
+
+const createMockLogger = (): LoggerService =>
+  ({
+    setContext: vi.fn(),
+    info: vi.fn(),
+    warn: vi.fn(),
+    error: vi.fn(),
+    debug: vi.fn(),
+    verbose: vi.fn(),
+    log: vi.fn(),
+  }) as unknown as LoggerService;
 
 const createMockAdapter = (model: LLMModel, shouldFail = false): LLMPort => ({
   query: vi.fn().mockImplementation(async (): Promise<LLMResponse> => {
@@ -33,6 +45,7 @@ describe('LLMServiceImpl', () => {
   let mockGpt52Adapter: LLMPort;
   let mockClaudeSonnetAdapter: LLMPort;
   let mockClaudeOpusAdapter: LLMPort;
+  let mockLogger: LoggerService;
 
   beforeEach(() => {
     mockOpenaiAdapter = createMockAdapter(LLMModel.GPT_4O_MINI);
@@ -40,6 +53,7 @@ describe('LLMServiceImpl', () => {
     mockGpt52Adapter = createMockAdapter(LLMModel.GPT_5_2);
     mockClaudeSonnetAdapter = createMockAdapter(LLMModel.CLAUDE_SONNET_4_5);
     mockClaudeOpusAdapter = createMockAdapter(LLMModel.CLAUDE_OPUS_4_5);
+    mockLogger = createMockLogger();
 
     service = new LLMServiceImpl(
       mockOpenaiAdapter as unknown as OpenAILLMAdapter,
@@ -47,6 +61,7 @@ describe('LLMServiceImpl', () => {
       mockGpt52Adapter as unknown as GPT52LLMAdapter,
       mockClaudeSonnetAdapter as unknown as ClaudeSonnetLLMAdapter,
       mockClaudeOpusAdapter as unknown as ClaudeOpusLLMAdapter,
+      mockLogger,
     );
   });
 
@@ -97,6 +112,7 @@ describe('LLMServiceImpl', () => {
         mockGpt52Adapter as unknown as GPT52LLMAdapter,
         mockClaudeSonnetAdapter as unknown as ClaudeSonnetLLMAdapter,
         mockClaudeOpusAdapter as unknown as ClaudeOpusLLMAdapter,
+        mockLogger,
       );
 
       const result = await service.queryByPlan('test prompt', Plan.SOLO);
@@ -116,6 +132,7 @@ describe('LLMServiceImpl', () => {
         mockGpt52Adapter as unknown as GPT52LLMAdapter,
         mockClaudeSonnetAdapter as unknown as ClaudeSonnetLLMAdapter,
         mockClaudeOpusAdapter as unknown as ClaudeOpusLLMAdapter,
+        mockLogger,
       );
 
       const result = await service.queryByPlan('test prompt', Plan.FREE);

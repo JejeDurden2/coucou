@@ -1,7 +1,8 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Cron } from '@nestjs/schedule';
 
+import { LoggerService } from '../../../../common/logger';
 import { EmailQueueService } from '../../../../infrastructure/queue';
 import { PrismaService } from '../../../../prisma';
 import { UnsubscribeTokenService } from './unsubscribe-token.service';
@@ -42,16 +43,17 @@ interface ScanMetrics {
 
 @Injectable()
 export class WeeklyReportService {
-  private readonly logger = new Logger(WeeklyReportService.name);
   private readonly frontendUrl: string;
   private readonly apiUrl: string;
 
   constructor(
+    private readonly logger: LoggerService,
     private readonly prisma: PrismaService,
     private readonly emailQueueService: EmailQueueService,
     private readonly configService: ConfigService,
     private readonly unsubscribeTokenService: UnsubscribeTokenService,
   ) {
+    this.logger.setContext(WeeklyReportService.name);
     this.frontendUrl = this.configService.get<string>('FRONTEND_URL', 'https://coucou-ia.com');
     this.apiUrl = this.configService.get<string>('API_URL', 'https://api.coucou-ia.com');
   }
@@ -65,7 +67,7 @@ export class WeeklyReportService {
     timeZone: 'Europe/Paris',
   })
   async handleWeeklyReport(): Promise<void> {
-    this.logger.log('Starting weekly report cron job');
+    this.logger.info('Starting weekly report cron job');
     const startTime = Date.now();
     let emailsSent = 0;
     let offset = 0;
@@ -82,11 +84,11 @@ export class WeeklyReportService {
             const sent = await this.sendReportForUser(user);
             if (sent) emailsSent++;
           } catch (error) {
-            this.logger.error({
-              message: 'Weekly report: failed for user',
-              userId: user.id,
-              error: error instanceof Error ? error.message : String(error),
-            });
+            this.logger.error(
+              'Weekly report: failed for user',
+              error instanceof Error ? error : undefined,
+              { userId: user.id },
+            );
           }
         }
 
@@ -94,14 +96,13 @@ export class WeeklyReportService {
         hasMore = users.length === BATCH_SIZE;
       }
     } catch (error) {
-      this.logger.error({
-        message: 'Weekly report: critical error',
-        error: error instanceof Error ? error.message : String(error),
-      });
+      this.logger.error(
+        'Weekly report: critical error',
+        error instanceof Error ? error : undefined,
+      );
     }
 
-    this.logger.log({
-      message: 'Weekly report: completed',
+    this.logger.info('Weekly report: completed', {
       emailsSent,
       durationMs: Date.now() - startTime,
     });

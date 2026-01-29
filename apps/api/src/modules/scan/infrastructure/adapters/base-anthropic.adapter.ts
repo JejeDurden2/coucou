@@ -1,16 +1,18 @@
-import { Logger } from '@nestjs/common';
 import { LLMProvider } from '@prisma/client';
 
+import { LoggerService } from '../../../../common/logger';
 import { AnthropicClientService } from '../../../../common/infrastructure/anthropic/anthropic-client.service';
 import type { LLMQueryOptions, LLMResponse } from '../../application/ports/llm.port';
 import { BaseLLMAdapter, LLM_CONFIG, SYSTEM_PROMPT } from './base-llm.adapter';
 
 export abstract class BaseAnthropicAdapter extends BaseLLMAdapter {
-  protected abstract readonly logger: Logger;
   protected abstract readonly model: string;
 
-  constructor(private readonly anthropicClient: AnthropicClientService) {
-    super();
+  constructor(
+    private readonly anthropicClient: AnthropicClientService,
+    logger: LoggerService,
+  ) {
+    super(logger);
   }
 
   getProvider(): LLMProvider {
@@ -37,7 +39,9 @@ export abstract class BaseAnthropicAdapter extends BaseLLMAdapter {
         latencyMs: Date.now() - startTime,
       };
     } catch (error) {
-      this.logger.error(`Failed to query Anthropic (${this.model})`, error);
+      this.logger.error('Failed to query Anthropic', error instanceof Error ? error : undefined, {
+        model: this.model,
+      });
       throw error;
     }
   }

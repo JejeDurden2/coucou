@@ -1,8 +1,9 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 
 import { Result } from '../../../../common/utils/result';
 import type { DomainError } from '../../../../common/errors/domain-error';
 import { NotFoundError, ValidationError } from '../../../../common/errors/domain-error';
+import { LoggerService } from '../../../../common/logger';
 import { EmailQueueService } from '../../../../infrastructure/queue';
 import { USER_REPOSITORY, type UserRepository } from '../../domain/repositories/user.repository';
 import {
@@ -24,8 +25,6 @@ export interface DeleteAccountResult {
 
 @Injectable()
 export class DeleteAccountUseCase {
-  private readonly logger = new Logger(DeleteAccountUseCase.name);
-
   constructor(
     @Inject(USER_REPOSITORY)
     private readonly userRepository: UserRepository,
@@ -34,7 +33,10 @@ export class DeleteAccountUseCase {
     @Inject(STRIPE_PORT)
     private readonly stripePort: StripePort,
     private readonly emailQueueService: EmailQueueService,
-  ) {}
+    private readonly logger: LoggerService,
+  ) {
+    this.logger.setContext(DeleteAccountUseCase.name);
+  }
 
   async execute(input: DeleteAccountInput): Promise<Result<DeleteAccountResult, DomainError>> {
     const { userId, confirmation } = input;
@@ -53,23 +55,27 @@ export class DeleteAccountUseCase {
     const userEmail = user.email;
     const userName = user.name;
 
-    this.logger.log(`Starting account deletion for user: ${userId}`);
+    this.logger.info('Starting account deletion', { userId });
 
     const subscription = await this.subscriptionRepository.findByUserId(userId);
     if (subscription) {
-      this.logger.log(`Canceling Stripe subscription: ${subscription.stripeSubscriptionId}`);
+      this.logger.info('Canceling Stripe subscription', {
+        subscriptionId: subscription.stripeSubscriptionId,
+      });
       const cancelResult = await this.stripePort.cancelSubscriptionImmediately(
         subscription.stripeSubscriptionId,
       );
       if (!cancelResult.ok) {
-        this.logger.error(`Failed to cancel Stripe subscription: ${cancelResult.error.message}`);
+        this.logger.error('Failed to cancel Stripe subscription', {
+          error: cancelResult.error.message,
+        });
         return Result.err(cancelResult.error);
       }
     }
 
     await this.userRepository.anonymize(userId);
 
-    this.logger.log(`Account anonymized successfully for user: ${userId}`);
+    this.logger.info('Account anonymized successfully', { userId });
 
     // Send deletion confirmation email via queue
     await this.emailQueueService.addJob({

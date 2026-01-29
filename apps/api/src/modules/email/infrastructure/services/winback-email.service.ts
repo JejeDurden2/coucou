@@ -1,8 +1,9 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Cron } from '@nestjs/schedule';
 import { Plan } from '@prisma/client';
 
+import { LoggerService } from '../../../../common/logger';
 import { EmailQueueService } from '../../../../infrastructure/queue';
 import { PrismaService } from '../../../../prisma';
 import { UnsubscribeTokenService } from './unsubscribe-token.service';
@@ -11,16 +12,17 @@ const BATCH_SIZE = 100;
 
 @Injectable()
 export class WinbackEmailService {
-  private readonly logger = new Logger(WinbackEmailService.name);
   private readonly frontendUrl: string;
   private readonly apiUrl: string;
 
   constructor(
+    private readonly logger: LoggerService,
     private readonly prisma: PrismaService,
     private readonly emailQueueService: EmailQueueService,
     private readonly configService: ConfigService,
     private readonly unsubscribeTokenService: UnsubscribeTokenService,
   ) {
+    this.logger.setContext(WinbackEmailService.name);
     this.frontendUrl = this.configService.get<string>('FRONTEND_URL', 'https://coucou-ia.com');
     this.apiUrl = this.configService.get<string>('API_URL', 'https://api.coucou-ia.com');
   }
@@ -34,7 +36,7 @@ export class WinbackEmailService {
     timeZone: 'Europe/Paris',
   })
   async handleWinbackEmails(): Promise<void> {
-    this.logger.log('Starting win-back email cron job');
+    this.logger.info('Starting win-back email cron job');
     const startTime = Date.now();
     let emailsSent = 0;
 
@@ -48,14 +50,13 @@ export class WinbackEmailService {
       // W3: +21 days after subscription ended
       emailsSent += await this.sendWinbackEmail(21, 22, 'winback-discount');
     } catch (error) {
-      this.logger.error({
-        message: 'Win-back emails: critical error',
-        error: error instanceof Error ? error.message : String(error),
-      });
+      this.logger.error(
+        'Win-back emails: critical error',
+        error instanceof Error ? error : undefined,
+      );
     }
 
-    this.logger.log({
-      message: 'Win-back emails: completed',
+    this.logger.info('Win-back emails: completed', {
       emailsSent,
       durationMs: Date.now() - startTime,
     });
@@ -129,15 +130,15 @@ export class WinbackEmailService {
 
         sent++;
       } catch (error) {
-        this.logger.error({
-          message: `Win-back: failed to send ${type}`,
-          userId: user.id,
-          error: error instanceof Error ? error.message : String(error),
-        });
+        this.logger.error(
+          `Win-back: failed to send ${type}`,
+          error instanceof Error ? error : undefined,
+          { userId: user.id },
+        );
       }
     }
 
-    this.logger.log({ message: `Win-back ${type}`, sent });
+    this.logger.info(`Win-back ${type}`, { sent });
     return sent;
   }
 }

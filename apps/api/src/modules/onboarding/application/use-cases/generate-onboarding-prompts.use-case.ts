@@ -1,7 +1,8 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { Plan, PLAN_LIMITS } from '@coucou-ia/shared';
 
 import { ForbiddenError, NotFoundError, Result, withSpan } from '../../../../common';
+import { LoggerService } from '../../../../common/logger';
 import {
   PROJECT_REPOSITORY,
   type ProjectRepository,
@@ -29,8 +30,6 @@ type GenerateOnboardingPromptsError =
 
 @Injectable()
 export class GenerateOnboardingPromptsUseCase {
-  private readonly logger = new Logger(GenerateOnboardingPromptsUseCase.name);
-
   constructor(
     @Inject(PROJECT_REPOSITORY)
     private readonly projectRepository: ProjectRepository,
@@ -38,7 +37,10 @@ export class GenerateOnboardingPromptsUseCase {
     private readonly promptRepository: PromptRepository,
     @Inject(BRAND_ANALYZER)
     private readonly brandAnalyzer: BrandAnalyzerPort,
-  ) {}
+    private readonly logger: LoggerService,
+  ) {
+    this.logger.setContext(GenerateOnboardingPromptsUseCase.name);
+  }
 
   async execute(
     projectId: string,
@@ -64,9 +66,10 @@ export class GenerateOnboardingPromptsUseCase {
         try {
           brandContext = await this.brandAnalyzer.extractContext(project.domain, project.brandName);
         } catch (error) {
-          this.logger.warn(
-            `Brand context extraction failed for ${project.domain}: ${error instanceof Error ? error.message : 'Unknown error'}`,
-          );
+          this.logger.warn('Brand context extraction failed', {
+            domain: project.domain,
+            error: error instanceof Error ? error.message : 'Unknown error',
+          });
           return Result.err(new BrandContextExtractionError(project.domain));
         }
 
@@ -87,9 +90,9 @@ export class GenerateOnboardingPromptsUseCase {
             promptCount,
           );
         } catch (error) {
-          this.logger.warn(
-            `Prompt generation failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
-          );
+          this.logger.warn('Prompt generation failed', {
+            error: error instanceof Error ? error.message : 'Unknown error',
+          });
           return Result.err(
             new PromptGenerationError(error instanceof Error ? error.message : 'Unknown error'),
           );
@@ -115,9 +118,10 @@ export class GenerateOnboardingPromptsUseCase {
           });
         }
 
-        this.logger.log(
-          `Successfully generated ${createdPrompts.length} prompts for project ${projectId}`,
-        );
+        this.logger.info('Successfully generated prompts', {
+          projectId,
+          promptsCount: createdPrompts.length,
+        });
 
         return Result.ok(createdPrompts);
       },

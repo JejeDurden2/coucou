@@ -120,7 +120,7 @@ async function bootstrap(): Promise<void> {
     }),
   );
 
-  app.useGlobalFilters(new AllExceptionsFilter());
+  app.useGlobalFilters(new AllExceptionsFilter(logger));
 
   const port = process.env.PORT ?? 3001;
   await app.listen(port);

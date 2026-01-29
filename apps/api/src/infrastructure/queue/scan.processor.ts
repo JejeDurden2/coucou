@@ -1,7 +1,8 @@
 import { Processor, WorkerHost, OnWorkerEvent } from '@nestjs/bullmq';
-import { Inject, Logger } from '@nestjs/common';
+import { Inject } from '@nestjs/common';
 import type { Job } from 'bullmq';
 
+import { LoggerService } from '../../common/logger';
 import { SCAN_QUEUE_NAME } from './queue.config';
 import type { ScanJobData, ScanJobResult } from './types/scan-job.types';
 import {
@@ -13,20 +14,19 @@ import {
   concurrency: 2, // Process 2 scan jobs in parallel
 })
 export class ScanProcessor extends WorkerHost {
-  private readonly logger = new Logger(ScanProcessor.name);
-
   constructor(
     @Inject(PROCESS_SCAN_JOB_USE_CASE)
     private readonly processScanJobUseCase: ProcessScanJobUseCase,
+    private readonly logger: LoggerService,
   ) {
     super();
+    this.logger.setContext(ScanProcessor.name);
   }
 
   async process(job: Job<ScanJobData>): Promise<ScanJobResult> {
     const { scanJobId, projectId, userId, plan } = job.data;
 
-    this.logger.log({
-      message: 'Processing scan job',
+    this.logger.info('Processing scan job', {
       jobId: job.id,
       scanJobId,
       projectId,
@@ -41,8 +41,7 @@ export class ScanProcessor extends WorkerHost {
     });
 
     if (!result.ok) {
-      this.logger.error({
-        message: 'Scan job processing failed',
+      this.logger.error('Scan job processing failed', {
         jobId: job.id,
         scanJobId,
         error: result.error.message,
@@ -50,8 +49,7 @@ export class ScanProcessor extends WorkerHost {
       throw new Error(result.error.message);
     }
 
-    this.logger.log({
-      message: 'Scan job processed successfully',
+    this.logger.info('Scan job processed successfully', {
       jobId: job.id,
       scanJobId,
       status: result.value.status,
@@ -63,21 +61,18 @@ export class ScanProcessor extends WorkerHost {
 
   @OnWorkerEvent('failed')
   onFailed(job: Job<ScanJobData>, error: Error): void {
-    this.logger.error({
-      message: 'Scan job failed',
+    this.logger.error('Scan job failed', error, {
       jobId: job.id,
       scanJobId: job.data.scanJobId,
       projectId: job.data.projectId,
       attempt: job.attemptsMade,
       maxAttempts: job.opts.attempts,
-      error: error.message,
     });
   }
 
   @OnWorkerEvent('completed')
   onCompleted(job: Job<ScanJobData>): void {
-    this.logger.log({
-      message: 'Scan job completed',
+    this.logger.info('Scan job completed', {
       jobId: job.id,
       scanJobId: job.data.scanJobId,
       projectId: job.data.projectId,

@@ -1,9 +1,10 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { Plan, SubscriptionStatus } from '@prisma/client';
 
 import { Result } from '../../../../common/utils/result';
 import type { DomainError } from '../../../../common/errors/domain-error';
 import { NotFoundError } from '../../../../common/errors/domain-error';
+import { LoggerService } from '../../../../common/logger';
 import {
   USER_REPOSITORY,
   type UserRepository,
@@ -31,8 +32,6 @@ export interface CancelDowngradeResult {
 
 @Injectable()
 export class CancelDowngradeUseCase {
-  private readonly logger = new Logger(CancelDowngradeUseCase.name);
-
   constructor(
     @Inject(USER_REPOSITORY)
     private readonly userRepository: UserRepository,
@@ -40,7 +39,10 @@ export class CancelDowngradeUseCase {
     private readonly subscriptionRepository: SubscriptionRepository,
     @Inject(STRIPE_PORT)
     private readonly stripePort: StripePort,
-  ) {}
+    private readonly logger: LoggerService,
+  ) {
+    this.logger.setContext(CancelDowngradeUseCase.name);
+  }
 
   async execute(input: CancelDowngradeInput): Promise<Result<CancelDowngradeResult, DomainError>> {
     const { userId } = input;
@@ -79,7 +81,7 @@ export class CancelDowngradeUseCase {
       cancelAtPeriodEnd: false,
     });
 
-    this.logger.log(`Downgrade cancelled for user: ${userId}`);
+    this.logger.info('Downgrade cancelled', { userId });
 
     return Result.ok({
       currentPlan: user.plan,

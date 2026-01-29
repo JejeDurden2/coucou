@@ -1,8 +1,8 @@
 import { Processor, WorkerHost, OnWorkerEvent } from '@nestjs/bullmq';
-import { Logger } from '@nestjs/common';
 import type { Job } from 'bullmq';
 
 import { ONBOARDING_QUEUE_NAME } from '../../../../infrastructure/queue/queue.config';
+import { LoggerService } from '../../../../common/logger';
 import { GenerateOnboardingPromptsUseCase } from '../../application/use-cases/generate-onboarding-prompts.use-case';
 import type { OnboardingJobData, OnboardingJobResult } from './onboarding-job.types';
 
@@ -10,17 +10,18 @@ import type { OnboardingJobData, OnboardingJobResult } from './onboarding-job.ty
   concurrency: 1, // Single job at a time to respect API rate limits
 })
 export class OnboardingProcessor extends WorkerHost {
-  private readonly logger = new Logger(OnboardingProcessor.name);
-
-  constructor(private readonly generateOnboardingPromptsUseCase: GenerateOnboardingPromptsUseCase) {
+  constructor(
+    private readonly generateOnboardingPromptsUseCase: GenerateOnboardingPromptsUseCase,
+    private readonly logger: LoggerService,
+  ) {
     super();
+    this.logger.setContext(OnboardingProcessor.name);
   }
 
   async process(job: Job<OnboardingJobData>): Promise<OnboardingJobResult> {
     const { projectId, userId, plan } = job.data;
 
-    this.logger.log({
-      message: 'Processing onboarding job',
+    this.logger.info('Processing onboarding job', {
       jobId: job.id,
       projectId,
       attempt: job.attemptsMade + 1,
@@ -29,8 +30,7 @@ export class OnboardingProcessor extends WorkerHost {
     const result = await this.generateOnboardingPromptsUseCase.execute(projectId, userId, plan);
 
     if (!result.ok) {
-      this.logger.error({
-        message: 'Onboarding job processing failed',
+      this.logger.error('Onboarding job processing failed', {
         jobId: job.id,
         projectId,
         error: result.error.message,
@@ -38,8 +38,7 @@ export class OnboardingProcessor extends WorkerHost {
       throw new Error(result.error.message);
     }
 
-    this.logger.log({
-      message: 'Onboarding job processed successfully',
+    this.logger.info('Onboarding job processed successfully', {
       jobId: job.id,
       projectId,
       promptsCreated: result.value.length,
@@ -53,20 +52,17 @@ export class OnboardingProcessor extends WorkerHost {
 
   @OnWorkerEvent('failed')
   onFailed(job: Job<OnboardingJobData>, error: Error): void {
-    this.logger.error({
-      message: 'Onboarding job failed',
+    this.logger.error('Onboarding job failed', error, {
       jobId: job.id,
       projectId: job.data.projectId,
       attempt: job.attemptsMade,
       maxAttempts: job.opts.attempts,
-      error: error.message,
     });
   }
 
   @OnWorkerEvent('completed')
   onCompleted(job: Job<OnboardingJobData>): void {
-    this.logger.log({
-      message: 'Onboarding job completed',
+    this.logger.info('Onboarding job completed', {
       jobId: job.id,
       projectId: job.data.projectId,
     });

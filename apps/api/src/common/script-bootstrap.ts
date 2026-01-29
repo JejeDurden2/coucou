@@ -1,13 +1,15 @@
 import { config } from 'dotenv';
-import { INestApplicationContext, Logger, Type } from '@nestjs/common';
+import { INestApplicationContext, Type } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 
+import { LoggerService } from './logger';
 import { ScriptModule } from '../script.module';
 
 // Load .env file before NestJS starts
 config();
 
-const logger = new Logger('ScriptBootstrap');
+const logger = new LoggerService();
+logger.setContext('ScriptBootstrap');
 
 /**
  * Bootstrap a NestJS script with minimal module loading.
@@ -41,7 +43,7 @@ export async function bootstrapScript<T>(
 
     return await callback(app);
   } catch (error) {
-    logger.error('Script execution failed', error instanceof Error ? error.stack : error);
+    logger.error('Script execution failed', error instanceof Error ? error : undefined);
     throw error;
   } finally {
     if (app) {

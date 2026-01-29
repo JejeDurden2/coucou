@@ -1,8 +1,9 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Cron } from '@nestjs/schedule';
 import { Plan } from '@prisma/client';
 
+import { LoggerService } from '../../../../common/logger';
 import { EmailQueueService } from '../../../../infrastructure/queue';
 import { PrismaService } from '../../../../prisma';
 import { UnsubscribeTokenService } from './unsubscribe-token.service';
@@ -12,16 +13,17 @@ const MIN_UPGRADE_EMAIL_INTERVAL_DAYS = 3;
 
 @Injectable()
 export class UpgradeCampaignService {
-  private readonly logger = new Logger(UpgradeCampaignService.name);
   private readonly frontendUrl: string;
   private readonly apiUrl: string;
 
   constructor(
+    private readonly logger: LoggerService,
     private readonly prisma: PrismaService,
     private readonly emailQueueService: EmailQueueService,
     private readonly configService: ConfigService,
     private readonly unsubscribeTokenService: UnsubscribeTokenService,
   ) {
+    this.logger.setContext(UpgradeCampaignService.name);
     this.frontendUrl = this.configService.get<string>('FRONTEND_URL', 'https://coucou-ia.com');
     this.apiUrl = this.configService.get<string>('API_URL', 'https://api.coucou-ia.com');
   }
@@ -35,7 +37,7 @@ export class UpgradeCampaignService {
     timeZone: 'Europe/Paris',
   })
   async handleUpgradeCampaign(): Promise<void> {
-    this.logger.log('Starting upgrade campaign cron job');
+    this.logger.info('Starting upgrade campaign cron job');
     const startTime = Date.now();
     let emailsSent = 0;
 
@@ -49,14 +51,13 @@ export class UpgradeCampaignService {
       // U3: Day 21 — final push
       emailsSent += await this.processDay21Users();
     } catch (error) {
-      this.logger.error({
-        message: 'Upgrade campaign: critical error',
-        error: error instanceof Error ? error.message : String(error),
-      });
+      this.logger.error(
+        'Upgrade campaign: critical error',
+        error instanceof Error ? error : undefined,
+      );
     }
 
-    this.logger.log({
-      message: 'Upgrade campaign: completed',
+    this.logger.info('Upgrade campaign: completed', {
       emailsSent,
       durationMs: Date.now() - startTime,
     });
@@ -124,15 +125,15 @@ export class UpgradeCampaignService {
 
         sent++;
       } catch (error) {
-        this.logger.error({
-          message: `Upgrade campaign: failed to send ${type}`,
-          userId: user.id,
-          error: error instanceof Error ? error.message : String(error),
-        });
+        this.logger.error(
+          `Upgrade campaign: failed to send ${type}`,
+          error instanceof Error ? error : undefined,
+          { userId: user.id },
+        );
       }
     }
 
-    this.logger.log({ message: `Upgrade campaign ${type}`, sent });
+    this.logger.info(`Upgrade campaign ${type}`, { sent });
     return sent;
   }
 }

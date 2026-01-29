@@ -1,10 +1,4 @@
-import {
-  Injectable,
-  Logger,
-  type OnModuleInit,
-  type OnModuleDestroy,
-  Inject,
-} from '@nestjs/common';
+import { Injectable, type OnModuleInit, type OnModuleDestroy, Inject } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectQueue } from '@nestjs/bullmq';
 import { Cron } from '@nestjs/schedule';
@@ -15,13 +9,13 @@ import {
   SENTIMENT_QUEUE_NAME,
   sentimentJobOptions,
 } from '../../../../infrastructure/queue/queue.config';
+import { LoggerService } from '../../../../common/logger';
 import type { SentimentJobData } from '../../../../infrastructure/queue/types/sentiment-job.types';
 import { PrismaService } from '../../../../prisma';
 import { SENTIMENT_SCAN_REPOSITORY, type SentimentScanRepository } from '../../domain';
 
 @Injectable()
 export class SentimentQueueService implements OnModuleInit, OnModuleDestroy {
-  private readonly logger = new Logger(SentimentQueueService.name);
   private queueEvents: QueueEvents | null = null;
 
   constructor(
@@ -31,7 +25,10 @@ export class SentimentQueueService implements OnModuleInit, OnModuleDestroy {
     private readonly sentimentRepository: SentimentScanRepository,
     private readonly prisma: PrismaService,
     private readonly configService: ConfigService,
-  ) {}
+    private readonly logger: LoggerService,
+  ) {
+    this.logger.setContext(SentimentQueueService.name);
+  }
 
   onModuleInit(): void {
     this.setupEventListeners();
@@ -51,30 +48,18 @@ export class SentimentQueueService implements OnModuleInit, OnModuleDestroy {
     });
 
     this.queueEvents.on('added', ({ jobId, name }) => {
-      this.logger.log({
-        message: 'Sentiment job created',
-        jobId,
-        jobName: name,
-      });
+      this.logger.info('Sentiment job created', { jobId, jobName: name });
     });
 
     this.queueEvents.on('completed', ({ jobId, returnvalue }) => {
-      this.logger.log({
-        message: 'Sentiment job completed',
-        jobId,
-        result: returnvalue,
-      });
+      this.logger.info('Sentiment job completed', { jobId, result: returnvalue });
     });
 
     this.queueEvents.on('failed', ({ jobId, failedReason }) => {
-      this.logger.error({
-        message: 'Sentiment job failed',
-        jobId,
-        reason: failedReason,
-      });
+      this.logger.error('Sentiment job failed', { jobId, reason: failedReason });
     });
 
-    this.logger.log('Sentiment queue event listeners initialized');
+    this.logger.info('Sentiment queue event listeners initialized');
   }
 
   /**
@@ -83,11 +68,7 @@ export class SentimentQueueService implements OnModuleInit, OnModuleDestroy {
   async addJob(data: SentimentJobData): Promise<string> {
     const job = await this.sentimentQueue.add('sentiment-scan', data, sentimentJobOptions);
 
-    this.logger.log({
-      message: 'Sentiment job queued',
-      jobId: job.id,
-      projectId: data.projectId,
-    });
+    this.logger.info('Sentiment job queued', { jobId: job.id, projectId: data.projectId });
 
     return job.id ?? '';
   }
@@ -101,7 +82,7 @@ export class SentimentQueueService implements OnModuleInit, OnModuleDestroy {
     timeZone: 'Europe/Paris',
   })
   async scheduleWeeklySentimentScans(): Promise<void> {
-    this.logger.log('Starting weekly sentiment scan scheduling');
+    this.logger.info('Starting weekly sentiment scan scheduling');
 
     try {
       const eligibleProjects = await this.findEligibleProjects();
@@ -111,10 +92,7 @@ export class SentimentQueueService implements OnModuleInit, OnModuleDestroy {
         const hasRecentScan = await this.hasRecentSentimentScan(project.id);
 
         if (hasRecentScan) {
-          this.logger.debug({
-            message: 'Skipping project - recent scan exists',
-            projectId: project.id,
-          });
+          this.logger.debug('Skipping project - recent scan exists', { projectId: project.id });
           continue;
         }
 
@@ -125,17 +103,17 @@ export class SentimentQueueService implements OnModuleInit, OnModuleDestroy {
         enqueuedCount++;
       }
 
-      this.logger.log({
-        message: 'Weekly sentiment scan scheduling completed',
+      this.logger.info('Weekly sentiment scan scheduling completed', {
         eligibleProjects: eligibleProjects.length,
         enqueuedJobs: enqueuedCount,
         skipped: eligibleProjects.length - enqueuedCount,
       });
     } catch (error) {
-      this.logger.error({
-        message: 'Failed to schedule weekly sentiment scans',
-        error: error instanceof Error ? error.message : String(error),
-      });
+      this.logger.error(
+        'Failed to schedule weekly sentiment scans',
+        error instanceof Error ? error : undefined,
+        error instanceof Error ? undefined : { error: String(error) },
+      );
     }
   }
 

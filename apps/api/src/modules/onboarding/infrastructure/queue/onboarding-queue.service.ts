@@ -1,4 +1,4 @@
-import { Injectable, Logger, type OnModuleInit, type OnModuleDestroy } from '@nestjs/common';
+import { Injectable, type OnModuleInit, type OnModuleDestroy } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectQueue } from '@nestjs/bullmq';
 import { Queue, QueueEvents } from 'bullmq';
@@ -7,18 +7,21 @@ import {
   ONBOARDING_QUEUE_NAME,
   onboardingJobOptions,
 } from '../../../../infrastructure/queue/queue.config';
+import { LoggerService } from '../../../../common/logger';
 import type { OnboardingJobData } from './onboarding-job.types';
 
 @Injectable()
 export class OnboardingQueueService implements OnModuleInit, OnModuleDestroy {
-  private readonly logger = new Logger(OnboardingQueueService.name);
   private queueEvents: QueueEvents | null = null;
 
   constructor(
     @InjectQueue(ONBOARDING_QUEUE_NAME)
     private readonly onboardingQueue: Queue<OnboardingJobData>,
     private readonly configService: ConfigService,
-  ) {}
+    private readonly logger: LoggerService,
+  ) {
+    this.logger.setContext(OnboardingQueueService.name);
+  }
 
   onModuleInit(): void {
     this.setupEventListeners();
@@ -38,40 +41,24 @@ export class OnboardingQueueService implements OnModuleInit, OnModuleDestroy {
     });
 
     this.queueEvents.on('added', ({ jobId, name }) => {
-      this.logger.log({
-        message: 'Onboarding job created',
-        jobId,
-        jobName: name,
-      });
+      this.logger.info('Onboarding job created', { jobId, jobName: name });
     });
 
     this.queueEvents.on('completed', ({ jobId, returnvalue }) => {
-      this.logger.log({
-        message: 'Onboarding job completed',
-        jobId,
-        result: returnvalue,
-      });
+      this.logger.info('Onboarding job completed', { jobId, result: returnvalue });
     });
 
     this.queueEvents.on('failed', ({ jobId, failedReason }) => {
-      this.logger.error({
-        message: 'Onboarding job failed',
-        jobId,
-        reason: failedReason,
-      });
+      this.logger.error('Onboarding job failed', { jobId, reason: failedReason });
     });
 
-    this.logger.log('Onboarding queue event listeners initialized');
+    this.logger.info('Onboarding queue event listeners initialized');
   }
 
   async addJob(data: OnboardingJobData): Promise<string> {
     const job = await this.onboardingQueue.add('generate-prompts', data, onboardingJobOptions);
 
-    this.logger.log({
-      message: 'Onboarding job queued',
-      jobId: job.id,
-      projectId: data.projectId,
-    });
+    this.logger.info('Onboarding job queued', { jobId: job.id, projectId: data.projectId });
 
     return job.id ?? '';
   }

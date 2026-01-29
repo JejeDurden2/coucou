@@ -7,6 +7,17 @@ import type { PrismaService } from '../../../../prisma';
 import type { StripeService } from '../../infrastructure/stripe.service';
 import type { EmailQueueService } from '../../../../infrastructure/queue';
 import type { UnsubscribeTokenService } from '../../../email/infrastructure/services/unsubscribe-token.service';
+import type { LoggerService } from '../../../../common/logger';
+
+const mockLogger = {
+  setContext: vi.fn(),
+  info: vi.fn(),
+  warn: vi.fn(),
+  error: vi.fn(),
+  debug: vi.fn(),
+  log: vi.fn(),
+  verbose: vi.fn(),
+} as unknown as LoggerService;
 
 describe('HandleWebhookUseCase', () => {
   let useCase: HandleWebhookUseCase;
@@ -67,6 +78,7 @@ describe('HandleWebhookUseCase', () => {
       mockConfigService as unknown as ConfigService,
       mockEmailQueueService as EmailQueueService,
       mockUnsubscribeTokenService as UnsubscribeTokenService,
+      mockLogger,
     );
   });
 

@@ -1,10 +1,11 @@
-import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
+import { Injectable, OnModuleInit } from '@nestjs/common';
 import { promises as dns } from 'dns';
 import { readFile } from 'fs/promises';
 import { join } from 'path';
 import { z } from 'zod';
 
 import { Result } from '../../../../common';
+import { LoggerService } from '../../../../common/logger';
 import type { EmailValidatorPort } from '../../domain/ports/email-validator.port';
 import {
   DisposableEmailError,
@@ -19,8 +20,11 @@ const emailSchema = z.string().email();
 
 @Injectable()
 export class DnsEmailValidatorService implements EmailValidatorPort, OnModuleInit {
-  private readonly logger = new Logger(DnsEmailValidatorService.name);
   private disposableDomains: Set<string> = new Set();
+
+  constructor(private readonly logger: LoggerService) {
+    this.logger.setContext(DnsEmailValidatorService.name);
+  }
 
   async onModuleInit(): Promise<void> {
     await this.loadDisposableDomains();
@@ -32,9 +36,12 @@ export class DnsEmailValidatorService implements EmailValidatorPort, OnModuleIni
       const content = await readFile(filePath, 'utf-8');
       const domains: string[] = JSON.parse(content);
       this.disposableDomains = new Set(domains.map((d) => d.toLowerCase()));
-      this.logger.log(`Loaded ${this.disposableDomains.size} disposable domains`);
+      this.logger.info('Loaded disposable domains', { count: this.disposableDomains.size });
     } catch (error) {
-      this.logger.error('Failed to load disposable domains', error);
+      this.logger.error(
+        'Failed to load disposable domains',
+        error instanceof Error ? error : undefined,
+      );
       // Continue with empty set - fail open
     }
   }
@@ -68,7 +75,7 @@ export class DnsEmailValidatorService implements EmailValidatorPort, OnModuleIni
 
       // Timeout returns null - fail open
       if (result === null) {
-        this.logger.warn(`DNS lookup timeout for domain: ${domain}`);
+        this.logger.warn('DNS lookup timeout', { domain });
         return Result.ok(undefined);
       }
 
@@ -87,7 +94,7 @@ export class DnsEmailValidatorService implements EmailValidatorPort, OnModuleIni
         }
       }
       // Other errors - fail open
-      this.logger.warn(`DNS lookup error for ${domain}:`, error);
+      this.logger.warn('DNS lookup error', { domain });
       return Result.ok(undefined);
     }
   }

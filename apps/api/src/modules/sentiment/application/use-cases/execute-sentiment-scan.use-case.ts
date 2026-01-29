@@ -1,8 +1,9 @@
-import { Inject, Injectable, Logger, forwardRef } from '@nestjs/common';
+import { Inject, Injectable, forwardRef } from '@nestjs/common';
 import { z } from 'zod';
 import type { SentimentResult, SentimentScanResults } from '@coucou-ia/shared';
 
 import { ForbiddenError, NotFoundError, Result, withSpan } from '../../../../common';
+import { LoggerService } from '../../../../common/logger';
 import { AnthropicClientService } from '../../../../common/infrastructure/anthropic/anthropic-client.service';
 import { PROJECT_REPOSITORY, type ProjectRepository } from '../../../project';
 import type { LLMQueryOptions, LLMResponse } from '../../../scan';
@@ -68,8 +69,6 @@ const SENTIMENT_JSON_SCHEMA = {
 
 @Injectable()
 export class ExecuteSentimentScanUseCase {
-  private readonly logger = new Logger(ExecuteSentimentScanUseCase.name);
-
   constructor(
     @Inject(PROJECT_REPOSITORY)
     private readonly projectRepository: ProjectRepository,
@@ -78,7 +77,10 @@ export class ExecuteSentimentScanUseCase {
     @Inject(forwardRef(() => GPT52LLMAdapter))
     private readonly gpt52Adapter: GPT52LLMAdapter,
     private readonly anthropicClient: AnthropicClientService,
-  ) {}
+    private readonly logger: LoggerService,
+  ) {
+    this.logger.setContext(ExecuteSentimentScanUseCase.name);
+  }
 
   async execute(
     projectId: string,
@@ -106,7 +108,7 @@ export class ExecuteSentimentScanUseCase {
           project.brandContext,
         );
 
-        this.logger.log(`Executing sentiment scan for project ${projectId}`);
+        this.logger.info('Executing sentiment scan', { projectId });
 
         const gptOptions: LLMQueryOptions = {
           systemPrompt: SENTIMENT_SYSTEM_PROMPT,
@@ -123,14 +125,15 @@ export class ExecuteSentimentScanUseCase {
           .map((r) => ({ provider: r.provider, error: r.error! }));
 
         if (successes.length === 0) {
-          this.logger.error(`All LLM providers failed for sentiment scan on project ${projectId}`);
+          this.logger.error('All LLM providers failed for sentiment scan', { projectId, failures });
           return Result.err(new AllSentimentProvidersFailedError(failures));
         }
 
         if (failures.length > 0) {
-          this.logger.warn(
-            `Partial LLM failures for sentiment scan: ${failures.map((f) => f.provider).join(', ')}`,
-          );
+          this.logger.warn('Partial LLM failures for sentiment scan', {
+            projectId,
+            failedProviders: failures.map((f) => f.provider),
+          });
         }
 
         const globalScore = this.calculateGlobalScore(successes);
@@ -143,7 +146,7 @@ export class ExecuteSentimentScanUseCase {
           results,
         });
 
-        this.logger.log(`Sentiment scan ${scan.id} completed for project ${projectId}`);
+        this.logger.info('Sentiment scan completed', { scanId: scan.id, projectId });
 
         return Result.ok(scan);
       },
@@ -190,11 +193,11 @@ JSON uniquement: {"s":score,"t":[themes],"kp":[positifs],"kn":[négatifs]}`;
         const errorMessage = error instanceof Error ? error.message : String(error);
 
         if (error instanceof SentimentParseError && !isLastAttempt) {
-          this.logger.warn(`Parse error from gpt, retrying (attempt ${attempt}/${maxRetries})`);
+          this.logger.warn('Parse error from gpt, retrying', { attempt, maxRetries });
           continue;
         }
 
-        this.logger.error(`gpt failed after ${attempt} attempts: ${errorMessage}`);
+        this.logger.error('GPT failed', { attempt, error: errorMessage });
         return { provider: 'gpt', error: errorMessage };
       }
     }
@@ -234,14 +237,12 @@ JSON uniquement: {"s":score,"t":[themes],"kp":[positifs],"kn":[négatifs]}`;
         const errorMessage = error instanceof Error ? error.message : String(error);
 
         if (!isLastAttempt) {
-          this.logger.warn(
-            `Parse/API error from claude, retrying (attempt ${attempt}/${maxRetries})`,
-          );
+          this.logger.warn('Parse/API error from claude, retrying', { attempt, maxRetries });
           await new Promise((r) => setTimeout(r, 5000));
           continue;
         }
 
-        this.logger.error(`claude failed after ${attempt} attempts: ${errorMessage}`);
+        this.logger.error('Claude failed', { attempt, error: errorMessage });
         return { provider: 'claude', error: errorMessage };
       }
     }

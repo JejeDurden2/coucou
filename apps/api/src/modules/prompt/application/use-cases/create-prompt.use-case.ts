@@ -1,7 +1,8 @@
-import { forwardRef, Inject, Injectable, Logger } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import type { Plan } from '@prisma/client';
 
 import { ForbiddenError, NotFoundError, PlanLimitError, Result } from '../../../../common';
+import { LoggerService } from '../../../../common/logger';
 import { EMAIL_PORT, type EmailPort, PlanLimitNotificationService } from '../../../email';
 import { PLAN_LIMITS } from '../../../billing/domain/services/plan-limits.service';
 import { PROJECT_REPOSITORY, type ProjectRepository } from '../../../project';
@@ -21,8 +22,6 @@ interface UserInfo {
 
 @Injectable()
 export class CreatePromptUseCase {
-  private readonly logger = new Logger(CreatePromptUseCase.name);
-
   constructor(
     @Inject(PROMPT_REPOSITORY)
     private readonly promptRepository: PromptRepository,
@@ -33,7 +32,10 @@ export class CreatePromptUseCase {
     @Inject(forwardRef(() => QUEUE_PROMPT_SCAN_USE_CASE))
     private readonly queuePromptScanUseCase: QueuePromptScanUseCase,
     private readonly planLimitNotification: PlanLimitNotificationService,
-  ) {}
+    private readonly logger: LoggerService,
+  ) {
+    this.logger.setContext(CreatePromptUseCase.name);
+  }
 
   async execute(
     projectId: string,
@@ -77,7 +79,9 @@ export class CreatePromptUseCase {
     // Auto-trigger scan for SOLO/PRO plans (non-blocking)
     if (plan === 'SOLO' || plan === 'PRO') {
       this.triggerAutoScan(prompt.id, userId, plan, userInfo?.email).catch((err) => {
-        this.logger.error(`Auto-scan failed for prompt ${prompt.id}:`, err);
+        this.logger.error('Auto-scan failed', err instanceof Error ? err : undefined, {
+          promptId: prompt.id,
+        });
       });
     }
 
@@ -106,7 +110,7 @@ export class CreatePromptUseCase {
     });
 
     if (result.ok) {
-      this.logger.log(`Auto-scan queued for prompt ${promptId}: job ${result.value.jobId}`);
+      this.logger.info('Auto-scan queued', { promptId, jobId: result.value.jobId });
     } else if (result.error.code === 'SCAN_LIMIT_EXCEEDED' && userEmail) {
       const message = `Votre prompt a été créé. Le scan sera lancé lors de votre prochaine période.`;
       await this.emailPort.send({
@@ -115,9 +119,9 @@ export class CreatePromptUseCase {
         html: `<p>${message}</p>`,
         text: message,
       });
-      this.logger.log(`Scan quota exceeded for user ${userId}, notification sent`);
+      this.logger.info('Scan quota exceeded, notification sent', { userId });
     } else {
-      this.logger.warn(`Auto-scan rejected for prompt ${promptId}: ${result.error.message}`);
+      this.logger.warn('Auto-scan rejected', { promptId, error: result.error.message });
     }
   }
 }

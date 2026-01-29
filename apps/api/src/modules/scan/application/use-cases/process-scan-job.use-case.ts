@@ -1,8 +1,9 @@
-import { forwardRef, Inject, Injectable, Logger } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Plan, ScanJobStatus } from '@prisma/client';
 
 import { Result, withSpan } from '../../../../common';
+import { LoggerService } from '../../../../common/logger';
 import type { DomainError } from '../../../../common/errors/domain-error';
 import { NotFoundError } from '../../../../common/errors/domain-error';
 import { EmailQueueService } from '../../../../infrastructure/queue/email-queue.service';
@@ -30,8 +31,6 @@ export const PROCESS_SCAN_JOB_USE_CASE = Symbol('PROCESS_SCAN_JOB_USE_CASE');
 
 @Injectable()
 export class ProcessScanJobUseCase {
-  private readonly logger = new Logger(ProcessScanJobUseCase.name);
-
   constructor(
     @Inject(forwardRef(() => PROMPT_REPOSITORY))
     private readonly promptRepository: PromptRepository,
@@ -49,7 +48,10 @@ export class ProcessScanJobUseCase {
     private readonly emailQueueService: EmailQueueService,
     private readonly unsubscribeTokenService: UnsubscribeTokenService,
     private readonly configService: ConfigService,
-  ) {}
+    private readonly logger: LoggerService,
+  ) {
+    this.logger.setContext(ProcessScanJobUseCase.name);
+  }
 
   async execute(data: ScanJobData): Promise<Result<ScanJobResult, DomainError>> {
     return withSpan(
@@ -76,7 +78,7 @@ export class ProcessScanJobUseCase {
           startedAt: new Date(),
         });
 
-        this.logger.log(`Processing scan job ${scanJobId} for project ${projectId}`);
+        this.logger.info('Processing scan job', { scanJobId, projectId });
 
         const project = await this.projectRepository.findById(projectId);
         if (!project) {
@@ -120,13 +122,17 @@ export class ProcessScanJobUseCase {
               hasAtLeastOneSuccess = true;
               scansCreated++;
             } else if (result.reason) {
-              this.logger.debug(`Prompt ${prompt.id} skipped: ${result.reason}`);
+              this.logger.debug('Prompt skipped', { promptId: prompt.id, reason: result.reason });
             }
           } catch (error) {
             await this.scanJobRepository.incrementProgress(scanJobId, false);
             const errorMsg = error instanceof Error ? error.message : 'Unknown error';
             errorMessages.push(`Prompt ${prompt.id}: ${errorMsg}`);
-            this.logger.error(`Error processing prompt ${prompt.id}:`, error);
+            this.logger.error(
+              'Error processing prompt',
+              error instanceof Error ? error : undefined,
+              { promptId: prompt.id },
+            );
           }
         }
 
@@ -165,13 +171,19 @@ export class ProcessScanJobUseCase {
         // Check milestones (non-blocking)
         if (hasAtLeastOneSuccess) {
           this.tryCheckMilestones(userId, project).catch((error) => {
-            this.logger.error(`Milestone check failed for user ${userId}:`, error);
+            this.logger.error(
+              'Milestone check failed',
+              error instanceof Error ? error : undefined,
+              { userId },
+            );
           });
         }
 
-        this.logger.log(
-          `Completed scan job ${scanJobId}: status=${finalStatus}, scans=${scansCreated}`,
-        );
+        this.logger.info('Completed scan job', {
+          scanJobId,
+          status: finalStatus,
+          scansCreated,
+        });
 
         return Result.ok({
           status:
@@ -204,25 +216,32 @@ export class ProcessScanJobUseCase {
     const analysis = PromptSanitizerService.analyze(prompt.content);
 
     if (analysis.level === ThreatLevel.HIGH) {
-      this.logger.warn(
-        `Blocked HIGH threat prompt for project ${project.id}: ${analysis.matchedPatterns.join(', ')}`,
-      );
+      this.logger.warn('Blocked HIGH threat prompt', {
+        projectId: project.id,
+        matchedPatterns: analysis.matchedPatterns,
+      });
       return { success: false, reason: `Contenu suspect: ${analysis.matchedPatterns.join(', ')}` };
     }
 
     const wasSanitized = analysis.level === ThreatLevel.LOW;
     if (wasSanitized) {
-      this.logger.log(
-        `Sanitized LOW threat prompt for project ${project.id}: ${analysis.matchedPatterns.join(', ')}`,
-      );
+      this.logger.info('Sanitized LOW threat prompt', {
+        projectId: project.id,
+        matchedPatterns: analysis.matchedPatterns,
+      });
     }
 
     const { successes, failures } = await this.llmService.queryByPlan(analysis.sanitized, plan);
 
     if (successes.length === 0) {
-      this.logger.error(
-        `All LLM models failed for prompt ${prompt.id}: ${failures.map((f) => `${f.provider}/${f.model}: ${f.error}`).join(', ')}`,
-      );
+      this.logger.error('All LLM models failed for prompt', undefined, {
+        promptId: prompt.id,
+        failures: failures.map((f) => ({
+          provider: f.provider,
+          model: f.model,
+          error: f.error,
+        })),
+      });
       return {
         success: false,
         reason: `Echec des modeles LLM: ${failures.map((f) => `${f.provider}/${f.model}`).join(', ')}`,
@@ -230,9 +249,10 @@ export class ProcessScanJobUseCase {
     }
 
     if (failures.length > 0) {
-      this.logger.warn(
-        `Partial LLM failures for prompt ${prompt.id}: ${failures.map((f) => `${f.provider}/${f.model}`).join(', ')}`,
-      );
+      this.logger.warn('Partial LLM failures for prompt', {
+        promptId: prompt.id,
+        failures: failures.map((f) => ({ provider: f.provider, model: f.model })),
+      });
     }
 
     const results: LLMResult[] = successes.map((response) =>
@@ -257,15 +277,15 @@ export class ProcessScanJobUseCase {
     try {
       const user = await this.userRepository.findByIdWithEmailPrefs(userId);
       if (!user) {
-        this.logger.warn(`User ${userId} not found for post-scan email`);
+        this.logger.warn('User not found for post-scan email', { userId });
         return;
       }
 
       // Check if user has email notifications enabled
       if (!user.emailNotificationsEnabled) {
-        this.logger.debug(
-          `User ${userId} has email notifications disabled, skipping post-scan email`,
-        );
+        this.logger.debug('User has email notifications disabled, skipping post-scan email', {
+          userId,
+        });
         return;
       }
 
@@ -278,7 +298,7 @@ export class ProcessScanJobUseCase {
           lastSent.getMonth() === today.getMonth() &&
           lastSent.getDate() === today.getDate()
         ) {
-          this.logger.debug(`User ${userId} already received post-scan email today, skipping`);
+          this.logger.debug('User already received post-scan email today, skipping', { userId });
           return;
         }
       }
@@ -305,10 +325,14 @@ export class ProcessScanJobUseCase {
 
       await this.userRepository.updateLastPostScanEmailAt(userId, new Date());
 
-      this.logger.log(`Post-scan email queued for user ${userId}`);
+      this.logger.info('Post-scan email queued', { userId });
     } catch (error) {
       // Don't fail the scan if email fails
-      this.logger.error(`Failed to send post-scan email for user ${userId}:`, error);
+      this.logger.error(
+        'Failed to send post-scan email',
+        error instanceof Error ? error : undefined,
+        { userId },
+      );
     }
   }
 
@@ -373,7 +397,7 @@ export class ProcessScanJobUseCase {
         to: user.email,
         data: { firstName, scanCount, brandName: project.brandName, projectUrl, unsubscribeUrl },
       });
-      this.logger.log(`Scan count milestone (${scanCount}) email queued for user ${userId}`);
+      this.logger.info('Scan count milestone email queued', { userId, scanCount });
     }
 
     // First citation check: load recent scans (limited to 100 by default)
@@ -386,7 +410,7 @@ export class ProcessScanJobUseCase {
         to: user.email,
         data: { firstName, brandName: project.brandName, projectUrl, unsubscribeUrl },
       });
-      this.logger.log(`First citation milestone email queued for user ${userId}`);
+      this.logger.info('First citation milestone email queued', { userId });
     }
   }
 }

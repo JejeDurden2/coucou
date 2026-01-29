@@ -1,7 +1,8 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Plan, SubscriptionStatus, type User } from '@prisma/client';
 
+import { LoggerService } from '../../../../common/logger';
 import { PrismaService } from '../../../../prisma';
 import { EmailQueueService } from '../../../../infrastructure/queue';
 import { UnsubscribeTokenService } from '../../../email';
@@ -40,15 +41,16 @@ interface WebhookInvoice {
 
 @Injectable()
 export class HandleWebhookUseCase {
-  private readonly logger = new Logger(HandleWebhookUseCase.name);
-
   constructor(
     private readonly prisma: PrismaService,
     private readonly stripeService: StripeService,
     private readonly configService: ConfigService,
     private readonly emailQueueService: EmailQueueService,
     private readonly unsubscribeTokenService: UnsubscribeTokenService,
-  ) {}
+    private readonly logger: LoggerService,
+  ) {
+    this.logger.setContext(HandleWebhookUseCase.name);
+  }
 
   async execute(payload: string, signature: string): Promise<void> {
     const event = this.stripeService.constructWebhookEvent(payload, signature);
@@ -57,7 +59,7 @@ export class HandleWebhookUseCase {
       return;
     }
 
-    this.logger.log(`Processing webhook event: ${event.type}`);
+    this.logger.info('Processing webhook event', { type: event.type });
 
     switch (event.type) {
       case 'checkout.session.completed':
@@ -76,7 +78,7 @@ export class HandleWebhookUseCase {
         await this.handleInvoicePaid(event.data.object as unknown as WebhookInvoice);
         break;
       default:
-        this.logger.log(`Unhandled event type: ${event.type}`);
+        this.logger.info('Unhandled event type', { type: event.type });
     }
   }
 
@@ -117,7 +119,7 @@ export class HandleWebhookUseCase {
       }),
     ]);
 
-    this.logger.log(`Subscription created for user: ${user.id}, plan: ${plan}`);
+    this.logger.info('Subscription created', { userId: user.id, plan });
 
     if (plan !== Plan.FREE) {
       this.queueEmailSafe(
@@ -205,7 +207,7 @@ export class HandleWebhookUseCase {
       }),
     ]);
 
-    this.logger.log(`Subscription updated for user: ${user.id}, plan: ${plan}`);
+    this.logger.info('Subscription updated', { userId: user.id, plan });
   }
 
   private async handleSubscriptionDeleted(subscription: WebhookSubscription): Promise<void> {
@@ -229,7 +231,7 @@ export class HandleWebhookUseCase {
       }),
     ]);
 
-    this.logger.log(`Subscription deleted for user: ${user.id}, previousPlan: ${previousPlan}`);
+    this.logger.info('Subscription deleted', { userId: user.id, previousPlan });
 
     if (previousPlan === Plan.SOLO || previousPlan === Plan.PRO) {
       const frontendUrl = this.configService.get<string>('FRONTEND_URL') ?? 'https://coucou-ia.com';
@@ -267,12 +269,12 @@ export class HandleWebhookUseCase {
     if (user.lastPaymentFailedAt) {
       const elapsed = Date.now() - new Date(user.lastPaymentFailedAt).getTime();
       if (elapsed < ONE_DAY_MS) {
-        this.logger.log(`Dunning already active for user: ${user.id}, skipping`);
+        this.logger.info('Dunning already active, skipping', { userId: user.id });
         return;
       }
     }
 
-    this.logger.log(`Invoice payment failed for user: ${user.id}`);
+    this.logger.info('Invoice payment failed', { userId: user.id });
 
     await this.prisma.user.update({
       where: { id: user.id },
@@ -325,16 +327,14 @@ export class HandleWebhookUseCase {
         where: { id: user.id },
         data: { lastPaymentFailedAt: null },
       });
-      this.logger.log(`Payment recovered for user: ${user.id}`);
+      this.logger.info('Payment recovered', { userId: user.id });
     }
   }
 
   private queueEmailSafe(fn: () => Promise<unknown>, label: string, userId: string): void {
     fn().catch((error) => {
-      this.logger.error({
-        message: `Failed to queue ${label}`,
+      this.logger.error(`Failed to queue ${label}`, error instanceof Error ? error : undefined, {
         userId,
-        error: error instanceof Error ? error.message : String(error),
       });
     });
   }
@@ -345,7 +345,7 @@ export class HandleWebhookUseCase {
     });
 
     if (!user) {
-      this.logger.error(`User not found for Stripe customer: ${stripeCustomerId}`);
+      this.logger.error('User not found for Stripe customer', { stripeCustomerId });
     }
 
     return user;
@@ -372,7 +372,9 @@ export class HandleWebhookUseCase {
 
   private toSafeDate(unixTimestamp: number | undefined | null): Date {
     if (!unixTimestamp || unixTimestamp <= 0) {
-      this.logger.warn(`Invalid timestamp received: ${unixTimestamp}, using current date`);
+      this.logger.warn('Invalid timestamp received, using current date', {
+        timestamp: unixTimestamp,
+      });
       return new Date();
     }
     return new Date(unixTimestamp * 1000);

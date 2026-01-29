@@ -10,6 +10,17 @@ import type { SentimentScanRepository } from '../../domain';
 import type { LLMResponse } from '../../../scan';
 import type { GPT52LLMAdapter } from '../../../scan/infrastructure/adapters/gpt52-llm.adapter';
 import type { AnthropicClientService } from '../../../../common/infrastructure/anthropic/anthropic-client.service';
+import type { LoggerService } from '../../../../common/logger';
+
+const mockLogger = {
+  setContext: vi.fn(),
+  info: vi.fn(),
+  warn: vi.fn(),
+  error: vi.fn(),
+  debug: vi.fn(),
+  log: vi.fn(),
+  verbose: vi.fn(),
+} as unknown as LoggerService;
 
 describe('ExecuteSentimentScanUseCase', () => {
   let useCase: ExecuteSentimentScanUseCase;
@@ -97,6 +108,7 @@ describe('ExecuteSentimentScanUseCase', () => {
       mockSentimentRepository as SentimentScanRepository,
       mockGpt52Adapter as unknown as GPT52LLMAdapter,
       mockAnthropicClient as unknown as AnthropicClientService,
+      mockLogger,
     );
   });
 

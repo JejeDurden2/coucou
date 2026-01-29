@@ -1,8 +1,9 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Cron } from '@nestjs/schedule';
 import { Plan } from '@prisma/client';
 
+import { LoggerService } from '../../../common/logger';
 import { EmailQueueService } from '../../../infrastructure/queue';
 import { PrismaService } from '../../../prisma';
 import { UnsubscribeTokenService } from './services/unsubscribe-token.service';
@@ -25,16 +26,17 @@ interface InactiveUser {
 
 @Injectable()
 export class InactivityCheckService {
-  private readonly logger = new Logger(InactivityCheckService.name);
   private readonly frontendUrl: string;
   private readonly apiUrl: string;
 
   constructor(
+    private readonly logger: LoggerService,
     private readonly prisma: PrismaService,
     private readonly emailQueueService: EmailQueueService,
     private readonly configService: ConfigService,
     private readonly unsubscribeTokenService: UnsubscribeTokenService,
   ) {
+    this.logger.setContext(InactivityCheckService.name);
     this.frontendUrl = this.configService.get<string>('FRONTEND_URL', 'https://coucou-ia.com');
     this.apiUrl = this.configService.get<string>('API_URL', 'https://api.coucou-ia.com');
   }
@@ -48,7 +50,7 @@ export class InactivityCheckService {
     timeZone: 'Europe/Paris',
   })
   async handleInactivityCheck(): Promise<void> {
-    this.logger.log('Starting inactivity check cron job');
+    this.logger.info('Starting inactivity check cron job');
     const startTime = Date.now();
     let firstAnalysisEmailsSent = 0;
     let inactivityEmailsSent = 0;
@@ -71,16 +73,15 @@ export class InactivityCheckService {
       inactivityEmailsSent = returningResult.sent;
       skipped += returningResult.skipped;
     } catch (error) {
-      this.logger.error({
-        message: 'Inactivity check: critical error',
-        error: error instanceof Error ? error.message : String(error),
-      });
+      this.logger.error(
+        'Inactivity check: critical error',
+        error instanceof Error ? error : undefined,
+      );
     }
 
     const duration = Date.now() - startTime;
 
-    this.logger.log({
-      message: 'Inactivity check: completed',
+    this.logger.info('Inactivity check: completed', {
       firstAnalysisEmailsSent,
       inactivityEmailsSent,
       skipped,
@@ -97,7 +98,7 @@ export class InactivityCheckService {
     timeZone: 'Europe/Paris',
   })
   async handlePaidInactivityCheck(): Promise<void> {
-    this.logger.log('Starting paid inactivity check cron job');
+    this.logger.info('Starting paid inactivity check cron job');
     const startTime = Date.now();
 
     try {
@@ -106,17 +107,16 @@ export class InactivityCheckService {
         (user) => this.sendPaidInactivityEmail(user),
       );
 
-      this.logger.log({
-        message: 'Paid inactivity check: completed',
+      this.logger.info('Paid inactivity check: completed', {
         emailsSent: result.sent,
         skipped: result.skipped,
         durationMs: Date.now() - startTime,
       });
     } catch (error) {
-      this.logger.error({
-        message: 'Paid inactivity check: critical error',
-        error: error instanceof Error ? error.message : String(error),
-      });
+      this.logger.error(
+        'Paid inactivity check: critical error',
+        error instanceof Error ? error : undefined,
+      );
     }
   }
 
@@ -132,8 +132,7 @@ export class InactivityCheckService {
     while (hasMore) {
       const users = await findUsers(offset, BATCH_SIZE);
 
-      this.logger.log({
-        message: 'Inactivity check: processing batch',
+      this.logger.info('Inactivity check: processing batch', {
         offset,
         batchSize: users.length,
       });
@@ -152,11 +151,11 @@ export class InactivityCheckService {
           await sendEmail(user);
           sent++;
         } catch (error) {
-          this.logger.error({
-            message: 'Inactivity check: failed to send email',
-            userId: user.id,
-            error: error instanceof Error ? error.message : String(error),
-          });
+          this.logger.error(
+            'Inactivity check: failed to send email',
+            error instanceof Error ? error : undefined,
+            { userId: user.id },
+          );
         }
       }
 
@@ -283,8 +282,7 @@ export class InactivityCheckService {
       data: { lastInactivityEmailAt: now },
     });
 
-    this.logger.log({
-      message: 'Inactivity check: first-analysis email queued',
+    this.logger.info('Inactivity check: first-analysis email queued', {
       userId: user.id,
       projectId: project.id,
     });
@@ -313,8 +311,7 @@ export class InactivityCheckService {
       data: { lastInactivityEmailAt: now },
     });
 
-    this.logger.log({
-      message: 'Inactivity check: inactivity email queued',
+    this.logger.info('Inactivity check: inactivity email queued', {
       userId: user.id,
       projectId: project.id,
     });
@@ -389,8 +386,7 @@ export class InactivityCheckService {
       data: { lastInactivityEmailAt: now },
     });
 
-    this.logger.log({
-      message: 'Paid inactivity check: email queued',
+    this.logger.info('Paid inactivity check: email queued', {
       userId: user.id,
       projectId: project.id,
     });

@@ -1,9 +1,10 @@
-import { Inject, Injectable, Logger, Optional } from '@nestjs/common';
+import { Inject, Injectable, Optional } from '@nestjs/common';
 import { Plan } from '@prisma/client';
 
 import { ForbiddenError, ValidationError } from '../../../../common/errors/domain-error';
 import { Result } from '../../../../common/utils/result';
 import { withSpan } from '../../../../common/tracing';
+import { LoggerService } from '../../../../common/logger';
 import {
   EMAIL_PORT,
   type EmailAttachment,
@@ -47,15 +48,16 @@ function parseBase64Screenshot(raw: string): { data: string; extension: string }
 
 @Injectable()
 export class SendSupportRequestUseCase {
-  private readonly logger = new Logger(SendSupportRequestUseCase.name);
-
   constructor(
     @Inject(EMAIL_PORT)
     private readonly emailPort: EmailPort,
     @Optional()
     @Inject(PROJECT_REPOSITORY)
-    private readonly projectRepository?: ProjectRepository,
-  ) {}
+    private readonly projectRepository: ProjectRepository | undefined,
+    private readonly logger: LoggerService,
+  ) {
+    this.logger.setContext(SendSupportRequestUseCase.name);
+  }
 
   async execute(
     input: SendSupportRequestInput,
@@ -119,8 +121,7 @@ export class SendSupportRequestUseCase {
           attachments: screenshotAttachment ? [screenshotAttachment] : undefined,
         });
 
-        this.logger.log({
-          message: 'Support request sent',
+        this.logger.info('Support request sent', {
           userId,
           plan,
           category,

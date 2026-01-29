@@ -1,7 +1,8 @@
-import { forwardRef, Inject, Injectable, Logger } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { Plan } from '@prisma/client';
 
 import { ForbiddenError, NotFoundError, Result, ScanLimitError } from '../../../../common';
+import { LoggerService } from '../../../../common/logger';
 import { PROJECT_REPOSITORY, type ProjectRepository } from '../../../project';
 import { PROMPT_REPOSITORY, type PromptRepository } from '../../../prompt';
 import {
@@ -39,8 +40,6 @@ type ExecuteProjectScanError =
 
 @Injectable()
 export class ExecuteProjectScanUseCase {
-  private readonly logger = new Logger(ExecuteProjectScanUseCase.name);
-
   constructor(
     @Inject(forwardRef(() => PROMPT_REPOSITORY))
     private readonly promptRepository: PromptRepository,
@@ -51,7 +50,10 @@ export class ExecuteProjectScanUseCase {
     @Inject(LLM_SERVICE)
     private readonly llmService: LLMService,
     private readonly responseProcessor: LLMResponseProcessorService,
-  ) {}
+    private readonly logger: LoggerService,
+  ) {
+    this.logger.setContext(ExecuteProjectScanUseCase.name);
+  }
 
   async execute(
     projectId: string,
@@ -84,7 +86,7 @@ export class ExecuteProjectScanUseCase {
       return Result.ok([]);
     }
 
-    this.logger.log(`Executing scan for project ${projectId} with ${prompts.length} prompts`);
+    this.logger.info('Executing scan for project', { projectId, promptCount: prompts.length });
 
     const scanResults: ScanResponseDto[] = [];
     let hasAtLeastOneSuccess = false;
@@ -113,9 +115,10 @@ export class ExecuteProjectScanUseCase {
       const analysis = PromptSanitizerService.analyze(prompt.content);
 
       if (analysis.level === ThreatLevel.HIGH) {
-        this.logger.warn(
-          `Blocked HIGH threat prompt for project ${projectId}: ${analysis.matchedPatterns.join(', ')}`,
-        );
+        this.logger.warn('Blocked HIGH threat prompt', {
+          projectId,
+          matchedPatterns: analysis.matchedPatterns,
+        });
         scanResults.push({
           id: '',
           promptId: prompt.id,
@@ -130,17 +133,23 @@ export class ExecuteProjectScanUseCase {
 
       const wasSanitized = analysis.level === ThreatLevel.LOW;
       if (wasSanitized) {
-        this.logger.log(
-          `Sanitized LOW threat prompt for project ${projectId}: ${analysis.matchedPatterns.join(', ')}`,
-        );
+        this.logger.info('Sanitized LOW threat prompt', {
+          projectId,
+          matchedPatterns: analysis.matchedPatterns,
+        });
       }
 
       const { successes, failures } = await this.llmService.queryByPlan(analysis.sanitized, plan);
 
       if (successes.length === 0) {
-        this.logger.error(
-          `All LLM models failed for prompt ${prompt.id}: ${failures.map((f) => `${f.provider}/${f.model}: ${f.error}`).join(', ')}`,
-        );
+        this.logger.error('All LLM models failed for prompt', undefined, {
+          promptId: prompt.id,
+          failures: failures.map((f) => ({
+            provider: f.provider,
+            model: f.model,
+            error: f.error,
+          })),
+        });
         lastAllProvidersError = new AllProvidersFailedError(
           failures.map((f) => ({ provider: f.provider, error: f.error })),
         );
@@ -160,9 +169,10 @@ export class ExecuteProjectScanUseCase {
       hasAtLeastOneSuccess = true;
 
       if (failures.length > 0) {
-        this.logger.warn(
-          `Partial LLM failures for prompt ${prompt.id}: ${failures.map((f) => `${f.provider}/${f.model}`).join(', ')}`,
-        );
+        this.logger.warn('Partial LLM failures for prompt', {
+          promptId: prompt.id,
+          failures: failures.map((f) => ({ provider: f.provider, model: f.model })),
+        });
       }
 
       const results: LLMResult[] = successes.map((response) =>
@@ -207,7 +217,10 @@ export class ExecuteProjectScanUseCase {
 
     await this.projectRepository.updateLastScannedAt(project.id, new Date());
 
-    this.logger.log(`Completed ${scanResults.length} scans for project ${projectId}`);
+    this.logger.info('Completed scans for project', {
+      projectId,
+      scanCount: scanResults.length,
+    });
 
     return Result.ok(scanResults);
   }

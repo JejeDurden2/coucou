@@ -1,6 +1,8 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { LLMProvider, Plan } from '@prisma/client';
 import { LLMModel, PLAN_MODELS } from '@coucou-ia/shared';
+
+import { LoggerService } from '../../../../common/logger';
 
 import type {
   LLMResponse,
@@ -21,7 +23,6 @@ type QueryResult =
 
 @Injectable()
 export class LLMServiceImpl implements LLMService {
-  private readonly logger = new Logger(LLMServiceImpl.name);
   private readonly adaptersByModel: Map<LLMModel, LLMPort>;
 
   constructor(
@@ -30,7 +31,9 @@ export class LLMServiceImpl implements LLMService {
     private readonly gpt52Adapter: GPT52LLMAdapter,
     private readonly claudeSonnetAdapter: ClaudeSonnetLLMAdapter,
     private readonly claudeOpusAdapter: ClaudeOpusLLMAdapter,
+    private readonly logger: LoggerService,
   ) {
+    this.logger.setContext(LLMServiceImpl.name);
     this.adaptersByModel = new Map<LLMModel, LLMPort>([
       [LLMModel.GPT_4O_MINI, this.openaiAdapter],
       [LLMModel.GPT_4O, this.gpt4oAdapter],
@@ -71,7 +74,10 @@ export class LLMServiceImpl implements LLMService {
       return { success: true, response };
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : String(error);
-      this.logger.error(`Failed to query ${provider} (${model}): ${errorMessage}`);
+      this.logger.error('Failed to query LLM adapter', error instanceof Error ? error : undefined, {
+        provider,
+        model,
+      });
       return { success: false, provider, model, error: errorMessage };
     }
   }

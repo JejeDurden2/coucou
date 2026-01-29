@@ -1,8 +1,9 @@
-import { Injectable, Logger, type OnModuleInit, type OnModuleDestroy } from '@nestjs/common';
+import { Injectable, type OnModuleInit, type OnModuleDestroy } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectQueue } from '@nestjs/bullmq';
 import { Queue, QueueEvents } from 'bullmq';
 
+import { LoggerService } from '../../common/logger';
 import { EMAIL_QUEUE_NAME, defaultJobOptions } from './queue.config';
 import type { EmailJobData } from './types/email-job.types';
 
@@ -15,14 +16,16 @@ export interface QueueHealthStatus {
 
 @Injectable()
 export class EmailQueueService implements OnModuleInit, OnModuleDestroy {
-  private readonly logger = new Logger(EmailQueueService.name);
   private queueEvents: QueueEvents | null = null;
 
   constructor(
     @InjectQueue(EMAIL_QUEUE_NAME)
     private readonly emailQueue: Queue<EmailJobData>,
     private readonly configService: ConfigService,
-  ) {}
+    private readonly logger: LoggerService,
+  ) {
+    this.logger.setContext(EmailQueueService.name);
+  }
 
   onModuleInit(): void {
     this.setupEventListeners();
@@ -42,30 +45,18 @@ export class EmailQueueService implements OnModuleInit, OnModuleDestroy {
     });
 
     this.queueEvents.on('added', ({ jobId, name }) => {
-      this.logger.log({
-        message: 'Email job created',
-        jobId,
-        jobName: name,
-      });
+      this.logger.info('Email job created', { jobId, jobName: name });
     });
 
     this.queueEvents.on('completed', ({ jobId, returnvalue }) => {
-      this.logger.log({
-        message: 'Email job completed',
-        jobId,
-        result: returnvalue,
-      });
+      this.logger.info('Email job completed', { jobId, result: returnvalue });
     });
 
     this.queueEvents.on('failed', ({ jobId, failedReason }) => {
-      this.logger.error({
-        message: 'Email job failed',
-        jobId,
-        reason: failedReason,
-      });
+      this.logger.error('Email job failed', { jobId, reason: failedReason });
     });
 
-    this.logger.log('Email queue event listeners initialized');
+    this.logger.info('Email queue event listeners initialized');
   }
 
   async addJob(data: EmailJobData, options?: { delay?: number; jobId?: string }): Promise<string> {
@@ -74,8 +65,7 @@ export class EmailQueueService implements OnModuleInit, OnModuleDestroy {
       ...options,
     });
 
-    this.logger.log({
-      message: 'Email job queued',
+    this.logger.info('Email job queued', {
       jobId: job.id,
       type: data.type,
       to: data.to,
@@ -93,10 +83,7 @@ export class EmailQueueService implements OnModuleInit, OnModuleDestroy {
 
       return { status: 'healthy', latencyMs };
     } catch (error) {
-      this.logger.error({
-        message: 'Redis health check failed',
-        error: error instanceof Error ? error.message : 'Unknown error',
-      });
+      this.logger.error('Redis health check failed', error instanceof Error ? error : undefined);
       return { status: 'unhealthy' };
     }
   }

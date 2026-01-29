@@ -2,7 +2,18 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { promises as dns } from 'dns';
 import * as fs from 'fs/promises';
 
+import type { LoggerService } from '../../../../common/logger';
 import { DnsEmailValidatorService } from './dns-email-validator.service';
+
+const mockLogger = {
+  setContext: vi.fn(),
+  info: vi.fn(),
+  warn: vi.fn(),
+  error: vi.fn(),
+  debug: vi.fn(),
+  log: vi.fn(),
+  verbose: vi.fn(),
+} as unknown as LoggerService;
 
 vi.mock('dns', () => ({
   promises: {
@@ -28,7 +39,7 @@ describe('DnsEmailValidatorService', () => {
     // Default: valid MX records
     vi.mocked(dns.resolveMx).mockResolvedValue([{ exchange: 'mx.example.com', priority: 10 }]);
 
-    service = new DnsEmailValidatorService();
+    service = new DnsEmailValidatorService(mockLogger);
     await service.onModuleInit();
   });
 
@@ -174,7 +185,7 @@ describe('DnsEmailValidatorService', () => {
     it('should continue with empty set if blocklist file fails to load', async () => {
       vi.mocked(fs.readFile).mockRejectedValue(new Error('File not found'));
 
-      const newService = new DnsEmailValidatorService();
+      const newService = new DnsEmailValidatorService(mockLogger);
       await newService.onModuleInit();
 
       // Should not throw, and should allow emails from domains that would be blocked

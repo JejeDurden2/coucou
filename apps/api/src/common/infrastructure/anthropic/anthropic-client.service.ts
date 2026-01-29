@@ -1,8 +1,10 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import Anthropic from '@anthropic-ai/sdk';
 import type { MessageCreateParamsNonStreaming } from '@anthropic-ai/sdk/resources/messages';
 import type { ZodSchema } from 'zod';
+
+import { LoggerService } from '../../logger';
 
 export interface AnthropicMessageOptions {
   model: string;
@@ -27,14 +29,18 @@ export interface AnthropicTextResponse {
 
 @Injectable()
 export class AnthropicClientService {
-  private readonly logger = new Logger(AnthropicClientService.name);
   private client: Anthropic | null = null;
 
   /** Timestamp of last web-search call — used for rate limiting (30k tokens/min budget) */
   private lastWebSearchCallMs = 0;
   private readonly WEB_SEARCH_MIN_INTERVAL_MS = 25_000; // ~2.4 web-search calls/min max
 
-  constructor(private readonly configService: ConfigService) {}
+  constructor(
+    private readonly configService: ConfigService,
+    private readonly logger: LoggerService,
+  ) {
+    this.logger.setContext(AnthropicClientService.name);
+  }
 
   async createMessage(options: AnthropicMessageOptions): Promise<AnthropicTextResponse> {
     if (options.webSearch) {
@@ -84,8 +90,7 @@ export class AnthropicClientService {
     const inputTokens = response.usage.input_tokens;
     const outputTokens = response.usage.output_tokens;
 
-    this.logger.log({
-      message: 'Anthropic API call completed',
+    this.logger.info('Anthropic API call completed', {
       model: response.model,
       inputTokens,
       outputTokens,
@@ -112,7 +117,7 @@ export class AnthropicClientService {
 
     const result = schema.safeParse(parsed);
     if (!result.success) {
-      this.logger.error(`JSON validation failed: ${result.error.message}`);
+      this.logger.error('JSON validation failed', { error: result.error.message });
       throw new Error(`Invalid JSON structure: ${result.error.message}`);
     }
 
@@ -123,7 +128,7 @@ export class AnthropicClientService {
     const elapsed = Date.now() - this.lastWebSearchCallMs;
     if (elapsed < this.WEB_SEARCH_MIN_INTERVAL_MS) {
       const waitMs = this.WEB_SEARCH_MIN_INTERVAL_MS - elapsed;
-      this.logger.log(`Rate limiter: waiting ${waitMs}ms before next web search call`);
+      this.logger.info('Rate limiter: waiting before next web search call', { waitMs });
       await new Promise((r) => setTimeout(r, waitMs));
     }
   }

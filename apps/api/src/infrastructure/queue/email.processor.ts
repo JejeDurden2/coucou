@@ -1,6 +1,8 @@
 import { Processor, WorkerHost, OnWorkerEvent } from '@nestjs/bullmq';
-import { Inject, Logger } from '@nestjs/common';
+import { Inject } from '@nestjs/common';
 import type { Job } from 'bullmq';
+
+import { LoggerService } from '../../common/logger';
 
 import {
   EMAIL_PORT,
@@ -212,20 +214,19 @@ const EMAIL_CONFIG: Record<EmailJobType, { generator: EmailGenerator; subject: s
   concurrency: 1, // Sequential processing to avoid Resend rate limits
 })
 export class EmailProcessor extends WorkerHost {
-  private readonly logger = new Logger(EmailProcessor.name);
-
   constructor(
     @Inject(EMAIL_PORT)
     private readonly emailPort: EmailPort,
+    private readonly logger: LoggerService,
   ) {
     super();
+    this.logger.setContext(EmailProcessor.name);
   }
 
   async process(job: Job<EmailJobData>): Promise<EmailJobResult> {
     const { type, to, data } = job.data;
 
-    this.logger.log({
-      message: 'Processing email job',
+    this.logger.info('Processing email job', {
       jobId: job.id,
       type,
       to,
@@ -234,11 +235,7 @@ export class EmailProcessor extends WorkerHost {
 
     const config = EMAIL_CONFIG[type];
     if (!config) {
-      this.logger.error({
-        message: 'Unknown email job type',
-        jobId: job.id,
-        type,
-      });
+      this.logger.error('Unknown email job type', { jobId: job.id, type });
       throw new Error(`Unknown email job type: ${type}`);
     }
 
@@ -251,33 +248,25 @@ export class EmailProcessor extends WorkerHost {
       text,
     });
 
-    this.logger.log({
-      message: 'Email sent successfully',
-      jobId: job.id,
-      type,
-      to,
-    });
+    this.logger.info('Email sent successfully', { jobId: job.id, type, to });
 
     return { success: true };
   }
 
   @OnWorkerEvent('failed')
   onFailed(job: Job<EmailJobData>, error: Error): void {
-    this.logger.error({
-      message: 'Email job failed',
+    this.logger.error('Email job failed', error, {
       jobId: job.id,
       type: job.data.type,
       to: job.data.to,
       attempt: job.attemptsMade,
       maxAttempts: job.opts.attempts,
-      error: error.message,
     });
   }
 
   @OnWorkerEvent('completed')
   onCompleted(job: Job<EmailJobData>): void {
-    this.logger.log({
-      message: 'Email job completed',
+    this.logger.info('Email job completed', {
       jobId: job.id,
       type: job.data.type,
       to: job.data.to,

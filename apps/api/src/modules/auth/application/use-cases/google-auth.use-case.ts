@@ -1,8 +1,9 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { CURRENT_TERMS_VERSION, CURRENT_PRIVACY_VERSION } from '@coucou-ia/shared';
 
+import { LoggerService } from '../../../../common/logger';
 import { PrismaService } from '../../../../prisma';
 import { EmailQueueService } from '../../../../infrastructure/queue';
 import { EMAIL_PORT, type EmailPort, generateWelcomeEmail } from '../../../email';
@@ -18,8 +19,6 @@ import type { GoogleProfile } from '../../presentation/strategies/google.strateg
 
 @Injectable()
 export class GoogleAuthUseCase {
-  private readonly logger = new Logger(GoogleAuthUseCase.name);
-
   constructor(
     @Inject(USER_REPOSITORY)
     private readonly userRepository: UserRepository,
@@ -31,7 +30,10 @@ export class GoogleAuthUseCase {
     private readonly configService: ConfigService,
     private readonly prisma: PrismaService,
     private readonly emailQueueService: EmailQueueService,
-  ) {}
+    private readonly logger: LoggerService,
+  ) {
+    this.logger.setContext(GoogleAuthUseCase.name);
+  }
 
   async execute(profile: GoogleProfile): Promise<AuthResponseDto> {
     // Check if user exists by Google ID
@@ -82,10 +84,22 @@ export class GoogleAuthUseCase {
     // Send welcome email and admin notification for new users (non-blocking)
     if (isNewUser) {
       this.sendWelcomeEmail(user).catch((error) => {
-        this.logger.error(`Failed to send welcome email to ${user.email}`, error);
+        this.logger.error(
+          'Failed to send welcome email',
+          error instanceof Error ? error : undefined,
+          {
+            email: user.email,
+          },
+        );
       });
       this.emailQueueService.notifyNewUser(user, 'google').catch((error) => {
-        this.logger.error(`Failed to send admin notification for ${user.email}`, error);
+        this.logger.error(
+          'Failed to send admin notification',
+          error instanceof Error ? error : undefined,
+          {
+            email: user.email,
+          },
+        );
       });
     }
 

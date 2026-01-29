@@ -1,4 +1,4 @@
-import { forwardRef, Inject, Injectable, Logger } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { Plan } from '@prisma/client';
 
 import {
@@ -9,6 +9,7 @@ import {
   ValidationError,
   withSpan,
 } from '../../../../common';
+import { LoggerService } from '../../../../common/logger';
 import { PROJECT_REPOSITORY, type ProjectRepository } from '../../../project';
 import { PROMPT_REPOSITORY, type PromptRepository } from '../../../prompt';
 import {
@@ -48,8 +49,6 @@ type ExecuteScanError =
 
 @Injectable()
 export class ExecuteScanUseCase {
-  private readonly logger = new Logger(ExecuteScanUseCase.name);
-
   constructor(
     @Inject(forwardRef(() => PROMPT_REPOSITORY))
     private readonly promptRepository: PromptRepository,
@@ -60,7 +59,10 @@ export class ExecuteScanUseCase {
     @Inject(LLM_SERVICE)
     private readonly llmService: LLMService,
     private readonly responseProcessor: LLMResponseProcessorService,
-  ) {}
+    private readonly logger: LoggerService,
+  ) {
+    this.logger.setContext(ExecuteScanUseCase.name);
+  }
 
   async execute(
     promptId: string,
@@ -114,9 +116,10 @@ export class ExecuteScanUseCase {
         const analysis = PromptSanitizerService.analyze(prompt.content);
 
         if (analysis.level === ThreatLevel.HIGH) {
-          this.logger.warn(
-            `Blocked HIGH threat prompt ${promptId}: ${analysis.matchedPatterns.join(', ')}`,
-          );
+          this.logger.warn('Blocked HIGH threat prompt', {
+            promptId,
+            matchedPatterns: analysis.matchedPatterns,
+          });
           return Result.err(
             new ValidationError([
               `Contenu suspect détecté: ${analysis.matchedPatterns.join(', ')}`,
@@ -125,17 +128,18 @@ export class ExecuteScanUseCase {
         }
 
         if (analysis.level === ThreatLevel.LOW) {
-          this.logger.log(
-            `Sanitized LOW threat prompt ${promptId}: ${analysis.matchedPatterns.join(', ')}`,
-          );
+          this.logger.info('Sanitized LOW threat prompt', {
+            promptId,
+            matchedPatterns: analysis.matchedPatterns,
+          });
         }
 
-        this.logger.log(`Executing scan for prompt ${promptId} with plan ${plan}`);
+        this.logger.info('Executing scan for prompt', { promptId, plan });
 
         const { successes, failures } = await this.llmService.queryByPlan(analysis.sanitized, plan);
 
         if (successes.length === 0) {
-          this.logger.error(`All LLM models failed for prompt ${promptId}`);
+          this.logger.error('All LLM models failed for prompt', undefined, { promptId });
           return Result.err(
             new AllProvidersFailedError(
               failures.map((f) => ({ provider: f.provider, error: f.error })),
@@ -144,9 +148,10 @@ export class ExecuteScanUseCase {
         }
 
         if (failures.length > 0) {
-          this.logger.warn(
-            `Partial LLM failures for prompt ${promptId}: ${failures.map((f) => `${f.provider}/${f.model}`).join(', ')}`,
-          );
+          this.logger.warn('Partial LLM failures for prompt', {
+            promptId,
+            failures: failures.map((f) => ({ provider: f.provider, model: f.model })),
+          });
         }
 
         const results: LLMResult[] = successes.map((response) =>
@@ -162,7 +167,7 @@ export class ExecuteScanUseCase {
         await this.promptRepository.updateLastScannedAt(promptId, scanDate);
         await this.projectRepository.updateLastScannedAt(project.id, scanDate);
 
-        this.logger.log(`Scan ${scan.id} completed for prompt ${promptId}`);
+        this.logger.info('Scan completed for prompt', { scanId: scan.id, promptId });
 
         return Result.ok({
           id: scan.id,

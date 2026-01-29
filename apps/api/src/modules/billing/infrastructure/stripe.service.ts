@@ -1,9 +1,10 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Plan } from '@prisma/client';
 import Stripe from 'stripe';
 
 import { ConfigurationError, ExternalServiceError } from '../../../common';
+import { LoggerService } from '../../../common/logger';
 
 interface StripeCheckoutSession {
   id: string;
@@ -42,14 +43,17 @@ interface StripeWebhookEvent {
 
 @Injectable()
 export class StripeService {
-  private readonly logger = new Logger(StripeService.name);
   private readonly stripe: Stripe;
   private readonly secretKey: string;
   private readonly webhookSecret: string;
   private readonly priceIds: Record<Exclude<Plan, 'FREE'>, string>;
   private readonly baseUrl = 'https://api.stripe.com/v1';
 
-  constructor(private readonly configService: ConfigService) {
+  constructor(
+    private readonly configService: ConfigService,
+    private readonly logger: LoggerService,
+  ) {
+    this.logger.setContext(StripeService.name);
     this.secretKey = this.configService.get<string>('STRIPE_SECRET_KEY') ?? '';
     this.webhookSecret = this.configService.get<string>('STRIPE_WEBHOOK_SECRET') ?? '';
     this.priceIds = {
@@ -71,7 +75,7 @@ export class StripeService {
 
     if (!response.ok) {
       // Log status code only, not response body (may contain sensitive data)
-      this.logger.error(`Stripe API error: status ${response.status}`);
+      this.logger.error('Stripe API error', { status: response.status });
       throw new ExternalServiceError('Stripe', 'Payment service unavailable');
     }
 
@@ -191,7 +195,8 @@ export class StripeService {
       };
     } catch (error) {
       this.logger.error(
-        `Webhook signature verification failed: ${error instanceof Error ? error.message : 'Unknown error'}`,
+        'Webhook signature verification failed',
+        error instanceof Error ? error : undefined,
       );
       return null;
     }

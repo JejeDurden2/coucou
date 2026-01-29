@@ -1,8 +1,9 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Cron } from '@nestjs/schedule';
 import { Plan } from '@prisma/client';
 
+import { LoggerService } from '../../../../common/logger';
 import { EmailQueueService } from '../../../../infrastructure/queue';
 import { PrismaService } from '../../../../prisma';
 import { UnsubscribeTokenService } from './unsubscribe-token.service';
@@ -24,16 +25,17 @@ interface OnboardingUser {
 
 @Injectable()
 export class OnboardingEmailService {
-  private readonly logger = new Logger(OnboardingEmailService.name);
   private readonly frontendUrl: string;
   private readonly apiUrl: string;
 
   constructor(
+    private readonly logger: LoggerService,
     private readonly prisma: PrismaService,
     private readonly emailQueueService: EmailQueueService,
     private readonly configService: ConfigService,
     private readonly unsubscribeTokenService: UnsubscribeTokenService,
   ) {
+    this.logger.setContext(OnboardingEmailService.name);
     this.frontendUrl = this.configService.get<string>('FRONTEND_URL', 'https://coucou-ia.com');
     this.apiUrl = this.configService.get<string>('API_URL', 'https://api.coucou-ia.com');
   }
@@ -47,7 +49,7 @@ export class OnboardingEmailService {
     timeZone: 'Europe/Paris',
   })
   async handleOnboardingDrip(): Promise<void> {
-    this.logger.log('Starting onboarding drip cron job');
+    this.logger.info('Starting onboarding drip cron job');
     const startTime = Date.now();
     let emailsSent = 0;
 
@@ -64,14 +66,13 @@ export class OnboardingEmailService {
       // E5: Day 7 — last chance
       emailsSent += await this.processDay7Users();
     } catch (error) {
-      this.logger.error({
-        message: 'Onboarding drip: critical error',
-        error: error instanceof Error ? error.message : String(error),
-      });
+      this.logger.error(
+        'Onboarding drip: critical error',
+        error instanceof Error ? error : undefined,
+      );
     }
 
-    this.logger.log({
-      message: 'Onboarding drip: completed',
+    this.logger.info('Onboarding drip: completed', {
       emailsSent,
       durationMs: Date.now() - startTime,
     });
@@ -113,15 +114,15 @@ export class OnboardingEmailService {
         });
         sent++;
       } catch (error) {
-        this.logger.error({
-          message: 'Onboarding drip: failed to send E2',
-          userId: user.id,
-          error: error instanceof Error ? error.message : String(error),
-        });
+        this.logger.error(
+          'Onboarding drip: failed to send E2',
+          error instanceof Error ? error : undefined,
+          { userId: user.id },
+        );
       }
     }
 
-    this.logger.log({ message: 'Onboarding E2 (create-brand)', sent });
+    this.logger.info('Onboarding E2 (create-brand)', { sent });
     return sent;
   }
 
@@ -174,15 +175,15 @@ export class OnboardingEmailService {
         });
         sent++;
       } catch (error) {
-        this.logger.error({
-          message: 'Onboarding drip: failed to send E3',
-          userId: user.id,
-          error: error instanceof Error ? error.message : String(error),
-        });
+        this.logger.error(
+          'Onboarding drip: failed to send E3',
+          error instanceof Error ? error : undefined,
+          { userId: user.id },
+        );
       }
     }
 
-    this.logger.log({ message: 'Onboarding E3 (first-scan)', sent });
+    this.logger.info('Onboarding E3 (first-scan)', { sent });
     return sent;
   }
 
@@ -234,15 +235,15 @@ export class OnboardingEmailService {
         });
         sent++;
       } catch (error) {
-        this.logger.error({
-          message: 'Onboarding drip: failed to send E4',
-          userId: user.id,
-          error: error instanceof Error ? error.message : String(error),
-        });
+        this.logger.error(
+          'Onboarding drip: failed to send E4',
+          error instanceof Error ? error : undefined,
+          { userId: user.id },
+        );
       }
     }
 
-    this.logger.log({ message: 'Onboarding E4 (competitor-fomo)', sent });
+    this.logger.info('Onboarding E4 (competitor-fomo)', { sent });
     return sent;
   }
 
@@ -294,15 +295,15 @@ export class OnboardingEmailService {
         });
         sent++;
       } catch (error) {
-        this.logger.error({
-          message: 'Onboarding drip: failed to send E5',
-          userId: user.id,
-          error: error instanceof Error ? error.message : String(error),
-        });
+        this.logger.error(
+          'Onboarding drip: failed to send E5',
+          error instanceof Error ? error : undefined,
+          { userId: user.id },
+        );
       }
     }
 
-    this.logger.log({ message: 'Onboarding E5 (last-chance)', sent });
+    this.logger.info('Onboarding E5 (last-chance)', { sent });
     return sent;
   }
 }

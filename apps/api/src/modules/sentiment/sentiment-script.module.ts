@@ -1,9 +1,10 @@
-import { Injectable, Logger, Module } from '@nestjs/common';
+import { Injectable, Module } from '@nestjs/common';
 import { InjectQueue, BullModule } from '@nestjs/bullmq';
 import { Queue } from 'bullmq';
 
 import { SENTIMENT_QUEUE_NAME, sentimentJobOptions } from '../../infrastructure/queue/queue.config';
 import type { SentimentJobData } from '../../infrastructure/queue/types/sentiment-job.types';
+import { LoggerModule, LoggerService } from '../../common/logger';
 
 /**
  * Simplified queue service for scripts.
@@ -11,21 +12,18 @@ import type { SentimentJobData } from '../../infrastructure/queue/types/sentimen
  */
 @Injectable()
 export class SentimentScriptQueueService {
-  private readonly logger = new Logger(SentimentScriptQueueService.name);
-
   constructor(
     @InjectQueue(SENTIMENT_QUEUE_NAME)
     private readonly sentimentQueue: Queue<SentimentJobData>,
-  ) {}
+    private readonly logger: LoggerService,
+  ) {
+    this.logger.setContext(SentimentScriptQueueService.name);
+  }
 
   async addJob(data: SentimentJobData): Promise<string> {
     const job = await this.sentimentQueue.add('sentiment-scan', data, sentimentJobOptions);
 
-    this.logger.log({
-      message: 'Sentiment job queued',
-      jobId: job.id,
-      projectId: data.projectId,
-    });
+    this.logger.info('Sentiment job queued', { jobId: job.id, projectId: data.projectId });
 
     return job.id ?? '';
   }
@@ -43,6 +41,7 @@ export class SentimentScriptQueueService {
       name: SENTIMENT_QUEUE_NAME,
       defaultJobOptions: sentimentJobOptions,
     }),
+    LoggerModule,
   ],
   providers: [SentimentScriptQueueService],
   exports: [SentimentScriptQueueService],

@@ -1,7 +1,8 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { z } from 'zod';
 
 import { AnthropicClientService } from '../../../../common/infrastructure/anthropic/anthropic-client.service';
+import { LoggerService } from '../../../../common/logger';
 import type {
   BrandAnalyzerPort,
   BrandContext,
@@ -62,12 +63,15 @@ Règles IMPORTANTES:
 
 @Injectable()
 export class ClaudeBrandAnalyzerAdapter implements BrandAnalyzerPort {
-  private readonly logger = new Logger(ClaudeBrandAnalyzerAdapter.name);
-
-  constructor(private readonly anthropicClient: AnthropicClientService) {}
+  constructor(
+    private readonly anthropicClient: AnthropicClientService,
+    private readonly logger: LoggerService,
+  ) {
+    this.logger.setContext(ClaudeBrandAnalyzerAdapter.name);
+  }
 
   async extractContext(url: string, brandName: string): Promise<BrandContext> {
-    this.logger.log(`Extracting brand context for ${brandName} from ${url}`);
+    this.logger.info('Extracting brand context', { brandName, url });
 
     const response = await this.anthropicClient.createMessage({
       model: 'claude-sonnet-4-5-20250929',
@@ -78,13 +82,14 @@ export class ClaudeBrandAnalyzerAdapter implements BrandAnalyzerPort {
       webSearch: true,
     });
 
-    this.logger.debug(
-      `Raw brand context response for ${brandName}: ${response.text.slice(0, 500)}`,
-    );
+    this.logger.debug('Raw brand context response', {
+      brandName,
+      responsePreview: response.text.slice(0, 500),
+    });
 
     const parsed = this.anthropicClient.extractJson(response.text, BrandContextSchema);
 
-    this.logger.log(`Successfully extracted brand context for ${brandName}`);
+    this.logger.info('Successfully extracted brand context', { brandName });
     return parsed;
   }
 
@@ -93,7 +98,7 @@ export class ClaudeBrandAnalyzerAdapter implements BrandAnalyzerPort {
     brandName: string,
     count: number,
   ): Promise<GeneratedPrompt[]> {
-    this.logger.log(`Generating ${count} prompts for ${brandName}`);
+    this.logger.info('Generating prompts', { brandName, count });
 
     const response = await this.anthropicClient.createMessage({
       model: 'claude-haiku-4-5-20251001',
@@ -104,7 +109,7 @@ export class ClaudeBrandAnalyzerAdapter implements BrandAnalyzerPort {
 
     const parsed = this.anthropicClient.extractJson(response.text, GeneratedPromptsSchema);
 
-    this.logger.log(`Successfully generated ${parsed.length} prompts for ${brandName}`);
+    this.logger.info('Successfully generated prompts', { brandName, promptsCount: parsed.length });
     return parsed;
   }
 }

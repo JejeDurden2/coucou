@@ -1,6 +1,7 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
+import { LoggerService } from '../../../../common/logger';
 import { EMAIL_PORT, type EmailPort } from '../../application/ports/email.port';
 import { generatePlanLimitEmail } from '../templates/plan-limit.template';
 import { generatePlanApproachingLimitEmail } from '../templates/plan-approaching-limit.template';
@@ -33,14 +34,15 @@ interface UserInfo {
 
 @Injectable()
 export class PlanLimitNotificationService {
-  private readonly logger = new Logger(PlanLimitNotificationService.name);
   private readonly frontendUrl: string;
 
   constructor(
+    private readonly logger: LoggerService,
     @Inject(EMAIL_PORT)
     private readonly emailPort: EmailPort,
     private readonly configService: ConfigService,
   ) {
+    this.logger.setContext(PlanLimitNotificationService.name);
     this.frontendUrl = this.configService.get<string>('FRONTEND_URL', 'https://coucou-ia.com');
   }
 
@@ -57,22 +59,22 @@ export class PlanLimitNotificationService {
   ): void {
     if (currentCount >= limit) {
       this.sendPlanLimitEmail(userInfo, plan, resourceType, currentCount, limit).catch((error) => {
-        this.logger.error({
-          message: 'Failed to send plan limit email',
-          userId: userInfo.email,
-          error: error instanceof Error ? error.message : String(error),
-        });
+        this.logger.error(
+          'Failed to send plan limit email',
+          error instanceof Error ? error : undefined,
+          { email: userInfo.email },
+        );
       });
     } else {
       const threshold = Math.ceil(limit * APPROACHING_LIMIT_THRESHOLD);
       if (currentCount >= threshold) {
         this.sendApproachingLimitEmail(userInfo, plan, resourceType, currentCount, limit).catch(
           (error) => {
-            this.logger.error({
-              message: 'Failed to send approaching-limit email',
-              userId: userInfo.email,
-              error: error instanceof Error ? error.message : String(error),
-            });
+            this.logger.error(
+              'Failed to send approaching-limit email',
+              error instanceof Error ? error : undefined,
+              { email: userInfo.email },
+            );
           },
         );
       }
@@ -116,11 +118,7 @@ export class PlanLimitNotificationService {
 
     await this.emailPort.send({ to: userInfo.email, subject, html, text });
 
-    this.logger.log({
-      message: 'Plan limit email sent',
-      resourceType,
-      plan,
-    });
+    this.logger.info('Plan limit email sent', { resourceType, plan });
   }
 
   private async sendApproachingLimitEmail(
@@ -145,10 +143,6 @@ export class PlanLimitNotificationService {
 
     await this.emailPort.send({ to: userInfo.email, subject, html, text });
 
-    this.logger.log({
-      message: 'Approaching limit email sent',
-      resourceType,
-      plan,
-    });
+    this.logger.info('Approaching limit email sent', { resourceType, plan });
   }
 }

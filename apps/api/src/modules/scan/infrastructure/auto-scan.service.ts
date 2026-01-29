@@ -1,7 +1,8 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
 import { Plan } from '@prisma/client';
 
+import { LoggerService } from '../../../common/logger';
 import { PrismaService } from '../../../prisma';
 import { PROJECT_REPOSITORY, type ProjectRepository } from '../../project';
 import {
@@ -17,15 +18,16 @@ interface ProjectToScan {
 
 @Injectable()
 export class AutoScanService {
-  private readonly logger = new Logger(AutoScanService.name);
-
   constructor(
     private readonly prisma: PrismaService,
     @Inject(PROJECT_REPOSITORY)
     private readonly projectRepository: ProjectRepository,
     @Inject(QUEUE_PROJECT_SCAN_USE_CASE)
     private readonly queueProjectScanUseCase: QueueProjectScanUseCase,
-  ) {}
+    private readonly logger: LoggerService,
+  ) {
+    this.logger.setContext(AutoScanService.name);
+  }
 
   /**
    * SOLO plan: Monday and Thursday at 9:30 Paris time
@@ -35,7 +37,7 @@ export class AutoScanService {
     timeZone: 'Europe/Paris',
   })
   async handleSoloAutoScan(): Promise<void> {
-    this.logger.log('Starting SOLO auto-scan cron job');
+    this.logger.info('Starting SOLO auto-scan cron job');
     await this.processAutoScans(Plan.SOLO);
   }
 
@@ -47,7 +49,7 @@ export class AutoScanService {
     timeZone: 'Europe/Paris',
   })
   async handleProAutoScan(): Promise<void> {
-    this.logger.log('Starting PRO auto-scan cron job');
+    this.logger.info('Starting PRO auto-scan cron job');
     await this.processAutoScans(Plan.PRO);
   }
 
@@ -59,8 +61,7 @@ export class AutoScanService {
     try {
       const projects = await this.findProjectsByPlan(plan);
 
-      this.logger.log({
-        message: 'Auto-scan: found projects',
+      this.logger.info('Auto-scan: found projects', {
         plan,
         projectCount: projects.length,
       });
@@ -87,41 +88,36 @@ export class AutoScanService {
             await this.projectRepository.updateAutoScanDates(project.id, now, nextAutoScanAt);
             successCount++;
 
-            this.logger.log({
-              message: 'Auto-scan: project queued',
+            this.logger.info('Auto-scan: project queued', {
               projectId: project.id,
               jobId: result.value.jobId,
               source: 'auto',
             });
           } else {
             errorCount++;
-            this.logger.warn({
-              message: 'Auto-scan: failed to queue project',
+            this.logger.warn('Auto-scan: failed to queue project', {
               projectId: project.id,
               error: result.error.message,
             });
           }
         } catch (error) {
           errorCount++;
-          this.logger.error({
-            message: 'Auto-scan: error processing project',
-            projectId: project.id,
-            error: error instanceof Error ? error.message : String(error),
-          });
+          this.logger.error(
+            'Auto-scan: error processing project',
+            error instanceof Error ? error : undefined,
+            { projectId: project.id },
+          );
         }
       }
     } catch (error) {
-      this.logger.error({
-        message: 'Auto-scan: critical error',
+      this.logger.error('Auto-scan: critical error', error instanceof Error ? error : undefined, {
         plan,
-        error: error instanceof Error ? error.message : String(error),
       });
     }
 
     const duration = Date.now() - startTime;
 
-    this.logger.log({
-      message: 'Auto-scan: completed',
+    this.logger.info('Auto-scan: completed', {
       plan,
       successCount,
       errorCount,

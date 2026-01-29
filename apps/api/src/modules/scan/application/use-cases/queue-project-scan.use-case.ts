@@ -1,7 +1,8 @@
-import { forwardRef, Inject, Injectable, Logger } from '@nestjs/common';
+import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { Plan, ScanJobStatus } from '@prisma/client';
 
 import { ForbiddenError, NotFoundError, Result, ScanLimitError } from '../../../../common';
+import { LoggerService } from '../../../../common/logger';
 import { ScanQueueService } from '../../../../infrastructure/queue';
 import { PROJECT_REPOSITORY, type ProjectRepository } from '../../../project';
 import { PROMPT_REPOSITORY, type PromptRepository } from '../../../prompt';
@@ -36,8 +37,6 @@ export const QUEUE_PROJECT_SCAN_USE_CASE = Symbol('QUEUE_PROJECT_SCAN_USE_CASE')
 
 @Injectable()
 export class QueueProjectScanUseCase {
-  private readonly logger = new Logger(QueueProjectScanUseCase.name);
-
   constructor(
     @Inject(forwardRef(() => PROMPT_REPOSITORY))
     private readonly promptRepository: PromptRepository,
@@ -48,7 +47,10 @@ export class QueueProjectScanUseCase {
     @Inject(SCAN_JOB_REPOSITORY)
     private readonly scanJobRepository: ScanJobRepository,
     private readonly scanQueueService: ScanQueueService,
-  ) {}
+    private readonly logger: LoggerService,
+  ) {
+    this.logger.setContext(QueueProjectScanUseCase.name);
+  }
 
   async execute(
     input: QueueProjectScanInput,
@@ -114,9 +116,11 @@ export class QueueProjectScanUseCase {
       source,
     });
 
-    this.logger.log(
-      `Queued scan job ${scanJob.id} for project ${projectId} with ${prompts.length} prompts`,
-    );
+    this.logger.info('Queued scan job for project', {
+      scanJobId: scanJob.id,
+      projectId,
+      promptCount: prompts.length,
+    });
 
     return Result.ok({
       jobId: scanJob.id,

@@ -1,8 +1,9 @@
-import { Inject, Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { randomBytes } from 'crypto';
 
 import { Result } from '../../../../common';
+import { LoggerService } from '../../../../common/logger';
 import { EmailQueueService } from '../../../../infrastructure/queue';
 import {
   USER_REPOSITORY,
@@ -15,8 +16,6 @@ const TOKEN_EXPIRY_MINUTES = 30;
 
 @Injectable()
 export class ForgotPasswordUseCase {
-  private readonly logger = new Logger(ForgotPasswordUseCase.name);
-
   constructor(
     @Inject(USER_REPOSITORY)
     private readonly userRepository: UserRepository,
@@ -24,20 +23,23 @@ export class ForgotPasswordUseCase {
     private readonly passwordResetRepository: PasswordResetRepository,
     private readonly emailQueueService: EmailQueueService,
     private readonly configService: ConfigService,
-  ) {}
+    private readonly logger: LoggerService,
+  ) {
+    this.logger.setContext(ForgotPasswordUseCase.name);
+  }
 
   async execute(email: string): Promise<Result<void, never>> {
     // Always return success to prevent email enumeration
     const user = await this.userRepository.findByEmail(email);
 
     if (!user) {
-      this.logger.debug(`Password reset requested for non-existent email: ${email}`);
+      this.logger.debug('Password reset requested for non-existent email', { email });
       return Result.ok(undefined);
     }
 
     // Users with only Google OAuth cannot reset password
     if (!user.password && user.googleId) {
-      this.logger.debug(`Password reset requested for OAuth-only user: ${email}`);
+      this.logger.debug('Password reset requested for OAuth-only user', { email });
       return Result.ok(undefined);
     }
 

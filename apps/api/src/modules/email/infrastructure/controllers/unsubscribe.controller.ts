@@ -1,17 +1,19 @@
-import { Controller, Get, Header, Logger, Query } from '@nestjs/common';
+import { Controller, Get, Header, Query } from '@nestjs/common';
 
+import { LoggerService } from '../../../../common/logger';
 import { PrismaService } from '../../../../prisma';
 import { UnsubscribeTokenService } from '../services/unsubscribe-token.service';
 import { renderUnsubscribePage } from '../templates/unsubscribe-page.template';
 
 @Controller('email')
 export class UnsubscribeController {
-  private readonly logger = new Logger(UnsubscribeController.name);
-
   constructor(
+    private readonly logger: LoggerService,
     private readonly unsubscribeTokenService: UnsubscribeTokenService,
     private readonly prisma: PrismaService,
-  ) {}
+  ) {
+    this.logger.setContext(UnsubscribeController.name);
+  }
 
   @Get('unsubscribe')
   @Header('Content-Type', 'text/html; charset=utf-8')
@@ -39,10 +41,7 @@ export class UnsubscribeController {
         data: { emailNotificationsEnabled: false },
       });
 
-      this.logger.log({
-        message: 'User unsubscribed from emails',
-        userId: result.userId,
-      });
+      this.logger.info('User unsubscribed from emails', { userId: result.userId });
 
       return renderUnsubscribePage(
         'Vous êtes désabonné',
@@ -50,10 +49,8 @@ export class UnsubscribeController {
         true,
       );
     } catch (error) {
-      this.logger.error({
-        message: 'Failed to unsubscribe user',
+      this.logger.error('Failed to unsubscribe user', error instanceof Error ? error : undefined, {
         userId: result.userId,
-        error: error instanceof Error ? error.message : String(error),
       });
 
       return renderUnsubscribePage(

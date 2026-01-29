@@ -1,6 +1,6 @@
-import { Logger } from '@nestjs/common';
 import { LLMProvider } from '@prisma/client';
 
+import { LoggerService } from '../../../../common/logger';
 import type { LLMPort, LLMQueryOptions, LLMResponse } from '../../application/ports/llm.port';
 
 export const SYSTEM_PROMPT = `Réponds en JSON uniquement. Top 5 marques pour la question posée.
@@ -18,8 +18,9 @@ export const LLM_CONFIG = {
 } as const;
 
 export abstract class BaseLLMAdapter implements LLMPort {
-  protected abstract readonly logger: Logger;
   protected abstract readonly model: string;
+
+  constructor(protected readonly logger: LoggerService) {}
 
   abstract getProvider(): LLMProvider;
 
@@ -35,8 +36,8 @@ export abstract class BaseLLMAdapter implements LLMPort {
       const response = await this.callApi(prompt, systemPrompt, options);
 
       if (!response.ok) {
-        const error = await response.text();
-        this.logger.error(`${this.getProvider()} API error: ${error}`);
+        const errorText = await response.text();
+        this.logger.error('LLM API error', { provider: this.getProvider(), error: errorText });
         throw new Error(`${this.getProvider()} API error: ${response.status}`);
       }
 
@@ -50,7 +51,9 @@ export abstract class BaseLLMAdapter implements LLMPort {
         latencyMs,
       };
     } catch (error) {
-      this.logger.error(`Failed to query ${this.getProvider()}`, error);
+      this.logger.error('Failed to query LLM', error instanceof Error ? error : undefined, {
+        provider: this.getProvider(),
+      });
       throw error;
     }
   }

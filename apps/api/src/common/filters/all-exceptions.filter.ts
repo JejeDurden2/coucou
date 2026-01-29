@@ -1,7 +1,8 @@
-import { ArgumentsHost, Catch, ExceptionFilter, HttpException, Logger } from '@nestjs/common';
+import { ArgumentsHost, Catch, ExceptionFilter, HttpException } from '@nestjs/common';
 import type { Request, Response } from 'express';
 
 import { DomainError } from '../errors/domain-error';
+import { LoggerService } from '../logger';
 
 interface ErrorResponse {
   code: string;
@@ -13,7 +14,9 @@ interface ErrorResponse {
 
 @Catch()
 export class AllExceptionsFilter implements ExceptionFilter {
-  private readonly logger = new Logger(AllExceptionsFilter.name);
+  constructor(private readonly logger: LoggerService) {
+    this.logger.setContext(AllExceptionsFilter.name);
+  }
 
   catch(exception: unknown, host: ArgumentsHost): void {
     const ctx = host.switchToHttp();
@@ -45,7 +48,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
         body = { code: 'HTTP_ERROR', message: String(res) };
       }
     } else if (exception instanceof Error) {
-      this.logger.error('Unhandled exception', exception.stack, {
+      this.logger.error('Unhandled exception', exception, {
         path: request.url,
         method: request.method,
       });
