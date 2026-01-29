@@ -315,6 +315,19 @@ class ApiClient {
     return this.fetch<OnboardingJobStatusResponse>(`/onboarding/job/${jobId}/status`);
   }
 
+  // Brand Analysis (generic endpoints for dashboard brand creation)
+  async analyzeBrand(projectId: string): Promise<EnqueuedJobResponse> {
+    return this.fetch<EnqueuedJobResponse>(`/projects/${projectId}/brand/analyze`, {
+      method: 'POST',
+    });
+  }
+
+  async getBrandJobStatus(projectId: string, jobId: string): Promise<OnboardingJobStatusResponse> {
+    return this.fetch<OnboardingJobStatusResponse>(
+      `/projects/${projectId}/brand/job/${jobId}/status`,
+    );
+  }
+
   // Sentiment
   async getLatestSentiment(projectId: string): Promise<LatestSentimentResponse> {
     return this.fetch<LatestSentimentResponse>(`/projects/${projectId}/sentiment/latest`);

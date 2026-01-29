@@ -9,11 +9,17 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 
-interface BrandStepProps {
+interface BrandInfoStepProps {
   onProjectCreated: (projectId: string) => void;
+  title?: string;
+  description?: string;
 }
 
-export function BrandStep({ onProjectCreated }: BrandStepProps): React.ReactNode {
+export function BrandInfoStep({
+  onProjectCreated,
+  title = 'Ajoutez votre marque',
+  description = 'Ces informations seront utilisées pour détecter les mentions dans les réponses IA',
+}: BrandInfoStepProps): React.ReactNode {
   const createProject = useCreateProject();
 
   const [brandName, setBrandName] = useState('');
@@ -52,10 +58,8 @@ export function BrandStep({ onProjectCreated }: BrandStepProps): React.ReactNode
   return (
     <div className="max-w-2xl mx-auto space-y-6">
       <div className="text-center space-y-2">
-        <h1 className="text-3xl font-bold text-balance">Ajoutez votre marque</h1>
-        <p className="text-muted-foreground text-pretty">
-          Ces informations seront utilisées pour détecter les mentions dans les réponses IA
-        </p>
+        <h1 className="text-3xl font-bold text-balance">{title}</h1>
+        <p className="text-muted-foreground text-pretty">{description}</p>
       </div>
 
       <Card>

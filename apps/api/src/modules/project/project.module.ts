@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 
 import { PROJECT_REPOSITORY } from './domain';
 import { PrismaProjectRepository } from './infrastructure/persistence/prisma-project.repository';
@@ -10,9 +10,12 @@ import {
   UpdateProjectUseCase,
 } from './application/use-cases';
 import { ProjectController } from './presentation/controllers/project.controller';
+import { BrandController } from './presentation/controllers/brand.controller';
+import { OnboardingModule } from '../onboarding/onboarding.module';
 
 @Module({
-  controllers: [ProjectController],
+  imports: [forwardRef(() => OnboardingModule)],
+  controllers: [ProjectController, BrandController],
   providers: [
     // Use cases
     CreateProjectUseCase,

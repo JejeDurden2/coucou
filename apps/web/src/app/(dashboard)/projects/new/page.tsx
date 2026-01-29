@@ -2,166 +2,63 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, X } from 'lucide-react';
+import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
-import { useCreateProject } from '@/hooks/use-projects';
+
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import { StepIndicator, BrandInfoStep, PromptGenerationStep } from '@/components/brand-wizard';
+
+type WizardStep = 'brand-info' | 'prompt-generation';
+
+const STEPS = [
+  { id: 'brand-info', label: 'Marque' },
+  { id: 'prompt-generation', label: 'Requêtes' },
+];
 
 export default function NewBrandPage() {
   const router = useRouter();
-  const createProject = useCreateProject();
+  const [step, setStep] = useState<WizardStep>('brand-info');
+  const [projectId, setProjectId] = useState<string | null>(null);
 
-  const [brandName, setBrandName] = useState('');
-  const [domain, setDomain] = useState('');
-  const [variantInput, setVariantInput] = useState('');
-  const [brandVariants, setBrandVariants] = useState<string[]>([]);
+  function handleProjectCreated(id: string): void {
+    setProjectId(id);
+    setStep('prompt-generation');
+  }
 
-  const addVariant = () => {
-    const trimmed = variantInput.trim();
-    if (trimmed && !brandVariants.includes(trimmed)) {
-      setBrandVariants([...brandVariants, trimmed]);
-      setVariantInput('');
+  function handleComplete(): void {
+    if (projectId) {
+      router.push(`/projects/${projectId}`);
     }
-  };
+  }
 
-  const removeVariant = (variant: string) => {
-    setBrandVariants(brandVariants.filter((v) => v !== variant));
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    try {
-      const project = await createProject.mutateAsync({
-        name: brandName,
-        brandName,
-        brandVariants,
-        domain,
-      });
-      router.push(`/projects/${project.id}`);
-    } catch {
-      // Error handled by mutation
-    }
-  };
+  const currentStepIndex = STEPS.findIndex((s) => s.id === step);
 
   return (
-    <div className="max-w-2xl mx-auto space-y-6">
-      <div className="flex items-center gap-4">
-        <Button variant="ghost" size="icon" asChild aria-label="Retour aux marques">
-          <Link href="/projects">
-            <ArrowLeft className="size-5" aria-hidden="true" />
-          </Link>
-        </Button>
-        <div>
-          <h1 className="text-2xl font-bold text-balance">Nouvelle marque</h1>
-          <p className="text-muted-foreground text-pretty">
-            Configurez le tracking de visibilité pour votre marque
-          </p>
+    <div className="min-h-[80vh] flex items-center justify-center p-4">
+      <div className="w-full max-w-4xl">
+        <div className="flex items-center gap-4 mb-6">
+          <Button variant="ghost" size="icon" asChild aria-label="Retour aux marques">
+            <Link href="/projects">
+              <ArrowLeft className="size-5" aria-hidden="true" />
+            </Link>
+          </Button>
+          <div className="flex-1">
+            <StepIndicator steps={STEPS} currentStepIndex={currentStepIndex} />
+          </div>
         </div>
+
+        {step === 'brand-info' && (
+          <BrandInfoStep
+            onProjectCreated={handleProjectCreated}
+            title="Nouvelle marque"
+            description="Configurez le tracking de visibilité pour votre marque"
+          />
+        )}
+
+        {step === 'prompt-generation' && projectId && (
+          <PromptGenerationStep projectId={projectId} onComplete={handleComplete} />
+        )}
       </div>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Votre marque</CardTitle>
-          <CardDescription>
-            Renseignez le nom de votre marque et ses variantes pour un tracking précis.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="space-y-2">
-              <label htmlFor="brandName" className="text-sm font-medium">
-                Nom de la marque
-              </label>
-              <Input
-                id="brandName"
-                placeholder="Ex: Café Lomi"
-                value={brandName}
-                onChange={(e) => setBrandName(e.target.value)}
-                required
-                autoComplete="off"
-              />
-              <p className="text-xs text-muted-foreground text-pretty">
-                Le nom principal de votre marque à tracker
-              </p>
-            </div>
-
-            <div className="space-y-2">
-              <label htmlFor="variants" className="text-sm font-medium">
-                Variantes (optionnel)
-              </label>
-              <div className="flex gap-2">
-                <Input
-                  id="variants"
-                  placeholder="Ex: Lomi Coffee"
-                  value={variantInput}
-                  onChange={(e) => setVariantInput(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') {
-                      e.preventDefault();
-                      addVariant();
-                    }
-                  }}
-                  autoComplete="off"
-                />
-                <Button type="button" variant="outline" onClick={addVariant}>
-                  Ajouter
-                </Button>
-              </div>
-              {brandVariants.length > 0 && (
-                <div className="flex flex-wrap gap-2 mt-2">
-                  {brandVariants.map((variant) => (
-                    <Badge key={variant} variant="outline" className="gap-1">
-                      {variant}
-                      <button
-                        type="button"
-                        onClick={() => removeVariant(variant)}
-                        className="ml-1 hover:text-destructive"
-                        aria-label={`Supprimer ${variant}`}
-                      >
-                        <X className="size-3" aria-hidden="true" />
-                      </button>
-                    </Badge>
-                  ))}
-                </div>
-              )}
-              <p className="text-xs text-muted-foreground text-pretty">
-                Autres façons dont votre marque peut être mentionnée
-              </p>
-            </div>
-
-            <div className="space-y-2">
-              <label htmlFor="domain" className="text-sm font-medium">
-                URL de votre site
-              </label>
-              <Input
-                id="domain"
-                type="url"
-                placeholder="https://cafelomi.com"
-                value={domain}
-                onChange={(e) => setDomain(e.target.value)}
-                required
-                autoComplete="off"
-              />
-              <p className="text-xs text-muted-foreground text-pretty">
-                Sera utilisé pour analyser votre marque et détecter les mentions
-              </p>
-            </div>
-
-            <div className="flex gap-4 pt-4">
-              <Button type="submit" className="flex-1" disabled={createProject.isPending}>
-                {createProject.isPending ? 'Création…' : 'Ajouter la marque'}
-              </Button>
-              <Button type="button" variant="outline" asChild>
-                <Link href="/projects">Annuler</Link>
-              </Button>
-            </div>
-          </form>
-        </CardContent>
-      </Card>
     </div>
   );
 }

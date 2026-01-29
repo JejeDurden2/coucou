@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { BullModule } from '@nestjs/bullmq';
 
 import {
@@ -16,7 +16,7 @@ import { OnboardingController } from './presentation/controllers/onboarding.cont
 
 @Module({
   imports: [
-    ProjectModule,
+    forwardRef(() => ProjectModule),
     PromptModule,
     BullModule.registerQueue({
       name: ONBOARDING_QUEUE_NAME,

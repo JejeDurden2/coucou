@@ -2,18 +2,21 @@
 
 import { Sparkles, Loader2, Wand2 } from 'lucide-react';
 
-import { useGeneratePrompts, useOnboardingJobPolling } from '@/hooks/use-onboarding';
+import { useBrandAnalyze, useBrandJobPolling } from '@/hooks/use-brand-wizard';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
-interface PromptsStepProps {
+interface PromptGenerationStepProps {
   projectId: string;
   onComplete: () => void;
 }
 
-export function PromptsStep({ projectId, onComplete }: PromptsStepProps): React.ReactNode {
-  const generatePrompts = useGeneratePrompts();
-  const onboardingPolling = useOnboardingJobPolling({
+export function PromptGenerationStep({
+  projectId,
+  onComplete,
+}: PromptGenerationStepProps): React.ReactNode {
+  const analyzeBrand = useBrandAnalyze();
+  const brandPolling = useBrandJobPolling({
     projectId,
     onCompleted: () => onComplete(),
     onFailed: () => {
@@ -23,8 +26,8 @@ export function PromptsStep({ projectId, onComplete }: PromptsStepProps): React.
 
   async function handleGenerate(): Promise<void> {
     try {
-      const { jobId } = await generatePrompts.mutateAsync(projectId);
-      onboardingPolling.startPolling(jobId);
+      const { jobId } = await analyzeBrand.mutateAsync(projectId);
+      brandPolling.startPolling(jobId);
     } catch {
       // Error handled by mutation hook toast
     }
@@ -52,7 +55,7 @@ export function PromptsStep({ projectId, onComplete }: PromptsStepProps): React.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          {onboardingPolling.isPolling ? (
+          {brandPolling.isPolling ? (
             <div className="flex flex-col items-center gap-3 py-4" aria-live="polite">
               <Loader2
                 className="size-8 animate-spin motion-reduce:animate-none text-primary"
@@ -68,11 +71,11 @@ export function PromptsStep({ projectId, onComplete }: PromptsStepProps): React.
             <>
               <Button
                 onClick={handleGenerate}
-                disabled={generatePrompts.isPending}
+                disabled={analyzeBrand.isPending}
                 className="w-full"
                 size="lg"
               >
-                {generatePrompts.isPending ? (
+                {analyzeBrand.isPending ? (
                   <>
                     <Loader2
                       className="mr-2 size-4 animate-spin motion-reduce:animate-none"
@@ -90,7 +93,7 @@ export function PromptsStep({ projectId, onComplete }: PromptsStepProps): React.
               <Button
                 variant="outline"
                 onClick={onComplete}
-                disabled={generatePrompts.isPending}
+                disabled={analyzeBrand.isPending}
                 className="w-full"
                 size="lg"
               >
