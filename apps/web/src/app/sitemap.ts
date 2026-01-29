@@ -1,13 +1,19 @@
 import type { MetadataRoute } from 'next';
 
 import { getAllPosts } from '@/lib/blog';
+import { getAllTerms } from '@/lib/glossary';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = 'https://coucou-ia.com';
   const posts = getAllPosts();
+  const terms = getAllTerms();
 
   // Use latest blog post date as proxy for blog listing / homepage freshness
   const latestPostDate = posts.length > 0 ? new Date(posts[0].date) : new Date('2026-01-01');
+  const latestTermDate =
+    terms.length > 0
+      ? new Date(Math.max(...terms.map((t) => new Date(t.lastUpdated).getTime())))
+      : new Date('2026-01-01');
 
   // Static pages
   const staticPages: MetadataRoute.Sitemap = [
@@ -51,5 +57,23 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.7,
   }));
 
-  return [...staticPages, ...blogPages];
+  // Lexique index
+  const lexiqueIndex: MetadataRoute.Sitemap = [
+    {
+      url: `${baseUrl}/lexique`,
+      lastModified: latestTermDate,
+      changeFrequency: 'weekly',
+      priority: 0.8,
+    },
+  ];
+
+  // Lexique terms
+  const lexiquePages: MetadataRoute.Sitemap = terms.map((term) => ({
+    url: `${baseUrl}/lexique/${term.slug}`,
+    lastModified: new Date(term.lastUpdated),
+    changeFrequency: 'monthly',
+    priority: 0.6,
+  }));
+
+  return [...staticPages, ...blogPages, ...lexiqueIndex, ...lexiquePages];
 }
