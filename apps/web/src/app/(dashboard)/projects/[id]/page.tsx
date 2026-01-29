@@ -13,6 +13,7 @@ import {
   Users,
   Lightbulb,
   Smile,
+  MoreVertical,
 } from 'lucide-react';
 
 import { useProject } from '@/hooks/use-projects';
@@ -25,6 +26,12 @@ import {
 } from '@/hooks/use-dashboard';
 import { useAuth } from '@/lib/auth-context';
 import { Button } from '@/components/ui/button';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import {
@@ -38,6 +45,7 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { CompetitorsList } from '@/components/features/dashboard';
+import { DeleteProjectModal } from '@/components/features/projects';
 import { InfoTooltip } from '@/components/ui/info-tooltip';
 import { AddPromptModal } from '@/components/features/dashboard/add-prompt-modal';
 import { StatsContainer } from '@/components/features/stats';
@@ -98,6 +106,7 @@ export default function ProjectDashboardPage({
   const { openUpgradeModal, trackLockedTabClick } = useUpgradeModal();
 
   const [showAddPrompt, setShowAddPrompt] = useState(false);
+  const [showDeleteProject, setShowDeleteProject] = useState(false);
   const [promptToDelete, setPromptToDelete] = useState<string | null>(null);
   const [scanningPromptId, setScanningPromptId] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState('overview');
@@ -203,6 +212,23 @@ export default function ProjectDashboardPage({
               </p>
             ) : null}
           </div>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon" className="size-8">
+                <MoreVertical className="size-4" aria-hidden="true" />
+                <span className="sr-only">Options de la marque</span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start">
+              <DropdownMenuItem
+                className="text-destructive focus:text-destructive focus:bg-destructive/10"
+                onClick={() => setShowDeleteProject(true)}
+              >
+                <Trash2 className="mr-2 size-4" aria-hidden="true" />
+                Supprimer la marque
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
         {userPlan === Plan.FREE ? (
           <TooltipProvider>
@@ -530,6 +556,13 @@ export default function ProjectDashboardPage({
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
+
+      <DeleteProjectModal
+        projectId={id}
+        brandName={project.brandName}
+        open={showDeleteProject}
+        onOpenChange={setShowDeleteProject}
+      />
     </div>
   );
 }
