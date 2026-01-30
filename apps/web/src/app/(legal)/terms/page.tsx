@@ -25,7 +25,22 @@ export default function TermsPage(): React.ReactNode {
         </h1>
 
         <div className="prose prose-invert prose-zinc max-w-none space-y-8">
-          <p className="text-muted-foreground">Dernière mise à jour : 18 janvier 2026</p>
+          <p className="text-muted-foreground">Dernière mise à jour : 30 janvier 2026</p>
+
+          <section className="space-y-4">
+            <h2 className="text-xl font-semibold text-balance">Éditeur du service</h2>
+            <p className="text-muted-foreground">
+              Le service Coucou IA est édité par la société Coucou IA, SASU au capital de 500 euros,
+              immatriculée au Registre du Commerce et des Sociétés de Nice sous le numéro 100 498
+              070, dont le siège social est situé 460 Avenue de Pessicart, 06100 Nice, France.
+            </p>
+            <p className="text-muted-foreground">
+              Numéro de TVA intracommunautaire : En cours d&apos;attribution.
+            </p>
+            <p className="text-muted-foreground">
+              Directeur de la publication : Monsieur Jérôme Desmares, Président.
+            </p>
+          </section>
 
           <section className="space-y-4">
             <h2 className="text-xl font-semibold text-balance">1. Objet</h2>
@@ -75,11 +90,11 @@ export default function TermsPage(): React.ReactNode {
             <h2 className="text-xl font-semibold text-balance">5. Plans et tarification</h2>
             <p className="text-muted-foreground">
               Coucou IA propose plusieurs plans (Free, Solo, Pro) avec des fonctionnalités et
-              limites différentes. Les tarifs sont indiqués en euros TTC sur la page{' '}
+              limites différentes. Les tarifs sont indiqués en euros hors taxes (HT) sur la page{' '}
               <Link href="/#pricing" className="text-primary hover:underline">
                 Tarifs
               </Link>
-              .
+              . La TVA applicable sera ajoutée lors de la facturation.
             </p>
             <p className="text-muted-foreground">
               Les abonnements payants sont facturés mensuellement via Stripe. Vous pouvez annuler à
@@ -148,8 +163,8 @@ export default function TermsPage(): React.ReactNode {
           <section className="space-y-4">
             <h2 className="text-xl font-semibold text-balance">12. Droit applicable</h2>
             <p className="text-muted-foreground">
-              Les présentes CGU sont soumises au droit français. Tout litige sera soumis aux
-              tribunaux compétents de Paris.
+              Les présentes CGU sont soumises au droit français. Tout litige sera soumis à la
+              compétence exclusive du Tribunal de Commerce de Nice.
             </p>
           </section>
 
