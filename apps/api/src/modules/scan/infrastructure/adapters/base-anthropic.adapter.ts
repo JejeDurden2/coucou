@@ -16,7 +16,7 @@ export abstract class BaseAnthropicAdapter extends BaseLLMAdapter {
   }
 
   getProvider(): LLMProvider {
-    return LLMProvider.ANTHROPIC;
+    return LLMProvider.CLAUDE;
   }
 
   override async query(prompt: string, options?: LLMQueryOptions): Promise<LLMResponse> {

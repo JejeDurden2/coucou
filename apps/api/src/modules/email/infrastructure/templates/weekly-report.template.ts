@@ -53,14 +53,14 @@ export function generateWeeklyReportEmail(data: WeeklyReportEmailData): {
   const freeUpgradeBox =
     data.plan === 'FREE'
       ? createInfoBox(
-          `<p style="margin: 0; font-size: 14px; color: ${EMAIL_COLORS.text};">Vous analysez 1 seul modèle IA. Le plan Solo analyse 3 modèles pour une vision complète. À partir de 39€/mois.</p>`,
+          `<p style="margin: 0; font-size: 14px; color: ${EMAIL_COLORS.text};">Vous analysez uniquement ChatGPT. Le plan Solo analyse ChatGPT + Claude pour une vision complète. À partir de 39€/mois.</p>`,
           'primary',
         )
       : '';
 
   const freeUpgradeText =
     data.plan === 'FREE'
-      ? '\nVous analysez 1 seul modèle IA. Le plan Solo analyse 3 modèles pour une vision complète. À partir de 39€/mois.\n'
+      ? '\nVous analysez uniquement ChatGPT. Le plan Solo analyse ChatGPT + Claude pour une vision complète. À partir de 39€/mois.\n'
       : '';
 
   const content = `

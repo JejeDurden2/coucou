@@ -27,7 +27,7 @@ export abstract class BaseOpenAIAdapter extends BaseLLMAdapter {
   }
 
   getProvider(): LLMProvider {
-    return LLMProvider.OPENAI;
+    return LLMProvider.CHATGPT;
   }
 
   protected callApi(

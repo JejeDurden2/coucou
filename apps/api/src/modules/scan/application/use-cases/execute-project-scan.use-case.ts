@@ -184,6 +184,7 @@ export class ExecuteProjectScanUseCase {
 
       const scan = await this.scanRepository.create({
         promptId: prompt.id,
+        provider: results[0].provider,
         results,
       });
 

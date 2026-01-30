@@ -114,6 +114,7 @@ export type SimpleTrendDto = 'up' | 'down' | 'stable';
 
 export interface HistoricalModelBreakdownDto {
   model: string;
+  provider: LLMProvider;
   citationRate: number;
   averageRank: number | null;
   trend: SimpleTrendDto;

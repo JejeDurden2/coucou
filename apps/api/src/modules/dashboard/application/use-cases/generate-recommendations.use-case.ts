@@ -433,7 +433,7 @@ export class GenerateRecommendationsUseCase {
     const gap = best.citationRate - worst.citationRate;
     if (gap < 20) return null;
 
-    const worstIsAnthropic = worst.provider === LLMProvider.ANTHROPIC;
+    const worstIsClaude = worst.provider === LLMProvider.CLAUDE;
 
     return {
       id: generateId(),
@@ -442,7 +442,7 @@ export class GenerateRecommendationsUseCase {
       title: 'Disparité de visibilité entre modèles',
       description: `${best.model} vous cite ${best.citationRate}% du temps, mais ${worst.model} seulement ${worst.citationRate}%.`,
       actionItems: [
-        worstIsAnthropic
+        worstIsClaude
           ? 'Claude privilégie les contenus structurés : ajoutez des listes, tableaux et données chiffrées'
           : 'GPT privilégie les sources autoritaires : ajoutez des citations et références externes',
         'Testez différents formats de contenu sur votre site',

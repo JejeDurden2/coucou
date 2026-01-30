@@ -21,7 +21,7 @@ const PLAN_STEPS = {
   PRO: [
     "Créez jusqu'à 15 projets",
     "Ajoutez jusqu'à 50 requêtes par projet",
-    'Analysez 5 modèles IA dont GPT-5.2 et Claude Opus 4.5',
+    'Analysez les 2 IA leaders : ChatGPT + Claude',
   ],
 } as const;
 

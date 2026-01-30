@@ -10,14 +10,14 @@ interface Feature {
   wide: boolean;
 }
 
-const LLM_PROVIDERS = ['ChatGPT', 'Claude'] as const;
+const AI_ENGINES = ['ChatGPT', 'Claude', 'Gemini bientôt'] as const;
 
 const FEATURES: Feature[] = [
   {
     icon: Layers,
-    title: 'Surveillance multi-LLM',
+    title: 'Surveillance multi-moteurs',
     description:
-      "Analysez vos mentions sur ChatGPT et Claude en un seul dashboard. Détectez automatiquement si l'IA recommande votre marque ou vos concurrents.",
+      'Surveillez votre marque sur ChatGPT, Claude, et bientôt Gemini. Détectez automatiquement si les moteurs de recherche IA recommandent votre marque ou vos concurrents.',
     wide: true,
   },
   {
@@ -75,12 +75,16 @@ function WideFeatureContent({ feature }: { feature: Feature }) {
         <FeatureContent feature={feature} />
       </div>
       <div className="flex flex-wrap md:flex-col gap-2 md:shrink-0">
-        {LLM_PROVIDERS.map((provider) => (
+        {AI_ENGINES.map((engine) => (
           <span
-            key={provider}
-            className="rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-medium text-muted-foreground"
+            key={engine}
+            className={`rounded-lg border px-3 py-1.5 text-xs font-medium ${
+              engine.includes('bientôt')
+                ? 'border-amber-500/20 bg-amber-500/5 text-amber-400'
+                : 'border-white/10 bg-white/5 text-muted-foreground'
+            }`}
           >
-            {provider}
+            {engine}
           </span>
         ))}
       </div>

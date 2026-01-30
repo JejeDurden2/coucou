@@ -3,6 +3,8 @@ import {
   createButton,
   createParagraph,
   createHeading,
+  createProviderList,
+  createProviderListText,
   EMAIL_COLORS,
 } from './base.template';
 
@@ -51,8 +53,8 @@ export function generateSoloToProNudgeEmail(data: SoloToProNudgeEmailData): {
               <td style="padding: 8px 0; font-size: 14px; color: ${EMAIL_COLORS.text}; text-align: right; font-weight: 500;">50</td>
             </tr>
             <tr>
-              <td style="padding: 8px 0; font-size: 14px; color: ${EMAIL_COLORS.textMuted};">Modèles IA</td>
-              <td style="padding: 8px 0; font-size: 14px; color: ${EMAIL_COLORS.text}; text-align: right; font-weight: 500;">5 (dont GPT-5.2 et Claude Opus 4.5)</td>
+              <td style="padding: 8px 0; font-size: 14px; color: ${EMAIL_COLORS.textMuted};">IA analysées</td>
+              <td style="padding: 8px 0; font-size: 14px; color: ${EMAIL_COLORS.text}; text-align: right; font-weight: 500;">${createProviderList(['CHATGPT', 'CLAUDE'])}</td>
             </tr>
             <tr>
               <td style="padding: 8px 0; font-size: 14px; color: ${EMAIL_COLORS.textMuted};">Fréquence d'analyse</td>
@@ -92,7 +94,7 @@ Vous utilisez ${data.currentUsage} de vos ${data.maxAllowed} ${limitLabel} sur l
 Plan Pro :
 - 15 projets
 - 50 requêtes par projet
-- 5 modèles IA (dont GPT-5.2 et Claude Opus 4.5)
+- IA analysées : ${createProviderListText(['CHATGPT', 'CLAUDE'])}
 - Analyses quotidiennes
 - Historique illimité
 

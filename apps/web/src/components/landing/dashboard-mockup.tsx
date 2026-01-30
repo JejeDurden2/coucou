@@ -6,14 +6,9 @@ import { Sparkline } from '@/components/ui/sparkline';
 const POSITION_SPARKLINE = [3.2, 2.8, 2.5, 2.7, 2.3, 2.1, 2.0];
 const SENTIMENT_SCORE = 78;
 
-const GPT_MODELS = [
-  { name: 'GPT-4o', position: '2.3', color: 'text-slate-300' },
-  { name: 'GPT-5.2', position: '1.7', color: 'text-amber-400' },
-] as const;
-
-const CLAUDE_MODELS = [
-  { name: 'Sonnet 4', position: '1.6', color: 'text-amber-400' },
-  { name: 'Opus 4.5', position: '2.4', color: 'text-slate-300' },
+const PROVIDERS = [
+  { name: 'ChatGPT', position: '1.8', color: 'text-amber-400' },
+  { name: 'Claude', position: '2.1', color: 'text-slate-300' },
 ] as const;
 
 const SENTIMENT_TAGS = ['Marque reconnue', 'Prix compétitifs'] as const;
@@ -44,18 +39,22 @@ export function DashboardMockup() {
           </div>
         </div>
 
-        {GPT_MODELS.map((model) => (
+        {PROVIDERS.map((provider) => (
           <div
-            key={model.name}
+            key={provider.name}
             className="hidden rounded-xl border border-border/50 bg-background/40 p-3 md:block"
           >
             <div className="mb-2 flex items-center gap-2 text-xs text-muted-foreground">
-              <MessageSquare className="size-3.5" aria-hidden="true" />
-              <span>{model.name}</span>
+              {provider.name === 'ChatGPT' ? (
+                <MessageSquare className="size-3.5" aria-hidden="true" />
+              ) : (
+                <Bot className="size-3.5" aria-hidden="true" />
+              )}
+              <span>{provider.name}</span>
             </div>
-            <p className={`text-lg font-semibold tabular-nums font-mono ${model.color}`}>
+            <p className={`text-lg font-semibold tabular-nums font-mono ${provider.color}`}>
               <span className="text-sm text-muted-foreground">#</span>
-              {model.position}
+              {provider.position}
             </p>
           </div>
         ))}
@@ -96,18 +95,16 @@ export function DashboardMockup() {
         <div className="hidden rounded-xl border border-border/50 bg-background/40 p-4 md:col-span-2 md:block">
           <div className="flex items-start justify-between gap-3">
             <div className="min-w-0 flex-1">
-              <p className="mb-2 text-xs text-muted-foreground">Positions Claude</p>
-              <ul className="space-y-1.5">
-                {CLAUDE_MODELS.map((model) => (
-                  <li key={model.name} className="flex items-baseline justify-between gap-2">
-                    <span className="text-sm text-foreground">{model.name}</span>
-                    <span className={`text-lg font-semibold tabular-nums font-mono ${model.color}`}>
-                      <span className="text-sm text-muted-foreground">#</span>
-                      {model.position}
-                    </span>
-                  </li>
-                ))}
-              </ul>
+              <p className="mb-2 text-xs text-muted-foreground">Part de voix</p>
+              <div className="flex items-baseline gap-2">
+                <span className="text-2xl font-semibold tabular-nums font-mono text-primary">
+                  67%
+                </span>
+                <span className="text-sm text-muted-foreground">de citations</span>
+              </div>
+              <p className="mt-2 text-xs text-muted-foreground">
+                Votre marque est recommandée dans 67% des requêtes surveillées
+              </p>
             </div>
             <div className="rounded-lg border border-border/50 bg-muted/50 p-2 text-muted-foreground">
               <Bot className="size-4" aria-hidden="true" />

@@ -12,7 +12,7 @@ export function HeroSection() {
           <div className="text-center lg:text-left">
             <Badge className="mb-6" variant="outline">
               <Sparkles className="mr-1 size-3" aria-hidden="true" />
-              Nouveau : Support GPT-5.2 et Claude Opus 4.5
+              Nouveau : Support Claude
             </Badge>
 
             <h1 className="font-display text-4xl font-bold mb-6 text-balance md:text-5xl lg:text-6xl">

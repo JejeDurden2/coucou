@@ -4,6 +4,7 @@ import { Plan, PLAN_PRICING } from '@coucou-ia/shared';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { FeatureWithLogos } from '@/components/ui/feature-with-logos';
 import { cn } from '@/lib/utils';
 
 const PLANS = [
@@ -77,8 +78,8 @@ export function PricingSection() {
                 <ul className="space-y-3 mb-6">
                   {plan.features.map((feature) => (
                     <li key={feature} className="flex items-center gap-2 text-sm">
-                      <Check className="size-4 text-success" aria-hidden="true" />
-                      {feature}
+                      <Check className="size-4 text-success shrink-0" aria-hidden="true" />
+                      <FeatureWithLogos feature={feature} />
                     </li>
                   ))}
                 </ul>

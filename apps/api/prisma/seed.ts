@@ -112,7 +112,7 @@ async function main(): Promise<void> {
           executedAt: scanDate,
           results: [
             {
-              provider: LLMProvider.OPENAI,
+              provider: LLMProvider.CHATGPT,
               model: 'gpt-4o-mini',
               rawResponse: JSON.stringify({
                 r: [
@@ -147,7 +147,7 @@ async function main(): Promise<void> {
               parseSuccess: true,
             },
             {
-              provider: LLMProvider.ANTHROPIC,
+              provider: LLMProvider.CLAUDE,
               model: 'claude-haiku-4-5-20251001',
               rawResponse: JSON.stringify({
                 r: [

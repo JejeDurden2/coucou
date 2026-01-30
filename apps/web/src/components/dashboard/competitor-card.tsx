@@ -1,7 +1,12 @@
 'use client';
 
 import { memo, useMemo } from 'react';
-import { type EnrichedCompetitor, type Plan, PLAN_MODELS, type LLMModel } from '@coucou-ia/shared';
+import {
+  type EnrichedCompetitor,
+  type Plan,
+  getModelsForPlan,
+  type LLMModel,
+} from '@coucou-ia/shared';
 import { Card, CardContent } from '@/components/ui/card';
 import { LLMPositionsTable } from '@/components/dashboard/llm-positions-table';
 import { CompetitorTrendBadge } from '@/components/features/competitors/competitor-trend-badge';
@@ -21,7 +26,7 @@ export const DashboardCompetitorCard = memo(function DashboardCompetitorCard({
   userPlan,
 }: DashboardCompetitorCardProps): React.ReactNode {
   const positions = useMemo(() => {
-    const allowedModels = PLAN_MODELS[userPlan];
+    const allowedModels = getModelsForPlan(userPlan);
     return competitor.statsByModel
       .filter((s) => allowedModels.includes(s.model as LLMModel))
       .map((s) => ({ model: s.model, position: s.averagePosition }));

@@ -26,7 +26,7 @@ function createMockResult(
   competitorMentions: Array<{ name: string; position: number; keywords: string[] }> = [],
 ): LLMResult {
   return {
-    provider: model.startsWith('gpt') ? LLMProvider.OPENAI : LLMProvider.ANTHROPIC,
+    provider: model.startsWith('gpt') ? LLMProvider.CHATGPT : LLMProvider.CLAUDE,
     model,
     rawResponse: 'mock response',
     isCited,
@@ -134,7 +134,7 @@ describe('GetHistoricalStatsUseCase', () => {
     it('should return positive insight when variation > 10%', async () => {
       const now = new Date();
       const thirtyDaysAgo = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
-      const sixtyDaysAgo = new Date(now.getTime() - 60 * 24 * 60 * 60 * 1000);
+      const _sixtyDaysAgo = new Date(now.getTime() - 60 * 24 * 60 * 60 * 1000);
 
       // Current period: 80% citation rate (4/5 cited)
       const currentScans = [

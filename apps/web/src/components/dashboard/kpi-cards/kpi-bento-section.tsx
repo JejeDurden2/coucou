@@ -1,14 +1,9 @@
-import { MessageSquare, BarChart3 } from 'lucide-react';
-import {
-  LLMProvider,
-  type DashboardStats,
-  type Plan,
-  getModelDisplayName,
-} from '@coucou-ia/shared';
+import { BarChart3 } from 'lucide-react';
+import { type DashboardStats, type Plan } from '@coucou-ia/shared';
 
 import { StatCard } from '@/components/features/dashboard/stat-card';
 import { BentoGrid, BentoItem } from '@/components/dashboard/bento-grid';
-import { ClaudeModelsCard } from './claude-models-card';
+import { ProviderStatCard } from './provider-stat-card';
 import { PositionCard } from './position-card';
 import { SentimentBentoCard } from './sentiment-card';
 
@@ -25,13 +20,7 @@ export function KpiBentoSection({
   userPlan,
   onNavigateToSentiment,
 }: KpiBentoSectionProps): React.ReactNode {
-  const modelBreakdown = stats?.modelBreakdown ?? [];
-  const openaiModels: typeof modelBreakdown = [];
-  const claudeModels: typeof modelBreakdown = [];
-  for (const m of modelBreakdown) {
-    if (m.provider === LLMProvider.OPENAI) openaiModels.push(m);
-    else if (m.provider === LLMProvider.ANTHROPIC) claudeModels.push(m);
-  }
+  const providerBreakdown = stats?.breakdown ?? [];
 
   return (
     <BentoGrid>
@@ -43,14 +32,9 @@ export function KpiBentoSection({
         />
       </BentoItem>
 
-      {openaiModels.map((model) => (
-        <BentoItem key={model.model}>
-          <StatCard
-            icon={MessageSquare}
-            label={getModelDisplayName(model.model)}
-            value={model.averageRank}
-            podiumStyle
-          />
+      {providerBreakdown.map((provider) => (
+        <BentoItem key={provider.provider}>
+          <ProviderStatCard provider={provider.provider} averageRank={provider.averageRank} />
         </BentoItem>
       ))}
 
@@ -70,10 +54,6 @@ export function KpiBentoSection({
           onNavigate={onNavigateToSentiment}
           className="h-full"
         />
-      </BentoItem>
-
-      <BentoItem className="lg:col-span-2">
-        <ClaudeModelsCard models={claudeModels} />
       </BentoItem>
     </BentoGrid>
   );

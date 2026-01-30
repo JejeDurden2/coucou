@@ -120,7 +120,7 @@ export class GetDashboardStatsUseCase {
   }
 
   private calculateProviderBreakdown(results: LLMResult[]): ProviderBreakdownDto[] {
-    const providers = [LLMProvider.OPENAI, LLMProvider.ANTHROPIC];
+    const providers = [LLMProvider.CHATGPT, LLMProvider.CLAUDE];
 
     return providers.map((provider) => {
       const providerResults = results.filter((r) => r.provider === provider);

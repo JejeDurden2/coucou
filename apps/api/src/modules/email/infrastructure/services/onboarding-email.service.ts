@@ -10,19 +10,6 @@ import { UnsubscribeTokenService } from './unsubscribe-token.service';
 
 const BATCH_SIZE = 100;
 
-interface OnboardingUser {
-  id: string;
-  email: string;
-  name: string;
-  createdAt: Date;
-  projectCount: number;
-  project: {
-    id: string;
-    brandName: string;
-  } | null;
-  hasScan: boolean;
-}
-
 @Injectable()
 export class OnboardingEmailService {
   private readonly frontendUrl: string;

@@ -24,6 +24,42 @@ export interface BaseEmailData {
 // Logo hosted on the website (SVG not supported by most email clients, use PNG)
 const LOGO_URL = 'https://coucou-ia.com/logo-email.png';
 
+// Provider logos for email templates
+export const PROVIDER_LOGOS = {
+  CHATGPT: 'https://coucou-ia.com/logos/chatgpt.png',
+  CLAUDE: 'https://coucou-ia.com/logos/claude.png',
+} as const;
+
+export const PROVIDER_NAMES = {
+  CHATGPT: 'ChatGPT',
+  CLAUDE: 'Claude',
+} as const;
+
+export type EmailProvider = keyof typeof PROVIDER_LOGOS;
+
+/**
+ * Creates a provider badge with logo and name (inline)
+ */
+export function createProviderBadge(provider: EmailProvider): string {
+  return `<img src="${PROVIDER_LOGOS[provider]}" alt="${PROVIDER_NAMES[provider]}" width="20" height="20" style="vertical-align: middle; margin-right: 4px; border-radius: 4px;" /><span style="vertical-align: middle;">${PROVIDER_NAMES[provider]}</span>`;
+}
+
+/**
+ * Creates a list of providers with logos (e.g., "ChatGPT + Claude")
+ */
+export function createProviderList(providers: EmailProvider[]): string {
+  return providers
+    .map((p) => createProviderBadge(p))
+    .join(' <span style="color: ' + EMAIL_COLORS.textMuted + '; margin: 0 4px;">+</span> ');
+}
+
+/**
+ * Creates a provider list for plain text emails
+ */
+export function createProviderListText(providers: EmailProvider[]): string {
+  return providers.map((p) => PROVIDER_NAMES[p]).join(' + ');
+}
+
 /**
  * Wraps email content in the base template with Coucou IA branding
  */

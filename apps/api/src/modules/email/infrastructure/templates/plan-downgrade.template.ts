@@ -3,7 +3,11 @@ import {
   createButton,
   createParagraph,
   createHeading,
+  createProviderList,
+  createProviderBadge,
+  PROVIDER_NAMES,
   EMAIL_COLORS,
+  type EmailProvider,
 } from './base.template';
 
 export interface PlanDowngradeEmailData {
@@ -13,23 +17,25 @@ export interface PlanDowngradeEmailData {
   dashboardUrl: string;
 }
 
-const PLAN_FEATURES = {
+const PLAN_FEATURES: Record<
+  'SOLO' | 'PRO',
+  { projects: number; promptsPerProject: number; providers: EmailProvider[] }
+> = {
   SOLO: {
     projects: 5,
     promptsPerProject: 10,
-    models: 3,
+    providers: ['CHATGPT', 'CLAUDE'],
   },
   PRO: {
     projects: 15,
     promptsPerProject: 50,
-    models: 5,
+    providers: ['CHATGPT', 'CLAUDE'],
   },
-} as const;
+};
 
 const FREE_LIMITS = {
   projects: 1,
   promptsPerProject: 2,
-  models: 1,
 } as const;
 
 function formatDateFr(dateString: string): string {
@@ -82,8 +88,8 @@ export function generatePlanDowngradeEmail(data: PlanDowngradeEmailData): {
               <td style="padding: 8px 0; font-size: 14px; color: ${EMAIL_COLORS.text}; text-align: right; font-weight: 500;">${currentFeatures.promptsPerProject}</td>
             </tr>
             <tr>
-              <td style="padding: 8px 0; font-size: 14px; color: ${EMAIL_COLORS.textMuted};">Modèles IA</td>
-              <td style="padding: 8px 0; font-size: 14px; color: ${EMAIL_COLORS.text}; text-align: right; font-weight: 500;">${currentFeatures.models}</td>
+              <td style="padding: 8px 0; font-size: 14px; color: ${EMAIL_COLORS.textMuted};">IA analysées</td>
+              <td style="padding: 8px 0; font-size: 14px; color: ${EMAIL_COLORS.text}; text-align: right; font-weight: 500;">${createProviderList(currentFeatures.providers)}</td>
             </tr>
           </table>
 
@@ -100,8 +106,8 @@ export function generatePlanDowngradeEmail(data: PlanDowngradeEmailData): {
               <td style="padding: 8px 0; font-size: 14px; color: ${EMAIL_COLORS.warning}; text-align: right; font-weight: 500;">${FREE_LIMITS.promptsPerProject}</td>
             </tr>
             <tr>
-              <td style="padding: 8px 0; font-size: 14px; color: ${EMAIL_COLORS.textMuted};">Modèles IA</td>
-              <td style="padding: 8px 0; font-size: 14px; color: ${EMAIL_COLORS.warning}; text-align: right; font-weight: 500;">${FREE_LIMITS.models}</td>
+              <td style="padding: 8px 0; font-size: 14px; color: ${EMAIL_COLORS.textMuted};">IA analysée</td>
+              <td style="padding: 8px 0; font-size: 14px; color: ${EMAIL_COLORS.warning}; text-align: right; font-weight: 500;">${createProviderBadge('CHATGPT')}</td>
             </tr>
           </table>
         </td>
@@ -131,12 +137,12 @@ Vous conservez l'accès à toutes les fonctionnalités de votre plan ${data.curr
 Votre plan actuel (jusqu'au ${formattedDate}) :
 - ${currentFeatures.projects} projets
 - ${currentFeatures.promptsPerProject} requêtes par projet
-- ${currentFeatures.models} modèles IA
+- IA analysées : ${PROVIDER_NAMES.CHATGPT} + ${PROVIDER_NAMES.CLAUDE}
 
 Plan FREE (à partir du ${formattedDate}) :
 - ${FREE_LIMITS.projects} projet
 - ${FREE_LIMITS.promptsPerProject} requêtes par projet
-- ${FREE_LIMITS.models} modèle IA
+- IA analysée : ${PROVIDER_NAMES.CHATGPT} uniquement
 
 Vous avez changé d'avis ? Vous pouvez réactiver votre abonnement à tout moment depuis votre tableau de bord.
 

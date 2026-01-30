@@ -4,6 +4,8 @@ import {
   createParagraph,
   createHeading,
   createInfoBox,
+  createProviderBadge,
+  createProviderListText,
   EMAIL_COLORS,
 } from './base.template';
 
@@ -18,21 +20,24 @@ export function generateUpgradeMultimodelEmail(data: UpgradeMultimodelEmailData)
   text: string;
 } {
   const content = `
-    ${createHeading('Vous analysez 1 modèle IA. Vos concurrents en utilisent 3.', 1)}
+    ${createHeading('Vous analysez 1 IA. Vos concurrents en utilisent 2.', 1)}
 
     ${createParagraph(`Bonjour ${data.firstName},`)}
 
-    ${createParagraph('Avec le plan Gratuit, vous analysez uniquement GPT-4o-mini. Mais ChatGPT et Claude donnent des réponses différentes.')}
+    ${createParagraph('Avec le plan Gratuit, vous analysez uniquement ChatGPT. Mais <strong>ChatGPT et Claude donnent des réponses différentes</strong>.')}
 
-    ${createParagraph('Le plan Solo analyse <strong>3 modèles IA</strong> pour une vision complète de votre visibilité.')}
+    ${createParagraph('Le plan Solo analyse les <strong>2 IA leaders</strong> pour une vision complète de votre visibilité.')}
 
     ${createInfoBox(
-      `<p style="margin: 0 0 8px; font-size: 14px; font-weight: 600; color: ${EMAIL_COLORS.text};">Modèles analysés avec le plan Solo :</p>
-      <ul style="margin: 0; padding-left: 20px; color: ${EMAIL_COLORS.text}; font-size: 14px; line-height: 1.8;">
-        <li>GPT-4o-mini</li>
-        <li>GPT-4o</li>
-        <li>Claude Sonnet 4.5</li>
-      </ul>`,
+      `<p style="margin: 0 0 12px; font-size: 14px; font-weight: 600; color: ${EMAIL_COLORS.text};">IA analysées avec le plan Solo :</p>
+      <table role="presentation" style="width: 100%; border-collapse: collapse;">
+        <tr>
+          <td style="padding: 6px 0; font-size: 14px; color: ${EMAIL_COLORS.text};">${createProviderBadge('CHATGPT')}</td>
+        </tr>
+        <tr>
+          <td style="padding: 6px 0; font-size: 14px; color: ${EMAIL_COLORS.text};">${createProviderBadge('CLAUDE')}</td>
+        </tr>
+      </table>`,
       'primary',
     )}
 
@@ -44,29 +49,27 @@ export function generateUpgradeMultimodelEmail(data: UpgradeMultimodelEmailData)
   `;
 
   const html = wrapInBaseTemplate(content, {
-    previewText: "Analysez 3 modèles IA au lieu d'un seul avec le plan Solo.",
+    previewText: 'Analysez ChatGPT + Claude avec le plan Solo.',
   });
 
   const text = `
-Vous analysez 1 modèle IA. Vos concurrents en utilisent 3.
+Vous analysez 1 IA. Vos concurrents en utilisent 2.
 
 Bonjour ${data.firstName},
 
-Avec le plan Gratuit, vous analysez uniquement GPT-4o-mini. Mais ChatGPT et Claude donnent des réponses différentes.
+Avec le plan Gratuit, vous analysez uniquement ChatGPT. Mais ChatGPT et Claude donnent des réponses différentes.
 
-Le plan Solo analyse 3 modèles IA pour une vision complète de votre visibilité.
+Le plan Solo analyse les 2 IA leaders pour une vision complète de votre visibilité.
 
-Modèles analysés avec le plan Solo :
-- GPT-4o-mini
-- GPT-4o
-- Claude Sonnet 4.5
+IA analysées avec le plan Solo :
+- ${createProviderListText(['CHATGPT', 'CLAUDE'])}
 
 Comparer les plans : ${data.pricingUrl}
 
 --
 Se désinscrire : ${data.unsubscribeUrl}
 
-Coucou IA- Votre visibilité dans les IA
+Coucou IA - Votre visibilité dans les IA
 https://coucou-ia.com
 `.trim();
 

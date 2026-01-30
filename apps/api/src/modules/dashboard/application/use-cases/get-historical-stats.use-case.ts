@@ -544,8 +544,12 @@ export class GetHistoricalStatsUseCase {
         prevCitationRate = (prevCited / prevResults.length) * 100;
       }
 
+      // Get provider from the first result (all results for same model have same provider)
+      const provider = results[0].provider;
+
       breakdown.push({
         model,
+        provider,
         citationRate,
         averageRank,
         trend: this.calculateTrend(citationRate, prevCitationRate),
@@ -660,7 +664,7 @@ export class GetHistoricalStatsUseCase {
 
   private generateInsight(
     citationVariation: number | null,
-    currentCitationRate: number,
+    _currentCitationRate: number,
   ): HistoricalInsightDto {
     if (citationVariation === null) {
       return {

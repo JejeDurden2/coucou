@@ -9,6 +9,7 @@ import { MidPageCTA } from '@/components/landing/mid-page-cta';
 import { PricingSection } from '@/components/landing/pricing-section';
 import { FAQSection } from '@/components/landing/faq-section';
 import { FinalCTA } from '@/components/landing/final-cta';
+import { SupportedEnginesSection } from '@/components/landing/supported-engines-section';
 import { JsonLd } from '@/components/seo/json-ld';
 import { faqs } from '@/components/landing/faq-data';
 
@@ -72,6 +73,7 @@ export default function LandingPage() {
         <SocialProofBanner />
         <ProblemSection />
         <FeaturesSection />
+        <SupportedEnginesSection />
         <HowItWorksSection />
         <MidPageCTA />
         <PricingSection />

@@ -3,6 +3,7 @@ import {
   createButton,
   createParagraph,
   createHeading,
+  PROVIDER_NAMES,
   EMAIL_COLORS,
 } from './base.template';
 
@@ -45,9 +46,9 @@ export function generateUpgradeFinalEmail(data: UpgradeFinalEmailData): {
               <td style="padding: 8px 0; font-size: 14px; color: ${EMAIL_COLORS.primary}; text-align: right; font-weight: 500;">10</td>
             </tr>
             <tr>
-              <td style="padding: 8px 0; font-size: 14px; color: ${EMAIL_COLORS.textMuted};">Modèles IA</td>
-              <td style="padding: 8px 0; font-size: 14px; color: ${EMAIL_COLORS.text}; text-align: right; font-weight: 500;">1</td>
-              <td style="padding: 8px 0; font-size: 14px; color: ${EMAIL_COLORS.primary}; text-align: right; font-weight: 500;">3</td>
+              <td style="padding: 8px 0; font-size: 14px; color: ${EMAIL_COLORS.textMuted};">IA analysées</td>
+              <td style="padding: 8px 0; font-size: 14px; color: ${EMAIL_COLORS.text}; text-align: right; font-weight: 500;">${PROVIDER_NAMES.CHATGPT}</td>
+              <td style="padding: 8px 0; font-size: 14px; color: ${EMAIL_COLORS.primary}; text-align: right; font-weight: 500;">${PROVIDER_NAMES.CHATGPT} + ${PROVIDER_NAMES.CLAUDE}</td>
             </tr>
             <tr>
               <td style="padding: 8px 0; font-size: 14px; color: ${EMAIL_COLORS.textMuted};">Analyses automatiques</td>
@@ -67,7 +68,7 @@ export function generateUpgradeFinalEmail(data: UpgradeFinalEmailData): {
   `;
 
   const html = wrapInBaseTemplate(content, {
-    previewText: 'Le plan Solo offre 5 projets, 10 requêtes et 3 modèles IA.',
+    previewText: 'Le plan Solo offre 5 projets, 10 requêtes et ChatGPT + Claude.',
   });
 
   const text = `
@@ -80,11 +81,11 @@ Bonjour ${data.firstName},
 Des centaines de marques françaises utilisent déjà Coucou IA pour surveiller leur visibilité.
 
 Comparaison :
-                  Gratuit   Solo
-Projets           1         5
-Requêtes/projet   2         10
-Modèles IA        1         3
-Analyses auto     Non       Oui
+                  Gratuit      Solo
+Projets           1            5
+Requêtes/projet   2            10
+IA analysées      ChatGPT      ChatGPT + Claude
+Analyses auto     Non          Oui
 
 Passer au plan Solo — 39\u20AC/mois : ${data.pricingUrl}
 

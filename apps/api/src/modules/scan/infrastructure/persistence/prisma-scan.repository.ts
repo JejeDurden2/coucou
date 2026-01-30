@@ -81,6 +81,7 @@ export class PrismaScanRepository implements ScanRepository {
     const scan = await this.prisma.scan.create({
       data: {
         promptId: data.promptId,
+        provider: data.provider,
         results: data.results as unknown as object,
       },
     });

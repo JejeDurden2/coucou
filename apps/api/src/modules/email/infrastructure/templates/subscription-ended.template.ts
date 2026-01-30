@@ -3,6 +3,8 @@ import {
   createButton,
   createParagraph,
   createHeading,
+  createProviderBadge,
+  PROVIDER_NAMES,
   EMAIL_COLORS,
 } from './base.template';
 
@@ -15,7 +17,6 @@ export interface SubscriptionEndedEmailData {
 const FREE_LIMITS = {
   projects: 1,
   promptsPerProject: 2,
-  models: 1,
   scanFrequency: 'hebdomadaires',
 } as const;
 
@@ -46,8 +47,8 @@ export function generateSubscriptionEndedEmail(data: SubscriptionEndedEmailData)
               <td style="padding: 8px 0; font-size: 14px; color: ${EMAIL_COLORS.text}; text-align: right; font-weight: 500;">${FREE_LIMITS.promptsPerProject}</td>
             </tr>
             <tr>
-              <td style="padding: 8px 0; font-size: 14px; color: ${EMAIL_COLORS.textMuted};">Modèles IA</td>
-              <td style="padding: 8px 0; font-size: 14px; color: ${EMAIL_COLORS.text}; text-align: right; font-weight: 500;">${FREE_LIMITS.models} (GPT-4o-mini)</td>
+              <td style="padding: 8px 0; font-size: 14px; color: ${EMAIL_COLORS.textMuted};">IA analysée</td>
+              <td style="padding: 8px 0; font-size: 14px; color: ${EMAIL_COLORS.text}; text-align: right; font-weight: 500;">${createProviderBadge('CHATGPT')}</td>
             </tr>
             <tr>
               <td style="padding: 8px 0; font-size: 14px; color: ${EMAIL_COLORS.textMuted};">Analyses</td>
@@ -79,7 +80,7 @@ Votre abonnement ${data.previousPlan} est maintenant terminé. Votre compte est 
 Avec le plan Gratuit, vous avez accès à :
 - ${FREE_LIMITS.projects} projet
 - ${FREE_LIMITS.promptsPerProject} requêtes par projet
-- ${FREE_LIMITS.models} modèle IA (GPT-4o-mini uniquement)
+- IA analysée : ${PROVIDER_NAMES.CHATGPT} uniquement
 - Analyses ${FREE_LIMITS.scanFrequency}
 
 Envie de retrouver toutes les fonctionnalités ? Vous pouvez upgrader à tout moment.

@@ -1,5 +1,5 @@
-import { Plan } from '@prisma/client';
-import { LLMModel, PLAN_MODELS } from '@coucou-ia/shared';
+import { LLMProvider, Plan } from '@prisma/client';
+import { LLMModel, getModelsForPlan, Plan as SharedPlan } from '@coucou-ia/shared';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
 import type { LoggerService } from '../../../../common/logger';
@@ -30,11 +30,13 @@ const createMockAdapter = (model: LLMModel, shouldFail = false): LLMPort => ({
     return {
       content: `Response from ${model}`,
       model,
-      provider: model.startsWith('gpt') ? 'OPENAI' : 'ANTHROPIC',
+      provider: model.startsWith('gpt') ? LLMProvider.CHATGPT : LLMProvider.CLAUDE,
       latencyMs: 100,
-    } as LLMResponse;
+    };
   }),
-  getProvider: vi.fn().mockReturnValue(model.startsWith('gpt') ? 'OPENAI' : 'ANTHROPIC'),
+  getProvider: vi
+    .fn()
+    .mockReturnValue(model.startsWith('gpt') ? LLMProvider.CHATGPT : LLMProvider.CLAUDE),
   getModel: vi.fn().mockReturnValue(model),
 });
 
@@ -79,47 +81,47 @@ describe('LLMServiceImpl', () => {
       expect(result.successes[0].model).toBe(LLMModel.GPT_4O_MINI);
     });
 
-    it('should query GPT-4o-mini, GPT-4o, and Claude Sonnet 4.5 for SOLO plan', async () => {
+    it('should query GPT-5.2 and Claude Sonnet 4.5 for SOLO plan', async () => {
       const result = await service.queryByPlan('test prompt', Plan.SOLO);
 
-      expect(mockOpenaiAdapter.query).toHaveBeenCalledWith('test prompt');
-      expect(mockGpt4oAdapter.query).toHaveBeenCalledWith('test prompt');
-      expect(mockClaudeSonnetAdapter.query).toHaveBeenCalledWith('test prompt');
-      expect(mockGpt52Adapter.query).not.toHaveBeenCalled();
-      expect(mockClaudeOpusAdapter.query).not.toHaveBeenCalled();
-
-      expect(result.successes).toHaveLength(3);
-    });
-
-    it('should query all models for PRO plan', async () => {
-      const result = await service.queryByPlan('test prompt', Plan.PRO);
-
-      expect(mockOpenaiAdapter.query).toHaveBeenCalledWith('test prompt');
-      expect(mockGpt4oAdapter.query).toHaveBeenCalledWith('test prompt');
       expect(mockGpt52Adapter.query).toHaveBeenCalledWith('test prompt');
       expect(mockClaudeSonnetAdapter.query).toHaveBeenCalledWith('test prompt');
-      expect(mockClaudeOpusAdapter.query).toHaveBeenCalledWith('test prompt');
+      expect(mockOpenaiAdapter.query).not.toHaveBeenCalled();
+      expect(mockGpt4oAdapter.query).not.toHaveBeenCalled();
+      expect(mockClaudeOpusAdapter.query).not.toHaveBeenCalled();
 
-      expect(result.successes).toHaveLength(5);
+      expect(result.successes).toHaveLength(2);
+    });
+
+    it('should query GPT-5.2 and Claude Sonnet 4.5 for PRO plan', async () => {
+      const result = await service.queryByPlan('test prompt', Plan.PRO);
+
+      expect(mockGpt52Adapter.query).toHaveBeenCalledWith('test prompt');
+      expect(mockClaudeSonnetAdapter.query).toHaveBeenCalledWith('test prompt');
+      expect(mockOpenaiAdapter.query).not.toHaveBeenCalled();
+      expect(mockGpt4oAdapter.query).not.toHaveBeenCalled();
+      expect(mockClaudeOpusAdapter.query).not.toHaveBeenCalled();
+
+      expect(result.successes).toHaveLength(2);
     });
 
     it('should handle partial failures gracefully', async () => {
-      const failingGpt4oAdapter = createMockAdapter(LLMModel.GPT_4O, true);
+      const failingClaudeSonnetAdapter = createMockAdapter(LLMModel.CLAUDE_SONNET_4_5, true);
 
       service = new LLMServiceImpl(
         mockOpenaiAdapter as unknown as OpenAILLMAdapter,
-        failingGpt4oAdapter as unknown as GPT4oLLMAdapter,
+        mockGpt4oAdapter as unknown as GPT4oLLMAdapter,
         mockGpt52Adapter as unknown as GPT52LLMAdapter,
-        mockClaudeSonnetAdapter as unknown as ClaudeSonnetLLMAdapter,
+        failingClaudeSonnetAdapter as unknown as ClaudeSonnetLLMAdapter,
         mockClaudeOpusAdapter as unknown as ClaudeOpusLLMAdapter,
         mockLogger,
       );
 
       const result = await service.queryByPlan('test prompt', Plan.SOLO);
 
-      expect(result.successes).toHaveLength(2);
+      expect(result.successes).toHaveLength(1);
       expect(result.failures).toHaveLength(1);
-      expect(result.failures[0].model).toBe(LLMModel.GPT_4O);
+      expect(result.failures[0].model).toBe(LLMModel.CLAUDE_SONNET_4_5);
       expect(result.failures[0].error).toContain('Mock error');
     });
 
@@ -141,19 +143,15 @@ describe('LLMServiceImpl', () => {
       expect(result.failures).toHaveLength(1);
     });
 
-    it('should match PLAN_MODELS configuration', () => {
-      expect(PLAN_MODELS[Plan.FREE]).toEqual([LLMModel.GPT_4O_MINI]);
-      expect(PLAN_MODELS[Plan.SOLO]).toEqual([
-        LLMModel.GPT_4O_MINI,
-        LLMModel.GPT_4O,
-        LLMModel.CLAUDE_SONNET_4_5,
-      ]);
-      expect(PLAN_MODELS[Plan.PRO]).toEqual([
-        LLMModel.GPT_4O_MINI,
-        LLMModel.GPT_4O,
+    it('should match plan model configuration', () => {
+      expect(getModelsForPlan(SharedPlan.FREE)).toEqual([LLMModel.GPT_4O_MINI]);
+      expect(getModelsForPlan(SharedPlan.SOLO)).toEqual([
         LLMModel.GPT_5_2,
         LLMModel.CLAUDE_SONNET_4_5,
-        LLMModel.CLAUDE_OPUS_4_5,
+      ]);
+      expect(getModelsForPlan(SharedPlan.PRO)).toEqual([
+        LLMModel.GPT_5_2,
+        LLMModel.CLAUDE_SONNET_4_5,
       ]);
     });
 
@@ -161,26 +159,15 @@ describe('LLMServiceImpl', () => {
       const delays: number[] = [];
       const startTime = Date.now();
 
-      vi.spyOn(mockOpenaiAdapter, 'query').mockImplementation(async () => {
+      vi.spyOn(mockGpt52Adapter, 'query').mockImplementation(async () => {
         await new Promise((resolve) => setTimeout(resolve, 50));
         delays.push(Date.now() - startTime);
         return {
           content: '',
-          model: LLMModel.GPT_4O_MINI,
-          provider: 'OPENAI',
+          model: LLMModel.GPT_5_2,
+          provider: LLMProvider.CHATGPT,
           latencyMs: 50,
-        } as LLMResponse;
-      });
-
-      vi.spyOn(mockGpt4oAdapter, 'query').mockImplementation(async () => {
-        await new Promise((resolve) => setTimeout(resolve, 50));
-        delays.push(Date.now() - startTime);
-        return {
-          content: '',
-          model: LLMModel.GPT_4O,
-          provider: 'OPENAI',
-          latencyMs: 50,
-        } as LLMResponse;
+        };
       });
 
       vi.spyOn(mockClaudeSonnetAdapter, 'query').mockImplementation(async () => {
@@ -189,17 +176,17 @@ describe('LLMServiceImpl', () => {
         return {
           content: '',
           model: LLMModel.CLAUDE_SONNET_4_5,
-          provider: 'ANTHROPIC',
+          provider: LLMProvider.CLAUDE,
           latencyMs: 50,
-        } as LLMResponse;
+        };
       });
 
       await service.queryByPlan('test prompt', Plan.SOLO);
 
       // All queries should complete around the same time (parallel execution)
-      // If sequential, total time would be ~150ms
+      // If sequential, total time would be ~100ms
       const totalTime = Math.max(...delays);
-      expect(totalTime).toBeLessThan(120);
+      expect(totalTime).toBeLessThan(80);
     });
   });
 });

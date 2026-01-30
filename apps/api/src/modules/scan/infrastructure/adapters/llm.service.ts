@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { LLMProvider, Plan } from '@prisma/client';
-import { LLMModel, PLAN_MODELS } from '@coucou-ia/shared';
+import { LLMModel, getModelsForPlan, Plan as SharedPlan } from '@coucou-ia/shared';
 
 import { LoggerService } from '../../../../common/logger';
 
@@ -44,7 +44,7 @@ export class LLMServiceImpl implements LLMService {
   }
 
   async queryByPlan(prompt: string, plan: Plan): Promise<LLMQueryResult> {
-    const allowedModels = PLAN_MODELS[plan];
+    const allowedModels = getModelsForPlan(plan as SharedPlan);
     const adapters = allowedModels
       .map((model) => this.adaptersByModel.get(model))
       .filter((adapter): adapter is LLMPort => adapter !== undefined);

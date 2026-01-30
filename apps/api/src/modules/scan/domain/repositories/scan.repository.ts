@@ -1,9 +1,12 @@
+import type { LLMProvider } from '@prisma/client';
+
 import type { Scan, LLMResult } from '../entities/scan.entity';
 
 export const SCAN_REPOSITORY = Symbol('SCAN_REPOSITORY');
 
 export interface CreateScanData {
   promptId: string;
+  provider: LLMProvider;
   results: LLMResult[];
 }
 

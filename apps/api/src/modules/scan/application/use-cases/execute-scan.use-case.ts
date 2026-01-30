@@ -163,6 +163,7 @@ export class ExecuteScanUseCase {
 
         const scan = await this.scanRepository.create({
           promptId,
+          provider: results[0].provider,
           results,
         });
 

@@ -24,8 +24,8 @@ enum SubscriptionStatus {
 }
 
 enum LLMProvider {
-  OPENAI
-  ANTHROPIC
+  CHATGPT
+  CLAUDE
 }
 
 enum ScanJobStatus {
@@ -164,9 +164,10 @@ model Prompt {
 }
 
 model Scan {
-  id         String   @id @default(cuid())
-  promptId   String   @map("prompt_id")
-  executedAt DateTime @default(now()) @map("executed_at")
+  id         String      @id @default(cuid())
+  promptId   String      @map("prompt_id")
+  provider   LLMProvider
+  executedAt DateTime    @default(now()) @map("executed_at")
 
   // Results for each LLM provider stored as JSON
   // Structure: { provider: LLMProvider, model: string, rawResponse: string,
@@ -179,6 +180,7 @@ model Scan {
   prompt Prompt @relation(fields: [promptId], references: [id], onDelete: Cascade)
 
   @@index([promptId, executedAt])
+  @@index([provider])
   @@map("scans")
 }
 

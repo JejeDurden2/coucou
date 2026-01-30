@@ -3,7 +3,10 @@ import {
   createButton,
   createParagraph,
   createHeading,
+  createProviderList,
+  createProviderListText,
   EMAIL_COLORS,
+  type EmailProvider,
 } from './base.template';
 
 export interface PlanUpgradeEmailData {
@@ -12,18 +15,21 @@ export interface PlanUpgradeEmailData {
   dashboardUrl: string;
 }
 
-const PLAN_FEATURES = {
+const PLAN_FEATURES: Record<
+  'SOLO' | 'PRO',
+  { projects: number; promptsPerProject: number; providers: EmailProvider[] }
+> = {
   SOLO: {
     projects: 5,
     promptsPerProject: 10,
-    models: ['GPT-4o-mini', 'GPT-4o', 'Claude Sonnet 4.5'],
+    providers: ['CHATGPT', 'CLAUDE'],
   },
   PRO: {
     projects: 15,
     promptsPerProject: 50,
-    models: ['GPT-4o-mini', 'GPT-4o', 'GPT-5.2', 'Claude Sonnet 4.5', 'Claude Opus 4.5'],
+    providers: ['CHATGPT', 'CLAUDE'],
   },
-} as const;
+};
 
 export function generatePlanUpgradeEmail(data: PlanUpgradeEmailData): {
   html: string;
@@ -54,8 +60,8 @@ export function generatePlanUpgradeEmail(data: PlanUpgradeEmailData): {
               <td style="padding: 8px 0; font-size: 14px; color: ${EMAIL_COLORS.text}; text-align: right; font-weight: 500;">${features.promptsPerProject}</td>
             </tr>
             <tr>
-              <td style="padding: 8px 0; font-size: 14px; color: ${EMAIL_COLORS.textMuted};">Modèles IA</td>
-              <td style="padding: 8px 0; font-size: 14px; color: ${EMAIL_COLORS.text}; text-align: right; font-weight: 500;">${features.models.length}</td>
+              <td style="padding: 8px 0; font-size: 14px; color: ${EMAIL_COLORS.textMuted};">IA analysées</td>
+              <td style="padding: 8px 0; font-size: 14px; color: ${EMAIL_COLORS.text}; text-align: right; font-weight: 500;">${createProviderList(features.providers)}</td>
             </tr>
           </table>
         </td>
@@ -79,7 +85,7 @@ Votre compte a été mis à niveau vers le plan ${data.planName}.
 Votre plan inclut :
 - ${features.projects} projets
 - ${features.promptsPerProject} requêtes par projet
-- ${features.models.length} modèles IA (${features.models.join(', ')})
+- IA analysées : ${createProviderListText(features.providers)}
 
 Accéder au dashboard : ${data.dashboardUrl}
 

@@ -4,6 +4,7 @@ import { Check } from 'lucide-react';
 import { Plan, PLAN_PRICING } from '@coucou-ia/shared';
 
 import { Button } from '@/components/ui/button';
+import { FeatureWithLogos } from '@/components/ui/feature-with-logos';
 import { cn } from '@/lib/utils';
 
 interface PlanCardProps {
@@ -58,7 +59,7 @@ export function PlanCard({
         {pricing.features.map((feature) => (
           <li key={feature} className="flex items-start gap-2 text-sm">
             <Check className="size-4 text-primary shrink-0 mt-0.5" aria-hidden="true" />
-            <span>{feature}</span>
+            <FeatureWithLogos feature={feature} />
           </li>
         ))}
       </ul>

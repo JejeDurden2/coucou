@@ -9,8 +9,8 @@ export enum Plan {
 }
 
 export enum LLMProvider {
-  OPENAI = 'OPENAI',
-  ANTHROPIC = 'ANTHROPIC',
+  CHATGPT = 'CHATGPT',
+  CLAUDE = 'CLAUDE',
 }
 
 export enum LLMModel {
@@ -322,6 +322,7 @@ export type SimpleTrend = 'up' | 'down' | 'stable';
 
 export interface HistoricalModelBreakdown {
   model: string;
+  provider: LLMProvider;
   citationRate: number;
   averageRank: number | null;
   trend: SimpleTrend;
@@ -507,18 +508,6 @@ export function getScanAvailability(
   };
 }
 
-export const PLAN_MODELS: Record<Plan, LLMModel[]> = {
-  [Plan.FREE]: [LLMModel.GPT_4O_MINI],
-  [Plan.SOLO]: [LLMModel.GPT_4O_MINI, LLMModel.GPT_4O, LLMModel.CLAUDE_SONNET_4_5],
-  [Plan.PRO]: [
-    LLMModel.GPT_4O_MINI,
-    LLMModel.GPT_4O,
-    LLMModel.GPT_5_2,
-    LLMModel.CLAUDE_SONNET_4_5,
-    LLMModel.CLAUDE_OPUS_4_5,
-  ],
-};
-
 // ============================================
 // Pricing Configuration
 // ============================================
@@ -536,7 +525,7 @@ export const PLAN_PRICING: Record<Plan, PlanPricing> = {
     price: 0,
     period: 'month',
     description: 'Pour tester la plateforme',
-    features: ['1 marque', '2 prompts', 'GPT-4o-mini', '1 analyse/prompt/semaine'],
+    features: ['1 marque', '2 prompts', 'ChatGPT', '1 analyse/prompt/semaine'],
   },
   [Plan.SOLO]: {
     price: 39,
@@ -545,7 +534,7 @@ export const PLAN_PRICING: Record<Plan, PlanPricing> = {
     features: [
       '5 marques',
       '10 prompts par marque',
-      'GPT-4o-mini, GPT-4o, Claude Sonnet 4.5',
+      'ChatGPT + Claude',
       '2 analyses/prompt/semaine',
       'Analyse sentiment',
       'Historique 30 jours',
@@ -560,7 +549,7 @@ export const PLAN_PRICING: Record<Plan, PlanPricing> = {
     features: [
       '15 marques',
       '50 prompts par marque',
-      'Tous les modèles + Claude Opus 4.5, GPT-5.2',
+      'ChatGPT + Claude',
       '1 analyse/prompt/jour',
       'Analyse sentiment',
       'Historique illimité',

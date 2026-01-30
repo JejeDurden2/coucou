@@ -12,12 +12,12 @@ export const faqs: FAQ[] = [
   {
     question: 'Quelle est la différence entre GEO et SEO ?',
     answer:
-      'Le SEO optimise votre positionnement dans les résultats de recherche classiques (Google, Bing). Le GEO optimise votre visibilité dans les réponses conversationnelles des IA. Les deux sont complémentaires : un bon SEO renforce votre GEO, mais le GEO requiert aussi de travailler la notoriété de marque et la présence sur les sources citées par les LLM.',
+      'Le SEO optimise votre positionnement dans les résultats de recherche classiques (Google, Bing). Le GEO optimise votre visibilité dans les réponses conversationnelles des IA. Les deux sont complémentaires : un bon SEO renforce votre GEO, mais le GEO requiert aussi de travailler la notoriété de marque et la présence sur les sources citées par les moteurs IA.',
   },
   {
     question: 'Quels moteurs IA sont supportés ?',
     answer:
-      "Coucou IA supporte actuellement ChatGPT (OpenAI) et Claude (Anthropic), les deux leaders du marché de l'IA conversationnelle. Ces modèles couvrent la majorité des usages de recherche IA. D'autres moteurs seront ajoutés prochainement.",
+      'Coucou IA supporte actuellement ChatGPT et Claude, les deux leaders du marché des moteurs de recherche IA. Gemini sera bientôt disponible. Ces moteurs couvrent la majorité des usages de recherche IA conversationnelle.',
   },
   {
     question: 'Combien de temps pour voir mes premiers résultats ?',

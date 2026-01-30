@@ -16,11 +16,13 @@ import {
   type PromptPerformance,
   type PromptCategory,
   type HistoricalStats,
+  LLMProvider,
+  getDisplayNameForProvider,
 } from '@coucou-ia/shared';
 import { useHistoricalStats } from '@/hooks/use-historical-stats';
 import { DateRangePicker, type DatePreset } from './date-range-picker';
 import { CitationRateChart } from './citation-rate-chart';
-import { ModelPerformanceTable } from './model-performance-table';
+import { ProviderPerformanceTable } from './provider-performance-table';
 import { PromptPerformanceTable } from './prompt-performance-table';
 import { CompetitorRankingTable } from './competitor-ranking-table';
 import { Badge } from '@/components/ui/badge';
@@ -73,11 +75,16 @@ function generateCSV(data: HistoricalStats, projectName: string): void {
   const BOM = '\uFEFF';
   const SEP = ';';
 
-  // Get all unique models from rankByModel
-  const models = Object.keys(data.rankByModel);
+  // Get providers: ChatGPT and Claude
+  const providers = [LLMProvider.CHATGPT, LLMProvider.CLAUDE];
 
-  // Build header row
-  const headers = ['Date', 'Part de voix (%)', 'Position moy.', ...models.map((m) => `Rang ${m}`)];
+  // Build header row with provider names
+  const headers = [
+    'Date',
+    'Part de voix (%)',
+    'Position moy.',
+    ...providers.map((p) => `Rang ${getDisplayNameForProvider(p)}`),
+  ];
 
   // Build data rows from citationRate time series
   const rows: string[][] = data.citationRate.map((point) => {
@@ -88,14 +95,31 @@ function generateCSV(data: HistoricalStats, projectName: string): void {
     const avgRankPoint = data.averageRank.find((r) => r.date === date);
     const avgRank = avgRankPoint ? avgRankPoint.value.toFixed(1) : '';
 
-    // Find matching rank for each model
-    const modelRanks = models.map((model) => {
-      const modelData = data.rankByModel[model];
-      const modelPoint = modelData?.find((r) => r.date === date);
-      return modelPoint ? modelPoint.value.toFixed(1) : '';
+    // Build model→provider lookup from modelBreakdown
+    const modelToProvider = new Map(data.modelBreakdown.map((m) => [m.model, m.provider]));
+
+    // Find matching rank for each provider (aggregate from models)
+    const providerRanks = providers.map((provider) => {
+      // Find models belonging to this provider using the lookup map
+      const providerModels = Object.keys(data.rankByModel).filter(
+        (modelId) => modelToProvider.get(modelId) === provider,
+      );
+
+      // Get ranks for this date from all models of this provider
+      const ranks: number[] = [];
+      for (const model of providerModels) {
+        const modelData = data.rankByModel[model];
+        const modelPoint = modelData?.find((r) => r.date === date);
+        if (modelPoint) ranks.push(modelPoint.value);
+      }
+
+      // Average the ranks
+      if (ranks.length === 0) return '';
+      const avgProviderRank = ranks.reduce((a, b) => a + b, 0) / ranks.length;
+      return avgProviderRank.toFixed(1);
     });
 
-    return [date, citationValue, avgRank, ...modelRanks];
+    return [date, citationValue, avgRank, ...providerRanks];
   });
 
   // Add empty row before competitors section
@@ -318,7 +342,7 @@ export function StatsContainer({
 
       {/* Tables Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <ModelPerformanceTable data={data.modelBreakdown} userPlan={userPlan} />
+        <ProviderPerformanceTable data={data.modelBreakdown} />
         <div className="rounded-lg border border-border bg-card p-4">
           <h3 className="text-sm font-medium mb-4 text-balance">Performance par requête</h3>
           <PromptPerformanceTable

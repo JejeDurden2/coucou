@@ -73,10 +73,10 @@ describe('ExecuteSentimentScanUseCase', () => {
 
   const createLLMResponse = (
     content: string,
-    provider: LLMProvider = LLMProvider.OPENAI,
+    provider: LLMProvider = LLMProvider.CHATGPT,
   ): LLMResponse => ({
     content,
-    model: provider === LLMProvider.OPENAI ? 'gpt-5.2' : 'claude-sonnet-4-5',
+    model: provider === LLMProvider.CHATGPT ? 'gpt-5.2' : 'claude-sonnet-4-5',
     provider,
     latencyMs: 500,
   });
@@ -94,7 +94,7 @@ describe('ExecuteSentimentScanUseCase', () => {
 
     mockGpt52Adapter = {
       query: vi.fn(),
-      getProvider: vi.fn().mockReturnValue(LLMProvider.OPENAI),
+      getProvider: vi.fn().mockReturnValue(LLMProvider.CHATGPT),
       getModel: vi.fn().mockReturnValue('gpt-5.2'),
     };
 
@@ -143,7 +143,7 @@ describe('ExecuteSentimentScanUseCase', () => {
     it('should successfully execute with both LLMs and calculate average score', async () => {
       (mockProjectRepository.findById as ReturnType<typeof vi.fn>).mockResolvedValue(mockProject);
       (mockGpt52Adapter.query as ReturnType<typeof vi.fn>).mockResolvedValue(
-        createLLMResponse(JSON.stringify(validGptResult), LLMProvider.OPENAI),
+        createLLMResponse(JSON.stringify(validGptResult), LLMProvider.CHATGPT),
       );
       mockAnthropicClient.createMessage.mockResolvedValue({
         text: JSON.stringify(validClaudeResult),
@@ -195,7 +195,7 @@ describe('ExecuteSentimentScanUseCase', () => {
     it('should succeed with single LLM when Claude fails', async () => {
       (mockProjectRepository.findById as ReturnType<typeof vi.fn>).mockResolvedValue(mockProject);
       (mockGpt52Adapter.query as ReturnType<typeof vi.fn>).mockResolvedValue(
-        createLLMResponse(JSON.stringify(validGptResult), LLMProvider.OPENAI),
+        createLLMResponse(JSON.stringify(validGptResult), LLMProvider.CHATGPT),
       );
       mockAnthropicClient.createMessage.mockRejectedValue(new Error('API timeout'));
 
@@ -224,9 +224,9 @@ describe('ExecuteSentimentScanUseCase', () => {
 
       // GPT: first call returns malformed JSON, second returns valid
       (mockGpt52Adapter.query as ReturnType<typeof vi.fn>)
-        .mockResolvedValueOnce(createLLMResponse('not valid json', LLMProvider.OPENAI))
+        .mockResolvedValueOnce(createLLMResponse('not valid json', LLMProvider.CHATGPT))
         .mockResolvedValueOnce(
-          createLLMResponse(JSON.stringify(validGptResult), LLMProvider.OPENAI),
+          createLLMResponse(JSON.stringify(validGptResult), LLMProvider.CHATGPT),
         );
 
       mockAnthropicClient.createMessage.mockResolvedValue({
@@ -280,7 +280,7 @@ ${JSON.stringify(validGptResult)}
 \`\`\``;
 
       (mockGpt52Adapter.query as ReturnType<typeof vi.fn>).mockResolvedValue(
-        createLLMResponse(wrappedJson, LLMProvider.OPENAI),
+        createLLMResponse(wrappedJson, LLMProvider.CHATGPT),
       );
       mockAnthropicClient.createMessage.mockResolvedValue({
         text: JSON.stringify(validClaudeResult),

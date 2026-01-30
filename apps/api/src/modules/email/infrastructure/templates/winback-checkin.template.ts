@@ -23,7 +23,7 @@ export function generateWinbackCheckinEmail(data: WinbackCheckinEmailData): {
 
     ${createParagraph('Cela fait une semaine que vous êtes passé au plan Gratuit. Votre marque est-elle toujours citée par les IA ?')}
 
-    ${createParagraph('Avec le plan Gratuit, vos analyses ne couvrent plus que GPT-4o-mini.')}
+    ${createParagraph('Avec le plan Gratuit, vos analyses ne couvrent plus que ChatGPT.')}
 
     ${createButton('Vérifier ma visibilité', data.dashboardUrl)}
 
@@ -43,7 +43,7 @@ Bonjour ${data.firstName},
 
 Cela fait une semaine que vous êtes passé au plan Gratuit. Votre marque est-elle toujours citée par les IA ?
 
-Avec le plan Gratuit, vos analyses ne couvrent plus que GPT-4o-mini.
+Avec le plan Gratuit, vos analyses ne couvrent plus que ChatGPT.
 
 Vérifier ma visibilité : ${data.dashboardUrl}
 

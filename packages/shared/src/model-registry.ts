@@ -18,27 +18,27 @@ const MODEL_REGISTRY: Record<string, ModelMetadata> = {
   [LLMModel.GPT_4O_MINI]: {
     displayName: 'GPT-4o Mini',
     abbreviation: '4o-mini',
-    provider: LLMProvider.OPENAI,
+    provider: LLMProvider.CHATGPT,
   },
   [LLMModel.GPT_4O]: {
     displayName: 'GPT-4o',
     abbreviation: '4o',
-    provider: LLMProvider.OPENAI,
+    provider: LLMProvider.CHATGPT,
   },
   [LLMModel.GPT_5_2]: {
     displayName: 'GPT-5.2',
     abbreviation: '5.2',
-    provider: LLMProvider.OPENAI,
+    provider: LLMProvider.CHATGPT,
   },
   [LLMModel.CLAUDE_SONNET_4_5]: {
     displayName: 'Claude Sonnet 4.5',
     abbreviation: 'Sonnet',
-    provider: LLMProvider.ANTHROPIC,
+    provider: LLMProvider.CLAUDE,
   },
   [LLMModel.CLAUDE_OPUS_4_5]: {
     displayName: 'Claude Opus 4.5',
     abbreviation: 'Opus',
-    provider: LLMProvider.ANTHROPIC,
+    provider: LLMProvider.CLAUDE,
   },
 };
 
@@ -59,7 +59,7 @@ function parseModelId(modelId: string): ModelMetadata | null {
     return {
       displayName: `Claude ${tier} ${version}`,
       abbreviation: tier,
-      provider: LLMProvider.ANTHROPIC,
+      provider: LLMProvider.CLAUDE,
     };
   }
 
@@ -69,7 +69,7 @@ function parseModelId(modelId: string): ModelMetadata | null {
     return {
       displayName: `GPT-${openaiMatch[1]}`,
       abbreviation: openaiMatch[1],
-      provider: LLMProvider.OPENAI,
+      provider: LLMProvider.CHATGPT,
     };
   }
 
@@ -90,7 +90,7 @@ export function getModelMetadata(modelId: string): ModelMetadata {
   return {
     displayName: modelId,
     abbreviation: modelId,
-    provider: LLMProvider.OPENAI,
+    provider: LLMProvider.CHATGPT,
   };
 }
 
@@ -100,4 +100,30 @@ export function getModelDisplayName(modelId: string): string {
 
 export function getModelAbbreviation(modelId: string): string {
   return getModelMetadata(modelId).abbreviation;
+}
+
+// ============================================
+// Provider Display Layer
+// ============================================
+
+export const PROVIDER_DISPLAY_NAME: Record<LLMProvider, string> = {
+  [LLMProvider.CHATGPT]: 'ChatGPT',
+  [LLMProvider.CLAUDE]: 'Claude',
+};
+
+export const PROVIDER_LOGO: Record<LLMProvider, string> = {
+  [LLMProvider.CHATGPT]: '/logos/chatgpt.svg',
+  [LLMProvider.CLAUDE]: '/logos/claude.svg',
+};
+
+export function getProviderForModel(model: LLMModel): LLMProvider {
+  return MODEL_REGISTRY[model]?.provider ?? LLMProvider.CHATGPT;
+}
+
+export function getDisplayNameForProvider(provider: LLMProvider): string {
+  return PROVIDER_DISPLAY_NAME[provider];
+}
+
+export function getLogoForProvider(provider: LLMProvider): string {
+  return PROVIDER_LOGO[provider];
 }
