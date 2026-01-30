@@ -2,9 +2,15 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Menu, X } from 'lucide-react';
+import { ChevronDown, Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Logo } from '@/components/ui/logo';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 interface HeaderProps {
   variant?: 'default' | 'blog';
@@ -53,6 +59,20 @@ export function Header({ variant = 'default' }: HeaderProps) {
               {link.label}
             </Link>
           ))}
+          <DropdownMenu>
+            <DropdownMenuTrigger className="flex items-center gap-1 text-sm text-muted-foreground hover:text-primary transition-colors">
+              Ressources
+              <ChevronDown className="size-4" aria-hidden="true" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start">
+              <DropdownMenuItem asChild>
+                <Link href="/lexique">Lexique GEO</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href="/geo-pour">GEO par métier</Link>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
 
         <div className="hidden md:flex items-center gap-4">
@@ -92,6 +112,26 @@ export function Header({ variant = 'default' }: HeaderProps) {
                 {link.label}
               </Link>
             ))}
+
+            <div className="pt-2 border-t border-border">
+              <p className="text-xs font-medium text-muted-foreground/70 uppercase tracking-wider py-2">
+                Ressources
+              </p>
+              <Link
+                href="/lexique"
+                className="block text-sm text-muted-foreground hover:text-primary transition-colors py-2"
+                onClick={closeMobileMenu}
+              >
+                Lexique GEO
+              </Link>
+              <Link
+                href="/geo-pour"
+                className="block text-sm text-muted-foreground hover:text-primary transition-colors py-2"
+                onClick={closeMobileMenu}
+              >
+                GEO par métier
+              </Link>
+            </div>
 
             <div className="flex flex-col gap-3 pt-4 border-t border-border">
               <Button variant="ghost" asChild>

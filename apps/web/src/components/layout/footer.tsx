@@ -59,6 +59,11 @@ export function Footer() {
                   CGU
                 </Link>
               </li>
+              <li>
+                <Link href="/mentions-legales" className="hover:text-foreground">
+                  Mentions légales
+                </Link>
+              </li>
             </ul>
           </nav>
         </div>
