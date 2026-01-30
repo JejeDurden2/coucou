@@ -128,16 +128,26 @@ export const PROVIDER_LOGO: Record<LLMProvider, string> = {
   [LLMProvider.CLAUDE]: '/logos/claude.svg',
 };
 
+// Legacy provider names from before the rename (OPENAI→CHATGPT, ANTHROPIC→CLAUDE)
+const LEGACY_PROVIDER_MAP: Record<string, LLMProvider> = {
+  OPENAI: LLMProvider.CHATGPT,
+  ANTHROPIC: LLMProvider.CLAUDE,
+};
+
+function normalizeProvider(provider: LLMProvider | string): LLMProvider {
+  return LEGACY_PROVIDER_MAP[provider as string] ?? (provider as LLMProvider);
+}
+
 export function getProviderForModel(model: LLMModel): LLMProvider {
   return MODEL_REGISTRY[model]?.provider ?? LLMProvider.CHATGPT;
 }
 
-export function getDisplayNameForProvider(provider: LLMProvider): string {
-  return PROVIDER_DISPLAY_NAME[provider];
+export function getDisplayNameForProvider(provider: LLMProvider | string): string {
+  return PROVIDER_DISPLAY_NAME[normalizeProvider(provider)] ?? 'Unknown';
 }
 
-export function getLogoForProvider(provider: LLMProvider): string {
-  return PROVIDER_LOGO[provider];
+export function getLogoForProvider(provider: LLMProvider | string): string {
+  return PROVIDER_LOGO[normalizeProvider(provider)] ?? '/logos/chatgpt.svg';
 }
 
 export function getModelPriority(modelId: string): number {
