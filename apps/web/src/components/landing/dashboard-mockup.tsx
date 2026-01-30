@@ -1,14 +1,17 @@
-import { Bot, Heart, MessageSquare, Trophy, TrendingDown } from 'lucide-react';
+import { Bot, Heart, Trophy, TrendingDown } from 'lucide-react';
+
+import { LLMProvider } from '@coucou-ia/shared';
 
 import { Badge } from '@/components/ui/badge';
+import { ProviderLogo } from '@/components/ui/provider-logo';
 import { Sparkline } from '@/components/ui/sparkline';
 
 const POSITION_SPARKLINE = [3.2, 2.8, 2.5, 2.7, 2.3, 2.1, 2.0];
 const SENTIMENT_SCORE = 78;
 
 const PROVIDERS = [
-  { name: 'ChatGPT', position: '1.8', color: 'text-amber-400' },
-  { name: 'Claude', position: '2.1', color: 'text-slate-300' },
+  { name: 'ChatGPT', provider: LLMProvider.CHATGPT, position: '1.8', color: 'text-amber-400' },
+  { name: 'Claude', provider: LLMProvider.CLAUDE, position: '2.1', color: 'text-slate-300' },
 ] as const;
 
 const SENTIMENT_TAGS = ['Marque reconnue', 'Prix compétitifs'] as const;
@@ -45,11 +48,7 @@ export function DashboardMockup() {
             className="hidden rounded-xl border border-border/50 bg-background/40 p-3 md:block"
           >
             <div className="mb-2 flex items-center gap-2 text-xs text-muted-foreground">
-              {provider.name === 'ChatGPT' ? (
-                <MessageSquare className="size-3.5" aria-hidden="true" />
-              ) : (
-                <Bot className="size-3.5" aria-hidden="true" />
-              )}
+              <ProviderLogo provider={provider.provider} size="sm" />
               <span>{provider.name}</span>
             </div>
             <p className={`text-lg font-semibold tabular-nums font-mono ${provider.color}`}>
