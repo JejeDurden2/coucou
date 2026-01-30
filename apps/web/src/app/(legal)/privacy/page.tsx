@@ -28,8 +28,11 @@ export default function PrivacyPage(): React.ReactNode {
           <section className="space-y-4">
             <h2 className="text-xl font-semibold text-balance">1. Responsable du traitement</h2>
             <p className="text-muted-foreground">
-              Coucou IA, société par actions simplifiée, dont le siège social est situé à Paris,
-              France.
+              Coucou IA, société par actions simplifiée à associé unique (SASU) au capital de 500
+              euros, immatriculée au RCS de Nice sous le numéro 100 498 070, dont le siège social
+              est situé 460 Avenue de Pessicart, 06100 Nice, France.
+              <br />
+              Représentée par Monsieur Jérôme Desmares, Président.
               <br />
               Email : privacy@coucou-ia.com
             </p>
@@ -184,9 +187,10 @@ export default function PrivacyPage(): React.ReactNode {
           <section className="space-y-4">
             <h2 className="text-xl font-semibold text-balance">10. Transferts internationaux</h2>
             <p className="text-muted-foreground">
-              Certains de nos prestataires (OpenAI, Anthropic, Stripe) sont situés aux États-Unis.
-              Ces transferts sont encadrés par des clauses contractuelles types (CCT) approuvées par
-              la Commission européenne.
+              Certains de nos prestataires (OpenAI, Anthropic, Stripe, Vercel, Railway, Neon) sont
+              situés aux États-Unis. Ces transferts sont encadrés par des clauses contractuelles
+              types (CCT) approuvées par la Commission européenne et/ou le Data Privacy Framework
+              UE-USA.
             </p>
           </section>
 
