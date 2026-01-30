@@ -62,7 +62,11 @@ import {
   Plan,
   PLAN_LIMITS,
   type PromptCategory,
-  getModelDisplayName,
+  LLMProvider,
+  type LLMModel,
+  getProviderForModel,
+  getModelPriority,
+  getDisplayNameForProvider,
 } from '@coucou-ia/shared';
 import { cn } from '@/lib/utils';
 import { formatRelativeTime } from '@/lib/format';
@@ -71,6 +75,7 @@ import { KpiBentoSection } from '@/components/dashboard/kpi-cards';
 import { PulsingDot } from '@/components/ui/pulsing-dot';
 import { CitationStatus } from '@/components/dashboard/citation-status';
 import { ScanAvailabilityBadge } from '@/components/dashboard/scan-availability-badge';
+import { ProviderLogo } from '@/components/ui/provider-logo';
 
 function formatScanProgress(
   scanProgress: { status?: string; progress?: number } | undefined,
@@ -158,9 +163,16 @@ export default function ProjectDashboardPage({
   }
 
   const promptCount = stats?.promptStats?.length ?? 0;
-  const availableModels = Array.from(
-    new Set(stats?.promptStats?.flatMap((p) => p.modelResults.map((r) => r.model)) ?? []),
-  );
+  const availableProviders = Array.from(
+    new Set(
+      stats?.promptStats?.flatMap((p) =>
+        p.modelResults.map((r) => getProviderForModel(r.model as LLMModel)),
+      ) ?? [],
+    ),
+  ).sort((a, b) => {
+    const order = { [LLMProvider.CHATGPT]: 0, [LLMProvider.CLAUDE]: 1 };
+    return order[a] - order[b];
+  });
   const hasPrompts = promptCount > 0;
 
   const scannablePromptIds = new Set(
@@ -346,12 +358,14 @@ export default function ProjectDashboardPage({
                     <th className="text-left text-xs font-medium text-muted-foreground uppercase px-4 py-3">
                       Prompt
                     </th>
-                    {availableModels.map((model) => (
-                      <th
-                        key={model}
-                        className="text-center text-xs font-medium text-muted-foreground uppercase px-4 py-3 w-24"
-                      >
-                        {getModelDisplayName(model)}
+                    {availableProviders.map((provider) => (
+                      <th key={provider} className="px-4 py-3 w-24">
+                        <div className="flex items-center justify-center gap-1.5">
+                          <ProviderLogo provider={provider} size="sm" />
+                          <span className="text-xs font-medium text-muted-foreground">
+                            {getDisplayNameForProvider(provider)}
+                          </span>
+                        </div>
                       </th>
                     ))}
                     <th className="w-12" />
@@ -360,7 +374,10 @@ export default function ProjectDashboardPage({
                 <tbody>
                   {!hasPrompts ? (
                     <tr>
-                      <td colSpan={availableModels.length + 2} className="px-4 py-12 text-center">
+                      <td
+                        colSpan={availableProviders.length + 2}
+                        className="px-4 py-12 text-center"
+                      >
                         <div className="mx-auto size-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
                           <MessageSquare
                             className="size-8 text-primary opacity-50"
@@ -378,7 +395,21 @@ export default function ProjectDashboardPage({
                   ) : (
                     stats?.promptStats.map((prompt) => {
                       const isCitedByAny = prompt.modelResults.some((r) => r.isCited);
-                      const resultsByModel = new Map(prompt.modelResults.map((r) => [r.model, r]));
+                      // Group results by provider, keeping only the highest priority model
+                      const resultsByProvider = new Map<
+                        LLMProvider,
+                        (typeof prompt.modelResults)[0]
+                      >();
+                      for (const result of prompt.modelResults) {
+                        const provider = getProviderForModel(result.model as LLMModel);
+                        const existing = resultsByProvider.get(provider);
+                        if (
+                          !existing ||
+                          getModelPriority(result.model) > getModelPriority(existing.model)
+                        ) {
+                          resultsByProvider.set(provider, result);
+                        }
+                      }
                       const scanAvailability = getScanAvailability(prompt.lastScanAt, userPlan);
                       return (
                         <tr
@@ -409,9 +440,9 @@ export default function ProjectDashboardPage({
                               </div>
                             </div>
                           </td>
-                          {availableModels.map((model) => (
-                            <td key={model} className="px-4 py-3 text-center">
-                              <CitationStatus result={resultsByModel.get(model) ?? null} />
+                          {availableProviders.map((provider) => (
+                            <td key={provider} className="px-4 py-3 text-center">
+                              <CitationStatus result={resultsByProvider.get(provider) ?? null} />
                             </td>
                           ))}
                           <td className="px-4 py-3">
@@ -461,7 +492,7 @@ export default function ProjectDashboardPage({
                 className="flex items-center gap-2 text-xs text-muted-foreground hover:text-primary transition-colors cursor-pointer"
               >
                 <Lock className="size-3" aria-hidden="true" />
-                <span>Résultats GPT-4o-mini uniquement. +2 modèles IA avec Solo</span>
+                <span>ChatGPT uniquement. Ajoutez Claude avec Solo</span>
               </button>
             )}
           </div>

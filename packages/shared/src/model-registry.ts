@@ -11,6 +11,18 @@ export interface ModelMetadata {
 }
 
 // ============================================
+// Model Priority (higher = more recent/preferred)
+// ============================================
+
+const MODEL_PRIORITY: Record<string, number> = {
+  [LLMModel.GPT_4O_MINI]: 1,
+  [LLMModel.GPT_4O]: 2,
+  [LLMModel.GPT_5_2]: 3,
+  [LLMModel.CLAUDE_SONNET_4_5]: 1,
+  [LLMModel.CLAUDE_OPUS_4_5]: 2,
+};
+
+// ============================================
 // Explicit registry for known models
 // ============================================
 
@@ -126,4 +138,8 @@ export function getDisplayNameForProvider(provider: LLMProvider): string {
 
 export function getLogoForProvider(provider: LLMProvider): string {
   return PROVIDER_LOGO[provider];
+}
+
+export function getModelPriority(modelId: string): number {
+  return MODEL_PRIORITY[modelId] ?? 0;
 }
