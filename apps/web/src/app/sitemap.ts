@@ -53,6 +53,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'yearly',
       priority: 0.3,
     },
+    {
+      url: `${baseUrl}/mentions-legales`,
+      lastModified: new Date('2026-01-30'),
+      changeFrequency: 'yearly',
+      priority: 0.3,
+    },
   ];
 
   // Blog posts
