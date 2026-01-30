@@ -5,7 +5,9 @@ import { notFound } from 'next/navigation';
 import { ArrowLeft, Calendar, Clock, User } from 'lucide-react';
 
 import { getPost, getAllPostSlugs, getAllPosts } from '@/lib/blog';
+import { autoLinkTermsInHtml } from '@/lib/cross-links';
 import { PostCard, PostContent } from '@/components/blog';
+import { TermCard } from '@/components/lexique';
 import { Logo } from '@/components/ui/logo';
 
 interface PageProps {
@@ -66,6 +68,9 @@ export default async function BlogPostPage({ params }: PageProps): Promise<React
     month: 'long',
     year: 'numeric',
   });
+
+  // Auto-link glossary terms in content
+  const { html: linkedContent, foundTerms } = autoLinkTermsInHtml(post.content);
 
   const jsonLd = {
     '@context': 'https://schema.org',
@@ -199,7 +204,21 @@ export default async function BlogPostPage({ params }: PageProps): Promise<React
           )}
 
           {/* Content */}
-          <PostContent content={post.content} />
+          <PostContent content={linkedContent} />
+
+          {/* Related Lexique Terms */}
+          {foundTerms.length > 0 && (
+            <section className="mt-16">
+              <h2 className="font-display text-2xl font-semibold text-foreground mb-6">
+                Termes du lexique
+              </h2>
+              <div className="grid gap-4 sm:grid-cols-2">
+                {foundTerms.slice(0, 4).map((term) => (
+                  <TermCard key={term.slug} term={term} />
+                ))}
+              </div>
+            </section>
+          )}
 
           {/* Related Posts */}
           {(() => {

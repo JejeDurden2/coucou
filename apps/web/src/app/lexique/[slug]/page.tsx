@@ -4,7 +4,9 @@ import { notFound } from 'next/navigation';
 import { ArrowLeft, Calendar, Clock } from 'lucide-react';
 
 import { getTerm, getAllTermSlugs, getRelatedTerms } from '@/lib/glossary';
+import { findPostsForTerm } from '@/lib/cross-links';
 import { TermCard, TermContent } from '@/components/lexique';
+import { PostCard } from '@/components/blog';
 import { Logo } from '@/components/ui/logo';
 
 interface PageProps {
@@ -63,6 +65,7 @@ export default async function TermPage({ params }: PageProps): Promise<React.Rea
   }
 
   const relatedTerms = getRelatedTerms(slug);
+  const relatedPosts = findPostsForTerm(slug);
 
   const formattedDate = new Date(term.lastUpdated).toLocaleDateString('fr-FR', {
     day: 'numeric',
@@ -231,6 +234,20 @@ export default async function TermPage({ params }: PageProps): Promise<React.Rea
                     <h3 className="font-semibold text-foreground mb-2">{item.question}</h3>
                     <p className="text-muted-foreground text-pretty">{item.answer}</p>
                   </div>
+                ))}
+              </div>
+            </section>
+          )}
+
+          {/* Related Blog Posts */}
+          {relatedPosts.length > 0 && (
+            <section className="mt-12">
+              <h2 className="font-display text-2xl font-semibold text-foreground mb-6">
+                Articles associés
+              </h2>
+              <div className="grid gap-6 md:grid-cols-2">
+                {relatedPosts.slice(0, 2).map((post) => (
+                  <PostCard key={post.slug} post={post} />
                 ))}
               </div>
             </section>
