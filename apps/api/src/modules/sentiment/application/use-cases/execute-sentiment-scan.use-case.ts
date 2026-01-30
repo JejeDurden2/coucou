@@ -215,7 +215,7 @@ JSON uniquement: {"s":score,"t":[themes],"kp":[positifs],"kn":[négatifs]}`;
       try {
         const response = await this.anthropicClient.createMessage({
           model: CLAUDE_SENTIMENT_MODEL,
-          maxTokens: 1024,
+          maxTokens: 8196,
           temperature: 0,
           system: SENTIMENT_SYSTEM_PROMPT,
           messages: [{ role: 'user', content: prompt }],

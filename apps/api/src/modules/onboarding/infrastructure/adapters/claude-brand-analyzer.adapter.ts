@@ -75,7 +75,7 @@ export class ClaudeBrandAnalyzerAdapter implements BrandAnalyzerPort {
 
     const response = await this.anthropicClient.createMessage({
       model: 'claude-sonnet-4-5-20250929',
-      maxTokens: 2048,
+      maxTokens: 8196,
       temperature: 0,
       system: CONTEXT_EXTRACTION_SYSTEM,
       messages: [{ role: 'user', content: CONTEXT_EXTRACTION_PROMPT(url, brandName) }],
