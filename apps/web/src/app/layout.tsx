@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Inter, JetBrains_Mono, Space_Grotesk } from 'next/font/google';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import './globals.css';
 
 // Primary sans-serif - clean and modern
@@ -128,6 +129,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           />
         </noscript>
         <Providers>{children}</Providers>
+        <SpeedInsights />
       </body>
     </html>
   );
