@@ -2,6 +2,7 @@ import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
   reactStrictMode: true,
+  trailingSlash: false,
   transpilePackages: ['@coucou-ia/shared'],
   experimental: {
     optimizePackageImports: [
@@ -11,6 +12,35 @@ const nextConfig: NextConfig = {
       'recharts',
       '@coucou-ia/shared',
     ],
+  },
+  async redirects() {
+    return [
+      {
+        source: '/lexique/',
+        destination: '/lexique',
+        permanent: true,
+      },
+      {
+        source: '/blog/',
+        destination: '/blog',
+        permanent: true,
+      },
+      {
+        source: '/blog/:slug/',
+        destination: '/blog/:slug',
+        permanent: true,
+      },
+      {
+        source: '/lexique/:slug/',
+        destination: '/lexique/:slug',
+        permanent: true,
+      },
+      {
+        source: '/geo-pour/:slug/',
+        destination: '/geo-pour/:slug',
+        permanent: true,
+      },
+    ];
   },
 };
 
