@@ -1,52 +1,68 @@
-# Observability - OpenTelemetry
+# Observability
 
-## Setup
+## OpenTelemetry Setup
+
+### Configuration ([tracing.ts](../../../apps/api/src/tracing.ts))
+
+OpenTelemetry is **optional** and enabled when `OTEL_EXPORTER_OTLP_ENDPOINT` is set:
 
 ```typescript
-// tracing.ts (load BEFORE app imports)
-import { NodeSDK } from '@opentelemetry/sdk-node';
-import { getNodeAutoInstrumentations } from '@opentelemetry/auto-instrumentations-node';
-import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http';
-import { OTLPMetricExporter } from '@opentelemetry/exporter-metrics-otlp-http';
-import { PeriodicExportingMetricReader } from '@opentelemetry/sdk-metrics';
-import { Resource } from '@opentelemetry/resources';
-import { ATTR_SERVICE_NAME, ATTR_SERVICE_VERSION } from '@opentelemetry/semantic-conventions';
+// Loaded first in main.ts via: import './tracing';
+const otlpEndpoint = process.env.OTEL_EXPORTER_OTLP_ENDPOINT;
 
-const sdk = new NodeSDK({
-  resource: new Resource({
-    [ATTR_SERVICE_NAME]: process.env.SERVICE_NAME || 'api',
-    [ATTR_SERVICE_VERSION]: process.env.npm_package_version || '1.0.0',
-  }),
-  traceExporter: new OTLPTraceExporter({
-    url: process.env.OTEL_EXPORTER_OTLP_ENDPOINT + '/v1/traces',
-  }),
-  metricReader: new PeriodicExportingMetricReader({
-    exporter: new OTLPMetricExporter({
-      url: process.env.OTEL_EXPORTER_OTLP_ENDPOINT + '/v1/metrics',
+if (otlpEndpoint) {
+  const sdk = new NodeSDK({
+    resource: resourceFromAttributes({
+      [ATTR_SERVICE_NAME]: process.env.SERVICE_NAME || 'coucou-api',
+      [ATTR_SERVICE_VERSION]: process.env.npm_package_version || '0.1.0',
     }),
-    exportIntervalMillis: 30000,
-  }),
-  instrumentations: [getNodeAutoInstrumentations()],
-});
+    traceExporter: new OTLPTraceExporter({
+      url: `${otlpEndpoint}/v1/traces`,
+      headers: parseOtlpHeaders(),
+      compression: CompressionAlgorithm.GZIP,
+      timeoutMillis: 5000,
+    }),
+    metricReader: new PeriodicExportingMetricReader({
+      exporter: new OTLPMetricExporter({
+        url: `${otlpEndpoint}/v1/metrics`,
+        headers: parseOtlpHeaders(),
+        compression: CompressionAlgorithm.GZIP,
+        timeoutMillis: 5000,
+      }),
+      exportIntervalMillis: 30_000,
+    }),
+    instrumentations: [
+      getNodeAutoInstrumentations({
+        '@opentelemetry/instrumentation-fs': { enabled: false },
+      }),
+    ],
+  });
 
-sdk.start();
+  sdk.start();
+  // Graceful shutdown on SIGTERM/SIGINT
+}
+```
+
+### Environment Variables
+
+```bash
+# Optional — tracing only enabled when endpoint is set
+OTEL_EXPORTER_OTLP_ENDPOINT=https://your-collector:4318
+OTEL_EXPORTER_OTLP_HEADERS=x-api-key=your-key,x-custom=value
+SERVICE_NAME=coucou-api
 ```
 
 ---
 
-## Structured Logging with Pino + OpenTelemetry
+## Structured Logging with Pino
+
+### Logger Service ([logger.service.ts](../../../apps/api/src/common/logger/logger.service.ts))
 
 ```typescript
-// common/logger/logger.service.ts
-import { pino } from 'pino';
-import { trace, context } from '@opentelemetry/api';
-
-const logger = pino({
+const pinoInstance: PinoLogger = pino({
   level: process.env.LOG_LEVEL || 'info',
-  formatters: {
-    level: (label) => ({ level: label }),
-  },
   mixin() {
+    // Auto-inject traceId and spanId from active OTEL span
     const span = trace.getSpan(context.active());
     if (span) {
       const { traceId, spanId } = span.spanContext();
@@ -54,63 +70,70 @@ const logger = pino({
     }
     return {};
   },
-  transport: process.env.NODE_ENV === 'development' ? { target: 'pino-pretty' } : undefined,
+  transport: buildTransport(),
 });
 
-@Injectable()
-export class LoggerService {
-  private context?: string;
+@Injectable({ scope: Scope.TRANSIENT })
+export class LoggerService implements NestLoggerService {
+  private ctx?: string;
 
-  setContext(context: string): void {
-    this.context = context;
+  setContext(ctx: string): void {
+    this.ctx = ctx;
   }
 
   info(message: string, data?: Record<string, unknown>): void {
-    logger.info({ context: this.context, ...data }, message);
+    pinoInstance.info({ context: this.ctx, ...data }, message);
   }
 
-  error(message: string, error?: Error, data?: Record<string, unknown>): void {
-    logger.error(
-      {
-        context: this.context,
-        err: error,
-        stack: error?.stack,
-        ...data,
-      },
-      message,
-    );
+  error(
+    message: string,
+    errorOrData?: Error | Record<string, unknown>,
+    data?: Record<string, unknown>,
+  ): void {
+    // Handles both error object and structured data
   }
 
-  warn(message: string, data?: Record<string, unknown>): void {
-    logger.warn({ context: this.context, ...data }, message);
-  }
-
-  debug(message: string, data?: Record<string, unknown>): void {
-    logger.debug({ context: this.context, ...data }, message);
-  }
+  warn(message: string, data?: Record<string, unknown>): void {}
+  debug(message: string, data?: Record<string, unknown>): void {}
+  verbose(message: string, data?: Record<string, unknown>): void {}
 }
+```
+
+### Multi-Transport Support
+
+Logs go to:
+
+1. **Development**: `pino-pretty` (colorized console)
+2. **Production**: stdout (for Railway logs)
+3. **BetterStack** (optional): when `BETTERSTACK_SOURCE_TOKEN` is set via `@logtail/pino`
+
+```bash
+LOG_LEVEL=info
+BETTERSTACK_SOURCE_TOKEN=  # Optional
 ```
 
 ---
 
 ## Custom Spans
 
+### withSpan Helper ([with-span.ts](../../../apps/api/src/common/tracing/with-span.ts))
+
 ```typescript
-// Usage in use cases
-import { trace } from '@opentelemetry/api';
-
-const tracer = trace.getTracer('feature-module');
-
-async execute(dto: CreateFeatureDto): Promise<Result<Feature, FeatureError>> {
-  return tracer.startActiveSpan('CreateFeatureUseCase.execute', async (span) => {
+export function withSpan<T>(
+  tracerName: string,
+  spanName: string,
+  attributes: Record<string, string | number | boolean>,
+  fn: (span: Span) => Promise<T>,
+): Promise<T> {
+  const tracer = trace.getTracer(tracerName);
+  return tracer.startActiveSpan(spanName, { attributes }, async (span) => {
     try {
-      span.setAttribute('feature.name', dto.name);
-      // ... logic
+      const result = await fn(span);
       span.setStatus({ code: SpanStatusCode.OK });
-      return Result.ok(feature);
+      return result;
     } catch (error) {
-      span.setStatus({ code: SpanStatusCode.ERROR, message: error.message });
-      span.recordException(error);
+      span.setStatus({ code: SpanStatusCode.ERROR, message: (error as Error).message });
+      span.recordException(error as Error);
       throw error;
     } finally {
       span.end();
@@ -119,18 +142,61 @@ async execute(dto: CreateFeatureDto): Promise<Result<Feature, FeatureError>> {
 }
 ```
 
+### Usage in Use Cases
+
+```typescript
+@Injectable()
+export class ExecuteScanUseCase {
+  constructor(private readonly logger: LoggerService) {
+    this.logger.setContext(ExecuteScanUseCase.name);
+  }
+
+  async execute(
+    promptId: string,
+    userId: string,
+    plan: Plan,
+  ): Promise<Result<ScanResponseDto, ExecuteScanError>> {
+    return withSpan(
+      'scan-module',
+      'ExecuteScanUseCase.execute',
+      { 'scan.promptId': promptId, 'scan.userId': userId, 'scan.plan': plan },
+      async (span) => {
+        this.logger.info('Executing scan', { promptId, userId });
+        // ... business logic
+        // Trace context (traceId, spanId) automatically added to logs
+        return Result.ok(response);
+      },
+    );
+  }
+}
+```
+
 ---
 
-## Recommended Stack
+## Key Patterns
 
-- **Local**: Jaeger (docker-compose)
-- **Production**: Grafana Tempo, Datadog, or Honeycomb
+1. **Optional observability**: App runs fine without OTEL endpoint configured
+2. **Automatic correlation**: Logger mixin injects `traceId` and `spanId` from active span
+3. **Transient scope**: Each service instance gets its own logger with isolated context
+4. **Structured logging**: Always use `logger.info(message, data)` not string concatenation
+5. **Custom spans**: Use `withSpan()` for critical use cases (scans, billing, auth)
+6. **Auto-instrumentation**: HTTP, database, Redis automatically traced when OTEL enabled
+7. **Graceful shutdown**: OTEL SDK flushes on SIGTERM/SIGINT
 
 ---
 
-## Key Rules
+## Rules
 
-1. **Add structured logging with context** (traceId, spanId, relevant metadata)
-2. **Never log sensitive data** (passwords, tokens, PII)
-3. **Use log levels appropriately**: debug, info, warn, error
-4. **Include relevant metadata** for debugging
+### ALWAYS
+
+- Set logger context in constructor: `this.logger.setContext(UseCaseName.name)`
+- Use structured logging: `logger.info('message', { key: value })`
+- Wrap critical operations with `withSpan()` for distributed tracing
+- Use appropriate log levels: `debug` (verbose), `info` (normal), `warn` (issues), `error` (failures)
+
+### NEVER
+
+- Log sensitive data (passwords, tokens, API keys, PII)
+- Use string concatenation or template literals for data — use structured data parameter
+- Skip context in logger — always call `setContext()` in constructor
+- Throw from within withSpan — let it handle exceptions

@@ -43,12 +43,14 @@ if (otlpEndpoint) {
       url: `${otlpEndpoint}/v1/traces`,
       headers,
       compression: CompressionAlgorithm.GZIP,
+      timeoutMillis: 5000,
     }),
     metricReader: new PeriodicExportingMetricReader({
       exporter: new OTLPMetricExporter({
         url: `${otlpEndpoint}/v1/metrics`,
         headers,
         compression: CompressionAlgorithm.GZIP,
+        timeoutMillis: 5000,
       }),
       exportIntervalMillis: 30_000,
     }),
@@ -59,8 +61,12 @@ if (otlpEndpoint) {
     ],
   });
 
-  sdk.start();
-  console.log('[Tracing] OpenTelemetry SDK started');
+  try {
+    sdk.start();
+    console.log('[Tracing] OpenTelemetry SDK started');
+  } catch (err) {
+    console.error('[Tracing] Failed to start OpenTelemetry SDK, continuing without tracing', err);
+  }
 
   async function shutdown(): Promise<void> {
     try {
