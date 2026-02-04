@@ -15,6 +15,7 @@ import { TrendingUp } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { InfoTooltip } from '@/components/ui/info-tooltip';
+import { CHART_MARGIN } from '@/lib/chart-config';
 import {
   formatTooltipDate,
   formatVariation,
@@ -122,7 +123,7 @@ export const CitationRateChart = memo(function CitationRateChart({
       <CardContent>
         <div className="h-[300px]">
           <ResponsiveContainer width="100%" height="100%">
-            <AreaChart data={chartData} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
+            <AreaChart data={chartData} margin={CHART_MARGIN}>
               <defs>
                 <linearGradient id="citationGradient" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.2} />

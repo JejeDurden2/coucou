@@ -427,7 +427,7 @@ export default function ProjectDashboardPage({
                               <p className="text-sm text-pretty">{prompt.content}</p>
                               <div className="flex items-center gap-2 mt-1">
                                 {prompt.category && (
-                                  <span className="inline-flex px-2 py-0.5 rounded-full text-[10px] bg-primary/10 text-primary">
+                                  <span className="inline-flex px-2 py-0.5 rounded-full text-2xs bg-primary/10 text-primary">
                                     {prompt.category}
                                   </span>
                                 )}

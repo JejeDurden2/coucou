@@ -21,7 +21,7 @@ export const ScanAvailabilityBadge = memo(function ScanAvailabilityBadge({
 
   if (lastScanAt === null) {
     return (
-      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] bg-muted text-muted-foreground">
+      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-2xs bg-muted text-muted-foreground">
         <Clock className="size-3" aria-hidden="true" />
         Jamais analysé
       </span>
@@ -30,7 +30,7 @@ export const ScanAvailabilityBadge = memo(function ScanAvailabilityBadge({
 
   if (canScan) {
     return (
-      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] bg-success/10 text-success">
+      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-2xs bg-success/10 text-success">
         <CheckCircle2 className="size-3" aria-hidden="true" />
         Analyse disponible
       </span>
@@ -39,7 +39,7 @@ export const ScanAvailabilityBadge = memo(function ScanAvailabilityBadge({
 
   return (
     <span
-      className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] bg-amber-500/10 text-amber-600"
+      className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-2xs bg-warning/10 text-warning"
       title={`1 analyse/${frequency} - Prochaine analyse ${nextAvailableAt ? formatRelativeTimeFuture(nextAvailableAt) : ''}`}
     >
       <Clock className="size-3" aria-hidden="true" />

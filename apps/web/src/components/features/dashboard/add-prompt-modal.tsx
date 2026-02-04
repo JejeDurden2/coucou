@@ -19,7 +19,7 @@ const MIN_CHARS = 5;
 
 function getCharCountColor(count: number, max: number): string {
   if (count > max) return 'text-destructive';
-  if (count > max * 0.9) return 'text-amber-500';
+  if (count > max * 0.9) return 'text-warning';
   return 'text-muted-foreground';
 }
 
@@ -124,7 +124,7 @@ export function AddPromptModal({
           {/* GEO Tips */}
           <div className="rounded-lg border bg-muted/30 p-4 space-y-3">
             <div className="flex items-center gap-2 text-sm font-medium">
-              <Lightbulb className="size-4 text-amber-500" aria-hidden="true" />
+              <Lightbulb className="size-4 text-warning" aria-hidden="true" />
               Conseils pour une bonne requête
             </div>
             <ul className="space-y-2 text-sm text-muted-foreground">

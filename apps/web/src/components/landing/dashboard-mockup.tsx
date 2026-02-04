@@ -10,8 +10,8 @@ const POSITION_SPARKLINE = [3.2, 2.8, 2.5, 2.7, 2.3, 2.1, 2.0];
 const SENTIMENT_SCORE = 78;
 
 const PROVIDERS = [
-  { name: 'ChatGPT', provider: LLMProvider.CHATGPT, position: '1.8', color: 'text-amber-400' },
-  { name: 'Claude', provider: LLMProvider.CLAUDE, position: '2.1', color: 'text-slate-300' },
+  { name: 'ChatGPT', provider: LLMProvider.CHATGPT, position: '1.8', color: 'text-chatgpt' },
+  { name: 'Claude', provider: LLMProvider.CLAUDE, position: '2.1', color: 'text-claude' },
 ] as const;
 
 const SENTIMENT_TAGS = ['Marque reconnue', 'Prix compétitifs'] as const;
@@ -24,7 +24,7 @@ export function DashboardMockup() {
       aria-hidden="true"
     >
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        <div className="col-span-2 rounded-xl border border-amber-500/20 bg-amber-500/5 p-5">
+        <div className="col-span-2 rounded-xl border border-primary/20 bg-primary/5 p-5">
           <div className="flex items-start justify-between gap-3">
             <div className="min-w-0 flex-1">
               <p className="mb-1 text-xs text-muted-foreground">Position moyenne</p>
@@ -33,7 +33,7 @@ export function DashboardMockup() {
               </p>
               <p className="mt-1 text-xs text-muted-foreground">vs 7 derniers jours</p>
             </div>
-            <div className="rounded-lg border border-amber-500/20 bg-amber-500/10 p-2 text-amber-400">
+            <div className="rounded-lg border border-primary/20 bg-primary/10 p-2 text-primary">
               <Trophy className="size-5" aria-hidden="true" />
             </div>
           </div>
@@ -84,7 +84,7 @@ export function DashboardMockup() {
           </div>
           <div className="mt-3 flex flex-wrap gap-1.5">
             {SENTIMENT_TAGS.map((tag) => (
-              <Badge key={tag} variant="outline" className="px-2 py-0.5 text-[10px]">
+              <Badge key={tag} variant="outline" className="px-2 py-0.5 text-2xs">
                 {tag}
               </Badge>
             ))}

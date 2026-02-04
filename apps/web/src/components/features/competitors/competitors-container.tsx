@@ -53,7 +53,7 @@ export const CompetitorsContainer = memo(function CompetitorsContainer({
       <Card>
         <CardHeader>
           <div className="flex items-center gap-2">
-            <Trophy className="size-5 text-amber-500" aria-hidden="true" />
+            <Trophy className="size-5 text-warning" aria-hidden="true" />
             <CardTitle className="flex items-center gap-1">
               Tous les concurrents
               <InfoTooltip term="competitor" />

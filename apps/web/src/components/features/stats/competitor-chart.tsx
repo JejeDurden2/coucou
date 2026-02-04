@@ -13,6 +13,7 @@ import {
 } from 'recharts';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { formatChartDate, type AggregationLevel } from '@/lib/format';
+import { CHART_COLORS, CHART_MARGIN } from '@/lib/chart-config';
 
 interface CompetitorTrend {
   name: string;
@@ -23,14 +24,6 @@ interface CompetitorChartProps {
   data: CompetitorTrend[];
   aggregation: AggregationLevel;
 }
-
-const COMPETITOR_COLORS = [
-  'hsl(346 77% 49%)',
-  'hsl(217 91% 60%)',
-  'hsl(262 83% 58%)',
-  'hsl(43 96% 56%)',
-  'hsl(172 66% 50%)',
-];
 
 export const CompetitorChart = memo(function CompetitorChart({
   data,
@@ -86,7 +79,7 @@ export const CompetitorChart = memo(function CompetitorChart({
       <CardContent>
         <div className="h-64">
           <ResponsiveContainer width="100%" height="100%">
-            <AreaChart data={chartData} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
+            <AreaChart data={chartData} margin={CHART_MARGIN}>
               <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
               <XAxis
                 dataKey="label"
@@ -122,8 +115,8 @@ export const CompetitorChart = memo(function CompetitorChart({
                   type="monotone"
                   dataKey={name}
                   stackId="1"
-                  stroke={COMPETITOR_COLORS[index % COMPETITOR_COLORS.length]}
-                  fill={COMPETITOR_COLORS[index % COMPETITOR_COLORS.length]}
+                  stroke={CHART_COLORS[index % CHART_COLORS.length]}
+                  fill={CHART_COLORS[index % CHART_COLORS.length]}
                   fillOpacity={0.6}
                 />
               ))}

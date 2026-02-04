@@ -32,10 +32,10 @@ interface PromptPerformanceTableProps {
 }
 
 const CATEGORY_COLORS: Record<PromptCategory, string> = {
-  Découverte: 'bg-blue-500/20 text-blue-600 border-blue-500/30',
-  Comparaison: 'bg-purple-500/20 text-purple-600 border-purple-500/30',
-  "Intention d'achat": 'bg-green-500/20 text-green-600 border-green-500/30',
-  Local: 'bg-orange-500/20 text-orange-600 border-orange-500/30',
+  Découverte: 'bg-primary/10 text-primary border-primary/30',
+  Comparaison: 'bg-accent/10 text-accent border-accent/30',
+  "Intention d'achat": 'bg-success/10 text-success border-success/30',
+  Local: 'bg-warning/10 text-warning border-warning/30',
 };
 
 function TruncatedPrompt({ content }: { content: string }): React.ReactElement {

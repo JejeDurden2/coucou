@@ -104,16 +104,16 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: rgb(9 9 11);
+  background: rgb(var(--background));
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgb(39 39 42);
+  background: rgb(var(--muted));
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgb(63 63 70);
+  background: rgb(var(--border));
 }
 
 ::selection {

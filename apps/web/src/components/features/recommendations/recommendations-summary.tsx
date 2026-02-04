@@ -55,7 +55,7 @@ export const RecommendationsSummary = memo(function RecommendationsSummary({
     <Card>
       <CardHeader className="flex flex-row items-center justify-between pb-4">
         <div className="flex items-center gap-2">
-          <Lightbulb className="size-5 text-amber-500" aria-hidden="true" />
+          <Lightbulb className="size-5 text-warning" aria-hidden="true" />
           <CardTitle className="text-lg font-medium">Recommandations</CardTitle>
         </div>
         <div className="flex items-center gap-2">

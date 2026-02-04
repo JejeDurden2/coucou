@@ -87,7 +87,7 @@ export const RecommendationsContainer = memo(function RecommendationsContainer({
         <CardHeader>
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div className="flex items-center gap-2">
-              <Lightbulb className="size-5 text-amber-500" aria-hidden="true" />
+              <Lightbulb className="size-5 text-warning" aria-hidden="true" />
               <CardTitle className="flex items-center gap-1">
                 Toutes les recommandations
                 <InfoTooltip term="recommendation" />

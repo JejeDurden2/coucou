@@ -21,7 +21,7 @@ export const SentimentPreview = memo(function SentimentPreview() {
           {SAMPLE_THEMES.slice(0, 3).map((theme) => (
             <span
               key={theme}
-              className="px-2 py-0.5 rounded-full text-[10px] bg-muted text-muted-foreground"
+              className="px-2 py-0.5 rounded-full text-2xs bg-muted text-muted-foreground"
             >
               {theme}
             </span>
@@ -43,7 +43,7 @@ export const SentimentPreview = memo(function SentimentPreview() {
           {SAMPLE_THEMES.slice(2, 5).map((theme) => (
             <span
               key={theme}
-              className="px-2 py-0.5 rounded-full text-[10px] bg-muted text-muted-foreground"
+              className="px-2 py-0.5 rounded-full text-2xs bg-muted text-muted-foreground"
             >
               {theme}
             </span>

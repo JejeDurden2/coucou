@@ -106,7 +106,7 @@ export const PromptCard = memo(function PromptCard({
         <div className="flex-1 min-w-0">
           <p className="text-sm text-foreground text-pretty">{content}</p>
           {category && (
-            <Badge variant="muted" className="mt-2 text-[10px]">
+            <Badge variant="muted" className="mt-2 text-2xs">
               {category}
             </Badge>
           )}
@@ -115,11 +115,11 @@ export const PromptCard = memo(function PromptCard({
         {/* Provider Results */}
         <div className="flex items-center gap-3 flex-shrink-0">
           <div className="flex flex-col items-center gap-1">
-            <span className="text-[10px] text-muted-foreground uppercase">ChatGPT</span>
+            <span className="text-2xs text-muted-foreground uppercase">ChatGPT</span>
             <PositionIndicator result={openai} provider="chatgpt" />
           </div>
           <div className="flex flex-col items-center gap-1">
-            <span className="text-[10px] text-muted-foreground uppercase">Claude</span>
+            <span className="text-2xs text-muted-foreground uppercase">Claude</span>
             <PositionIndicator result={anthropic} provider="claude" />
           </div>
         </div>

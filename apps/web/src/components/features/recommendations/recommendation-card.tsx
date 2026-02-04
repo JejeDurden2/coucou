@@ -136,7 +136,7 @@ export const RecommendationCard = memo(function RecommendationCard({
             <h3 className="text-sm font-medium text-balance">{recommendation.title}</h3>
             <span
               className={cn(
-                'text-[10px] px-1.5 py-0.5 rounded-full font-medium',
+                'text-2xs px-1.5 py-0.5 rounded-full font-medium',
                 config.bgClass,
                 config.colorClass,
               )}
@@ -158,7 +158,7 @@ export const RecommendationCard = memo(function RecommendationCard({
                   style={{ width: `${progress}%` }}
                 />
               </div>
-              <span className="text-[10px] text-muted-foreground">
+              <span className="text-2xs text-muted-foreground">
                 {completedCount}/{totalItems}
               </span>
             </div>

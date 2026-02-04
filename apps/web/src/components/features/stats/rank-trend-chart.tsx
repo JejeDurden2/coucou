@@ -14,6 +14,7 @@ import {
 import type { TimeSeriesPoint } from '@coucou-ia/shared';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { formatChartDate, type AggregationLevel } from '@/lib/format';
+import { CHART_MARGIN } from '@/lib/chart-config';
 
 interface RankTrendChartProps {
   data: TimeSeriesPoint[];
@@ -52,7 +53,7 @@ export const RankTrendChart = memo(function RankTrendChart({
       <CardContent>
         <div className="h-64">
           <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={chartData} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
+            <LineChart data={chartData} margin={CHART_MARGIN}>
               <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
               <XAxis
                 dataKey="label"
