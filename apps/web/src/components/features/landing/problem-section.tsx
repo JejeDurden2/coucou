@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { cn } from '@/lib/utils';
+import { Badge } from '@/components/ui/badge';
 
 interface Stat {
   value: number;
@@ -9,8 +9,6 @@ interface Stat {
   suffix: string;
   label: string;
   source: string;
-  color: string;
-  textColor: string;
 }
 
 const STATS: Stat[] = [
@@ -20,8 +18,6 @@ const STATS: Stat[] = [
     suffix: '%',
     label: 'font confiance aux recommandations IA',
     source: 'Études 2024-2025',
-    color: 'bg-red-500/[0.03] border-red-500/[0.08]',
-    textColor: 'text-red-500',
   },
   {
     value: 25,
@@ -29,8 +25,6 @@ const STATS: Stat[] = [
     suffix: '%',
     label: 'de recherches Google depuis ChatGPT',
     source: 'Gartner 2024',
-    color: 'bg-amber-500/[0.03] border-amber-500/[0.08]',
-    textColor: 'text-amber-400',
   },
   {
     value: 40,
@@ -38,8 +32,6 @@ const STATS: Stat[] = [
     suffix: '%',
     label: 'de conversions si cité en premier',
     source: 'Seer Interactive 2025',
-    color: 'bg-primary/[0.03] border-primary/[0.08]',
-    textColor: 'text-primary',
   },
 ];
 
@@ -109,33 +101,35 @@ export function ProblemSection() {
   const displayValues = useCountUp(STAT_TARGETS, isVisible);
 
   return (
-    <section ref={sectionRef} className="py-20 px-4 bg-zinc-900/50">
-      <div className="container mx-auto max-w-5xl">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-balance">
-            Pourquoi le GEO devient incontournable
-          </h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto text-pretty">
-            Les décisions d&apos;achat passent de plus en plus par l&apos;IA. Sans visibilité, vous
-            perdez des clients sans le savoir.
-          </p>
-        </div>
+    <section ref={sectionRef} className="py-16 px-4 bg-zinc-900/50 md:py-20">
+      <div className="container mx-auto max-w-4xl">
+        <Badge variant="mono" className="mb-8">
+          [Le Problème]
+        </Badge>
 
-        <div className="grid md:grid-cols-3 gap-6">
+        <h2 className="font-display text-4xl leading-tight mb-8 text-balance md:text-5xl lg:text-6xl">
+          <span className="font-mono text-secondary-accent">67%</span> des consommateurs font
+          confiance aux recommandations IA.
+        </h2>
+
+        <p className="text-xl text-muted-foreground leading-relaxed max-w-2xl mb-12">
+          Pendant que vous lisez ceci, des prospects demandent à ChatGPT de recommander un produit
+          comme le vôtre. Êtes-vous mentionné ? Ou est-ce votre concurrent qui décroche la vente ?
+        </p>
+
+        {/* Technical grid for stats */}
+        <div className="grid md:grid-cols-3 gap-px bg-border">
           {STATS.map((stat, i) => (
-            <div
-              key={stat.label}
-              className={cn('rounded-lg border p-6 backdrop-blur-sm', stat.color)}
-            >
-              <div
-                className={cn('font-display text-4xl font-bold tabular-nums mb-2', stat.textColor)}
-              >
+            <div key={stat.label} className="bg-card p-8">
+              <p className="font-mono text-4xl tabular-nums text-secondary-accent mb-3">
                 {stat.prefix}
                 {displayValues[i]}
                 {stat.suffix}
-              </div>
-              <p className="text-sm text-muted-foreground text-pretty">{stat.label}</p>
-              <p className="text-xs text-muted-foreground mt-2">{stat.source}</p>
+              </p>
+              <p className="text-sm text-muted-foreground leading-relaxed mb-2">{stat.label}</p>
+              <p className="font-sans text-xs text-muted-foreground uppercase tracking-wide">
+                {stat.source}
+              </p>
             </div>
           ))}
         </div>

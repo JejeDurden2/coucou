@@ -17,7 +17,7 @@ export function Footer() {
             </p>
           </div>
           <nav aria-label="Produit">
-            <h4 className="font-medium mb-4">Produit</h4>
+            <h4 className="font-sans text-xs uppercase tracking-wide font-medium mb-4">Produit</h4>
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li>
                 <Link href="/#pricing" className="hover:text-foreground">
@@ -32,7 +32,9 @@ export function Footer() {
             </ul>
           </nav>
           <nav aria-label="Ressources">
-            <h4 className="font-medium mb-4">Ressources</h4>
+            <h4 className="font-sans text-xs uppercase tracking-wide font-medium mb-4">
+              Ressources
+            </h4>
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li>
                 <Link href="/lexique" className="hover:text-foreground">
@@ -47,7 +49,7 @@ export function Footer() {
             </ul>
           </nav>
           <nav aria-label="Légal">
-            <h4 className="font-medium mb-4">Légal</h4>
+            <h4 className="font-sans text-xs uppercase tracking-wide font-medium mb-4">Légal</h4>
             <ul className="space-y-2 text-sm text-muted-foreground">
               <li>
                 <Link href="/privacy" className="hover:text-foreground">

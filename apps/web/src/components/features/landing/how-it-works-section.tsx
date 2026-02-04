@@ -25,23 +25,27 @@ const CONNECTORS = [
 
 export function HowItWorksSection() {
   return (
-    <section className="py-20 px-4 bg-zinc-900/50">
+    <section className="py-16 px-4 bg-zinc-900/50 md:py-20">
       <div className="container mx-auto max-w-5xl">
-        <div className="text-center mb-12">
-          <Badge className="mb-4">Comment ça marche</Badge>
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-balance">
+        <div className="text-center mb-16">
+          <Badge variant="mono" className="mb-6">
+            Comment ça marche
+          </Badge>
+          <h2 className="font-display text-4xl mb-4 text-balance md:text-5xl">
             Analysez votre marque en 3 étapes
           </h2>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8 relative">
+        <div className="grid md:grid-cols-3 gap-12 relative">
           {STEPS.map((step) => (
             <div key={step.number} className="text-center">
-              <div className="text-6xl font-display text-primary/40 font-bold mb-4 tabular-nums">
+              <div className="font-mono text-6xl text-primary/40 font-bold mb-6 tabular-nums">
                 {step.number}
               </div>
-              <h3 className="text-lg font-semibold mb-2 text-balance">{step.title}</h3>
-              <p className="text-sm text-muted-foreground text-pretty">{step.description}</p>
+              <h3 className="text-xl font-semibold mb-3 text-balance">{step.title}</h3>
+              <p className="text-sm text-muted-foreground text-pretty leading-relaxed">
+                {step.description}
+              </p>
             </div>
           ))}
 
@@ -49,7 +53,7 @@ export function HowItWorksSection() {
             <div
               key={i}
               aria-hidden="true"
-              className="hidden md:block absolute top-8 border-t-2 border-dashed border-zinc-700"
+              className="hidden md:block absolute top-8 border-t-2 border-dashed border-border"
               style={{ left: pos.left, right: pos.right }}
             />
           ))}

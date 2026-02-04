@@ -2,14 +2,17 @@
 
 ## Philosophy
 
-**Clean, modern, and professional** - A dark-mode SaaS aesthetic for AI visibility tracking. Minimal, flat design with solid colors.
+**"Editorial Technique Français"** - Fusionner l'élégance éditoriale française avec une esthétique technique/analytique pour créer une identité visuelle distinctive dans l'espace SaaS.
 
 ### Design Principles
 
 - **Clean and flat**: No gradients, solid colors only
 - **Dark-first**: Deep zinc backgrounds let content shine
-- **Single accent**: Violet for all primary actions
-- **Smooth motion**: Simple transitions that feel premium
+- **Dual accent**: Violet (primary) + Coral (secondary) for visual tension
+- **Editorial typography**: Serif display font for impact, monospace as signature
+- **Technical grids**: Gap-px layouts for data table aesthetic
+- **Asymmetric layouts**: Bento grids and intentional imbalance
+- **Data as art**: Transform stats into heroic visual elements
 
 ---
 
@@ -47,6 +50,10 @@
   --accent-foreground: 250 250 250;
   --accent-muted: 139 92 246; /* Use with /12 opacity */
 
+  /* Secondary Accent - Coral/Rose for editorial highlights */
+  --secondary-accent: 255 77 109; /* #ff4d6d */
+  --secondary-accent-foreground: 250 250 250;
+
   /* LLM colors - Neutralized (both gray) */
   --chatgpt: 113 113 122; /* #71717a - zinc-500 */
   --claude: 113 113 122; /* #71717a - zinc-500 */
@@ -69,17 +76,18 @@
 
 ### Semantic Mappings
 
-| Semantic Token     | RGB Value   | Hex     | Usage                         |
-| ------------------ | ----------- | ------- | ----------------------------- |
-| `primary`          | 139 92 246  | #8b5cf6 | CTAs, links, focus rings      |
-| `success`          | 34 197 94   | #22c55e | Positive deltas, cited states |
-| `destructive`      | 239 68 68   | #ef4444 | Negative deltas, errors       |
-| `warning`          | 251 191 36  | #fbbf24 | Warnings, caution states      |
-| `background`       | 9 9 11      | #09090b | Page background               |
-| `foreground`       | 250 250 250 | #fafafa | Primary text                  |
-| `muted-foreground` | 161 161 170 | #a1a1aa | Secondary text                |
-| `card`             | 24 24 27    | #18181b | Card backgrounds              |
-| `border`           | 39 39 42    | #27272a | Default borders               |
+| Semantic Token     | RGB Value   | Hex     | Usage                                    |
+| ------------------ | ----------- | ------- | ---------------------------------------- |
+| `primary`          | 139 92 246  | #8b5cf6 | CTAs, links, focus rings                 |
+| `secondary-accent` | 255 77 109  | #ff4d6d | Editorial highlights, key stats, accents |
+| `success`          | 34 197 94   | #22c55e | Positive deltas, cited states            |
+| `destructive`      | 239 68 68   | #ef4444 | Negative deltas, errors                  |
+| `warning`          | 251 191 36  | #fbbf24 | Warnings, caution states                 |
+| `background`       | 9 9 11      | #09090b | Page background                          |
+| `foreground`       | 250 250 250 | #fafafa | Primary text                             |
+| `muted-foreground` | 161 161 170 | #a1a1aa | Secondary text                           |
+| `card`             | 24 24 27    | #18181b | Card backgrounds                         |
+| `border`           | 39 39 42    | #27272a | Default borders                          |
 
 ### Tailwind Usage
 
@@ -112,17 +120,23 @@
 
 ### Fonts
 
-| Family             | Variable         | Usage                 | Weights            |
-| ------------------ | ---------------- | --------------------- | ------------------ |
-| **Inter**          | `--font-sans`    | Body text, UI         | 400, 500, 600, 700 |
-| **Space Grotesk**  | `--font-display` | Headings, titles      | 400, 500, 600, 700 |
-| **JetBrains Mono** | `--font-mono`    | Code, data, technical | 400, 500, 600      |
+| Family               | Variable         | Usage                                 | Weights       |
+| -------------------- | ---------------- | ------------------------------------- | ------------- |
+| **Inter**            | `--font-sans`    | Body text, UI                         | 400, 500, 600 |
+| **Instrument Serif** | `--font-display` | Headlines, editorial titles (IMPACT!) | 400           |
+| **JetBrains Mono**   | `--font-mono`    | Data, stats, badges, labels, code     | 400, 500, 600 |
+
+**Typography Philosophy:**
+
+- **Instrument Serif**: Used for massive editorial headlines (text-6xl+) to create immediate visual impact
+- **JetBrains Mono**: Expanded role as signature visual identity - not just code, but stats, badges, labels
+- **Inter**: Reliable workhorse for body text and UI elements
 
 ### Tailwind Classes
 
 ```tsx
 <p className="font-sans">Body text with Inter</p>
-<h1 className="font-display">Heading with Space Grotesk</h1>
+<h1 className="font-display">Heading with Instrument Serif</h1>
 <code className="font-mono">Code with JetBrains Mono</code>
 ```
 

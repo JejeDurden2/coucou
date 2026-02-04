@@ -30,10 +30,10 @@ function EngineCard({ engine }: EngineCardProps): ReactNode {
   return (
     <div
       className={cn(
-        'relative flex flex-col items-center gap-4 p-6 rounded-xl border backdrop-blur-md transition-all',
+        'relative flex flex-col items-center gap-4 p-8 border transition-colors',
         isActive
-          ? 'border-white/10 bg-white/5 hover:border-primary/30'
-          : 'border-dashed border-white/10 bg-white/[0.02]',
+          ? 'border-border bg-card hover:bg-card-hover'
+          : 'border-dashed border-border bg-card/50',
       )}
     >
       <div
@@ -52,7 +52,7 @@ function EngineCard({ engine }: EngineCardProps): ReactNode {
       </div>
 
       <div className="text-center">
-        <p className={cn('font-semibold mb-1', !isActive && 'text-muted-foreground')}>
+        <p className={cn('font-medium mb-1', !isActive && 'text-muted-foreground')}>
           {engine.name}
         </p>
         <EngineStatusBadge status={engine.status} />
@@ -68,7 +68,7 @@ interface EngineStatusBadgeProps {
 function EngineStatusBadge({ status }: EngineStatusBadgeProps): ReactNode {
   if (status === 'active') {
     return (
-      <span className="inline-flex items-center gap-1 text-xs text-success">
+      <span className="inline-flex items-center gap-1.5 font-sans text-xs text-success uppercase tracking-wide">
         <Check className="size-3" aria-hidden="true" />
         Disponible
       </span>
@@ -76,7 +76,7 @@ function EngineStatusBadge({ status }: EngineStatusBadgeProps): ReactNode {
   }
 
   return (
-    <span className="inline-flex items-center gap-1 text-xs text-amber-400">
+    <span className="inline-flex items-center gap-1.5 font-sans text-xs text-warning uppercase tracking-wide">
       <Clock className="size-3" aria-hidden="true" />
       Bientôt
     </span>
@@ -85,19 +85,22 @@ function EngineStatusBadge({ status }: EngineStatusBadgeProps): ReactNode {
 
 export function SupportedEnginesSection(): ReactNode {
   return (
-    <section className="py-16 px-4">
+    <section className="py-16 px-4 md:py-20">
       <div className="container mx-auto max-w-4xl">
-        <div className="text-center mb-10">
-          <Badge className="mb-4">Compatibilité</Badge>
-          <h2 className="text-2xl md:text-3xl font-bold mb-3 text-balance">
+        <div className="text-center mb-12">
+          <Badge variant="mono" className="mb-6">
+            Compatibilité
+          </Badge>
+          <h2 className="font-display text-3xl mb-4 text-balance md:text-4xl">
             Moteurs de recherche IA supportés
           </h2>
-          <p className="text-muted-foreground max-w-xl mx-auto text-pretty">
+          <p className="text-muted-foreground max-w-xl mx-auto text-pretty leading-relaxed">
             Surveillez votre visibilité sur les principaux moteurs de recherche IA du marché.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-2xl mx-auto">
+        {/* Technical grid with gap-px */}
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-px bg-border max-w-2xl mx-auto">
           {ENGINES.map((engine) => (
             <EngineCard key={engine.name} engine={engine} />
           ))}

@@ -43,6 +43,10 @@ const config: Config = {
           foreground: 'rgb(var(--accent-foreground) / <alpha-value>)',
           muted: 'rgb(var(--accent-muted) / 0.12)',
         },
+        'secondary-accent': {
+          DEFAULT: 'rgb(var(--secondary-accent) / <alpha-value>)',
+          foreground: 'rgb(var(--secondary-accent-foreground) / <alpha-value>)',
+        },
         // LLM-specific colors
         chatgpt: 'rgb(var(--chatgpt) / <alpha-value>)',
         claude: 'rgb(var(--claude) / <alpha-value>)',
@@ -67,6 +71,10 @@ const config: Config = {
         lg: 'var(--radius)',
         md: 'calc(var(--radius) - 2px)',
         sm: 'calc(var(--radius) - 4px)',
+      },
+      spacing: {
+        '18': '4.5rem',
+        '22': '5.5rem',
       },
       keyframes: {
         'accordion-down': {

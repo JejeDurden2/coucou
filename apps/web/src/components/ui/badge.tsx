@@ -14,6 +14,7 @@ const badgeVariants = cva(
         warning: 'bg-warning/20 text-warning border border-warning/30',
         outline: 'border border-primary/30 text-foreground',
         muted: 'bg-muted text-muted-foreground border border-border',
+        mono: 'border-transparent bg-muted font-sans uppercase tracking-wide',
         // LLM-specific variants
         chatgpt: 'bg-chatgpt/20 text-chatgpt border border-chatgpt/30',
         claude: 'bg-claude/20 text-claude border border-claude/30',

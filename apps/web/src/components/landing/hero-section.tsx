@@ -1,32 +1,29 @@
 import Link from 'next/link';
-import { ArrowRight, Sparkles } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { DashboardMockup } from '@/components/landing/dashboard-mockup';
 
 export function HeroSection() {
   return (
-    <section className="relative pt-24 pb-20 px-4 overflow-hidden lg:pt-32">
+    <section className="relative pt-20 pb-20 px-4 overflow-hidden md:pt-28 md:pb-28">
       <div className="container mx-auto max-w-6xl relative z-10">
         <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
-          <div className="text-center lg:text-left">
-            <Badge className="mb-6" variant="outline">
-              <Sparkles className="mr-1 size-3" aria-hidden="true" />
-              Nouveau : Support Claude
-            </Badge>
-
-            <h1 className="font-display text-4xl font-bold mb-6 text-balance md:text-5xl lg:text-6xl">
-              L&apos;outil <span className="text-primary">GEO</span> pour surveiller votre
-              visibilité IA
+          <div>
+            <h1 className="font-display text-4xl leading-[0.95] mb-4 md:text-5xl lg:text-6xl">
+              <span className="block">
+                L&apos;outil <span className="text-secondary-accent">GEO</span>
+              </span>
+              <span className="block mt-1">pour analyser</span>
+              <span className="block mt-1">votre visibilité IA</span>
             </h1>
 
-            <p className="text-lg text-muted-foreground mx-auto mb-8 max-w-lg text-pretty lg:mx-0 lg:text-xl">
-              Mesurez si <span className="text-foreground font-medium">ChatGPT</span> et{' '}
-              <span className="text-foreground font-medium">Claude</span> recommandent votre marque
-              — ou vos concurrents.
+            <p className="font-sans text-base leading-relaxed text-muted-foreground mb-6 max-w-xl md:text-lg">
+              Surveillez votre présence dans ChatGPT et Claude. Analyses automatisées.
+              Recommandations actionnables.
             </p>
 
-            <div className="flex flex-col items-center gap-4 sm:flex-row lg:items-start mb-6">
+            <div className="flex flex-col items-start gap-4 sm:flex-row mb-6">
               <Button size="lg" asChild>
                 <Link href="/register">
                   Analyser ma marque gratuitement
@@ -35,8 +32,8 @@ export function HeroSection() {
               </Button>
             </div>
 
-            <p className="text-sm text-muted-foreground">
-              Sans carte bancaire · Résultat en 2 minutes · RGPD compliant
+            <p className="font-sans text-xs text-muted-foreground uppercase tracking-wide">
+              Sans CB · 2 min · RGPD
             </p>
           </div>
 

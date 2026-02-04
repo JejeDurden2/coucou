@@ -43,7 +43,7 @@ export function Header({ variant = 'default' }: HeaderProps) {
   }
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 border-b border-border bg-background/80 backdrop-blur-sm pt-[env(safe-area-inset-top)]">
+    <header className="fixed top-0 left-0 right-0 z-50 border-b border-border bg-background pt-[env(safe-area-inset-top)]">
       <nav className="container mx-auto flex h-16 items-center justify-between px-4">
         <Link href="/" onClick={closeMobileMenu}>
           <Logo size="sm" />
@@ -54,13 +54,13 @@ export function Header({ variant = 'default' }: HeaderProps) {
             <Link
               key={link.href}
               href={getHref(link)}
-              className="text-sm text-muted-foreground hover:text-primary transition-colors"
+              className="font-sans text-xs uppercase tracking-wide text-muted-foreground hover:text-primary transition-colors"
             >
               {link.label}
             </Link>
           ))}
           <DropdownMenu>
-            <DropdownMenuTrigger className="flex items-center gap-1 text-sm text-muted-foreground hover:text-primary transition-colors">
+            <DropdownMenuTrigger className="font-sans text-xs uppercase tracking-wide flex items-center gap-1 text-muted-foreground hover:text-primary transition-colors">
               Ressources
               <ChevronDown className="size-4" aria-hidden="true" />
             </DropdownMenuTrigger>
@@ -106,7 +106,7 @@ export function Header({ variant = 'default' }: HeaderProps) {
               <Link
                 key={link.href}
                 href={getHref(link)}
-                className="text-sm text-muted-foreground hover:text-primary transition-colors py-2"
+                className="font-sans text-xs uppercase tracking-wide text-muted-foreground hover:text-primary transition-colors py-2"
                 onClick={closeMobileMenu}
               >
                 {link.label}
@@ -114,19 +114,19 @@ export function Header({ variant = 'default' }: HeaderProps) {
             ))}
 
             <div className="pt-2 border-t border-border">
-              <p className="text-xs font-medium text-muted-foreground/70 uppercase tracking-wider py-2">
+              <p className="font-sans text-xs text-muted-foreground/70 uppercase tracking-wider py-2">
                 Ressources
               </p>
               <Link
                 href="/lexique"
-                className="block text-sm text-muted-foreground hover:text-primary transition-colors py-2"
+                className="block font-sans text-xs uppercase tracking-wide text-muted-foreground hover:text-primary transition-colors py-2"
                 onClick={closeMobileMenu}
               >
                 Lexique GEO
               </Link>
               <Link
                 href="/geo-pour"
-                className="block text-sm text-muted-foreground hover:text-primary transition-colors py-2"
+                className="block font-sans text-xs uppercase tracking-wide text-muted-foreground hover:text-primary transition-colors py-2"
                 onClick={closeMobileMenu}
               >
                 GEO par métier

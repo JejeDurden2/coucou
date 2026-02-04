@@ -1,11 +1,12 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { ArrowLeft, Calendar, Clock, CheckCircle2, AlertCircle } from 'lucide-react';
+import { Calendar, Clock, CheckCircle2, AlertCircle } from 'lucide-react';
 
 import { getPersona, getAllPersonaSlugs, getRelatedPersonas } from '@/lib/geo-pour';
 import { PersonaContent, PersonaCard } from '@/components/geo-pour';
-import { Logo } from '@/components/ui/logo';
+import { Header } from '@/components/layout/header';
+import { Footer } from '@/components/layout/footer';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -153,23 +154,7 @@ export default async function PersonaPage({ params }: PageProps): Promise<React.
       />
 
       <div className="min-h-dvh bg-background">
-        {/* Header */}
-        <header className="border-b border-border">
-          <div className="mx-auto max-w-3xl px-4 py-4">
-            <div className="flex items-center justify-between">
-              <Link href="/" className="hover:opacity-80 transition-opacity">
-                <Logo size="sm" />
-              </Link>
-              <Link
-                href="/geo-pour"
-                className="flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"
-              >
-                <ArrowLeft className="size-4" aria-hidden="true" />
-                Tous les métiers
-              </Link>
-            </div>
-          </div>
-        </header>
+        <Header variant="blog" />
 
         {/* Article */}
         <article className="mx-auto max-w-3xl px-4 py-12">
@@ -317,17 +302,7 @@ export default async function PersonaPage({ params }: PageProps): Promise<React.
           </footer>
         </article>
 
-        {/* Site Footer */}
-        <footer className="border-t border-border mt-20">
-          <div className="mx-auto max-w-3xl px-4 py-8">
-            <div className="flex flex-col items-center gap-4 text-center">
-              <Link href="/" className="hover:opacity-80 transition-opacity">
-                <Logo size="sm" />
-              </Link>
-              <p className="text-sm text-muted-foreground">Votre visibilité dans les IA</p>
-            </div>
-          </div>
-        </footer>
+        <Footer />
       </div>
     </>
   );

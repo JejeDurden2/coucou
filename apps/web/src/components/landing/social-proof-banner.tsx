@@ -17,20 +17,27 @@ const SOCIAL_PROOF_ITEMS: SocialProofItem[] = [
 
 export function SocialProofBanner() {
   return (
-    <section className="py-12 px-4">
-      <div className="container mx-auto max-w-4xl text-center">
-        <p className="text-sm text-muted-foreground mb-6">
+    <section className="-mt-8 pb-8 px-4">
+      <div className="container mx-auto max-w-5xl text-center">
+        <p className="font-sans text-xs uppercase tracking-wide text-muted-foreground mb-8">
           Conçu pour les équipes qui veulent prendre de l&apos;avance
         </p>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {SOCIAL_PROOF_ITEMS.map(({ icon: Icon, label, href }) => (
+        {/* Technical grid with gap-px for data table aesthetic */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-px bg-border">
+          {SOCIAL_PROOF_ITEMS.map(({ icon: Icon, label, href }, i) => (
             <Link
               key={label}
               href={href}
-              className="flex items-center justify-center gap-2 px-4 py-3 rounded-xl border border-white/10 bg-white/5 backdrop-blur-md text-sm font-medium text-muted-foreground transition-colors hover:border-primary/50 hover:text-foreground"
+              className="bg-card border border-border p-6 hover:bg-card-hover transition-colors group flex flex-col items-center justify-center gap-4"
             >
-              <Icon className="size-4 text-primary" aria-hidden="true" />
-              <span>{label}</span>
+              <p className="font-sans text-xs text-muted-foreground uppercase tracking-wide">
+                [{String(i + 1).padStart(2, '0')}]
+              </p>
+              <Icon
+                className="size-8 text-primary group-hover:text-secondary-accent transition-colors"
+                aria-hidden="true"
+              />
+              <p className="text-sm font-medium">{label}</p>
             </Link>
           ))}
         </div>

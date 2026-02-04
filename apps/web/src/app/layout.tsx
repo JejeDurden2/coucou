@@ -1,24 +1,25 @@
 import type { Metadata } from 'next';
-import { Inter, JetBrains_Mono, Space_Grotesk } from 'next/font/google';
+import { Bricolage_Grotesque, JetBrains_Mono, Fraunces } from 'next/font/google';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import './globals.css';
 
-// Primary sans-serif - clean and modern
-const inter = Inter({
+// Primary sans-serif - distinctive grotesque with editorial character
+const bricolageGrotesque = Bricolage_Grotesque({
   subsets: ['latin'],
   display: 'swap',
   variable: '--font-sans',
+  weight: ['400', '500', '700'],
 });
 
-// Display font - geometric and tech-forward for headings
-const spaceGrotesk = Space_Grotesk({
+// Display font - editorial serif for distinctive headings (variable font with full weight range)
+const fraunces = Fraunces({
   subsets: ['latin'],
   display: 'swap',
   variable: '--font-display',
-  weight: ['400', '500', '600', '700'],
+  weight: ['400', '600', '700'],
 });
 
-// Monospace - for code, data, and technical elements
+// Monospace - for code, data, and technical elements (signature visual)
 const jetbrainsMono = JetBrains_Mono({
   subsets: ['latin'],
   display: 'swap',
@@ -101,7 +102,7 @@ export default function RootLayout({
   return (
     <html
       lang="fr"
-      className={`scroll-smooth dark ${inter.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable}`}
+      className={`scroll-smooth dark ${bricolageGrotesque.variable} ${fraunces.variable} ${jetbrainsMono.variable}`}
     >
       <head>
         <meta name="color-scheme" content="dark" />

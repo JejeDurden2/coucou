@@ -11,7 +11,7 @@ const PLANS = [
   {
     ...PLAN_PRICING[Plan.FREE],
     name: 'Free',
-    cta: 'Commencer gratuitement',
+    cta: 'Analyser ma marque gratuitement',
     popular: false,
     reassurance: 'Commencer sans engagement',
   },
@@ -33,23 +33,26 @@ const PLANS = [
 
 export function PricingSection() {
   return (
-    <section id="pricing" className="py-20 px-4 scroll-mt-20">
+    <section id="pricing" className="py-16 px-4 scroll-mt-20 md:py-20">
       <div className="container mx-auto max-w-6xl">
-        <div className="text-center mb-12">
-          <Badge className="mb-4">Tarifs</Badge>
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-balance">
+        <div className="text-center mb-16">
+          <Badge variant="mono" className="mb-6">
+            Tarifs
+          </Badge>
+          <h2 className="font-display text-4xl mb-6 text-balance md:text-5xl">
             Un plan pour chaque besoin
           </h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto text-pretty">
+          <p className="text-muted-foreground max-w-2xl mx-auto text-pretty leading-relaxed">
             Commencez gratuitement, évoluez selon vos besoins.
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+        <div className="grid md:grid-cols-3 gap-6 max-w-5xl mx-auto">
           {PLANS.map((plan) => (
             <Card
               key={plan.name}
               className={cn(
+                'hover:bg-card-hover transition-colors',
                 plan.popular &&
                   'border-primary ring-1 ring-primary/20 relative order-first md:order-none',
               )}
@@ -65,28 +68,36 @@ export function PricingSection() {
                 </div>
               )}
               <CardHeader>
-                <CardTitle className="text-lg">{plan.name}</CardTitle>
-                <div className="mt-2">
-                  <span className="text-4xl font-display font-bold tabular-nums">
-                    {plan.price}€
+                <Badge variant="mono" className="text-xs uppercase tracking-wider w-fit mb-4">
+                  {plan.name}
+                </Badge>
+                <div className="flex items-baseline gap-2">
+                  <span className="font-mono text-5xl tabular-nums font-bold md:text-6xl">
+                    {plan.price}
                   </span>
-                  <span className="text-muted-foreground">/mois</span>
+                  <span className="font-mono text-xl text-muted-foreground">€/mois</span>
                 </div>
-                <p className="text-sm text-muted-foreground text-pretty">{plan.description}</p>
+                <p className="text-sm text-muted-foreground text-pretty mt-3 leading-relaxed">
+                  {plan.description}
+                </p>
               </CardHeader>
               <CardContent>
-                <ul className="space-y-3 mb-6">
+                <ul className="space-y-3 mb-8">
                   {plan.features.map((feature) => (
-                    <li key={feature} className="flex items-center gap-2 text-sm">
-                      <Check className="size-4 text-success shrink-0" aria-hidden="true" />
-                      <FeatureWithLogos feature={feature} />
+                    <li key={feature} className="flex items-start gap-3 text-sm">
+                      <Check className="size-5 text-success shrink-0 mt-0.5" aria-hidden="true" />
+                      <span className="leading-relaxed">
+                        <FeatureWithLogos feature={feature} />
+                      </span>
                     </li>
                   ))}
                 </ul>
                 <Button className="w-full" variant={plan.popular ? 'default' : 'outline'} asChild>
                   <Link href="/register">{plan.cta}</Link>
                 </Button>
-                <p className="text-xs text-muted-foreground text-center mt-2">{plan.reassurance}</p>
+                <p className="font-sans text-xs text-muted-foreground text-center mt-3 uppercase tracking-wide">
+                  {plan.reassurance}
+                </p>
               </CardContent>
             </Card>
           ))}
