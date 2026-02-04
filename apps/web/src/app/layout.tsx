@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Script from 'next/script';
 import { Bricolage_Grotesque, JetBrains_Mono, Fraunces } from 'next/font/google';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import './globals.css';
@@ -107,8 +108,12 @@ export default function RootLayout({
       <head>
         <meta name="color-scheme" content="dark" />
         <meta name="theme-color" content="#080a12" />
-        {/* Google Tag Manager */}
-        <script
+      </head>
+      <body className="font-sans antialiased">
+        {/* Google Tag Manager - loaded async after page interactive */}
+        <Script
+          id="gtm"
+          strategy="afterInteractive"
           dangerouslySetInnerHTML={{
             __html: `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -117,8 +122,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 })(window,document,'script','dataLayer','GTM-K7Z65296');`,
           }}
         />
-      </head>
-      <body className="font-sans antialiased">
         {/* Google Tag Manager (noscript) */}
         <noscript>
           <iframe

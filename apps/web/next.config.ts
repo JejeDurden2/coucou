@@ -40,6 +40,11 @@ const nextConfig: NextConfig = {
         destination: '/geo-pour/:slug',
         permanent: true,
       },
+      {
+        source: '/geo-pour/',
+        destination: '/geo-pour',
+        permanent: true,
+      },
     ];
   },
 };
