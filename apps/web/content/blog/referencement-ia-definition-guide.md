@@ -1,10 +1,10 @@
 ---
 title: "Référencement IA : qu'est-ce que c'est et comment ça fonctionne"
 description: "Le référencement IA, c'est l'art d'apparaître dans les réponses de ChatGPT et Claude. Définition, fonctionnement et leviers concrets pour ta marque."
-date: "2026-02-05"
-author: "Jérôme Demares"
-tags: ["GEO", "Référencement IA", "Visibilité IA", "Définition"]
-image: "/blog/images/referencement-ia-hero.svg"
+date: '2026-02-05'
+author: 'Jérôme Demares'
+tags: ['GEO', 'Référencement IA', 'Visibilité IA', 'Définition']
+image: '/blog/images/referencement-ia-hero.svg'
 ---
 
 Tu as peut-être entendu parler de "GEO", de "référencement IA" ou de "visibilité dans les moteurs génératifs". Ces termes désignent tous la même chose : faire en sorte que ta marque apparaisse quand quelqu'un pose une question à ChatGPT, Claude ou Gemini.
@@ -23,12 +23,12 @@ Contrairement au SEO traditionnel qui vise les pages de résultats Google, le r�
 
 Le SEO et le référencement IA partagent un objectif commun (être visible), mais leurs mécanismes diffèrent.
 
-| Aspect | SEO traditionnel | Référencement IA |
-|--------|-----------------|------------------|
-| **Cible** | Pages de résultats Google | Réponses générées par l'IA |
-| **Format** | Liens cliquables | Texte avec mentions de marque |
-| **Mesure** | Position, CTR, trafic | Taux de mention, position dans la réponse |
-| **Mise à jour** | Indexation continue | Données d'entraînement + recherche temps réel |
+| Aspect          | SEO traditionnel          | Référencement IA                              |
+| --------------- | ------------------------- | --------------------------------------------- |
+| **Cible**       | Pages de résultats Google | Réponses générées par l'IA                    |
+| **Format**      | Liens cliquables          | Texte avec mentions de marque                 |
+| **Mesure**      | Position, CTR, trafic     | Taux de mention, position dans la réponse     |
+| **Mise à jour** | Indexation continue       | Données d'entraînement + recherche temps réel |
 
 Le SEO reste essentiel. Mais il ne suffit plus. **90% des sites web sont invisibles dans les réponses de ChatGPT**, selon une étude SEO.fr portant sur 300 000 requêtes.
 
@@ -157,4 +157,4 @@ Les marques qui s'y intéressent maintenant construisent un avantage. Celles qui
 
 ---
 
-*Sources : Ipsos-CESI (janvier 2025), OpenAI/Harvard (juin 2025), SparkToro (mars 2025), Seer Interactive (2025), Similarweb (2025), SEO.fr (2025)*
+_Sources : Ipsos-CESI (janvier 2025), OpenAI/Harvard (juin 2025), SparkToro (mars 2025), Seer Interactive (2025), Similarweb (2025), SEO.fr (2025)_
