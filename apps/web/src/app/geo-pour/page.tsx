@@ -74,11 +74,11 @@ export default function GeoIndexPage(): React.ReactNode {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
 
-      <div className="min-h-dvh bg-background">
+      <div className="flex min-h-dvh flex-col bg-background">
         <Header variant="blog" />
 
         {/* Main */}
-        <main className="mx-auto max-w-5xl px-4 py-12">
+        <main className="mx-auto w-full max-w-5xl flex-1 px-4 pb-12 pt-28">
           <div className="mb-12 text-center">
             <div className="mb-4 inline-flex items-center justify-center rounded-full bg-primary/10 p-3">
               <Users className="size-6 text-primary" aria-hidden="true" />

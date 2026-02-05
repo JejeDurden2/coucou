@@ -132,11 +132,11 @@ export default async function BlogPostPage({ params }: PageProps): Promise<React
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
 
-      <div className="min-h-dvh bg-background">
+      <div className="flex min-h-dvh flex-col bg-background">
         <Header variant="blog" />
 
         {/* Article */}
-        <article className="mx-auto max-w-3xl px-4 py-12">
+        <article className="mx-auto w-full max-w-3xl flex-1 px-4 pb-12 pt-28">
           {/* Meta */}
           <header className="mb-10">
             {post.tags.length > 0 && (
