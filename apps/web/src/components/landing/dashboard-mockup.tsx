@@ -1,4 +1,4 @@
-import { Bot, Heart, Trophy, TrendingDown } from 'lucide-react';
+import { Bot, Heart, Trophy, TrendingUp } from 'lucide-react';
 
 import { LLMProvider } from '@coucou-ia/shared';
 
@@ -12,7 +12,6 @@ const SENTIMENT_SCORE = 78;
 const PROVIDERS = [
   { name: 'ChatGPT', provider: LLMProvider.CHATGPT, position: '1.8', color: 'text-chatgpt' },
   { name: 'Claude', provider: LLMProvider.CLAUDE, position: '2.1', color: 'text-claude' },
-  { name: 'Mistral', provider: LLMProvider.MISTRAL, position: '2.4', color: 'text-mistral' },
 ] as const;
 
 const SENTIMENT_TAGS = ['Marque reconnue', 'Prix compétitifs'] as const;
@@ -24,7 +23,7 @@ export function DashboardMockup() {
       style={{ animationDelay: '0.3s' }}
       aria-hidden="true"
     >
-      <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
         <div className="col-span-2 rounded-xl border border-primary/20 bg-primary/5 p-5">
           <div className="flex items-start justify-between gap-3">
             <div className="min-w-0 flex-1">
@@ -39,7 +38,7 @@ export function DashboardMockup() {
             </div>
           </div>
           <div className="mt-3">
-            <Sparkline data={POSITION_SPARKLINE} width={200} height={32} color="primary" />
+            <Sparkline data={POSITION_SPARKLINE} width={200} height={32} color="primary" inverted />
           </div>
         </div>
 
@@ -67,9 +66,9 @@ export function DashboardMockup() {
                 <span className="text-2xl font-semibold tabular-nums font-mono text-success">
                   {SENTIMENT_SCORE}%
                 </span>
-                <span className="inline-flex items-center gap-0.5 text-xs font-medium text-destructive">
-                  <TrendingDown className="size-3" aria-hidden="true" />
-                  7%
+                <span className="inline-flex items-center gap-0.5 text-xs font-medium text-success">
+                  <TrendingUp className="size-3" aria-hidden="true" />
+                  +5%
                 </span>
               </div>
             </div>
@@ -111,12 +110,6 @@ export function DashboardMockup() {
             </div>
           </div>
         </div>
-      </div>
-
-      <div className="mt-4 flex items-center gap-2 border-t border-white/5 pt-4">
-        <Badge variant="chatgpt">ChatGPT</Badge>
-        <Badge variant="claude">Claude</Badge>
-        <Badge variant="mistral">Mistral</Badge>
       </div>
     </div>
   );

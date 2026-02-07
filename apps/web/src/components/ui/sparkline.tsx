@@ -7,6 +7,7 @@ interface SparklineProps {
   height?: number;
   strokeWidth?: number;
   color?: 'primary' | 'secondary' | 'success' | 'destructive' | 'chatgpt' | 'claude';
+  inverted?: boolean;
   showArea?: boolean;
   className?: string;
 }
@@ -26,6 +27,7 @@ export const Sparkline = memo(function Sparkline({
   height = 24,
   strokeWidth = 1.5,
   color = 'primary',
+  inverted = false,
   showArea = true,
   className,
 }: SparklineProps) {
@@ -44,7 +46,8 @@ export const Sparkline = memo(function Sparkline({
 
     const points = data.map((value, index) => {
       const x = padding + (index / (data.length - 1)) * chartWidth;
-      const y = padding + chartHeight - ((value - min) / range) * chartHeight;
+      const normalizedY = ((value - min) / range) * chartHeight;
+      const y = inverted ? padding + normalizedY : padding + chartHeight - normalizedY;
       return { x, y };
     });
 
@@ -60,7 +63,7 @@ export const Sparkline = memo(function Sparkline({
     ].join(' ');
 
     return { linePath: linePoints, areaPath: areaPoints };
-  }, [data, width, height]);
+  }, [data, width, height, inverted]);
 
   if (data.length < 2) {
     return null;
