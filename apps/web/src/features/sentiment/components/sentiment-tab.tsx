@@ -2,8 +2,9 @@
 
 import { memo, useMemo } from 'react';
 import { Loader2, Brain, Calendar } from 'lucide-react';
-import { Plan } from '@coucou-ia/shared';
+import { Plan, type SentimentResult } from '@coucou-ia/shared';
 
+import { cn } from '@/lib/utils';
 import { Card, CardContent } from '@/components/ui/card';
 import { useLatestSentiment } from '@/hooks/use-sentiment';
 import { formatRelativeTime, formatRelativeTimeFuture } from '@/lib/format';
@@ -19,25 +20,33 @@ interface SentimentTabProps {
   userPlan: Plan;
 }
 
+type SentimentProvider = 'gpt' | 'claude' | 'mistral';
+
 export const SentimentTab = memo(function SentimentTab({ projectId, userPlan }: SentimentTabProps) {
   const { data, isLoading, error } = useLatestSentiment(projectId);
 
   const scan = data?.scan;
-  const gpt = scan?.results.gpt;
-  const claude = scan?.results.claude;
 
-  // Merge all unique themes and keywords from both providers
-  const mergedData = useMemo(
-    () =>
-      gpt && claude
-        ? {
-            themes: [...new Set([...gpt.t, ...claude.t])],
-            positiveKeywords: [...new Set([...gpt.kp, ...claude.kp])],
-            negativeKeywords: [...new Set([...gpt.kn, ...claude.kn])],
-          }
-        : null,
-    [gpt, claude],
-  );
+  const providers = useMemo(() => {
+    if (!scan?.results) return [];
+    const entries: Array<{ key: string; provider: SentimentProvider; result: SentimentResult }> =
+      [];
+    if (scan.results.gpt) entries.push({ key: 'gpt', provider: 'gpt', result: scan.results.gpt });
+    if (scan.results.claude)
+      entries.push({ key: 'claude', provider: 'claude', result: scan.results.claude });
+    if (scan.results.mistral)
+      entries.push({ key: 'mistral', provider: 'mistral', result: scan.results.mistral });
+    return entries;
+  }, [scan?.results]);
+
+  const mergedData = useMemo(() => {
+    if (providers.length === 0) return null;
+    return {
+      themes: [...new Set(providers.flatMap((p) => p.result.t))],
+      positiveKeywords: [...new Set(providers.flatMap((p) => p.result.kp))],
+      negativeKeywords: [...new Set(providers.flatMap((p) => p.result.kn))],
+    };
+  }, [providers]);
 
   // Locked state for FREE users
   if (userPlan === Plan.FREE) {
@@ -98,10 +107,11 @@ export const SentimentTab = memo(function SentimentTab({ projectId, userPlan }: 
 
   return (
     <div className="space-y-6">
-      {/* Scores by LLM */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <ScoreCard provider="gpt" score={scan.results.gpt.s} themes={scan.results.gpt.t} />
-        <ScoreCard provider="claude" score={scan.results.claude.s} themes={scan.results.claude.t} />
+      {/* Scores by provider */}
+      <div className={cn('grid grid-cols-1 gap-4', providers.length > 1 && 'sm:grid-cols-2')}>
+        {providers.map(({ key, provider, result }) => (
+          <ScoreCard key={key} provider={provider} score={result.s} themes={result.t} />
+        ))}
       </div>
 
       {/* Combined themes */}

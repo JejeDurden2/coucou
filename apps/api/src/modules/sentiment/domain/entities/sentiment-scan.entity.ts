@@ -1,4 +1,4 @@
-import type { SentimentResult, SentimentScanResults } from '@coucou-ia/shared';
+import type { SentimentScanResults } from '@coucou-ia/shared';
 
 export interface SentimentScanProps {
   id: string;
@@ -52,14 +52,6 @@ export class SentimentScan {
 
   get results(): SentimentScanResults {
     return this.props.results;
-  }
-
-  get gptResult(): SentimentResult {
-    return this.props.results.gpt;
-  }
-
-  get claudeResult(): SentimentResult {
-    return this.props.results.claude;
   }
 
   get createdAt(): Date {

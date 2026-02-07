@@ -86,7 +86,7 @@ import { ScanController } from './presentation/controllers/scan.controller';
     SCAN_REPOSITORY,
     SCAN_JOB_REPOSITORY,
     LLM_SERVICE,
-    GPT52LLMAdapter,
+    MistralSmallLLMAdapter,
     QUEUE_PROMPT_SCAN_USE_CASE,
     PROCESS_SCAN_JOB_USE_CASE,
   ],

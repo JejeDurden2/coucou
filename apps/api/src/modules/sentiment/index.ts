@@ -22,5 +22,10 @@ export type {
   SentimentHistoryDto,
   SentimentHistoryPointDto,
 } from './application/dto/sentiment.dto';
+export { SENTIMENT_ANALYZER } from './application/ports/sentiment-analyzer.port';
+export type {
+  SentimentAnalyzerPort,
+  SentimentAnalysisInput,
+} from './application/ports/sentiment-analyzer.port';
 export { SentimentQueueService } from './infrastructure/queue/sentiment-queue.service';
 export { SentimentProcessor } from './infrastructure/queue/sentiment.processor';

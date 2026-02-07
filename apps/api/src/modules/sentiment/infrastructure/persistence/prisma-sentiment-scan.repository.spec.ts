@@ -138,22 +138,13 @@ describe('PrismaSentimentScanRepository', () => {
   });
 
   describe('SentimentScan entity', () => {
-    it('should provide accessors for GPT and Claude results', () => {
-      const scan = SentimentScan.fromPersistence(mockScanData);
-
-      expect(scan.gptResult.s).toBe(75);
-      expect(scan.gptResult.kp).toContain('reliable');
-      expect(scan.claudeResult.s).toBe(80);
-      expect(scan.claudeResult.kn).toContain('complex');
-    });
-
     it('should serialize to JSON correctly', () => {
       const scan = SentimentScan.fromPersistence(mockScanData);
       const json = scan.toJSON();
 
       expect(json.id).toBe('scan-123');
       expect(json.globalScore).toBe(78);
-      expect(json.results.gpt.s).toBe(75);
+      expect(json.results).toEqual(mockResults);
     });
   });
 });

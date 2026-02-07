@@ -420,8 +420,9 @@ export interface SentimentResult {
 }
 
 export interface SentimentScanResults {
-  gpt: SentimentResult;
-  claude: SentimentResult;
+  gpt?: SentimentResult;
+  claude?: SentimentResult;
+  mistral?: SentimentResult;
 }
 
 export interface SentimentScan {

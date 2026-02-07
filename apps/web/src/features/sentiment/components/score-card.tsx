@@ -10,15 +10,18 @@ import { InfoTooltip } from '@/components/ui/info-tooltip';
 import { ProviderLogo } from '@/components/ui/provider-logo';
 import { getSentimentVariant, variantTextStyles } from '../lib/sentiment-variant';
 
+type SentimentProvider = 'gpt' | 'claude' | 'mistral';
+
 interface ScoreCardProps {
-  provider: 'gpt' | 'claude';
+  provider: SentimentProvider;
   score: number;
   themes: string[];
 }
 
-const PROVIDER_MAP: Record<'gpt' | 'claude', LLMProvider> = {
+const PROVIDER_MAP: Record<SentimentProvider, LLMProvider> = {
   gpt: LLMProvider.CHATGPT,
   claude: LLMProvider.CLAUDE,
+  mistral: LLMProvider.MISTRAL,
 };
 
 const PROVIDER_CONFIG = {
@@ -31,6 +34,11 @@ const PROVIDER_CONFIG = {
     label: 'Score Claude',
     displayName: 'Claude',
     badgeVariant: 'claude' as const,
+  },
+  mistral: {
+    label: 'Score Mistral',
+    displayName: 'Mistral',
+    badgeVariant: 'mistral' as const,
   },
 } as const;
 
