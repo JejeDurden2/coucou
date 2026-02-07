@@ -16,6 +16,7 @@ export const metadata: Metadata = {
     description:
       'Stratégies GEO adaptées à votre activité. Apparaissez dans les recommandations de ChatGPT et Claude.',
     type: 'website',
+    url: 'https://coucou-ia.com/geo-pour',
   },
   twitter: {
     title: 'GEO par Métier | Coucou IA',

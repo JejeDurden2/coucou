@@ -137,6 +137,25 @@ export default async function BlogPostPage({ params }: PageProps): Promise<React
 
         {/* Article */}
         <article className="mx-auto w-full max-w-3xl flex-1 px-4 pb-12 pt-28">
+          {/* Breadcrumb */}
+          <nav className="mb-8 text-sm text-muted-foreground" aria-label="Fil d'Ariane">
+            <ol className="flex items-center gap-2">
+              <li>
+                <Link href="/" className="hover:text-foreground">
+                  Accueil
+                </Link>
+              </li>
+              <li aria-hidden="true">/</li>
+              <li>
+                <Link href="/blog" className="hover:text-foreground">
+                  Blog
+                </Link>
+              </li>
+              <li aria-hidden="true">/</li>
+              <li className="text-foreground line-clamp-1">{post.title}</li>
+            </ol>
+          </nav>
+
           {/* Meta */}
           <header className="mb-10">
             {post.tags.length > 0 && (

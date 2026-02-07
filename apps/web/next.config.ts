@@ -45,6 +45,21 @@ const nextConfig: NextConfig = {
         destination: '/geo-pour',
         permanent: true,
       },
+      {
+        source: '/privacy/',
+        destination: '/privacy',
+        permanent: true,
+      },
+      {
+        source: '/terms/',
+        destination: '/terms',
+        permanent: true,
+      },
+      {
+        source: '/mentions-legales/',
+        destination: '/mentions-legales',
+        permanent: true,
+      },
     ];
   },
 };

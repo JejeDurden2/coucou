@@ -50,11 +50,6 @@ const SOFTWARE_APP_SCHEMA = {
       description: '15 marques, 50 prompts par marque, analyses quotidiennes, support prioritaire',
     },
   ],
-  aggregateRating: {
-    '@type': 'AggregateRating',
-    ratingValue: '4.8',
-    ratingCount: '127',
-  },
 };
 
 const FAQ_SCHEMA = {

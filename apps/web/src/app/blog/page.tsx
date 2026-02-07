@@ -5,6 +5,7 @@ import { getAllPosts } from '@/lib/blog';
 import { PostCard } from '@/components/blog';
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
+import { JsonLd } from '@/components/seo/json-ld';
 
 export const metadata: Metadata = {
   title: 'Blog GEO & Recherche IA | Guides et actualités',
@@ -15,6 +16,7 @@ export const metadata: Metadata = {
     description:
       'Guides pratiques sur le GEO, la recherche IA et la visibilité de marque sur ChatGPT et Claude.',
     type: 'website',
+    url: 'https://coucou-ia.com/blog',
   },
   twitter: {
     title: 'Blog GEO & Recherche IA | Coucou IA',
@@ -25,12 +27,46 @@ export const metadata: Metadata = {
   },
 };
 
+const COLLECTION_SCHEMA = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: 'Blog GEO & Recherche IA',
+  description:
+    'Guides pratiques sur le GEO (Generative Engine Optimization), la recherche IA et la visibilité de marque sur ChatGPT et Claude.',
+  url: 'https://coucou-ia.com/blog',
+  publisher: {
+    '@type': 'Organization',
+    name: 'Coucou IA',
+    url: 'https://coucou-ia.com',
+  },
+};
+
+const BREADCRUMB_SCHEMA = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    {
+      '@type': 'ListItem',
+      position: 1,
+      name: 'Accueil',
+      item: 'https://coucou-ia.com',
+    },
+    {
+      '@type': 'ListItem',
+      position: 2,
+      name: 'Blog',
+    },
+  ],
+};
+
 export default function BlogPage(): React.ReactNode {
   const posts = getAllPosts();
 
   return (
     <div className="flex min-h-dvh flex-col bg-background">
       <Header variant="blog" />
+      <JsonLd data={COLLECTION_SCHEMA} />
+      <JsonLd data={BREADCRUMB_SCHEMA} />
 
       {/* Main */}
       <main className="mx-auto w-full max-w-5xl flex-1 px-4 pb-12 pt-28">

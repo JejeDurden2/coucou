@@ -87,6 +87,7 @@ export default async function PersonaPage({ params }: PageProps): Promise<React.
       name: 'Coucou IA',
       url: 'https://coucou-ia.com',
     },
+    datePublished: persona.lastUpdated,
     dateModified: persona.lastUpdated,
     mainEntityOfPage: {
       '@type': 'WebPage',

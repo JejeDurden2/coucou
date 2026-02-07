@@ -6,6 +6,7 @@ import { getTermsByCategory, getCategoryLabel, type GlossaryCategory } from '@/l
 import { TermCard } from '@/components/lexique';
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
+import { JsonLd } from '@/components/seo/json-ld';
 
 export const metadata: Metadata = {
   title: 'Lexique GEO | Définitions et glossaire du référencement IA',
@@ -16,6 +17,7 @@ export const metadata: Metadata = {
     description:
       'Définitions des termes essentiels pour comprendre la visibilité de marque sur ChatGPT et Claude.',
     type: 'website',
+    url: 'https://coucou-ia.com/lexique',
   },
   twitter: {
     title: 'Lexique GEO | Coucou IA',
@@ -24,6 +26,38 @@ export const metadata: Metadata = {
   alternates: {
     canonical: 'https://coucou-ia.com/lexique',
   },
+};
+
+const COLLECTION_SCHEMA = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: 'Lexique GEO',
+  description:
+    'Glossaire complet du GEO (Generative Engine Optimization). Définitions des termes essentiels pour comprendre la visibilité de marque sur ChatGPT et Claude.',
+  url: 'https://coucou-ia.com/lexique',
+  publisher: {
+    '@type': 'Organization',
+    name: 'Coucou IA',
+    url: 'https://coucou-ia.com',
+  },
+};
+
+const BREADCRUMB_SCHEMA = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: [
+    {
+      '@type': 'ListItem',
+      position: 1,
+      name: 'Accueil',
+      item: 'https://coucou-ia.com',
+    },
+    {
+      '@type': 'ListItem',
+      position: 2,
+      name: 'Lexique GEO',
+    },
+  ],
 };
 
 const CATEGORY_ORDER: GlossaryCategory[] = [
@@ -41,6 +75,8 @@ export default function LexiquePage(): React.ReactNode {
   return (
     <div className="flex min-h-dvh flex-col bg-background">
       <Header variant="blog" />
+      <JsonLd data={COLLECTION_SCHEMA} />
+      <JsonLd data={BREADCRUMB_SCHEMA} />
 
       {/* Main */}
       <main className="mx-auto w-full max-w-5xl flex-1 px-4 pb-12 pt-28">
