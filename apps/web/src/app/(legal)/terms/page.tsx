@@ -4,8 +4,21 @@ import Link from 'next/link';
 import { Logo } from '@/components/ui/logo';
 
 export const metadata: Metadata = {
-  title: "Conditions Générales d'Utilisation - Coucou IA",
+  title: "Conditions Générales d'Utilisation",
   description: "Conditions générales d'utilisation du service Coucou IA.",
+  openGraph: {
+    title: "Conditions Générales d'Utilisation | Coucou IA",
+    description: "Conditions générales d'utilisation du service Coucou IA.",
+    type: 'website',
+    url: 'https://coucou-ia.com/terms',
+  },
+  alternates: {
+    canonical: 'https://coucou-ia.com/terms',
+    languages: {
+      fr: 'https://coucou-ia.com/terms',
+      'x-default': 'https://coucou-ia.com/terms',
+    },
+  },
 };
 
 export default function TermsPage(): React.ReactNode {

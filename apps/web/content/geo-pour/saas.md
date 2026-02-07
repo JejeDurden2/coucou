@@ -2,7 +2,7 @@
 persona: SaaS
 slug: saas
 headline: 'GEO pour SaaS : Soyez recommandé quand les entreprises cherchent une solution'
-metaTitle: 'GEO pour SaaS B2B : Visibilité IA pour Éditeurs de Logiciels | Coucou IA'
+metaTitle: 'GEO pour SaaS B2B : Visibilité IA'
 metaDescription: 'Votre SaaS est-il recommandé par ChatGPT quand les entreprises cherchent un outil comme le vôtre ? Mesurez et améliorez votre visibilité IA avec Coucou IA.'
 painPoints:
   - "Les décideurs demandent à ChatGPT « Quel est le meilleur [catégorie] ? » et vous n'apparaissez pas"

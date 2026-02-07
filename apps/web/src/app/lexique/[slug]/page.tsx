@@ -28,7 +28,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 
   const url = `https://coucou-ia.com/lexique/${slug}`;
-  const title = `${term.term} : Définition et Guide | Lexique GEO`;
+  const title = `${term.term} : Définition GEO`;
 
   return {
     title,
@@ -53,6 +53,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     },
     alternates: {
       canonical: url,
+      languages: { fr: url, 'x-default': url },
     },
   };
 }

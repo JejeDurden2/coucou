@@ -2,7 +2,7 @@
 persona: Responsables Marketing
 slug: responsables-marketing
 headline: 'GEO pour Responsables Marketing : Pilotez votre visibilité IA'
-metaTitle: 'GEO pour CMO et Responsables Marketing : Maîtrisez la Visibilité IA | Coucou IA'
+metaTitle: 'GEO pour CMO et Marketing : Visibilité IA'
 metaDescription: 'Êtes-vous visible quand les décideurs demandent des recommandations à ChatGPT ? Intégrez le GEO à votre stratégie marketing avec Coucou IA.'
 painPoints:
   - 'Votre CEO vous demande si ChatGPT recommande votre marque et vous ne savez pas répondre'

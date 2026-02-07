@@ -8,7 +8,7 @@ import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
 
 export const metadata: Metadata = {
-  title: 'GEO par Métier | Optimisation IA pour votre secteur',
+  title: 'GEO par Métier | Optimisation IA par secteur',
   description:
     "Découvrez comment le GEO (Generative Engine Optimization) s'applique à votre métier. Guides dédiés pour startups, e-commerce, agences SEO, SaaS et plus.",
   openGraph: {
@@ -24,6 +24,10 @@ export const metadata: Metadata = {
   },
   alternates: {
     canonical: 'https://coucou-ia.com/geo-pour',
+    languages: {
+      fr: 'https://coucou-ia.com/geo-pour',
+      'x-default': 'https://coucou-ia.com/geo-pour',
+    },
   },
 };
 

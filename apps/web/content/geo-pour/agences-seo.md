@@ -2,7 +2,7 @@
 persona: Agences SEO
 slug: agences-seo
 headline: 'GEO pour Agences SEO : Proposez un nouveau service à vos clients'
-metaTitle: 'GEO pour Agences SEO : Nouveau Levier pour Vos Clients | Coucou IA'
+metaTitle: 'GEO pour Agences SEO : Nouveau Levier'
 metaDescription: 'Intégrez le GEO dans vos prestations SEO. Offrez à vos clients une visibilité complète : Google + ChatGPT + Claude. Différenciez votre agence avec Coucou IA.'
 painPoints:
   - 'Vos clients vous demandent si ChatGPT recommande leur marque et vous ne savez pas répondre'

@@ -2,7 +2,7 @@
 persona: Consultants SEO
 slug: consultants-seo
 headline: 'GEO pour Consultants SEO : Élargissez votre expertise à la recherche IA'
-metaTitle: 'GEO pour Consultants SEO et Freelances : Maîtrisez la Visibilité IA | Coucou IA'
+metaTitle: 'GEO pour Consultants SEO : Visibilité IA'
 metaDescription: 'Ajoutez le GEO à votre arsenal de consultant SEO. Aidez vos clients à apparaître dans les recommandations de ChatGPT et Claude. Nouvel avantage concurrentiel.'
 painPoints:
   - "Vos clients posent des questions sur ChatGPT et vous manquez d'outils pour y répondre"

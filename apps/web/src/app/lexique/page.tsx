@@ -9,7 +9,7 @@ import { Footer } from '@/components/layout/footer';
 import { JsonLd } from '@/components/seo/json-ld';
 
 export const metadata: Metadata = {
-  title: 'Lexique GEO | Définitions et glossaire du référencement IA',
+  title: 'Lexique GEO | Glossaire du référencement IA',
   description:
     'Glossaire complet du GEO (Generative Engine Optimization). Définitions des termes essentiels pour comprendre la visibilité de marque sur ChatGPT et Claude.',
   openGraph: {
@@ -25,6 +25,10 @@ export const metadata: Metadata = {
   },
   alternates: {
     canonical: 'https://coucou-ia.com/lexique',
+    languages: {
+      fr: 'https://coucou-ia.com/lexique',
+      'x-default': 'https://coucou-ia.com/lexique',
+    },
   },
 };
 

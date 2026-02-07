@@ -2,7 +2,7 @@
 persona: E-commerce
 slug: ecommerce
 headline: 'GEO pour E-commerce : Apparaissez dans les recommandations produits des IA'
-metaTitle: 'GEO pour E-commerce : Visibilité IA pour Boutiques en Ligne | Coucou IA'
+metaTitle: 'GEO pour E-commerce : Visibilité IA'
 metaDescription: "Optimisez la visibilité de votre boutique e-commerce sur ChatGPT et Claude. Découvrez si les IA recommandent vos produits quand les clients demandent des conseils d'achat."
 painPoints:
   - 'Quand un client demande « Quel est le meilleur [produit] ? » à ChatGPT, vos concurrents apparaissent, pas vous'

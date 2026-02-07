@@ -2,7 +2,7 @@
 persona: Marques D2C
 slug: marques-d2c
 headline: 'GEO pour Marques D2C : Soyez recommandé directement aux consommateurs'
-metaTitle: 'GEO pour Marques D2C : Visibilité IA pour Direct-to-Consumer | Coucou IA'
+metaTitle: 'GEO pour Marques D2C : Visibilité IA'
 metaDescription: "Votre marque D2C est-elle recommandée par ChatGPT ? Les consommateurs demandent des conseils d'achat aux IA. Mesurez votre visibilité avec Coucou IA."
 painPoints:
   - "Les consommateurs demandent à ChatGPT « Quelle marque de [produit] ? » et vous n'êtes pas cité"

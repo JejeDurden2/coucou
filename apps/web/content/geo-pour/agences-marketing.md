@@ -2,7 +2,7 @@
 persona: Agences Marketing
 slug: agences-marketing
 headline: 'GEO pour Agences Marketing : Complétez votre offre avec la visibilité IA'
-metaTitle: 'GEO pour Agences Marketing Digital : Nouveau Service à Haute Valeur | Coucou IA'
+metaTitle: 'GEO pour Agences Marketing : Visibilité IA'
 metaDescription: 'Proposez le monitoring GEO à vos clients. Complétez SEO, SEA et social avec la visibilité IA. Différenciez votre agence marketing avec Coucou IA.'
 painPoints:
   - 'Vos clients demandent des résultats sur ChatGPT mais vous ne proposez pas ce service'

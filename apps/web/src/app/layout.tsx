@@ -32,7 +32,7 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL('https://coucou-ia.com'),
   title: {
-    default: 'Coucou IA | Surveillance de votre visibilité dans la recherche IA',
+    default: 'Coucou IA | Surveillance visibilité recherche IA',
     template: '%s | Coucou IA',
   },
   description:
@@ -92,7 +92,7 @@ export const metadata: Metadata = {
   },
   alternates: {
     canonical: 'https://coucou-ia.com',
-    languages: { fr: 'https://coucou-ia.com' },
+    languages: { fr: 'https://coucou-ia.com', 'x-default': 'https://coucou-ia.com' },
   },
 };
 

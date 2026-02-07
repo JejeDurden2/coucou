@@ -4,8 +4,22 @@ import Link from 'next/link';
 import { Logo } from '@/components/ui/logo';
 
 export const metadata: Metadata = {
-  title: 'Politique de confidentialité - Coucou IA',
+  title: 'Politique de confidentialité',
   description: 'Politique de confidentialité et protection des données personnelles de Coucou IA.',
+  openGraph: {
+    title: 'Politique de confidentialité | Coucou IA',
+    description:
+      'Politique de confidentialité et protection des données personnelles de Coucou IA.',
+    type: 'website',
+    url: 'https://coucou-ia.com/privacy',
+  },
+  alternates: {
+    canonical: 'https://coucou-ia.com/privacy',
+    languages: {
+      fr: 'https://coucou-ia.com/privacy',
+      'x-default': 'https://coucou-ia.com/privacy',
+    },
+  },
 };
 
 export default function PrivacyPage(): React.ReactNode {

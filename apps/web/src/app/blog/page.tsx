@@ -24,6 +24,7 @@ export const metadata: Metadata = {
   },
   alternates: {
     canonical: 'https://coucou-ia.com/blog',
+    languages: { fr: 'https://coucou-ia.com/blog', 'x-default': 'https://coucou-ia.com/blog' },
   },
 };
 

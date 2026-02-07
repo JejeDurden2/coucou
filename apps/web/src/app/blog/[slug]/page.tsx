@@ -31,7 +31,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const url = `https://coucou-ia.com/blog/${slug}`;
 
   return {
-    title: post.title,
+    title: { absolute: post.title },
     description: post.description,
     authors: [{ name: post.author }],
     openGraph: {
@@ -52,6 +52,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     },
     alternates: {
       canonical: url,
+      languages: { fr: url, 'x-default': url },
     },
   };
 }

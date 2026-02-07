@@ -2,7 +2,7 @@
 persona: Startups
 slug: startups
 headline: 'GEO pour Startups : Soyez recommandé par les IA dès le lancement'
-metaTitle: 'GEO pour Startups : Visibilité IA pour Jeunes Entreprises | Coucou IA'
+metaTitle: 'GEO pour Startups : Visibilité IA'
 metaDescription: 'Comment les startups peuvent apparaître dans les recommandations de ChatGPT et Claude. Construisez votre visibilité IA dès le début avec Coucou IA.'
 painPoints:
   - 'Vous lancez votre produit mais les IA recommandent uniquement vos concurrents établis'

@@ -4,9 +4,23 @@ import Link from 'next/link';
 import { Logo } from '@/components/ui/logo';
 
 export const metadata: Metadata = {
-  title: 'Mentions légales - Coucou IA',
+  title: 'Mentions légales',
   description:
     "Mentions légales du site coucou-ia.com : informations sur l'éditeur, l'hébergeur, la propriété intellectuelle et la protection des données.",
+  openGraph: {
+    title: 'Mentions légales | Coucou IA',
+    description:
+      "Mentions légales du site coucou-ia.com : informations sur l'éditeur, l'hébergeur et la propriété intellectuelle.",
+    type: 'website',
+    url: 'https://coucou-ia.com/mentions-legales',
+  },
+  alternates: {
+    canonical: 'https://coucou-ia.com/mentions-legales',
+    languages: {
+      fr: 'https://coucou-ia.com/mentions-legales',
+      'x-default': 'https://coucou-ia.com/mentions-legales',
+    },
+  },
 };
 
 export default function MentionsLegalesPage(): React.ReactNode {
