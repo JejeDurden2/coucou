@@ -13,25 +13,25 @@ interface Stat {
 
 const STATS: Stat[] = [
   {
-    value: 67,
+    value: 48,
     prefix: '',
     suffix: '%',
-    label: 'font confiance aux recommandations IA',
-    source: 'Études 2024-2025',
+    label: "des Français utilisent l'IA pour leurs recherches",
+    source: 'Ipsos-CESI, fév 2025',
   },
   {
-    value: 25,
-    prefix: '-',
+    value: 90,
+    prefix: '',
     suffix: '%',
-    label: 'de recherches Google depuis ChatGPT',
-    source: 'Gartner 2024',
+    label: 'des sites sont invisibles dans ChatGPT',
+    source: 'SEO.fr, étude 300K requêtes',
   },
   {
-    value: 40,
+    value: 35,
     prefix: '+',
     suffix: '%',
-    label: 'de conversions si cité en premier',
-    source: 'Seer Interactive 2025',
+    label: 'de CTR si cité dans les AI Overviews',
+    source: 'Seer Interactive, 2025',
   },
 ];
 
@@ -108,8 +108,8 @@ export function ProblemSection() {
         </Badge>
 
         <h2 className="font-display text-4xl leading-tight mb-8 text-balance md:text-5xl lg:text-6xl">
-          <span className="font-mono text-secondary-accent">67%</span> des consommateurs font
-          confiance aux recommandations IA.
+          <span className="font-mono text-secondary-accent">48%</span> des Français utilisent l'IA
+          pour leurs recherches.
         </h2>
 
         <p className="text-xl text-muted-foreground leading-relaxed max-w-2xl mb-12">
