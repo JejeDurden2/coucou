@@ -4,31 +4,29 @@ interface FeatureWithLogosProps {
   feature: string;
 }
 
-// Word-boundary patterns to avoid matching substrings like "ChatGPT-like"
-const CHATGPT_PATTERN = /\bChatGPT\b/;
-const CLAUDE_PATTERN = /\bClaude\b/;
+const PROVIDER_LOGOS = [
+  { name: 'Mistral', pattern: /\bMistral\b/, src: '/logos/mistral.svg' },
+  { name: 'ChatGPT', pattern: /\bChatGPT\b/, src: '/logos/chatgpt.svg' },
+  { name: 'Claude', pattern: /\bClaude\b/, src: '/logos/claude.svg' },
+] as const;
 
 /**
  * Renders a pricing feature with provider logos if it contains AI engine names.
- * - "ChatGPT" → ChatGPT logo + text
- * - "ChatGPT + Claude" → Both logos + text
+ * - "Mistral" -> Mistral logo + text
+ * - "Mistral + ChatGPT + Claude" -> All logos + text
  */
 export function FeatureWithLogos({ feature }: FeatureWithLogosProps): React.ReactNode {
-  const hasChatGPT = CHATGPT_PATTERN.test(feature);
-  const hasClaude = CLAUDE_PATTERN.test(feature);
+  const matchedLogos = PROVIDER_LOGOS.filter(({ pattern }) => pattern.test(feature));
 
-  if (!hasChatGPT && !hasClaude) {
+  if (matchedLogos.length === 0) {
     return <span>{feature}</span>;
   }
 
   return (
     <span className="inline-flex items-center gap-1.5">
-      {hasChatGPT && (
-        <Image src="/logos/chatgpt.svg" alt="ChatGPT" width={16} height={16} className="shrink-0" />
-      )}
-      {hasClaude && (
-        <Image src="/logos/claude.svg" alt="Claude" width={16} height={16} className="shrink-0" />
-      )}
+      {matchedLogos.map(({ name, src }) => (
+        <Image key={name} src={src} alt={name} width={16} height={16} className="shrink-0" />
+      ))}
       <span>{feature}</span>
     </span>
   );

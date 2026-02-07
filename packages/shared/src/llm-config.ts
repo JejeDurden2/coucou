@@ -6,27 +6,27 @@ import { LLMModel, LLMProvider, Plan } from './types';
 
 interface PlanLLMConfiguration {
   providers: readonly LLMProvider[];
-  models: Partial<Record<LLMProvider, LLMModel>>;
+  models: readonly LLMModel[];
 }
 
 export const PLAN_LLM_CONFIG: Record<Plan, PlanLLMConfiguration> = {
   [Plan.FREE]: {
-    providers: [LLMProvider.CHATGPT],
-    models: { [LLMProvider.CHATGPT]: LLMModel.GPT_4O_MINI },
+    providers: [LLMProvider.MISTRAL],
+    models: [LLMModel.MISTRAL_SMALL_LATEST],
   },
   [Plan.SOLO]: {
-    providers: [LLMProvider.CHATGPT, LLMProvider.CLAUDE],
-    models: {
-      [LLMProvider.CHATGPT]: LLMModel.GPT_5_2,
-      [LLMProvider.CLAUDE]: LLMModel.CLAUDE_SONNET_4_5,
-    },
+    providers: [LLMProvider.MISTRAL, LLMProvider.CHATGPT, LLMProvider.CLAUDE],
+    models: [LLMModel.MISTRAL_SMALL_LATEST, LLMModel.GPT_4O, LLMModel.CLAUDE_SONNET_4_5],
   },
   [Plan.PRO]: {
-    providers: [LLMProvider.CHATGPT, LLMProvider.CLAUDE],
-    models: {
-      [LLMProvider.CHATGPT]: LLMModel.GPT_5_2,
-      [LLMProvider.CLAUDE]: LLMModel.CLAUDE_SONNET_4_5,
-    },
+    providers: [LLMProvider.MISTRAL, LLMProvider.CHATGPT, LLMProvider.CLAUDE],
+    models: [
+      LLMModel.MISTRAL_SMALL_LATEST,
+      LLMModel.GPT_4O,
+      LLMModel.GPT_5_2,
+      LLMModel.CLAUDE_SONNET_4_5,
+      LLMModel.CLAUDE_OPUS_4_5,
+    ],
   },
 } as const;
 
@@ -37,7 +37,7 @@ export const SENTIMENT_MODEL = LLMModel.CLAUDE_OPUS_4_5;
 // ============================================
 
 export function getModelsForPlan(plan: Plan): LLMModel[] {
-  return Object.values(PLAN_LLM_CONFIG[plan].models);
+  return [...PLAN_LLM_CONFIG[plan].models];
 }
 
 export function getProvidersForPlan(plan: Plan): LLMProvider[] {

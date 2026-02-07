@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Script from 'next/script';
 import { Bricolage_Grotesque, JetBrains_Mono, Fraunces } from 'next/font/google';
 import { SpeedInsights } from '@vercel/speed-insights/next';
+import { Providers } from './providers';
 import './globals.css';
 
 // Primary sans-serif - distinctive grotesque with editorial character
@@ -35,7 +36,7 @@ export const metadata: Metadata = {
     template: '%s | Coucou IA',
   },
   description:
-    'Analysez vos mentions sur ChatGPT et Claude. Suivez votre part de voix IA et surveillez vos concurrents. Premier outil français de monitoring recherche IA. Essai gratuit.',
+    'Analysez vos mentions sur ChatGPT, Claude et Mistral. Suivez votre part de voix IA et surveillez vos concurrents. Premier outil français de monitoring recherche IA. Essai gratuit.',
   keywords: [
     'surveillance visibilité IA',
     'monitoring recherche IA',
@@ -45,6 +46,8 @@ export const metadata: Metadata = {
     'Generative Engine Optimization',
     'visibilité ChatGPT',
     'visibilité Claude',
+    'visibilité Mistral',
+    'mentions marque Mistral',
     'SEO IA',
     'monitoring LLM',
   ],
@@ -79,12 +82,12 @@ export const metadata: Metadata = {
     siteName: 'Coucou IA',
     title: 'Coucou IA | Surveillance visibilité recherche IA',
     description:
-      'Analysez vos mentions sur ChatGPT et Claude. Premier outil français de monitoring recherche IA.',
+      'Analysez vos mentions sur ChatGPT, Claude et Mistral. Premier outil français de monitoring recherche IA.',
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Coucou IA | Surveillance visibilité recherche IA',
-    description: 'Analysez vos mentions sur ChatGPT et Claude. Premier outil français.',
+    description: 'Analysez vos mentions sur ChatGPT, Claude et Mistral. Premier outil français.',
     creator: '@coucouia',
   },
   alternates: {
@@ -92,8 +95,6 @@ export const metadata: Metadata = {
     languages: { fr: 'https://coucou-ia.com' },
   },
 };
-
-import { Providers } from './providers';
 
 export default function RootLayout({
   children,

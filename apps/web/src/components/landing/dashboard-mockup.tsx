@@ -12,6 +12,7 @@ const SENTIMENT_SCORE = 78;
 const PROVIDERS = [
   { name: 'ChatGPT', provider: LLMProvider.CHATGPT, position: '1.8', color: 'text-chatgpt' },
   { name: 'Claude', provider: LLMProvider.CLAUDE, position: '2.1', color: 'text-claude' },
+  { name: 'Mistral', provider: LLMProvider.MISTRAL, position: '2.4', color: 'text-mistral' },
 ] as const;
 
 const SENTIMENT_TAGS = ['Marque reconnue', 'Prix compétitifs'] as const;
@@ -19,11 +20,11 @@ const SENTIMENT_TAGS = ['Marque reconnue', 'Prix compétitifs'] as const;
 export function DashboardMockup() {
   return (
     <div
-      className="rounded-2xl border border-white/10 bg-card/60 p-6 shadow-2xl shadow-primary/5 backdrop-blur-xl opacity-0 animate-fade-in-up"
+      className="rounded-2xl border border-white/10 bg-card/95 p-6 shadow-2xl shadow-primary/5 opacity-0 animate-fade-in-up motion-reduce:opacity-100"
       style={{ animationDelay: '0.3s' }}
       aria-hidden="true"
     >
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
         <div className="col-span-2 rounded-xl border border-primary/20 bg-primary/5 p-5">
           <div className="flex items-start justify-between gap-3">
             <div className="min-w-0 flex-1">
@@ -115,6 +116,7 @@ export function DashboardMockup() {
       <div className="mt-4 flex items-center gap-2 border-t border-white/5 pt-4">
         <Badge variant="chatgpt">ChatGPT</Badge>
         <Badge variant="claude">Claude</Badge>
+        <Badge variant="mistral">Mistral</Badge>
       </div>
     </div>
   );

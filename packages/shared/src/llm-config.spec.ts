@@ -16,26 +16,43 @@ describe('llm-config', () => {
       expect(PLAN_LLM_CONFIG[Plan.PRO]).toBeDefined();
     });
 
-    it('should have FREE plan with only CHATGPT provider', () => {
+    it('should have FREE plan with only MISTRAL provider', () => {
       const config = PLAN_LLM_CONFIG[Plan.FREE];
-      expect(config.providers).toEqual([LLMProvider.CHATGPT]);
-      expect(config.models[LLMProvider.CHATGPT]).toBe(LLMModel.GPT_4O_MINI);
+      expect(config.providers).toEqual([LLMProvider.MISTRAL]);
+      expect(config.models).toEqual([LLMModel.MISTRAL_SMALL_LATEST]);
     });
 
-    it('should have SOLO plan with both providers', () => {
+    it('should have SOLO plan with all three providers', () => {
       const config = PLAN_LLM_CONFIG[Plan.SOLO];
+      expect(config.providers).toContain(LLMProvider.MISTRAL);
       expect(config.providers).toContain(LLMProvider.CHATGPT);
       expect(config.providers).toContain(LLMProvider.CLAUDE);
-      expect(config.models[LLMProvider.CHATGPT]).toBe(LLMModel.GPT_5_2);
-      expect(config.models[LLMProvider.CLAUDE]).toBe(LLMModel.CLAUDE_SONNET_4_5);
+      expect(config.models).toEqual([
+        LLMModel.MISTRAL_SMALL_LATEST,
+        LLMModel.GPT_4O,
+        LLMModel.CLAUDE_SONNET_4_5,
+      ]);
     });
 
-    it('should have PRO plan with both providers', () => {
+    it('should have PRO plan with all three providers and 5 models', () => {
       const config = PLAN_LLM_CONFIG[Plan.PRO];
+      expect(config.providers).toContain(LLMProvider.MISTRAL);
       expect(config.providers).toContain(LLMProvider.CHATGPT);
       expect(config.providers).toContain(LLMProvider.CLAUDE);
-      expect(config.models[LLMProvider.CHATGPT]).toBe(LLMModel.GPT_5_2);
-      expect(config.models[LLMProvider.CLAUDE]).toBe(LLMModel.CLAUDE_SONNET_4_5);
+      expect(config.models).toEqual([
+        LLMModel.MISTRAL_SMALL_LATEST,
+        LLMModel.GPT_4O,
+        LLMModel.GPT_5_2,
+        LLMModel.CLAUDE_SONNET_4_5,
+        LLMModel.CLAUDE_OPUS_4_5,
+      ]);
+    });
+
+    it('should not include deprecated GPT_4O_MINI in any plan', () => {
+      for (const plan of Object.values(Plan)) {
+        const models = PLAN_LLM_CONFIG[plan].models;
+        expect(models).not.toContain(LLMModel.GPT_4O_MINI);
+      }
     });
   });
 
@@ -46,42 +63,55 @@ describe('llm-config', () => {
   });
 
   describe('getModelsForPlan', () => {
-    it('should return [GPT_4O_MINI] for FREE plan', () => {
+    it('should return [MISTRAL_SMALL_LATEST] for FREE plan', () => {
       const models = getModelsForPlan(Plan.FREE);
-      expect(models).toEqual([LLMModel.GPT_4O_MINI]);
+      expect(models).toEqual([LLMModel.MISTRAL_SMALL_LATEST]);
     });
 
-    it('should return [GPT_5_2, CLAUDE_SONNET_4_5] for SOLO plan', () => {
+    it('should return 3 models for SOLO plan', () => {
       const models = getModelsForPlan(Plan.SOLO);
-      expect(models).toHaveLength(2);
-      expect(models).toContain(LLMModel.GPT_5_2);
+      expect(models).toHaveLength(3);
+      expect(models).toContain(LLMModel.MISTRAL_SMALL_LATEST);
+      expect(models).toContain(LLMModel.GPT_4O);
       expect(models).toContain(LLMModel.CLAUDE_SONNET_4_5);
     });
 
-    it('should return [GPT_5_2, CLAUDE_SONNET_4_5] for PRO plan', () => {
+    it('should return 5 models for PRO plan', () => {
       const models = getModelsForPlan(Plan.PRO);
-      expect(models).toHaveLength(2);
+      expect(models).toHaveLength(5);
+      expect(models).toContain(LLMModel.MISTRAL_SMALL_LATEST);
+      expect(models).toContain(LLMModel.GPT_4O);
       expect(models).toContain(LLMModel.GPT_5_2);
       expect(models).toContain(LLMModel.CLAUDE_SONNET_4_5);
+      expect(models).toContain(LLMModel.CLAUDE_OPUS_4_5);
+    });
+
+    it('should return a new array (not the original reference)', () => {
+      const models1 = getModelsForPlan(Plan.FREE);
+      const models2 = getModelsForPlan(Plan.FREE);
+      expect(models1).not.toBe(models2);
+      expect(models1).toEqual(models2);
     });
   });
 
   describe('getProvidersForPlan', () => {
-    it('should return [CHATGPT] for FREE plan', () => {
+    it('should return [MISTRAL] for FREE plan', () => {
       const providers = getProvidersForPlan(Plan.FREE);
-      expect(providers).toEqual([LLMProvider.CHATGPT]);
+      expect(providers).toEqual([LLMProvider.MISTRAL]);
     });
 
-    it('should return [CHATGPT, CLAUDE] for SOLO plan', () => {
+    it('should return [MISTRAL, CHATGPT, CLAUDE] for SOLO plan', () => {
       const providers = getProvidersForPlan(Plan.SOLO);
-      expect(providers).toHaveLength(2);
+      expect(providers).toHaveLength(3);
+      expect(providers).toContain(LLMProvider.MISTRAL);
       expect(providers).toContain(LLMProvider.CHATGPT);
       expect(providers).toContain(LLMProvider.CLAUDE);
     });
 
-    it('should return [CHATGPT, CLAUDE] for PRO plan', () => {
+    it('should return [MISTRAL, CHATGPT, CLAUDE] for PRO plan', () => {
       const providers = getProvidersForPlan(Plan.PRO);
-      expect(providers).toHaveLength(2);
+      expect(providers).toHaveLength(3);
+      expect(providers).toContain(LLMProvider.MISTRAL);
       expect(providers).toContain(LLMProvider.CHATGPT);
       expect(providers).toContain(LLMProvider.CLAUDE);
     });

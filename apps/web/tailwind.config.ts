@@ -53,6 +53,7 @@ const config: Config = {
         // LLM-specific colors
         chatgpt: 'rgb(var(--chatgpt) / <alpha-value>)',
         claude: 'rgb(var(--claude) / <alpha-value>)',
+        mistral: 'rgb(var(--mistral) / <alpha-value>)',
         // Semantic colors
         destructive: {
           DEFAULT: 'rgb(var(--destructive) / <alpha-value>)',

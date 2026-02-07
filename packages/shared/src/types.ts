@@ -11,15 +11,21 @@ export enum Plan {
 export enum LLMProvider {
   CHATGPT = 'CHATGPT',
   CLAUDE = 'CLAUDE',
+  MISTRAL = 'MISTRAL',
 }
 
 export enum LLMModel {
+  /** @deprecated Kept for backward compatibility with historical scan data. Not used in active plans. */
   GPT_4O_MINI = 'gpt-4o-mini',
   GPT_4O = 'gpt-4o',
   GPT_5_2 = 'gpt-5.2',
   CLAUDE_SONNET_4_5 = 'claude-sonnet-4-5-20250929',
   CLAUDE_OPUS_4_5 = 'claude-opus-4-5-20251101',
+  MISTRAL_SMALL_LATEST = 'mistral-small-latest',
 }
+
+/** Models currently used in active plan configurations. Excludes deprecated models kept for historical data. */
+export type ActiveLLMModel = Exclude<LLMModel, LLMModel.GPT_4O_MINI>;
 
 // ============================================
 // User Types
@@ -380,7 +386,7 @@ export function canAccessStats(plan: Plan): boolean {
  * Check if a plan can access sentiment analysis
  */
 export function canAccessSentiment(plan: Plan): boolean {
-  return plan === Plan.SOLO || plan === Plan.PRO;
+  return plan !== Plan.FREE;
 }
 
 /**
@@ -525,7 +531,7 @@ export const PLAN_PRICING: Record<Plan, PlanPricing> = {
     price: 0,
     period: 'month',
     description: 'Pour tester la plateforme',
-    features: ['1 marque', '2 prompts', 'ChatGPT', '1 analyse/prompt/semaine'],
+    features: ['1 marque', '2 prompts', 'Mistral', '1 analyse/prompt/semaine'],
   },
   [Plan.SOLO]: {
     price: 39,
@@ -534,7 +540,7 @@ export const PLAN_PRICING: Record<Plan, PlanPricing> = {
     features: [
       '5 marques',
       '10 prompts par marque',
-      'ChatGPT + Claude',
+      'Mistral + ChatGPT + Claude',
       '2 analyses/prompt/semaine',
       'Analyse sentiment',
       'Historique 30 jours',
@@ -549,7 +555,7 @@ export const PLAN_PRICING: Record<Plan, PlanPricing> = {
     features: [
       '15 marques',
       '50 prompts par marque',
-      'ChatGPT + Claude',
+      'Mistral + ChatGPT + Claude',
       '1 analyse/prompt/jour',
       'Analyse sentiment',
       'Historique illimité',

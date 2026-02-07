@@ -75,8 +75,7 @@ function generateCSV(data: HistoricalStats, projectName: string): void {
   const BOM = '\uFEFF';
   const SEP = ';';
 
-  // Get providers: ChatGPT and Claude
-  const providers = [LLMProvider.CHATGPT, LLMProvider.CLAUDE];
+  const providers = [LLMProvider.CHATGPT, LLMProvider.CLAUDE, LLMProvider.MISTRAL];
 
   // Build header row with provider names
   const headers = [
@@ -86,6 +85,9 @@ function generateCSV(data: HistoricalStats, projectName: string): void {
     ...providers.map((p) => `Rang ${getDisplayNameForProvider(p)}`),
   ];
 
+  // Build model->provider lookup from modelBreakdown (once, outside the loop)
+  const modelToProvider = new Map(data.modelBreakdown.map((m) => [m.model, m.provider]));
+
   // Build data rows from citationRate time series
   const rows: string[][] = data.citationRate.map((point) => {
     const date = point.date;
@@ -94,9 +96,6 @@ function generateCSV(data: HistoricalStats, projectName: string): void {
     // Find matching averageRank for this date
     const avgRankPoint = data.averageRank.find((r) => r.date === date);
     const avgRank = avgRankPoint ? avgRankPoint.value.toFixed(1) : '';
-
-    // Build model→provider lookup from modelBreakdown
-    const modelToProvider = new Map(data.modelBreakdown.map((m) => [m.model, m.provider]));
 
     // Find matching rank for each provider (aggregate from models)
     const providerRanks = providers.map((provider) => {
@@ -154,7 +153,7 @@ function generateCSV(data: HistoricalStats, projectName: string): void {
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
-  URL.revokeObjectURL(url);
+  setTimeout(() => URL.revokeObjectURL(url), 100);
 }
 
 function LoadingSkeleton(): React.ReactElement {
@@ -211,7 +210,11 @@ function ErrorState({ onRetry }: ErrorStateProps): React.ReactElement {
   );
 }
 
-function EmptyState(): React.ReactElement {
+interface EmptyStateProps {
+  onNavigateToOverview: () => void;
+}
+
+function EmptyState({ onNavigateToOverview }: EmptyStateProps): React.ReactElement {
   return (
     <div className="text-center py-12 text-muted-foreground">
       <BarChart3 className="size-12 mx-auto mb-4 opacity-50" aria-hidden="true" />
@@ -219,6 +222,9 @@ function EmptyState(): React.ReactElement {
       <p className="text-sm mt-1 text-pretty">
         Lancez votre première analyse pour voir les statistiques
       </p>
+      <Button variant="outline" size="sm" className="mt-4" onClick={onNavigateToOverview}>
+        Lancer une analyse
+      </Button>
     </div>
   );
 }
@@ -249,7 +255,7 @@ export function StatsContainer({
   }
 
   if (!data) {
-    return <EmptyState />;
+    return <EmptyState onNavigateToOverview={onNavigateToOverview} />;
   }
 
   const avgCitation =
@@ -258,13 +264,14 @@ export function StatsContainer({
       : 0;
 
   // Transform HistoricalPromptBreakdown to PromptPerformance
+  const trendToValue: Record<string, number> = { up: 5, down: -5, stable: 0 };
   const promptPerformance: PromptPerformance[] = data.promptBreakdown.map((p) => ({
     promptId: p.promptId,
     content: p.promptText,
     category: p.category as PromptCategory | null,
     citationRate: p.citationRate,
     averageRank: p.averageRank ?? 0,
-    trend: p.trend === 'up' ? 5 : p.trend === 'down' ? -5 : 0,
+    trend: trendToValue[p.trend] ?? 0,
   }));
 
   const ctaConfig = data.insight.ctaType ? CTA_CONFIG[data.insight.ctaType] : undefined;

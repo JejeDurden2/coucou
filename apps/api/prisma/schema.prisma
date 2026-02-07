@@ -26,6 +26,7 @@ enum SubscriptionStatus {
 enum LLMProvider {
   CHATGPT
   CLAUDE
+  MISTRAL
 }
 
 enum ScanJobStatus {
@@ -231,7 +232,7 @@ model SentimentScan {
   projectId   String   @map("project_id")
   scannedAt   DateTime @map("scanned_at")
   globalScore Int      @map("global_score")
-  results     Json     // { gpt: { s, t, kp, kn }, claude: { s, t, kp, kn } }
+  results     Json     // { gpt: { s, t, kp, kn }, claude: { s, t, kp, kn } } — Mistral not included (sentiment uses CLAUDE_OPUS only)
 
   createdAt DateTime @default(now()) @map("created_at")
 

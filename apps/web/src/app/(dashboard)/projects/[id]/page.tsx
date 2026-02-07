@@ -1,6 +1,6 @@
 'use client';
 
-import { use, useState } from 'react';
+import { use, useMemo, useState } from 'react';
 import Link from 'next/link';
 import {
   Radar,
@@ -116,6 +116,40 @@ export default function ProjectDashboardPage({
   const [scanningPromptId, setScanningPromptId] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState('overview');
 
+  const promptCount = stats?.promptStats?.length ?? 0;
+  const availableProviders = useMemo(
+    () =>
+      Array.from(
+        new Set(
+          stats?.promptStats?.flatMap((p) =>
+            p.modelResults.map((r) => getProviderForModel(r.model as LLMModel)),
+          ) ?? [],
+        ),
+      ).sort((a, b) => {
+        const order: Record<LLMProvider, number> = {
+          [LLMProvider.CHATGPT]: 0,
+          [LLMProvider.CLAUDE]: 1,
+          [LLMProvider.MISTRAL]: 2,
+        };
+        return order[a] - order[b];
+      }),
+    [stats?.promptStats],
+  );
+  const hasPrompts = promptCount > 0;
+
+  const scannablePromptIds = useMemo(
+    () =>
+      new Set(
+        stats?.promptStats
+          ?.filter((p) => getScanAvailability(p.lastScanAt, userPlan).canScan)
+          .map((p) => p.promptId) ?? [],
+      ),
+    [stats?.promptStats, userPlan],
+  );
+  const allOnCooldown = hasPrompts && scannablePromptIds.size === 0;
+
+  const userCanAccessStats = userPlan !== Plan.FREE;
+
   async function handleAddPrompt(content: string, category?: PromptCategory): Promise<void> {
     await createPrompt.mutateAsync({ content, category });
     setShowAddPrompt(false);
@@ -162,28 +196,6 @@ export default function ProjectDashboardPage({
     );
   }
 
-  const promptCount = stats?.promptStats?.length ?? 0;
-  const availableProviders = Array.from(
-    new Set(
-      stats?.promptStats?.flatMap((p) =>
-        p.modelResults.map((r) => getProviderForModel(r.model as LLMModel)),
-      ) ?? [],
-    ),
-  ).sort((a, b) => {
-    const order = { [LLMProvider.CHATGPT]: 0, [LLMProvider.CLAUDE]: 1 };
-    return order[a] - order[b];
-  });
-  const hasPrompts = promptCount > 0;
-
-  const scannablePromptIds = new Set(
-    stats?.promptStats
-      ?.filter((p) => getScanAvailability(p.lastScanAt, userPlan).canScan)
-      .map((p) => p.promptId) ?? [],
-  );
-  const allOnCooldown = hasPrompts && scannablePromptIds.size === 0;
-
-  const userCanAccessStats = userPlan !== Plan.FREE;
-
   function getScanDisabledReason(): string | null {
     if (isScanning) return null;
     if (!hasPrompts) return 'Ajoutez des prompts pour lancer une analyse';
@@ -213,16 +225,17 @@ export default function ProjectDashboardPage({
                 </span>
               )}
             </div>
-            {isScanning ? (
+            {isScanning && (
               <span className="flex items-center gap-1.5 text-xs text-primary">
                 <PulsingDot color="primary" />
                 {formatScanProgress(scanProgress)}
               </span>
-            ) : stats?.lastScanAt ? (
+            )}
+            {!isScanning && stats?.lastScanAt && (
               <p className="text-xs text-muted-foreground text-pretty">
                 Dernière analyse {formatRelativeTime(stats.lastScanAt)}
               </p>
-            ) : null}
+            )}
           </div>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -286,18 +299,9 @@ export default function ProjectDashboardPage({
         value={activeTab}
         onValueChange={(tab) => {
           setActiveTab(tab);
-          if (!userCanAccessStats && tab !== 'overview') {
-            const featureMap: Record<
-              string,
-              'competitors' | 'recommendations' | 'stats' | 'sentiment'
-            > = {
-              competitors: 'competitors',
-              recommendations: 'recommendations',
-              stats: 'stats',
-              sentiment: 'sentiment',
-            };
-            const feature = featureMap[tab];
-            if (feature) trackLockedTabClick(feature);
+          const lockedFeatures = new Set(['competitors', 'recommendations', 'stats', 'sentiment']);
+          if (!userCanAccessStats && lockedFeatures.has(tab)) {
+            trackLockedTabClick(tab as 'competitors' | 'recommendations' | 'stats' | 'sentiment');
           }
         }}
         className="space-y-4"

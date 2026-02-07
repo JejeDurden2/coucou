@@ -20,6 +20,7 @@ const MODEL_PRIORITY: Record<string, number> = {
   [LLMModel.GPT_5_2]: 3,
   [LLMModel.CLAUDE_SONNET_4_5]: 1,
   [LLMModel.CLAUDE_OPUS_4_5]: 2,
+  [LLMModel.MISTRAL_SMALL_LATEST]: 1,
 };
 
 // ============================================
@@ -52,6 +53,11 @@ const MODEL_REGISTRY: Record<string, ModelMetadata> = {
     abbreviation: 'Opus',
     provider: LLMProvider.CLAUDE,
   },
+  [LLMModel.MISTRAL_SMALL_LATEST]: {
+    displayName: 'Mistral Small',
+    abbreviation: 'Small',
+    provider: LLMProvider.MISTRAL,
+  },
 };
 
 // ============================================
@@ -82,6 +88,18 @@ function parseModelId(modelId: string): ModelMetadata | null {
       displayName: `GPT-${openaiMatch[1]}`,
       abbreviation: openaiMatch[1],
       provider: LLMProvider.CHATGPT,
+    };
+  }
+
+  // Mistral pattern: mistral-{tier}-{version}
+  const mistralMatch = modelId.match(/^mistral-(\w+)(?:-(.+))?$/);
+  if (mistralMatch) {
+    const tier = capitalize(mistralMatch[1]);
+    const suffix = mistralMatch[2] ? ` ${mistralMatch[2]}` : '';
+    return {
+      displayName: `Mistral ${tier}${suffix}`,
+      abbreviation: tier,
+      provider: LLMProvider.MISTRAL,
     };
   }
 
@@ -121,11 +139,13 @@ export function getModelAbbreviation(modelId: string): string {
 export const PROVIDER_DISPLAY_NAME: Record<LLMProvider, string> = {
   [LLMProvider.CHATGPT]: 'ChatGPT',
   [LLMProvider.CLAUDE]: 'Claude',
+  [LLMProvider.MISTRAL]: 'Mistral',
 };
 
 export const PROVIDER_LOGO: Record<LLMProvider, string> = {
   [LLMProvider.CHATGPT]: '/logos/chatgpt.svg',
   [LLMProvider.CLAUDE]: '/logos/claude.svg',
+  [LLMProvider.MISTRAL]: '/logos/mistral.svg',
 };
 
 // Legacy provider names from before the rename (OPENAI→CHATGPT, ANTHROPIC→CLAUDE)

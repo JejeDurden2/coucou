@@ -2,6 +2,7 @@ import { BarChart3, Heart, Layers, Lightbulb, TrendingUp } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Card } from '@/components/ui/card';
+import { cn } from '@/lib/utils';
 
 interface Feature {
   number: string;
@@ -12,7 +13,7 @@ interface Feature {
   engines?: readonly string[];
 }
 
-const AI_ENGINES = ['ChatGPT', 'Claude', 'Gemini bientôt'] as const;
+const AI_ENGINES = ['ChatGPT', 'Claude', 'Mistral', 'Gemini bientôt'] as const;
 
 const FEATURES: Feature[] = [
   {
@@ -21,7 +22,7 @@ const FEATURES: Feature[] = [
     icon: Layers,
     title: 'Surveillance multi-moteurs',
     description:
-      'Surveillez votre marque sur ChatGPT, Claude, et bientôt Gemini. Détectez automatiquement si les moteurs de recherche IA recommandent votre marque ou vos concurrents.',
+      'Surveillez votre marque sur ChatGPT, Claude et Mistral. Détectez automatiquement si les moteurs de recherche IA recommandent votre marque ou vos concurrents.',
     engines: AI_ENGINES,
   },
   {
@@ -67,7 +68,7 @@ function FeatureCard({ feature }: { feature: Feature }) {
     <div className="flex flex-col h-full">
       <div className="flex items-start justify-between mb-4">
         <Badge variant="mono" className="text-xs">
-          [{feature.number}] {feature.badge || ''}
+          [{feature.number}] {feature.badge ?? ''}
         </Badge>
       </div>
       <FeatureIcon icon={feature.icon} />
@@ -75,22 +76,23 @@ function FeatureCard({ feature }: { feature: Feature }) {
       <p className="text-sm text-muted-foreground leading-relaxed text-pretty flex-grow">
         {feature.description}
       </p>
-      {feature.engines ? (
+      {feature.engines && (
         <div className="flex flex-wrap gap-2 mt-6">
           {feature.engines.map((engine) => (
             <span
               key={engine}
-              className={`rounded-lg border px-3 py-1.5 text-xs font-medium ${
+              className={cn(
+                'rounded-lg border px-3 py-1.5 text-xs font-medium',
                 engine.includes('bientôt')
                   ? 'border-warning/30 bg-warning/10 text-warning'
-                  : 'border-border bg-card text-muted-foreground'
-              }`}
+                  : 'border-border bg-card text-muted-foreground',
+              )}
             >
               {engine}
             </span>
           ))}
         </div>
-      ) : null}
+      )}
     </div>
   );
 }

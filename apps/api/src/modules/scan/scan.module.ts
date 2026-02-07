@@ -24,6 +24,7 @@ import { ClaudeSonnetLLMAdapter } from './infrastructure/adapters/claude-sonnet-
 import { GPT4oLLMAdapter } from './infrastructure/adapters/gpt4o-llm.adapter';
 import { GPT52LLMAdapter } from './infrastructure/adapters/gpt52-llm.adapter';
 import { LLMServiceImpl } from './infrastructure/adapters/llm.service';
+import { MistralSmallLLMAdapter } from './infrastructure/adapters/mistral-small-llm.adapter';
 import { OpenAILLMAdapter } from './infrastructure/adapters/openai-llm.adapter';
 import { PrismaScanJobRepository } from './infrastructure/persistence/prisma-scan-job.repository';
 import { PrismaScanRepository } from './infrastructure/persistence/prisma-scan.repository';
@@ -64,6 +65,7 @@ import { ScanController } from './presentation/controllers/scan.controller';
     GPT52LLMAdapter,
     ClaudeSonnetLLMAdapter,
     ClaudeOpusLLMAdapter,
+    MistralSmallLLMAdapter,
     // Services
     LLMResponseProcessorService,
     {

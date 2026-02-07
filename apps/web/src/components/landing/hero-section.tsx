@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { DashboardMockup } from '@/components/landing/dashboard-mockup';
 
 export function HeroSection() {
@@ -10,7 +9,7 @@ export function HeroSection() {
       <div className="container mx-auto max-w-6xl relative z-10">
         <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
           <div>
-            <h1 className="font-display text-4xl leading-[0.95] mb-4 md:text-5xl lg:text-6xl">
+            <h1 className="font-display text-4xl leading-[0.95] mb-4 text-balance md:text-5xl lg:text-6xl">
               <span className="block">
                 L&apos;outil <span className="text-secondary-accent">GEO</span>
               </span>
@@ -19,7 +18,7 @@ export function HeroSection() {
             </h1>
 
             <p className="font-sans text-base leading-relaxed text-muted-foreground mb-6 max-w-xl md:text-lg">
-              Surveillez votre présence dans ChatGPT et Claude. Analyses automatisées.
+              Surveillez votre présence dans ChatGPT, Claude et Mistral. Analyses automatisées.
               Recommandations actionnables.
             </p>
 

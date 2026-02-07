@@ -16,6 +16,7 @@ import { GPT4oLLMAdapter } from './gpt4o-llm.adapter';
 import { GPT52LLMAdapter } from './gpt52-llm.adapter';
 import { ClaudeSonnetLLMAdapter } from './claude-sonnet-llm.adapter';
 import { ClaudeOpusLLMAdapter } from './claude-opus-llm.adapter';
+import { MistralSmallLLMAdapter } from './mistral-small-llm.adapter';
 
 type QueryResult =
   | { success: true; response: LLMResponse }
@@ -31,6 +32,7 @@ export class LLMServiceImpl implements LLMService {
     private readonly gpt52Adapter: GPT52LLMAdapter,
     private readonly claudeSonnetAdapter: ClaudeSonnetLLMAdapter,
     private readonly claudeOpusAdapter: ClaudeOpusLLMAdapter,
+    private readonly mistralSmallAdapter: MistralSmallLLMAdapter,
     private readonly logger: LoggerService,
   ) {
     this.logger.setContext(LLMServiceImpl.name);
@@ -40,6 +42,7 @@ export class LLMServiceImpl implements LLMService {
       [LLMModel.GPT_5_2, this.gpt52Adapter],
       [LLMModel.CLAUDE_SONNET_4_5, this.claudeSonnetAdapter],
       [LLMModel.CLAUDE_OPUS_4_5, this.claudeOpusAdapter],
+      [LLMModel.MISTRAL_SMALL_LATEST, this.mistralSmallAdapter],
     ]);
   }
 

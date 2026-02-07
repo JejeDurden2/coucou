@@ -17,6 +17,7 @@ interface Engine {
 const ENGINES: Engine[] = [
   { name: 'ChatGPT', logo: '/logos/chatgpt.svg', status: 'active' },
   { name: 'Claude', logo: '/logos/claude.svg', status: 'active' },
+  { name: 'Mistral', logo: '/logos/mistral.svg', status: 'active' },
   { name: 'Gemini', logo: '/logos/gemini.svg', status: 'coming' },
 ];
 
@@ -100,7 +101,7 @@ export function SupportedEnginesSection(): ReactNode {
         </div>
 
         {/* Technical grid with gap-px */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-px bg-border max-w-2xl mx-auto">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px bg-border max-w-3xl mx-auto">
           {ENGINES.map((engine) => (
             <EngineCard key={engine.name} engine={engine} />
           ))}

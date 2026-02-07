@@ -28,7 +28,7 @@ const SOFTWARE_APP_SCHEMA = {
       priceCurrency: 'EUR',
       availability: 'https://schema.org/InStock',
       url: 'https://coucou-ia.com/#pricing',
-      description: '1 marque, 5 prompts, analyse hebdomadaire sur GPT-4o et Claude Opus 4.5',
+      description: '1 marque, 2 prompts, analyse hebdomadaire sur Mistral',
     },
     {
       '@type': 'Offer',
@@ -37,7 +37,8 @@ const SOFTWARE_APP_SCHEMA = {
       priceCurrency: 'EUR',
       availability: 'https://schema.org/InStock',
       url: 'https://coucou-ia.com/#pricing',
-      description: '3 marques, 15 prompts, analyses quotidiennes sur tous les modèles IA',
+      description:
+        '5 marques, 10 prompts par marque, analyses bi-hebdomadaires sur Mistral, ChatGPT et Claude',
     },
     {
       '@type': 'Offer',
@@ -76,7 +77,7 @@ const ORG_SCHEMA = {
   url: 'https://coucou-ia.com',
   logo: 'https://coucou-ia.com/logo.svg',
   description:
-    'Outil GEO français pour surveiller et améliorer la visibilité de votre marque dans ChatGPT et Claude.',
+    'Outil GEO français pour surveiller et améliorer la visibilité de votre marque dans ChatGPT, Claude et Mistral.',
   foundingDate: '2024',
   sameAs: ['https://twitter.com/coucouia', 'https://linkedin.com/company/coucouia'],
   contactPoint: {

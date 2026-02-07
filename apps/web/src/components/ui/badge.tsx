@@ -18,6 +18,7 @@ const badgeVariants = cva(
         // LLM-specific variants
         chatgpt: 'bg-chatgpt/20 text-chatgpt border border-chatgpt/30',
         claude: 'bg-claude/20 text-claude border border-claude/30',
+        mistral: 'bg-mistral/20 text-mistral border border-mistral/30',
       },
     },
     defaultVariants: {
@@ -27,10 +28,10 @@ const badgeVariants = cva(
 );
 
 export interface BadgeProps
-  extends HTMLAttributes<HTMLDivElement>, VariantProps<typeof badgeVariants> {}
+  extends HTMLAttributes<HTMLSpanElement>, VariantProps<typeof badgeVariants> {}
 
 function Badge({ className, variant, ...props }: BadgeProps) {
-  return <div className={cn(badgeVariants({ variant }), className)} {...props} />;
+  return <span className={cn(badgeVariants({ variant }), className)} {...props} />;
 }
 
 export { Badge, badgeVariants };

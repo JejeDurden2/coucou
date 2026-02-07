@@ -49,7 +49,11 @@ function groupByProvider(
 
   // Sort by provider order: CHATGPT first, then CLAUDE
   return result.sort((a, b) => {
-    const order = { [LLMProvider.CHATGPT]: 0, [LLMProvider.CLAUDE]: 1 };
+    const order: Record<LLMProvider, number> = {
+      [LLMProvider.CHATGPT]: 0,
+      [LLMProvider.CLAUDE]: 1,
+      [LLMProvider.MISTRAL]: 2,
+    };
     return order[a.provider] - order[b.provider];
   });
 }
@@ -60,11 +64,14 @@ export const LLMPositionsTable = memo(function LLMPositionsTable({
 }: LLMPositionsTableProps) {
   const providerPositions = useMemo(() => groupByProvider(positions), [positions]);
 
-  if (providerPositions.length === 0) return null;
+  const gridCols = useMemo(
+    () => ({
+      gridTemplateColumns: `repeat(${providerPositions.length}, minmax(0, 1fr))`,
+    }),
+    [providerPositions.length],
+  );
 
-  const gridCols = {
-    gridTemplateColumns: `repeat(${providerPositions.length}, minmax(0, 1fr))`,
-  };
+  if (providerPositions.length === 0) return null;
 
   return (
     <div className="overflow-x-auto">

@@ -7,7 +7,7 @@ export const faqs: FAQ[] = [
   {
     question: "Qu'est-ce que le GEO (Generative Engine Optimization) ?",
     answer:
-      "Le GEO est l'optimisation de votre présence dans les réponses générées par les moteurs IA comme ChatGPT et Claude. Contrairement au SEO qui cible les pages de résultats Google, le GEO vise les recommandations formulées directement par l'intelligence artificielle. C'est la nouvelle discipline clé pour les marques qui veulent rester visibles.",
+      "Le GEO est l'optimisation de votre présence dans les réponses générées par les moteurs IA comme ChatGPT, Claude et Mistral. Contrairement au SEO qui cible les pages de résultats Google, le GEO vise les recommandations formulées directement par l'intelligence artificielle. C'est la nouvelle discipline clé pour les marques qui veulent rester visibles.",
   },
   {
     question: 'Quelle est la différence entre GEO et SEO ?',
@@ -17,7 +17,7 @@ export const faqs: FAQ[] = [
   {
     question: 'Quels moteurs IA sont supportés ?',
     answer:
-      'Coucou IA supporte actuellement ChatGPT et Claude, les deux leaders du marché des moteurs de recherche IA. Gemini sera bientôt disponible. Ces moteurs couvrent la majorité des usages de recherche IA conversationnelle.',
+      'Coucou IA supporte actuellement ChatGPT, Claude et Mistral. Gemini sera bientôt disponible. Mistral, moteur IA français, renforce notre couverture des principales plateformes de recherche IA conversationnelle.',
   },
   {
     question: 'Combien de temps pour voir mes premiers résultats ?',
