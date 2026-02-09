@@ -594,9 +594,25 @@ export type RecommendationType =
   | 'model_disparity'
   | 'position_drop'
   | 'emerging_competitor'
-  | 'improvement';
+  | 'improvement'
+  | 'platform_optimization'
+  | 'content_freshness'
+  | 'content_structure'
+  | 'eeat_signal'
+  | 'prompt_category_gap'
+  | 'triple_threat_optimization';
 
 export type RecommendationSeverity = 'info' | 'warning' | 'critical';
+
+export type RecommendationImpact = 'high' | 'medium' | 'low';
+export type RecommendationEffort = 'high' | 'medium' | 'low';
+export type RecommendationCategory = 'content' | 'technical' | 'monitoring';
+
+export interface RecommendationSource {
+  claim: string;
+  source: string;
+  year: number;
+}
 
 export interface Recommendation {
   id: string;

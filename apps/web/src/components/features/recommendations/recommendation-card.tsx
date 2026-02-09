@@ -5,17 +5,31 @@ import {
   AlertTriangle,
   ChevronDown,
   ChevronRight,
+  Clock,
+  FolderKanban,
+  Globe,
   Info,
+  LayoutTemplate,
   Lightbulb,
   Search,
   Layers,
+  ShieldCheck,
   Target,
   TrendingDown,
   TrendingUp,
   Users,
+  Zap,
   Check,
+  BookOpen,
 } from 'lucide-react';
-import type { Recommendation, RecommendationType, RecommendationSeverity } from '@coucou-ia/shared';
+import type {
+  Recommendation,
+  RecommendationType,
+  RecommendationSeverity,
+  RecommendationImpact,
+  RecommendationEffort,
+  RecommendationSource,
+} from '@coucou-ia/shared';
 import { cn } from '@/lib/utils';
 
 // Severity configuration
@@ -53,7 +67,33 @@ export const TYPE_ICONS: Record<RecommendationType, typeof Target> = {
   position_drop: TrendingDown,
   emerging_competitor: TrendingUp,
   improvement: Lightbulb,
+  platform_optimization: Globe,
+  content_freshness: Clock,
+  content_structure: LayoutTemplate,
+  eeat_signal: ShieldCheck,
+  prompt_category_gap: FolderKanban,
+  triple_threat_optimization: Zap,
 };
+
+// Impact badge config
+const IMPACT_CONFIG: Record<RecommendationImpact, { label: string; className: string }> = {
+  high: { label: 'Impact fort', className: 'bg-success/10 text-success' },
+  medium: { label: 'Impact moyen', className: 'bg-warning/10 text-warning' },
+  low: { label: 'Impact faible', className: 'bg-muted text-muted-foreground' },
+};
+
+// Effort badge config
+const EFFORT_CONFIG: Record<RecommendationEffort, { label: string; className: string }> = {
+  low: { label: 'Rapide', className: 'bg-success/10 text-success' },
+  medium: { label: 'Effort moyen', className: 'bg-warning/10 text-warning' },
+  high: { label: 'Effort important', className: 'bg-destructive/10 text-destructive' },
+};
+
+function formatEstimatedTime(minutes: number): string {
+  if (minutes < 60) return `~${minutes}min`;
+  const hours = Math.round(minutes / 60);
+  return `~${hours}h`;
+}
 
 // Severity badge labels
 const SEVERITY_LABELS: Record<RecommendationSeverity, string> = {
@@ -97,6 +137,16 @@ export const RecommendationCard = memo(function RecommendationCard({
   const completedCount = checkedItems.size;
   const totalItems = recommendation.actionItems.length;
   const progress = totalItems > 0 ? Math.round((completedCount / totalItems) * 100) : 0;
+
+  // Extract typed metadata
+  const meta = recommendation.metadata as
+    | {
+        impact?: RecommendationImpact;
+        effort?: RecommendationEffort;
+        estimatedTimeMinutes?: number;
+        sources?: RecommendationSource[];
+      }
+    | undefined;
 
   if (compact) {
     return (
@@ -143,6 +193,32 @@ export const RecommendationCard = memo(function RecommendationCard({
             >
               {SEVERITY_LABELS[recommendation.severity]}
             </span>
+            {meta?.impact && (
+              <span
+                className={cn(
+                  'text-2xs px-1.5 py-0.5 rounded-full font-medium',
+                  IMPACT_CONFIG[meta.impact].className,
+                )}
+              >
+                {IMPACT_CONFIG[meta.impact].label}
+              </span>
+            )}
+            {meta?.effort && (
+              <span
+                className={cn(
+                  'text-2xs px-1.5 py-0.5 rounded-full font-medium',
+                  EFFORT_CONFIG[meta.effort].className,
+                )}
+              >
+                {EFFORT_CONFIG[meta.effort].label}
+              </span>
+            )}
+            {meta?.estimatedTimeMinutes && (
+              <span className="text-2xs px-1.5 py-0.5 rounded-full font-medium bg-muted text-muted-foreground inline-flex items-center gap-0.5">
+                <Clock className="size-2.5" aria-hidden="true" />
+                {formatEstimatedTime(meta.estimatedTimeMinutes)}
+              </span>
+            )}
           </div>
           <p className="text-xs text-muted-foreground mt-1 text-pretty">
             {recommendation.description}
@@ -208,6 +284,23 @@ export const RecommendationCard = memo(function RecommendationCard({
               );
             })}
           </ul>
+          {meta?.sources && meta.sources.length > 0 && (
+            <div className="mt-4 pt-3 border-t border-border/50">
+              <div className="flex items-center gap-1.5 mb-1.5">
+                <BookOpen className="size-3 text-muted-foreground" aria-hidden="true" />
+                <p className="text-2xs text-muted-foreground font-medium uppercase">Sources</p>
+              </div>
+              <ul className="space-y-0.5">
+                {meta.sources.map((src, i) => (
+                  <li key={i} className="text-2xs text-muted-foreground">
+                    <span className="font-medium">{src.source}</span>
+                    <span className="opacity-70"> ({src.year})</span>
+                    {src.claim && <span className="opacity-60"> — {src.claim}</span>}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
       )}
     </div>

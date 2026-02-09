@@ -6,7 +6,13 @@ export type RecommendationType =
   | 'model_disparity'
   | 'position_drop'
   | 'emerging_competitor'
-  | 'improvement';
+  | 'improvement'
+  | 'platform_optimization'
+  | 'content_freshness'
+  | 'content_structure'
+  | 'eeat_signal'
+  | 'prompt_category_gap'
+  | 'triple_threat_optimization';
 
 export type RecommendationSeverity = 'info' | 'warning' | 'critical';
 
