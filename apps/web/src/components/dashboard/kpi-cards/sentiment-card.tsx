@@ -72,9 +72,7 @@ export const SentimentBentoCard = memo(function SentimentBentoCard({
   }, [history]);
 
   const themes = useMemo(() => {
-    if (!data?.scan?.results) return [];
-    const r = data.scan.results;
-    return [...new Set([...(r.gpt?.t ?? []), ...(r.claude?.t ?? []), ...(r.mistral?.t ?? [])])];
+    return data?.scan?.results?.mistral?.t ?? [];
   }, [data]);
 
   if (isLocked) {

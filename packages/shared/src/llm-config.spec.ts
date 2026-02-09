@@ -57,8 +57,8 @@ describe('llm-config', () => {
   });
 
   describe('SENTIMENT_MODEL', () => {
-    it('should be Claude Opus 4.5', () => {
-      expect(SENTIMENT_MODEL).toBe(LLMModel.CLAUDE_OPUS_4_5);
+    it('should be Mistral Small', () => {
+      expect(SENTIMENT_MODEL).toBe(LLMModel.MISTRAL_SMALL_LATEST);
     });
   });
 

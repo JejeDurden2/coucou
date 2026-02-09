@@ -30,7 +30,7 @@ export const PLAN_LLM_CONFIG: Record<Plan, PlanLLMConfiguration> = {
   },
 } as const;
 
-export const SENTIMENT_MODEL = LLMModel.CLAUDE_OPUS_4_5;
+export const SENTIMENT_MODEL = LLMModel.MISTRAL_SMALL_LATEST;
 
 // ============================================
 // Utility Functions

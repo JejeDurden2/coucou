@@ -2,9 +2,8 @@
 
 import { memo, useMemo } from 'react';
 import { Loader2, Brain, Calendar } from 'lucide-react';
-import { Plan, type SentimentResult } from '@coucou-ia/shared';
+import { Plan } from '@coucou-ia/shared';
 
-import { cn } from '@/lib/utils';
 import { Card, CardContent } from '@/components/ui/card';
 import { useLatestSentiment } from '@/hooks/use-sentiment';
 import { formatRelativeTime, formatRelativeTimeFuture } from '@/lib/format';
@@ -20,33 +19,21 @@ interface SentimentTabProps {
   userPlan: Plan;
 }
 
-type SentimentProvider = 'gpt' | 'claude' | 'mistral';
-
 export const SentimentTab = memo(function SentimentTab({ projectId, userPlan }: SentimentTabProps) {
   const { data, isLoading, error } = useLatestSentiment(projectId);
 
   const scan = data?.scan;
+  const mistralResult = scan?.results?.mistral ?? null;
 
-  const providers = useMemo(() => {
-    if (!scan?.results) return [];
-    const entries: Array<{ key: string; provider: SentimentProvider; result: SentimentResult }> =
-      [];
-    if (scan.results.gpt) entries.push({ key: 'gpt', provider: 'gpt', result: scan.results.gpt });
-    if (scan.results.claude)
-      entries.push({ key: 'claude', provider: 'claude', result: scan.results.claude });
-    if (scan.results.mistral)
-      entries.push({ key: 'mistral', provider: 'mistral', result: scan.results.mistral });
-    return entries;
-  }, [scan?.results]);
-
-  const mergedData = useMemo(() => {
-    if (providers.length === 0) return null;
+  const sentimentData = useMemo(() => {
+    if (!mistralResult) return null;
     return {
-      themes: [...new Set(providers.flatMap((p) => p.result.t))],
-      positiveKeywords: [...new Set(providers.flatMap((p) => p.result.kp))],
-      negativeKeywords: [...new Set(providers.flatMap((p) => p.result.kn))],
+      score: mistralResult.s,
+      themes: mistralResult.t,
+      positiveKeywords: mistralResult.kp,
+      negativeKeywords: mistralResult.kn,
     };
-  }, [providers]);
+  }, [mistralResult]);
 
   // Locked state for FREE users
   if (userPlan === Plan.FREE) {
@@ -76,7 +63,7 @@ export const SentimentTab = memo(function SentimentTab({ projectId, userPlan }: 
   }
 
   // Empty state - no scan yet
-  if (!scan || !mergedData) {
+  if (!scan || !sentimentData) {
     return (
       <Card>
         <CardContent className="py-12">
@@ -103,18 +90,14 @@ export const SentimentTab = memo(function SentimentTab({ projectId, userPlan }: 
   }
 
   const { nextScanDate } = data;
-  const { themes, positiveKeywords, negativeKeywords } = mergedData;
+  const { score, themes, positiveKeywords, negativeKeywords } = sentimentData;
 
   return (
     <div className="space-y-6">
-      {/* Scores by provider */}
-      <div className={cn('grid grid-cols-1 gap-4', providers.length > 1 && 'sm:grid-cols-2')}>
-        {providers.map(({ key, provider, result }) => (
-          <ScoreCard key={key} provider={provider} score={result.s} themes={result.t} />
-        ))}
-      </div>
+      {/* Score */}
+      <ScoreCard score={score} themes={themes} />
 
-      {/* Combined themes */}
+      {/* Themes */}
       <ThemesBadges themes={themes} />
 
       {/* Sentiment evolution chart */}
