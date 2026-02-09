@@ -67,6 +67,7 @@ import {
   getProviderForModel,
   getModelPriority,
   getDisplayNameForProvider,
+  getLockedProvidersForPlan,
 } from '@coucou-ia/shared';
 import { cn } from '@/lib/utils';
 import { formatRelativeTime } from '@/lib/format';
@@ -135,6 +136,7 @@ export default function ProjectDashboardPage({
       }),
     [stats?.promptStats],
   );
+  const lockedProviders = useMemo(() => getLockedProvidersForPlan(userPlan), [userPlan]);
   const hasPrompts = promptCount > 0;
 
   const scannablePromptIds = useMemo(
@@ -372,6 +374,22 @@ export default function ProjectDashboardPage({
                         </div>
                       </th>
                     ))}
+                    {lockedProviders.map((provider) => (
+                      <th key={provider} className="px-4 py-3 w-24">
+                        <button
+                          type="button"
+                          onClick={() => openUpgradeModal('providers')}
+                          className="flex items-center justify-center gap-1.5 w-full cursor-pointer"
+                          aria-label={`Débloquer ${getDisplayNameForProvider(provider)}`}
+                        >
+                          <ProviderLogo provider={provider} size="sm" className="opacity-40" />
+                          <span className="text-xs font-medium text-muted-foreground/40">
+                            {getDisplayNameForProvider(provider)}
+                          </span>
+                          <Lock className="size-3 text-muted-foreground" aria-hidden="true" />
+                        </button>
+                      </th>
+                    ))}
                     <th className="w-12" />
                   </tr>
                 </thead>
@@ -379,7 +397,7 @@ export default function ProjectDashboardPage({
                   {!hasPrompts ? (
                     <tr>
                       <td
-                        colSpan={availableProviders.length + 2}
+                        colSpan={availableProviders.length + lockedProviders.length + 2}
                         className="px-4 py-12 text-center"
                       >
                         <div className="mx-auto size-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
@@ -449,6 +467,21 @@ export default function ProjectDashboardPage({
                               <CitationStatus result={resultsByProvider.get(provider) ?? null} />
                             </td>
                           ))}
+                          {lockedProviders.map((provider) => (
+                            <td
+                              key={provider}
+                              className="px-4 py-3 text-center cursor-pointer"
+                              onClick={() => openUpgradeModal('providers')}
+                              role="button"
+                              tabIndex={0}
+                              aria-label={`Débloquer ${getDisplayNameForProvider(provider)}`}
+                            >
+                              <Lock
+                                className="size-3.5 text-muted-foreground/40 mx-auto"
+                                aria-hidden="true"
+                              />
+                            </td>
+                          ))}
                           <td className="px-4 py-3">
                             <div className="flex items-center gap-1">
                               {userPlan === Plan.FREE && scanAvailability.canScan && (
@@ -492,11 +525,11 @@ export default function ProjectDashboardPage({
             {userPlan === Plan.FREE && hasPrompts && (
               <button
                 type="button"
-                onClick={() => openUpgradeModal('stats')}
+                onClick={() => openUpgradeModal('providers')}
                 className="flex items-center gap-2 text-xs text-muted-foreground hover:text-primary transition-colors cursor-pointer"
               >
                 <Lock className="size-3" aria-hidden="true" />
-                <span>ChatGPT uniquement. Ajoutez Claude avec Solo</span>
+                <span>Mistral uniquement. Débloquez ChatGPT et Claude avec Solo</span>
               </button>
             )}
           </div>

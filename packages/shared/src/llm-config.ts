@@ -1,6 +1,16 @@
 import { LLMModel, LLMProvider, Plan } from './types';
 
 // ============================================
+// All Supported Providers
+// ============================================
+
+const ALL_PROVIDERS: readonly LLMProvider[] = [
+  LLMProvider.CHATGPT,
+  LLMProvider.CLAUDE,
+  LLMProvider.MISTRAL,
+];
+
+// ============================================
 // Plan LLM Configuration
 // ============================================
 
@@ -42,4 +52,9 @@ export function getModelsForPlan(plan: Plan): LLMModel[] {
 
 export function getProvidersForPlan(plan: Plan): LLMProvider[] {
   return [...PLAN_LLM_CONFIG[plan].providers];
+}
+
+export function getLockedProvidersForPlan(plan: Plan): LLMProvider[] {
+  const available = new Set(PLAN_LLM_CONFIG[plan].providers);
+  return ALL_PROVIDERS.filter((p) => !available.has(p));
 }

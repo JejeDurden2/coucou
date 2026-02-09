@@ -1,9 +1,10 @@
 import { BarChart3 } from 'lucide-react';
-import { type DashboardStats, type Plan } from '@coucou-ia/shared';
+import { type DashboardStats, type Plan, getLockedProvidersForPlan } from '@coucou-ia/shared';
 
 import { StatCard } from '@/components/features/dashboard/stat-card';
 import { BentoGrid, BentoItem } from '@/components/dashboard/bento-grid';
 import { ProviderStatCard } from './provider-stat-card';
+import { LockedProviderCard } from './locked-provider-card';
 import { PositionCard } from './position-card';
 import { SentimentBentoCard } from './sentiment-card';
 
@@ -21,6 +22,7 @@ export function KpiBentoSection({
   onNavigateToSentiment,
 }: KpiBentoSectionProps): React.ReactNode {
   const providerBreakdown = stats?.breakdown ?? [];
+  const lockedProviders = getLockedProvidersForPlan(userPlan);
 
   return (
     <BentoGrid>
@@ -35,6 +37,12 @@ export function KpiBentoSection({
       {providerBreakdown.map((provider) => (
         <BentoItem key={provider.provider}>
           <ProviderStatCard provider={provider.provider} averageRank={provider.averageRank} />
+        </BentoItem>
+      ))}
+
+      {lockedProviders.map((provider) => (
+        <BentoItem key={provider}>
+          <LockedProviderCard provider={provider} />
         </BentoItem>
       ))}
 

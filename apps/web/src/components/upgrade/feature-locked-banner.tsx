@@ -11,12 +11,14 @@ import { StatsPreview } from './feature-preview/stats-preview';
 import { CompetitorsPreview } from './feature-preview/competitors-preview';
 import { RecommendationsPreview } from './feature-preview/recommendations-preview';
 import { SentimentPreview } from './feature-preview/sentiment-preview';
+import { ProvidersPreview } from './feature-preview/providers-preview';
 
 const PREVIEW_COMPONENTS: Record<UpgradeFeature, React.ComponentType> = {
   stats: StatsPreview,
   competitors: CompetitorsPreview,
   recommendations: RecommendationsPreview,
   sentiment: SentimentPreview,
+  providers: ProvidersPreview,
 };
 
 interface FeatureLockedBannerProps {

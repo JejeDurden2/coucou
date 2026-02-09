@@ -1,6 +1,11 @@
-import { BarChart3, Users, Lightbulb, Brain, type LucideIcon } from 'lucide-react';
+import { BarChart3, Users, Lightbulb, Brain, Cpu, type LucideIcon } from 'lucide-react';
 
-export type UpgradeFeature = 'stats' | 'competitors' | 'recommendations' | 'sentiment';
+export type UpgradeFeature =
+  | 'stats'
+  | 'competitors'
+  | 'recommendations'
+  | 'sentiment'
+  | 'providers';
 
 export interface UpgradeFeatureConfig {
   title: string;
@@ -61,6 +66,19 @@ export const UPGRADE_FEATURES: Record<UpgradeFeature, UpgradeFeatureConfig> = {
       'Thèmes et mots-clés associés à votre marque',
       "Points positifs et axes d'amélioration",
       'Évolution dans le temps',
+    ],
+  },
+  providers: {
+    title: 'Tous les modèles IA',
+    description:
+      'Analysez votre visibilité sur ChatGPT, Claude et Mistral pour une vision complète de votre présence IA.',
+    icon: Cpu,
+    hint: 'ChatGPT, Claude et Mistral réunis',
+    benefits: [
+      'Visibilité sur ChatGPT (GPT-4o)',
+      'Visibilité sur Claude (Sonnet 4.5)',
+      'Comparaison entre modèles IA',
+      'Analyses automatiques hebdomadaires',
     ],
   },
 };
