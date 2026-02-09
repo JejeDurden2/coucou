@@ -68,6 +68,7 @@ import {
   getModelPriority,
   getDisplayNameForProvider,
   getLockedProvidersForPlan,
+  getProvidersForPlan,
 } from '@coucou-ia/shared';
 import { cn } from '@/lib/utils';
 import { formatRelativeTime } from '@/lib/format';
@@ -118,6 +119,7 @@ export default function ProjectDashboardPage({
   const [activeTab, setActiveTab] = useState('overview');
 
   const promptCount = stats?.promptStats?.length ?? 0;
+  const allowedProviders = useMemo(() => new Set(getProvidersForPlan(userPlan)), [userPlan]);
   const availableProviders = useMemo(
     () =>
       Array.from(
@@ -126,15 +128,17 @@ export default function ProjectDashboardPage({
             p.modelResults.map((r) => getProviderForModel(r.model as LLMModel)),
           ) ?? [],
         ),
-      ).sort((a, b) => {
-        const order: Record<LLMProvider, number> = {
-          [LLMProvider.CHATGPT]: 0,
-          [LLMProvider.CLAUDE]: 1,
-          [LLMProvider.MISTRAL]: 2,
-        };
-        return order[a] - order[b];
-      }),
-    [stats?.promptStats],
+      )
+        .filter((p) => allowedProviders.has(p))
+        .sort((a, b) => {
+          const order: Record<LLMProvider, number> = {
+            [LLMProvider.CHATGPT]: 0,
+            [LLMProvider.CLAUDE]: 1,
+            [LLMProvider.MISTRAL]: 2,
+          };
+          return order[a] - order[b];
+        }),
+    [stats?.promptStats, allowedProviders],
   );
   const lockedProviders = useMemo(() => getLockedProvidersForPlan(userPlan), [userPlan]);
   const hasPrompts = promptCount > 0;
