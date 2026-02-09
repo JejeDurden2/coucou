@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#080C18"/>
+      <stop offset="100%" style="stop-color:#0E1225"/>
+    </linearGradient>
+    <linearGradient id="violetGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#9B6DFF"/>
+      <stop offset="100%" style="stop-color:#7C3AED"/>
+    </linearGradient>
+    <linearGradient id="violetGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#7C3AED;stop-opacity:0.2"/>
+      <stop offset="100%" style="stop-color:#7C3AED;stop-opacity:0"/>
+    </linearGradient>
+    <linearGradient id="greyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#374151"/>
+      <stop offset="100%" style="stop-color:#1F2937"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="12" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="softGlow">
+      <feGaussianBlur stdDeviation="40" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bgGrad)"/>
+
+  <!-- Subtle grid -->
+  <g opacity="0.04">
+    <line x1="100" y1="0" x2="100" y2="630" stroke="white" stroke-width="0.5"/>
+    <line x1="200" y1="0" x2="200" y2="630" stroke="white" stroke-width="0.5"/>
+    <line x1="300" y1="0" x2="300" y2="630" stroke="white" stroke-width="0.5"/>
+    <line x1="400" y1="0" x2="400" y2="630" stroke="white" stroke-width="0.5"/>
+    <line x1="500" y1="0" x2="500" y2="630" stroke="white" stroke-width="0.5"/>
+    <line x1="600" y1="0" x2="600" y2="630" stroke="white" stroke-width="0.5"/>
+    <line x1="700" y1="0" x2="700" y2="630" stroke="white" stroke-width="0.5"/>
+    <line x1="800" y1="0" x2="800" y2="630" stroke="white" stroke-width="0.5"/>
+    <line x1="900" y1="0" x2="900" y2="630" stroke="white" stroke-width="0.5"/>
+    <line x1="1000" y1="0" x2="1000" y2="630" stroke="white" stroke-width="0.5"/>
+    <line x1="1100" y1="0" x2="1100" y2="630" stroke="white" stroke-width="0.5"/>
+    <line x1="0" y1="100" x2="1200" y2="100" stroke="white" stroke-width="0.5"/>
+    <line x1="0" y1="200" x2="1200" y2="200" stroke="white" stroke-width="0.5"/>
+    <line x1="0" y1="300" x2="1200" y2="300" stroke="white" stroke-width="0.5"/>
+    <line x1="0" y1="400" x2="1200" y2="400" stroke="white" stroke-width="0.5"/>
+    <line x1="0" y1="500" x2="1200" y2="500" stroke="white" stroke-width="0.5"/>
+  </g>
+
+  <!-- Background glow -->
+  <ellipse cx="350" cy="315" rx="350" ry="280" fill="url(#violetGlow)" filter="url(#softGlow)"/>
+
+  <!-- Title -->
+  <text x="80" y="205" font-family="system-ui, -apple-system, sans-serif" font-size="48" font-weight="800" fill="white" letter-spacing="-1">Le trafic IA convertit</text>
+
+  <!-- 23x -->
+  <text x="80" y="310" font-family="system-ui, -apple-system, sans-serif" font-size="105" font-weight="900" fill="url(#violetGrad)" letter-spacing="-3" filter="url(#glow)">23x</text>
+  <text x="385" y="300" font-family="system-ui, -apple-system, sans-serif" font-size="48" font-weight="700" fill="white" letter-spacing="-1">mieux</text>
+
+  <!-- Subtitle -->
+  <text x="80" y="375" font-family="system-ui, -apple-system, sans-serif" font-size="28" font-weight="400" fill="#94A3B8">que le trafic organique Google</text>
+
+  <!-- Source -->
+  <text x="80" y="425" font-family="system-ui, -apple-system, sans-serif" font-size="14" fill="#64748B">Source : Ahrefs, juin 2025</text>
+
+  <!-- Right: chart card -->
+  <rect x="660" y="130" width="460" height="370" rx="16" fill="#111827" stroke="#1E293B" stroke-width="1"/>
+
+  <!-- AI bar section -->
+  <text x="700" y="185" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="500" fill="#E2E8F0">Trafic IA</text>
+  <text x="1080" y="185" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="600" fill="#9B6DFF" text-anchor="end">12,1% des signups</text>
+  <rect x="700" y="200" width="380" height="50" rx="8" fill="url(#violetGrad)" opacity="0.9"/>
+  <text x="715" y="231" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="500" fill="white" opacity="0.8">0,5% du trafic</text>
+
+  <!-- Google bar section -->
+  <text x="700" y="305" font-family="system-ui, -apple-system, sans-serif" font-size="14" font-weight="500" fill="#E2E8F0">Trafic organique Google</text>
+  <rect x="700" y="320" width="16" height="50" rx="8" fill="url(#greyGrad)"/>
+  <text x="730" y="351" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="500" fill="#6B7280">Majorité du trafic</text>
+
+  <!-- Multiplier pill -->
+  <rect x="790" y="410" width="220" height="42" rx="21" fill="#7C3AED" opacity="0.12" stroke="#7C3AED" stroke-width="1" stroke-opacity="0.25"/>
+  <text x="900" y="436" font-family="system-ui, -apple-system, sans-serif" font-size="13" font-weight="700" fill="#9B6DFF" text-anchor="middle">↑ Conversion 23x supérieure</text>
+
+</svg>
