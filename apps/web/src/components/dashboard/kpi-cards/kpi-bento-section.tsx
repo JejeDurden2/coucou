@@ -26,10 +26,8 @@ export function KpiBentoSection({
   userPlan,
   onNavigateToSentiment,
 }: KpiBentoSectionProps): React.ReactNode {
-  const allowedProviders = new Set(getProvidersForPlan(userPlan));
-  const providerBreakdown = (stats?.breakdown ?? []).filter((b) =>
-    allowedProviders.has(b.provider),
-  );
+  const allowedProviders = getProvidersForPlan(userPlan);
+  const breakdownMap = new Map((stats?.breakdown ?? []).map((b) => [b.provider, b.averageRank]));
   const lockedProviders = getLockedProvidersForPlan(userPlan);
 
   return (
@@ -42,9 +40,9 @@ export function KpiBentoSection({
         />
       </BentoItem>
 
-      {providerBreakdown.map((provider) => (
-        <BentoItem key={provider.provider}>
-          <ProviderStatCard provider={provider.provider} averageRank={provider.averageRank} />
+      {allowedProviders.map((provider) => (
+        <BentoItem key={provider}>
+          <ProviderStatCard provider={provider} averageRank={breakdownMap.get(provider) ?? null} />
         </BentoItem>
       ))}
 
