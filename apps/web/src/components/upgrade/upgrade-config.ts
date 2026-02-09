@@ -75,8 +75,8 @@ export const UPGRADE_FEATURES: Record<UpgradeFeature, UpgradeFeatureConfig> = {
     icon: Cpu,
     hint: 'ChatGPT, Claude et Mistral réunis',
     benefits: [
-      'Visibilité sur ChatGPT (GPT-4o)',
-      'Visibilité sur Claude (Sonnet 4.5)',
+      'Visibilité sur ChatGPT',
+      'Visibilité sur Claude',
       'Comparaison entre modèles IA',
       'Analyses automatiques hebdomadaires',
     ],
