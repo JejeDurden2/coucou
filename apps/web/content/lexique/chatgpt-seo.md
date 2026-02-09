@@ -2,6 +2,7 @@
 term: ChatGPT SEO
 termEn: ChatGPT SEO
 aliases:
+  - ChatGPT
   - SEO pour ChatGPT
   - Optimisation ChatGPT
   - Référencement ChatGPT
