@@ -32,6 +32,73 @@ const PLAN_STATS_RETENTION: Record<Plan, number | null> = {
 const TOP_COMPETITORS_LIMIT = 5;
 const DEFAULT_RANK_FOR_NOT_CITED = 7;
 
+// ─── Generic helpers ───────────────────────────────────────────
+
+/** Group items into a Map by a key function */
+function groupBy<T, K>(items: T[], keyFn: (item: T) => K): Map<K, T[]> {
+  const map = new Map<K, T[]>();
+  for (const item of items) {
+    const key = keyFn(item);
+    const arr = map.get(key) ?? [];
+    arr.push(item);
+    map.set(key, arr);
+  }
+  return map;
+}
+
+/** Compute a metric for current period + nullable previous period */
+function withComparison<T>(
+  currentScans: Scan[],
+  previousScans: Scan[],
+  fn: (scans: Scan[]) => T,
+): { current: T; previous: T | null } {
+  return {
+    current: fn(currentScans),
+    previous: previousScans.length > 0 ? fn(previousScans) : null,
+  };
+}
+
+/** Count competitor mentions across scans → Map<name, count> */
+function countCompetitorMentions(scans: Scan[]): Map<string, number> {
+  const counts = new Map<string, number>();
+  for (const scan of scans) {
+    for (const result of scan.results) {
+      for (const mention of result.competitorMentions) {
+        counts.set(mention.name, (counts.get(mention.name) ?? 0) + 1);
+      }
+    }
+  }
+  return counts;
+}
+
+/** Average rank for a set of LLMResults (returns null if no citations) */
+function computeAverageRankForResults(results: LLMResult[]): number | null {
+  if (results.length === 0) return null;
+  if (!results.some((r) => r.isCited && r.position !== null)) return null;
+
+  const sum = results.reduce(
+    (acc, r) => acc + (r.isCited && r.position !== null ? r.position : DEFAULT_RANK_FOR_NOT_CITED),
+    0,
+  );
+  return Math.round((sum / results.length) * 10) / 10;
+}
+
+/** Citation rate as percentage for a set of scans */
+function computeCitationRate(scans: Scan[]): number {
+  if (scans.length === 0) return 0;
+  const citedCount = scans.filter((s) => s.results.some((r) => r.isCited)).length;
+  return Math.round((citedCount / scans.length) * 100 * 10) / 10;
+}
+
+/** Citation rate as percentage for a set of LLMResults */
+function computeResultCitationRate(results: LLMResult[]): number {
+  if (results.length === 0) return 0;
+  const citedCount = results.filter((r) => r.isCited).length;
+  return Math.round((citedCount / results.length) * 100 * 10) / 10;
+}
+
+// ───────────────────────────────────────────────────────────────
+
 @Injectable()
 export class GetHistoricalStatsUseCase {
   constructor(
@@ -50,7 +117,6 @@ export class GetHistoricalStatsUseCase {
     startDate?: Date,
     endDate?: Date,
   ): Promise<Result<HistoricalStatsDto | null, GetHistoricalStatsError>> {
-    // FREE users cannot access stats
     if (plan === Plan.FREE) {
       return Result.ok(null);
     }
@@ -136,7 +202,7 @@ export class GetHistoricalStatsUseCase {
       aggregation,
     );
 
-    // Calculate new enriched data
+    // Calculate enriched data
     const summary = this.calculateSummary(currentScans, previousScans);
     const modelBreakdown = this.calculateModelBreakdown(currentScans, previousScans);
     const promptBreakdown = this.calculatePromptBreakdown(currentScans, previousScans, prompts);
@@ -155,10 +221,7 @@ export class GetHistoricalStatsUseCase {
         start: effectiveStart.toISOString().split('T')[0],
         end: effectiveEnd.toISOString().split('T')[0],
       },
-      planLimit: {
-        maxDays,
-        isLimited,
-      },
+      planLimit: { maxDays, isLimited },
       aggregation,
       citationRate,
       averageRank,
@@ -198,18 +261,15 @@ export class GetHistoricalStatsUseCase {
       }
     }
 
-    return [...new Set(keys)]; // Remove duplicates
+    return [...new Set(keys)];
   }
 
   private getDateKey(date: Date, aggregation: AggregationLevel): string {
     const isoDate = date.toISOString().split('T')[0];
 
-    if (aggregation === 'day') {
-      return isoDate;
-    }
+    if (aggregation === 'day') return isoDate;
 
     if (aggregation === 'week') {
-      // Get Monday of the week
       const d = new Date(date);
       const day = d.getDay();
       const diff = d.getDate() - day + (day === 0 ? -6 : 1);
@@ -217,7 +277,6 @@ export class GetHistoricalStatsUseCase {
       return d.toISOString().split('T')[0];
     }
 
-    // Month: YYYY-MM-01
     return `${isoDate.substring(0, 7)}-01`;
   }
 
@@ -225,16 +284,7 @@ export class GetHistoricalStatsUseCase {
     scans: Array<{ executedAt: Date; results: LLMResult[] }>,
     aggregation: AggregationLevel,
   ): Map<string, Array<{ executedAt: Date; results: LLMResult[] }>> {
-    const grouped = new Map<string, Array<{ executedAt: Date; results: LLMResult[] }>>();
-
-    for (const scan of scans) {
-      const key = this.getDateKey(scan.executedAt, aggregation);
-      const existing = grouped.get(key) ?? [];
-      existing.push(scan);
-      grouped.set(key, existing);
-    }
-
-    return grouped;
+    return groupBy(scans, (scan) => this.getDateKey(scan.executedAt, aggregation));
   }
 
   private calculateCitationRateSeries(
@@ -254,10 +304,7 @@ export class GetHistoricalStatsUseCase {
         const citedCount = periodScans.filter((s) => s.results.some((r) => r.isCited)).length;
         const rate = (citedCount / periodScans.length) * 100;
 
-        return {
-          date,
-          value: Math.round(rate * 10) / 10,
-        };
+        return { date, value: Math.round(rate * 10) / 10 };
       })
       .filter((p): p is TimeSeriesPointDto => p !== null);
   }
@@ -276,21 +323,10 @@ export class GetHistoricalStatsUseCase {
         const periodScans = grouped.get(date) ?? [];
         if (periodScans.length === 0) return null;
 
-        const allResults = periodScans.flatMap((s) => s.results);
-        const hasCitation = allResults.some((r) => r.isCited && r.position !== null);
-        if (!hasCitation) return null;
+        const avgRank = computeAverageRankForResults(periodScans.flatMap((s) => s.results));
+        if (avgRank === null) return null;
 
-        const sum = allResults.reduce((acc, r) => {
-          if (r.isCited && r.position !== null) {
-            return acc + r.position;
-          }
-          return acc + DEFAULT_RANK_FOR_NOT_CITED;
-        }, 0);
-
-        return {
-          date,
-          value: Math.round((sum / allResults.length) * 10) / 10,
-        };
+        return { date, value: avgRank };
       })
       .filter((p): p is TimeSeriesPointDto => p !== null);
   }
@@ -304,14 +340,7 @@ export class GetHistoricalStatsUseCase {
     const dateKeys = this.generateDateKeys(startDate, endDate, aggregation);
     const grouped = this.groupScansByPeriod(scans, aggregation);
 
-    // Get all unique models
-    const models = new Set<string>();
-    for (const scan of scans) {
-      for (const result of scan.results) {
-        models.add(result.model);
-      }
-    }
-
+    const models = new Set(scans.flatMap((s) => s.results.map((r) => r.model)));
     const rankByModel: Record<string, TimeSeriesPointDto[]> = {};
 
     for (const model of models) {
@@ -322,22 +351,10 @@ export class GetHistoricalStatsUseCase {
         if (periodScans.length === 0) continue;
 
         const modelResults = periodScans.flatMap((s) => s.results).filter((r) => r.model === model);
-        if (modelResults.length === 0) continue;
+        const avgRank = computeAverageRankForResults(modelResults);
+        if (avgRank === null) continue;
 
-        const hasCitation = modelResults.some((r) => r.isCited && r.position !== null);
-        if (!hasCitation) continue;
-
-        const sum = modelResults.reduce((acc, r) => {
-          if (r.isCited && r.position !== null) {
-            return acc + r.position;
-          }
-          return acc + DEFAULT_RANK_FOR_NOT_CITED;
-        }, 0);
-
-        series.push({
-          date,
-          value: Math.round((sum / modelResults.length) * 10) / 10,
-        });
+        series.push({ date, value: avgRank });
       }
 
       if (series.length > 0) {
@@ -357,24 +374,13 @@ export class GetHistoricalStatsUseCase {
     const dateKeys = this.generateDateKeys(startDate, endDate, aggregation);
     const grouped = this.groupScansByPeriod(scans, aggregation);
 
-    // Count total mentions per competitor across all scans
-    const totalMentions = new Map<string, number>();
-    for (const scan of scans) {
-      for (const result of scan.results) {
-        for (const mention of result.competitorMentions) {
-          const count = totalMentions.get(mention.name) ?? 0;
-          totalMentions.set(mention.name, count + 1);
-        }
-      }
-    }
+    const totalMentions = countCompetitorMentions(scans as Scan[]);
 
-    // Get top 5 competitors
     const topCompetitors = Array.from(totalMentions.entries())
       .sort((a, b) => b[1] - a[1])
       .slice(0, TOP_COMPETITORS_LIMIT)
       .map(([name]) => name);
 
-    // Build time series for each top competitor
     return topCompetitors.map((competitorName) => {
       const timeSeries: TimeSeriesPointDto[] = [];
 
@@ -385,9 +391,7 @@ export class GetHistoricalStatsUseCase {
         for (const scan of periodScans) {
           for (const result of scan.results) {
             for (const mention of result.competitorMentions) {
-              if (mention.name === competitorName) {
-                mentions++;
-              }
+              if (mention.name === competitorName) mentions++;
             }
           }
         }
@@ -397,10 +401,7 @@ export class GetHistoricalStatsUseCase {
         }
       }
 
-      return {
-        name: competitorName,
-        timeSeries,
-      };
+      return { name: competitorName, timeSeries };
     });
   }
 
@@ -418,138 +419,48 @@ export class GetHistoricalStatsUseCase {
   }
 
   private calculateSummary(currentScans: Scan[], previousScans: Scan[]): HistoricalStatsSummaryDto {
-    // Citation rate
-    const currentCitationRate = this.computeCitationRate(currentScans);
-    const previousCitationRate =
-      previousScans.length > 0 ? this.computeCitationRate(previousScans) : null;
-
-    // Average rank
-    const currentAvgRank = this.computeAverageRank(currentScans);
-    const previousAvgRank =
-      previousScans.length > 0 ? this.computeAverageRank(previousScans) : null;
-
-    // Total scans
-    const currentTotalScans = currentScans.length;
-    const previousTotalScans = previousScans.length > 0 ? previousScans.length : null;
-
-    // Competitors count
-    const currentCompetitors = this.countUniqueCompetitors(currentScans);
-    const previousCompetitors =
-      previousScans.length > 0 ? this.countUniqueCompetitors(previousScans) : null;
+    const citation = withComparison(currentScans, previousScans, computeCitationRate);
+    const rank = withComparison(currentScans, previousScans, (scans) =>
+      computeAverageRankForResults(scans.flatMap((s) => s.results)) ?? 0,
+    );
+    const totalScans = withComparison(
+      currentScans,
+      previousScans,
+      (scans) => scans.length,
+    );
+    const competitors = withComparison(currentScans, previousScans, (scans) =>
+      countCompetitorMentions(scans).size,
+    );
 
     return {
-      citationRate: {
-        current: currentCitationRate,
-        previous: previousCitationRate,
-        variation: this.calculateVariation(currentCitationRate, previousCitationRate),
-      },
-      averageRank: {
-        current: currentAvgRank ?? 0,
-        previous: previousAvgRank,
-        variation: this.calculateVariation(currentAvgRank ?? 0, previousAvgRank),
-      },
-      totalScans: {
-        current: currentTotalScans,
-        previous: previousTotalScans,
-        variation: this.calculateVariation(currentTotalScans, previousTotalScans),
-      },
-      competitorsCount: {
-        current: currentCompetitors,
-        previous: previousCompetitors,
-        variation: this.calculateVariation(currentCompetitors, previousCompetitors),
-      },
+      citationRate: { ...citation, variation: this.calculateVariation(citation.current, citation.previous) },
+      averageRank: { ...rank, variation: this.calculateVariation(rank.current, rank.previous) },
+      totalScans: { ...totalScans, variation: this.calculateVariation(totalScans.current, totalScans.previous) },
+      competitorsCount: { ...competitors, variation: this.calculateVariation(competitors.current, competitors.previous) },
     };
-  }
-
-  private computeCitationRate(scans: Scan[]): number {
-    if (scans.length === 0) return 0;
-    const citedCount = scans.filter((s) => s.results.some((r) => r.isCited)).length;
-    return Math.round((citedCount / scans.length) * 100 * 10) / 10;
-  }
-
-  private computeAverageRank(scans: Scan[]): number | null {
-    const allResults = scans.flatMap((s) => s.results);
-    if (allResults.length === 0) return null;
-
-    const hasCitation = allResults.some((r) => r.isCited && r.position !== null);
-    if (!hasCitation) return null;
-
-    const sum = allResults.reduce((acc, r) => {
-      if (r.isCited && r.position !== null) {
-        return acc + r.position;
-      }
-      return acc + DEFAULT_RANK_FOR_NOT_CITED;
-    }, 0);
-
-    return Math.round((sum / allResults.length) * 10) / 10;
-  }
-
-  private countUniqueCompetitors(scans: Scan[]): number {
-    const competitors = new Set<string>();
-    for (const scan of scans) {
-      for (const result of scan.results) {
-        for (const mention of result.competitorMentions) {
-          competitors.add(mention.name);
-        }
-      }
-    }
-    return competitors.size;
   }
 
   private calculateModelBreakdown(
     currentScans: Scan[],
     previousScans: Scan[],
   ): HistoricalModelBreakdownDto[] {
-    // Group by model for current period
-    const modelMap = new Map<string, LLMResult[]>();
-    for (const scan of currentScans) {
-      for (const result of scan.results) {
-        const existing = modelMap.get(result.model) ?? [];
-        existing.push(result);
-        modelMap.set(result.model, existing);
-      }
-    }
-
-    // Group by model for previous period
-    const prevModelMap = new Map<string, LLMResult[]>();
-    for (const scan of previousScans) {
-      for (const result of scan.results) {
-        const existing = prevModelMap.get(result.model) ?? [];
-        existing.push(result);
-        prevModelMap.set(result.model, existing);
-      }
-    }
+    const currentByModel = groupBy(currentScans.flatMap((s) => s.results), (r) => r.model);
+    const previousByModel = groupBy(previousScans.flatMap((s) => s.results), (r) => r.model);
 
     const breakdown: HistoricalModelBreakdownDto[] = [];
-    for (const [model, results] of modelMap.entries()) {
-      const citedCount = results.filter((r) => r.isCited).length;
-      const citationRate = Math.round((citedCount / results.length) * 100 * 10) / 10;
 
-      // Calculate average rank
-      const hasCitation = results.some((r) => r.isCited && r.position !== null);
-      let averageRank: number | null = null;
-      if (hasCitation) {
-        const sum = results.reduce((acc, r) => {
-          if (r.isCited && r.position !== null) return acc + r.position;
-          return acc + DEFAULT_RANK_FOR_NOT_CITED;
-        }, 0);
-        averageRank = Math.round((sum / results.length) * 10) / 10;
-      }
+    for (const [model, results] of currentByModel.entries()) {
+      const citationRate = computeResultCitationRate(results);
+      const averageRank = computeAverageRankForResults(results);
 
-      // Calculate trend from previous period
-      const prevResults = prevModelMap.get(model);
-      let prevCitationRate: number | null = null;
-      if (prevResults && prevResults.length > 0) {
-        const prevCited = prevResults.filter((r) => r.isCited).length;
-        prevCitationRate = (prevCited / prevResults.length) * 100;
-      }
-
-      // Get provider from the first result (all results for same model have same provider)
-      const provider = results[0].provider;
+      const prevResults = previousByModel.get(model);
+      const prevCitationRate = prevResults && prevResults.length > 0
+        ? computeResultCitationRate(prevResults)
+        : null;
 
       breakdown.push({
         model,
-        provider,
+        provider: results[0].provider,
         citationRate,
         averageRank,
         trend: this.calculateTrend(citationRate, prevCitationRate),
@@ -565,39 +476,23 @@ export class GetHistoricalStatsUseCase {
     previousScans: Scan[],
     prompts: Prompt[],
   ): HistoricalPromptBreakdownDto[] {
-    // Create a map of prompts by ID
     const promptMap = new Map(prompts.map((p) => [p.id, p]));
-
-    // Group scans by promptId for current period
-    const scansByPrompt = new Map<string, Scan[]>();
-    for (const scan of currentScans) {
-      const existing = scansByPrompt.get(scan.promptId) ?? [];
-      existing.push(scan);
-      scansByPrompt.set(scan.promptId, existing);
-    }
-
-    // Group scans by promptId for previous period
-    const prevScansByPrompt = new Map<string, Scan[]>();
-    for (const scan of previousScans) {
-      const existing = prevScansByPrompt.get(scan.promptId) ?? [];
-      existing.push(scan);
-      prevScansByPrompt.set(scan.promptId, existing);
-    }
+    const currentByPrompt = groupBy(currentScans, (s) => s.promptId);
+    const previousByPrompt = groupBy(previousScans, (s) => s.promptId);
 
     const breakdown: HistoricalPromptBreakdownDto[] = [];
-    for (const [promptId, scans] of scansByPrompt.entries()) {
+
+    for (const [promptId, scans] of currentByPrompt.entries()) {
       const prompt = promptMap.get(promptId);
       if (!prompt) continue;
 
-      const citationRate = this.computeCitationRate(scans);
-      const averageRank = this.computeAverageRank(scans);
+      const citationRate = computeCitationRate(scans);
+      const averageRank = computeAverageRankForResults(scans.flatMap((s) => s.results));
 
-      // Calculate trend from previous period
-      const prevScans = prevScansByPrompt.get(promptId);
-      let prevCitationRate: number | null = null;
-      if (prevScans && prevScans.length > 0) {
-        prevCitationRate = this.computeCitationRate(prevScans);
-      }
+      const prevScans = previousByPrompt.get(promptId);
+      const prevCitationRate = prevScans && prevScans.length > 0
+        ? computeCitationRate(prevScans)
+        : null;
 
       breakdown.push({
         promptId,
@@ -609,7 +504,6 @@ export class GetHistoricalStatsUseCase {
       });
     }
 
-    // Sort by citationRate descending
     return breakdown.sort((a, b) => b.citationRate - a.citationRate);
   }
 
@@ -617,48 +511,24 @@ export class GetHistoricalStatsUseCase {
     currentScans: Scan[],
     previousScans: Scan[],
   ): HistoricalCompetitorRankingDto[] {
-    // Count mentions per competitor for current period
-    const competitorMentions = new Map<string, number>();
+    const mentions = countCompetitorMentions(currentScans);
+    const prevMentions = countCompetitorMentions(previousScans);
+
     let totalMentions = 0;
-    for (const scan of currentScans) {
-      for (const result of scan.results) {
-        for (const mention of result.competitorMentions) {
-          const count = competitorMentions.get(mention.name) ?? 0;
-          competitorMentions.set(mention.name, count + 1);
-          totalMentions++;
-        }
-      }
-    }
+    for (const count of mentions.values()) totalMentions += count;
 
-    // Count mentions per competitor for previous period
-    const prevCompetitorMentions = new Map<string, number>();
-    for (const scan of previousScans) {
-      for (const result of scan.results) {
-        for (const mention of result.competitorMentions) {
-          const count = prevCompetitorMentions.get(mention.name) ?? 0;
-          prevCompetitorMentions.set(mention.name, count + 1);
-        }
-      }
-    }
-
-    // Build ranking
     const ranking: HistoricalCompetitorRankingDto[] = [];
-    for (const [name, mentions] of competitorMentions.entries()) {
-      const shareOfVoice =
-        totalMentions > 0 ? Math.round((mentions / totalMentions) * 100 * 10) / 10 : 0;
 
-      const prevMentions = prevCompetitorMentions.get(name) ?? null;
-      const trend = this.calculateTrend(mentions, prevMentions);
-
+    for (const [name, count] of mentions.entries()) {
       ranking.push({
         name,
-        mentions,
-        shareOfVoice,
-        trend,
+        mentions: count,
+        shareOfVoice:
+          totalMentions > 0 ? Math.round((count / totalMentions) * 100 * 10) / 10 : 0,
+        trend: this.calculateTrend(count, prevMentions.get(name) ?? null),
       });
     }
 
-    // Sort by mentions descending and take top 5
     return ranking.sort((a, b) => b.mentions - a.mentions).slice(0, TOP_COMPETITORS_LIMIT);
   }
 

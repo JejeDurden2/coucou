@@ -1,8 +1,11 @@
 import { Inject, Injectable } from '@nestjs/common';
 
 import { NotFoundError, Result } from '../../../../common';
-import { PrismaService } from '../../../../prisma';
 import { USER_REPOSITORY, type UserRepository } from '../../domain';
+import {
+  PROJECT_REPOSITORY,
+  type ProjectRepository,
+} from '../../../project/domain/repositories/project.repository';
 import type { UserResponseDto } from '../dto/auth.dto';
 
 @Injectable()
@@ -10,7 +13,8 @@ export class GetMeUseCase {
   constructor(
     @Inject(USER_REPOSITORY)
     private readonly userRepository: UserRepository,
-    private readonly prisma: PrismaService,
+    @Inject(PROJECT_REPOSITORY)
+    private readonly projectRepository: ProjectRepository,
   ) {}
 
   async execute(userId: string): Promise<Result<UserResponseDto, NotFoundError>> {
@@ -20,9 +24,7 @@ export class GetMeUseCase {
       return Result.err(new NotFoundError('User', userId));
     }
 
-    const projectCount = await this.prisma.project.count({
-      where: { userId },
-    });
+    const projectCount = await this.projectRepository.countByUserId(userId);
 
     return Result.ok({
       id: user.id,

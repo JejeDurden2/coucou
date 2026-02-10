@@ -19,17 +19,17 @@ export class PrismaUserRepository implements UserRepository {
       return null;
     }
     const user = await this.prisma.user.findUnique({ where: { id } });
-    return user ? User.fromPersistence(user) : null;
+    return user ? User.from(user) : null;
   }
 
   async findByEmail(email: string): Promise<User | null> {
     const user = await this.prisma.user.findUnique({ where: { email } });
-    return user ? User.fromPersistence(user) : null;
+    return user ? User.from(user) : null;
   }
 
   async findByGoogleId(googleId: string): Promise<User | null> {
     const user = await this.prisma.user.findUnique({ where: { googleId } });
-    return user ? User.fromPersistence(user) : null;
+    return user ? User.from(user) : null;
   }
 
   async create(data: CreateUserData): Promise<User> {
@@ -40,7 +40,7 @@ export class PrismaUserRepository implements UserRepository {
         password: data.password,
       },
     });
-    return User.fromPersistence(user);
+    return User.from(user);
   }
 
   async createFromOAuth(data: CreateOAuthUserData): Promise<User> {
@@ -52,7 +52,7 @@ export class PrismaUserRepository implements UserRepository {
         avatarUrl: data.avatarUrl,
       },
     });
-    return User.fromPersistence(user);
+    return User.from(user);
   }
 
   async linkGoogleAccount(userId: string, googleId: string, avatarUrl?: string): Promise<User> {
@@ -63,7 +63,7 @@ export class PrismaUserRepository implements UserRepository {
         ...(avatarUrl && { avatarUrl }),
       },
     });
-    return User.fromPersistence(user);
+    return User.from(user);
   }
 
   async updatePlan(userId: string, plan: string, stripeCustomerId?: string): Promise<User> {
@@ -74,7 +74,7 @@ export class PrismaUserRepository implements UserRepository {
         ...(stripeCustomerId && { stripeCustomerId }),
       },
     });
-    return User.fromPersistence(user);
+    return User.from(user);
   }
 
   async updateName(userId: string, name: string): Promise<User> {
@@ -82,7 +82,7 @@ export class PrismaUserRepository implements UserRepository {
       where: { id: userId },
       data: { name },
     });
-    return User.fromPersistence(user);
+    return User.from(user);
   }
 
   async updateEmail(userId: string, email: string): Promise<User> {
@@ -90,7 +90,7 @@ export class PrismaUserRepository implements UserRepository {
       where: { id: userId },
       data: { email },
     });
-    return User.fromPersistence(user);
+    return User.from(user);
   }
 
   async updatePassword(userId: string, hashedPassword: string): Promise<User> {
@@ -98,7 +98,7 @@ export class PrismaUserRepository implements UserRepository {
       where: { id: userId },
       data: { password: hashedPassword },
     });
-    return User.fromPersistence(user);
+    return User.from(user);
   }
 
   async updateLastScanAt(userId: string, date: Date): Promise<void> {

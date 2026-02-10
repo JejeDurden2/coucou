@@ -8,6 +8,8 @@ import { AutoScanService } from './infrastructure/auto-scan.service';
 import { SCAN_JOB_REPOSITORY, SCAN_REPOSITORY } from './domain';
 import { LLM_SERVICE } from './application/ports/llm.port';
 import { LLMResponseProcessorService } from './application/services/llm-response-processor.service';
+import { PostScanEmailService } from './application/services/post-scan-email.service';
+import { MilestoneService } from './application/services/milestone.service';
 import {
   GetScanHistoryUseCase,
   QueueProjectScanUseCase,
@@ -64,6 +66,8 @@ import { ScanController } from './presentation/controllers/scan.controller';
     MistralMediumLLMAdapter,
     // Services
     LLMResponseProcessorService,
+    PostScanEmailService,
+    MilestoneService,
     {
       provide: LLM_SERVICE,
       useClass: LLMServiceImpl,

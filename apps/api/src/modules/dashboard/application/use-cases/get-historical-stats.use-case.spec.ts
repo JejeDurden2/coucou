@@ -40,7 +40,7 @@ function createMockResult(
 }
 
 function createMockPrompt(id: string, content: string, category: string | null = null): Prompt {
-  return Prompt.fromPersistence({
+  return Prompt.from({
     id,
     projectId: 'project-123',
     content,
@@ -58,7 +58,7 @@ describe('GetHistoricalStatsUseCase', () => {
   let mockPromptRepository: Partial<PromptRepository>;
   let mockScanRepository: Partial<ScanRepository>;
 
-  const mockProject = Project.create({
+  const mockProject = Project.from({
     id: 'project-123',
     userId: 'user-123',
     name: 'Test Project',

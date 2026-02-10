@@ -33,7 +33,7 @@ export class PrismaProjectRepository implements ProjectRepository {
 
   async findById(id: string): Promise<Project | null> {
     const project = await this.prisma.project.findUnique({ where: { id } });
-    return project ? Project.fromPersistence(mapPrismaToProjectProps(project)) : null;
+    return project ? Project.from(mapPrismaToProjectProps(project)) : null;
   }
 
   async findByUserId(userId: string): Promise<Project[]> {
@@ -41,7 +41,7 @@ export class PrismaProjectRepository implements ProjectRepository {
       where: { userId },
       orderBy: { createdAt: 'desc' },
     });
-    return projects.map((p) => Project.fromPersistence(mapPrismaToProjectProps(p)));
+    return projects.map((p) => Project.from(mapPrismaToProjectProps(p)));
   }
 
   async countByUserId(userId: string): Promise<number> {
@@ -58,7 +58,7 @@ export class PrismaProjectRepository implements ProjectRepository {
         domain: data.domain,
       },
     });
-    return Project.fromPersistence(mapPrismaToProjectProps(project));
+    return Project.from(mapPrismaToProjectProps(project));
   }
 
   async update(id: string, data: UpdateProjectData): Promise<Project> {
@@ -66,7 +66,7 @@ export class PrismaProjectRepository implements ProjectRepository {
       where: { id },
       data: data as Prisma.ProjectUpdateInput,
     });
-    return Project.fromPersistence(mapPrismaToProjectProps(project));
+    return Project.from(mapPrismaToProjectProps(project));
   }
 
   async updateLastScannedAt(id: string, date: Date): Promise<void> {

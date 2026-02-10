@@ -24,12 +24,8 @@ export interface ProjectProps {
 export class Project {
   private constructor(private readonly props: ProjectProps) {}
 
-  static create(props: ProjectProps): Project {
+  static from(props: ProjectProps): Project {
     return new Project(props);
-  }
-
-  static fromPersistence(data: ProjectProps): Project {
-    return new Project(data);
   }
 
   get id(): string {

@@ -1,15 +1,12 @@
 import { forwardRef, Inject, Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
 import { Plan, ScanJobStatus } from '@prisma/client';
 
 import { Result, withSpan } from '../../../../common';
 import { LoggerService } from '../../../../common/logger';
 import type { DomainError } from '../../../../common/errors/domain-error';
 import { NotFoundError } from '../../../../common/errors/domain-error';
-import { EmailQueueService } from '../../../../infrastructure/queue/email-queue.service';
 import type { ScanJobData, ScanJobResult } from '../../../../infrastructure/queue';
 import { USER_REPOSITORY, type UserRepository } from '../../../auth';
-import { UnsubscribeTokenService } from '../../../email';
 import {
   PROJECT_REPOSITORY,
   type ProjectRepository,
@@ -29,6 +26,8 @@ import {
 import type { LLMService } from '../ports/llm.port';
 import { LLM_SERVICE } from '../ports/llm.port';
 import { LLMResponseProcessorService } from '../services/llm-response-processor.service';
+import { PostScanEmailService } from '../services/post-scan-email.service';
+import { MilestoneService } from '../services/milestone.service';
 
 export const PROCESS_SCAN_JOB_USE_CASE = Symbol('PROCESS_SCAN_JOB_USE_CASE');
 
@@ -48,9 +47,8 @@ export class ProcessScanJobUseCase {
     @Inject(LLM_SERVICE)
     private readonly llmService: LLMService,
     private readonly responseProcessor: LLMResponseProcessorService,
-    private readonly emailQueueService: EmailQueueService,
-    private readonly unsubscribeTokenService: UnsubscribeTokenService,
-    private readonly configService: ConfigService,
+    private readonly postScanEmailService: PostScanEmailService,
+    private readonly milestoneService: MilestoneService,
     private readonly logger: LoggerService,
   ) {
     this.logger.setContext(ProcessScanJobUseCase.name);
@@ -168,12 +166,12 @@ export class ProcessScanJobUseCase {
           hasAtLeastOneSuccess &&
           (data.source === 'auto' ? plan === Plan.SOLO || plan === Plan.PRO : true)
         ) {
-          await this.trySendPostScanEmail(userId, project, plan);
+          await this.postScanEmailService.trySend(userId, project, plan);
         }
 
         // Check milestones (non-blocking)
         if (hasAtLeastOneSuccess) {
-          this.tryCheckMilestones(userId, project).catch((error) => {
+          this.milestoneService.tryCheck(userId, project).catch((error) => {
             this.logger.error(
               'Milestone check failed',
               error instanceof Error ? error : undefined,
@@ -271,150 +269,5 @@ export class ProcessScanJobUseCase {
     await this.promptRepository.updateLastScannedAt(prompt.id, new Date());
 
     return { success: true };
-  }
-
-  private async trySendPostScanEmail(
-    userId: string,
-    project: { id: string; brandName: string },
-    plan: Plan,
-  ): Promise<void> {
-    try {
-      const user = await this.userRepository.findByIdWithEmailPrefs(userId);
-      if (!user) {
-        this.logger.warn('User not found for post-scan email', { userId });
-        return;
-      }
-
-      // Check if user has email notifications enabled
-      if (!user.emailNotificationsEnabled) {
-        this.logger.debug('User has email notifications disabled, skipping post-scan email', {
-          userId,
-        });
-        return;
-      }
-
-      // Check if we already sent an email today
-      if (user.lastPostScanEmailAt) {
-        const today = new Date();
-        const lastSent = new Date(user.lastPostScanEmailAt);
-        if (
-          lastSent.getFullYear() === today.getFullYear() &&
-          lastSent.getMonth() === today.getMonth() &&
-          lastSent.getDate() === today.getDate()
-        ) {
-          this.logger.debug('User already received post-scan email today, skipping', { userId });
-          return;
-        }
-      }
-
-      const frontendUrl = this.configService.getOrThrow<string>('FRONTEND_URL');
-      const apiUrl = this.configService.getOrThrow<string>('API_URL');
-      const unsubscribeToken = this.unsubscribeTokenService.generateToken(userId);
-
-      const { citationRate, citationRateChange } = await this.computeCitationSummary(project.id);
-
-      await this.emailQueueService.addJob({
-        type: 'post-scan',
-        to: user.email,
-        data: {
-          firstName: user.name ?? user.email.split('@')[0],
-          projectName: project.brandName,
-          projectUrl: `${frontendUrl}/projects/${project.id}`,
-          unsubscribeUrl: `${apiUrl}/email/unsubscribe?token=${unsubscribeToken}`,
-          citationRate,
-          citationRateChange,
-          upgradeUrl: plan === Plan.FREE ? `${frontendUrl}/billing` : undefined,
-        },
-      });
-
-      await this.userRepository.updateLastPostScanEmailAt(userId, new Date());
-
-      this.logger.info('Post-scan email queued', { userId });
-    } catch (error) {
-      // Don't fail the scan if email fails
-      this.logger.error(
-        'Failed to send post-scan email',
-        error instanceof Error ? error : undefined,
-        { userId },
-      );
-    }
-  }
-
-  private async computeCitationSummary(
-    projectId: string,
-  ): Promise<{ citationRate?: number; citationRateChange?: number }> {
-    const now = new Date();
-    const oneWeekAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
-    const twoWeeksAgo = new Date(now.getTime() - 14 * 24 * 60 * 60 * 1000);
-
-    const [currentScans, previousScans] = await Promise.all([
-      this.scanRepository.findByProjectIdInRange(projectId, oneWeekAgo, now),
-      this.scanRepository.findByProjectIdInRange(projectId, twoWeeksAgo, oneWeekAgo),
-    ]);
-
-    if (currentScans.length === 0) {
-      return {};
-    }
-
-    const totalResults = currentScans.reduce((sum, s) => sum + s.results.length, 0);
-    const citedResults = currentScans.reduce(
-      (sum, s) => sum + s.results.filter((r) => r.isCited).length,
-      0,
-    );
-    const citationRate = totalResults > 0 ? Math.round((citedResults / totalResults) * 100) : 0;
-
-    if (previousScans.length === 0) {
-      return { citationRate };
-    }
-
-    const prevTotal = previousScans.reduce((sum, s) => sum + s.results.length, 0);
-    const prevCited = previousScans.reduce(
-      (sum, s) => sum + s.results.filter((r) => r.isCited).length,
-      0,
-    );
-    const prevRate = prevTotal > 0 ? Math.round((prevCited / prevTotal) * 100) : 0;
-
-    return { citationRate, citationRateChange: citationRate - prevRate };
-  }
-
-  private async tryCheckMilestones(
-    userId: string,
-    project: { id: string; brandName: string },
-  ): Promise<void> {
-    const user = await this.userRepository.findByIdWithEmailPrefs(userId);
-    if (!user || !user.emailNotificationsEnabled) return;
-
-    const frontendUrl = this.configService.getOrThrow<string>('FRONTEND_URL');
-    const apiUrl = this.configService.getOrThrow<string>('API_URL');
-    const unsubscribeToken = this.unsubscribeTokenService.generateToken(userId);
-    const firstName = user.name ?? user.email.split('@')[0];
-    const projectUrl = `${frontendUrl}/projects/${project.id}`;
-    const unsubscribeUrl = `${apiUrl}/email/unsubscribe?token=${unsubscribeToken}`;
-
-    // Use count query for scan milestones (avoids loading all scan data)
-    const scanCount = await this.scanRepository.countByProjectId(project.id);
-
-    const SCAN_MILESTONES = [5, 10, 25, 50, 100];
-    if (SCAN_MILESTONES.includes(scanCount)) {
-      await this.emailQueueService.addJob({
-        type: 'milestone-scan-count',
-        to: user.email,
-        data: { firstName, scanCount, brandName: project.brandName, projectUrl, unsubscribeUrl },
-      });
-      this.logger.info('Scan count milestone email queued', { userId, scanCount });
-    }
-
-    // First citation check: load recent scans (limited to 100 by default)
-    const recentScans = await this.scanRepository.findByProjectId(project.id);
-    const totalCited = recentScans.flatMap((s) => s.results).filter((r) => r.isCited).length;
-
-    if (totalCited === 1) {
-      await this.emailQueueService.addJob({
-        type: 'milestone-first-citation',
-        to: user.email,
-        data: { firstName, brandName: project.brandName, projectUrl, unsubscribeUrl },
-      });
-      this.logger.info('First citation milestone email queued', { userId });
-    }
   }
 }

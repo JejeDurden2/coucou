@@ -17,12 +17,8 @@ export interface UserProps {
 export class User {
   private constructor(private readonly props: UserProps) {}
 
-  static create(props: UserProps): User {
+  static from(props: UserProps): User {
     return new User(props);
-  }
-
-  static fromPersistence(data: UserProps): User {
-    return new User(data);
   }
 
   get id(): string {

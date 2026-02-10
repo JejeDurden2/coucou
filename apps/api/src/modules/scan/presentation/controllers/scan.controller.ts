@@ -1,15 +1,7 @@
-import {
-  Controller,
-  Get,
-  HttpException,
-  Inject,
-  Param,
-  Post,
-  Query,
-  UseGuards,
-} from '@nestjs/common';
+import { Controller, Get, Inject, Param, Post, Query, UseGuards } from '@nestjs/common';
 import { Throttle } from '@nestjs/throttler';
 
+import { unwrapOrThrow } from '../../../../common';
 import type { AuthenticatedUser } from '../../../auth';
 import { CurrentUser, JwtAuthGuard } from '../../../auth';
 import {
@@ -38,33 +30,17 @@ export class ScanController {
   @Post('prompts/:promptId/scan')
   @Throttle({ scan: { limit: 20, ttl: 3600000 } }) // 20 scans per hour per user
   async scanPrompt(@Param('promptId') promptId: string, @CurrentUser() user: AuthenticatedUser) {
-    const result = await this.queuePromptScanUseCase.execute({
-      promptId,
-      userId: user.id,
-      plan: user.plan,
-    });
-
-    if (!result.ok) {
-      throw new HttpException(result.error.toJSON(), result.error.statusCode);
-    }
-
-    return result.value;
+    return unwrapOrThrow(
+      await this.queuePromptScanUseCase.execute({ promptId, userId: user.id, plan: user.plan }),
+    );
   }
 
   @Post('projects/:projectId/scans')
   @Throttle({ scan: { limit: 10, ttl: 3600000 } }) // 10 project scans per hour per user
   async scanProject(@Param('projectId') projectId: string, @CurrentUser() user: AuthenticatedUser) {
-    const result = await this.queueProjectScanUseCase.execute({
-      projectId,
-      userId: user.id,
-      plan: user.plan,
-    });
-
-    if (!result.ok) {
-      throw new HttpException(result.error.toJSON(), result.error.statusCode);
-    }
-
-    return result.value;
+    return unwrapOrThrow(
+      await this.queueProjectScanUseCase.execute({ projectId, userId: user.id, plan: user.plan }),
+    );
   }
 
   @Get('projects/:projectId/scan-jobs/:jobId')
@@ -73,17 +49,9 @@ export class ScanController {
     @Param('jobId') jobId: string,
     @CurrentUser() user: AuthenticatedUser,
   ) {
-    const result = await this.getScanJobStatusUseCase.execute({
-      jobId,
-      projectId,
-      userId: user.id,
-    });
-
-    if (!result.ok) {
-      throw new HttpException(result.error.toJSON(), result.error.statusCode);
-    }
-
-    return result.value;
+    return unwrapOrThrow(
+      await this.getScanJobStatusUseCase.execute({ jobId, projectId, userId: user.id }),
+    );
   }
 
   @Get('projects/:projectId/scans')
@@ -92,16 +60,9 @@ export class ScanController {
     @CurrentUser() user: AuthenticatedUser,
     @Query('limit') limit?: string,
   ) {
-    // Validate and cap limit to prevent DoS
     const parsedLimit = limit ? parseInt(limit, 10) : 50;
     const safeLimit = Math.min(Math.max(1, parsedLimit || 50), 100);
 
-    const result = await this.getScanHistoryUseCase.execute(projectId, user.id, safeLimit);
-
-    if (!result.ok) {
-      throw new HttpException(result.error.toJSON(), result.error.statusCode);
-    }
-
-    return result.value;
+    return unwrapOrThrow(await this.getScanHistoryUseCase.execute(projectId, user.id, safeLimit));
   }
 }

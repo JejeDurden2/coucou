@@ -12,12 +12,8 @@ export interface PromptProps {
 export class Prompt {
   private constructor(private readonly props: PromptProps) {}
 
-  static create(props: PromptProps): Prompt {
+  static from(props: PromptProps): Prompt {
     return new Prompt(props);
-  }
-
-  static fromPersistence(data: PromptProps): Prompt {
-    return new Prompt(data);
   }
 
   get id(): string {

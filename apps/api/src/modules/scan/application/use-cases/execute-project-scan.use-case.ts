@@ -10,8 +10,11 @@ import {
 import { PROMPT_REPOSITORY, type PromptRepository } from '../../../prompt';
 import {
   AllProvidersFailedError,
+  getCooldownLabel,
   PromptSanitizerService,
   ThreatLevel,
+  SCAN_COOLDOWN_MS,
+  MAX_SCANS_PER_PERIOD,
   SCAN_REPOSITORY,
   type LLMResult,
   type ScanRepository,
@@ -20,20 +23,6 @@ import type { LLMService } from '../ports/llm.port';
 import { LLM_SERVICE } from '../ports/llm.port';
 import type { ScanResponseDto } from '../dto/scan.dto';
 import { LLMResponseProcessorService } from '../services/llm-response-processor.service';
-
-// Scan cooldown periods by plan
-const SCAN_COOLDOWN_MS: Record<Plan, number> = {
-  [Plan.FREE]: 7 * 24 * 60 * 60 * 1000, // 7 days
-  [Plan.SOLO]: 7 * 24 * 60 * 60 * 1000, // 7 days
-  [Plan.PRO]: 24 * 60 * 60 * 1000, // 1 day
-};
-
-// Max scans per period (projects × prompts per project)
-const MAX_SCANS_PER_PERIOD: Record<Plan, number> = {
-  [Plan.FREE]: 2,
-  [Plan.SOLO]: 50,
-  [Plan.PRO]: 750,
-};
 
 type ExecuteProjectScanError =
   | NotFoundError
@@ -101,7 +90,6 @@ export class ExecuteProjectScanUseCase {
         const cooldownMs = SCAN_COOLDOWN_MS[plan];
         const timeSinceLastScan = Date.now() - prompt.lastScannedAt.getTime();
         if (timeSinceLastScan < cooldownMs) {
-          const cooldownLabel = plan === Plan.PRO ? 'jour' : 'semaine';
           scanResults.push({
             id: '',
             promptId: prompt.id,
@@ -109,7 +97,7 @@ export class ExecuteProjectScanUseCase {
             results: [],
             isCitedByAny: false,
             citationRate: 0,
-            skippedReason: `Prompt déjà scanné cette ${cooldownLabel}`,
+            skippedReason: `Prompt déjà scanné cette ${getCooldownLabel(plan)}`,
           });
           continue;
         }

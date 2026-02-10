@@ -16,6 +16,7 @@ import { ConfigService } from '@nestjs/config';
 import { Throttle } from '@nestjs/throttler';
 import type { Request, Response } from 'express';
 
+import { unwrapOrThrow } from '../../../../common';
 import type { AuthenticatedUser } from '../../application/dto/auth.dto';
 import {
   DeleteAccountUseCase,
@@ -93,50 +94,37 @@ export class AuthController {
     @Req() req: Request,
     @Res({ passthrough: true }) res: Response,
   ) {
-    const registerResult = await this.registerUseCase.execute({
-      email: dto.email,
-      name: dto.name,
-      password: dto.password,
-      ipAddress: req.ip ?? req.headers['x-forwarded-for']?.toString(),
-      userAgent: req.headers['user-agent'],
-    });
-
-    if (!registerResult.ok) {
-      throw new HttpException(registerResult.error.toJSON(), registerResult.error.statusCode);
-    }
-
-    // Auto-login after registration
-    const loginResult = await this.loginUseCase.execute({
-      email: dto.email,
-      password: dto.password,
-    });
-
-    if (!loginResult.ok) {
-      throw new HttpException(loginResult.error.toJSON(), loginResult.error.statusCode);
-    }
-
-    this.cookieService.setAuthCookies(
-      res,
-      loginResult.value.accessToken,
-      loginResult.value.refreshToken,
+    unwrapOrThrow(
+      await this.registerUseCase.execute({
+        email: dto.email,
+        name: dto.name,
+        password: dto.password,
+        ipAddress: req.ip ?? req.headers['x-forwarded-for']?.toString(),
+        userAgent: req.headers['user-agent'],
+      }),
     );
 
-    return { user: loginResult.value.user };
+    // Auto-login after registration
+    const { user, accessToken, refreshToken } = unwrapOrThrow(
+      await this.loginUseCase.execute({ email: dto.email, password: dto.password }),
+    );
+
+    this.cookieService.setAuthCookies(res, accessToken, refreshToken);
+
+    return { user };
   }
 
   @Post('login')
   @HttpCode(HttpStatus.OK)
   @Throttle({ short: { limit: 5, ttl: 60000 } }) // 5 login attempts per minute
   async login(@Body() dto: LoginRequestDto, @Res({ passthrough: true }) res: Response) {
-    const result = await this.loginUseCase.execute(dto);
+    const { user, accessToken, refreshToken } = unwrapOrThrow(
+      await this.loginUseCase.execute(dto),
+    );
 
-    if (!result.ok) {
-      throw new HttpException(result.error.toJSON(), result.error.statusCode);
-    }
+    this.cookieService.setAuthCookies(res, accessToken, refreshToken);
 
-    this.cookieService.setAuthCookies(res, result.value.accessToken, result.value.refreshToken);
-
-    return { user: result.value.user };
+    return { user };
   }
 
   @Post('forgot-password')
@@ -154,25 +142,14 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @Throttle({ short: { limit: 5, ttl: 60000 } }) // 5 attempts per minute
   async resetPassword(@Body() dto: ResetPasswordRequestDto) {
-    const result = await this.resetPasswordUseCase.execute(dto.token, dto.password);
-
-    if (!result.ok) {
-      throw new HttpException(result.error.toJSON(), result.error.statusCode);
-    }
-
+    unwrapOrThrow(await this.resetPasswordUseCase.execute(dto.token, dto.password));
     return { message: 'Votre mot de passe a ete reinitialise avec succes.' };
   }
 
   @Get('me')
   @UseGuards(JwtAuthGuard)
   async getMe(@CurrentUser() user: AuthenticatedUser) {
-    const result = await this.getMeUseCase.execute(user.id);
-
-    if (!result.ok) {
-      throw new HttpException(result.error.toJSON(), result.error.statusCode);
-    }
-
-    return result.value;
+    return unwrapOrThrow(await this.getMeUseCase.execute(user.id));
   }
 
   @Patch('me')
@@ -181,13 +158,7 @@ export class AuthController {
     @CurrentUser() user: AuthenticatedUser,
     @Body() dto: UpdateProfileRequestDto,
   ) {
-    const result = await this.updateProfileUseCase.execute(user.id, dto);
-
-    if (!result.ok) {
-      throw new HttpException(result.error.toJSON(), result.error.statusCode);
-    }
-
-    return result.value.toJSON();
+    return unwrapOrThrow(await this.updateProfileUseCase.execute(user.id, dto)).toJSON();
   }
 
   @Post('refresh')
@@ -209,9 +180,10 @@ export class AuthController {
       throw new HttpException(result.error.toJSON(), result.error.statusCode);
     }
 
-    this.cookieService.setAuthCookies(res, result.value.accessToken, result.value.refreshToken);
+    const { user, accessToken, refreshToken: newRefreshToken } = result.value;
+    this.cookieService.setAuthCookies(res, accessToken, newRefreshToken);
 
-    return { user: result.value.user };
+    return { user };
   }
 
   @Post('logout')
@@ -223,13 +195,7 @@ export class AuthController {
   @Get('me/export')
   @UseGuards(JwtAuthGuard)
   async exportData(@CurrentUser() user: AuthenticatedUser) {
-    const result = await this.exportDataUseCase.execute(user.id);
-
-    if (!result.ok) {
-      throw new HttpException(result.error.toJSON(), result.error.statusCode);
-    }
-
-    return result.value;
+    return unwrapOrThrow(await this.exportDataUseCase.execute(user.id));
   }
 
   @Delete('me')
@@ -240,18 +206,13 @@ export class AuthController {
     @Body() dto: DeleteAccountRequestDto,
     @Res({ passthrough: true }) res: Response,
   ) {
-    const result = await this.deleteAccountUseCase.execute({
-      userId: user.id,
-      confirmation: dto.confirmation,
-    });
-
-    if (!result.ok) {
-      throw new HttpException(result.error.toJSON(), result.error.statusCode);
-    }
+    const value = unwrapOrThrow(
+      await this.deleteAccountUseCase.execute({ userId: user.id, confirmation: dto.confirmation }),
+    );
 
     this.cookieService.clearAuthCookies(res);
 
-    return result.value;
+    return value;
   }
 
   @Get('google')

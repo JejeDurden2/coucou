@@ -14,7 +14,7 @@ export class PrismaPromptRepository implements PromptRepository {
 
   async findById(id: string): Promise<Prompt | null> {
     const prompt = await this.prisma.prompt.findUnique({ where: { id } });
-    return prompt ? Prompt.fromPersistence(prompt) : null;
+    return prompt ? Prompt.from(prompt) : null;
   }
 
   async findByProjectId(projectId: string): Promise<Prompt[]> {
@@ -22,7 +22,7 @@ export class PrismaPromptRepository implements PromptRepository {
       where: { projectId },
       orderBy: { createdAt: 'desc' },
     });
-    return prompts.map((p) => Prompt.fromPersistence(p));
+    return prompts.map((p) => Prompt.from(p));
   }
 
   async findActiveByProjectId(projectId: string): Promise<Prompt[]> {
@@ -30,7 +30,7 @@ export class PrismaPromptRepository implements PromptRepository {
       where: { projectId, isActive: true },
       orderBy: { createdAt: 'desc' },
     });
-    return prompts.map((p) => Prompt.fromPersistence(p));
+    return prompts.map((p) => Prompt.from(p));
   }
 
   async countByProjectId(projectId: string): Promise<number> {
@@ -45,7 +45,7 @@ export class PrismaPromptRepository implements PromptRepository {
         category: data.category,
       },
     });
-    return Prompt.fromPersistence(prompt);
+    return Prompt.from(prompt);
   }
 
   async update(id: string, data: UpdatePromptData): Promise<Prompt> {
@@ -53,7 +53,7 @@ export class PrismaPromptRepository implements PromptRepository {
       where: { id },
       data,
     });
-    return Prompt.fromPersistence(prompt);
+    return Prompt.from(prompt);
   }
 
   async updateLastScannedAt(id: string, date: Date): Promise<void> {

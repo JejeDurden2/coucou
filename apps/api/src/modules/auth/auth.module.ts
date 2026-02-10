@@ -6,6 +6,7 @@ import { PassportModule } from '@nestjs/passport';
 import { QueueModule } from '../../infrastructure/queue';
 import { BillingModule } from '../billing/billing.module';
 import { EmailModule } from '../email/email.module';
+import { ProjectModule } from '../project/project.module';
 import {
   USER_REPOSITORY,
   PASSWORD_RESET_REPOSITORY,
@@ -51,6 +52,7 @@ import { GoogleStrategy } from './presentation/strategies/google.strategy';
     QueueModule, // Explicit import even though it's global, to ensure initialization order
     forwardRef(() => BillingModule),
     EmailModule,
+    ProjectModule,
   ],
   controllers: [AuthController],
   providers: [

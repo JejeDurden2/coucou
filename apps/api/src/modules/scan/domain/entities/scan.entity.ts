@@ -1,4 +1,5 @@
 import type { LLMProvider } from '@prisma/client';
+import { z } from 'zod';
 
 export interface CompetitorMentionData {
   name: string;
@@ -23,6 +24,26 @@ export interface LLMResult {
   parseSuccess: boolean;
 }
 
+/** Validates LLMResult[] from JSON storage — catches schema drift at persistence boundary */
+const LLMResultArraySchema = z.array(
+  z
+    .object({
+      provider: z.string(),
+      model: z.string(),
+      rawResponse: z.string(),
+      isCited: z.boolean(),
+      position: z.number().nullable(),
+      brandKeywords: z.array(z.string()),
+      queryKeywords: z.array(z.string()),
+      competitorMentions: z.array(
+        z.object({ name: z.string(), position: z.number(), keywords: z.array(z.string()) }),
+      ),
+      latencyMs: z.number(),
+      parseSuccess: z.boolean(),
+    })
+    .passthrough(),
+);
+
 export interface ScanProps {
   id: string;
   promptId: string;
@@ -45,11 +66,12 @@ export class Scan {
     results: unknown;
     createdAt: Date;
   }): Scan {
+    const parsed = LLMResultArraySchema.safeParse(data.results);
     return new Scan({
       id: data.id,
       promptId: data.promptId,
       executedAt: data.executedAt,
-      results: (data.results as LLMResult[]) ?? [],
+      results: parsed.success ? (parsed.data as LLMResult[]) : [],
       createdAt: data.createdAt,
     });
   }
