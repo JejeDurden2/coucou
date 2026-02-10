@@ -3,12 +3,14 @@ import type { MetadataRoute } from 'next';
 import { getAllPosts } from '@/lib/blog';
 import { getAllTerms } from '@/lib/glossary';
 import { getAllPersonas } from '@/lib/geo-pour';
+import { getAllComparisons } from '@/lib/comparatif';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = 'https://coucou-ia.com';
   const posts = getAllPosts();
   const terms = getAllTerms();
   const personas = getAllPersonas();
+  const comparisons = getAllComparisons();
 
   // Use latest blog post date as proxy for blog listing / homepage freshness
   const latestPostDate = posts.length > 0 ? new Date(posts[0].date) : new Date('2026-01-01');
@@ -19,6 +21,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const latestPersonaDate =
     personas.length > 0
       ? new Date(Math.max(...personas.map((p) => new Date(p.lastUpdated).getTime())))
+      : new Date('2026-01-01');
+  const latestComparisonDate =
+    comparisons.length > 0
+      ? new Date(Math.max(...comparisons.map((c) => new Date(c.lastUpdated).getTime())))
       : new Date('2026-01-01');
 
   // Static pages
@@ -99,5 +105,32 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.7,
   }));
 
-  return [...staticPages, ...blogPages, ...lexiqueIndex, ...lexiquePages, ...geoIndex, ...geoPages];
+  // Comparatif index
+  const comparatifIndex: MetadataRoute.Sitemap = [
+    {
+      url: `${baseUrl}/comparatif`,
+      lastModified: latestComparisonDate,
+      changeFrequency: 'weekly',
+      priority: 0.8,
+    },
+  ];
+
+  // Comparatif pages
+  const comparatifPages: MetadataRoute.Sitemap = comparisons.map((comparison) => ({
+    url: `${baseUrl}/comparatif/${comparison.slug}`,
+    lastModified: new Date(comparison.lastUpdated),
+    changeFrequency: 'monthly',
+    priority: 0.7,
+  }));
+
+  return [
+    ...staticPages,
+    ...blogPages,
+    ...lexiqueIndex,
+    ...lexiquePages,
+    ...geoIndex,
+    ...geoPages,
+    ...comparatifIndex,
+    ...comparatifPages,
+  ];
 }

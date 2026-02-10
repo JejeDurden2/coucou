@@ -71,6 +71,9 @@ export function Header({ variant = 'default' }: HeaderProps) {
               <DropdownMenuItem asChild>
                 <Link href="/geo-pour">GEO par métier</Link>
               </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href="/comparatif">Comparatifs</Link>
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
@@ -130,6 +133,13 @@ export function Header({ variant = 'default' }: HeaderProps) {
                 onClick={closeMobileMenu}
               >
                 GEO par métier
+              </Link>
+              <Link
+                href="/comparatif"
+                className="block font-sans text-xs uppercase tracking-wide text-muted-foreground hover:text-primary transition-colors py-2"
+                onClick={closeMobileMenu}
+              >
+                Comparatifs
               </Link>
             </div>
 

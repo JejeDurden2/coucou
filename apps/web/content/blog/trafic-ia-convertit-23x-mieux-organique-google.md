@@ -2,7 +2,7 @@
 title: 'Le trafic IA convertit 23x mieux que le trafic organique Google'
 description: 'Étude Ahrefs 2025 : les visiteurs issus de ChatGPT convertissent 23 fois mieux que ceux de Google. Données, analyse et implications pour les marques françaises.'
 date: '2026-02-10'
-author: 'Jérôme Demares'
+author: 'Jérôme Desmares'
 tags: ['GEO', 'Recherche IA', 'Conversion', 'ChatGPT']
 image: '/blog/images/trafic-ia-hero.svg'
 imageAlt: 'Graphique comparatif montrant que le trafic IA convertit 23 fois mieux que le trafic organique Google'

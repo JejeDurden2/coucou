@@ -46,6 +46,11 @@ export function Footer() {
                   GEO par métier
                 </Link>
               </li>
+              <li>
+                <Link href="/comparatif" className="hover:text-foreground">
+                  Comparatifs
+                </Link>
+              </li>
             </ul>
           </nav>
           <nav aria-label="Légal">
