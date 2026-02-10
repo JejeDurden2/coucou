@@ -212,8 +212,8 @@ export const SentimentBentoCard = memo(function SentimentBentoCard({
       {displayedThemes.length > 0 && (
         <div className="mt-auto pt-3 flex flex-wrap gap-1.5">
           {displayedThemes.map((theme) => (
-            <Badge key={theme} variant="outline" className="text-xs">
-              {theme}
+            <Badge key={theme.name} variant="outline" className="text-xs">
+              {theme.name}
             </Badge>
           ))}
           {extraThemeCount > 0 && (

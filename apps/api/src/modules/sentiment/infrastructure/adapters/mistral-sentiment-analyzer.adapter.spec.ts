@@ -28,7 +28,11 @@ describe('MistralSentimentAnalyzer', () => {
 
   const validSentimentResult: SentimentResult = {
     s: 72,
-    t: ['innovation', 'qualité', 'tech'],
+    t: [
+      { name: 'innovation', sentiment: 'positive', weight: 85 },
+      { name: 'qualité', sentiment: 'positive', weight: 75 },
+      { name: 'tech', sentiment: 'neutral', weight: 60 },
+    ],
     kp: ['fiable', 'rapide', 'moderne'],
     kn: ['cher', 'complexe', 'limité'],
   };

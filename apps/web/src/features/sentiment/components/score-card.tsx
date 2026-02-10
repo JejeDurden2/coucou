@@ -4,16 +4,14 @@ import { memo } from 'react';
 
 import { cn } from '@/lib/utils';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { InfoTooltip } from '@/components/ui/info-tooltip';
 import { getSentimentVariant, variantTextStyles } from '../lib/sentiment-variant';
 
 interface ScoreCardProps {
   score: number;
-  themes: string[];
 }
 
-export const ScoreCard = memo(function ScoreCard({ score, themes }: ScoreCardProps) {
+export const ScoreCard = memo(function ScoreCard({ score }: ScoreCardProps) {
   const { variant, icon: Icon } = getSentimentVariant(score);
 
   return (
@@ -31,15 +29,6 @@ export const ScoreCard = memo(function ScoreCard({ score, themes }: ScoreCardPro
             {Math.round(score)}%
           </span>
         </div>
-        {themes.length > 0 && (
-          <div className="mt-4 flex flex-wrap gap-1.5">
-            {themes.slice(0, 3).map((theme) => (
-              <Badge key={theme} variant="muted" className="text-xs">
-                {theme}
-              </Badge>
-            ))}
-          </div>
-        )}
       </CardContent>
     </Card>
   );

@@ -16,8 +16,24 @@ describe('PrismaSentimentScanRepository', () => {
   };
 
   const mockResults: SentimentScanResults = {
-    gpt: { s: 75, t: ['tech', 'innovation'], kp: ['reliable', 'fast'], kn: ['expensive'] },
-    claude: { s: 80, t: ['tech', 'quality'], kp: ['trusted', 'efficient'], kn: ['complex'] },
+    gpt: {
+      s: 75,
+      t: [
+        { name: 'tech', sentiment: 'positive', weight: 85 },
+        { name: 'innovation', sentiment: 'positive', weight: 75 },
+      ],
+      kp: ['reliable', 'fast'],
+      kn: ['expensive'],
+    },
+    claude: {
+      s: 80,
+      t: [
+        { name: 'tech', sentiment: 'positive', weight: 80 },
+        { name: 'quality', sentiment: 'positive', weight: 90 },
+      ],
+      kp: ['trusted', 'efficient'],
+      kn: ['complex'],
+    },
   };
 
   const mockScanData = {

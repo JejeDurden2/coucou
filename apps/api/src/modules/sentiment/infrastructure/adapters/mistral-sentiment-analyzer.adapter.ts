@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { z } from 'zod';
-import type { SentimentResult } from '@coucou-ia/shared';
+import type { SentimentResult, ThemeWithMetadata } from '@coucou-ia/shared';
 
 import { Result } from '../../../../common';
 import { LoggerService } from '../../../../common/logger';
@@ -11,9 +11,15 @@ import type {
   SentimentAnalysisInput,
 } from '../../application/ports/sentiment-analyzer.port';
 
+const ThemeWithMetadataSchema = z.object({
+  n: z.string().min(1),
+  s: z.enum(['positive', 'negative', 'neutral']),
+  w: z.number().min(0).max(100),
+});
+
 const SentimentResultSchema = z.object({
   s: z.number().min(0).max(100),
-  t: z.array(z.string()).min(1).max(10),
+  t: z.array(ThemeWithMetadataSchema).min(1).max(10),
   kp: z.array(z.string()).min(1).max(10),
   kn: z.array(z.string()).min(1).max(10),
 });
@@ -34,10 +40,16 @@ FACTEURS À ANALYSER:
 4. Engagement et satisfaction client
 5. Position vs concurrents
 
+THÈMES ENRICHIS:
+Pour chaque thème, fournis:
+- n: nom du thème (ex: "qualité", "prix", "support")
+- s: sentiment ("positive", "negative", "neutral")
+- w: poids d'importance 0-100 (basé sur la fréquence/prominence dans les mentions)
+
 IMPORTANT: Sois PRÉCIS et DIFFÉRENCIÉ. Ne donne pas un score neutre par défaut.
 
 Réponds uniquement en JSON valide, sans markdown, sans backticks, sans texte avant ou après.
-Format JSON: {"s":score,"t":["theme1","theme2","theme3"],"kp":["positif1","positif2","positif3"],"kn":["negatif1","negatif2","negatif3"]}`;
+Format JSON: {"s":score,"t":[{"n":"theme1","s":"positive","w":85},{"n":"theme2","s":"negative","w":60}],"kp":["positif1","positif2"],"kn":["negatif1","negatif2"]}`;
 
 @Injectable()
 export class MistralSentimentAnalyzer implements SentimentAnalyzerPort {
@@ -91,7 +103,17 @@ Domaine: ${input.domain}${contextStr}
 3. Quelle est sa réputation qualité?
 4. Comment se positionne-t-elle vs la concurrence?
 
-JSON uniquement: {"s":score,"t":[themes],"kp":[positifs],"kn":[négatifs]}`;
+JSON uniquement: {"s":score,"t":[{"n":"theme","s":"positive|negative|neutral","w":poids}],"kp":[positifs],"kn":[négatifs]}`;
+  }
+
+  private transformThemes(
+    rawThemes: Array<{ n: string; s: string; w: number }>,
+  ): ThemeWithMetadata[] {
+    return rawThemes.map((t) => ({
+      name: t.n,
+      sentiment: t.s as 'positive' | 'negative' | 'neutral',
+      weight: t.w,
+    }));
   }
 
   private parseResponse(content: string): Result<SentimentResult, SentimentParseError> {
@@ -118,7 +140,10 @@ JSON uniquement: {"s":score,"t":[themes],"kp":[positifs],"kn":[négatifs]}`;
       }
 
       this.logger.info('Successfully parsed Mistral sentiment', { score: validated.data.s });
-      return Result.ok(validated.data);
+      return Result.ok({
+        ...validated.data,
+        t: this.transformThemes(validated.data.t),
+      });
     } catch {
       this.logger.warn('JSON parse failed for Mistral sentiment', {
         responsePreview: trimmed.substring(0, 200),

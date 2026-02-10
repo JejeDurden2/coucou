@@ -95,7 +95,7 @@ export const SentimentTab = memo(function SentimentTab({ projectId, userPlan }: 
   return (
     <div className="space-y-6">
       {/* Score */}
-      <ScoreCard score={score} themes={themes} />
+      <ScoreCard score={score} />
 
       {/* Themes */}
       <ThemesBadges themes={themes} />

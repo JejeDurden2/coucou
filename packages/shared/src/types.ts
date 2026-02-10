@@ -412,9 +412,15 @@ export function getAggregationLevel(days: number): AggregationLevel {
 // Sentiment Analysis Types
 // ============================================
 
+export interface ThemeWithMetadata {
+  name: string;
+  sentiment: 'positive' | 'negative' | 'neutral';
+  weight: number; // 0-100, importance relative du thème
+}
+
 export interface SentimentResult {
   s: number; // score 0-100
-  t: string[]; // themes/attributs (3-5 items)
+  t: ThemeWithMetadata[]; // themes enrichis avec sentiment et weight
   kp: string[]; // keywords positifs (3-5 items)
   kn: string[]; // keywords négatifs (3-5 items)
 }
