@@ -92,7 +92,11 @@ export function PricingSection() {
                     </li>
                   ))}
                 </ul>
-                <Button className="w-full" variant={plan.popular ? 'default' : 'outline'} asChild>
+                <Button
+                  className={cn('w-full', plan.name === 'Free' && 'whitespace-normal')}
+                  variant={plan.popular ? 'default' : 'outline'}
+                  asChild
+                >
                   <Link href="/register">{plan.cta}</Link>
                 </Button>
                 <p className="font-sans text-xs text-muted-foreground text-center mt-3 uppercase tracking-wide">
