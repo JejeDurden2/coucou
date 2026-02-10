@@ -13,6 +13,12 @@ export default [
     },
   },
   {
+    files: ['scripts/**/*.ts'],
+    rules: {
+      'no-console': 'off',
+    },
+  },
+  {
     ignores: [
       'dist/**',
       'node_modules/**',

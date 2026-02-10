@@ -101,7 +101,6 @@ export default function LoginPage(): React.ReactNode {
                 required
                 autoComplete="email"
                 spellCheck={false}
-                autoFocus
               />
               {emailError && <p className="text-sm text-destructive">{emailError}</p>}
             </div>

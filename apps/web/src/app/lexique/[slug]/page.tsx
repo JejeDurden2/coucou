@@ -5,8 +5,10 @@ import { Calendar, Clock } from 'lucide-react';
 
 import { getTerm, getAllTermSlugs, getRelatedTerms } from '@/lib/glossary';
 import { findPostsForTerm } from '@/lib/cross-links';
-import { TermCard, TermContent } from '@/components/lexique';
+import { TermCard } from '@/components/lexique';
 import { PostCard } from '@/components/blog';
+import { ProseContent } from '@/components/ui/prose-content';
+import { JsonLd } from '@/components/seo/json-ld';
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
 
@@ -132,20 +134,9 @@ export default async function TermPage({ params }: PageProps): Promise<React.Rea
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(definedTermJsonLd) }}
-      />
-      {faqJsonLd && (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
-        />
-      )}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
-      />
+      <JsonLd data={definedTermJsonLd} />
+      {faqJsonLd && <JsonLd data={faqJsonLd} />}
+      <JsonLd data={breadcrumbJsonLd} />
 
       <div className="flex min-h-dvh flex-col bg-background">
         <Header variant="blog" />
@@ -206,7 +197,7 @@ export default async function TermPage({ params }: PageProps): Promise<React.Rea
           </header>
 
           {/* Content */}
-          <TermContent content={term.content} />
+          <ProseContent content={term.content} />
 
           {/* FAQ Section */}
           {term.faq.length > 0 && (

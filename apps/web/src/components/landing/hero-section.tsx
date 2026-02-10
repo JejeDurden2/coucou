@@ -22,8 +22,8 @@ export function HeroSection() {
               Recommandations actionnables.
             </p>
 
-            <div className="flex flex-col items-start gap-4 sm:flex-row mb-6">
-              <Button size="lg" asChild>
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-start mb-6">
+              <Button size="lg" className="w-full px-6 sm:w-auto sm:px-10" asChild>
                 <Link href="/register">
                   Analyser ma marque gratuitement
                   <ArrowRight className="ml-2 size-4" aria-hidden="true" />

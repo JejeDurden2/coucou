@@ -88,7 +88,7 @@ export default function LexiquePage(): React.ReactNode {
           <div className="mb-4 inline-flex items-center justify-center rounded-full bg-primary/10 p-3">
             <Book className="size-6 text-primary" aria-hidden="true" />
           </div>
-          <h1 className="font-display text-4xl font-bold text-foreground text-balance">
+          <h1 className="font-display text-3xl font-bold text-foreground text-balance md:text-4xl">
             Lexique GEO
           </h1>
           <p className="mt-4 text-lg text-muted-foreground text-pretty max-w-2xl mx-auto">

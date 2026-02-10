@@ -143,7 +143,6 @@ export default function ForgotPasswordPage() {
               required
               autoComplete="email"
               spellCheck={false}
-              autoFocus
             />
             {emailError && <p className="text-sm text-destructive">{emailError}</p>}
           </div>

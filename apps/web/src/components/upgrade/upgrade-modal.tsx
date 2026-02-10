@@ -110,7 +110,7 @@ export const UpgradeModal = memo(function UpgradeModal({
         </DialogHeader>
 
         {/* Benefits */}
-        <ul className="space-y-2 my-2" role="list">
+        <ul className="space-y-2 my-2">
           {config.benefits.map((benefit) => (
             <li key={benefit} className="flex items-start gap-2 text-sm">
               <Check className="size-4 text-primary mt-0.5 shrink-0" aria-hidden="true" />

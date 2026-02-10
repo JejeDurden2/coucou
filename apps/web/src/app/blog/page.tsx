@@ -72,7 +72,7 @@ export default function BlogPage(): React.ReactNode {
       {/* Main */}
       <main className="mx-auto w-full max-w-5xl flex-1 px-4 pb-12 pt-28">
         <div className="mb-12 text-center">
-          <h1 className="font-display text-4xl font-bold text-foreground text-balance">Blog</h1>
+          <h1 className="font-display text-3xl font-bold text-foreground text-balance md:text-4xl">Blog</h1>
           <p className="mt-4 text-lg text-muted-foreground text-pretty">
             Guides et articles sur le GEO et la visibilité dans les IA
           </p>

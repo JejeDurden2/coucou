@@ -6,8 +6,10 @@ import { Calendar, Clock, User } from 'lucide-react';
 
 import { getPost, getAllPostSlugs, getAllPosts } from '@/lib/blog';
 import { autoLinkTermsInHtml } from '@/lib/cross-links';
-import { PostCard, PostContent } from '@/components/blog';
+import { PostCard } from '@/components/blog';
 import { TermCard } from '@/components/lexique';
+import { ProseContent } from '@/components/ui/prose-content';
+import { JsonLd } from '@/components/seo/json-ld';
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
 
@@ -124,14 +126,8 @@ export default async function BlogPostPage({ params }: PageProps): Promise<React
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
-      />
+      <JsonLd data={jsonLd} />
+      <JsonLd data={breadcrumbJsonLd} />
 
       <div className="flex min-h-dvh flex-col bg-background">
         <Header variant="blog" />
@@ -209,7 +205,7 @@ export default async function BlogPostPage({ params }: PageProps): Promise<React
           )}
 
           {/* Content */}
-          <PostContent content={linkedContent} />
+          <ProseContent content={linkedContent} />
 
           {/* Related Lexique Terms */}
           {foundTerms.length > 0 && (

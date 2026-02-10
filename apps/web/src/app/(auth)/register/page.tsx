@@ -143,7 +143,6 @@ export default function RegisterPage(): React.ReactNode {
                   }}
                   required
                   autoComplete="name"
-                  autoFocus
                 />
                 {nameError && <p className="text-sm text-destructive">{nameError}</p>}
               </div>

@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { Plan, SubscriptionStatus } from '@prisma/client';
+import type { Subscription } from '@prisma/client';
 import { ConfigService } from '@nestjs/config';
 
 import { DowngradeSubscriptionUseCase } from './downgrade-subscription.use-case';
@@ -11,10 +12,45 @@ import {
   SubscriptionAlreadyCancelingError,
   SubscriptionNotActiveError,
 } from '../../domain/errors/billing.errors';
+import { User } from '../../../auth/domain/entities/user.entity';
 import type { UserRepository } from '../../../auth/domain/repositories/user.repository';
 import type { SubscriptionRepository } from '../../domain/repositories/subscription.repository';
 import type { StripePort } from '../../domain/ports/stripe.port';
 import type { EmailQueueService } from '../../../../infrastructure/queue';
+
+const now = new Date('2026-01-01T00:00:00Z');
+
+function mockUser(overrides: { id?: string; email?: string; name?: string; plan?: Plan } = {}): User {
+  return User.from({
+    id: overrides.id ?? 'user-123',
+    email: overrides.email ?? 'test@example.com',
+    name: overrides.name ?? 'Test User',
+    password: null,
+    googleId: null,
+    avatarUrl: null,
+    plan: overrides.plan ?? Plan.SOLO,
+    stripeCustomerId: null,
+    emailNotificationsEnabled: true,
+    createdAt: now,
+    updatedAt: now,
+  });
+}
+
+function mockSub(overrides: Partial<Subscription> = {}): Subscription {
+  return {
+    id: 'sub-123',
+    userId: 'user-123',
+    stripeSubscriptionId: 'stripe-sub-123',
+    status: SubscriptionStatus.ACTIVE,
+    plan: Plan.SOLO,
+    currentPeriodStart: now,
+    currentPeriodEnd: new Date('2026-02-01T00:00:00Z'),
+    cancelAtPeriodEnd: false,
+    createdAt: now,
+    updatedAt: now,
+    ...overrides,
+  };
+}
 
 describe('DowngradeSubscriptionUseCase', () => {
   let useCase: DowngradeSubscriptionUseCase;
@@ -57,7 +93,7 @@ describe('DowngradeSubscriptionUseCase', () => {
 
   describe('execute', () => {
     it('should return error if user not found', async () => {
-      (mockUserRepository.findById as any).mockResolvedValue(null);
+      vi.mocked(mockUserRepository.findById!).mockResolvedValue(null);
 
       const result = await useCase.execute({ userId: 'user-123' });
 
@@ -69,12 +105,7 @@ describe('DowngradeSubscriptionUseCase', () => {
     });
 
     it('should return error if user is already on FREE plan', async () => {
-      (mockUserRepository.findById as any).mockResolvedValue({
-        id: 'user-123',
-        email: 'test@example.com',
-        name: 'Test User',
-        plan: Plan.FREE,
-      });
+      vi.mocked(mockUserRepository.findById!).mockResolvedValue(mockUser({ plan: Plan.FREE }));
 
       const result = await useCase.execute({ userId: 'user-123' });
 
@@ -85,13 +116,8 @@ describe('DowngradeSubscriptionUseCase', () => {
     });
 
     it('should return error if no subscription found', async () => {
-      (mockUserRepository.findById as any).mockResolvedValue({
-        id: 'user-123',
-        email: 'test@example.com',
-        name: 'Test User',
-        plan: Plan.SOLO,
-      });
-      (mockSubscriptionRepository.findByUserId as any).mockResolvedValue(null);
+      vi.mocked(mockUserRepository.findById!).mockResolvedValue(mockUser());
+      vi.mocked(mockSubscriptionRepository.findByUserId!).mockResolvedValue(null);
 
       const result = await useCase.execute({ userId: 'user-123' });
 
@@ -102,18 +128,10 @@ describe('DowngradeSubscriptionUseCase', () => {
     });
 
     it('should return error if subscription is not active', async () => {
-      (mockUserRepository.findById as any).mockResolvedValue({
-        id: 'user-123',
-        email: 'test@example.com',
-        name: 'Test User',
-        plan: Plan.SOLO,
-      });
-      (mockSubscriptionRepository.findByUserId as any).mockResolvedValue({
-        id: 'sub-123',
-        stripeSubscriptionId: 'stripe-sub-123',
-        status: SubscriptionStatus.CANCELED,
-        cancelAtPeriodEnd: false,
-      });
+      vi.mocked(mockUserRepository.findById!).mockResolvedValue(mockUser());
+      vi.mocked(mockSubscriptionRepository.findByUserId!).mockResolvedValue(
+        mockSub({ status: SubscriptionStatus.CANCELED }),
+      );
 
       const result = await useCase.execute({ userId: 'user-123' });
 
@@ -124,18 +142,10 @@ describe('DowngradeSubscriptionUseCase', () => {
     });
 
     it('should return error if subscription already pending cancellation', async () => {
-      (mockUserRepository.findById as any).mockResolvedValue({
-        id: 'user-123',
-        email: 'test@example.com',
-        name: 'Test User',
-        plan: Plan.SOLO,
-      });
-      (mockSubscriptionRepository.findByUserId as any).mockResolvedValue({
-        id: 'sub-123',
-        stripeSubscriptionId: 'stripe-sub-123',
-        status: SubscriptionStatus.ACTIVE,
-        cancelAtPeriodEnd: true,
-      });
+      vi.mocked(mockUserRepository.findById!).mockResolvedValue(mockUser());
+      vi.mocked(mockSubscriptionRepository.findByUserId!).mockResolvedValue(
+        mockSub({ cancelAtPeriodEnd: true }),
+      );
 
       const result = await useCase.execute({ userId: 'user-123' });
 
@@ -146,19 +156,9 @@ describe('DowngradeSubscriptionUseCase', () => {
     });
 
     it('should return error if Stripe API fails', async () => {
-      (mockUserRepository.findById as any).mockResolvedValue({
-        id: 'user-123',
-        email: 'test@example.com',
-        name: 'Test User',
-        plan: Plan.SOLO,
-      });
-      (mockSubscriptionRepository.findByUserId as any).mockResolvedValue({
-        id: 'sub-123',
-        stripeSubscriptionId: 'stripe-sub-123',
-        status: SubscriptionStatus.ACTIVE,
-        cancelAtPeriodEnd: false,
-      });
-      (mockStripePort.cancelAtPeriodEnd as any).mockResolvedValue(
+      vi.mocked(mockUserRepository.findById!).mockResolvedValue(mockUser());
+      vi.mocked(mockSubscriptionRepository.findByUserId!).mockResolvedValue(mockSub());
+      vi.mocked(mockStripePort.cancelAtPeriodEnd!).mockResolvedValue(
         Result.err(new ExternalServiceError('Stripe', 'Payment service unavailable')),
       );
 
@@ -172,28 +172,17 @@ describe('DowngradeSubscriptionUseCase', () => {
 
     it('should successfully downgrade SOLO subscription', async () => {
       const periodEnd = new Date('2026-02-15T00:00:00Z');
-      (mockUserRepository.findById as any).mockResolvedValue({
-        id: 'user-123',
-        email: 'test@example.com',
-        name: 'Test User',
-        plan: Plan.SOLO,
-      });
-      (mockSubscriptionRepository.findByUserId as any).mockResolvedValue({
-        id: 'sub-123',
-        stripeSubscriptionId: 'stripe-sub-123',
-        status: SubscriptionStatus.ACTIVE,
-        cancelAtPeriodEnd: false,
-      });
-      (mockStripePort.cancelAtPeriodEnd as any).mockResolvedValue(
+      vi.mocked(mockUserRepository.findById!).mockResolvedValue(mockUser());
+      vi.mocked(mockSubscriptionRepository.findByUserId!).mockResolvedValue(mockSub());
+      vi.mocked(mockStripePort.cancelAtPeriodEnd!).mockResolvedValue(
         Result.ok({
           currentPeriodEnd: periodEnd,
           cancelAtPeriodEnd: true,
         }),
       );
-      (mockSubscriptionRepository.update as any).mockResolvedValue({
-        id: 'sub-123',
-        cancelAtPeriodEnd: true,
-      });
+      vi.mocked(mockSubscriptionRepository.update!).mockResolvedValue(
+        mockSub({ cancelAtPeriodEnd: true }),
+      );
 
       const result = await useCase.execute({ userId: 'user-123' });
 
@@ -213,28 +202,26 @@ describe('DowngradeSubscriptionUseCase', () => {
 
     it('should successfully downgrade PRO subscription', async () => {
       const periodEnd = new Date('2026-03-20T00:00:00Z');
-      (mockUserRepository.findById as any).mockResolvedValue({
-        id: 'user-456',
-        email: 'pro@example.com',
-        name: 'Pro User',
-        plan: Plan.PRO,
-      });
-      (mockSubscriptionRepository.findByUserId as any).mockResolvedValue({
-        id: 'sub-456',
-        stripeSubscriptionId: 'stripe-sub-456',
-        status: SubscriptionStatus.ACTIVE,
-        cancelAtPeriodEnd: false,
-      });
-      (mockStripePort.cancelAtPeriodEnd as any).mockResolvedValue(
+      vi.mocked(mockUserRepository.findById!).mockResolvedValue(
+        mockUser({ id: 'user-456', email: 'pro@example.com', name: 'Pro User', plan: Plan.PRO }),
+      );
+      vi.mocked(mockSubscriptionRepository.findByUserId!).mockResolvedValue(
+        mockSub({
+          id: 'sub-456',
+          userId: 'user-456',
+          stripeSubscriptionId: 'stripe-sub-456',
+          plan: Plan.PRO,
+        }),
+      );
+      vi.mocked(mockStripePort.cancelAtPeriodEnd!).mockResolvedValue(
         Result.ok({
           currentPeriodEnd: periodEnd,
           cancelAtPeriodEnd: true,
         }),
       );
-      (mockSubscriptionRepository.update as any).mockResolvedValue({
-        id: 'sub-456',
-        cancelAtPeriodEnd: true,
-      });
+      vi.mocked(mockSubscriptionRepository.update!).mockResolvedValue(
+        mockSub({ id: 'sub-456', cancelAtPeriodEnd: true }),
+      );
 
       const result = await useCase.execute({ userId: 'user-456' });
 
@@ -250,19 +237,9 @@ describe('DowngradeSubscriptionUseCase', () => {
 
     it('should format effectiveDate as ISO 8601', async () => {
       const periodEnd = new Date('2026-02-15T12:34:56Z');
-      (mockUserRepository.findById as any).mockResolvedValue({
-        id: 'user-123',
-        email: 'test@example.com',
-        name: 'Test User',
-        plan: Plan.SOLO,
-      });
-      (mockSubscriptionRepository.findByUserId as any).mockResolvedValue({
-        id: 'sub-123',
-        stripeSubscriptionId: 'stripe-sub-123',
-        status: SubscriptionStatus.ACTIVE,
-        cancelAtPeriodEnd: false,
-      });
-      (mockStripePort.cancelAtPeriodEnd as any).mockResolvedValue(
+      vi.mocked(mockUserRepository.findById!).mockResolvedValue(mockUser());
+      vi.mocked(mockSubscriptionRepository.findByUserId!).mockResolvedValue(mockSub());
+      vi.mocked(mockStripePort.cancelAtPeriodEnd!).mockResolvedValue(
         Result.ok({
           currentPeriodEnd: periodEnd,
           cancelAtPeriodEnd: true,
@@ -279,19 +256,9 @@ describe('DowngradeSubscriptionUseCase', () => {
 
     it('should include French message with formatted date', async () => {
       const periodEnd = new Date('2026-12-25T00:00:00Z');
-      (mockUserRepository.findById as any).mockResolvedValue({
-        id: 'user-123',
-        email: 'test@example.com',
-        name: 'Test User',
-        plan: Plan.SOLO,
-      });
-      (mockSubscriptionRepository.findByUserId as any).mockResolvedValue({
-        id: 'sub-123',
-        stripeSubscriptionId: 'stripe-sub-123',
-        status: SubscriptionStatus.ACTIVE,
-        cancelAtPeriodEnd: false,
-      });
-      (mockStripePort.cancelAtPeriodEnd as any).mockResolvedValue(
+      vi.mocked(mockUserRepository.findById!).mockResolvedValue(mockUser());
+      vi.mocked(mockSubscriptionRepository.findByUserId!).mockResolvedValue(mockSub());
+      vi.mocked(mockStripePort.cancelAtPeriodEnd!).mockResolvedValue(
         Result.ok({
           currentPeriodEnd: periodEnd,
           cancelAtPeriodEnd: true,

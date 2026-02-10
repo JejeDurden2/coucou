@@ -4,7 +4,9 @@ import { notFound } from 'next/navigation';
 import { Calendar, Clock, CheckCircle2, AlertCircle } from 'lucide-react';
 
 import { getPersona, getAllPersonaSlugs, getRelatedPersonas } from '@/lib/geo-pour';
-import { PersonaContent, PersonaCard } from '@/components/geo-pour';
+import { PersonaCard } from '@/components/geo-pour';
+import { ProseContent } from '@/components/ui/prose-content';
+import { JsonLd } from '@/components/seo/json-ld';
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
 
@@ -140,20 +142,9 @@ export default async function PersonaPage({ params }: PageProps): Promise<React.
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
-      />
-      {faqJsonLd && (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
-        />
-      )}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
-      />
+      <JsonLd data={articleJsonLd} />
+      {faqJsonLd && <JsonLd data={faqJsonLd} />}
+      <JsonLd data={breadcrumbJsonLd} />
 
       <div className="flex min-h-dvh flex-col bg-background">
         <Header variant="blog" />
@@ -234,7 +225,7 @@ export default async function PersonaPage({ params }: PageProps): Promise<React.
           )}
 
           {/* Main Content */}
-          <PersonaContent content={persona.content} />
+          <ProseContent content={persona.content} />
 
           {/* FAQ Section */}
           {persona.faq.length > 0 && (

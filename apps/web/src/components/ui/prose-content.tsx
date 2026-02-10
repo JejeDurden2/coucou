@@ -3,11 +3,11 @@
 import { useMemo } from 'react';
 import DOMPurify from 'isomorphic-dompurify';
 
-interface PostContentProps {
+interface ProseContentProps {
   content: string;
 }
 
-export function PostContent({ content }: PostContentProps): React.ReactNode {
+export function ProseContent({ content }: ProseContentProps): React.ReactNode {
   const sanitizedContent = useMemo(
     () =>
       DOMPurify.sanitize(content, {
@@ -21,8 +21,8 @@ export function PostContent({ content }: PostContentProps): React.ReactNode {
     <div
       className="prose prose-invert prose-zinc max-w-none
         prose-headings:font-display prose-headings:font-semibold
-        prose-h2:text-2xl prose-h2:mt-12 prose-h2:mb-4
-        prose-h3:text-xl prose-h3:mt-8 prose-h3:mb-3
+        prose-h2:text-xl md:prose-h2:text-2xl prose-h2:mt-8 md:prose-h2:mt-12 prose-h2:mb-4
+        prose-h3:text-lg md:prose-h3:text-xl prose-h3:mt-6 md:prose-h3:mt-8 prose-h3:mb-3
         prose-p:text-muted-foreground prose-p:leading-relaxed prose-p:mb-4
         prose-a:text-primary prose-a:no-underline hover:prose-a:underline
         prose-strong:text-foreground prose-strong:font-semibold

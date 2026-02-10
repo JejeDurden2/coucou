@@ -42,7 +42,7 @@ export const DateRangePicker = memo(function DateRangePicker({
             onClick={() => onChange(preset.value)}
             className={cn(
               'text-xs h-7 px-2.5',
-              isSelected && 'bg-background shadow-sm text-foreground',
+              isSelected && 'bg-background shadow-xs text-foreground',
               !isSelected && 'text-muted-foreground hover:text-foreground',
               isDisabled && 'opacity-50 cursor-not-allowed',
             )}

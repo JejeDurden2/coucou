@@ -12,7 +12,7 @@ export function FinalCTA() {
         <p className="text-lg text-muted-foreground mb-10 text-pretty leading-relaxed">
           Première analyse gratuite, sans carte bancaire.
         </p>
-        <Button size="lg" asChild>
+        <Button size="lg" className="w-full sm:w-auto" asChild>
           <Link href="/register">
             Analyser ma marque gratuitement
             <ArrowRight className="ml-2 size-4" aria-hidden="true" />

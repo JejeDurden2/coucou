@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { Check } from 'lucide-react';
 import { Plan, PLAN_PRICING } from '@coucou-ia/shared';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { FeatureWithLogos } from '@/components/ui/feature-with-logos';
 import { cn } from '@/lib/utils';
@@ -60,7 +60,7 @@ export function PricingSection() {
               {plan.popular && (
                 <div className="absolute -top-3 left-1/2 -translate-x-1/2">
                   <Badge
-                    className="bg-primary text-primary-foreground border-primary shadow-sm"
+                    className="bg-primary text-primary-foreground border-primary shadow-xs"
                     aria-label="Plan recommandé"
                   >
                     Recommandé
@@ -72,7 +72,7 @@ export function PricingSection() {
                   {plan.name}
                 </Badge>
                 <div className="flex items-baseline gap-2">
-                  <span className="font-mono text-5xl tabular-nums font-bold md:text-6xl">
+                  <span className="font-mono text-4xl tabular-nums font-bold sm:text-5xl md:text-6xl">
                     {plan.price}
                   </span>
                   <span className="font-mono text-xl text-muted-foreground">€/mois</span>

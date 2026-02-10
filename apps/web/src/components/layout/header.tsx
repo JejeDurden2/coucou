@@ -109,7 +109,7 @@ export function Header({ variant = 'default' }: HeaderProps) {
               <Link
                 key={link.href}
                 href={getHref(link)}
-                className="font-sans text-xs uppercase tracking-wide text-muted-foreground hover:text-primary transition-colors py-2"
+                className="font-sans text-xs uppercase tracking-wide text-muted-foreground hover:text-primary transition-colors py-3"
                 onClick={closeMobileMenu}
               >
                 {link.label}
@@ -117,26 +117,26 @@ export function Header({ variant = 'default' }: HeaderProps) {
             ))}
 
             <div className="pt-2 border-t border-border">
-              <p className="font-sans text-xs text-muted-foreground/70 uppercase tracking-wider py-2">
+              <p className="font-sans text-xs text-muted-foreground/70 uppercase tracking-wider py-3">
                 Ressources
               </p>
               <Link
                 href="/lexique"
-                className="block font-sans text-xs uppercase tracking-wide text-muted-foreground hover:text-primary transition-colors py-2"
+                className="block font-sans text-xs uppercase tracking-wide text-muted-foreground hover:text-primary transition-colors py-3"
                 onClick={closeMobileMenu}
               >
                 Lexique GEO
               </Link>
               <Link
                 href="/geo-pour"
-                className="block font-sans text-xs uppercase tracking-wide text-muted-foreground hover:text-primary transition-colors py-2"
+                className="block font-sans text-xs uppercase tracking-wide text-muted-foreground hover:text-primary transition-colors py-3"
                 onClick={closeMobileMenu}
               >
                 GEO par métier
               </Link>
               <Link
                 href="/comparatif"
-                className="block font-sans text-xs uppercase tracking-wide text-muted-foreground hover:text-primary transition-colors py-2"
+                className="block font-sans text-xs uppercase tracking-wide text-muted-foreground hover:text-primary transition-colors py-3"
                 onClick={closeMobileMenu}
               >
                 Comparatifs

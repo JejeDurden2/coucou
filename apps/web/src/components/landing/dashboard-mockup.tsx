@@ -23,8 +23,8 @@ export function DashboardMockup() {
       style={{ animationDelay: '0.3s' }}
       aria-hidden="true"
     >
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-        <div className="col-span-2 rounded-xl border border-primary/20 bg-primary/5 p-5">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-4">
+        <div className="sm:col-span-2 rounded-xl border border-primary/20 bg-primary/5 p-5">
           <div className="flex items-start justify-between gap-3">
             <div className="min-w-0 flex-1">
               <p className="mb-1 text-xs text-muted-foreground">Position moyenne</p>
@@ -38,27 +38,29 @@ export function DashboardMockup() {
             </div>
           </div>
           <div className="mt-3">
-            <Sparkline data={POSITION_SPARKLINE} width={200} height={32} color="primary" inverted />
+            <Sparkline data={POSITION_SPARKLINE} width={200} height={32} color="primary" inverted className="w-full h-8" />
           </div>
         </div>
 
-        {PROVIDERS.map((provider) => (
-          <div
-            key={provider.name}
-            className="hidden rounded-xl border border-border/50 bg-background/40 p-3 md:block"
-          >
-            <div className="mb-2 flex items-center gap-2 text-xs text-muted-foreground">
-              <ProviderLogo provider={provider.provider} size="sm" />
-              <span>{provider.name}</span>
+        <div className="grid grid-cols-2 gap-3 sm:col-span-2 md:contents">
+          {PROVIDERS.map((provider) => (
+            <div
+              key={provider.name}
+              className="rounded-xl border border-border/50 bg-background/40 p-3"
+            >
+              <div className="mb-2 flex items-center gap-2 text-xs text-muted-foreground">
+                <ProviderLogo provider={provider.provider} size="sm" />
+                <span>{provider.name}</span>
+              </div>
+              <p className={`text-lg font-semibold tabular-nums font-mono ${provider.color}`}>
+                <span className="text-sm text-muted-foreground">#</span>
+                {provider.position}
+              </p>
             </div>
-            <p className={`text-lg font-semibold tabular-nums font-mono ${provider.color}`}>
-              <span className="text-sm text-muted-foreground">#</span>
-              {provider.position}
-            </p>
-          </div>
-        ))}
+          ))}
+        </div>
 
-        <div className="col-span-2 rounded-xl border border-border/50 bg-background/40 p-4">
+        <div className="sm:col-span-2 rounded-xl border border-border/50 bg-background/40 p-4">
           <div className="flex items-start justify-between gap-3">
             <div className="min-w-0 flex-1">
               <p className="mb-1 text-xs text-muted-foreground">Sentiment IA</p>
@@ -91,7 +93,7 @@ export function DashboardMockup() {
           </div>
         </div>
 
-        <div className="hidden rounded-xl border border-border/50 bg-background/40 p-4 md:col-span-2 md:block">
+        <div className="rounded-xl border border-border/50 bg-background/40 p-4 sm:col-span-2">
           <div className="flex items-start justify-between gap-3">
             <div className="min-w-0 flex-1">
               <p className="mb-2 text-xs text-muted-foreground">Part de voix</p>

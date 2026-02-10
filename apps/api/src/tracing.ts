@@ -30,9 +30,9 @@ function parseOtlpHeaders(): Record<string, string> | undefined {
 if (otlpEndpoint) {
   const headers = parseOtlpHeaders();
 
-  console.log('[Tracing] Initializing OpenTelemetry SDK');
-  console.log(`[Tracing] Endpoint: ${otlpEndpoint}`);
-  console.log(`[Tracing] Headers: ${headers ? Object.keys(headers).join(', ') : 'none'}`);
+  console.warn('[Tracing] Initializing OpenTelemetry SDK');
+  console.warn(`[Tracing] Endpoint: ${otlpEndpoint}`);
+  console.warn(`[Tracing] Headers: ${headers ? Object.keys(headers).join(', ') : 'none'}`);
 
   const sdk = new NodeSDK({
     resource: resourceFromAttributes({
@@ -63,7 +63,7 @@ if (otlpEndpoint) {
 
   try {
     sdk.start();
-    console.log('[Tracing] OpenTelemetry SDK started');
+    console.warn('[Tracing] OpenTelemetry SDK started');
   } catch (err) {
     console.error('[Tracing] Failed to start OpenTelemetry SDK, continuing without tracing', err);
   }
@@ -79,5 +79,5 @@ if (otlpEndpoint) {
   process.on('SIGTERM', shutdown);
   process.on('SIGINT', shutdown);
 } else {
-  console.log('[Tracing] OpenTelemetry disabled (OTEL_EXPORTER_OTLP_ENDPOINT not set)');
+  console.warn('[Tracing] OpenTelemetry disabled (OTEL_EXPORTER_OTLP_ENDPOINT not set)');
 }

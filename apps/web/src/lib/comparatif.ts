@@ -126,7 +126,10 @@ export async function getComparison(slug: string): Promise<Comparison | null> {
     .use(remarkGfm)
     .use(html, { sanitize: false })
     .process(content);
-  const htmlContent = processedContent.toString();
+  let htmlContent = processedContent.toString();
+
+  // Add lazy loading to images for better performance
+  htmlContent = htmlContent.replace(/<img(?![^>]*loading=)/g, '<img loading="lazy"');
 
   return {
     slug,

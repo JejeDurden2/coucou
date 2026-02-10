@@ -12,7 +12,7 @@ interface BentoItemProps {
 
 export function BentoGrid({ children, className }: BentoGridProps): React.ReactNode {
   return (
-    <div className={cn('grid grid-cols-2 gap-4 lg:grid-cols-4 lg:grid-flow-dense', className)}>
+    <div className={cn('grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:grid-flow-dense', className)}>
       {children}
     </div>
   );

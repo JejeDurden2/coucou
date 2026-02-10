@@ -25,6 +25,7 @@ export function PostCard({ post }: PostCardProps): React.ReactNode {
               alt={post.imageAlt ?? post.title}
               width={1200}
               height={675}
+              sizes="(max-width: 768px) 100vw, 50vw"
               loading="lazy"
               className="size-full object-cover"
             />

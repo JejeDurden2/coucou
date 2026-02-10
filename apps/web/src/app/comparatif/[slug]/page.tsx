@@ -11,9 +11,11 @@ import {
 } from '@/lib/comparatif';
 import { getAllPosts } from '@/lib/blog';
 import { autoLinkTermsInHtml } from '@/lib/cross-links';
-import { ComparisonContent, ComparisonCard } from '@/components/comparatif';
+import { ComparisonCard } from '@/components/comparatif';
 import { PostCard } from '@/components/blog';
 import { TermCard } from '@/components/lexique';
+import { ProseContent } from '@/components/ui/prose-content';
+import { JsonLd } from '@/components/seo/json-ld';
 import { Header } from '@/components/layout/header';
 import { Footer } from '@/components/layout/footer';
 
@@ -159,20 +161,9 @@ export default async function ComparisonPage({ params }: PageProps): Promise<Rea
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
-      />
-      {faqJsonLd && (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
-        />
-      )}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
-      />
+      <JsonLd data={articleJsonLd} />
+      {faqJsonLd && <JsonLd data={faqJsonLd} />}
+      <JsonLd data={breadcrumbJsonLd} />
 
       <div className="flex min-h-dvh flex-col bg-background">
         <Header variant="blog" />
@@ -238,7 +229,7 @@ export default async function ComparisonPage({ params }: PageProps): Promise<Rea
           )}
 
           {/* Main Content (auto-linked with glossary terms) */}
-          <ComparisonContent content={linkedContent} />
+          <ProseContent content={linkedContent} />
 
           {/* FAQ Section */}
           {comparison.faq.length > 0 && (

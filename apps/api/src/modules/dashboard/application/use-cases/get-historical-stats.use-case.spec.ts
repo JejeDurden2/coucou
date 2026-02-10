@@ -114,8 +114,8 @@ describe('GetHistoricalStatsUseCase', () => {
         ]),
       ];
 
-      (mockPromptRepository.findByProjectId as any).mockResolvedValue(prompts);
-      (mockScanRepository.findByProjectIdInRange as any).mockResolvedValue(scans);
+      vi.mocked(mockPromptRepository.findByProjectId!).mockResolvedValue(prompts);
+      vi.mocked(mockScanRepository.findByProjectIdInRange!).mockResolvedValue(scans);
 
       const result = await useCase.execute('project-123', 'user-123', Plan.SOLO);
 
@@ -174,10 +174,10 @@ describe('GetHistoricalStatsUseCase', () => {
         ]),
       ];
 
-      (mockPromptRepository.findByProjectId as any).mockResolvedValue([
+      vi.mocked(mockPromptRepository.findByProjectId!).mockResolvedValue([
         createMockPrompt('prompt-1', 'test'),
       ]);
-      (mockScanRepository.findByProjectIdInRange as any)
+      vi.mocked(mockScanRepository.findByProjectIdInRange!)
         .mockResolvedValueOnce(currentScans) // current period
         .mockResolvedValueOnce(previousScans); // previous period
 
@@ -232,10 +232,10 @@ describe('GetHistoricalStatsUseCase', () => {
         ]),
       ];
 
-      (mockPromptRepository.findByProjectId as any).mockResolvedValue([
+      vi.mocked(mockPromptRepository.findByProjectId!).mockResolvedValue([
         createMockPrompt('prompt-1', 'test'),
       ]);
-      (mockScanRepository.findByProjectIdInRange as any)
+      vi.mocked(mockScanRepository.findByProjectIdInRange!)
         .mockResolvedValueOnce(currentScans)
         .mockResolvedValueOnce(previousScans);
 
@@ -273,10 +273,10 @@ describe('GetHistoricalStatsUseCase', () => {
         ]),
       ];
 
-      (mockPromptRepository.findByProjectId as any).mockResolvedValue([
+      vi.mocked(mockPromptRepository.findByProjectId!).mockResolvedValue([
         createMockPrompt('prompt-1', 'test'),
       ]);
-      (mockScanRepository.findByProjectIdInRange as any)
+      vi.mocked(mockScanRepository.findByProjectIdInRange!)
         .mockResolvedValueOnce(currentScans)
         .mockResolvedValueOnce(previousScans);
 
@@ -299,10 +299,10 @@ describe('GetHistoricalStatsUseCase', () => {
         ]),
       ];
 
-      (mockPromptRepository.findByProjectId as any).mockResolvedValue([
+      vi.mocked(mockPromptRepository.findByProjectId!).mockResolvedValue([
         createMockPrompt('prompt-1', 'test'),
       ]);
-      (mockScanRepository.findByProjectIdInRange as any)
+      vi.mocked(mockScanRepository.findByProjectIdInRange!)
         .mockResolvedValueOnce(currentScans)
         .mockResolvedValueOnce([]); // No previous data
 
@@ -343,10 +343,10 @@ describe('GetHistoricalStatsUseCase', () => {
         ]),
       ];
 
-      (mockPromptRepository.findByProjectId as any).mockResolvedValue([
+      vi.mocked(mockPromptRepository.findByProjectId!).mockResolvedValue([
         createMockPrompt('prompt-1', 'test'),
       ]);
-      (mockScanRepository.findByProjectIdInRange as any)
+      vi.mocked(mockScanRepository.findByProjectIdInRange!)
         .mockResolvedValueOnce(currentScans)
         .mockResolvedValueOnce(previousScans);
 
@@ -400,10 +400,10 @@ describe('GetHistoricalStatsUseCase', () => {
         ]),
       ];
 
-      (mockPromptRepository.findByProjectId as any).mockResolvedValue([
+      vi.mocked(mockPromptRepository.findByProjectId!).mockResolvedValue([
         createMockPrompt('prompt-1', 'test'),
       ]);
-      (mockScanRepository.findByProjectIdInRange as any)
+      vi.mocked(mockScanRepository.findByProjectIdInRange!)
         .mockResolvedValueOnce(currentScans)
         .mockResolvedValueOnce([]);
 
@@ -442,10 +442,10 @@ describe('GetHistoricalStatsUseCase', () => {
         ]),
       ];
 
-      (mockPromptRepository.findByProjectId as any).mockResolvedValue([
+      vi.mocked(mockPromptRepository.findByProjectId!).mockResolvedValue([
         createMockPrompt('prompt-1', 'test'),
       ]);
-      (mockScanRepository.findByProjectIdInRange as any)
+      vi.mocked(mockScanRepository.findByProjectIdInRange!)
         .mockResolvedValueOnce(currentScans)
         .mockResolvedValueOnce([]);
 
@@ -474,10 +474,10 @@ describe('GetHistoricalStatsUseCase', () => {
         ]),
       ];
 
-      (mockPromptRepository.findByProjectId as any).mockResolvedValue([
+      vi.mocked(mockPromptRepository.findByProjectId!).mockResolvedValue([
         createMockPrompt('prompt-1', 'test'),
       ]);
-      (mockScanRepository.findByProjectIdInRange as any)
+      vi.mocked(mockScanRepository.findByProjectIdInRange!)
         .mockResolvedValueOnce(currentScans)
         .mockResolvedValueOnce([]);
 
@@ -524,8 +524,8 @@ describe('GetHistoricalStatsUseCase', () => {
         ]),
       ];
 
-      (mockPromptRepository.findByProjectId as any).mockResolvedValue(prompts);
-      (mockScanRepository.findByProjectIdInRange as any)
+      vi.mocked(mockPromptRepository.findByProjectId!).mockResolvedValue(prompts);
+      vi.mocked(mockScanRepository.findByProjectIdInRange!)
         .mockResolvedValueOnce(currentScans)
         .mockResolvedValueOnce([]);
 
@@ -562,10 +562,10 @@ describe('GetHistoricalStatsUseCase', () => {
         ]),
       ];
 
-      (mockPromptRepository.findByProjectId as any).mockResolvedValue([
+      vi.mocked(mockPromptRepository.findByProjectId!).mockResolvedValue([
         createMockPrompt('prompt-1', 'test'),
       ]);
-      (mockScanRepository.findByProjectIdInRange as any)
+      vi.mocked(mockScanRepository.findByProjectIdInRange!)
         .mockResolvedValueOnce(currentScans)
         .mockResolvedValueOnce([]); // Empty because out of limit
 
