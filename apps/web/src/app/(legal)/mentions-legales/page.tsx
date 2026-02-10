@@ -70,8 +70,7 @@ export default function MentionsLegalesPage(): React.ReactNode {
                 <strong>RCS :</strong> Nice B 100 498 070
               </li>
               <li>
-                <strong>Numéro de TVA intracommunautaire :</strong> FR XX 100498070 (à mettre à jour
-                dès réception)
+                <strong>Numéro de TVA intracommunautaire :</strong> FR83100498070
               </li>
               <li>
                 <strong>Adresse e-mail :</strong>{' '}

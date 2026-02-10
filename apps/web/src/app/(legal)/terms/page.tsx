@@ -48,7 +48,7 @@ export default function TermsPage(): React.ReactNode {
               070, dont le siège social est situé 460 Avenue de Pessicart, 06100 Nice, France.
             </p>
             <p className="text-muted-foreground">
-              Numéro de TVA intracommunautaire : En cours d&apos;attribution.
+              Numéro de TVA intracommunautaire : FR83100498070.
             </p>
             <p className="text-muted-foreground">
               Directeur de la publication : Monsieur Jérôme Desmares, Président.
