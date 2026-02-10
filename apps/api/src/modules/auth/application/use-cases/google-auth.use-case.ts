@@ -5,11 +5,8 @@ import { CURRENT_TERMS_VERSION, CURRENT_PRIVACY_VERSION } from '@coucou-ia/share
 
 import { LoggerService } from '../../../../common/logger';
 import { EmailQueueService } from '../../../../infrastructure/queue';
+import { PrismaService } from '../../../../prisma';
 import { EMAIL_PORT, type EmailPort, generateWelcomeEmail } from '../../../email';
-import {
-  PROJECT_REPOSITORY,
-  type ProjectRepository,
-} from '../../../project/domain/repositories/project.repository';
 import {
   USER_REPOSITORY,
   CONSENT_REPOSITORY,
@@ -29,8 +26,7 @@ export class GoogleAuthUseCase {
     private readonly consentRepository: ConsentRepository,
     @Inject(EMAIL_PORT)
     private readonly emailService: EmailPort,
-    @Inject(PROJECT_REPOSITORY)
-    private readonly projectRepository: ProjectRepository,
+    private readonly prisma: PrismaService,
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
     private readonly emailQueueService: EmailQueueService,
@@ -121,7 +117,7 @@ export class GoogleAuthUseCase {
       expiresIn: this.configService.get('JWT_REFRESH_EXPIRES_IN', '7d'),
     });
 
-    const projectCount = await this.projectRepository.countByUserId(user.id);
+    const projectCount = await this.prisma.project.count({ where: { userId: user.id } });
 
     return {
       accessToken,

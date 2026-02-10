@@ -3,11 +3,8 @@ import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 
 import { Result, UnauthorizedError } from '../../../../common';
+import { PrismaService } from '../../../../prisma';
 import { USER_REPOSITORY, type UserRepository } from '../../domain';
-import {
-  PROJECT_REPOSITORY,
-  type ProjectRepository,
-} from '../../../project/domain/repositories/project.repository';
 import type { AuthResponseDto, JwtPayload } from '../dto/auth.dto';
 
 @Injectable()
@@ -15,8 +12,7 @@ export class RefreshTokenUseCase {
   constructor(
     @Inject(USER_REPOSITORY)
     private readonly userRepository: UserRepository,
-    @Inject(PROJECT_REPOSITORY)
-    private readonly projectRepository: ProjectRepository,
+    private readonly prisma: PrismaService,
     private readonly jwtService: JwtService,
     private readonly configService: ConfigService,
   ) {}
@@ -44,7 +40,7 @@ export class RefreshTokenUseCase {
         expiresIn: this.configService.get('JWT_REFRESH_EXPIRES_IN', '7d'),
       });
 
-      const projectCount = await this.projectRepository.countByUserId(user.id);
+      const projectCount = await this.prisma.project.count({ where: { userId: user.id } });
 
       return Result.ok({
         accessToken: newAccessToken,
