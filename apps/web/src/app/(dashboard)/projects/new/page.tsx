@@ -25,9 +25,10 @@ export default function NewBrandPage() {
     setStep('prompt-generation');
   }
 
-  function handleComplete(): void {
+  function handleComplete(source: 'generated' | 'skipped'): void {
     if (projectId) {
-      router.push(`/projects/${projectId}`);
+      const params = source === 'generated' ? '?autoScan=true' : '';
+      router.push(`/projects/${projectId}${params}`);
     }
   }
 

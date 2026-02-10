@@ -1,7 +1,8 @@
 'use client';
 
-import { use, useMemo, useState } from 'react';
+import { use, useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import {
   Radar,
   Plus,
@@ -135,6 +136,21 @@ export default function ProjectDashboardPage({
   const allOnCooldown = hasPrompts && scannablePromptIds.size === 0;
 
   const userCanAccessStats = userPlan !== Plan.FREE;
+
+  // Auto-trigger first scan after onboarding prompt generation
+  const searchParams = useSearchParams();
+  const autoScanParam = searchParams.get('autoScan') === 'true';
+  const autoScanTriggered = useRef(false);
+
+  useEffect(() => {
+    if (autoScanParam && !statsLoading && hasPrompts && !autoScanTriggered.current && !isScanning) {
+      autoScanTriggered.current = true;
+      const url = new URL(window.location.href);
+      url.searchParams.delete('autoScan');
+      window.history.replaceState(null, '', url.toString());
+      triggerScan.mutateAsync();
+    }
+  }, [autoScanParam, statsLoading, hasPrompts, isScanning, triggerScan]);
 
   async function handleAddPrompt(content: string, category?: PromptCategory): Promise<void> {
     await createPrompt.mutateAsync({ content, category });

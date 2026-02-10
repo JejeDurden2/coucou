@@ -37,9 +37,10 @@ export default function OnboardingPage(): React.ReactNode {
     setStep('prompts');
   }
 
-  function navigateToProject(): void {
+  function navigateToProject(source: 'generated' | 'skipped' = 'skipped'): void {
     if (createdProjectId) {
-      router.push(`/projects/${createdProjectId}`);
+      const params = source === 'generated' ? '?autoScan=true' : '';
+      router.push(`/projects/${createdProjectId}${params}`);
     }
   }
 

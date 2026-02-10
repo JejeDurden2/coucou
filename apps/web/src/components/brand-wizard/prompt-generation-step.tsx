@@ -8,7 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 
 interface PromptGenerationStepProps {
   projectId: string;
-  onComplete: () => void;
+  onComplete: (source: 'generated' | 'skipped') => void;
 }
 
 export function PromptGenerationStep({
@@ -18,7 +18,7 @@ export function PromptGenerationStep({
   const analyzeBrand = useBrandAnalyze();
   const brandPolling = useBrandJobPolling({
     projectId,
-    onCompleted: onComplete,
+    onCompleted: () => onComplete('generated'),
   });
 
   async function handleGenerate(): Promise<void> {
@@ -87,7 +87,7 @@ export function PromptGenerationStep({
               </Button>
               <Button
                 variant="outline"
-                onClick={onComplete}
+                onClick={() => onComplete('skipped')}
                 disabled={analyzeBrand.isPending}
                 className="w-full"
                 size="lg"
