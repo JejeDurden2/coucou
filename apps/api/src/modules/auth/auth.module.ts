@@ -52,7 +52,7 @@ import { GoogleStrategy } from './presentation/strategies/google.strategy';
     QueueModule, // Explicit import even though it's global, to ensure initialization order
     forwardRef(() => BillingModule),
     EmailModule,
-    ProjectModule,
+    forwardRef(() => ProjectModule),
   ],
   controllers: [AuthController],
   providers: [
