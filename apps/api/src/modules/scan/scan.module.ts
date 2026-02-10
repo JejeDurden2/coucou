@@ -19,13 +19,11 @@ import {
   GetScanJobStatusUseCase,
   GET_SCAN_JOB_STATUS_USE_CASE,
 } from './application/use-cases';
-import { ClaudeOpusLLMAdapter } from './infrastructure/adapters/claude-opus-llm.adapter';
 import { ClaudeSonnetLLMAdapter } from './infrastructure/adapters/claude-sonnet-llm.adapter';
-import { GPT4oLLMAdapter } from './infrastructure/adapters/gpt4o-llm.adapter';
 import { GPT52LLMAdapter } from './infrastructure/adapters/gpt52-llm.adapter';
 import { LLMServiceImpl } from './infrastructure/adapters/llm.service';
 import { MistralSmallLLMAdapter } from './infrastructure/adapters/mistral-small-llm.adapter';
-import { OpenAILLMAdapter } from './infrastructure/adapters/openai-llm.adapter';
+import { MistralMediumLLMAdapter } from './infrastructure/adapters/mistral-medium-llm.adapter';
 import { PrismaScanJobRepository } from './infrastructure/persistence/prisma-scan-job.repository';
 import { PrismaScanRepository } from './infrastructure/persistence/prisma-scan.repository';
 import { ScanController } from './presentation/controllers/scan.controller';
@@ -60,12 +58,10 @@ import { ScanController } from './presentation/controllers/scan.controller';
     // Auto-scan cron service
     AutoScanService,
     // LLM adapters
-    OpenAILLMAdapter,
-    GPT4oLLMAdapter,
     GPT52LLMAdapter,
     ClaudeSonnetLLMAdapter,
-    ClaudeOpusLLMAdapter,
     MistralSmallLLMAdapter,
+    MistralMediumLLMAdapter,
     // Services
     LLMResponseProcessorService,
     {
@@ -87,6 +83,7 @@ import { ScanController } from './presentation/controllers/scan.controller';
     SCAN_JOB_REPOSITORY,
     LLM_SERVICE,
     MistralSmallLLMAdapter,
+    MistralMediumLLMAdapter,
     QUEUE_PROMPT_SCAN_USE_CASE,
     PROCESS_SCAN_JOB_USE_CASE,
   ],

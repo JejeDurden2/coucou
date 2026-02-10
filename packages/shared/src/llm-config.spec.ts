@@ -22,43 +22,44 @@ describe('llm-config', () => {
       expect(config.models).toEqual([LLMModel.MISTRAL_SMALL_LATEST]);
     });
 
-    it('should have SOLO plan with all three providers', () => {
+    it('should have SOLO plan with all three providers and 3 models', () => {
       const config = PLAN_LLM_CONFIG[Plan.SOLO];
       expect(config.providers).toContain(LLMProvider.MISTRAL);
       expect(config.providers).toContain(LLMProvider.CHATGPT);
       expect(config.providers).toContain(LLMProvider.CLAUDE);
       expect(config.models).toEqual([
         LLMModel.MISTRAL_SMALL_LATEST,
-        LLMModel.GPT_4O,
+        LLMModel.GPT_5_2,
         LLMModel.CLAUDE_SONNET_4_5,
       ]);
     });
 
-    it('should have PRO plan with all three providers and 5 models', () => {
+    it('should have PRO plan with same models as SOLO', () => {
       const config = PLAN_LLM_CONFIG[Plan.PRO];
       expect(config.providers).toContain(LLMProvider.MISTRAL);
       expect(config.providers).toContain(LLMProvider.CHATGPT);
       expect(config.providers).toContain(LLMProvider.CLAUDE);
       expect(config.models).toEqual([
         LLMModel.MISTRAL_SMALL_LATEST,
-        LLMModel.GPT_4O,
         LLMModel.GPT_5_2,
         LLMModel.CLAUDE_SONNET_4_5,
-        LLMModel.CLAUDE_OPUS_4_5,
       ]);
     });
 
-    it('should not include deprecated GPT_4O_MINI in any plan', () => {
+    it('should not include deprecated models in any plan', () => {
+      const deprecated = [LLMModel.GPT_4O_MINI, LLMModel.GPT_4O, LLMModel.CLAUDE_OPUS_4_5];
       for (const plan of Object.values(Plan)) {
         const models = PLAN_LLM_CONFIG[plan].models;
-        expect(models).not.toContain(LLMModel.GPT_4O_MINI);
+        for (const model of deprecated) {
+          expect(models).not.toContain(model);
+        }
       }
     });
   });
 
   describe('SENTIMENT_MODEL', () => {
-    it('should be Mistral Small', () => {
-      expect(SENTIMENT_MODEL).toBe(LLMModel.MISTRAL_SMALL_LATEST);
+    it('should be Mistral Medium', () => {
+      expect(SENTIMENT_MODEL).toBe(LLMModel.MISTRAL_MEDIUM_LATEST);
     });
   });
 
@@ -72,18 +73,14 @@ describe('llm-config', () => {
       const models = getModelsForPlan(Plan.SOLO);
       expect(models).toHaveLength(3);
       expect(models).toContain(LLMModel.MISTRAL_SMALL_LATEST);
-      expect(models).toContain(LLMModel.GPT_4O);
+      expect(models).toContain(LLMModel.GPT_5_2);
       expect(models).toContain(LLMModel.CLAUDE_SONNET_4_5);
     });
 
-    it('should return 5 models for PRO plan', () => {
+    it('should return 3 models for PRO plan (same as SOLO)', () => {
       const models = getModelsForPlan(Plan.PRO);
-      expect(models).toHaveLength(5);
-      expect(models).toContain(LLMModel.MISTRAL_SMALL_LATEST);
-      expect(models).toContain(LLMModel.GPT_4O);
-      expect(models).toContain(LLMModel.GPT_5_2);
-      expect(models).toContain(LLMModel.CLAUDE_SONNET_4_5);
-      expect(models).toContain(LLMModel.CLAUDE_OPUS_4_5);
+      expect(models).toHaveLength(3);
+      expect(models).toEqual(getModelsForPlan(Plan.SOLO));
     });
 
     it('should return a new array (not the original reference)', () => {

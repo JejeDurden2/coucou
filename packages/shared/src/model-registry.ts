@@ -21,6 +21,7 @@ const MODEL_PRIORITY: Record<string, number> = {
   [LLMModel.CLAUDE_SONNET_4_5]: 1,
   [LLMModel.CLAUDE_OPUS_4_5]: 2,
   [LLMModel.MISTRAL_SMALL_LATEST]: 1,
+  [LLMModel.MISTRAL_MEDIUM_LATEST]: 2,
 };
 
 // ============================================
@@ -56,6 +57,11 @@ const MODEL_REGISTRY: Record<string, ModelMetadata> = {
   [LLMModel.MISTRAL_SMALL_LATEST]: {
     displayName: 'Mistral Small',
     abbreviation: 'Small',
+    provider: LLMProvider.MISTRAL,
+  },
+  [LLMModel.MISTRAL_MEDIUM_LATEST]: {
+    displayName: 'Mistral Medium',
+    abbreviation: 'Medium',
     provider: LLMProvider.MISTRAL,
   },
 };

@@ -4,7 +4,7 @@ import { BullModule } from '@nestjs/bullmq';
 
 import { ProjectModule } from '../project';
 import { ScanModule } from '../scan';
-import { MistralSmallLLMAdapter } from '../scan/infrastructure/adapters/mistral-small-llm.adapter';
+import { MistralMediumLLMAdapter } from '../scan/infrastructure/adapters/mistral-medium-llm.adapter';
 import { SENTIMENT_QUEUE_NAME, sentimentJobOptions } from '../../infrastructure/queue/queue.config';
 import { LoggerService } from '../../common/logger';
 import { SENTIMENT_SCAN_REPOSITORY } from './domain';
@@ -41,9 +41,9 @@ import { SentimentProcessor } from './infrastructure/queue/sentiment.processor';
     },
     {
       provide: SENTIMENT_ANALYZER,
-      useFactory: (mistralAdapter: MistralSmallLLMAdapter, logger: LoggerService) =>
+      useFactory: (mistralAdapter: MistralMediumLLMAdapter, logger: LoggerService) =>
         new MistralSentimentAnalyzer(mistralAdapter, logger),
-      inject: [MistralSmallLLMAdapter, LoggerService],
+      inject: [MistralMediumLLMAdapter, LoggerService],
     },
   ],
   exports: [

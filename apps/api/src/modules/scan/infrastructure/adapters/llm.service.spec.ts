@@ -5,11 +5,8 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import type { LoggerService } from '../../../../common/logger';
 import type { LLMPort, LLMResponse } from '../../application/ports/llm.port';
 import { LLMServiceImpl } from './llm.service';
-import { OpenAILLMAdapter } from './openai-llm.adapter';
-import { GPT4oLLMAdapter } from './gpt4o-llm.adapter';
 import { GPT52LLMAdapter } from './gpt52-llm.adapter';
 import { ClaudeSonnetLLMAdapter } from './claude-sonnet-llm.adapter';
-import { ClaudeOpusLLMAdapter } from './claude-opus-llm.adapter';
 import { MistralSmallLLMAdapter } from './mistral-small-llm.adapter';
 
 const createMockLogger = (): LoggerService =>
@@ -47,29 +44,20 @@ const createMockAdapter = (model: LLMModel, shouldFail = false): LLMPort => ({
 
 describe('LLMServiceImpl', () => {
   let service: LLMServiceImpl;
-  let mockOpenaiAdapter: LLMPort;
-  let mockGpt4oAdapter: LLMPort;
   let mockGpt52Adapter: LLMPort;
   let mockClaudeSonnetAdapter: LLMPort;
-  let mockClaudeOpusAdapter: LLMPort;
   let mockMistralSmallAdapter: LLMPort;
   let mockLogger: LoggerService;
 
   beforeEach(() => {
-    mockOpenaiAdapter = createMockAdapter(LLMModel.GPT_4O_MINI);
-    mockGpt4oAdapter = createMockAdapter(LLMModel.GPT_4O);
     mockGpt52Adapter = createMockAdapter(LLMModel.GPT_5_2);
     mockClaudeSonnetAdapter = createMockAdapter(LLMModel.CLAUDE_SONNET_4_5);
-    mockClaudeOpusAdapter = createMockAdapter(LLMModel.CLAUDE_OPUS_4_5);
     mockMistralSmallAdapter = createMockAdapter(LLMModel.MISTRAL_SMALL_LATEST);
     mockLogger = createMockLogger();
 
     service = new LLMServiceImpl(
-      mockOpenaiAdapter as unknown as OpenAILLMAdapter,
-      mockGpt4oAdapter as unknown as GPT4oLLMAdapter,
       mockGpt52Adapter as unknown as GPT52LLMAdapter,
       mockClaudeSonnetAdapter as unknown as ClaudeSonnetLLMAdapter,
-      mockClaudeOpusAdapter as unknown as ClaudeOpusLLMAdapter,
       mockMistralSmallAdapter as unknown as MistralSmallLLMAdapter,
       mockLogger,
     );
@@ -80,51 +68,39 @@ describe('LLMServiceImpl', () => {
       const result = await service.queryByPlan('test prompt', Plan.FREE);
 
       expect(mockMistralSmallAdapter.query).toHaveBeenCalledWith('test prompt');
-      expect(mockOpenaiAdapter.query).not.toHaveBeenCalled();
-      expect(mockGpt4oAdapter.query).not.toHaveBeenCalled();
       expect(mockGpt52Adapter.query).not.toHaveBeenCalled();
       expect(mockClaudeSonnetAdapter.query).not.toHaveBeenCalled();
-      expect(mockClaudeOpusAdapter.query).not.toHaveBeenCalled();
 
       expect(result.successes).toHaveLength(1);
       expect(result.successes[0].model).toBe(LLMModel.MISTRAL_SMALL_LATEST);
     });
 
-    it('should query Mistral Small, GPT-4o and Claude Sonnet 4.5 for SOLO plan', async () => {
+    it('should query all 3 models for SOLO plan', async () => {
       const result = await service.queryByPlan('test prompt', Plan.SOLO);
 
       expect(mockMistralSmallAdapter.query).toHaveBeenCalledWith('test prompt');
-      expect(mockGpt4oAdapter.query).toHaveBeenCalledWith('test prompt');
+      expect(mockGpt52Adapter.query).toHaveBeenCalledWith('test prompt');
       expect(mockClaudeSonnetAdapter.query).toHaveBeenCalledWith('test prompt');
-      expect(mockOpenaiAdapter.query).not.toHaveBeenCalled();
-      expect(mockGpt52Adapter.query).not.toHaveBeenCalled();
-      expect(mockClaudeOpusAdapter.query).not.toHaveBeenCalled();
 
       expect(result.successes).toHaveLength(3);
     });
 
-    it('should query all 5 models for PRO plan', async () => {
+    it('should query same 3 models for PRO plan', async () => {
       const result = await service.queryByPlan('test prompt', Plan.PRO);
 
       expect(mockMistralSmallAdapter.query).toHaveBeenCalledWith('test prompt');
-      expect(mockGpt4oAdapter.query).toHaveBeenCalledWith('test prompt');
       expect(mockGpt52Adapter.query).toHaveBeenCalledWith('test prompt');
       expect(mockClaudeSonnetAdapter.query).toHaveBeenCalledWith('test prompt');
-      expect(mockClaudeOpusAdapter.query).toHaveBeenCalledWith('test prompt');
-      expect(mockOpenaiAdapter.query).not.toHaveBeenCalled();
 
-      expect(result.successes).toHaveLength(5);
+      expect(result.successes).toHaveLength(3);
     });
 
     it('should handle partial failures gracefully', async () => {
       const failingClaudeSonnetAdapter = createMockAdapter(LLMModel.CLAUDE_SONNET_4_5, true);
 
       service = new LLMServiceImpl(
-        mockOpenaiAdapter as unknown as OpenAILLMAdapter,
-        mockGpt4oAdapter as unknown as GPT4oLLMAdapter,
         mockGpt52Adapter as unknown as GPT52LLMAdapter,
         failingClaudeSonnetAdapter as unknown as ClaudeSonnetLLMAdapter,
-        mockClaudeOpusAdapter as unknown as ClaudeOpusLLMAdapter,
         mockMistralSmallAdapter as unknown as MistralSmallLLMAdapter,
         mockLogger,
       );
@@ -141,11 +117,8 @@ describe('LLMServiceImpl', () => {
       const failingMistralAdapter = createMockAdapter(LLMModel.MISTRAL_SMALL_LATEST, true);
 
       service = new LLMServiceImpl(
-        mockOpenaiAdapter as unknown as OpenAILLMAdapter,
-        mockGpt4oAdapter as unknown as GPT4oLLMAdapter,
         mockGpt52Adapter as unknown as GPT52LLMAdapter,
         mockClaudeSonnetAdapter as unknown as ClaudeSonnetLLMAdapter,
-        mockClaudeOpusAdapter as unknown as ClaudeOpusLLMAdapter,
         failingMistralAdapter as unknown as MistralSmallLLMAdapter,
         mockLogger,
       );
@@ -160,16 +133,10 @@ describe('LLMServiceImpl', () => {
       expect(getModelsForPlan(SharedPlan.FREE)).toEqual([LLMModel.MISTRAL_SMALL_LATEST]);
       expect(getModelsForPlan(SharedPlan.SOLO)).toEqual([
         LLMModel.MISTRAL_SMALL_LATEST,
-        LLMModel.GPT_4O,
-        LLMModel.CLAUDE_SONNET_4_5,
-      ]);
-      expect(getModelsForPlan(SharedPlan.PRO)).toEqual([
-        LLMModel.MISTRAL_SMALL_LATEST,
-        LLMModel.GPT_4O,
         LLMModel.GPT_5_2,
         LLMModel.CLAUDE_SONNET_4_5,
-        LLMModel.CLAUDE_OPUS_4_5,
       ]);
+      expect(getModelsForPlan(SharedPlan.PRO)).toEqual(getModelsForPlan(SharedPlan.SOLO));
     });
 
     it('should execute queries in parallel', async () => {
@@ -187,12 +154,12 @@ describe('LLMServiceImpl', () => {
         };
       });
 
-      vi.spyOn(mockGpt4oAdapter, 'query').mockImplementation(async () => {
+      vi.spyOn(mockGpt52Adapter, 'query').mockImplementation(async () => {
         await new Promise((resolve) => setTimeout(resolve, 50));
         delays.push(Date.now() - startTime);
         return {
           content: '',
-          model: LLMModel.GPT_4O,
+          model: LLMModel.GPT_5_2,
           provider: LLMProvider.CHATGPT,
           latencyMs: 50,
         };

@@ -26,21 +26,15 @@ export const PLAN_LLM_CONFIG: Record<Plan, PlanLLMConfiguration> = {
   },
   [Plan.SOLO]: {
     providers: [LLMProvider.MISTRAL, LLMProvider.CHATGPT, LLMProvider.CLAUDE],
-    models: [LLMModel.MISTRAL_SMALL_LATEST, LLMModel.GPT_4O, LLMModel.CLAUDE_SONNET_4_5],
+    models: [LLMModel.MISTRAL_SMALL_LATEST, LLMModel.GPT_5_2, LLMModel.CLAUDE_SONNET_4_5],
   },
   [Plan.PRO]: {
     providers: [LLMProvider.MISTRAL, LLMProvider.CHATGPT, LLMProvider.CLAUDE],
-    models: [
-      LLMModel.MISTRAL_SMALL_LATEST,
-      LLMModel.GPT_4O,
-      LLMModel.GPT_5_2,
-      LLMModel.CLAUDE_SONNET_4_5,
-      LLMModel.CLAUDE_OPUS_4_5,
-    ],
+    models: [LLMModel.MISTRAL_SMALL_LATEST, LLMModel.GPT_5_2, LLMModel.CLAUDE_SONNET_4_5],
   },
 } as const;
 
-export const SENTIMENT_MODEL = LLMModel.MISTRAL_SMALL_LATEST;
+export const SENTIMENT_MODEL = LLMModel.MISTRAL_MEDIUM_LATEST;
 
 // ============================================
 // Utility Functions

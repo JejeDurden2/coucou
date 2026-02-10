@@ -17,15 +17,21 @@ export enum LLMProvider {
 export enum LLMModel {
   /** @deprecated Kept for backward compatibility with historical scan data. Not used in active plans. */
   GPT_4O_MINI = 'gpt-4o-mini',
+  /** @deprecated Kept for backward compatibility with historical scan data. Not used in active plans. */
   GPT_4O = 'gpt-4o',
   GPT_5_2 = 'gpt-5.2',
   CLAUDE_SONNET_4_5 = 'claude-sonnet-4-5-20250929',
+  /** @deprecated Kept for backward compatibility with historical scan data. Not used in active plans. */
   CLAUDE_OPUS_4_5 = 'claude-opus-4-5-20251101',
   MISTRAL_SMALL_LATEST = 'mistral-small-latest',
+  MISTRAL_MEDIUM_LATEST = 'mistral-medium-latest',
 }
 
 /** Models currently used in active plan configurations. Excludes deprecated models kept for historical data. */
-export type ActiveLLMModel = Exclude<LLMModel, LLMModel.GPT_4O_MINI>;
+export type ActiveLLMModel = Exclude<
+  LLMModel,
+  LLMModel.GPT_4O_MINI | LLMModel.GPT_4O | LLMModel.CLAUDE_OPUS_4_5
+>;
 
 // ============================================
 // User Types

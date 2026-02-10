@@ -26,7 +26,20 @@ describe('MistralSentimentAnalyzer', () => {
     getModel: ReturnType<typeof vi.fn>;
   };
 
-  const validSentimentResult: SentimentResult = {
+  // Compact format as returned by the LLM (before transformation)
+  const validLLMResponse = {
+    s: 72,
+    t: [
+      { n: 'innovation', s: 'positive', w: 85 },
+      { n: 'qualité', s: 'positive', w: 75 },
+      { n: 'tech', s: 'neutral', w: 60 },
+    ],
+    kp: ['fiable', 'rapide', 'moderne'],
+    kn: ['cher', 'complexe', 'limité'],
+  };
+
+  // Transformed output after adapter processing
+  const expectedResult: SentimentResult = {
     s: 72,
     t: [
       { name: 'innovation', sentiment: 'positive', weight: 85 },
@@ -66,7 +79,7 @@ describe('MistralSentimentAnalyzer', () => {
   describe('analyze', () => {
     it('should return Ok with valid SentimentResult on valid JSON response', async () => {
       mockLLMAdapter.query.mockResolvedValue(
-        createLLMResponse(JSON.stringify(validSentimentResult)),
+        createLLMResponse(JSON.stringify(validLLMResponse)),
       );
 
       const result = await analyzer.analyze(defaultInput);
@@ -74,7 +87,7 @@ describe('MistralSentimentAnalyzer', () => {
       expect(result.ok).toBe(true);
       if (result.ok) {
         expect(result.value.s).toBe(72);
-        expect(result.value.t).toEqual(['innovation', 'qualité', 'tech']);
+        expect(result.value.t).toEqual(expectedResult.t);
         expect(result.value.kp).toHaveLength(3);
         expect(result.value.kn).toHaveLength(3);
       }
@@ -87,7 +100,7 @@ describe('MistralSentimentAnalyzer', () => {
 
     it('should include brand variants and domain in prompt', async () => {
       mockLLMAdapter.query.mockResolvedValue(
-        createLLMResponse(JSON.stringify(validSentimentResult)),
+        createLLMResponse(JSON.stringify(validLLMResponse)),
       );
 
       await analyzer.analyze(defaultInput);
@@ -137,8 +150,8 @@ describe('MistralSentimentAnalyzer', () => {
       }
     });
 
-    it('should extract JSON from markdown code blocks', async () => {
-      const wrapped = `\`\`\`json\n${JSON.stringify(validSentimentResult)}\n\`\`\``;
+    it('should extract JSON from response with surrounding text', async () => {
+      const wrapped = `Here is the analysis:\n${JSON.stringify(validLLMResponse)}\nDone.`;
       mockLLMAdapter.query.mockResolvedValue(createLLMResponse(wrapped));
 
       const result = await analyzer.analyze(defaultInput);
@@ -151,7 +164,7 @@ describe('MistralSentimentAnalyzer', () => {
 
     it('should handle null brandContext in prompt', async () => {
       mockLLMAdapter.query.mockResolvedValue(
-        createLLMResponse(JSON.stringify(validSentimentResult)),
+        createLLMResponse(JSON.stringify(validLLMResponse)),
       );
 
       const input: SentimentAnalysisInput = {
@@ -170,7 +183,7 @@ describe('MistralSentimentAnalyzer', () => {
 
     it('should handle empty brandVariants in prompt', async () => {
       mockLLMAdapter.query.mockResolvedValue(
-        createLLMResponse(JSON.stringify(validSentimentResult)),
+        createLLMResponse(JSON.stringify(validLLMResponse)),
       );
 
       const input: SentimentAnalysisInput = {
@@ -187,7 +200,7 @@ describe('MistralSentimentAnalyzer', () => {
 
     it('should return Err when score is out of range', async () => {
       mockLLMAdapter.query.mockResolvedValue(
-        createLLMResponse(JSON.stringify({ ...validSentimentResult, s: 150 })),
+        createLLMResponse(JSON.stringify({ ...validLLMResponse, s: 150 })),
       );
 
       const result = await analyzer.analyze(defaultInput);

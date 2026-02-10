@@ -3,14 +3,14 @@ import { ConfigService } from '@nestjs/config';
 import { LLMModel } from '@coucou-ia/shared';
 
 import { LoggerService } from '../../../../common/logger';
-import { BaseOpenAIAdapter } from './base-openai.adapter';
+import { BaseMistralAdapter } from './base-mistral.adapter';
 
 @Injectable()
-export class GPT4oLLMAdapter extends BaseOpenAIAdapter {
-  protected readonly model = LLMModel.GPT_4O;
+export class MistralMediumLLMAdapter extends BaseMistralAdapter {
+  protected readonly model = LLMModel.MISTRAL_MEDIUM_LATEST;
 
   constructor(configService: ConfigService, logger: LoggerService) {
     super(configService, logger);
-    logger.setContext(GPT4oLLMAdapter.name);
+    logger.setContext(MistralMediumLLMAdapter.name);
   }
 }
