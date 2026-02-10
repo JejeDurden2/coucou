@@ -23,7 +23,7 @@ import { OnboardingController } from './presentation/controllers/onboarding.cont
   imports: [
     forwardRef(() => ProjectModule),
     PromptModule,
-    ScanModule,
+    forwardRef(() => ScanModule),
     WebScraperModule,
     BullModule.registerQueue({
       name: ONBOARDING_QUEUE_NAME,

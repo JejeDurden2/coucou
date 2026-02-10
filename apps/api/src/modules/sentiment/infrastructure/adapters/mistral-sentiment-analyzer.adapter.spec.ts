@@ -78,9 +78,7 @@ describe('MistralSentimentAnalyzer', () => {
 
   describe('analyze', () => {
     it('should return Ok with valid SentimentResult on valid JSON response', async () => {
-      mockLLMAdapter.query.mockResolvedValue(
-        createLLMResponse(JSON.stringify(validLLMResponse)),
-      );
+      mockLLMAdapter.query.mockResolvedValue(createLLMResponse(JSON.stringify(validLLMResponse)));
 
       const result = await analyzer.analyze(defaultInput);
 
@@ -99,9 +97,7 @@ describe('MistralSentimentAnalyzer', () => {
     });
 
     it('should include brand variants and domain in prompt', async () => {
-      mockLLMAdapter.query.mockResolvedValue(
-        createLLMResponse(JSON.stringify(validLLMResponse)),
-      );
+      mockLLMAdapter.query.mockResolvedValue(createLLMResponse(JSON.stringify(validLLMResponse)));
 
       await analyzer.analyze(defaultInput);
 
@@ -163,9 +159,7 @@ describe('MistralSentimentAnalyzer', () => {
     });
 
     it('should handle null brandContext in prompt', async () => {
-      mockLLMAdapter.query.mockResolvedValue(
-        createLLMResponse(JSON.stringify(validLLMResponse)),
-      );
+      mockLLMAdapter.query.mockResolvedValue(createLLMResponse(JSON.stringify(validLLMResponse)));
 
       const input: SentimentAnalysisInput = {
         ...defaultInput,
@@ -182,9 +176,7 @@ describe('MistralSentimentAnalyzer', () => {
     });
 
     it('should handle empty brandVariants in prompt', async () => {
-      mockLLMAdapter.query.mockResolvedValue(
-        createLLMResponse(JSON.stringify(validLLMResponse)),
-      );
+      mockLLMAdapter.query.mockResolvedValue(createLLMResponse(JSON.stringify(validLLMResponse)));
 
       const input: SentimentAnalysisInput = {
         ...defaultInput,

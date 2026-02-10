@@ -4,8 +4,7 @@ import { LoggerService } from '../../logger';
 
 const FETCH_TIMEOUT_MS = 10_000;
 const MAX_CONTENT_LENGTH = 15_000;
-const USER_AGENT =
-  'Mozilla/5.0 (compatible; CoucouBot/1.0; +https://coucou-ia.com)';
+const USER_AGENT = 'Mozilla/5.0 (compatible; CoucouBot/1.0; +https://coucou-ia.com)';
 
 @Injectable()
 export class WebScraperService {
@@ -26,6 +25,11 @@ export class WebScraperService {
       throw new Error(`HTTP ${response.status} fetching ${url}`);
     }
 
+    const contentType = response.headers.get('content-type') ?? '';
+    if (!contentType.includes('text/')) {
+      throw new Error(`Unsupported content type "${contentType}" for ${url}`);
+    }
+
     const html = await response.text();
     const text = this.stripHtml(html);
 
@@ -34,6 +38,14 @@ export class WebScraperService {
       rawLength: html.length,
       strippedLength: text.length,
     });
+
+    if (text.length > MAX_CONTENT_LENGTH) {
+      this.logger.warn('Content truncated', {
+        url,
+        originalLength: text.length,
+        maxLength: MAX_CONTENT_LENGTH,
+      });
+    }
 
     return text.slice(0, MAX_CONTENT_LENGTH);
   }

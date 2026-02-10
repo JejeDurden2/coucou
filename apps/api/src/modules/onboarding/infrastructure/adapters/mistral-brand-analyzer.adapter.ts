@@ -45,11 +45,7 @@ Format de réponse attendu (JSON uniquement):
 }`;
 }
 
-function buildPromptGenerationPrompt(
-  ctx: BrandContext,
-  brandName: string,
-  count: number,
-): string {
+function buildPromptGenerationPrompt(ctx: BrandContext, brandName: string, count: number): string {
   return `Génère exactement ${count} prompts de recherche pour tracker la visibilité de "${brandName}" dans les réponses des LLMs (ChatGPT, Claude, etc).
 
 Contexte de la marque:
@@ -124,9 +120,7 @@ export class MistralBrandAnalyzerAdapter implements BrandAnalyzerPort {
   private parseJson<T>(text: string, schema: z.ZodSchema<T>): T {
     const cleaned = text
       .trim()
-      .replace(/^```json\s*/i, '')
-      .replace(/^```\s*/i, '')
-      .replace(/\s*```$/, '')
+      .replace(/^```(?:json)?\s*|\s*```$/gi, '')
       .trim();
 
     const jsonStart = cleaned.indexOf('{');
@@ -143,9 +137,15 @@ export class MistralBrandAnalyzerAdapter implements BrandAnalyzerPort {
       startIndex = Math.min(jsonStart, arrayStart);
     }
 
-    const parsed: unknown = JSON.parse(cleaned.slice(startIndex));
-    const result = schema.safeParse(parsed);
+    let parsed: unknown;
+    try {
+      parsed = JSON.parse(cleaned.slice(startIndex));
+    } catch (error) {
+      this.logger.error('JSON parse failed', { responsePreview: text.slice(0, 300) });
+      throw error;
+    }
 
+    const result = schema.safeParse(parsed);
     if (!result.success) {
       this.logger.error('JSON validation failed', { error: result.error.message });
       throw new Error(`Invalid JSON structure: ${result.error.message}`);
