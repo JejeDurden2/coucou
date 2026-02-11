@@ -1,5 +1,4 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { LLMProvider } from '@prisma/client';
 import { subDays } from 'date-fns';
 
 import { ForbiddenError, NotFoundError, Result } from '../../../../common';
@@ -120,7 +119,7 @@ export class GetDashboardStatsUseCase {
   }
 
   private calculateProviderBreakdown(results: LLMResult[]): ProviderBreakdownDto[] {
-    const providers = [LLMProvider.CHATGPT, LLMProvider.CLAUDE];
+    const providers = [...new Set(results.map((r) => r.provider))];
 
     return providers.map((provider) => {
       const providerResults = results.filter((r) => r.provider === provider);
