@@ -79,6 +79,7 @@ export class MistralSentimentAnalyzer implements SentimentAnalyzerPort {
     try {
       const response = await this.mistralAdapter.query(prompt, {
         systemPrompt: SENTIMENT_SYSTEM_PROMPT,
+        jsonMode: true,
       });
 
       return this.parseResponse(response.content);
@@ -136,26 +137,33 @@ JSON uniquement: {"s":score,"t":[{"n":"theme","s":"positive|negative|neutral","w
   }
 
   private parseResponse(content: string): Result<SentimentResult, SentimentParseError> {
-    const trimmed = content.trim();
+    // Strip markdown code blocks and trim
+    const cleaned = content
+      .replace(/```(?:json)?\s*/gi, '')
+      .replace(/```\s*/g, '')
+      .trim();
 
-    const jsonMatch = trimmed.match(/\{[\s\S]*\}/);
+    const jsonMatch = cleaned.match(/\{[\s\S]*\}/);
     if (!jsonMatch) {
       this.logger.warn('No JSON found in Mistral response', {
-        responsePreview: trimmed.substring(0, 200),
+        responsePreview: cleaned.substring(0, 200),
       });
-      return Result.err(new SentimentParseError('mistral', trimmed));
+      return Result.err(new SentimentParseError('mistral', cleaned));
     }
 
+    // Remove trailing commas before ] or } (common LLM mistake)
+    const sanitized = jsonMatch[0].replace(/,\s*([}\]])/g, '$1');
+
     try {
-      const parsed: unknown = JSON.parse(jsonMatch[0]);
+      const parsed: unknown = JSON.parse(sanitized);
       const validated = SentimentResultSchema.safeParse(parsed);
 
       if (!validated.success) {
         this.logger.warn('Zod validation failed for Mistral sentiment', {
           zodError: validated.error.message,
-          responsePreview: trimmed.substring(0, 200),
+          responsePreview: cleaned.substring(0, 200),
         });
-        return Result.err(new SentimentParseError('mistral', trimmed));
+        return Result.err(new SentimentParseError('mistral', cleaned));
       }
 
       this.logger.info('Successfully parsed Mistral sentiment', { score: validated.data.s });
@@ -165,9 +173,9 @@ JSON uniquement: {"s":score,"t":[{"n":"theme","s":"positive|negative|neutral","w
       });
     } catch {
       this.logger.warn('JSON parse failed for Mistral sentiment', {
-        responsePreview: trimmed.substring(0, 200),
+        responsePreview: cleaned.substring(0, 200),
       });
-      return Result.err(new SentimentParseError('mistral', trimmed));
+      return Result.err(new SentimentParseError('mistral', cleaned));
     }
   }
 }

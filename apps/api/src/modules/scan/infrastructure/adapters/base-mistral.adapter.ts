@@ -32,11 +32,10 @@ export abstract class BaseMistralAdapter extends BaseLLMAdapter {
     return LLMProvider.MISTRAL;
   }
 
-  // Mistral API does not support web search or custom options — parameter intentionally unused
   protected callApi(
     prompt: string,
     systemPrompt: string,
-    _options?: LLMQueryOptions,
+    options?: LLMQueryOptions,
   ): Promise<Response> {
     const apiKey = this.configService.get<string>('MISTRAL_API_KEY') ?? '';
 
@@ -54,6 +53,7 @@ export abstract class BaseMistralAdapter extends BaseLLMAdapter {
         ],
         max_tokens: LLM_CONFIG.maxTokens,
         temperature: LLM_CONFIG.temperature,
+        ...(options?.jsonMode && { response_format: { type: 'json_object' } }),
       }),
     });
   }
