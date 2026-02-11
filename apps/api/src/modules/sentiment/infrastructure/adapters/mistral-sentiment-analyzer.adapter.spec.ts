@@ -54,7 +54,12 @@ describe('MistralSentimentAnalyzer', () => {
     brandName: 'TestBrand',
     brandVariants: ['TB', 'Test Brand Inc'],
     domain: 'testbrand.com',
-    brandContext: { businessType: 'SaaS', targetAudience: 'Developers' },
+    brandContext: {
+      businessType: 'SaaS',
+      targetAudience: 'Developers',
+      locality: null,
+      mainOfferings: ['API Management', 'Cloud Hosting'],
+    },
   };
 
   const createLLMResponse = (content: string): LLMResponse => ({

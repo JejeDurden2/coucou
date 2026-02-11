@@ -56,7 +56,14 @@ export class ExecuteSentimentScanUseCase {
           brandName: project.brandName,
           brandVariants: project.brandVariants,
           domain: project.domain,
-          brandContext: project.brandContext,
+          brandContext: project.brandContext
+            ? {
+                businessType: project.brandContext.businessType,
+                targetAudience: project.brandContext.targetAudience,
+                locality: project.brandContext.locality,
+                mainOfferings: project.brandContext.mainOfferings,
+              }
+            : null,
         });
 
         if (!analyzeResult.ok) {

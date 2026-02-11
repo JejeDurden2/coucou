@@ -12,6 +12,8 @@ export interface SentimentAnalysisInput {
   brandContext: {
     businessType: string;
     targetAudience: string;
+    locality: string | null;
+    mainOfferings: string[];
   } | null;
 }
 

@@ -24,27 +24,34 @@ const SentimentResultSchema = z.object({
   kn: z.array(z.string()).min(1).max(10),
 });
 
-const SENTIMENT_SYSTEM_PROMPT = `Tu es un analyste senior en réputation de marque. Évalue la perception RÉELLE de la marque selon ces critères:
+const SENTIMENT_SYSTEM_PROMPT = `Tu es un analyste senior en réputation de marque spécialisé sur le marché FRANÇAIS. Évalue la perception RÉELLE de la marque du point de vue des consommateurs français.
+
+CONTEXTE GÉOGRAPHIQUE:
+Tu évalues UNIQUEMENT la perception sur le marché français:
+- Réputation et notoriété en France spécifiquement
+- Avis et retours des clients français
+- Positionnement vs les concurrents présents en France
+- Controverses ou bad buzz dans la sphère francophone
 
 SCORING STRICT (évite les scores neutres 65-75):
-- 85-100: Marque iconique, leader incontesté, forte communauté (Apple, Nike, Patagonia)
-- 70-84: Bonne réputation, quelques critiques mineures
-- 50-69: Perception mitigée, controverses ou problèmes connus
-- 30-49: Réputation dégradée, scandales ou critiques majeures
-- 0-29: Crise réputationnelle grave
+- 85-100: Marque iconique en France, leader incontesté, forte communauté (ex: Decathlon, Blablacar)
+- 70-84: Bonne réputation en France, quelques critiques mineures
+- 50-69: Perception mitigée auprès des Français, controverses ou problèmes connus
+- 30-49: Réputation dégradée en France, scandales ou critiques majeures
+- 0-29: Crise réputationnelle grave sur le marché français
 
 FACTEURS À ANALYSER:
-1. Notoriété et reconnaissance dans le domaine
-2. Qualité perçue des produits/services
-3. Controverses, scandales ou bad buzz récents
-4. Engagement et satisfaction client
-5. Position vs concurrents
+1. Notoriété et reconnaissance en France dans son domaine
+2. Qualité perçue des produits/services par les clients français
+3. Controverses, scandales ou bad buzz récents en France
+4. Engagement et satisfaction des clients français
+5. Position vs concurrents sur le marché français
 
 THÈMES ENRICHIS:
 Pour chaque thème, fournis:
 - n: nom du thème (ex: "qualité", "prix", "support")
 - s: sentiment ("positive", "negative", "neutral")
-- w: poids d'importance 0-100 (basé sur la fréquence/prominence dans les mentions)
+- w: poids d'importance 0-100 (basé sur la fréquence/prominence dans les mentions françaises)
 
 IMPORTANT: Sois PRÉCIS et DIFFÉRENCIÉ. Ne donne pas un score neutre par défaut.
 
@@ -90,18 +97,30 @@ export class MistralSentimentAnalyzer implements SentimentAnalyzerPort {
       input.brandVariants.length > 0
         ? ` (aussi connue comme: ${input.brandVariants.join(', ')})`
         : '';
-    const contextStr = input.brandContext
-      ? `\nContexte business: ${input.brandContext.businessType}, audience cible: ${input.brandContext.targetAudience}.`
-      : '';
+
+    const contextParts: string[] = [];
+    if (input.brandContext) {
+      contextParts.push(
+        `Contexte business: ${input.brandContext.businessType}, audience cible: ${input.brandContext.targetAudience}.`,
+      );
+      if (input.brandContext.mainOfferings.length > 0) {
+        contextParts.push(`Offres principales: ${input.brandContext.mainOfferings.join(', ')}.`);
+      }
+      const locality = input.brandContext.locality ?? 'France (national)';
+      contextParts.push(`Localité: ${locality}.`);
+    }
+
+    const contextStr = contextParts.length > 0 ? `\n${contextParts.join('\n')}` : '';
 
     return `Marque: "${input.brandName}"${variantsStr}
-Domaine: ${input.domain}${contextStr}
+Domaine: ${input.domain}
+Marché: France${contextStr}
 
-Évalue cette marque selon:
-1. Est-elle connue/reconnue dans son domaine? (si inconnue = score bas 40-55)
-2. A-t-elle des controverses ou bad buzz connus?
-3. Quelle est sa réputation qualité?
-4. Comment se positionne-t-elle vs la concurrence?
+Évalue cette marque du point de vue des consommateurs FRANÇAIS:
+1. Est-elle connue/reconnue en France dans son domaine? (si inconnue en France = score bas 40-55)
+2. A-t-elle des controverses ou bad buzz connus en France?
+3. Quelle est sa réputation qualité auprès des clients français?
+4. Comment se positionne-t-elle vs la concurrence sur le marché français?
 
 JSON uniquement: {"s":score,"t":[{"n":"theme","s":"positive|negative|neutral","w":poids}],"kp":[positifs],"kn":[négatifs]}`;
   }
