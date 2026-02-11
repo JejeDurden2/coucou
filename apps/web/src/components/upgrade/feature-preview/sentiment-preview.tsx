@@ -78,14 +78,14 @@ export const SentimentPreview = memo(function SentimentPreview() {
           <path
             d="M0,50 Q30,45 60,40 T120,30 T180,25 T240,20 T300,15"
             fill="none"
-            stroke="hsl(var(--success))"
+            stroke="var(--success)"
             strokeWidth="2"
             opacity="0.3"
           />
           <path
             d="M0,40 Q30,38 60,35 T120,28 T180,30 T240,25 T300,22"
             fill="none"
-            stroke="hsl(var(--warning))"
+            stroke="var(--warning)"
             strokeWidth="2"
             opacity="0.3"
           />

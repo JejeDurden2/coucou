@@ -54,15 +54,15 @@ export const RankTrendChart = memo(function RankTrendChart({
         <div className="h-64">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={chartData} margin={CHART_MARGIN}>
-              <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
               <XAxis
                 dataKey="label"
-                tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))' }}
+                tick={{ fontSize: 11, fill: 'var(--muted-foreground)' }}
                 tickLine={false}
                 axisLine={false}
               />
               <YAxis
-                tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))' }}
+                tick={{ fontSize: 11, fill: 'var(--muted-foreground)' }}
                 tickLine={false}
                 axisLine={false}
                 domain={[1, 7]}
@@ -71,27 +71,27 @@ export const RankTrendChart = memo(function RankTrendChart({
               />
               <Tooltip
                 contentStyle={{
-                  backgroundColor: 'hsl(var(--card))',
-                  border: '1px solid hsl(var(--border))',
+                  backgroundColor: 'var(--card)',
+                  border: '1px solid var(--border)',
                   borderRadius: '8px',
                   fontSize: '12px',
                 }}
-                labelStyle={{ color: 'hsl(var(--foreground))' }}
+                labelStyle={{ color: 'var(--foreground)' }}
                 formatter={(value) => [`#${Number(value).toFixed(1)}`, 'Position']}
               />
               <ReferenceLine
                 y={3}
-                stroke="hsl(var(--warning))"
+                stroke="var(--warning)"
                 strokeDasharray="5 5"
                 strokeOpacity={0.6}
               />
               <Line
                 type="monotone"
                 dataKey="value"
-                stroke="hsl(var(--primary))"
+                stroke="var(--primary)"
                 strokeWidth={2}
-                dot={{ fill: 'hsl(var(--primary))', strokeWidth: 0, r: 3 }}
-                activeDot={{ r: 5, fill: 'hsl(var(--primary))' }}
+                dot={{ fill: 'var(--primary)', strokeWidth: 0, r: 3 }}
+                activeDot={{ r: 5, fill: 'var(--primary)' }}
               />
             </LineChart>
           </ResponsiveContainer>

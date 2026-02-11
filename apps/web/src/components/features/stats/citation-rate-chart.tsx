@@ -126,19 +126,19 @@ export const CitationRateChart = memo(function CitationRateChart({
             <AreaChart data={chartData} margin={CHART_MARGIN}>
               <defs>
                 <linearGradient id="citationGradient" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="hsl(var(--primary))" stopOpacity={0.2} />
-                  <stop offset="95%" stopColor="hsl(var(--primary))" stopOpacity={0} />
+                  <stop offset="5%" stopColor="var(--primary)" stopOpacity={0.2} />
+                  <stop offset="95%" stopColor="var(--primary)" stopOpacity={0} />
                 </linearGradient>
               </defs>
-              <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
               <XAxis
                 dataKey="label"
-                tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))' }}
+                tick={{ fontSize: 11, fill: 'var(--muted-foreground)' }}
                 tickLine={false}
                 axisLine={false}
               />
               <YAxis
-                tick={{ fontSize: 11, fill: 'hsl(var(--muted-foreground))' }}
+                tick={{ fontSize: 11, fill: 'var(--muted-foreground)' }}
                 tickLine={false}
                 axisLine={false}
                 domain={[0, 100]}
@@ -146,24 +146,24 @@ export const CitationRateChart = memo(function CitationRateChart({
               />
               <Tooltip
                 content={<CustomChartTooltip />}
-                cursor={{ stroke: 'hsl(var(--muted-foreground))', strokeOpacity: 0.3 }}
+                cursor={{ stroke: 'var(--muted-foreground)', strokeOpacity: 0.3 }}
               />
               <ReferenceLine
                 y={average}
-                stroke="hsl(var(--muted-foreground))"
+                stroke="var(--muted-foreground)"
                 strokeDasharray="5 5"
                 strokeOpacity={0.6}
                 label={{
                   value: `Moy. ${average.toFixed(0)}%`,
                   position: 'right',
-                  fill: 'hsl(var(--muted-foreground))',
+                  fill: 'var(--muted-foreground)',
                   fontSize: 10,
                 }}
               />
               <Area
                 type="monotone"
                 dataKey="value"
-                stroke="hsl(var(--primary))"
+                stroke="var(--primary)"
                 strokeWidth={2}
                 fill="url(#citationGradient)"
                 isAnimationActive={false}

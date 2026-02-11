@@ -27,14 +27,14 @@ export const StatsPreview = memo(function StatsPreview() {
           <path
             d="M0,80 Q25,70 50,60 T100,40 T150,30 T200,20"
             fill="none"
-            stroke="hsl(var(--primary))"
+            stroke="var(--primary)"
             strokeWidth="2"
             opacity="0.3"
           />
           <path
             d="M0,60 Q25,55 50,50 T100,35 T150,25 T200,15"
             fill="none"
-            stroke="hsl(var(--primary))"
+            stroke="var(--primary)"
             strokeWidth="2"
             opacity="0.2"
           />
