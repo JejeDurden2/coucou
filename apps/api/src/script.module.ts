@@ -1,6 +1,7 @@
 import { DynamicModule, Module, Type } from '@nestjs/common';
 import { BullModule } from '@nestjs/bullmq';
 
+import { LoggerModule } from './common/logger';
 import { PrismaModule } from './prisma';
 
 /**
@@ -27,6 +28,9 @@ export class ScriptModule {
       imports: [
         // PrismaModule - global database access
         PrismaModule,
+
+        // LoggerModule - global logging
+        LoggerModule,
 
         // BullModule with direct env access
         // Use REDIS_PUBLIC_URL for scripts running outside Railway (railway run from local)

@@ -1,10 +1,10 @@
-import { Injectable, Module } from '@nestjs/common';
+import { Inject, Injectable, Module } from '@nestjs/common';
 import { InjectQueue, BullModule } from '@nestjs/bullmq';
 import { Queue } from 'bullmq';
 
 import { SENTIMENT_QUEUE_NAME, sentimentJobOptions } from '../../infrastructure/queue/queue.config';
 import type { SentimentJobData } from '../../infrastructure/queue/types/sentiment-job.types';
-import { LoggerModule, LoggerService } from '../../common/logger';
+import { LoggerService } from '../../common/logger';
 
 /**
  * Simplified queue service for scripts.
@@ -15,6 +15,7 @@ export class SentimentScriptQueueService {
   constructor(
     @InjectQueue(SENTIMENT_QUEUE_NAME)
     private readonly sentimentQueue: Queue<SentimentJobData>,
+    @Inject(LoggerService)
     private readonly logger: LoggerService,
   ) {
     this.logger.setContext(SentimentScriptQueueService.name);
@@ -41,7 +42,6 @@ export class SentimentScriptQueueService {
       name: SENTIMENT_QUEUE_NAME,
       defaultJobOptions: sentimentJobOptions,
     }),
-    LoggerModule,
   ],
   providers: [SentimentScriptQueueService],
   exports: [SentimentScriptQueueService],
