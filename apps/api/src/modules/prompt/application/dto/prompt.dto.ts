@@ -18,4 +18,5 @@ export interface PromptResponseDto {
   lastScannedAt: Date | null;
   createdAt: Date;
   updatedAt: Date;
+  scanJobId?: string;
 }

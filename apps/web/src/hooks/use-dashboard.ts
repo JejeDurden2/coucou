@@ -95,6 +95,7 @@ export function useTriggerScan(projectId: string) {
 
   return {
     triggerScan: triggerMutation,
+    startPolling,
     isScanning,
     scanProgress,
   };

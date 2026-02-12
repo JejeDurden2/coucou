@@ -120,6 +120,10 @@ export interface Prompt {
   updatedAt: Date;
 }
 
+export interface CreatePromptResponse extends Prompt {
+  scanJobId?: string;
+}
+
 export interface CreatePromptInput {
   content: string;
   category?: string;

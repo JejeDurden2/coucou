@@ -79,13 +79,17 @@ export class CreatePromptUseCase {
       this.planLimitNotification.notifyIfNeeded(userInfo, plan, 'prompts', newCount, limit);
     }
 
-    // Auto-trigger scan for SOLO/PRO plans (non-blocking)
+    // Auto-trigger scan for SOLO/PRO plans
+    let scanJobId: string | undefined;
     if (plan === 'SOLO' || plan === 'PRO') {
-      this.triggerAutoScan(prompt.id, userId, plan, userInfo?.email).catch((err) => {
-        this.logger.error('Auto-scan failed', err instanceof Error ? err : undefined, {
-          promptId: prompt.id,
-        });
-      });
+      scanJobId = await this.triggerAutoScan(prompt.id, userId, plan, userInfo?.email).catch(
+        (err) => {
+          this.logger.error('Auto-scan failed', err instanceof Error ? err : undefined, {
+            promptId: prompt.id,
+          });
+          return undefined;
+        },
+      );
     }
 
     return Result.ok({
@@ -97,6 +101,7 @@ export class CreatePromptUseCase {
       lastScannedAt: prompt.lastScannedAt,
       createdAt: prompt.createdAt,
       updatedAt: prompt.updatedAt,
+      scanJobId,
     });
   }
 
@@ -105,7 +110,7 @@ export class CreatePromptUseCase {
     userId: string,
     plan: Plan,
     userEmail?: string,
-  ): Promise<void> {
+  ): Promise<string | undefined> {
     const result = await this.queuePromptScanUseCase.execute({
       promptId,
       userId,
@@ -114,7 +119,10 @@ export class CreatePromptUseCase {
 
     if (result.ok) {
       this.logger.info('Auto-scan queued', { promptId, jobId: result.value.jobId });
-    } else if (result.error.code === 'SCAN_LIMIT_EXCEEDED' && userEmail) {
+      return result.value.jobId;
+    }
+
+    if (result.error.code === 'SCAN_LIMIT_EXCEEDED' && userEmail) {
       const message = `Votre prompt a été créé. Le scan sera lancé lors de votre prochaine période.`;
       await this.emailPort.send({
         to: userEmail,
@@ -126,5 +134,7 @@ export class CreatePromptUseCase {
     } else {
       this.logger.warn('Auto-scan rejected', { promptId, error: result.error.message });
     }
+
+    return undefined;
   }
 }

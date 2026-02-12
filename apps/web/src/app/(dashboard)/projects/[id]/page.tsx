@@ -105,9 +105,9 @@ export default function ProjectDashboardPage({
   const { data: project, isLoading: projectLoading } = useProject(id);
   const { data: stats, isLoading: statsLoading } = useDashboardStats(id);
   const { data: recommendationsData } = useRecommendations(id);
-  const { triggerScan, isScanning, scanProgress } = useTriggerScan(id);
+  const { triggerScan, startPolling, isScanning, scanProgress } = useTriggerScan(id);
   const { triggerPromptScan } = useTriggerPromptScan(id);
-  const createPrompt = useCreatePrompt(id);
+  const createPrompt = useCreatePrompt(id, { onScanTriggered: startPolling });
   const deletePrompt = useDeletePrompt(id);
 
   const userPlan = (user?.plan as Plan) ?? Plan.FREE;

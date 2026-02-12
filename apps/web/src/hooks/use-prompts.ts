@@ -13,19 +13,28 @@ export function usePrompts(projectId: string) {
   });
 }
 
-export function useCreatePrompt(projectId: string) {
+interface UseCreatePromptOptions {
+  onScanTriggered?: (jobId: string) => void;
+}
+
+export function useCreatePrompt(projectId: string, options?: UseCreatePromptOptions) {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: (data: CreatePromptInput) => apiClient.createPrompt(projectId, data),
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries({
         queryKey: ['projects', projectId, 'prompts'],
       });
       queryClient.invalidateQueries({
         queryKey: ['projects', projectId, 'stats'],
       });
-      toast.success('Requête créée');
+      if (data.scanJobId) {
+        toast.success('Requête créée — analyse en cours');
+        options?.onScanTriggered?.(data.scanJobId);
+      } else {
+        toast.success('Requête créée');
+      }
     },
     onError: (error) => {
       if (error instanceof ApiClientError) {

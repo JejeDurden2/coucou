@@ -4,6 +4,7 @@ import type {
   UpdateProjectInput,
   Prompt,
   CreatePromptInput,
+  CreatePromptResponse,
   UpdatePromptInput,
   Scan,
   ScanJobResponse,
@@ -201,8 +202,8 @@ class ApiClient {
     return this.fetch<Prompt[]>(`/projects/${projectId}/prompts`);
   }
 
-  async createPrompt(projectId: string, data: CreatePromptInput): Promise<Prompt> {
-    return this.fetch<Prompt>(`/projects/${projectId}/prompts`, {
+  async createPrompt(projectId: string, data: CreatePromptInput): Promise<CreatePromptResponse> {
+    return this.fetch<CreatePromptResponse>(`/projects/${projectId}/prompts`, {
       method: 'POST',
       body: JSON.stringify(data),
     });
