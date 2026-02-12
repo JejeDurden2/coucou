@@ -23,6 +23,7 @@ import type {
   SentimentHistory,
   CreateSupportRequestInput,
   SupportRequestResponse,
+  LatestAuditResponseDto,
 } from '@coucou-ia/shared';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:3001';
@@ -336,6 +337,17 @@ class ApiClient {
 
   async getSentimentHistory(projectId: string): Promise<SentimentHistory> {
     return this.fetch<SentimentHistory>(`/projects/${projectId}/sentiment/history`);
+  }
+
+  // Audit
+  async getLatestAudit(projectId: string): Promise<LatestAuditResponseDto> {
+    return this.fetch<LatestAuditResponseDto>(`/projects/${projectId}/audit`);
+  }
+
+  async createAuditCheckout(projectId: string): Promise<{ checkoutUrl: string }> {
+    return this.fetch<{ checkoutUrl: string }>(`/projects/${projectId}/audit/checkout`, {
+      method: 'POST',
+    });
   }
 
   // Support

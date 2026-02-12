@@ -5,3 +5,4 @@ export * from './glossary';
 export * from './model-registry';
 export * from './llm-config';
 export * from './validations';
+export * from './audit';

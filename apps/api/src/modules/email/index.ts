@@ -159,3 +159,15 @@ export {
   generateSoloToProNudgeEmail,
   type SoloToProNudgeEmailData,
 } from './infrastructure/templates/solo-to-pro-nudge.template';
+export {
+  generateAuditSuccessEmail,
+  type AuditSuccessEmailData,
+} from './infrastructure/templates/audit-success.template';
+export {
+  generateAuditFailedEmail,
+  type AuditFailedEmailData,
+} from './infrastructure/templates/audit-failed.template';
+export {
+  generateAuditAdminAlertEmail,
+  type AuditAdminAlertEmailData,
+} from './infrastructure/templates/audit-admin-alert.template';

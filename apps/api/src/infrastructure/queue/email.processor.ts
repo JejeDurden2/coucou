@@ -43,14 +43,19 @@ import {
   generateNpsSurveyEmail,
   generateFounderOutreachEmail,
   generateSoloToProNudgeEmail,
+  generateAuditSuccessEmail,
+  type AuditSuccessEmailData,
+  generateAuditFailedEmail,
+  generateAuditAdminAlertEmail,
 } from '../../modules/email';
 
 import { EMAIL_QUEUE_NAME } from './queue.config';
 import type { EmailJobData, EmailJobResult, EmailJobType } from './types/email-job.types';
 
 type EmailGenerator = (data: never) => { html: string; text: string };
+type EmailSubject = string | ((data: never) => string);
 
-const EMAIL_CONFIG: Record<EmailJobType, { generator: EmailGenerator; subject: string }> = {
+const EMAIL_CONFIG: Record<EmailJobType, { generator: EmailGenerator; subject: EmailSubject }> = {
   welcome: {
     generator: generateWelcomeEmail as EmailGenerator,
     subject: 'Bienvenue sur Coucou IA',
@@ -208,6 +213,21 @@ const EMAIL_CONFIG: Record<EmailJobType, { generator: EmailGenerator; subject: s
     generator: generateSoloToProNudgeEmail as EmailGenerator,
     subject: 'Vous exploitez déjà la majorité de votre plan Solo',
   },
+  // Audit notifications
+  'audit-success': {
+    generator: generateAuditSuccessEmail as EmailGenerator,
+    subject: ((data: AuditSuccessEmailData) =>
+      `Audit GEO : score de ${data.score}/100 pour ${data.brandName}`
+    ) as (data: never) => string,
+  },
+  'audit-failed': {
+    generator: generateAuditFailedEmail as EmailGenerator,
+    subject: 'Audit GEO — un problème est survenu',
+  },
+  'audit-admin-alert': {
+    generator: generateAuditAdminAlertEmail as EmailGenerator,
+    subject: '[ALERTE] Audit GEO échoué',
+  },
 };
 
 @Processor(EMAIL_QUEUE_NAME, {
@@ -240,10 +260,14 @@ export class EmailProcessor extends WorkerHost {
     }
 
     const { html, text } = config.generator(data as never);
+    const subject =
+      typeof config.subject === 'function'
+        ? config.subject(data as never)
+        : config.subject;
 
     await this.emailPort.send({
       to,
-      subject: config.subject,
+      subject,
       html,
       text,
     });

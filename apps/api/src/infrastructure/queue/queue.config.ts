@@ -60,3 +60,45 @@ export const onboardingJobOptions: DefaultJobOptions = {
     age: 30 * 24 * 60 * 60, // 30 days in seconds
   },
 };
+
+export const AUDIT_QUEUE_NAME = 'audit';
+
+export const auditJobOptions: DefaultJobOptions = {
+  attempts: 3,
+  backoff: {
+    type: 'exponential',
+    delay: 5000, // 5s, 10s, 20s
+  },
+  removeOnComplete: {
+    age: 30 * 24 * 60 * 60, // 30 days in seconds
+  },
+  removeOnFail: {
+    age: 90 * 24 * 60 * 60, // 90 days in seconds
+  },
+};
+
+export const AUDIT_PDF_QUEUE_NAME = 'audit-pdf';
+
+export const auditPdfJobOptions: DefaultJobOptions = {
+  attempts: 3,
+  backoff: {
+    type: 'exponential',
+    delay: 5000, // 5s, 10s, 20s
+  },
+  removeOnComplete: {
+    age: 30 * 24 * 60 * 60, // 30 days in seconds
+  },
+  removeOnFail: {
+    age: 90 * 24 * 60 * 60, // 90 days in seconds
+  },
+};
+
+export const auditTimeoutCheckJobOptions: DefaultJobOptions = {
+  attempts: 1,
+  removeOnComplete: {
+    age: 7 * 24 * 60 * 60, // 7 days in seconds
+  },
+  removeOnFail: {
+    age: 7 * 24 * 60 * 60, // 7 days in seconds
+  },
+};

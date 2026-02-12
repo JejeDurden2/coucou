@@ -60,6 +60,11 @@ const nextConfig: NextConfig = {
         destination: '/mentions-legales',
         permanent: true,
       },
+      {
+        source: '/llm-info/',
+        destination: '/llm-info',
+        permanent: true,
+      },
     ];
   },
 };

@@ -15,6 +15,7 @@ import {
   Lightbulb,
   Smile,
   MoreVertical,
+  FileSearch,
 } from 'lucide-react';
 
 import { useProject } from '@/hooks/use-projects';
@@ -247,6 +248,12 @@ export default function ProjectDashboardPage({
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="start">
+              <DropdownMenuItem asChild>
+                <Link href={`/projects/${id}/audit`}>
+                  <FileSearch className="mr-2 size-4" aria-hidden="true" />
+                  Audit GEO
+                </Link>
+              </DropdownMenuItem>
               <DropdownMenuItem
                 className="text-destructive focus:text-destructive focus:bg-destructive/10"
                 onClick={() => setShowDeleteProject(true)}

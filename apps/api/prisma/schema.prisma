@@ -47,6 +47,17 @@ enum ConsentAction {
   WITHDRAWN
 }
 
+enum AuditStatus {
+  PENDING
+  PAID
+  PROCESSING
+  COMPLETED
+  PARTIAL
+  FAILED
+  TIMEOUT
+  SCHEMA_ERROR
+}
+
 // ============================================
 // MODELS
 // ============================================
@@ -80,6 +91,7 @@ model User {
   subscription        Subscription?
   passwordResetTokens PasswordResetToken[]
   consentLogs         ConsentLog[]
+  auditOrders         AuditOrder[]
 
   @@index([lastUpgradeEmailAt])
   @@index([subscriptionEndedAt])
@@ -140,6 +152,7 @@ model Project {
   prompts        Prompt[]
   scanJobs       ScanJob[]
   sentimentScans SentimentScan[]
+  auditOrders    AuditOrder[]
 
   @@index([userId])
   @@map("projects")
@@ -240,4 +253,45 @@ model SentimentScan {
 
   @@index([projectId, scannedAt])
   @@map("sentiment_scans")
+}
+
+model AuditOrder {
+  id                    String      @id @default(cuid())
+  userId                String      @map("user_id")
+  projectId             String      @map("project_id")
+  status                AuditStatus @default(PENDING)
+
+  // Payment
+  stripePaymentIntentId String?     @unique @map("stripe_payment_intent_id")
+  amountCents           Int         @map("amount_cents")
+  paidAt                DateTime?   @map("paid_at")
+
+  // Brief & results
+  briefPayload          Json        @map("brief_payload")
+  resultPayload         Json?       @map("result_payload")
+  rawResultPayload      Json?       @map("raw_result_payload")
+
+  // Twin
+  twinAgentId           String?     @map("twin_agent_id")
+
+  // PDF
+  reportUrl             String?     @map("report_url")
+
+  // Timing
+  startedAt             DateTime?   @map("started_at")
+  completedAt           DateTime?   @map("completed_at")
+  failedAt              DateTime?   @map("failed_at")
+  timeoutAt             DateTime?   @map("timeout_at")
+  failureReason         String?     @map("failure_reason")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([userId, status])
+  @@index([projectId])
+  @@map("audit_orders")
 }

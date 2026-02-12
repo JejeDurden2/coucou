@@ -11,6 +11,19 @@ interface StripeCheckoutSession {
   url: string | null;
 }
 
+interface StripePrice {
+  id: string;
+  unit_amount: number;
+  currency: string;
+}
+
+interface AuditCheckoutParams {
+  metadata: Record<string, string>;
+  successUrl: string;
+  cancelUrl: string;
+  customerEmail: string;
+}
+
 interface StripePortalSession {
   url: string;
 }
@@ -167,6 +180,40 @@ export class StripeService {
   async cancelSubscription(subscriptionId: string): Promise<StripeSubscription> {
     return this.fetch<StripeSubscription>(`/subscriptions/${subscriptionId}?prorate=true`, {
       method: 'DELETE',
+    });
+  }
+
+  async getAuditPrice(): Promise<StripePrice> {
+    const priceId = this.configService.get<string>('STRIPE_AUDIT_PRICE_ID') ?? '';
+    if (!priceId) {
+      throw new ConfigurationError('Missing STRIPE_AUDIT_PRICE_ID configuration');
+    }
+    return this.fetch<StripePrice>(`/prices/${priceId}`);
+  }
+
+  async createAuditCheckoutSession(params: AuditCheckoutParams): Promise<StripeCheckoutSession> {
+    const priceId = this.configService.get<string>('STRIPE_AUDIT_PRICE_ID') ?? '';
+    if (!priceId) {
+      throw new ConfigurationError('Missing STRIPE_AUDIT_PRICE_ID configuration');
+    }
+
+    const formData: Record<string, string | number | boolean> = {
+      'line_items[0][price]': priceId,
+      'line_items[0][quantity]': 1,
+      mode: 'payment',
+      success_url: params.successUrl,
+      cancel_url: params.cancelUrl,
+      customer_email: params.customerEmail,
+    };
+
+    for (const [key, value] of Object.entries(params.metadata)) {
+      formData[`metadata[${key}]`] = value;
+      formData[`payment_intent_data[metadata][${key}]`] = value;
+    }
+
+    return this.fetch<StripeCheckoutSession>('/checkout/sessions', {
+      method: 'POST',
+      body: this.toFormData(formData),
     });
   }
 

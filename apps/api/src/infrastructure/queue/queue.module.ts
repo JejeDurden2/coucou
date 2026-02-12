@@ -5,8 +5,10 @@ import { ConfigService } from '@nestjs/config';
 import {
   EMAIL_QUEUE_NAME,
   SCAN_QUEUE_NAME,
+  AUDIT_QUEUE_NAME,
   defaultJobOptions,
   scanJobOptions,
+  auditJobOptions,
 } from './queue.config';
 import { EmailQueueService } from './email-queue.service';
 import { EmailProcessor } from './email.processor';
@@ -30,6 +32,10 @@ import { ScanQueueService } from './scan-queue.service';
     BullModule.registerQueue({
       name: SCAN_QUEUE_NAME,
       defaultJobOptions: scanJobOptions,
+    }),
+    BullModule.registerQueue({
+      name: AUDIT_QUEUE_NAME,
+      defaultJobOptions: auditJobOptions,
     }),
   ],
   providers: [EmailQueueService, EmailProcessor, ScanQueueService],

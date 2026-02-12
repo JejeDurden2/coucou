@@ -17,6 +17,8 @@ import { PromptModule } from './modules/prompt';
 import { ScanModule } from './modules/scan';
 import { SentimentModule } from './modules/sentiment';
 import { SupportModule } from './modules/support';
+import { StorageModule } from './modules/storage';
+import { AuditModule } from './modules/audit';
 import { AnthropicModule } from './common/infrastructure/anthropic/anthropic.module';
 import { QueueModule, BullBoardConfigModule } from './infrastructure/queue';
 import { ProcessorsModule } from './infrastructure/processors.module';
@@ -64,6 +66,8 @@ import { PrismaModule } from './prisma';
     OnboardingModule,
     NotificationModule,
     SupportModule,
+    StorageModule,
+    AuditModule,
     BullBoardConfigModule,
     ProcessorsModule, // Must be last - contains BullMQ processors
   ],

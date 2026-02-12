@@ -8,6 +8,11 @@ import type { StripeService } from '../../infrastructure/stripe.service';
 import type { EmailQueueService } from '../../../../infrastructure/queue';
 import type { UnsubscribeTokenService } from '../../../email/infrastructure/services/unsubscribe-token.service';
 import type { LoggerService } from '../../../../common/logger';
+import type { HandleAuditPaymentUseCase } from '../../../audit/application/use-cases/handle-audit-payment.use-case';
+
+const mockHandleAuditPaymentUseCase = {
+  execute: vi.fn().mockResolvedValue(undefined),
+} as unknown as HandleAuditPaymentUseCase;
 
 const mockLogger = {
   setContext: vi.fn(),
@@ -78,6 +83,7 @@ describe('HandleWebhookUseCase', () => {
       mockConfigService as unknown as ConfigService,
       mockEmailQueueService as EmailQueueService,
       mockUnsubscribeTokenService as UnsubscribeTokenService,
+      mockHandleAuditPaymentUseCase,
       mockLogger,
     );
   });

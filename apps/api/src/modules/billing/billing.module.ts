@@ -3,6 +3,7 @@ import { forwardRef, Module } from '@nestjs/common';
 import { PrismaModule } from '../../prisma';
 import { AuthModule } from '../auth/auth.module';
 import { EmailModule } from '../email/email.module';
+import { AuditModule } from '../audit/audit.module';
 
 import { StripeService } from './infrastructure/stripe.service';
 import { CreateCheckoutUseCase } from './application/use-cases/create-checkout.use-case';
@@ -19,7 +20,7 @@ import { SUBSCRIPTION_REPOSITORY } from './domain/repositories/subscription.repo
 import { STRIPE_PORT } from './domain/ports/stripe.port';
 
 @Module({
-  imports: [PrismaModule, forwardRef(() => AuthModule), EmailModule],
+  imports: [PrismaModule, forwardRef(() => AuthModule), EmailModule, forwardRef(() => AuditModule)],
   controllers: [BillingController],
   providers: [
     StripeService,

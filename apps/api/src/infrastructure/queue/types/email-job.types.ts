@@ -35,6 +35,9 @@ import type {
   NpsSurveyEmailData,
   FounderOutreachEmailData,
   SoloToProNudgeEmailData,
+  AuditSuccessEmailData,
+  AuditFailedEmailData,
+  AuditAdminAlertEmailData,
 } from '../../../modules/email';
 
 export type EmailJobType =
@@ -86,7 +89,11 @@ export type EmailJobType =
   // Founder
   | 'founder-outreach'
   // Solo to Pro
-  | 'solo-to-pro-nudge';
+  | 'solo-to-pro-nudge'
+  // Audit notifications
+  | 'audit-success'
+  | 'audit-failed'
+  | 'audit-admin-alert';
 
 export type EmailJobData =
   | { type: 'welcome'; to: string; data: WelcomeEmailData }
@@ -137,7 +144,11 @@ export type EmailJobData =
   // Founder
   | { type: 'founder-outreach'; to: string; data: FounderOutreachEmailData }
   // Solo to Pro
-  | { type: 'solo-to-pro-nudge'; to: string; data: SoloToProNudgeEmailData };
+  | { type: 'solo-to-pro-nudge'; to: string; data: SoloToProNudgeEmailData }
+  // Audit notifications
+  | { type: 'audit-success'; to: string; data: AuditSuccessEmailData }
+  | { type: 'audit-failed'; to: string; data: AuditFailedEmailData }
+  | { type: 'audit-admin-alert'; to: string; data: AuditAdminAlertEmailData };
 
 export interface EmailJobResult {
   success: boolean;

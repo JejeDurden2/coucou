@@ -7,6 +7,7 @@ import { PrismaService } from '../../../../prisma';
 import { EmailQueueService } from '../../../../infrastructure/queue';
 import { UnsubscribeTokenService } from '../../../email';
 import { StripeService } from '../../infrastructure/stripe.service';
+import { HandleAuditPaymentUseCase } from '../../../audit/application/use-cases/handle-audit-payment.use-case';
 
 const ONE_DAY_MS = 24 * 60 * 60 * 1000;
 
@@ -14,6 +15,8 @@ interface WebhookCheckoutSession {
   id: string;
   customer: string;
   subscription: string;
+  metadata?: Record<string, string>;
+  payment_intent?: string;
 }
 
 interface WebhookSubscription {
@@ -47,6 +50,7 @@ export class HandleWebhookUseCase {
     private readonly configService: ConfigService,
     private readonly emailQueueService: EmailQueueService,
     private readonly unsubscribeTokenService: UnsubscribeTokenService,
+    private readonly handleAuditPaymentUseCase: HandleAuditPaymentUseCase,
     private readonly logger: LoggerService,
   ) {
     this.logger.setContext(HandleWebhookUseCase.name);
@@ -83,6 +87,13 @@ export class HandleWebhookUseCase {
   }
 
   private async handleCheckoutCompleted(session: WebhookCheckoutSession): Promise<void> {
+    // Audit one-time payment checkout
+    if (session.metadata?.type === 'audit') {
+      await this.handleAuditCheckoutCompleted(session);
+      return;
+    }
+
+    // Subscription checkout (existing flow)
     const user = await this.findUserByStripeCustomerId(session.customer);
     if (!user) return;
 
@@ -128,6 +139,21 @@ export class HandleWebhookUseCase {
         user.id,
       );
     }
+  }
+
+  private async handleAuditCheckoutCompleted(session: WebhookCheckoutSession): Promise<void> {
+    const auditOrderId = session.metadata?.auditOrderId;
+    const paymentIntentId = (session.payment_intent as string) ?? session.id;
+
+    if (!auditOrderId) {
+      this.logger.error('Audit checkout missing auditOrderId in metadata', {
+        sessionId: session.id,
+      });
+      return;
+    }
+
+    this.logger.info('Processing audit checkout', { auditOrderId, paymentIntentId });
+    await this.handleAuditPaymentUseCase.execute(auditOrderId, paymentIntentId);
   }
 
   private async queuePostUpgradeEmails(user: User, plan: Plan): Promise<void> {
