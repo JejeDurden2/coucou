@@ -204,6 +204,7 @@ export class StripeService {
       success_url: params.successUrl,
       cancel_url: params.cancelUrl,
       customer_email: params.customerEmail,
+      allow_promotion_codes: true,
     };
 
     for (const [key, value] of Object.entries(params.metadata)) {
