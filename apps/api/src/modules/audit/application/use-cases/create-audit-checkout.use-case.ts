@@ -66,10 +66,33 @@ export class CreateAuditCheckoutUseCase {
       return Result.err(new ForbiddenError('Accès refusé à ce projet'));
     }
 
-    // 2. Verify no active audit exists
+    // 2. Verify no active audit exists (PAID/PROCESSING block new checkout)
     const activeAudit = await this.auditOrderRepository.findActiveByProjectId(projectId);
+    const frontendUrl = this.configService.get<string>('FRONTEND_URL') ?? 'http://localhost:3000';
+
     if (activeAudit) {
-      return Result.err(new AuditAlreadyActiveError(projectId));
+      if (activeAudit.status !== AuditStatus.PENDING) {
+        return Result.err(new AuditAlreadyActiveError(projectId));
+      }
+
+      // Reuse existing PENDING order (user didn't pay, retry checkout)
+      const session = await this.stripeService.createAuditCheckoutSession({
+        metadata: {
+          type: 'audit',
+          auditOrderId: activeAudit.id,
+          projectId,
+          userId,
+        },
+        successUrl: `${frontendUrl}/projects/${projectId}/audit?success=true`,
+        cancelUrl: `${frontendUrl}/projects/${projectId}/audit?canceled=true`,
+        customerEmail: userEmail,
+      });
+
+      if (!session.url) {
+        return Result.err(new ExternalServiceError('Stripe', 'Impossible de créer la session de paiement'));
+      }
+
+      return Result.ok({ checkoutUrl: session.url });
     }
 
     // 3. Generate ID and assemble brief
@@ -109,8 +132,6 @@ export class CreateAuditCheckoutUseCase {
     await this.auditOrderRepository.save(auditOrder);
 
     // 6. Create Stripe one-time checkout session
-    const frontendUrl = this.configService.get<string>('FRONTEND_URL') ?? 'http://localhost:3000';
-
     const session = await this.stripeService.createAuditCheckoutSession({
       metadata: {
         type: 'audit',

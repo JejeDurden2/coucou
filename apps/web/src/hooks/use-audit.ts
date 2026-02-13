@@ -7,12 +7,11 @@ import { AuditStatus } from '@coucou-ia/shared';
 import { apiClient, ApiClientError } from '@/lib/api-client';
 
 const IN_PROGRESS_STATUSES = new Set<string>([
-  AuditStatus.PENDING,
   AuditStatus.PAID,
   AuditStatus.PROCESSING,
 ]);
 
-export function useLatestAudit(projectId: string) {
+export function useLatestAudit(projectId: string, fastPoll = false) {
   return useQuery({
     queryKey: ['projects', projectId, 'audit'],
     queryFn: () => apiClient.getLatestAudit(projectId),
@@ -22,6 +21,7 @@ export function useLatestAudit(projectId: string) {
       if (data && 'status' in data && IN_PROGRESS_STATUSES.has(data.status)) {
         return 10_000;
       }
+      if (fastPoll) return 2_000;
       return false;
     },
   });

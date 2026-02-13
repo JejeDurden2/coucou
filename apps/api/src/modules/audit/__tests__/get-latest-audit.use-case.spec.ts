@@ -158,7 +158,7 @@ describe('GetLatestAuditUseCase', () => {
     }
   });
 
-  it('should return in-progress response for PENDING status', async () => {
+  it('should return hasAudit false for PENDING status (awaiting payment)', async () => {
     const audit = AuditOrder.create(mockProps({ status: AuditStatus.PENDING }));
     auditOrderRepository.findLatestByProjectId.mockResolvedValue(audit);
 
@@ -166,13 +166,7 @@ describe('GetLatestAuditUseCase', () => {
 
     expect(result.ok).toBe(true);
     if (result.ok) {
-      expect(result.value).toEqual({
-        hasAudit: true,
-        status: AuditStatus.PENDING,
-        createdAt: BASE_DATE.toISOString(),
-        paidAt: null,
-        startedAt: null,
-      });
+      expect(result.value).toEqual({ hasAudit: false });
     }
   });
 

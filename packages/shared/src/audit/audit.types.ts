@@ -274,7 +274,7 @@ export interface AuditOrderDto {
 
 interface AuditResponseInProgress {
   hasAudit: true;
-  status: AuditStatus.PENDING | AuditStatus.PAID | AuditStatus.PROCESSING;
+  status: AuditStatus.PAID | AuditStatus.PROCESSING;
   createdAt: string;
   paidAt: string | null;
   startedAt: string | null;

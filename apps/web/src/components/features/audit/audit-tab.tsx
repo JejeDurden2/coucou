@@ -1,5 +1,6 @@
 'use client';
 
+import { useSearchParams } from 'next/navigation';
 import { AuditStatus } from '@coucou-ia/shared';
 
 import { useLatestAudit, useCreateAuditCheckout } from '@/hooks/use-audit';
@@ -37,13 +38,25 @@ interface AuditTabProps {
 }
 
 export function AuditTab({ projectId }: AuditTabProps): React.ReactNode {
-  const { data: audit, isLoading: isAuditLoading } = useLatestAudit(projectId);
+  const searchParams = useSearchParams();
+  const justPaid = searchParams.get('success') === 'true';
+  const { data: audit, isLoading: isAuditLoading } = useLatestAudit(projectId, justPaid);
   const { data: stats } = useDashboardStats(projectId);
   const { data: project } = useProject(projectId);
   const createCheckout = useCreateAuditCheckout(projectId);
 
   if (isAuditLoading) {
     return <AuditSkeleton />;
+  }
+
+  // User just returned from Stripe payment, waiting for webhook to confirm
+  if (justPaid && (!audit || !audit.hasAudit)) {
+    return (
+      <AuditProcessing
+        paidAt={null}
+        startedAt={null}
+      />
+    );
   }
 
   if (!audit || !audit.hasAudit) {
@@ -59,7 +72,6 @@ export function AuditTab({ projectId }: AuditTabProps): React.ReactNode {
   }
 
   if (
-    audit.status === AuditStatus.PENDING ||
     audit.status === AuditStatus.PAID ||
     audit.status === AuditStatus.PROCESSING
   ) {

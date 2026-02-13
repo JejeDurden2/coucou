@@ -19,7 +19,6 @@ import {
 type GetLatestAuditError = NotFoundError | ForbiddenError;
 
 const IN_PROGRESS_STATUSES: ReadonlySet<AuditStatus> = new Set([
-  AuditStatus.PENDING,
   AuditStatus.PAID,
   AuditStatus.PROCESSING,
 ]);
@@ -56,13 +55,17 @@ export class GetLatestAuditUseCase {
       return Result.ok({ hasAudit: false });
     }
 
+    // PENDING = awaiting payment, treat as no audit for the frontend
+    if (audit.status === AuditStatus.PENDING) {
+      return Result.ok({ hasAudit: false });
+    }
+
     const createdAt = audit.createdAt.toISOString();
 
     if (IN_PROGRESS_STATUSES.has(audit.status)) {
       return Result.ok({
         hasAudit: true,
         status: audit.status as
-          | AuditStatus.PENDING
           | AuditStatus.PAID
           | AuditStatus.PROCESSING,
         createdAt,
