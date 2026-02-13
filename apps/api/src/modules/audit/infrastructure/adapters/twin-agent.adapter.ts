@@ -44,8 +44,18 @@ export class TwinAgentAdapter implements AuditAgentPort {
         const latencyMs = Date.now() - start;
 
         if (response.ok) {
-          const body = (await response.json()) as { id?: string };
-          const agentId = body.id ?? 'unknown';
+          let agentId = 'unknown';
+
+          try {
+            const body = (await response.json()) as { id?: string };
+            agentId = body.id ?? 'unknown';
+          } catch {
+            this.logger.warn('Twin agent returned empty/invalid JSON body', {
+              auditId,
+              attempt,
+              latencyMs,
+            });
+          }
 
           this.logger.info('Twin agent triggered', {
             auditId,

@@ -239,6 +239,37 @@ describe('TwinAgentAdapter', () => {
       }
     });
 
+    it('should succeed with unknown agentId when response body is not valid JSON', async () => {
+      vi.mocked(global.fetch).mockResolvedValueOnce({
+        ok: true,
+        json: async () => {
+          throw new SyntaxError('Unexpected end of JSON input');
+        },
+      } as Response);
+
+      const result = await adapter.triggerAudit(mockBrief);
+
+      expect(Result.isOk(result)).toBe(true);
+      if (Result.isOk(result)) {
+        expect(result.value.agentId).toBe('unknown');
+      }
+
+      expect(mockLogger.warn).toHaveBeenCalledWith(
+        'Twin agent returned empty/invalid JSON body',
+        expect.objectContaining({
+          auditId: 'audit-123',
+          attempt: 1,
+        }),
+      );
+      expect(mockLogger.info).toHaveBeenCalledWith(
+        'Twin agent triggered',
+        expect.objectContaining({
+          agentId: 'unknown',
+          status: 'triggered',
+        }),
+      );
+    });
+
     it('should not log the full brief payload', async () => {
       vi.mocked(global.fetch).mockResolvedValueOnce({
         ok: true,
