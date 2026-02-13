@@ -229,8 +229,8 @@ export class BriefAssemblerService {
 
   private buildSummary(
     scans: Scan[],
-    promptResults: PromptResult[],
-    byProvider: Record<string, { citationRate: number; avgPosition: number }>,
+    _promptResults: PromptResult[],
+    _byProvider: Record<string, { citationRate: number; avgPosition: number }>,
   ): AuditBrief['scanData']['summary'] {
     let totalCited = 0;
     let totalResults = 0;

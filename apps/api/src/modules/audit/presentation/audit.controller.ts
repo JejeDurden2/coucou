@@ -115,7 +115,7 @@ export class AuditController {
     });
 
     if (!result.ok) {
-      throw result.error;
+      throw new HttpException(result.error.toJSON(), result.error.statusCode);
     }
 
     return result.value;

@@ -6,7 +6,8 @@ import { PromptModule } from '../prompt';
 import { ScanModule } from '../scan';
 import { SentimentModule } from '../sentiment';
 import { BillingModule } from '../billing/billing.module';
-import { AUDIT_QUEUE_NAME, AUDIT_PDF_QUEUE_NAME } from '../../infrastructure/queue/queue.config';
+import { AuthModule } from '../auth/auth.module';
+import { AUDIT_PDF_QUEUE_NAME } from '../../infrastructure/queue/queue.config';
 import { AUDIT_ORDER_REPOSITORY } from './domain/repositories/audit-order.repository';
 import { AUDIT_AGENT_PORT } from './domain/ports/audit-agent.port';
 import { AUDIT_PDF_PORT } from './domain/ports/audit-pdf.port';
@@ -32,12 +33,12 @@ import { TwinWebhookController } from './presentation/twin-webhook.controller';
 
 @Module({
   imports: [
-    ProjectModule,
+    forwardRef(() => ProjectModule),
     PromptModule,
     ScanModule,
     SentimentModule,
     forwardRef(() => BillingModule),
-    BullModule.registerQueue({ name: AUDIT_QUEUE_NAME }),
+    forwardRef(() => AuthModule),
     BullModule.registerQueue({ name: AUDIT_PDF_QUEUE_NAME }),
   ],
   controllers: [AuditController, TwinWebhookController],

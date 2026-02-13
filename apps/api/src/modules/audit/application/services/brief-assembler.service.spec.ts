@@ -14,7 +14,7 @@ import type { SentimentScanRepository } from '../../../sentiment/domain/reposito
 import type { LLMProvider } from '@prisma/client';
 
 const NOW = new Date('2026-01-15T12:00:00Z');
-const THIRTY_DAYS_AGO = new Date('2025-12-16T12:00:00Z');
+const _THIRTY_DAYS_AGO = new Date('2025-12-16T12:00:00Z');
 
 function mockProject(
   overrides: Partial<{

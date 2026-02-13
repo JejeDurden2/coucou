@@ -1,10 +1,13 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
 import { LoggerService } from '../../../../common/logger';
 import { EmailQueueService } from '../../../../infrastructure/queue/email-queue.service';
 import { UnsubscribeTokenService } from '../../../email';
-import { PrismaService } from '../../../../prisma/prisma.service';
+import {
+  USER_REPOSITORY,
+  type UserRepository,
+} from '../../../auth';
 import type { AuditOrder } from '../../domain';
 
 const ADMIN_NOTIFICATION_EMAIL = 'jerome@coucou-ia.com';
@@ -18,7 +21,8 @@ export class AuditEmailNotificationService {
     private readonly emailQueueService: EmailQueueService,
     private readonly unsubscribeTokenService: UnsubscribeTokenService,
     private readonly configService: ConfigService,
-    private readonly prisma: PrismaService,
+    @Inject(USER_REPOSITORY)
+    private readonly userRepository: UserRepository,
     private readonly logger: LoggerService,
   ) {
     this.logger.setContext(AuditEmailNotificationService.name);
@@ -56,7 +60,7 @@ export class AuditEmailNotificationService {
         result.actionPlan.shortTerm.length +
         result.actionPlan.mediumTerm.length;
 
-      const unsubscribeToken = this.unsubscribeTokenService.generateToken(user.id);
+      const unsubscribeToken = this.unsubscribeTokenService.generateToken(auditOrder.userId);
       const apiUrl = this.configService.getOrThrow<string>('API_URL');
 
       await this.emailQueueService.addJob({
@@ -76,7 +80,7 @@ export class AuditEmailNotificationService {
 
       this.logger.info('Audit success email queued', {
         auditOrderId: auditOrder.id,
-        userId: user.id,
+        userId: auditOrder.userId,
         score,
       });
     } catch (error) {
@@ -108,7 +112,7 @@ export class AuditEmailNotificationService {
 
       // User notification (respects preferences)
       if (user.emailNotificationsEnabled) {
-        const unsubscribeToken = this.unsubscribeTokenService.generateToken(user.id);
+        const unsubscribeToken = this.unsubscribeTokenService.generateToken(auditOrder.userId);
         const apiUrl = this.configService.getOrThrow<string>('API_URL');
 
         await this.emailQueueService.addJob({
@@ -124,7 +128,7 @@ export class AuditEmailNotificationService {
 
         this.logger.info('Audit failure email queued for user', {
           auditOrderId: auditOrder.id,
-          userId: user.id,
+          userId: auditOrder.userId,
           status,
         });
       }
@@ -163,27 +167,18 @@ export class AuditEmailNotificationService {
   }
 
   private async loadUser(userId: string): Promise<{
-    id: string;
     email: string;
     name: string;
     emailNotificationsEnabled: boolean;
   } | null> {
-    const user = await this.prisma.user.findUnique({
-      where: { id: userId },
-      select: {
-        id: true,
-        email: true,
-        name: true,
-        emailNotificationsEnabled: true,
-      },
-    });
+    const prefs = await this.userRepository.findByIdWithEmailPrefs(userId);
 
-    if (!user) {
+    if (!prefs) {
       this.logger.warn('User not found for audit notification', { userId });
       return null;
     }
 
-    return user;
+    return prefs;
   }
 
   private extractFirstName(name: string): string {

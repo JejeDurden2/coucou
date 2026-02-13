@@ -86,7 +86,6 @@ export default function AuditPage({ params }: AuditPageProps): React.ReactNode {
         status={audit.status}
         result={audit.result}
         reportUrl={audit.reportUrl}
-        projectId={projectId}
         brandName={project?.brandName ?? ''}
       />
     );

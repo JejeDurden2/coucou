@@ -11,6 +11,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
+import { AUDIT_PRICE_LABEL } from './audit-utils';
 
 const VALUE_ITEMS = [
   'Analyse complète de votre site pour la visibilité IA',
@@ -85,7 +86,7 @@ export function AuditCheckoutDialog({
             </div>
           </div>
 
-          <p className="text-lg font-semibold text-right">250 € HT</p>
+          <p className="text-lg font-semibold text-right">{AUDIT_PRICE_LABEL}</p>
         </div>
 
         {!hasScans && (
@@ -107,7 +108,7 @@ export function AuditCheckoutDialog({
                   Redirection…
                 </>
               ) : (
-                'Payer 250 € HT'
+                `Payer ${AUDIT_PRICE_LABEL}`
               )}
             </Button>
           ) : null}

@@ -18,8 +18,6 @@ import { FileStorageError } from '../../domain/errors/storage.errors';
 export class R2StorageAdapter implements FileStoragePort {
   private readonly s3: S3Client;
   private readonly bucket: string;
-  private readonly publicUrl: string | undefined;
-
   constructor(
     private readonly configService: ConfigService,
     private readonly logger: LoggerService,
@@ -30,8 +28,6 @@ export class R2StorageAdapter implements FileStoragePort {
       this.configService.getOrThrow<string>('R2_ACCOUNT_ID');
     this.bucket =
       this.configService.getOrThrow<string>('R2_BUCKET_NAME');
-    this.publicUrl =
-      this.configService.get<string>('R2_PUBLIC_URL') || undefined;
 
     this.s3 = new S3Client({
       region: 'auto',
@@ -64,7 +60,7 @@ export class R2StorageAdapter implements FileStoragePort {
       );
 
       const durationMs = Date.now() - start;
-      const url = this.publicUrl ? `${this.publicUrl}/${key}` : key;
+      const url = key;
 
       this.logger.info('File uploaded to R2', {
         key,

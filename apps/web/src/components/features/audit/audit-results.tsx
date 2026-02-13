@@ -15,7 +15,6 @@ interface AuditResultsProps {
   status: AuditStatus.COMPLETED | AuditStatus.PARTIAL;
   result: AuditResult;
   reportUrl: string | null;
-  projectId: string;
   brandName: string;
 }
 

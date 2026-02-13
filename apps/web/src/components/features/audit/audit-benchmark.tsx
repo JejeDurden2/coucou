@@ -4,17 +4,12 @@ import type { CompetitorBenchmark } from '@coucou-ia/shared';
 
 import { cn } from '@/lib/utils';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { getScoreColor } from './audit-utils';
 
 interface AuditBenchmarkProps {
   competitors: CompetitorBenchmark[];
   clientScore: number;
   clientName: string;
-}
-
-function getScoreColor(score: number): string {
-  if (score >= 70) return 'text-green-500';
-  if (score >= 40) return 'text-yellow-500';
-  return 'text-red-500';
 }
 
 export function AuditBenchmarkSection({ competitors, clientScore, clientName }: AuditBenchmarkProps): React.ReactNode {

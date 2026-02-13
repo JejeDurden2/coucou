@@ -7,6 +7,7 @@ import type { DashboardStats } from '@coucou-ia/shared';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { AuditCheckoutDialog } from './audit-checkout-dialog';
+import { AUDIT_PRICE_LABEL } from './audit-utils';
 
 const VALUE_PROPS = [
   {
@@ -89,7 +90,7 @@ export function AuditEmptyState({ stats, brandName, domain, onLaunchAudit, isLau
         onClick={() => setDialogOpen(true)}
         className="w-full sm:w-auto"
       >
-        Lancer l&apos;audit — 250 € HT
+        {`Lancer l'audit — ${AUDIT_PRICE_LABEL}`}
       </Button>
 
       <AuditCheckoutDialog

@@ -32,7 +32,7 @@ import { ScanController } from './presentation/controllers/scan.controller';
 
 @Module({
   imports: [
-    AuthModule,
+    forwardRef(() => AuthModule),
     forwardRef(() => ProjectModule),
     forwardRef(() => PromptModule),
     ScheduleModule.forRoot(),
