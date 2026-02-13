@@ -83,8 +83,8 @@ export class CreateAuditCheckoutUseCase {
           projectId,
           userId,
         },
-        successUrl: `${frontendUrl}/projects/${projectId}/audit?success=true`,
-        cancelUrl: `${frontendUrl}/projects/${projectId}/audit?canceled=true`,
+        successUrl: `${frontendUrl}/projects/${projectId}?tab=audit&success=true`,
+        cancelUrl: `${frontendUrl}/projects/${projectId}?tab=audit&canceled=true`,
         customerEmail: userEmail,
       });
 
@@ -139,8 +139,8 @@ export class CreateAuditCheckoutUseCase {
         projectId,
         userId,
       },
-      successUrl: `${frontendUrl}/projects/${projectId}/audit?success=true`,
-      cancelUrl: `${frontendUrl}/projects/${projectId}/audit?canceled=true`,
+      successUrl: `${frontendUrl}/projects/${projectId}?tab=audit&success=true`,
+      cancelUrl: `${frontendUrl}/projects/${projectId}?tab=audit&canceled=true`,
       customerEmail: userEmail,
     });
 

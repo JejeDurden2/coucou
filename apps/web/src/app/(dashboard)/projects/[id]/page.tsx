@@ -119,7 +119,8 @@ export default function ProjectDashboardPage({
   const [showDeleteProject, setShowDeleteProject] = useState(false);
   const [promptToDelete, setPromptToDelete] = useState<string | null>(null);
   const [scanningPromptId, setScanningPromptId] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState('overview');
+  const tabParam = searchParams.get('tab');
+  const [activeTab, setActiveTab] = useState(tabParam ?? 'overview');
 
   const promptCount = stats?.promptStats?.length ?? 0;
   const availableProviders = useMemo(() => getProvidersForPlan(userPlan), [userPlan]);
