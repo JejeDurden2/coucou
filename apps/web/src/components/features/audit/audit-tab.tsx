@@ -1,18 +1,16 @@
 'use client';
 
-import { use } from 'react';
 import { AuditStatus } from '@coucou-ia/shared';
 
 import { useLatestAudit, useCreateAuditCheckout } from '@/hooks/use-audit';
 import { useDashboardStats } from '@/hooks/use-dashboard';
 import { useProject } from '@/hooks/use-projects';
 import { Card, CardContent } from '@/components/ui/card';
-import {
-  AuditEmptyState,
-  AuditProcessing,
-  AuditError,
-  AuditResults,
-} from '@/components/features/audit';
+
+import { AuditEmptyState } from './audit-empty-state';
+import { AuditProcessing } from './audit-processing';
+import { AuditError } from './audit-error';
+import { AuditResults } from './audit-results';
 
 function AuditSkeleton(): React.ReactNode {
   return (
@@ -34,12 +32,11 @@ function AuditSkeleton(): React.ReactNode {
   );
 }
 
-interface AuditPageProps {
-  params: Promise<{ id: string }>;
+interface AuditTabProps {
+  projectId: string;
 }
 
-export default function AuditPage({ params }: AuditPageProps): React.ReactNode {
-  const { id: projectId } = use(params);
+export function AuditTab({ projectId }: AuditTabProps): React.ReactNode {
   const { data: audit, isLoading: isAuditLoading } = useLatestAudit(projectId);
   const { data: stats } = useDashboardStats(projectId);
   const { data: project } = useProject(projectId);
@@ -49,7 +46,6 @@ export default function AuditPage({ params }: AuditPageProps): React.ReactNode {
     return <AuditSkeleton />;
   }
 
-  // No audit exists
   if (!audit || !audit.hasAudit) {
     return (
       <AuditEmptyState
@@ -62,7 +58,6 @@ export default function AuditPage({ params }: AuditPageProps): React.ReactNode {
     );
   }
 
-  // In progress states
   if (
     audit.status === AuditStatus.PENDING ||
     audit.status === AuditStatus.PAID ||
@@ -76,7 +71,6 @@ export default function AuditPage({ params }: AuditPageProps): React.ReactNode {
     );
   }
 
-  // Completed states
   if (
     audit.status === AuditStatus.COMPLETED ||
     audit.status === AuditStatus.PARTIAL
@@ -91,7 +85,6 @@ export default function AuditPage({ params }: AuditPageProps): React.ReactNode {
     );
   }
 
-  // Error states (FAILED, TIMEOUT, SCHEMA_ERROR)
   return (
     <AuditError
       status={audit.status}

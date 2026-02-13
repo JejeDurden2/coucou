@@ -59,6 +59,7 @@ import {
 import { FeatureLockedBanner } from '@/components/upgrade';
 import { useUpgradeModal } from '@/hooks/use-upgrade';
 import { SentimentTab } from '@/features/sentiment';
+import { AuditTab } from '@/components/features/audit';
 import {
   getScanAvailability,
   Plan,
@@ -248,12 +249,6 @@ export default function ProjectDashboardPage({
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="start">
-              <DropdownMenuItem asChild>
-                <Link href={`/projects/${id}/audit`}>
-                  <FileSearch className="mr-2 size-4" aria-hidden="true" />
-                  Audit GEO
-                </Link>
-              </DropdownMenuItem>
               <DropdownMenuItem
                 className="text-destructive focus:text-destructive focus:bg-destructive/10"
                 onClick={() => setShowDeleteProject(true)}
@@ -336,6 +331,10 @@ export default function ProjectDashboardPage({
             <Smile className="size-3" aria-hidden="true" />
             Sentiment
             {!userCanAccessStats && <Lock className="size-3" aria-hidden="true" />}
+          </TabsTrigger>
+          <TabsTrigger value="audit" className="gap-1.5">
+            <FileSearch className="size-3" aria-hidden="true" />
+            Audit GEO
           </TabsTrigger>
         </TabsList>
 
@@ -598,6 +597,10 @@ export default function ProjectDashboardPage({
 
         <TabsContent value="sentiment">
           <SentimentTab projectId={id} userPlan={userPlan} />
+        </TabsContent>
+
+        <TabsContent value="audit">
+          <AuditTab projectId={id} />
         </TabsContent>
       </Tabs>
 
