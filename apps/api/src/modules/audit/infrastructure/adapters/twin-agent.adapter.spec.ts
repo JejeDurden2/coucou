@@ -96,17 +96,16 @@ describe('TwinAgentAdapter', () => {
   });
 
   describe('triggerAudit', () => {
-    it('should return agentId on successful first attempt', async () => {
+    it('should succeed on first attempt', async () => {
       vi.mocked(global.fetch).mockResolvedValueOnce({
         ok: true,
-        json: async () => ({ id: 'agent-xyz' }),
       } as Response);
 
       const result = await adapter.triggerAudit(mockBrief);
 
       expect(Result.isOk(result)).toBe(true);
       if (Result.isOk(result)) {
-        expect(result.value.agentId).toBe('agent-xyz');
+        expect(result.value.agentId).toBe('unknown');
       }
 
       expect(global.fetch).toHaveBeenCalledTimes(1);
@@ -123,7 +122,6 @@ describe('TwinAgentAdapter', () => {
         'Twin agent triggered',
         expect.objectContaining({
           auditId: 'audit-123',
-          agentId: 'agent-xyz',
           status: 'triggered',
         }),
       );
@@ -134,17 +132,17 @@ describe('TwinAgentAdapter', () => {
         .mockResolvedValueOnce({
           ok: false,
           status: 500,
+          text: async () => 'Internal Server Error',
         } as Response)
         .mockResolvedValueOnce({
           ok: true,
-          json: async () => ({ id: 'agent-retry' }),
         } as Response);
 
       const result = await adapter.triggerAudit(mockBrief);
 
       expect(Result.isOk(result)).toBe(true);
       if (Result.isOk(result)) {
-        expect(result.value.agentId).toBe('agent-retry');
+        expect(result.value.agentId).toBe('unknown');
       }
 
       expect(global.fetch).toHaveBeenCalledTimes(2);
@@ -160,10 +158,11 @@ describe('TwinAgentAdapter', () => {
     });
 
     it('should return error after exhausting all retries', async () => {
+      const errorResponse = { ok: false, status: 502, text: async () => '' } as Response;
       vi.mocked(global.fetch)
-        .mockResolvedValueOnce({ ok: false, status: 502 } as Response)
-        .mockResolvedValueOnce({ ok: false, status: 503 } as Response)
-        .mockResolvedValueOnce({ ok: false, status: 500 } as Response);
+        .mockResolvedValueOnce(errorResponse)
+        .mockResolvedValueOnce({ ok: false, status: 503, text: async () => '' } as Response)
+        .mockResolvedValueOnce({ ok: false, status: 500, text: async () => '' } as Response);
 
       const result = await adapter.triggerAudit(mockBrief);
 
@@ -188,14 +187,13 @@ describe('TwinAgentAdapter', () => {
         .mockRejectedValueOnce(new Error('Network error'))
         .mockResolvedValueOnce({
           ok: true,
-          json: async () => ({ id: 'agent-recovered' }),
         } as Response);
 
       const result = await adapter.triggerAudit(mockBrief);
 
       expect(Result.isOk(result)).toBe(true);
       if (Result.isOk(result)) {
-        expect(result.value.agentId).toBe('agent-recovered');
+        expect(result.value.agentId).toBe('unknown');
       }
 
       expect(mockLogger.warn).toHaveBeenCalledWith(
@@ -225,55 +223,9 @@ describe('TwinAgentAdapter', () => {
       expect(global.fetch).toHaveBeenCalledTimes(3);
     });
 
-    it('should handle missing agentId in response', async () => {
-      vi.mocked(global.fetch).mockResolvedValueOnce({
-        ok: true,
-        json: async () => ({}),
-      } as Response);
-
-      const result = await adapter.triggerAudit(mockBrief);
-
-      expect(Result.isOk(result)).toBe(true);
-      if (Result.isOk(result)) {
-        expect(result.value.agentId).toBe('unknown');
-      }
-    });
-
-    it('should succeed with unknown agentId when response body is not valid JSON', async () => {
-      vi.mocked(global.fetch).mockResolvedValueOnce({
-        ok: true,
-        json: async () => {
-          throw new SyntaxError('Unexpected end of JSON input');
-        },
-      } as Response);
-
-      const result = await adapter.triggerAudit(mockBrief);
-
-      expect(Result.isOk(result)).toBe(true);
-      if (Result.isOk(result)) {
-        expect(result.value.agentId).toBe('unknown');
-      }
-
-      expect(mockLogger.warn).toHaveBeenCalledWith(
-        'Twin agent returned empty/invalid JSON body',
-        expect.objectContaining({
-          auditId: 'audit-123',
-          attempt: 1,
-        }),
-      );
-      expect(mockLogger.info).toHaveBeenCalledWith(
-        'Twin agent triggered',
-        expect.objectContaining({
-          agentId: 'unknown',
-          status: 'triggered',
-        }),
-      );
-    });
-
     it('should not log the full brief payload', async () => {
       vi.mocked(global.fetch).mockResolvedValueOnce({
         ok: true,
-        json: async () => ({ id: 'agent-xyz' }),
       } as Response);
 
       await adapter.triggerAudit(mockBrief);
