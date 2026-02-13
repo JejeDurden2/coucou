@@ -119,6 +119,7 @@ export default function ProjectDashboardPage({
   const [showDeleteProject, setShowDeleteProject] = useState(false);
   const [promptToDelete, setPromptToDelete] = useState<string | null>(null);
   const [scanningPromptId, setScanningPromptId] = useState<string | null>(null);
+  const searchParams = useSearchParams();
   const tabParam = searchParams.get('tab');
   const [activeTab, setActiveTab] = useState(tabParam ?? 'overview');
 
@@ -141,7 +142,6 @@ export default function ProjectDashboardPage({
   const userCanAccessStats = userPlan !== Plan.FREE;
 
   // Auto-trigger first scan after onboarding prompt generation
-  const searchParams = useSearchParams();
   const autoScanParam = searchParams.get('autoScan') === 'true';
   const autoScanTriggered = useRef(false);
 
