@@ -109,7 +109,7 @@ export class BriefAssemblerService {
           primary: competitors,
         },
         callback: {
-          url: `${apiUrl}/webhooks/twin`,
+          url: `${apiUrl}/webhooks/twin/audit`,
           authHeader: `Bearer ${twinSecret}`,
           auditId,
         },

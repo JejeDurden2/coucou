@@ -530,7 +530,7 @@ describe('BriefAssemblerService', () => {
       if (!result.ok) return;
 
       expect(result.value.callback.url).toBe(
-        'https://api.coucou-ia.com/webhooks/twin',
+        'https://api.coucou-ia.com/webhooks/twin/audit',
       );
       expect(result.value.callback.authHeader).toBe(
         'Bearer secret-token-123',
