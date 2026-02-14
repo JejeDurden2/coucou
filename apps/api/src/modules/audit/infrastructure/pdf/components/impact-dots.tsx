@@ -7,6 +7,26 @@ interface ImpactDotsProps {
   label: string;
 }
 
+/**
+ * ImpactDots - Five-dot visual intensity indicator for brutalist layouts
+ *
+ * Renders a compact row of five circular dots where filled dots represent impact
+ * intensity. Uses high-contrast accent color fills for clear data communication.
+ * Ideal for quick-scan metrics in dense PDF reports.
+ *
+ * @param value - Impact level from 1 (low) to 5 (high), determines how many dots are filled
+ * @param label - Descriptive text displayed before the dots (e.g., "Impact", "Priority")
+ *
+ * @example
+ * ```tsx
+ * <ImpactDots value={4} label="Impact" />
+ * ```
+ *
+ * @example
+ * ```tsx
+ * <ImpactDots value={2} label="Priority" />
+ * ```
+ */
 export function ImpactDots({
   value,
   label,

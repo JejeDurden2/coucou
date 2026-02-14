@@ -74,10 +74,16 @@ export class ReactPdfAdapter implements AuditPdfPort {
       const pdfBuffer = await renderAuditPdf(analysis, brand);
 
       const renderMs = Date.now() - start;
-      this.logger.info('PDF rendered', {
+      const sizeMb = (pdfBuffer.length / 1024 / 1024).toFixed(2);
+      const estimatedPages = 8; // Cover + Summary + GeoDetail + SiteAudit + External + Competitor + Action + CTA
+
+      this.logger.info('PDF rendered successfully', {
         auditOrderId: auditOrder.id,
         sizeBytes: pdfBuffer.length,
+        sizeMb: `${sizeMb} MB`,
         renderMs,
+        avgMsPerPage: Math.round(renderMs / estimatedPages),
+        estimatedPages,
       });
 
       // 3. Size validation

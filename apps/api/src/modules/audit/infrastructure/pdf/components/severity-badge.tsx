@@ -22,7 +22,7 @@ export function SeverityBadge({
           fontFamily: theme.fonts.body,
           fontSize: theme.fontSize.xs,
           color,
-          fontWeight: 600,
+          fontWeight: 700,
         }}
       >
         {label}

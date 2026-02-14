@@ -41,6 +41,27 @@ function describeArc(
   return `M ${start.x} ${start.y} A ${r} ${r} 0 ${largeArcFlag} 0 ${end.x} ${end.y}`;
 }
 
+/**
+ * ScoreCircle - Brutalist circular progress indicator with score display
+ *
+ * Renders a radial progress arc with angular design, featuring mono font numerics,
+ * concentric halo effects, and dynamic color coding based on score thresholds.
+ * Designed for high-contrast, data-dense PDF layouts.
+ *
+ * @param score - Numeric value between 0-100 representing the score (auto-clamped)
+ * @param size - Visual size preset: 'large' (140px), 'medium' (90px), or 'small' (50px)
+ * @param label - Optional text label displayed below the circle for context
+ *
+ * @example
+ * ```tsx
+ * <ScoreCircle score={85} size="large" label="Overall Score" />
+ * ```
+ *
+ * @example
+ * ```tsx
+ * <ScoreCircle score={42} size="medium" />
+ * ```
+ */
 export function ScoreCircle({
   score,
   size,

@@ -6,6 +6,25 @@ interface CategoryBadgeProps {
   category: 'structure' | 'content' | 'technical' | 'external_presence';
 }
 
+/**
+ * CategoryBadge - Minimalist bordered pill for audit category identification
+ *
+ * Renders a rectangular badge with subtle borders and muted typography for
+ * categorizing audit sections. Uses theme-aware labels with clean, angular styling.
+ * Designed for semantic grouping in brutalist PDF layouts.
+ *
+ * @param category - Audit category type: 'structure', 'content', 'technical', or 'external_presence'
+ *
+ * @example
+ * ```tsx
+ * <CategoryBadge category="technical" />
+ * ```
+ *
+ * @example
+ * ```tsx
+ * <CategoryBadge category="external_presence" />
+ * ```
+ */
 export function CategoryBadge({
   category,
 }: CategoryBadgeProps): React.JSX.Element {

@@ -81,27 +81,6 @@ Font.register({
     {
       src: path.join(
         bricolageBase,
-        'files/bricolage-grotesque-latin-400-normal.woff',
-      ),
-      fontWeight: 400,
-    },
-    {
-      src: path.join(
-        bricolageBase,
-        'files/bricolage-grotesque-latin-500-normal.woff',
-      ),
-      fontWeight: 500,
-    },
-    {
-      src: path.join(
-        bricolageBase,
-        'files/bricolage-grotesque-latin-600-normal.woff',
-      ),
-      fontWeight: 600,
-    },
-    {
-      src: path.join(
-        bricolageBase,
         'files/bricolage-grotesque-latin-700-normal.woff',
       ),
       fontWeight: 700,
@@ -112,10 +91,6 @@ Font.register({
 Font.register({
   family: 'Fraunces',
   fonts: [
-    {
-      src: path.join(frauncesBase, 'files/fraunces-latin-500-normal.woff'),
-      fontWeight: 500,
-    },
     {
       src: path.join(frauncesBase, 'files/fraunces-latin-700-normal.woff'),
       fontWeight: 700,
@@ -176,10 +151,7 @@ export const theme = {
     '7xl': 96, // Typographie architecturale
   },
   fontWeight: {
-    normal: 400,
-    medium: 500,
-    semibold: 600,
-    bold: 700,
+    bold: 700, // Only bold weight used across all components (400, 500, 600 removed for performance)
   },
   spacing: {
     // Grid system pour brutalisme

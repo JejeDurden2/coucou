@@ -9,6 +9,28 @@ interface ProgressBarProps {
   variant?: 'horizontal' | 'vertical'; // Support pour orientation verticale brutalist
 }
 
+/**
+ * ProgressBar - Massive brutalist progress indicator with dual orientations
+ *
+ * Renders thick, angular progress bars in horizontal or vertical layouts. Features
+ * uppercase mono labels, bold score numerics, and dynamic color fills. Designed for
+ * architectural data visualization in brutalist PDF reports.
+ *
+ * @param score - Numeric value between 0-100 representing progress (auto-clamped)
+ * @param label - Uppercase mono text label (e.g., "SEO", "PERF", "SECURITY")
+ * @param width - Optional container width in pixels (defaults to full width for horizontal, 60px for vertical)
+ * @param variant - Orientation: 'horizontal' (default, 20px thick bar) or 'vertical' (60px tall bar)
+ *
+ * @example
+ * ```tsx
+ * <ProgressBar score={75} label="Technical" variant="horizontal" width={300} />
+ * ```
+ *
+ * @example
+ * ```tsx
+ * <ProgressBar score={92} label="Content" variant="vertical" />
+ * ```
+ */
 export function ProgressBar({
   score,
   label,

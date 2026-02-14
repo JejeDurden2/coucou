@@ -12,8 +12,23 @@ interface MetricHeroProps {
 /**
  * MetricHero - Métrique proéminente
  *
- * Barre horizontale pleine largeur avec métrique massive.
- * Impossible à manquer, crée un point focal immédiat.
+ * Barre horizontale pleine largeur avec métrique massive (5xl size).
+ * Impossible à manquer, crée un point focal immédiat sur la page.
+ * Full bleed effect (déborde des marges) pour maximum impact.
+ *
+ * @param value - Valeur de la métrique (nombre ou string)
+ * @param label - Label en majuscules (mono font, letterspacing 2)
+ * @param variant - Couleur de fond (accent, success, warning, destructive)
+ * @param fullWidth - Si true, déborde des marges de page (default: true)
+ *
+ * @example
+ * ```tsx
+ * <MetricHero
+ *   value={75}
+ *   label="SCORE GEO"
+ *   variant="accent"
+ * />
+ * ```
  */
 export function MetricHero({
   value,

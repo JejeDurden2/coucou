@@ -14,6 +14,39 @@ const IMPACT_VALUE: Record<string, 1 | 2 | 3 | 4 | 5> = {
   low: 1,
 };
 
+/**
+ * PlatformRow - Tabular data row for external platform presence analysis
+ *
+ * Renders a bordered row displaying platform name, discovery status, and impact dots.
+ * Features color-coded status indicators (green for found, muted for missing) and
+ * automatic impact level conversion. Designed for scannable data tables in PDF reports.
+ *
+ * @param platform - Platform presence object containing name, found status, discovery status, and impact level
+ *
+ * @example
+ * ```tsx
+ * <PlatformRow
+ *   platform={{
+ *     platform: "Google Business Profile",
+ *     found: true,
+ *     status: "Réclamé et vérifié",
+ *     impact: "high"
+ *   }}
+ * />
+ * ```
+ *
+ * @example
+ * ```tsx
+ * <PlatformRow
+ *   platform={{
+ *     platform: "Yelp",
+ *     found: false,
+ *     status: "",
+ *     impact: "medium"
+ *   }}
+ * />
+ * ```
+ */
 export function PlatformRow({
   platform,
 }: PlatformRowProps): React.JSX.Element {
