@@ -1,3 +1,15 @@
+// Early crash handlers — registered before all imports via -r flag
+// Uses stdout.write (sync) so the message is flushed before process dies
+process.on('uncaughtException', (error) => {
+  process.stdout.write(`[FATAL] Uncaught exception: ${error.stack ?? error.message}\n`);
+  process.exit(1);
+});
+process.on('unhandledRejection', (reason) => {
+  const msg = reason instanceof Error ? (reason.stack ?? reason.message) : String(reason);
+  process.stdout.write(`[FATAL] Unhandled rejection: ${msg}\n`);
+  process.exit(1);
+});
+
 import { NodeSDK } from '@opentelemetry/sdk-node';
 import { getNodeAutoInstrumentations } from '@opentelemetry/auto-instrumentations-node';
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-http';
