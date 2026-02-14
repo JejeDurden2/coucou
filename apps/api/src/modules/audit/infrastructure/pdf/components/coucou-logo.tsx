@@ -1,4 +1,4 @@
-import { LogoSvg } from '../assets/logo-svg';
+import { CoucouLogo as CoucouLogoSvg } from '../assets/logo-svg';
 
 interface CoucouLogoProps {
   width?: number;
@@ -11,5 +11,5 @@ interface CoucouLogoProps {
 export function CoucouLogo({
   width = 120,
 }: CoucouLogoProps): React.JSX.Element {
-  return <LogoSvg width={width} />;
+  return <CoucouLogoSvg width={width} />;
 }
