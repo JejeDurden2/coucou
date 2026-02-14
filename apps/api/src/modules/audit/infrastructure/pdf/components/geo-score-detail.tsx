@@ -36,6 +36,7 @@ function BrutalScoreBlock({
         borderLeftWidth: 4,
         borderLeftColor: color,
       }}
+      wrap={false}
     >
       {/* Label monospace */}
       <Text

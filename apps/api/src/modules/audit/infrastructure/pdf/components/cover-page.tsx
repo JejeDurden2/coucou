@@ -45,12 +45,15 @@ export function CoverPage({
         {/* Espace brutal */}
         <View style={{ height: 40 }} />
 
-        {/* Brand name - peut déborder */}
+        {/* Brand name - responsive font size for long names */}
         <View style={{ marginLeft: -10, marginBottom: 8 }}>
           <Text
             style={{
               fontFamily: theme.fonts.mono,
-              fontSize: theme.fontSize['4xl'],
+              fontSize:
+                brandName.length > 30
+                  ? theme.fontSize['3xl']
+                  : theme.fontSize['4xl'],
               fontWeight: 700,
               color: theme.colors.accent,
               lineHeight: 1.1,

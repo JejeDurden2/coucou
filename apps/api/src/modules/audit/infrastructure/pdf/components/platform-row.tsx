@@ -17,6 +17,15 @@ const IMPACT_VALUE: Record<string, 1 | 2 | 3 | 4 | 5> = {
 export function PlatformRow({
   platform,
 }: PlatformRowProps): React.JSX.Element {
+  const impactValue = IMPACT_VALUE[platform.impact];
+
+  // Warn if impact value is unknown
+  if (!impactValue) {
+    console.warn(
+      `[PlatformRow] Unknown impact value: "${platform.impact}" for platform "${platform.platform}". Defaulting to 3 (medium).`,
+    );
+  }
+
   return (
     <View
       style={{
@@ -54,10 +63,7 @@ export function PlatformRow({
       </Text>
 
       {/* Impact dots */}
-      <ImpactDots
-        value={IMPACT_VALUE[platform.impact] ?? 3}
-        label="Impact"
-      />
+      <ImpactDots value={impactValue ?? 3} label="Impact" />
     </View>
   );
 }

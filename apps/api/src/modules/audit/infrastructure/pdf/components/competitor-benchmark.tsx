@@ -136,6 +136,13 @@ export function CompetitorBenchmarkSection({
 }: CompetitorBenchmarkProps): React.JSX.Element {
   const competitors = benchmark.competitors;
 
+  // Warn if more than 2 competitors (table only shows 2)
+  if (competitors.length > 2) {
+    console.warn(
+      `[CompetitorBenchmark] ${competitors.length} competitors found, but only 2 will be displayed in comparison table. All competitors will be shown in individual cards.`,
+    );
+  }
+
   return (
     <Page size="A4" style={baseStyles.page} wrap>
       {/* Grille technique */}

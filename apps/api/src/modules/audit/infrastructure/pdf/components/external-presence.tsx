@@ -98,9 +98,30 @@ export function ExternalPresence({
       <View style={baseStyles.divider} />
 
       {/* Platform rows */}
-      {sortedPlatforms.map((platform) => (
-        <PlatformRow key={platform.platform} platform={platform} />
-      ))}
+      {sortedPlatforms.length > 0 ? (
+        sortedPlatforms.map((platform) => (
+          <PlatformRow key={platform.platform} platform={platform} />
+        ))
+      ) : (
+        <View
+          style={{
+            backgroundColor: theme.colors.bgCard,
+            padding: 20,
+            marginTop: 12,
+          }}
+        >
+          <Text
+            style={{
+              fontFamily: theme.fonts.mono,
+              fontSize: theme.fontSize.base,
+              color: theme.colors.textMuted,
+              textAlign: 'center',
+            }}
+          >
+            Aucune plateforme externe analysée.
+          </Text>
+        </View>
+      )}
 
       {/* Gaps critiques card */}
       {externalPresence.gaps.length > 0 && (
