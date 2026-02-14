@@ -2,8 +2,11 @@ import { Page, View, Text } from '@react-pdf/renderer';
 import type { AuditAnalysis, AnalysisActionItem } from '@coucou-ia/shared';
 
 import { theme, baseStyles } from '../theme';
-import { ImpactDots } from './impact-dots';
+import { BrutalGrid } from './brutal-grid';
 import { CategoryBadge } from './category-badge';
+import { ImpactDots } from './impact-dots';
+import { MetricHero } from './metric-hero';
+import { PageFooter } from './page-footer';
 
 interface ActionPlanSectionProps {
   actionPlan: AuditAnalysis['actionPlan'];
@@ -15,12 +18,21 @@ function ActionCard({
   action: AnalysisActionItem;
 }): React.JSX.Element {
   return (
-    <View style={baseStyles.card} wrap={false}>
-      {/* Title */}
+    <View
+      style={{
+        backgroundColor: theme.colors.bgCard,
+        padding: 12,
+        marginBottom: 8,
+        borderLeftWidth: 3,
+        borderLeftColor: theme.colors.accent,
+      }}
+      wrap={false}
+    >
+      {/* Title - monospace */}
       <Text
         style={{
-          fontFamily: theme.fonts.body,
-          fontSize: theme.fontSize.base,
+          fontFamily: theme.fonts.mono,
+          fontSize: theme.fontSize.sm,
           fontWeight: 700,
           color: theme.colors.textPrimary,
           marginBottom: 4,
@@ -29,44 +41,29 @@ function ActionCard({
         {action.title}
       </Text>
 
-      {/* Description */}
+      {/* Description - dense */}
       <Text
         style={{
-          fontFamily: theme.fonts.body,
-          fontSize: theme.fontSize.sm,
-          color: theme.colors.textPrimary,
-          lineHeight: 1.5,
-          marginBottom: 4,
+          fontFamily: theme.fonts.mono,
+          fontSize: theme.fontSize.tiny,
+          color: theme.colors.textMuted,
+          lineHeight: 1.4,
+          marginBottom: 6,
         }}
       >
         {action.description}
       </Text>
 
-      {/* Target URL */}
-      {action.targetUrl !== null && (
-        <Text
-          style={{
-            fontFamily: theme.fonts.body,
-            fontSize: theme.fontSize.xs,
-            color: theme.colors.textMuted,
-            marginBottom: 8,
-          }}
-        >
-          {action.targetUrl}
-        </Text>
-      )}
-
-      {/* Bottom row: ImpactDots + CategoryBadge */}
+      {/* Bottom row compact */}
       <View
         style={{
           flexDirection: 'row',
           alignItems: 'center',
-          gap: 12,
-          marginTop: 4,
+          gap: 8,
         }}
       >
-        <ImpactDots value={action.impact} label="Impact" />
-        <ImpactDots value={action.effort} label="Effort" />
+        <ImpactDots value={action.impact} label="IMP" />
+        <ImpactDots value={action.effort} label="EFF" />
         <CategoryBadge category={action.category} />
       </View>
     </View>
@@ -89,32 +86,39 @@ function ActionSection({
   const sortedActions = [...actions].sort((a, b) => b.impact - a.impact);
 
   return (
-    <View style={{ marginBottom: 16 }}>
-      {/* Sub-section title with left border */}
-      <View
-        style={{
-          borderLeftWidth: 4,
-          borderLeftColor: borderColor,
-          paddingLeft: 12,
-          marginBottom: 12,
-        }}
-      >
+    <View style={{ marginBottom: 20 }}>
+      {/* Section header avec règle décorative */}
+      <View style={{ marginBottom: 12 }}>
         <Text
           style={{
-            fontFamily: theme.fonts.display,
-            fontSize: theme.fontSize.xl,
+            fontFamily: theme.fonts.mono,
+            fontSize: theme.fontSize.base,
             fontWeight: 700,
             color: titleColor,
+            letterSpacing: 1,
+            textTransform: 'uppercase',
+            marginBottom: 4,
           }}
         >
           {title}
         </Text>
+        <View
+          style={{
+            width: 80,
+            height: 2,
+            backgroundColor: borderColor,
+          }}
+        />
       </View>
 
-      {/* Action cards */}
-      {sortedActions.map((action, i) => (
-        <ActionCard key={`action-${i}`} action={action} />
-      ))}
+      {/* Action cards en 2 colonnes */}
+      <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
+        {sortedActions.map((action, i) => (
+          <View key={`action-${i}`} style={{ width: '48%' }}>
+            <ActionCard action={action} />
+          </View>
+        ))}
+      </View>
     </View>
   );
 }
@@ -124,33 +128,58 @@ export function ActionPlanSection({
 }: ActionPlanSectionProps): React.JSX.Element {
   return (
     <Page size="A4" style={baseStyles.page} wrap>
-      {/* Section Title */}
-      <Text style={baseStyles.sectionTitle}>{"Plan d'Action"}</Text>
+      {/* Grille technique */}
+      <BrutalGrid variant="subtle" />
 
-      {/* Highlight counter */}
-      <View
-        style={{
-          backgroundColor: `${theme.colors.accent}1A`,
-          padding: 12,
-          borderRadius: 8,
-          marginBottom: 20,
-        }}
-      >
+      {/* Section Title - petit en haut à droite */}
+      <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginBottom: 24 }}>
         <Text
           style={{
-            fontFamily: theme.fonts.body,
-            fontSize: theme.fontSize.lg,
+            fontFamily: theme.fonts.mono,
+            fontSize: theme.fontSize.sm,
             fontWeight: 700,
-            color: theme.colors.textPrimary,
+            color: theme.colors.textMuted,
+            letterSpacing: 2,
+            textTransform: 'uppercase',
           }}
         >
-          {`${actionPlan.totalActions} optimisations identifiées`}
+          PLAN D'ACTION
         </Text>
       </View>
 
+      {/* Metric Hero - total actions */}
+      <MetricHero
+        value={actionPlan.totalActions}
+        label="OPTIMISATIONS"
+        variant="accent"
+      />
+
+      {/* Message positif si aucune action */}
+      {actionPlan.totalActions === 0 && (
+        <View
+          style={{
+            backgroundColor: theme.colors.success,
+            padding: 20,
+            marginVertical: 20,
+          }}
+        >
+          <Text
+            style={{
+              fontFamily: theme.fonts.mono,
+              fontSize: theme.fontSize.base,
+              color: theme.colors.brutalWhite,
+              lineHeight: 1.5,
+            }}
+          >
+            ✅ Excellent ! Votre site est déjà bien optimisé pour la visibilité
+            IA. Aucune action critique identifiée.
+          </Text>
+        </View>
+      )}
+
       {/* Quick Wins */}
       <ActionSection
-        title="Quick Wins — 1 à 2 semaines"
+        title="QUICK WINS — 1-2 SEMAINES"
         actions={actionPlan.quickWins}
         borderColor={theme.colors.success}
         titleColor={theme.colors.success}
@@ -158,7 +187,7 @@ export function ActionPlanSection({
 
       {/* Court terme */}
       <ActionSection
-        title="Court terme — 1 à 2 mois"
+        title="COURT TERME — 1-2 MOIS"
         actions={actionPlan.shortTerm}
         borderColor={theme.colors.accent}
         titleColor={theme.colors.accent}
@@ -166,17 +195,14 @@ export function ActionPlanSection({
 
       {/* Moyen terme */}
       <ActionSection
-        title="Moyen terme — 3 à 6 mois"
+        title="MOYEN TERME — 3-6 MOIS"
         actions={actionPlan.mediumTerm}
         borderColor={theme.colors.textMuted}
         titleColor={theme.colors.textMuted}
       />
 
       {/* Footer */}
-      <View style={baseStyles.footer} fixed>
-        <Text>Coucou IA</Text>
-        <Text>{"Plan d'Action"}</Text>
-      </View>
+      <PageFooter left="COUCOU IA" right="PLAN D'ACTION" />
     </Page>
   );
 }

@@ -17,7 +17,6 @@ export function CategoryBadge({
         backgroundColor: theme.colors.bgCard,
         borderWidth: 1,
         borderColor: theme.colors.border,
-        borderRadius: 20,
         paddingHorizontal: 10,
         paddingVertical: 3,
       }}

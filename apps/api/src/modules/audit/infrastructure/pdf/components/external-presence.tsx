@@ -2,8 +2,11 @@ import { Page, View, Text, Svg, Circle } from '@react-pdf/renderer';
 import type { AuditAnalysis } from '@coucou-ia/shared';
 
 import { theme, baseStyles } from '../theme';
-import { ScoreCircle } from './score-circle';
+import { BrutalGrid } from './brutal-grid';
+import { MetricHero } from './metric-hero';
+import { PageFooter } from './page-footer';
 import { PlatformRow } from './platform-row';
+import { ScoreCircle } from './score-circle';
 
 interface ExternalPresenceProps {
   externalPresence: AuditAnalysis['externalPresence'];
@@ -18,34 +21,46 @@ export function ExternalPresence({
 
   return (
     <Page size="A4" style={baseStyles.page} wrap>
-      {/* Section Title */}
-      <Text style={baseStyles.sectionTitle}>
-        Présence Externe — Signaux de Confiance IA
-      </Text>
+      {/* Grille technique */}
+      <BrutalGrid variant="subtle" />
 
-      {/* Intro paragraph */}
+      {/* Section Title - petit en haut à droite */}
+      <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginBottom: 24 }}>
+        <Text
+          style={{
+            fontFamily: theme.fonts.mono,
+            fontSize: theme.fontSize.sm,
+            fontWeight: 700,
+            color: theme.colors.textMuted,
+            letterSpacing: 2,
+            textTransform: 'uppercase',
+          }}
+        >
+          PRÉSENCE EXTERNE
+        </Text>
+      </View>
+
+      {/* Metric Hero - Score */}
+      <MetricHero
+        value={externalPresence.score}
+        label="SCORE PRÉSENCE"
+        variant="accent"
+      />
+
+      {/* Intro - monospace */}
       <Text
         style={{
-          fontFamily: theme.fonts.body,
-          fontSize: theme.fontSize.base,
+          fontFamily: theme.fonts.mono,
+          fontSize: theme.fontSize.sm,
           color: theme.colors.textMuted,
-          lineHeight: 1.6,
-          marginBottom: 16,
+          lineHeight: 1.5,
+          marginBottom: 20,
+          width: '80%',
         }}
       >
         Les moteurs de recherche IA construisent leur connaissance d'une marque à
-        partir de sources publiques. Plus votre marque est présente et bien notée
-        sur ces plateformes, plus les IA la citent dans leurs réponses.
+        partir de sources publiques.
       </Text>
-
-      {/* Score */}
-      <View style={{ alignItems: 'center', marginBottom: 20 }}>
-        <ScoreCircle
-          score={externalPresence.score}
-          size="medium"
-          label="Présence externe"
-        />
-      </View>
 
       {/* Table header */}
       <View
@@ -155,10 +170,7 @@ export function ExternalPresence({
       )}
 
       {/* Footer */}
-      <View style={baseStyles.footer} fixed>
-        <Text>Coucou IA</Text>
-        <Text>Présence Externe</Text>
-      </View>
+      <PageFooter left="COUCOU IA" right="PRÉSENCE EXTERNE" />
     </Page>
   );
 }

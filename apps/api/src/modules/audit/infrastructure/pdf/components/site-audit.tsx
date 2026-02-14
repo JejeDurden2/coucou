@@ -2,7 +2,9 @@ import { Page, View, Text } from '@react-pdf/renderer';
 import type { AuditAnalysis, AnalysisFinding } from '@coucou-ia/shared';
 
 import { theme, baseStyles } from '../theme';
-import { SeverityBadge } from './severity-badge';
+import { BrutalGrid } from './brutal-grid';
+import { MetricHero } from './metric-hero';
+import { PageFooter } from './page-footer';
 
 interface SiteAuditProps {
   siteAudit: AuditAnalysis['siteAudit'];
@@ -14,16 +16,28 @@ const SEVERITY_ORDER: AnalysisFinding['severity'][] = [
   'info',
 ];
 
+const SEVERITY_COLORS: Record<AnalysisFinding['severity'], string> = {
+  critical: theme.colors.destructive,
+  warning: theme.colors.warning,
+  info: theme.colors.accent,
+};
+
+const SEVERITY_LABELS: Record<AnalysisFinding['severity'], string> = {
+  critical: 'CRITIQUE',
+  warning: 'ATTENTION',
+  info: 'INFO',
+};
+
 const PAGE_TYPE_LABELS: Record<string, string> = {
-  homepage: 'Accueil',
-  about: 'À propos',
-  service: 'Service',
-  blog: 'Blog',
-  pricing: 'Tarifs',
+  homepage: 'HOME',
+  about: 'À PROPOS',
+  service: 'SERVICE',
+  blog: 'BLOG',
+  pricing: 'PRIX',
   faq: 'FAQ',
-  legal: 'Mentions légales',
-  contact: 'Contact',
-  other: 'Autre',
+  legal: 'LÉGAL',
+  contact: 'CONTACT',
+  other: 'AUTRE',
 };
 
 function sortFindings(findings: AnalysisFinding[]): AnalysisFinding[] {
@@ -33,67 +47,73 @@ function sortFindings(findings: AnalysisFinding[]): AnalysisFinding[] {
   );
 }
 
-function FindingItem({
+function FindingCard({
   finding,
 }: {
   finding: AnalysisFinding;
 }): React.JSX.Element {
+  const severityColor = SEVERITY_COLORS[finding.severity];
+
   return (
     <View
       style={{
-        ...baseStyles.card,
-        borderLeftWidth: 3,
-        borderLeftColor:
-          finding.severity === 'critical'
-            ? theme.colors.destructive
-            : finding.severity === 'warning'
-              ? theme.colors.warning
-              : theme.colors.textMuted,
+        backgroundColor: theme.colors.bgCard,
+        padding: 10,
+        marginBottom: 8,
+        borderLeftWidth: 5,
+        borderLeftColor: severityColor,
       }}
       wrap={false}
     >
-      {/* Header: badge + title */}
-      <View
+      {/* Severity label - monospace caps */}
+      <Text
         style={{
-          flexDirection: 'row',
-          alignItems: 'center',
-          gap: 8,
+          fontFamily: theme.fonts.mono,
+          fontSize: theme.fontSize.tiny,
+          fontWeight: 700,
+          color: severityColor,
+          letterSpacing: 2,
+          textTransform: 'uppercase',
           marginBottom: 4,
         }}
       >
-        <SeverityBadge severity={finding.severity} />
-        <Text
-          style={{
-            fontFamily: theme.fonts.body,
-            fontSize: theme.fontSize.base,
-            fontWeight: 700,
-            color: theme.colors.textPrimary,
-            flex: 1,
-          }}
-        >
-          {finding.title}
-        </Text>
-      </View>
+        {SEVERITY_LABELS[finding.severity]}
+      </Text>
 
-      {/* Detail */}
+      {/* Title - monospace bold */}
       <Text
         style={{
-          fontFamily: theme.fonts.body,
-          fontSize: theme.fontSize.base,
+          fontFamily: theme.fonts.mono,
+          fontSize: theme.fontSize.sm,
+          fontWeight: 700,
           color: theme.colors.textPrimary,
-          lineHeight: 1.5,
+          marginBottom: 4,
+          lineHeight: 1.3,
+        }}
+      >
+        {finding.title}
+      </Text>
+
+      {/* Detail - dense */}
+      <Text
+        style={{
+          fontFamily: theme.fonts.mono,
+          fontSize: theme.fontSize.tiny,
+          color: theme.colors.textMuted,
+          lineHeight: 1.4,
           marginBottom: 4,
         }}
       >
         {finding.detail}
       </Text>
 
-      {/* Recommendation */}
+      {/* Recommendation - arrow + monospace */}
       <Text
         style={{
-          fontFamily: theme.fonts.body,
-          fontSize: theme.fontSize.sm,
-          color: theme.colors.textMuted,
+          fontFamily: theme.fonts.mono,
+          fontSize: theme.fontSize.tiny,
+          color: theme.colors.accent,
+          lineHeight: 1.4,
         }}
       >
         → {finding.recommendation}
@@ -107,147 +127,203 @@ export function SiteAudit({
 }: SiteAuditProps): React.JSX.Element {
   const { pages, globalFindings } = siteAudit;
 
+  // Count total findings by severity
+  const totalFindings = pages.reduce(
+    (acc, p) => acc + p.findings.length,
+    globalFindings.length,
+  );
+  const criticalCount = [
+    ...globalFindings,
+    ...pages.flatMap((p) => p.findings),
+  ].filter((f) => f.severity === 'critical').length;
+
   return (
     <Page size="A4" style={baseStyles.page} wrap>
-      {/* Section Title */}
-      <Text style={baseStyles.sectionTitle}>Audit de Votre Site</Text>
+      {/* Grille technique */}
+      <BrutalGrid variant="heavy" />
 
-      {/* Global Findings */}
+      {/* Section Title - petit en haut à droite */}
+      <View
+        style={{ flexDirection: 'row', justifyContent: 'flex-end', marginBottom: 20 }}
+      >
+        <Text
+          style={{
+            fontFamily: theme.fonts.mono,
+            fontSize: theme.fontSize.sm,
+            fontWeight: 700,
+            color: theme.colors.textMuted,
+            letterSpacing: 2,
+            textTransform: 'uppercase',
+          }}
+        >
+          AUDIT TECHNIQUE
+        </Text>
+      </View>
+
+      {/* Metric Hero - Total findings */}
+      <MetricHero
+        value={totalFindings}
+        label={`CONSTATS${criticalCount > 0 ? ` · ${criticalCount} CRITIQUES` : ''}`}
+        variant={criticalCount > 0 ? 'destructive' : 'accent'}
+      />
+
+      {/* Global Findings - Layout 2 colonnes */}
       {globalFindings.length > 0 && (
-        <View style={{ marginBottom: 16 }}>
-          <Text
-            style={{
-              fontFamily: theme.fonts.display,
-              fontSize: theme.fontSize.xl,
-              fontWeight: 700,
-              color: theme.colors.textPrimary,
-              marginBottom: 12,
-            }}
-          >
-            Constats Généraux
-          </Text>
+        <View style={{ marginBottom: 20 }}>
+          {/* Section header avec règle */}
+          <View style={{ marginBottom: 12 }}>
+            <Text
+              style={{
+                fontFamily: theme.fonts.mono,
+                fontSize: theme.fontSize.base,
+                fontWeight: 700,
+                color: theme.colors.destructive,
+                letterSpacing: 1,
+                textTransform: 'uppercase',
+                marginBottom: 4,
+              }}
+            >
+              PROBLÈMES GLOBAUX
+            </Text>
+            <View
+              style={{
+                width: 100,
+                height: 3,
+                backgroundColor: theme.colors.destructive,
+              }}
+            />
+          </View>
 
-          {sortFindings(globalFindings).map((finding, i) => (
-            <FindingItem key={`global-${i}`} finding={finding} />
-          ))}
-
-          <View style={baseStyles.divider} />
+          {/* 2 colonnes de findings */}
+          <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
+            {sortFindings(globalFindings).map((finding, i) => (
+              <View key={`global-${i}`} style={{ width: '48%' }}>
+                <FindingCard finding={finding} />
+              </View>
+            ))}
+          </View>
         </View>
       )}
 
-      {/* Per-page audits */}
-      {pages.map((page, pageIdx) => (
-        <View key={`page-${pageIdx}`} style={{ marginBottom: 16 }}>
-          {/* Page header */}
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              gap: 8,
-              marginBottom: 8,
-            }}
-            wrap={false}
-          >
-            {/* Page type badge */}
+      {/* Par page - Layout editorial dense */}
+      {pages.map((page, pageIdx) => {
+        const allPageFindings = sortFindings(page.findings);
+        if (allPageFindings.length === 0 && page.strengths.length === 0)
+          return null;
+
+        return (
+          <View key={`page-${pageIdx}`} style={{ marginBottom: 16 }}>
+            {/* En-tête de page - monospace avec barre */}
             <View
               style={{
-                backgroundColor: theme.colors.bgCard,
-                borderWidth: 1,
-                borderColor: theme.colors.border,
-                borderRadius: 20,
-                paddingHorizontal: 10,
-                paddingVertical: 3,
+                flexDirection: 'row',
+                alignItems: 'center',
+                marginBottom: 8,
+                gap: 8,
               }}
+              wrap={false}
             >
-              <Text
+              {/* Type badge - monospace brutal */}
+              <View
                 style={{
-                  fontFamily: theme.fonts.body,
-                  fontSize: theme.fontSize.xs,
-                  color: theme.colors.textMuted,
+                  backgroundColor: theme.colors.accent,
+                  paddingHorizontal: 8,
+                  paddingVertical: 3,
                 }}
               >
-                {PAGE_TYPE_LABELS[page.type] ?? page.type}
-              </Text>
-            </View>
-
-            <Text
-              style={{
-                fontFamily: theme.fonts.body,
-                fontSize: theme.fontSize.sm,
-                color: theme.colors.textMuted,
-                flex: 1,
-              }}
-            >
-              {page.url}
-            </Text>
-          </View>
-
-          {/* Strengths */}
-          {page.strengths.length > 0 && (
-            <View style={{ marginBottom: 8 }} wrap={false}>
-              <Text
-                style={{
-                  fontFamily: theme.fonts.body,
-                  fontSize: theme.fontSize.base,
-                  fontWeight: 600,
-                  color: theme.colors.success,
-                  marginBottom: 4,
-                }}
-              >
-                Points forts
-              </Text>
-              {page.strengths.map((strength, i) => (
-                <View
-                  key={`strength-${pageIdx}-${i}`}
+                <Text
                   style={{
-                    flexDirection: 'row',
-                    marginBottom: 2,
-                    paddingLeft: 4,
+                    fontFamily: theme.fonts.mono,
+                    fontSize: theme.fontSize.tiny,
+                    fontWeight: 700,
+                    color: theme.colors.brutalWhite,
+                    letterSpacing: 1,
                   }}
                 >
-                  <Text
-                    style={{
-                      color: theme.colors.success,
-                      fontSize: theme.fontSize.base,
-                      marginRight: 6,
-                    }}
-                  >
-                    ✓
-                  </Text>
-                  <Text
-                    style={{
-                      fontFamily: theme.fonts.body,
-                      fontSize: theme.fontSize.base,
-                      color: theme.colors.textPrimary,
-                      flex: 1,
-                    }}
-                  >
-                    {strength}
-                  </Text>
-                </View>
-              ))}
+                  {PAGE_TYPE_LABELS[page.type] ?? page.type}
+                </Text>
+              </View>
+
+              {/* URL - monospace truncated */}
+              <Text
+                style={{
+                  fontFamily: theme.fonts.mono,
+                  fontSize: theme.fontSize.tiny,
+                  color: theme.colors.textMuted,
+                  flex: 1,
+                }}
+              >
+                {page.url}
+              </Text>
             </View>
-          )}
 
-          {/* Findings sorted by severity */}
-          {page.findings.length > 0 &&
-            sortFindings(page.findings).map((finding, i) => (
-              <FindingItem
-                key={`page-${pageIdx}-finding-${i}`}
-                finding={finding}
+            {/* Strengths - inline dense */}
+            {page.strengths.length > 0 && (
+              <View style={{ marginBottom: 6 }} wrap={false}>
+                <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 4 }}>
+                  {page.strengths.map((strength, i) => (
+                    <View
+                      key={`strength-${pageIdx}-${i}`}
+                      style={{
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        backgroundColor: theme.colors.bgCard,
+                        paddingHorizontal: 6,
+                        paddingVertical: 2,
+                      }}
+                    >
+                      <Text
+                        style={{
+                          fontFamily: theme.fonts.mono,
+                          fontSize: theme.fontSize.tiny,
+                          color: theme.colors.success,
+                          marginRight: 3,
+                        }}
+                      >
+                        ✓
+                      </Text>
+                      <Text
+                        style={{
+                          fontFamily: theme.fonts.mono,
+                          fontSize: theme.fontSize.tiny,
+                          color: theme.colors.textMuted,
+                        }}
+                      >
+                        {strength}
+                      </Text>
+                    </View>
+                  ))}
+                </View>
+              </View>
+            )}
+
+            {/* Findings en 2 colonnes */}
+            {allPageFindings.length > 0 && (
+              <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
+                {allPageFindings.map((finding, i) => (
+                  <View key={`page-${pageIdx}-finding-${i}`} style={{ width: '48%' }}>
+                    <FindingCard finding={finding} />
+                  </View>
+                ))}
+              </View>
+            )}
+
+            {/* Divider massif entre pages */}
+            {pageIdx < pages.length - 1 && (
+              <View
+                style={{
+                  height: 3,
+                  backgroundColor: theme.colors.gridLine,
+                  marginTop: 12,
+                }}
               />
-            ))}
-
-          {/* Divider between pages */}
-          {pageIdx < pages.length - 1 && <View style={baseStyles.divider} />}
-        </View>
-      ))}
+            )}
+          </View>
+        );
+      })}
 
       {/* Footer */}
-      <View style={baseStyles.footer} fixed>
-        <Text>Coucou IA</Text>
-        <Text>Audit du Site</Text>
-      </View>
+      <PageFooter left="COUCOU IA" right="AUDIT TECHNIQUE" />
     </Page>
   );
 }

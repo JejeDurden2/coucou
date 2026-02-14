@@ -1,13 +1,15 @@
-import { Image } from '@react-pdf/renderer';
-
-import { LOGO_BASE64 } from '../assets/logo';
+import { LogoSvg } from '../assets/logo-svg';
 
 interface CoucouLogoProps {
   width?: number;
 }
 
+/**
+ * Coucou IA logo component
+ * Uses SVG for crisp rendering at any size
+ */
 export function CoucouLogo({
   width = 120,
 }: CoucouLogoProps): React.JSX.Element {
-  return <Image src={LOGO_BASE64} style={{ width }} />;
+  return <LogoSvg width={width} />;
 }

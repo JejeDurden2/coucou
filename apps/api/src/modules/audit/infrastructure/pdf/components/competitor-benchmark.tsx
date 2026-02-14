@@ -2,6 +2,8 @@ import { Page, View, Text } from '@react-pdf/renderer';
 import type { AuditAnalysis, AnalysisCompetitor } from '@coucou-ia/shared';
 
 import { theme, baseStyles, getScoreColor } from '../theme';
+import { BrutalGrid } from './brutal-grid';
+import { PageFooter } from './page-footer';
 
 interface CompetitorBenchmarkProps {
   benchmark: AuditAnalysis['competitorBenchmark'];
@@ -260,8 +262,24 @@ export function CompetitorBenchmarkSection({
 
   return (
     <Page size="A4" style={baseStyles.page} wrap>
-      {/* Section Title */}
-      <Text style={baseStyles.sectionTitle}>Benchmark Concurrentiel</Text>
+      {/* Grille technique */}
+      <BrutalGrid variant="subtle" />
+
+      {/* Section Title - petit en haut à droite */}
+      <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginBottom: 24 }}>
+        <Text
+          style={{
+            fontFamily: theme.fonts.mono,
+            fontSize: theme.fontSize.sm,
+            fontWeight: 700,
+            color: theme.colors.textMuted,
+            letterSpacing: 2,
+            textTransform: 'uppercase',
+          }}
+        >
+          BENCHMARK CONCURRENTIEL
+        </Text>
+      </View>
 
       {/* Comparison table */}
       <View style={{ marginBottom: 20 }}>
@@ -397,10 +415,7 @@ export function CompetitorBenchmarkSection({
       )}
 
       {/* Footer */}
-      <View style={baseStyles.footer} fixed>
-        <Text>Coucou IA</Text>
-        <Text>Benchmark Concurrentiel</Text>
-      </View>
+      <PageFooter left="COUCOU IA" right="BENCHMARK CONCURRENTIEL" />
     </Page>
   );
 }

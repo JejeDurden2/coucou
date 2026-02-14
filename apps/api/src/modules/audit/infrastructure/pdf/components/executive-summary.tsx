@@ -2,6 +2,8 @@ import { Page, View, Text } from '@react-pdf/renderer';
 import type { AuditAnalysis } from '@coucou-ia/shared';
 
 import { theme, baseStyles } from '../theme';
+import { BrutalGrid } from './brutal-grid';
+import { PageFooter } from './page-footer';
 import { ProgressBar } from './progress-bar';
 
 interface ExecutiveSummaryProps {
@@ -31,118 +33,159 @@ export function ExecutiveSummary({
 
   return (
     <Page size="A4" style={baseStyles.page} wrap>
-      {/* Section Title */}
-      <Text style={baseStyles.sectionTitle}>Résumé Exécutif</Text>
+      {/* Grille technique */}
+      <BrutalGrid variant="subtle" />
 
-      {/* Headline card */}
+      {/* Section Title - petit en haut à droite (inverse conventionnel) */}
       <View
         style={{
-          ...baseStyles.card,
-          borderLeftWidth: 4,
-          borderLeftColor: theme.colors.accent,
+          flexDirection: 'row',
+          justifyContent: 'flex-end',
+          marginBottom: 24,
         }}
       >
         <Text
           style={{
-            fontFamily: theme.fonts.body,
-            fontSize: theme.fontSize.lg,
+            fontFamily: theme.fonts.mono,
+            fontSize: theme.fontSize.sm,
+            fontWeight: 700,
+            color: theme.colors.textMuted,
+            letterSpacing: 2,
+            textTransform: 'uppercase',
+          }}
+        >
+          RÉSUMÉ EXÉCUTIF
+        </Text>
+      </View>
+
+      {/* Headline MASSIF en monospace - 70% width */}
+      <View style={{ width: '70%', marginBottom: 32 }}>
+        <Text
+          style={{
+            fontFamily: theme.fonts.mono,
+            fontSize: theme.fontSize['5xl'],
             fontWeight: 700,
             color: theme.colors.textPrimary,
+            lineHeight: 1.1,
+            letterSpacing: -1,
           }}
         >
           {summary.headline}
         </Text>
       </View>
 
-      {/* Context */}
-      <Text
-        style={{
-          fontFamily: theme.fonts.body,
-          fontSize: theme.fontSize.base,
-          color: theme.colors.textPrimary,
-          lineHeight: 1.6,
-          marginBottom: 16,
-        }}
-      >
-        {summary.context}
-      </Text>
-
-      {/* Sub-scores */}
-      <View style={{ marginBottom: 16 }}>
-        <ProgressBar score={geoScore.structure} label="Structure" />
-        <ProgressBar score={geoScore.content} label="Contenu" />
-        <ProgressBar score={geoScore.technical} label="Technique" />
-        <ProgressBar
-          score={geoScore.externalPresence}
-          label="Présence ext."
-        />
-      </View>
-
-      {/* Key Findings */}
-      <Text
-        style={{
-          fontFamily: theme.fonts.display,
-          fontSize: theme.fontSize.xl,
-          fontWeight: 700,
-          color: theme.colors.textPrimary,
-          marginBottom: 12,
-        }}
-      >
-        Constats clés
-      </Text>
-
-      {summary.keyFindings.map((finding, i) => (
-        <View
-          key={`finding-${i}`}
-          style={{
-            ...baseStyles.card,
-            borderLeftWidth: 4,
-            borderLeftColor:
-              FINDING_BORDER_COLORS[i] ?? theme.colors.accent,
-          }}
-          wrap={false}
-        >
+      {/* Layout 3 colonnes inégales: 30% / 10% / 60% */}
+      <View style={{ flexDirection: 'row', marginBottom: 24, gap: 8 }}>
+        {/* Colonne 1 - Scores (30%) */}
+        <View style={{ width: '30%' }}>
           <Text
             style={{
-              fontFamily: theme.fonts.body,
-              fontSize: theme.fontSize.base,
-              color: theme.colors.textPrimary,
-              lineHeight: 1.5,
+              fontFamily: theme.fonts.mono,
+              fontSize: theme.fontSize.tiny,
+              color: theme.colors.textMuted,
+              letterSpacing: 2,
+              marginBottom: 12,
             }}
           >
-            {finding}
+            SCORES
+          </Text>
+          <View style={{ gap: 8 }}>
+            <ProgressBar score={geoScore.structure} label="STRUCT" />
+            <ProgressBar score={geoScore.content} label="CONTENT" />
+            <ProgressBar score={geoScore.technical} label="TECH" />
+            <ProgressBar score={geoScore.externalPresence} label="EXTERN" />
+          </View>
+        </View>
+
+        {/* Colonne 2 - Vide intentionnel (10%) */}
+        <View style={{ width: '10%' }} />
+
+        {/* Colonne 3 - Context (60%) */}
+        <View style={{ width: '60%' }}>
+          <Text
+            style={{
+              fontFamily: theme.fonts.mono,
+              fontSize: theme.fontSize.base,
+              color: theme.colors.textPrimary,
+              lineHeight: 1.4,
+            }}
+          >
+            {summary.context}
           </Text>
         </View>
-      ))}
+      </View>
 
-      {/* Verdict badge */}
+      {/* Key Findings - monospace dense */}
+      <Text
+        style={{
+          fontFamily: theme.fonts.mono,
+          fontSize: theme.fontSize.xs,
+          fontWeight: 700,
+          color: theme.colors.textMuted,
+          letterSpacing: 2,
+          marginBottom: 12,
+          textTransform: 'uppercase',
+        }}
+      >
+        CONSTATS CLÉS
+      </Text>
+
+      {summary.keyFindings.map((finding, i) => {
+        const shouldOverflow = i === 1; // Le 2ème finding déborde
+        return (
+          <View
+            key={`finding-${i}`}
+            style={{
+              backgroundColor: theme.colors.bgCard,
+              padding: 12,
+              marginBottom: 8,
+              borderLeftWidth: 3,
+              borderLeftColor: FINDING_BORDER_COLORS[i] ?? theme.colors.accent,
+              marginRight: shouldOverflow ? -60 : 0, // Déborde à droite
+            }}
+            wrap={false}
+          >
+            <Text
+              style={{
+                fontFamily: theme.fonts.mono,
+                fontSize: theme.fontSize.sm,
+                color: theme.colors.textPrimary,
+                lineHeight: 1.3,
+              }}
+            >
+              {finding}
+            </Text>
+          </View>
+        );
+      })}
+
+      {/* Verdict badge ÉNORME en overlap coin */}
       <View
         style={{
-          alignSelf: 'flex-start',
+          position: 'absolute',
+          bottom: 60,
+          right: 20,
           backgroundColor: verdictColor,
-          borderRadius: 12,
-          paddingHorizontal: 16,
-          paddingVertical: 6,
-          marginTop: 8,
+          paddingHorizontal: 24,
+          paddingVertical: 16,
         }}
       >
         <Text
           style={{
-            fontFamily: theme.fonts.body,
-            fontSize: theme.fontSize.base,
+            fontFamily: theme.fonts.mono,
+            fontSize: theme.fontSize.xl,
             fontWeight: 700,
-            color: '#FFFFFF',
+            color: theme.colors.brutalWhite,
+            letterSpacing: 1,
+            textTransform: 'uppercase',
           }}
         >
-          Visibilité {summary.verdict}
+          {summary.verdict}
         </Text>
       </View>
 
       {/* Footer */}
-      <View style={baseStyles.footer} fixed>
-        <Text>Coucou IA</Text>
-        <Text>Résumé Exécutif</Text>
-      </View>
+      <PageFooter left="COUCOU IA" right="02" />
     </Page>
   );
 }

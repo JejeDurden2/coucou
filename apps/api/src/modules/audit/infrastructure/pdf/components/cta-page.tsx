@@ -1,7 +1,9 @@
 import { Page, View, Text, Link } from '@react-pdf/renderer';
 
 import { theme, baseStyles } from '../theme';
+import { BrutalGrid } from './brutal-grid';
 import { CoucouLogo } from './coucou-logo';
+import { TypeSlab } from './type-slab';
 
 interface CtaPageProps {
   totalActions: number;
@@ -10,89 +12,112 @@ interface CtaPageProps {
 export function CtaPage({ totalActions }: CtaPageProps): React.JSX.Element {
   return (
     <Page size="A4" style={baseStyles.page} break>
+      {/* Grille technique subtile */}
+      <BrutalGrid variant="subtle" />
+
+      {/* Layout asymétrique - tout à gauche */}
       <View
         style={{
-          flex: 1,
-          justifyContent: 'center',
-          alignItems: 'center',
-          paddingHorizontal: 40,
+          width: '65%',
+          paddingTop: 80,
         }}
       >
-        {/* Main headline */}
-        <Text
-          style={{
-            fontFamily: theme.fonts.display,
-            fontSize: theme.fontSize['3xl'],
-            fontWeight: 700,
-            color: theme.colors.accent,
-            textAlign: 'center',
-            marginBottom: 24,
-          }}
-        >
-          PASSEZ À L'ACTION
-        </Text>
+        {/* Titre MASSIF aligné à gauche */}
+        <TypeSlab text="PASSEZ" size="massive" align="left" />
+        <TypeSlab text="À L'ACTION" size="massive" align="left" />
 
-        {/* Dynamic text */}
-        <Text
-          style={{
-            fontFamily: theme.fonts.body,
-            fontSize: theme.fontSize.lg,
-            color: theme.colors.textPrimary,
-            textAlign: 'center',
-            lineHeight: 1.6,
-            marginBottom: 16,
-          }}
-        >
-          {`Ce rapport identifie ${totalActions} optimisations pour améliorer votre visibilité dans les réponses IA.`}
-        </Text>
+        {/* Espace brutal */}
+        <View style={{ height: 60 }} />
 
-        {/* Service description */}
-        <Text
-          style={{
-            fontFamily: theme.fonts.body,
-            fontSize: theme.fontSize.base,
-            color: theme.colors.textMuted,
-            textAlign: 'center',
-            lineHeight: 1.6,
-            marginBottom: 16,
-          }}
-        >
-          Coucou IA peut exécuter ces recommandations automatiquement sur votre
-          site.
-        </Text>
+        {/* Texte en 2 colonnes inégales */}
+        <View style={{ flexDirection: 'row', gap: 16, marginBottom: 32 }}>
+          <View style={{ width: '70%' }}>
+            <Text
+              style={{
+                fontFamily: theme.fonts.mono,
+                fontSize: theme.fontSize.base,
+                color: theme.colors.textPrimary,
+                lineHeight: 1.5,
+              }}
+            >
+              {`Ce rapport identifie ${totalActions} optimisations pour améliorer votre visibilité.`}
+            </Text>
+          </View>
 
-        {/* Link */}
-        <Link
-          src="https://coucou-ia.com"
-          style={{
-            fontFamily: theme.fonts.body,
-            fontSize: theme.fontSize.lg,
-            color: theme.colors.accent,
-            textDecoration: 'underline',
-            marginBottom: 40,
-          }}
-        >
-          coucou-ia.com
-        </Link>
-
-        {/* Accent divider */}
-        <View style={{ ...baseStyles.accentDivider, alignSelf: 'center' }} />
-
-        {/* Logo */}
-        <View style={{ marginBottom: 12 }}>
-          <CoucouLogo width={80} />
+          <View style={{ width: '30%' }}>
+            <Text
+              style={{
+                fontFamily: theme.fonts.mono,
+                fontSize: theme.fontSize.sm,
+                color: theme.colors.textMuted,
+                lineHeight: 1.5,
+              }}
+            >
+              Coucou IA peut exécuter ces recommandations automatiquement.
+            </Text>
+          </View>
         </View>
 
-        {/* Tagline */}
+        {/* URL comme point focal avec règle */}
+        <View style={{ marginBottom: 8 }}>
+          <Link
+            src="https://coucou-ia.com"
+            style={{
+              fontFamily: theme.fonts.mono,
+              fontSize: theme.fontSize['2xl'],
+              fontWeight: 700,
+              color: theme.colors.accent,
+              textDecoration: 'none',
+            }}
+          >
+            coucou-ia.com
+          </Link>
+        </View>
+
+        {/* Règle décorative */}
+        <View
+          style={{
+            width: 120,
+            height: 3,
+            backgroundColor: theme.colors.accent,
+            marginBottom: 40,
+          }}
+        />
+      </View>
+
+      {/* Zone vide dramatique - 40% */}
+      <View style={{ flex: 1 }} />
+
+      {/* Tagline en bas à gauche */}
+      <View
+        style={{
+          position: 'absolute',
+          bottom: 40,
+          left: 40,
+        }}
+      >
         <Text
           style={{
-            fontFamily: theme.fonts.body,
-            fontSize: theme.fontSize.sm,
+            fontFamily: theme.fonts.mono,
+            fontSize: theme.fontSize.base,
+            fontWeight: 700,
             color: theme.colors.textMuted,
+            letterSpacing: 1,
           }}
         >
-          Le GEO, c'est le nouveau SEO.
+          LE GEO, C'EST LE NOUVEAU SEO.
         </Text>
+      </View>
+
+      {/* Logo en bas à droite */}
+      <View
+        style={{
+          position: 'absolute',
+          bottom: 40,
+          right: 40,
+        }}
+      >
+        <CoucouLogo width={60} />
       </View>
     </Page>
   );

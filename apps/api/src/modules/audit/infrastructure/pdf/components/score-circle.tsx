@@ -83,13 +83,37 @@ export function ScoreCircle({
           />
         )}
 
-        {/* Score text */}
+        {/* Halo effects - cercles concentriques */}
+        <Circle
+          cx={cx}
+          cy={cy}
+          r={r + 4}
+          style={{
+            fill: 'none',
+            stroke: color,
+            strokeWidth: 1,
+            opacity: 0.2,
+          }}
+        />
+        <Circle
+          cx={cx}
+          cy={cy}
+          r={r + 8}
+          style={{
+            fill: 'none',
+            stroke: color,
+            strokeWidth: 0.5,
+            opacity: 0.1,
+          }}
+        />
+
+        {/* Score text - monospace pour data */}
         <SvgText
           x={cx}
           y={cy - subFontSize / 2}
           style={{
             fontSize: scoreFontSize,
-            fontFamily: theme.fonts.display,
+            fontFamily: theme.fonts.mono,
             fontWeight: 700,
             fill: theme.colors.textPrimary,
             textAnchor: 'middle',

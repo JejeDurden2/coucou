@@ -63,22 +63,42 @@ Font.register({
 
 export const theme = {
   colors: {
+    // Backgrounds - Palette actuelle conservée
     bgPrimary: '#09090B',
     bgCard: '#18181B',
     bgCardHover: '#27272A',
+
+    // Text - Palette actuelle conservée
     textPrimary: '#FAFAFA',
     textMuted: '#A1A1AA',
+
+    // Accent - Palette actuelle conservée
     accent: '#8B5CF6',
+
+    // Sémantiques - Palette actuelle conservée
     success: '#22C55E',
     destructive: '#EF4444',
     warning: '#FBBF24',
+
+    // Bordures - Palette actuelle conservée
     border: '#27272A',
+
+    // Nouveaux tokens brutalist
+    brutalBlack: '#000000', // Noir pur pour contraste max
+    brutalWhite: '#FFFFFF', // Blanc pur pour contraste max
+
+    // Grilles techniques
+    gridLine: '#27272A', // Lignes de grille subtiles
+    gridLineHeavy: '#52525B', // Lignes de grille proéminentes
   },
   fonts: {
     display: 'Fraunces',
     body: 'Bricolage Grotesque',
+    mono: 'Bricolage Grotesque', // Utiliser Bricolage pour data monospace-style
   },
   fontSize: {
+    // Échelle étendue pour brutalisme (8pt → 96pt)
+    tiny: 6, // Métadonnées ultra-small
     xs: 8,
     sm: 9,
     base: 11,
@@ -87,6 +107,21 @@ export const theme = {
     '2xl': 24,
     '3xl': 28,
     '4xl': 36,
+    '5xl': 48, // Headlines massifs
+    '6xl': 64, // Titres brutaux
+    '7xl': 96, // Typographie architecturale
+  },
+  fontWeight: {
+    normal: 400,
+    medium: 500,
+    semibold: 600,
+    bold: 700,
+  },
+  spacing: {
+    // Grid system pour brutalisme
+    gridUnit: 8, // Unité de base 8px
+    gridColumn: 60, // Largeur colonne dans grille 12-col
+    gridGutter: 16, // Gouttière entre colonnes
   },
 } as const;
 
@@ -168,5 +203,49 @@ export const baseStyles = StyleSheet.create({
     justifyContent: 'space-between',
     fontSize: theme.fontSize.xs,
     color: theme.colors.textMuted,
+  },
+
+  // ─── Brutalist Styles ────────────────────────────────────────────────
+
+  // Typographie massive pour titres brutaux
+  brutalTitle: {
+    fontFamily: theme.fonts.body,
+    fontSize: theme.fontSize['7xl'],
+    fontWeight: 700,
+    lineHeight: 0.9,
+    color: theme.colors.brutalWhite,
+    letterSpacing: -2,
+  },
+
+  // Headline massif pour sections
+  brutalHeadline: {
+    fontFamily: theme.fonts.mono,
+    fontSize: theme.fontSize['5xl'],
+    fontWeight: 700,
+    lineHeight: 1.1,
+    color: theme.colors.textPrimary,
+  },
+
+  // Data monospace technique
+  brutalData: {
+    fontFamily: theme.fonts.mono,
+    fontWeight: 700,
+    letterSpacing: 0,
+  },
+
+  // Card sans border radius (angulaire)
+  brutalCard: {
+    backgroundColor: theme.colors.bgCard,
+    padding: 16,
+    marginBottom: 12,
+  },
+
+  // Grille technique visible
+  gridOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
   },
 });
