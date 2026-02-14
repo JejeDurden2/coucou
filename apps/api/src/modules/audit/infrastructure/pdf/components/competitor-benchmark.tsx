@@ -3,6 +3,7 @@ import type { AuditAnalysis, AnalysisCompetitor } from '@coucou-ia/shared';
 
 import { theme, baseStyles, getScoreColor } from '../theme';
 import { BrutalGrid } from './brutal-grid';
+import { CompetitorCard } from './competitor-card';
 import { PageFooter } from './page-footer';
 import { SectionHeader } from './section-header';
 
@@ -122,132 +123,6 @@ function TableRow({
           >
             —
           </Text>
-        </View>
-      )}
-    </View>
-  );
-}
-
-function CompetitorCard({
-  competitor,
-}: {
-  competitor: AnalysisCompetitor;
-}): React.JSX.Element {
-  return (
-    <View style={baseStyles.card} wrap={false}>
-      {/* Name + domain */}
-      <Text
-        style={{
-          fontFamily: theme.fonts.display,
-          fontSize: theme.fontSize.lg,
-          fontWeight: 700,
-          color: theme.colors.textPrimary,
-          marginBottom: 2,
-        }}
-      >
-        {competitor.name}
-      </Text>
-      <Text
-        style={{
-          fontFamily: theme.fonts.body,
-          fontSize: theme.fontSize.sm,
-          color: theme.colors.textMuted,
-          marginBottom: 12,
-        }}
-      >
-        {competitor.domain}
-      </Text>
-
-      {/* Forces */}
-      {competitor.strengths.length > 0 && (
-        <View style={{ marginBottom: 8 }}>
-          <Text
-            style={{
-              fontFamily: theme.fonts.body,
-              fontSize: theme.fontSize.sm,
-              fontWeight: 700,
-              color: theme.colors.textPrimary,
-              marginBottom: 4,
-            }}
-          >
-            Forces
-          </Text>
-          {competitor.strengths.map((s, i) => (
-            <Text
-              key={`s-${i}`}
-              style={{
-                fontFamily: theme.fonts.body,
-                fontSize: theme.fontSize.sm,
-                color: theme.colors.textPrimary,
-                marginBottom: 2,
-              }}
-            >
-              <Text style={{ color: theme.colors.accent }}>{'> '}</Text>
-              {s}
-            </Text>
-          ))}
-        </View>
-      )}
-
-      {/* Gaps exploitables */}
-      {competitor.clientGaps.length > 0 && (
-        <View style={{ marginBottom: 8 }}>
-          <Text
-            style={{
-              fontFamily: theme.fonts.body,
-              fontSize: theme.fontSize.sm,
-              fontWeight: 700,
-              color: theme.colors.textPrimary,
-              marginBottom: 4,
-            }}
-          >
-            Gaps exploitables
-          </Text>
-          {competitor.clientGaps.map((g, i) => (
-            <Text
-              key={`g-${i}`}
-              style={{
-                fontFamily: theme.fonts.body,
-                fontSize: theme.fontSize.sm,
-                color: theme.colors.textPrimary,
-                marginBottom: 2,
-              }}
-            >
-              <Text style={{ color: theme.colors.success }}>{'> '}</Text>
-              {g}
-            </Text>
-          ))}
-        </View>
-      )}
-
-      {/* Avantages présence externe */}
-      {competitor.externalPresenceAdvantage.length > 0 && (
-        <View>
-          <Text
-            style={{
-              fontFamily: theme.fonts.body,
-              fontSize: theme.fontSize.sm,
-              fontWeight: 700,
-              color: theme.colors.textPrimary,
-              marginBottom: 4,
-            }}
-          >
-            Avantages présence externe
-          </Text>
-          {competitor.externalPresenceAdvantage.map((a, i) => (
-            <Text
-              key={`a-${i}`}
-              style={{
-                fontFamily: theme.fonts.body,
-                fontSize: theme.fontSize.sm,
-                color: theme.colors.textPrimary,
-                marginBottom: 2,
-              }}
-            >
-              <Text style={{ color: theme.colors.warning }}>{'! '}</Text>
-              {a}
-            </Text>
-          ))}
         </View>
       )}
     </View>

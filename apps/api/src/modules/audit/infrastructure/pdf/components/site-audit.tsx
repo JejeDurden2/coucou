@@ -3,6 +3,7 @@ import type { AuditAnalysis, AnalysisFinding } from '@coucou-ia/shared';
 
 import { theme, baseStyles } from '../theme';
 import { BrutalGrid } from './brutal-grid';
+import { FindingCard } from './finding-card';
 import { MetricHero } from './metric-hero';
 import { PageFooter } from './page-footer';
 import { SectionHeader } from './section-header';
@@ -16,18 +17,6 @@ const SEVERITY_ORDER: AnalysisFinding['severity'][] = [
   'warning',
   'info',
 ];
-
-const SEVERITY_COLORS: Record<AnalysisFinding['severity'], string> = {
-  critical: theme.colors.destructive,
-  warning: theme.colors.warning,
-  info: theme.colors.accent,
-};
-
-const SEVERITY_LABELS: Record<AnalysisFinding['severity'], string> = {
-  critical: 'CRITIQUE',
-  warning: 'ATTENTION',
-  info: 'INFO',
-};
 
 const PAGE_TYPE_LABELS: Record<string, string> = {
   homepage: 'HOME',
@@ -45,81 +34,6 @@ function sortFindings(findings: AnalysisFinding[]): AnalysisFinding[] {
   return [...findings].sort(
     (a, b) =>
       SEVERITY_ORDER.indexOf(a.severity) - SEVERITY_ORDER.indexOf(b.severity),
-  );
-}
-
-function FindingCard({
-  finding,
-}: {
-  finding: AnalysisFinding;
-}): React.JSX.Element {
-  const severityColor = SEVERITY_COLORS[finding.severity];
-
-  return (
-    <View
-      style={{
-        backgroundColor: theme.colors.bgCard,
-        padding: 10,
-        marginBottom: 8,
-        borderLeftWidth: 5,
-        borderLeftColor: severityColor,
-      }}
-      wrap={false}
-    >
-      {/* Severity label - monospace caps */}
-      <Text
-        style={{
-          fontFamily: theme.fonts.mono,
-          fontSize: theme.fontSize.tiny,
-          fontWeight: 700,
-          color: severityColor,
-          letterSpacing: 2,
-          textTransform: 'uppercase',
-          marginBottom: 4,
-        }}
-      >
-        {SEVERITY_LABELS[finding.severity]}
-      </Text>
-
-      {/* Title - monospace bold */}
-      <Text
-        style={{
-          fontFamily: theme.fonts.mono,
-          fontSize: theme.fontSize.sm,
-          fontWeight: 700,
-          color: theme.colors.textPrimary,
-          marginBottom: 4,
-          lineHeight: 1.3,
-        }}
-      >
-        {finding.title}
-      </Text>
-
-      {/* Detail - dense */}
-      <Text
-        style={{
-          fontFamily: theme.fonts.mono,
-          fontSize: theme.fontSize.tiny,
-          color: theme.colors.textMuted,
-          lineHeight: 1.4,
-          marginBottom: 4,
-        }}
-      >
-        {finding.detail}
-      </Text>
-
-      {/* Recommendation - arrow + monospace */}
-      <Text
-        style={{
-          fontFamily: theme.fonts.mono,
-          fontSize: theme.fontSize.tiny,
-          color: theme.colors.accent,
-          lineHeight: 1.4,
-        }}
-      >
-        → {finding.recommendation}
-      </Text>
-    </View>
   );
 }
 
