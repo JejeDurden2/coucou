@@ -7,6 +7,7 @@ import { CategoryBadge } from './category-badge';
 import { ImpactDots } from './impact-dots';
 import { MetricHero } from './metric-hero';
 import { PageFooter } from './page-footer';
+import { SectionHeader } from './section-header';
 
 interface ActionPlanSectionProps {
   actionPlan: AuditAnalysis['actionPlan'];
@@ -131,21 +132,8 @@ export function ActionPlanSection({
       {/* Grille technique */}
       <BrutalGrid variant="subtle" />
 
-      {/* Section Title - petit en haut à droite */}
-      <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginBottom: 24 }}>
-        <Text
-          style={{
-            fontFamily: theme.fonts.mono,
-            fontSize: theme.fontSize.sm,
-            fontWeight: 700,
-            color: theme.colors.textMuted,
-            letterSpacing: 2,
-            textTransform: 'uppercase',
-          }}
-        >
-          PLAN D'ACTION
-        </Text>
-      </View>
+      {/* Section Title */}
+      <SectionHeader title="PLAN D'ACTION" />
 
       {/* Metric Hero - total actions */}
       <MetricHero

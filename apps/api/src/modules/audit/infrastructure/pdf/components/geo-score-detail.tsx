@@ -5,6 +5,7 @@ import { theme, baseStyles, getScoreColor } from '../theme';
 import { BrutalGrid } from './brutal-grid';
 import { PageFooter } from './page-footer';
 import { ScoreCircle } from './score-circle';
+import { SectionHeader } from './section-header';
 
 interface GeoScoreDetailProps {
   geoScore: AuditAnalysis['geoScore'];
@@ -97,20 +98,9 @@ export function GeoScoreDetail({
       {/* Grille technique 4x4 visible */}
       <BrutalGrid variant="heavy" />
 
-      {/* Section Title - petit en haut à droite */}
-      <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginBottom: 32 }}>
-        <Text
-          style={{
-            fontFamily: theme.fonts.mono,
-            fontSize: theme.fontSize.sm,
-            fontWeight: 700,
-            color: theme.colors.textMuted,
-            letterSpacing: 2,
-            textTransform: 'uppercase',
-          }}
-        >
-          DÉTAIL SCORES
-        </Text>
+      {/* Section Title */}
+      <View style={{ marginBottom: 8 }}>
+        <SectionHeader title="DÉTAIL SCORES" />
       </View>
 
       {/* Overall Score - décentré en haut à gauche */}

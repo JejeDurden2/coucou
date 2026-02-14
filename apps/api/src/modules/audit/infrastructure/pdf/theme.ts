@@ -2,6 +2,70 @@ import path from 'path';
 
 import { Font, StyleSheet } from '@react-pdf/renderer';
 
+/**
+ * ═══════════════════════════════════════════════════════════════════════════
+ * THEME SYSTEM - PDF AUDIT (Source Unique de Vérité)
+ * ═══════════════════════════════════════════════════════════════════════════
+ *
+ * ⚠️  IMPORTANT : Ce fichier est la SOURCE UNIQUE DE VÉRITÉ pour le design system
+ *     du PDF d'audit. Toute modification du style visuel doit passer par ici.
+ *
+ * Ce fichier définit :
+ * ┌─────────────────────────────────────────────────────────────────────────┐
+ * │ • Fonts        : Fraunces (display), Bricolage Grotesque (body/mono)    │
+ * │ • Colors       : Palette brutalist dark (bgPrimary, accent, semantic)   │
+ * │ • Font Sizes   : Échelle de tiny (6pt) à 7xl (96pt) pour typo massive  │
+ * │ • Spacing      : Système de grille 8px                                  │
+ * │ • Base Styles  : Page, card, footer, styles brutalist                   │
+ * └─────────────────────────────────────────────────────────────────────────┘
+ *
+ * 📋 RÈGLES D'UTILISATION :
+ *
+ *   ✅ TOUJOURS utiliser theme.colors.*     (jamais de hardcoded hex #8B5CF6)
+ *   ✅ TOUJOURS utiliser theme.fontSize.*   (jamais de numbers directs)
+ *   ✅ TOUJOURS utiliser theme.fonts.*      (jamais de font names directs)
+ *   ✅ TOUJOURS utiliser theme.spacing.*    (pour cohérence du grid 8px)
+ *   ❌ NE JAMAIS créer de système parallèle (styles.ts a été supprimé)
+ *   ❌ NE JAMAIS hardcoder des valeurs de style
+ *
+ * 📖 EXEMPLE D'USAGE :
+ *
+ *   ```tsx
+ *   import { theme } from '../theme';
+ *
+ *   <Text style={{
+ *     fontFamily: theme.fonts.mono,
+ *     fontSize: theme.fontSize.base,
+ *     color: theme.colors.accent,
+ *     marginBottom: theme.spacing.gridUnit * 2, // 16px
+ *   }}>
+ *     Hello World
+ *   </Text>
+ *   ```
+ *
+ * 🎨 DIRECTION ESTHÉTIQUE : BRUTALIST MODERNE
+ *
+ *   • Typographie massive architecturale (sizes 7xl = 96pt)
+ *   • Grilles techniques visibles en arrière-plan
+ *   • Layouts asymétriques intentionnels (70/30, 60/40)
+ *   • High contrast dark theme (bgPrimary #09090B)
+ *   • No border-radius (coins angulaires brutaux)
+ *   • Mono font pour toutes les données (Bricolage Grotesque)
+ *
+ * 🔧 MAINTENANCE :
+ *
+ *   Pour modifier le theme :
+ *   1. Mettre à jour ce fichier uniquement
+ *   2. Les changements se propagent automatiquement à tous les composants
+ *   3. Tester avec `pnpm dev` pour vérifier le rendu PDF
+ *
+ * 📚 DOCUMENTATION COMPLÈTE :
+ *   - Review : tasks/pdf-review-executive-summary.md
+ *   - Plan d'action : tasks/pdf-improvements.md
+ *
+ * ═══════════════════════════════════════════════════════════════════════════
+ */
+
 // ─── Font Registration ───────────────────────────────────────────────
 
 const bricolageBase = path.dirname(

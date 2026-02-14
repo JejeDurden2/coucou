@@ -7,6 +7,7 @@ import { MetricHero } from './metric-hero';
 import { PageFooter } from './page-footer';
 import { PlatformRow } from './platform-row';
 import { ScoreCircle } from './score-circle';
+import { SectionHeader } from './section-header';
 
 interface ExternalPresenceProps {
   externalPresence: AuditAnalysis['externalPresence'];
@@ -24,21 +25,8 @@ export function ExternalPresence({
       {/* Grille technique */}
       <BrutalGrid variant="subtle" />
 
-      {/* Section Title - petit en haut à droite */}
-      <View style={{ flexDirection: 'row', justifyContent: 'flex-end', marginBottom: 24 }}>
-        <Text
-          style={{
-            fontFamily: theme.fonts.mono,
-            fontSize: theme.fontSize.sm,
-            fontWeight: 700,
-            color: theme.colors.textMuted,
-            letterSpacing: 2,
-            textTransform: 'uppercase',
-          }}
-        >
-          PRÉSENCE EXTERNE
-        </Text>
-      </View>
+      {/* Section Title */}
+      <SectionHeader title="PRÉSENCE EXTERNE" />
 
       {/* Metric Hero - Score */}
       <MetricHero

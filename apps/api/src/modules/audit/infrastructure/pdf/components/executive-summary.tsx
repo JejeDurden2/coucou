@@ -5,6 +5,7 @@ import { theme, baseStyles } from '../theme';
 import { BrutalGrid } from './brutal-grid';
 import { PageFooter } from './page-footer';
 import { ProgressBar } from './progress-bar';
+import { SectionHeader } from './section-header';
 
 interface ExecutiveSummaryProps {
   summary: AuditAnalysis['executiveSummary'];
@@ -36,27 +37,8 @@ export function ExecutiveSummary({
       {/* Grille technique */}
       <BrutalGrid variant="subtle" />
 
-      {/* Section Title - petit en haut à droite (inverse conventionnel) */}
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'flex-end',
-          marginBottom: 24,
-        }}
-      >
-        <Text
-          style={{
-            fontFamily: theme.fonts.mono,
-            fontSize: theme.fontSize.sm,
-            fontWeight: 700,
-            color: theme.colors.textMuted,
-            letterSpacing: 2,
-            textTransform: 'uppercase',
-          }}
-        >
-          RÉSUMÉ EXÉCUTIF
-        </Text>
-      </View>
+      {/* Section Title */}
+      <SectionHeader title="RÉSUMÉ EXÉCUTIF" />
 
       {/* Headline MASSIF en monospace - 70% width */}
       <View style={{ width: '70%', marginBottom: 32 }}>

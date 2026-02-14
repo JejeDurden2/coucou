@@ -5,6 +5,7 @@ import { theme, baseStyles } from '../theme';
 import { BrutalGrid } from './brutal-grid';
 import { MetricHero } from './metric-hero';
 import { PageFooter } from './page-footer';
+import { SectionHeader } from './section-header';
 
 interface SiteAuditProps {
   siteAudit: AuditAnalysis['siteAudit'];
@@ -142,22 +143,9 @@ export function SiteAudit({
       {/* Grille technique */}
       <BrutalGrid variant="heavy" />
 
-      {/* Section Title - petit en haut à droite */}
-      <View
-        style={{ flexDirection: 'row', justifyContent: 'flex-end', marginBottom: 20 }}
-      >
-        <Text
-          style={{
-            fontFamily: theme.fonts.mono,
-            fontSize: theme.fontSize.sm,
-            fontWeight: 700,
-            color: theme.colors.textMuted,
-            letterSpacing: 2,
-            textTransform: 'uppercase',
-          }}
-        >
-          AUDIT TECHNIQUE
-        </Text>
+      {/* Section Title */}
+      <View style={{ marginBottom: -4 }}>
+        <SectionHeader title="AUDIT TECHNIQUE" />
       </View>
 
       {/* Metric Hero - Total findings */}
