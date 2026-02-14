@@ -21,7 +21,7 @@ CREATE TABLE "audit_orders" (
     "timeout_at" TIMESTAMP(3),
     "failure_reason" TEXT,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updated_at" TIMESTAMP(3) NOT NULL,
+    "updated_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "audit_orders_pkey" PRIMARY KEY ("id")
 );
