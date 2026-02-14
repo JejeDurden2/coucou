@@ -6,9 +6,11 @@ import {
   EMAIL_QUEUE_NAME,
   SCAN_QUEUE_NAME,
   AUDIT_QUEUE_NAME,
+  AUDIT_PDF_QUEUE_NAME,
   defaultJobOptions,
   scanJobOptions,
   auditJobOptions,
+  auditPdfJobOptions,
 } from './queue.config';
 import { EmailQueueService } from './email-queue.service';
 import { EmailProcessor } from './email.processor';
@@ -36,6 +38,10 @@ import { ScanQueueService } from './scan-queue.service';
     BullModule.registerQueue({
       name: AUDIT_QUEUE_NAME,
       defaultJobOptions: auditJobOptions,
+    }),
+    BullModule.registerQueue({
+      name: AUDIT_PDF_QUEUE_NAME,
+      defaultJobOptions: auditPdfJobOptions,
     }),
   ],
   providers: [EmailQueueService, EmailProcessor, ScanQueueService],

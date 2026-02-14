@@ -17,6 +17,13 @@ const REQUIRED_ENV_VARS_PRODUCTION = [
   'FRONTEND_URL',
   'API_URL',
   'RESEND_API_KEY',
+  // R2 Storage (required for audit PDF generation)
+  'R2_ACCOUNT_ID',
+  'R2_BUCKET_NAME',
+  'R2_ACCESS_KEY_ID',
+  'R2_SECRET_ACCESS_KEY',
+  // Mistral AI (required for audit analysis)
+  'MISTRAL_API_KEY',
 ] as const;
 
 function validateEnvironment(logger: LoggerService): void {

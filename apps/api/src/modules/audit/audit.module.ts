@@ -1,5 +1,4 @@
 import { forwardRef, Module } from '@nestjs/common';
-import { BullModule } from '@nestjs/bullmq';
 
 import { ProjectModule } from '../project';
 import { PromptModule } from '../prompt';
@@ -7,7 +6,6 @@ import { ScanModule } from '../scan';
 import { SentimentModule } from '../sentiment';
 import { BillingModule } from '../billing/billing.module';
 import { AuthModule } from '../auth/auth.module';
-import { AUDIT_PDF_QUEUE_NAME } from '../../infrastructure/queue/queue.config';
 import { AUDIT_ORDER_REPOSITORY } from './domain/repositories/audit-order.repository';
 import { AUDIT_AGENT_PORT } from './domain/ports/audit-agent.port';
 import { AUDIT_PDF_PORT } from './domain/ports/audit-pdf.port';
@@ -47,7 +45,6 @@ import { TwinWebhookController } from './presentation/twin-webhook.controller';
     SentimentModule,
     forwardRef(() => BillingModule),
     forwardRef(() => AuthModule),
-    BullModule.registerQueue({ name: AUDIT_PDF_QUEUE_NAME }),
   ],
   controllers: [AuditController, AuditPdfDownloadController, TwinWebhookController],
   providers: [

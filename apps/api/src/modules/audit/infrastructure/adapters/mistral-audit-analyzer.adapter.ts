@@ -114,7 +114,12 @@ export class MistralAuditAnalyzerAdapter implements AuditAnalyzerPort {
     const startTime = Date.now();
 
     const userPrompt = this.buildUserPrompt(observations, brandContext);
-    const apiKey = this.configService.get<string>('MISTRAL_API_KEY') ?? '';
+    const apiKey = this.configService.get<string>('MISTRAL_API_KEY');
+
+    if (!apiKey) {
+      this.logger.error('MISTRAL_API_KEY is not configured');
+      return Result.err(new AuditAnalysisError('Mistral API key is not configured'));
+    }
 
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), TIMEOUT_MS);
