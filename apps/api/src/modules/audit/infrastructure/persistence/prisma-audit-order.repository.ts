@@ -1,18 +1,26 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma } from '@prisma/client';
+import { Prisma, $Enums } from '@prisma/client';
 import { AuditStatus } from '@coucou-ia/shared';
 
 import { PrismaService } from '../../../../prisma';
 import { AuditOrder } from '../../domain/entities/audit-order.entity';
 import type { AuditOrderRepository } from '../../domain/repositories/audit-order.repository';
 
-const TERMINAL_STATUSES: AuditStatus[] = [
+function toPrismaStatus(status: AuditStatus): $Enums.AuditStatus {
+  return status as unknown as $Enums.AuditStatus;
+}
+
+function fromPrismaStatus(status: $Enums.AuditStatus): AuditStatus {
+  return status as unknown as AuditStatus;
+}
+
+const TERMINAL_STATUSES: $Enums.AuditStatus[] = [
   AuditStatus.COMPLETED,
   AuditStatus.PARTIAL,
   AuditStatus.FAILED,
   AuditStatus.TIMEOUT,
   AuditStatus.SCHEMA_ERROR,
-];
+].map(toPrismaStatus);
 
 function jsonOrDbNull(value: unknown): Prisma.InputJsonValue | typeof Prisma.DbNull {
   return value === null || value === undefined
@@ -28,7 +36,7 @@ export class PrismaAuditOrderRepository implements AuditOrderRepository {
     const data = {
       userId: auditOrder.userId,
       projectId: auditOrder.projectId,
-      status: auditOrder.status,
+      status: toPrismaStatus(auditOrder.status),
       stripePaymentIntentId: auditOrder.stripePaymentIntentId,
       amountCents: auditOrder.amountCents,
       paidAt: auditOrder.paidAt,
@@ -37,11 +45,27 @@ export class PrismaAuditOrderRepository implements AuditOrderRepository {
       rawResultPayload: jsonOrDbNull(auditOrder.rawResultPayload),
       twinAgentId: auditOrder.twinAgentId,
       reportUrl: auditOrder.reportUrl,
+      crawlDataUrl: auditOrder.crawlDataUrl,
+      analysisDataUrl: auditOrder.analysisDataUrl,
+      retryCount: auditOrder.retryCount,
+      pagesAnalyzedClient: auditOrder.pagesAnalyzedClient,
+      pagesAnalyzedCompetitors: auditOrder.pagesAnalyzedCompetitors,
+      competitorsAnalyzed: auditOrder.competitorsAnalyzed,
+      geoScore: auditOrder.geoScore,
+      verdict: auditOrder.verdict,
+      topFindings: auditOrder.topFindings,
+      actionCountCritical: auditOrder.actionCountCritical,
+      actionCountHigh: auditOrder.actionCountHigh,
+      actionCountMedium: auditOrder.actionCountMedium,
+      totalActions: auditOrder.totalActions,
+      externalPresenceScore: auditOrder.externalPresenceScore,
       startedAt: auditOrder.startedAt,
       completedAt: auditOrder.completedAt,
       failedAt: auditOrder.failedAt,
       timeoutAt: auditOrder.timeoutAt,
       failureReason: auditOrder.failureReason,
+      refundedAt: auditOrder.refundedAt,
+      refundId: auditOrder.refundId,
     };
 
     const record = await this.prisma.auditOrder.upsert({
@@ -52,7 +76,7 @@ export class PrismaAuditOrderRepository implements AuditOrderRepository {
 
     return AuditOrder.fromPersistence({
       ...record,
-      status: record.status as unknown as AuditStatus,
+      status: fromPrismaStatus(record.status),
     });
   }
 
@@ -61,7 +85,7 @@ export class PrismaAuditOrderRepository implements AuditOrderRepository {
     if (!record) return null;
     return AuditOrder.fromPersistence({
       ...record,
-      status: record.status as unknown as AuditStatus,
+      status: fromPrismaStatus(record.status),
     });
   }
 
@@ -73,7 +97,7 @@ export class PrismaAuditOrderRepository implements AuditOrderRepository {
     return records.map((r) =>
       AuditOrder.fromPersistence({
         ...r,
-        status: r.status as unknown as AuditStatus,
+        status: fromPrismaStatus(r.status),
       }),
     );
   }
@@ -86,7 +110,7 @@ export class PrismaAuditOrderRepository implements AuditOrderRepository {
     return records.map((r) =>
       AuditOrder.fromPersistence({
         ...r,
-        status: r.status as unknown as AuditStatus,
+        status: fromPrismaStatus(r.status),
       }),
     );
   }
@@ -99,7 +123,7 @@ export class PrismaAuditOrderRepository implements AuditOrderRepository {
     if (!record) return null;
     return AuditOrder.fromPersistence({
       ...record,
-      status: record.status as unknown as AuditStatus,
+      status: fromPrismaStatus(record.status),
     });
   }
 
@@ -114,21 +138,27 @@ export class PrismaAuditOrderRepository implements AuditOrderRepository {
     if (!record) return null;
     return AuditOrder.fromPersistence({
       ...record,
-      status: record.status as unknown as AuditStatus,
+      status: fromPrismaStatus(record.status),
     });
   }
 
   async findTimedOutAudits(): Promise<AuditOrder[]> {
     const records = await this.prisma.auditOrder.findMany({
       where: {
-        status: AuditStatus.PROCESSING,
+        status: {
+          in: [
+            AuditStatus.CRAWLING,
+            AuditStatus.ANALYZING,
+            AuditStatus.PROCESSING,
+          ].map(toPrismaStatus),
+        },
         timeoutAt: { lt: new Date() },
       },
     });
     return records.map((r) =>
       AuditOrder.fromPersistence({
         ...r,
-        status: r.status as unknown as AuditStatus,
+        status: fromPrismaStatus(r.status),
       }),
     );
   }

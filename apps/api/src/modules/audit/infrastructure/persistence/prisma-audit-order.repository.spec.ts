@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { AuditStatus } from '@coucou-ia/shared';
-import type { AuditBrief } from '@coucou-ia/shared';
+import type { TwinCrawlInput } from '@coucou-ia/shared';
 
 import { PrismaAuditOrderRepository } from './prisma-audit-order.repository';
 import { AuditOrder } from '../../domain/entities/audit-order.entity';
@@ -17,8 +17,7 @@ describe('PrismaAuditOrderRepository', () => {
     };
   };
 
-  const mockBrief: AuditBrief = {
-    mission: 'test mission',
+  const mockBrief: TwinCrawlInput = {
     brand: {
       name: 'Test Brand',
       domain: 'test.com',
@@ -31,34 +30,23 @@ describe('PrismaAuditOrderRepository', () => {
       },
     },
     scanData: {
-      summary: {
-        totalScans: 10,
-        dateRange: '2026-01-01 - 2026-01-30',
-        globalCitationRate: 0.5,
-        globalAvgPosition: 3,
-        trend: 'stable',
-      },
-      byProvider: {},
-      sentiment: {
-        score: 0,
-        themes: [],
-        positiveTerms: [],
-        negativeTerms: [],
-        rawSummary: '',
-      },
-      promptResults: [],
+      clientCitationRate: 0.5,
+      totalQueriesTested: 10,
+      clientMentionsCount: 5,
+      averageSentiment: 'neutral',
+      positionsWhenCited: [1, 3],
+      topPerformingQueries: ['best tool'],
+      queriesNotCited: ['other query'],
     },
-    competitors: { primary: [] },
+    competitors: {
+      primary: [{ name: 'Competitor A', domain: '' }],
+      maxPagesPerCompetitor: 3,
+    },
     callback: {
-      url: 'https://api.test.com/webhooks/twin',
-      authHeader: 'Bearer secret',
+      url: 'https://api.test.com/webhooks/twin/audit',
       auditId: 'audit-123',
     },
-    outputFormat: {
-      schema: 'audit_result_v1',
-      sections: ['geo_score'],
-      language: 'fr',
-    },
+    outputFormat: 'structured_observations',
   };
 
   const mockRecord = {
@@ -74,11 +62,27 @@ describe('PrismaAuditOrderRepository', () => {
     rawResultPayload: null,
     twinAgentId: null,
     reportUrl: null,
+    crawlDataUrl: null,
+    analysisDataUrl: null,
     startedAt: null,
     completedAt: null,
     failedAt: null,
     timeoutAt: null,
     failureReason: null,
+    retryCount: 0,
+    pagesAnalyzedClient: null,
+    pagesAnalyzedCompetitors: null,
+    competitorsAnalyzed: [],
+    geoScore: null,
+    verdict: null,
+    topFindings: [],
+    actionCountCritical: null,
+    actionCountHigh: null,
+    actionCountMedium: null,
+    totalActions: null,
+    externalPresenceScore: null,
+    refundedAt: null,
+    refundId: null,
     createdAt: new Date('2026-02-10T10:00:00Z'),
     updatedAt: new Date('2026-02-10T10:00:00Z'),
   };
@@ -105,6 +109,7 @@ describe('PrismaAuditOrderRepository', () => {
       const auditOrder = AuditOrder.create({
         ...mockRecord,
         briefPayload: mockBrief,
+        storedGeoScore: mockRecord.geoScore,
       });
 
       const result = await repository.save(auditOrder);
@@ -128,6 +133,30 @@ describe('PrismaAuditOrderRepository', () => {
       expect(result).toBeInstanceOf(AuditOrder);
       expect(result.id).toBe('audit-123');
       expect(result.status).toBe(AuditStatus.PENDING);
+    });
+
+    it('should persist refundedAt and refundId', async () => {
+      const refundedRecord = {
+        ...mockRecord,
+        status: AuditStatus.FAILED,
+        refundedAt: new Date('2026-02-10T11:00:00Z'),
+        refundId: 're_refund_123',
+      };
+      mockPrisma.auditOrder.upsert.mockResolvedValue(refundedRecord);
+
+      const auditOrder = AuditOrder.create({
+        ...refundedRecord,
+        briefPayload: mockBrief,
+        storedGeoScore: refundedRecord.geoScore,
+      });
+
+      await repository.save(auditOrder);
+
+      const upsertCall = mockPrisma.auditOrder.upsert.mock.calls[0][0];
+      expect(upsertCall.create.refundedAt).toEqual(new Date('2026-02-10T11:00:00Z'));
+      expect(upsertCall.create.refundId).toBe('re_refund_123');
+      expect(upsertCall.update.refundedAt).toEqual(new Date('2026-02-10T11:00:00Z'));
+      expect(upsertCall.update.refundId).toBe('re_refund_123');
     });
   });
 
@@ -243,7 +272,13 @@ describe('PrismaAuditOrderRepository', () => {
 
       expect(mockPrisma.auditOrder.findMany).toHaveBeenCalledWith({
         where: {
-          status: AuditStatus.PROCESSING,
+          status: {
+            in: [
+              AuditStatus.CRAWLING,
+              AuditStatus.ANALYZING,
+              AuditStatus.PROCESSING,
+            ],
+          },
           timeoutAt: { lt: expect.any(Date) },
         },
       });

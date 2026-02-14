@@ -3,6 +3,7 @@ import { Inject } from '@nestjs/common';
 import type { Job } from 'bullmq';
 
 import { LoggerService } from '../../../../common/logger';
+import { withTimeout } from '../../../../common/utils';
 import { AUDIT_QUEUE_NAME } from '../../../../infrastructure/queue/queue.config';
 import {
   AUDIT_ORDER_REPOSITORY,
@@ -12,9 +13,18 @@ import {
 } from '../../domain';
 import { BriefAssemblerService } from '../../application/services/brief-assembler.service';
 import { AuditEmailNotificationService } from '../../application/services/audit-email-notification.service';
+import { RefundAuditUseCase } from '../../application/use-cases/refund-audit.use-case';
 import { CompleteAuditUseCase } from '../../application/use-cases/complete-audit.use-case';
+import { HandleCrawlCompleteUseCase } from '../../application/use-cases/handle-crawl-complete.use-case';
+import { AnalyzeWithMistralUseCase } from '../../application/use-cases/analyze-with-mistral.use-case';
 import { AuditQueueService } from './audit-queue.service';
-import type { AuditJobData, AuditTimeoutCheckJobData, CompleteAuditJobData } from './audit-queue.service';
+import type {
+  AuditJobData,
+  AuditTimeoutCheckJobData,
+  CompleteAuditJobData,
+  HandleCrawlCompleteJobData,
+  AnalyzeWithMistralJobData,
+} from './audit-queue.service';
 
 const JOB_TIMEOUT_MS = 2 * 60 * 1000; // 2 minutes
 const TIMEOUT_CHECK_DELAY_MS = 15 * 60 * 1000; // 15 minutes
@@ -31,7 +41,10 @@ export class AuditProcessor extends WorkerHost {
     private readonly briefAssemblerService: BriefAssemblerService,
     private readonly auditQueueService: AuditQueueService,
     private readonly auditEmailNotificationService: AuditEmailNotificationService,
+    private readonly refundAuditUseCase: RefundAuditUseCase,
     private readonly completeAuditUseCase: CompleteAuditUseCase,
+    private readonly handleCrawlCompleteUseCase: HandleCrawlCompleteUseCase,
+    private readonly analyzeWithMistralUseCase: AnalyzeWithMistralUseCase,
     private readonly logger: LoggerService,
   ) {
     super();
@@ -46,6 +59,10 @@ export class AuditProcessor extends WorkerHost {
         return this.processTimeoutCheck(job as Job<AuditTimeoutCheckJobData>);
       case 'complete-audit':
         return this.processCompleteAudit(job as Job<CompleteAuditJobData>);
+      case 'handle-crawl-complete':
+        return this.processHandleCrawlComplete(job as Job<HandleCrawlCompleteJobData>);
+      case 'analyze-with-mistral':
+        return this.processAnalyzeWithMistral(job as Job<AnalyzeWithMistralJobData>);
       default:
         this.logger.warn('Unknown audit job name', { jobName: job.name });
     }
@@ -61,7 +78,7 @@ export class AuditProcessor extends WorkerHost {
       attempt: job.attemptsMade + 1,
     });
 
-    await this.withTimeout(async () => {
+    await withTimeout(async () => {
       // 1. Fetch AuditOrder and validate status
       let auditOrder = await this.auditOrderRepository.findById(auditOrderId);
       if (!auditOrder) {
@@ -102,8 +119,8 @@ export class AuditProcessor extends WorkerHost {
       auditOrder = updateBriefResult.value;
       await this.auditOrderRepository.save(auditOrder);
 
-      // 4. Trigger Twin agent
-      const triggerResult = await this.auditAgentPort.triggerAudit(
+      // 4. Trigger Twin crawl
+      const triggerResult = await this.auditAgentPort.triggerCrawl(
         auditOrder.briefPayload,
       );
       if (!triggerResult.ok) {
@@ -114,21 +131,21 @@ export class AuditProcessor extends WorkerHost {
         throw new Error(triggerResult.error.message);
       }
 
-      // 5. Transition PAID → PROCESSING
-      const processingResult = auditOrder.markProcessing(
+      // 5. Transition PAID → CRAWLING
+      const crawlingResult = auditOrder.markCrawling(
         triggerResult.value.agentId,
       );
-      if (!processingResult.ok) {
-        this.logger.error('Failed to transition audit to PROCESSING', {
+      if (!crawlingResult.ok) {
+        this.logger.error('Failed to transition audit to CRAWLING', {
           auditOrderId,
-          error: processingResult.error.message,
+          error: crawlingResult.error.message,
         });
-        throw new Error(processingResult.error.message);
+        throw new Error(crawlingResult.error.message);
       }
-      auditOrder = processingResult.value;
+      auditOrder = crawlingResult.value;
       await this.auditOrderRepository.save(auditOrder);
 
-      this.logger.info('Audit order moved to PROCESSING', {
+      this.logger.info('Audit order moved to CRAWLING', {
         auditOrderId,
         agentId: triggerResult.value.agentId,
       });
@@ -177,9 +194,16 @@ export class AuditProcessor extends WorkerHost {
     }
 
     await this.auditOrderRepository.save(timeoutResult.value);
-    await this.auditEmailNotificationService.notifyAuditTimeout(timeoutResult.value);
 
-    this.logger.info('Audit order marked as TIMEOUT', { auditOrderId });
+    const refundResult = await this.refundAuditUseCase.execute(timeoutResult.value);
+    const refundedOrder = refundResult.ok ? refundResult.value : timeoutResult.value;
+
+    await this.auditEmailNotificationService.notifyAuditTimeout(refundedOrder);
+
+    this.logger.info('Audit order marked as TIMEOUT', {
+      auditOrderId,
+      refunded: refundedOrder.isRefunded,
+    });
   }
 
   private async processCompleteAudit(
@@ -196,6 +220,37 @@ export class AuditProcessor extends WorkerHost {
     await this.completeAuditUseCase.execute(job.data);
   }
 
+  private async processHandleCrawlComplete(
+    job: Job<HandleCrawlCompleteJobData>,
+  ): Promise<void> {
+    const { auditId, status } = job.data;
+
+    this.logger.info('Processing crawl completion', {
+      jobId: job.id,
+      auditId,
+      status,
+    });
+
+    await this.handleCrawlCompleteUseCase.execute(job.data);
+  }
+
+  private async processAnalyzeWithMistral(
+    job: Job<AnalyzeWithMistralJobData>,
+  ): Promise<void> {
+    const { auditOrderId } = job.data;
+
+    this.logger.info('Processing Mistral analysis', {
+      jobId: job.id,
+      auditOrderId,
+      attempt: job.attemptsMade + 1,
+    });
+
+    const result = await this.analyzeWithMistralUseCase.execute({ auditOrderId });
+    if (!result.ok) {
+      throw result.error;
+    }
+  }
+
   @OnWorkerEvent('failed')
   async onFailed(job: Job, error: Error): Promise<void> {
     const maxAttempts = job.opts.attempts ?? 1;
@@ -210,8 +265,8 @@ export class AuditProcessor extends WorkerHost {
       isFinalAttempt,
     });
 
-    if (isFinalAttempt && job.name === 'run-audit') {
-      await this.handleFinalFailure(job as Job<AuditJobData>, error);
+    if (isFinalAttempt && (job.name === 'run-audit' || job.name === 'analyze-with-mistral')) {
+      await this.handleFinalFailure(job as Job<AuditJobData | AnalyzeWithMistralJobData>, error);
     }
   }
 
@@ -225,7 +280,7 @@ export class AuditProcessor extends WorkerHost {
   }
 
   private async handleFinalFailure(
-    job: Job<AuditJobData>,
+    job: Job<AuditJobData | AnalyzeWithMistralJobData>,
     error: Error,
   ): Promise<void> {
     const { auditOrderId } = job.data;
@@ -242,9 +297,14 @@ export class AuditProcessor extends WorkerHost {
         const failedResult = auditOrder.markFailed(error.message);
         if (failedResult.ok) {
           await this.auditOrderRepository.save(failedResult.value);
-          await this.auditEmailNotificationService.notifyAuditFailed(failedResult.value);
+
+          const refundResult = await this.refundAuditUseCase.execute(failedResult.value);
+          const refundedOrder = refundResult.ok ? refundResult.value : failedResult.value;
+
+          await this.auditEmailNotificationService.notifyAuditFailed(refundedOrder);
           this.logger.info('Audit order marked as FAILED after retries', {
             auditOrderId,
+            refunded: refundedOrder.isRefunded,
           });
         }
       }
@@ -257,18 +317,4 @@ export class AuditProcessor extends WorkerHost {
     }
   }
 
-  private async withTimeout<T>(
-    fn: () => Promise<T>,
-    timeoutMs: number,
-  ): Promise<T> {
-    return Promise.race([
-      fn(),
-      new Promise<never>((_, reject) =>
-        setTimeout(
-          () => reject(new Error(`Job timed out after ${timeoutMs}ms`)),
-          timeoutMs,
-        ),
-      ),
-    ]);
-  }
 }

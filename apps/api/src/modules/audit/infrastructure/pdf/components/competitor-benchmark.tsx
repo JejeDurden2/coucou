@@ -1,24 +1,36 @@
 import { Page, View, Text } from '@react-pdf/renderer';
-import type { CompetitorBenchmark } from '@coucou-ia/shared';
+import type { AuditAnalysis, AnalysisCompetitor } from '@coucou-ia/shared';
 
-import { styles, COLORS, SPACING } from '../styles';
+import { theme, baseStyles, getScoreColor } from '../theme';
 
-interface CompetitorBenchmarkSectionProps {
-  competitors: CompetitorBenchmark[];
-  brandName: string;
-  brandScore: number;
+interface CompetitorBenchmarkProps {
+  benchmark: AuditAnalysis['competitorBenchmark'];
+  clientGeoScore: AuditAnalysis['geoScore'];
+  clientName: string;
 }
 
-function ScoreBadge({ score }: { score: number }): React.JSX.Element {
+function ScoreCell({
+  score,
+  compareWith,
+}: {
+  score: number;
+  compareWith?: number;
+}): React.JSX.Element {
   const color =
-    score >= 70 ? COLORS.success : score >= 40 ? COLORS.warning : COLORS.error;
+    compareWith !== undefined
+      ? score >= compareWith
+        ? theme.colors.success
+        : theme.colors.destructive
+      : getScoreColor(score);
 
   return (
     <Text
       style={{
-        fontSize: 12,
-        fontFamily: 'Helvetica-Bold',
+        fontFamily: theme.fonts.body,
+        fontSize: theme.fontSize.base,
+        fontWeight: 700,
         color,
+        textAlign: 'center',
       }}
     >
       {score}
@@ -26,143 +38,368 @@ function ScoreBadge({ score }: { score: number }): React.JSX.Element {
   );
 }
 
-export function CompetitorBenchmarkSection({
+function TableRow({
+  label,
+  clientScore,
   competitors,
-  brandName,
-  brandScore,
-}: CompetitorBenchmarkSectionProps): React.JSX.Element {
+  isComparisonRow,
+}: {
+  label: string;
+  clientScore: number;
+  competitors: AnalysisCompetitor[];
+  isComparisonRow: boolean;
+}): React.JSX.Element {
   return (
-    <Page size="A4" style={styles.page}>
-      <Text style={styles.h2}>Benchmark concurrents</Text>
+    <View
+      style={{
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingVertical: 6,
+        borderBottomWidth: 0.5,
+        borderBottomColor: theme.colors.border,
+      }}
+    >
+      {/* Label */}
+      <Text
+        style={{
+          fontFamily: theme.fonts.body,
+          fontSize: theme.fontSize.sm,
+          color: theme.colors.textMuted,
+          width: '25%',
+        }}
+      >
+        {label}
+      </Text>
 
-      {/* Comparison table */}
-      <View style={{ marginBottom: SPACING.lg }}>
-        {/* Header */}
-        <View style={styles.tableHeader}>
+      {/* Client score (highlighted) */}
+      <View
+        style={{
+          width: '25%',
+          backgroundColor: theme.colors.bgCardHover,
+          borderRadius: 4,
+          paddingVertical: 4,
+        }}
+      >
+        <ScoreCell score={clientScore} />
+      </View>
+
+      {/* Competitor scores */}
+      {competitors.slice(0, 2).map((comp) => (
+        <View key={comp.domain} style={{ width: '25%', paddingVertical: 4 }}>
+          {isComparisonRow ? (
+            <ScoreCell
+              score={comp.estimatedGeoScore}
+              compareWith={clientScore}
+            />
+          ) : (
+            <Text
+              style={{
+                fontFamily: theme.fonts.body,
+                fontSize: theme.fontSize.sm,
+                color: theme.colors.textMuted,
+                textAlign: 'center',
+              }}
+            >
+              —
+            </Text>
+          )}
+        </View>
+      ))}
+
+      {/* Fill empty competitor columns if less than 2 */}
+      {competitors.length < 2 && (
+        <View style={{ width: '25%' }}>
           <Text
             style={{
-              width: '25%',
-              fontSize: 9,
-              fontFamily: 'Helvetica-Bold',
-              color: COLORS.gray300,
-            }}
-          >
-            Marque
-          </Text>
-          <Text
-            style={{
-              width: '15%',
-              fontSize: 9,
-              fontFamily: 'Helvetica-Bold',
-              color: COLORS.gray300,
+              fontFamily: theme.fonts.body,
+              fontSize: theme.fontSize.sm,
+              color: theme.colors.textMuted,
               textAlign: 'center',
             }}
           >
-            Score GEO
+            —
           </Text>
+        </View>
+      )}
+    </View>
+  );
+}
+
+function CompetitorCard({
+  competitor,
+}: {
+  competitor: AnalysisCompetitor;
+}): React.JSX.Element {
+  return (
+    <View style={baseStyles.card} wrap={false}>
+      {/* Name + domain */}
+      <Text
+        style={{
+          fontFamily: theme.fonts.display,
+          fontSize: theme.fontSize.lg,
+          fontWeight: 700,
+          color: theme.colors.textPrimary,
+          marginBottom: 2,
+        }}
+      >
+        {competitor.name}
+      </Text>
+      <Text
+        style={{
+          fontFamily: theme.fonts.body,
+          fontSize: theme.fontSize.sm,
+          color: theme.colors.textMuted,
+          marginBottom: 12,
+        }}
+      >
+        {competitor.domain}
+      </Text>
+
+      {/* Forces */}
+      {competitor.strengths.length > 0 && (
+        <View style={{ marginBottom: 8 }}>
           <Text
             style={{
-              width: '30%',
-              fontSize: 9,
-              fontFamily: 'Helvetica-Bold',
-              color: COLORS.gray300,
+              fontFamily: theme.fonts.body,
+              fontSize: theme.fontSize.sm,
+              fontWeight: 700,
+              color: theme.colors.textPrimary,
+              marginBottom: 4,
             }}
           >
             Forces
           </Text>
-          <Text
-            style={{
-              width: '30%',
-              fontSize: 9,
-              fontFamily: 'Helvetica-Bold',
-              color: COLORS.gray300,
-            }}
-          >
-            Écarts client
-          </Text>
-        </View>
-
-        {/* Brand row (highlighted) */}
-        <View
-          style={{
-            ...styles.tableRow,
-            backgroundColor: COLORS.backgroundCard,
-            borderRadius: 4,
-            paddingHorizontal: 4,
-          }}
-        >
-          <View style={{ width: '25%' }}>
+          {competitor.strengths.map((s, i) => (
             <Text
+              key={`s-${i}`}
               style={{
-                fontSize: 9,
-                fontFamily: 'Helvetica-Bold',
-                color: COLORS.purpleLight,
+                fontFamily: theme.fonts.body,
+                fontSize: theme.fontSize.sm,
+                color: theme.colors.textPrimary,
+                marginBottom: 2,
               }}
             >
-              {brandName}
+              <Text style={{ color: theme.colors.accent }}>{'> '}</Text>
+              {s}
             </Text>
-            <Text style={{ fontSize: 7, color: COLORS.gray500 }}>
-              (votre marque)
+          ))}
+        </View>
+      )}
+
+      {/* Gaps exploitables */}
+      {competitor.clientGaps.length > 0 && (
+        <View style={{ marginBottom: 8 }}>
+          <Text
+            style={{
+              fontFamily: theme.fonts.body,
+              fontSize: theme.fontSize.sm,
+              fontWeight: 700,
+              color: theme.colors.textPrimary,
+              marginBottom: 4,
+            }}
+          >
+            Gaps exploitables
+          </Text>
+          {competitor.clientGaps.map((g, i) => (
+            <Text
+              key={`g-${i}`}
+              style={{
+                fontFamily: theme.fonts.body,
+                fontSize: theme.fontSize.sm,
+                color: theme.colors.textPrimary,
+                marginBottom: 2,
+              }}
+            >
+              <Text style={{ color: theme.colors.success }}>{'> '}</Text>
+              {g}
             </Text>
-          </View>
-          <View style={{ width: '15%', alignItems: 'center' }}>
-            <ScoreBadge score={brandScore} />
-          </View>
-          <Text style={{ width: '30%', fontSize: 8, color: COLORS.gray400 }}>
-            —
+          ))}
+        </View>
+      )}
+
+      {/* Avantages présence externe */}
+      {competitor.externalPresenceAdvantage.length > 0 && (
+        <View>
+          <Text
+            style={{
+              fontFamily: theme.fonts.body,
+              fontSize: theme.fontSize.sm,
+              fontWeight: 700,
+              color: theme.colors.textPrimary,
+              marginBottom: 4,
+            }}
+          >
+            Avantages présence externe
           </Text>
-          <Text style={{ width: '30%', fontSize: 8, color: COLORS.gray400 }}>
-            —
+          {competitor.externalPresenceAdvantage.map((a, i) => (
+            <Text
+              key={`a-${i}`}
+              style={{
+                fontFamily: theme.fonts.body,
+                fontSize: theme.fontSize.sm,
+                color: theme.colors.textPrimary,
+                marginBottom: 2,
+              }}
+            >
+              <Text style={{ color: theme.colors.warning }}>{'! '}</Text>
+              {a}
+            </Text>
+          ))}
+        </View>
+      )}
+    </View>
+  );
+}
+
+export function CompetitorBenchmarkSection({
+  benchmark,
+  clientGeoScore,
+  clientName,
+}: CompetitorBenchmarkProps): React.JSX.Element {
+  const competitors = benchmark.competitors;
+
+  return (
+    <Page size="A4" style={baseStyles.page} wrap>
+      {/* Section Title */}
+      <Text style={baseStyles.sectionTitle}>Benchmark Concurrentiel</Text>
+
+      {/* Comparison table */}
+      <View style={{ marginBottom: 20 }}>
+        {/* Header row */}
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            paddingVertical: 8,
+            borderBottomWidth: 1,
+            borderBottomColor: theme.colors.accent,
+          }}
+        >
+          <Text style={{ width: '25%' }} />
+          <Text
+            style={{
+              width: '25%',
+              fontFamily: theme.fonts.body,
+              fontSize: theme.fontSize.sm,
+              fontWeight: 700,
+              color: theme.colors.accent,
+              textAlign: 'center',
+            }}
+          >
+            {clientName}
           </Text>
+          {competitors.slice(0, 2).map((comp) => (
+            <Text
+              key={comp.domain}
+              style={{
+                width: '25%',
+                fontFamily: theme.fonts.body,
+                fontSize: theme.fontSize.sm,
+                fontWeight: 700,
+                color: theme.colors.textPrimary,
+                textAlign: 'center',
+              }}
+            >
+              {comp.name}
+            </Text>
+          ))}
+          {competitors.length < 2 && <View style={{ width: '25%' }} />}
         </View>
 
-        {/* Competitor rows */}
-        {competitors.map((comp) => (
-          <View key={comp.domain} style={styles.tableRow}>
-            <View style={{ width: '25%' }}>
-              <Text
-                style={{
-                  fontSize: 9,
-                  fontFamily: 'Helvetica-Bold',
-                  color: COLORS.white,
-                }}
-              >
-                {comp.name}
-              </Text>
-              <Text style={{ fontSize: 7, color: COLORS.gray500 }}>
-                {comp.domain}
-              </Text>
-            </View>
-            <View style={{ width: '15%', alignItems: 'center' }}>
-              <ScoreBadge score={comp.geoScore} />
-            </View>
-            <View style={{ width: '30%' }}>
-              {comp.strengths.slice(0, 3).map((s, i) => (
-                <Text
-                  key={`s-${i}`}
-                  style={{ fontSize: 7, color: COLORS.gray300 }}
-                >
-                  {`• ${s}`}
-                </Text>
-              ))}
-            </View>
-            <View style={{ width: '30%' }}>
-              {comp.clientGaps.slice(0, 3).map((g, i) => (
-                <Text
-                  key={`g-${i}`}
-                  style={{ fontSize: 7, color: COLORS.warning }}
-                >
-                  {`• ${g}`}
-                </Text>
-              ))}
-            </View>
-          </View>
-        ))}
+        {/* Score GEO row (comparison) */}
+        <TableRow
+          label="Score GEO"
+          clientScore={clientGeoScore.overall}
+          competitors={competitors}
+          isComparisonRow
+        />
+
+        {/* Client-only dimension rows */}
+        <TableRow
+          label="Structure"
+          clientScore={clientGeoScore.structure}
+          competitors={competitors}
+          isComparisonRow={false}
+        />
+        <TableRow
+          label="Contenu"
+          clientScore={clientGeoScore.content}
+          competitors={competitors}
+          isComparisonRow={false}
+        />
+        <TableRow
+          label="Technique"
+          clientScore={clientGeoScore.technical}
+          competitors={competitors}
+          isComparisonRow={false}
+        />
+        <TableRow
+          label="Présence ext."
+          clientScore={clientGeoScore.externalPresence}
+          competitors={competitors}
+          isComparisonRow={false}
+        />
       </View>
 
-      <View style={styles.footer}>
+      {/* Per-competitor cards */}
+      {competitors.map((comp) => (
+        <CompetitorCard key={comp.domain} competitor={comp} />
+      ))}
+
+      {/* Summary */}
+      <Text
+        style={{
+          fontFamily: theme.fonts.body,
+          fontSize: theme.fontSize.base,
+          color: theme.colors.textPrimary,
+          lineHeight: 1.6,
+          marginBottom: 16,
+        }}
+      >
+        {benchmark.summary}
+      </Text>
+
+      {/* Key Gaps card */}
+      {benchmark.keyGaps.length > 0 && (
+        <View
+          style={{
+            ...baseStyles.card,
+            borderLeftWidth: 4,
+            borderLeftColor: theme.colors.accent,
+          }}
+          wrap={false}
+        >
+          <Text
+            style={{
+              fontFamily: theme.fonts.display,
+              fontSize: theme.fontSize.lg,
+              fontWeight: 700,
+              color: theme.colors.textPrimary,
+              marginBottom: 8,
+            }}
+          >
+            Top 3 actions prioritaires vs concurrents
+          </Text>
+          {benchmark.keyGaps.map((gap, i) => (
+            <Text
+              key={`kg-${i}`}
+              style={{
+                fontFamily: theme.fonts.body,
+                fontSize: theme.fontSize.base,
+                color: theme.colors.textPrimary,
+                marginBottom: 4,
+              }}
+            >
+              {`${i + 1}. ${gap}`}
+            </Text>
+          ))}
+        </View>
+      )}
+
+      {/* Footer */}
+      <View style={baseStyles.footer} fixed>
         <Text>Coucou IA</Text>
-        <Text>Benchmark concurrents</Text>
+        <Text>Benchmark Concurrentiel</Text>
       </View>
     </Page>
   );

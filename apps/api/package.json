@@ -19,7 +19,8 @@
     "db:studio": "prisma studio",
     "db:seed": "tsx prisma/seed.ts",
     "sentiment:trigger": "tsx scripts/trigger-sentiment-scan.ts",
-    "update:disposable-domains": "tsx scripts/update-disposable-domains.ts"
+    "update:disposable-domains": "tsx scripts/update-disposable-domains.ts",
+    "pdf:test": "tsx scripts/generate-test-audit-pdf.ts"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
@@ -32,6 +33,8 @@
     "@bull-board/express": "^6.17.0",
     "@bull-board/nestjs": "^6.17.0",
     "@coucou-ia/shared": "workspace:*",
+    "@fontsource/bricolage-grotesque": "^5.2.10",
+    "@fontsource/fraunces": "^5.2.9",
     "@logtail/pino": "^0.5.7",
     "@nestjs/bullmq": "^11.0.4",
     "@nestjs/common": "^11.1.13",

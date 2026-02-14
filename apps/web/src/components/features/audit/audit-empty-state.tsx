@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Search, BarChart3, Target, FileText } from 'lucide-react';
+import { Search, BarChart3, Globe, FileText } from 'lucide-react';
 import type { DashboardStats } from '@coucou-ia/shared';
 
 import { Button } from '@/components/ui/button';
@@ -13,22 +13,22 @@ const VALUE_PROPS = [
   {
     icon: Search,
     title: 'Analyse complète de votre site',
-    description: 'Audit de chaque page pour la visibilité IA : structure, contenu, données structurées, E-E-A-T.',
+    description: 'Structure, contenu, technique : chaque page est auditée pour la visibilité IA.',
+  },
+  {
+    icon: Globe,
+    title: 'Présence externe vérifiée',
+    description: 'Wikipedia, Trustpilot, LinkedIn… vérification de votre empreinte numérique.',
   },
   {
     icon: BarChart3,
-    title: 'Benchmark concurrentiel',
-    description: 'Comparaison directe avec vos concurrents détectés par les IA.',
-  },
-  {
-    icon: Target,
-    title: 'Plan d\'action priorisé',
-    description: 'Quick wins, court terme et moyen terme avec impact et effort estimés.',
+    title: 'Benchmark détaillé de vos concurrents',
+    description: 'Comparaison directe sur les critères GEO avec vos concurrents détectés.',
   },
   {
     icon: FileText,
-    title: 'Rapport téléchargeable',
-    description: 'PDF complet avec toutes les recommandations pour votre équipe.',
+    title: 'Plan d\'action + rapport PDF',
+    description: 'Plan d\'action priorisé et rapport PDF professionnel téléchargeable.',
   },
 ] as const;
 

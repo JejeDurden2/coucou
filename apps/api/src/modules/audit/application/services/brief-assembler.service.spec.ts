@@ -14,7 +14,6 @@ import type { SentimentScanRepository } from '../../../sentiment/domain/reposito
 import type { LLMProvider } from '@prisma/client';
 
 const NOW = new Date('2026-01-15T12:00:00Z');
-const _THIRTY_DAYS_AGO = new Date('2025-12-16T12:00:00Z');
 
 function mockProject(
   overrides: Partial<{
@@ -200,7 +199,6 @@ describe('BriefAssemblerService', () => {
     mockConfigService = {
       get: vi.fn().mockImplementation((key: string, defaultValue?: string) => {
         if (key === 'API_URL') return 'https://api.coucou-ia.com';
-        if (key === 'TWIN_CALLBACK_SECRET') return 'secret-token-123';
         return defaultValue ?? '';
       }),
     };
@@ -243,7 +241,7 @@ describe('BriefAssemblerService', () => {
       }
     });
 
-    it('should assemble brief with correct brand info', async () => {
+    it('should assemble TwinCrawlInput with correct brand info', async () => {
       const result = await service.assemble('project-123', 'audit-123');
 
       expect(result.ok).toBe(true);
@@ -258,41 +256,69 @@ describe('BriefAssemblerService', () => {
       );
     });
 
-    it('should sort promptResults by citation rate ascending', async () => {
+    it('should compute scanData with correct citation metrics', async () => {
       const result = await service.assemble('project-123', 'audit-123');
 
       expect(result.ok).toBe(true);
       if (!result.ok) return;
 
-      const promptResults = result.value.scanData.promptResults;
-      expect(promptResults.length).toBe(2);
+      const { scanData } = result.value;
 
-      // prompt-1 has 1 cited out of 2 (50%), prompt-2 has 2 cited out of 2 (100%)
-      // Worst first → prompt-1 (50%) before prompt-2 (100%)
-      expect(promptResults[0].prompt).toBe('Prompt A');
-      expect(promptResults[1].prompt).toBe('Prompt B');
+      // 4 total results: scan-1 has GPT(cited) + CLAUDE(not cited),
+      // scan-2 has GPT(cited) + CLAUDE(cited) → 3 cited out of 4
+      expect(scanData.clientCitationRate).toBe(0.75);
+      expect(scanData.totalQueriesTested).toBe(2);
+      expect(scanData.clientMentionsCount).toBe(3);
+      expect(scanData.positionsWhenCited).toEqual(
+        expect.arrayContaining([3, 1, 2]),
+      );
     });
 
-    it('should aggregate stats by provider', async () => {
+    it('should classify queries as top-performing or not-cited', async () => {
       const result = await service.assemble('project-123', 'audit-123');
 
       expect(result.ok).toBe(true);
       if (!result.ok) return;
 
-      const byProvider = result.value.scanData.byProvider;
+      const { scanData } = result.value;
 
-      // GPT: 2 scans, both cited → rate = 1.0, positions = [3, 1] → avg = 2.0
-      expect(byProvider['GPT']).toBeDefined();
-      expect(byProvider['GPT'].citationRate).toBe(1);
-      expect(byProvider['GPT'].avgPosition).toBe(2);
-
-      // CLAUDE: 2 scans, 1 cited → rate = 0.5, positions = [2] → avg = 2.0
-      expect(byProvider['CLAUDE']).toBeDefined();
-      expect(byProvider['CLAUDE'].citationRate).toBe(0.5);
-      expect(byProvider['CLAUDE'].avgPosition).toBe(2);
+      // Both prompts have at least one cited result
+      expect(scanData.topPerformingQueries).toContain('Prompt A');
+      expect(scanData.topPerformingQueries).toContain('Prompt B');
+      expect(scanData.queriesNotCited).toEqual([]);
     });
 
-    it('should identify top 3 competitors by citation rate', async () => {
+    it('should put uncited prompts in queriesNotCited', async () => {
+      vi.mocked(mockScanRepo.findByProjectIdInRange!).mockResolvedValue([
+        mockScan({
+          id: 'scan-1',
+          promptId: 'prompt-1',
+          results: [
+            {
+              provider: 'GPT' as LLMProvider,
+              model: 'gpt-4',
+              rawResponse: '{}',
+              isCited: false,
+              position: null,
+              brandKeywords: [],
+              queryKeywords: [],
+              competitorMentions: [],
+              latencyMs: 500,
+              parseSuccess: true,
+            },
+          ],
+        }),
+      ]);
+
+      const result = await service.assemble('project-123', 'audit-123');
+
+      expect(result.ok).toBe(true);
+      if (!result.ok) return;
+
+      expect(result.value.scanData.queriesNotCited).toContain('Prompt A');
+    });
+
+    it('should identify top competitors by mention frequency', async () => {
       const result = await service.assemble('project-123', 'audit-123');
 
       expect(result.ok).toBe(true);
@@ -301,175 +327,20 @@ describe('BriefAssemblerService', () => {
       const competitors = result.value.competitors.primary;
       expect(competitors.length).toBeLessThanOrEqual(3);
 
-      // Competitor A appears in both scans → higher rate
+      // Competitor A appears in scan-1 (2 mentions across providers)
       expect(competitors[0].name).toBe('Competitor A');
-      expect(competitors[0].citationRate).toBeGreaterThan(0);
     });
 
-    it('should calculate trend as stable when scans are similar', async () => {
-      const earlyDate = new Date('2025-12-20T12:00:00Z');
-      const recentDate = new Date('2026-01-10T12:00:00Z');
-
-      // Both scans have 50% citation rate → stable
-      const sameRateResults = [
-        {
-          provider: 'GPT' as LLMProvider,
-          model: 'gpt-4',
-          rawResponse: '{}',
-          isCited: true,
-          position: 2,
-          brandKeywords: [],
-          queryKeywords: [],
-          competitorMentions: [],
-          latencyMs: 500,
-          parseSuccess: true,
-        },
-        {
-          provider: 'CLAUDE' as LLMProvider,
-          model: 'claude-3',
-          rawResponse: '{}',
-          isCited: false,
-          position: null,
-          brandKeywords: [],
-          queryKeywords: [],
-          competitorMentions: [],
-          latencyMs: 500,
-          parseSuccess: true,
-        },
-      ];
-
-      vi.mocked(mockScanRepo.findByProjectIdInRange!).mockResolvedValue([
-        mockScan({
-          id: 'scan-early',
-          promptId: 'prompt-1',
-          executedAt: earlyDate,
-          results: sameRateResults,
-        }),
-        mockScan({
-          id: 'scan-recent',
-          promptId: 'prompt-1',
-          executedAt: recentDate,
-          results: sameRateResults,
-        }),
-      ]);
-
+    it('should set maxPagesPerCompetitor to 3', async () => {
       const result = await service.assemble('project-123', 'audit-123');
 
       expect(result.ok).toBe(true);
       if (!result.ok) return;
 
-      expect(result.value.scanData.summary.trend).toBe('stable');
+      expect(result.value.competitors.maxPagesPerCompetitor).toBe(3);
     });
 
-    it('should calculate trend as improving when recent scans are better', async () => {
-      const earlyDate = new Date('2025-12-20T12:00:00Z');
-      const recentDate = new Date('2026-01-10T12:00:00Z');
-
-      vi.mocked(mockScanRepo.findByProjectIdInRange!).mockResolvedValue([
-        // Early scan: not cited
-        mockScan({
-          id: 'scan-early',
-          promptId: 'prompt-1',
-          executedAt: earlyDate,
-          results: [
-            {
-              provider: 'GPT' as LLMProvider,
-              model: 'gpt-4',
-              rawResponse: '{}',
-              isCited: false,
-              position: null,
-              brandKeywords: [],
-              queryKeywords: [],
-              competitorMentions: [],
-              latencyMs: 500,
-              parseSuccess: true,
-            },
-          ],
-        }),
-        // Recent scan: cited
-        mockScan({
-          id: 'scan-recent',
-          promptId: 'prompt-1',
-          executedAt: recentDate,
-          results: [
-            {
-              provider: 'GPT' as LLMProvider,
-              model: 'gpt-4',
-              rawResponse: '{}',
-              isCited: true,
-              position: 1,
-              brandKeywords: [],
-              queryKeywords: [],
-              competitorMentions: [],
-              latencyMs: 500,
-              parseSuccess: true,
-            },
-          ],
-        }),
-      ]);
-
-      const result = await service.assemble('project-123', 'audit-123');
-
-      expect(result.ok).toBe(true);
-      if (!result.ok) return;
-      expect(result.value.scanData.summary.trend).toBe('improving');
-    });
-
-    it('should calculate trend as declining when recent scans are worse', async () => {
-      const earlyDate = new Date('2025-12-20T12:00:00Z');
-      const recentDate = new Date('2026-01-10T12:00:00Z');
-
-      vi.mocked(mockScanRepo.findByProjectIdInRange!).mockResolvedValue([
-        // Early scan: cited
-        mockScan({
-          id: 'scan-early',
-          promptId: 'prompt-1',
-          executedAt: earlyDate,
-          results: [
-            {
-              provider: 'GPT' as LLMProvider,
-              model: 'gpt-4',
-              rawResponse: '{}',
-              isCited: true,
-              position: 1,
-              brandKeywords: [],
-              queryKeywords: [],
-              competitorMentions: [],
-              latencyMs: 500,
-              parseSuccess: true,
-            },
-          ],
-        }),
-        // Recent scan: not cited
-        mockScan({
-          id: 'scan-recent',
-          promptId: 'prompt-1',
-          executedAt: recentDate,
-          results: [
-            {
-              provider: 'GPT' as LLMProvider,
-              model: 'gpt-4',
-              rawResponse: '{}',
-              isCited: false,
-              position: null,
-              brandKeywords: [],
-              queryKeywords: [],
-              competitorMentions: [],
-              latencyMs: 500,
-              parseSuccess: true,
-            },
-          ],
-        }),
-      ]);
-
-      const result = await service.assemble('project-123', 'audit-123');
-
-      expect(result.ok).toBe(true);
-      if (!result.ok) return;
-      expect(result.value.scanData.summary.trend).toBe('declining');
-    });
-
-    it('should include sentiment data when available', async () => {
+    it('should derive sentiment label from score', async () => {
       vi.mocked(
         mockSentimentRepo.findLatestByProjectId!,
       ).mockResolvedValue(
@@ -481,12 +352,9 @@ describe('BriefAssemblerService', () => {
           results: {
             gpt: {
               s: 75,
-              t: [
-                { name: 'Innovation', sentiment: 'positive', weight: 80 },
-                { name: 'Support', sentiment: 'negative', weight: 40 },
-              ],
-              kp: ['innovative', 'fast'],
-              kn: ['expensive', 'complex'],
+              t: [{ name: 'Innovation', sentiment: 'positive', weight: 80 }],
+              kp: ['innovative'],
+              kn: ['expensive'],
             },
           },
           createdAt: NOW,
@@ -498,15 +366,10 @@ describe('BriefAssemblerService', () => {
       expect(result.ok).toBe(true);
       if (!result.ok) return;
 
-      const sentiment = result.value.scanData.sentiment;
-      expect(sentiment.score).toBe(72);
-      expect(sentiment.themes).toContain('Innovation');
-      expect(sentiment.themes).toContain('Support');
-      expect(sentiment.positiveTerms).toContain('innovative');
-      expect(sentiment.negativeTerms).toContain('expensive');
+      expect(result.value.scanData.averageSentiment).toBe('positive');
     });
 
-    it('should use fallback sentiment when none exists', async () => {
+    it('should use neutral sentiment when no sentiment scan exists', async () => {
       vi.mocked(
         mockSentimentRepo.findLatestByProjectId!,
       ).mockResolvedValue(null);
@@ -516,14 +379,55 @@ describe('BriefAssemblerService', () => {
       expect(result.ok).toBe(true);
       if (!result.ok) return;
 
-      const sentiment = result.value.scanData.sentiment;
-      expect(sentiment.score).toBe(0);
-      expect(sentiment.themes).toEqual([]);
-      expect(sentiment.positiveTerms).toEqual([]);
-      expect(sentiment.negativeTerms).toEqual([]);
+      // Default score 50 → neutral
+      expect(result.value.scanData.averageSentiment).toBe('neutral');
     });
 
-    it('should build callback with correct URL and auth header', async () => {
+    it('should derive negative sentiment for low scores', async () => {
+      vi.mocked(
+        mockSentimentRepo.findLatestByProjectId!,
+      ).mockResolvedValue(
+        SentimentScan.create({
+          id: 'sentiment-1',
+          projectId: 'project-123',
+          scannedAt: NOW,
+          globalScore: 20,
+          results: {},
+          createdAt: NOW,
+        }),
+      );
+
+      const result = await service.assemble('project-123', 'audit-123');
+
+      expect(result.ok).toBe(true);
+      if (!result.ok) return;
+
+      expect(result.value.scanData.averageSentiment).toBe('negative');
+    });
+
+    it('should derive mixed sentiment for intermediate scores', async () => {
+      vi.mocked(
+        mockSentimentRepo.findLatestByProjectId!,
+      ).mockResolvedValue(
+        SentimentScan.create({
+          id: 'sentiment-1',
+          projectId: 'project-123',
+          scannedAt: NOW,
+          globalScore: 35,
+          results: {},
+          createdAt: NOW,
+        }),
+      );
+
+      const result = await service.assemble('project-123', 'audit-123');
+
+      expect(result.ok).toBe(true);
+      if (!result.ok) return;
+
+      expect(result.value.scanData.averageSentiment).toBe('mixed');
+    });
+
+    it('should build callback with correct URL and auditId', async () => {
       const result = await service.assemble('project-123', 'audit-456');
 
       expect(result.ok).toBe(true);
@@ -532,27 +436,16 @@ describe('BriefAssemblerService', () => {
       expect(result.value.callback.url).toBe(
         'https://api.coucou-ia.com/webhooks/twin/audit',
       );
-      expect(result.value.callback.authHeader).toBe(
-        'Bearer secret-token-123',
-      );
       expect(result.value.callback.auditId).toBe('audit-456');
     });
 
-    it('should set outputFormat with schema v1, all sections, fr language', async () => {
+    it('should set outputFormat to structured_observations', async () => {
       const result = await service.assemble('project-123', 'audit-123');
 
       expect(result.ok).toBe(true);
       if (!result.ok) return;
 
-      expect(result.value.outputFormat.schema).toBe('audit_result_v1');
-      expect(result.value.outputFormat.sections).toEqual([
-        'geo_score',
-        'site_audit',
-        'competitor_benchmark',
-        'action_plan',
-        'external_presence',
-      ]);
-      expect(result.value.outputFormat.language).toBe('fr');
+      expect(result.value.outputFormat).toBe('structured_observations');
     });
 
     it('should handle unexpected errors gracefully', async () => {

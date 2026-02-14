@@ -47,6 +47,12 @@ interface StripeCustomer {
   id: string;
 }
 
+interface StripeRefund {
+  id: string;
+  status: string;
+  amount: number;
+}
+
 interface StripeWebhookEvent {
   type: string;
   data: {
@@ -215,6 +221,13 @@ export class StripeService {
     return this.fetch<StripeCheckoutSession>('/checkout/sessions', {
       method: 'POST',
       body: this.toFormData(formData),
+    });
+  }
+
+  async createRefund(paymentIntentId: string): Promise<StripeRefund> {
+    return this.fetch<StripeRefund>('/refunds', {
+      method: 'POST',
+      body: this.toFormData({ payment_intent: paymentIntentId }),
     });
   }
 

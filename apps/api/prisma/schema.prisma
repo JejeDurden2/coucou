@@ -50,6 +50,8 @@ enum ConsentAction {
 enum AuditStatus {
   PENDING
   PAID
+  CRAWLING
+  ANALYZING
   PROCESSING
   COMPLETED
   PARTIAL
@@ -276,6 +278,28 @@ model AuditOrder {
 
   // PDF
   reportUrl             String?     @map("report_url")
+
+  // Dashboard metadata (denormalized from analysis)
+  geoScore                 Int?       @map("geo_score")
+  verdict                  String?    @map("verdict")
+  topFindings              String[]   @default([]) @map("top_findings")
+  actionCountCritical      Int?       @map("action_count_critical")
+  actionCountHigh          Int?       @map("action_count_high")
+  actionCountMedium        Int?       @map("action_count_medium")
+  totalActions             Int?       @map("total_actions")
+  pagesAnalyzedClient      Int?       @map("pages_analyzed_client")
+  pagesAnalyzedCompetitors Int?       @map("pages_analyzed_competitors")
+  competitorsAnalyzed      String[]   @default([]) @map("competitors_analyzed")
+  externalPresenceScore    Int?       @map("external_presence_score")
+
+  // Raw data URLs (R2)
+  crawlDataUrl             String?    @map("crawl_data_url")
+  analysisDataUrl          String?    @map("analysis_data_url")
+
+  // Retry & refund
+  retryCount               Int        @default(0) @map("retry_count")
+  refundedAt               DateTime?  @map("refunded_at")
+  refundId                 String?    @map("refund_id")
 
   // Timing
   startedAt             DateTime?   @map("started_at")

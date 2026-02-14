@@ -1,5 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { renderToBuffer } from '@react-pdf/renderer';
+import type { AuditAnalysis } from '@coucou-ia/shared';
 
 import { Result } from '../../../../common/utils/result';
 import type { DomainError } from '../../../../common/errors/domain-error';
@@ -11,7 +11,7 @@ import {
   type FileStoragePort,
 } from '../../../storage';
 import { AuditPdfGenerationError } from '../../domain/errors/audit.errors';
-import { AuditReportDocument } from '../pdf/audit-report.document';
+import { renderAuditPdf } from '../pdf/audit-report.document';
 
 const MAX_PDF_SIZE_BYTES = 5 * 1024 * 1024; // 5 MB
 
@@ -28,11 +28,11 @@ export class ReactPdfAdapter implements AuditPdfPort {
   async generateReport(
     auditOrder: AuditOrder,
   ): Promise<Result<{ url: string }, DomainError>> {
-    const auditResult = auditOrder.resultPayload;
-    if (!auditResult) {
+    const analysisDataUrl = auditOrder.analysisDataUrl;
+    if (!analysisDataUrl) {
       return Result.err(
         new AuditPdfGenerationError(
-          'Aucun résultat disponible',
+          'Aucune analyse disponible (analysisDataUrl manquant)',
           auditOrder.id,
         ),
       );
@@ -41,14 +41,37 @@ export class ReactPdfAdapter implements AuditPdfPort {
     try {
       const start = Date.now();
 
-      const pdfBuffer = await renderToBuffer(
-        AuditReportDocument({
-          auditResult,
-          brandName: auditOrder.briefPayload.brand.name,
-          domain: auditOrder.briefPayload.brand.domain,
-          completedAt: auditOrder.completedAt ?? new Date(),
-        }),
-      );
+      // 1. Download analysis JSON from R2
+      const downloadResult = await this.fileStorage.download(analysisDataUrl);
+      if (!downloadResult.ok) {
+        return Result.err(
+          new AuditPdfGenerationError(
+            `Échec du téléchargement de l'analyse: ${downloadResult.error.message}`,
+            auditOrder.id,
+          ),
+        );
+      }
+
+      let analysis: AuditAnalysis;
+      try {
+        analysis = JSON.parse(
+          downloadResult.value.toString('utf-8'),
+        ) as AuditAnalysis;
+      } catch {
+        return Result.err(
+          new AuditPdfGenerationError(
+            "Échec du parsing JSON de l'analyse",
+            auditOrder.id,
+          ),
+        );
+      }
+
+      // 2. Render PDF
+      const brand = {
+        name: auditOrder.briefPayload.brand.name,
+        domain: auditOrder.briefPayload.brand.domain,
+      };
+      const pdfBuffer = await renderAuditPdf(analysis, brand);
 
       const renderMs = Date.now() - start;
       this.logger.info('PDF rendered', {
@@ -57,6 +80,7 @@ export class ReactPdfAdapter implements AuditPdfPort {
         renderMs,
       });
 
+      // 3. Size validation
       if (pdfBuffer.length > MAX_PDF_SIZE_BYTES) {
         return Result.err(
           new AuditPdfGenerationError(
@@ -66,10 +90,11 @@ export class ReactPdfAdapter implements AuditPdfPort {
         );
       }
 
-      const s3Key = `audit-reports/${auditOrder.id}.pdf`;
+      // 4. Upload to R2
+      const s3Key = `audits/${auditOrder.id}/report.pdf`;
       const uploadResult = await this.fileStorage.upload(
         s3Key,
-        Buffer.from(pdfBuffer),
+        pdfBuffer,
         'application/pdf',
       );
 

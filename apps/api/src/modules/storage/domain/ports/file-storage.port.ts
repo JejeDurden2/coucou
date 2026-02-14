@@ -15,5 +15,7 @@ export interface FileStoragePort {
     expiresInSeconds: number,
   ): Promise<Result<{ url: string }, DomainError>>;
 
+  download(key: string): Promise<Result<Buffer, DomainError>>;
+
   delete(key: string): Promise<Result<void, DomainError>>;
 }

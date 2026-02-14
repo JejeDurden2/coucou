@@ -1,140 +1,73 @@
 import { Page, View, Text } from '@react-pdf/renderer';
-import type { ActionItem } from '@coucou-ia/shared';
+import type { AuditAnalysis, AnalysisActionItem } from '@coucou-ia/shared';
 
-import { styles, COLORS, SPACING, PRIORITY_COLORS } from '../styles';
+import { theme, baseStyles } from '../theme';
+import { ImpactDots } from './impact-dots';
+import { CategoryBadge } from './category-badge';
 
 interface ActionPlanSectionProps {
-  actionPlan: {
-    quickWins: ActionItem[];
-    shortTerm: ActionItem[];
-    mediumTerm: ActionItem[];
-  };
+  actionPlan: AuditAnalysis['actionPlan'];
 }
 
-function ImpactEffortIndicator({
-  value,
-  max,
-  color,
+function ActionCard({
+  action,
 }: {
-  value: number;
-  max: number;
-  color: string;
+  action: AnalysisActionItem;
 }): React.JSX.Element {
   return (
-    <View style={{ flexDirection: 'row', gap: 2 }}>
-      {Array.from({ length: max }).map((_, i) => (
-        <View
-          key={`dot-${i}`}
-          style={{
-            width: 6,
-            height: 6,
-            borderRadius: 3,
-            backgroundColor: i < value ? color : '#2D2640',
-          }}
-        />
-      ))}
-    </View>
-  );
-}
-
-function ActionCard({ action }: { action: ActionItem }): React.JSX.Element {
-  const priorityColor = PRIORITY_COLORS[action.priority] ?? COLORS.gray400;
-
-  return (
-    <View
-      style={{
-        ...styles.card,
-        borderLeftWidth: 3,
-        borderLeftColor: priorityColor,
-      }}
-      wrap={false}
-    >
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'flex-start',
-          marginBottom: SPACING.xs,
-        }}
-      >
-        <Text
-          style={{
-            fontSize: 10,
-            fontFamily: 'Helvetica-Bold',
-            color: COLORS.white,
-            flex: 1,
-            marginRight: SPACING.sm,
-          }}
-        >
-          {action.title}
-        </Text>
-        <View
-          style={{
-            paddingHorizontal: 6,
-            paddingVertical: 2,
-            borderRadius: 3,
-            backgroundColor: priorityColor,
-          }}
-        >
-          <Text
-            style={{
-              fontSize: 7,
-              fontFamily: 'Helvetica-Bold',
-              color: COLORS.white,
-            }}
-          >
-            {action.priority}
-          </Text>
-        </View>
-      </View>
-
+    <View style={baseStyles.card} wrap={false}>
+      {/* Title */}
       <Text
         style={{
-          ...styles.body,
-          marginBottom: SPACING.sm,
+          fontFamily: theme.fonts.body,
+          fontSize: theme.fontSize.base,
+          fontWeight: 700,
+          color: theme.colors.textPrimary,
+          marginBottom: 4,
+        }}
+      >
+        {action.title}
+      </Text>
+
+      {/* Description */}
+      <Text
+        style={{
+          fontFamily: theme.fonts.body,
+          fontSize: theme.fontSize.sm,
+          color: theme.colors.textPrimary,
+          lineHeight: 1.5,
+          marginBottom: 4,
         }}
       >
         {action.description}
       </Text>
 
+      {/* Target URL */}
+      {action.targetUrl !== null && (
+        <Text
+          style={{
+            fontFamily: theme.fonts.body,
+            fontSize: theme.fontSize.xs,
+            color: theme.colors.textMuted,
+            marginBottom: 8,
+          }}
+        >
+          {action.targetUrl}
+        </Text>
+      )}
+
+      {/* Bottom row: ImpactDots + CategoryBadge */}
       <View
         style={{
           flexDirection: 'row',
-          gap: SPACING.lg,
+          alignItems: 'center',
+          gap: 12,
+          marginTop: 4,
         }}
       >
-        <View>
-          <Text
-            style={{
-              fontSize: 7,
-              color: COLORS.gray500,
-              marginBottom: 2,
-            }}
-          >
-            Impact
-          </Text>
-          <ImpactEffortIndicator
-            value={action.estimatedImpact}
-            max={5}
-            color={COLORS.success}
-          />
-        </View>
-        <View>
-          <Text
-            style={{
-              fontSize: 7,
-              color: COLORS.gray500,
-              marginBottom: 2,
-            }}
-          >
-            Effort
-          </Text>
-          <ImpactEffortIndicator
-            value={action.estimatedEffort}
-            max={5}
-            color={COLORS.warning}
-          />
-        </View>
+        <ImpactDots value={action.impact} label="Impact" />
+        <ImpactDots value={action.effort} label="Effort" />
+        <CategoryBadge category={action.category} />
       </View>
     </View>
   );
@@ -143,17 +76,44 @@ function ActionCard({ action }: { action: ActionItem }): React.JSX.Element {
 function ActionSection({
   title,
   actions,
+  borderColor,
+  titleColor,
 }: {
   title: string;
-  actions: ActionItem[];
+  actions: AnalysisActionItem[];
+  borderColor: string;
+  titleColor: string;
 }): React.JSX.Element | null {
   if (actions.length === 0) return null;
 
+  const sortedActions = [...actions].sort((a, b) => b.impact - a.impact);
+
   return (
-    <View style={{ marginBottom: SPACING.lg }}>
-      <Text style={styles.h3}>{title}</Text>
-      {actions.map((action) => (
-        <ActionCard key={action.id} action={action} />
+    <View style={{ marginBottom: 16 }}>
+      {/* Sub-section title with left border */}
+      <View
+        style={{
+          borderLeftWidth: 4,
+          borderLeftColor: borderColor,
+          paddingLeft: 12,
+          marginBottom: 12,
+        }}
+      >
+        <Text
+          style={{
+            fontFamily: theme.fonts.display,
+            fontSize: theme.fontSize.xl,
+            fontWeight: 700,
+            color: titleColor,
+          }}
+        >
+          {title}
+        </Text>
+      </View>
+
+      {/* Action cards */}
+      {sortedActions.map((action, i) => (
+        <ActionCard key={`action-${i}`} action={action} />
       ))}
     </View>
   );
@@ -163,16 +123,59 @@ export function ActionPlanSection({
   actionPlan,
 }: ActionPlanSectionProps): React.JSX.Element {
   return (
-    <Page size="A4" style={styles.page} wrap>
-      <Text style={styles.h2}>{"Plan d'action"}</Text>
+    <Page size="A4" style={baseStyles.page} wrap>
+      {/* Section Title */}
+      <Text style={baseStyles.sectionTitle}>{"Plan d'Action"}</Text>
 
-      <ActionSection title="Quick wins" actions={actionPlan.quickWins} />
-      <ActionSection title="Court terme" actions={actionPlan.shortTerm} />
-      <ActionSection title="Moyen terme" actions={actionPlan.mediumTerm} />
+      {/* Highlight counter */}
+      <View
+        style={{
+          backgroundColor: `${theme.colors.accent}1A`,
+          padding: 12,
+          borderRadius: 8,
+          marginBottom: 20,
+        }}
+      >
+        <Text
+          style={{
+            fontFamily: theme.fonts.body,
+            fontSize: theme.fontSize.lg,
+            fontWeight: 700,
+            color: theme.colors.textPrimary,
+          }}
+        >
+          {`${actionPlan.totalActions} optimisations identifiées`}
+        </Text>
+      </View>
 
-      <View style={styles.footer} fixed>
+      {/* Quick Wins */}
+      <ActionSection
+        title="Quick Wins — 1 à 2 semaines"
+        actions={actionPlan.quickWins}
+        borderColor={theme.colors.success}
+        titleColor={theme.colors.success}
+      />
+
+      {/* Court terme */}
+      <ActionSection
+        title="Court terme — 1 à 2 mois"
+        actions={actionPlan.shortTerm}
+        borderColor={theme.colors.accent}
+        titleColor={theme.colors.accent}
+      />
+
+      {/* Moyen terme */}
+      <ActionSection
+        title="Moyen terme — 3 à 6 mois"
+        actions={actionPlan.mediumTerm}
+        borderColor={theme.colors.textMuted}
+        titleColor={theme.colors.textMuted}
+      />
+
+      {/* Footer */}
+      <View style={baseStyles.footer} fixed>
         <Text>Coucou IA</Text>
-        <Text>{"Plan d'action"}</Text>
+        <Text>{"Plan d'Action"}</Text>
       </View>
     </Page>
   );

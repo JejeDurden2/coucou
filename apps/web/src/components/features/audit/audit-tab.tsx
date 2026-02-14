@@ -11,7 +11,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { AuditEmptyState } from './audit-empty-state';
 import { AuditProcessing } from './audit-processing';
 import { AuditError } from './audit-error';
-import { AuditResults } from './audit-results';
+import { AuditDashboard } from './audit-dashboard';
 
 function AuditSkeleton(): React.ReactNode {
   return (
@@ -53,8 +53,9 @@ export function AuditTab({ projectId }: AuditTabProps): React.ReactNode {
   if (justPaid && (!audit || !audit.hasAudit)) {
     return (
       <AuditProcessing
-        paidAt={null}
-        startedAt={null}
+        status={AuditStatus.PAID}
+        pagesAnalyzedClient={null}
+        competitorsAnalyzed={[]}
       />
     );
   }
@@ -71,37 +72,46 @@ export function AuditTab({ projectId }: AuditTabProps): React.ReactNode {
     );
   }
 
+  // In-progress states: PAID, CRAWLING
   if (
     audit.status === AuditStatus.PAID ||
-    audit.status === AuditStatus.PROCESSING
+    audit.status === AuditStatus.CRAWLING
   ) {
     return (
       <AuditProcessing
-        paidAt={audit.paidAt}
-        startedAt={audit.startedAt}
-      />
-    );
-  }
-
-  if (
-    audit.status === AuditStatus.COMPLETED ||
-    audit.status === AuditStatus.PARTIAL
-  ) {
-    return (
-      <AuditResults
         status={audit.status}
-        result={audit.result}
-        reportUrl={audit.reportUrl}
-        brandName={project?.brandName ?? ''}
+        pagesAnalyzedClient={null}
+        competitorsAnalyzed={[]}
       />
     );
   }
 
+  if (audit.status === AuditStatus.ANALYZING) {
+    return (
+      <AuditProcessing
+        status={audit.status}
+        pagesAnalyzedClient={audit.pagesAnalyzedClient}
+        competitorsAnalyzed={audit.competitorsAnalyzed}
+      />
+    );
+  }
+
+  // Completed state: dashboard summary
+  if (audit.status === AuditStatus.COMPLETED) {
+    return (
+      <AuditDashboard
+        projectId={projectId}
+        audit={audit}
+        onRelaunch={() => createCheckout.mutate()}
+        isRelaunching={createCheckout.isPending}
+      />
+    );
+  }
+
+  // Failed state
   return (
     <AuditError
-      status={audit.status}
-      onRetry={() => createCheckout.mutate()}
-      isRetrying={createCheckout.isPending}
+      failureReason={'failureReason' in audit ? audit.failureReason : null}
     />
   );
 }

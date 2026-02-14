@@ -1,155 +1,147 @@
 import { Page, View, Text } from '@react-pdf/renderer';
-import type { AuditResult } from '@coucou-ia/shared';
+import type { AuditAnalysis } from '@coucou-ia/shared';
 
-import { styles, COLORS, SPACING } from '../styles';
-import { RadarChart } from './radar-chart';
+import { theme, baseStyles } from '../theme';
+import { ProgressBar } from './progress-bar';
 
 interface ExecutiveSummaryProps {
-  geoScore: AuditResult['geoScore'];
+  summary: AuditAnalysis['executiveSummary'];
+  geoScore: AuditAnalysis['geoScore'];
 }
 
-function ScoreCircle({ score }: { score: number }): React.JSX.Element {
-  const color =
-    score >= 70 ? COLORS.success : score >= 40 ? COLORS.warning : COLORS.error;
+const VERDICT_COLORS: Record<string, string> = {
+  insuffisante: theme.colors.destructive,
+  'à renforcer': theme.colors.warning,
+  correcte: theme.colors.accent,
+  excellente: theme.colors.success,
+};
 
-  return (
-    <View
-      style={{
-        width: 100,
-        height: 100,
-        borderRadius: 50,
-        borderWidth: 4,
-        borderColor: color,
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}
-    >
-      <Text
-        style={{
-          fontSize: 36,
-          fontFamily: 'Helvetica-Bold',
-          color,
-        }}
-      >
-        {score}
-      </Text>
-      <Text style={{ fontSize: 8, color: COLORS.gray400 }}>/100</Text>
-    </View>
-  );
-}
+const FINDING_BORDER_COLORS = [
+  theme.colors.destructive,
+  theme.colors.warning,
+  theme.colors.success,
+];
 
 export function ExecutiveSummary({
+  summary,
   geoScore,
 }: ExecutiveSummaryProps): React.JSX.Element {
-  return (
-    <Page size="A4" style={styles.page}>
-      <Text style={styles.h2}>Synthèse exécutive</Text>
+  const verdictColor =
+    VERDICT_COLORS[summary.verdict] ?? theme.colors.textMuted;
 
-      {/* Score + Radar side by side */}
+  return (
+    <Page size="A4" style={baseStyles.page} wrap>
+      {/* Section Title */}
+      <Text style={baseStyles.sectionTitle}>Résumé Exécutif</Text>
+
+      {/* Headline card */}
       <View
         style={{
-          flexDirection: 'row',
-          justifyContent: 'space-around',
-          alignItems: 'center',
-          marginBottom: SPACING.lg,
+          ...baseStyles.card,
+          borderLeftWidth: 4,
+          borderLeftColor: theme.colors.accent,
         }}
       >
-        <View style={{ alignItems: 'center' }}>
-          <Text
-            style={{
-              fontSize: 10,
-              color: COLORS.gray400,
-              marginBottom: SPACING.sm,
-            }}
-          >
-            Score GEO global
-          </Text>
-          <ScoreCircle score={geoScore.overall} />
-        </View>
-
-        <RadarChart
-          scores={{
-            structure: geoScore.structure,
-            content: geoScore.content,
-            technical: geoScore.technical,
-            competitive: geoScore.competitive,
+        <Text
+          style={{
+            fontFamily: theme.fonts.body,
+            fontSize: theme.fontSize.lg,
+            fontWeight: 700,
+            color: theme.colors.textPrimary,
           }}
-          size={220}
+        >
+          {summary.headline}
+        </Text>
+      </View>
+
+      {/* Context */}
+      <Text
+        style={{
+          fontFamily: theme.fonts.body,
+          fontSize: theme.fontSize.base,
+          color: theme.colors.textPrimary,
+          lineHeight: 1.6,
+          marginBottom: 16,
+        }}
+      >
+        {summary.context}
+      </Text>
+
+      {/* Sub-scores */}
+      <View style={{ marginBottom: 16 }}>
+        <ProgressBar score={geoScore.structure} label="Structure" />
+        <ProgressBar score={geoScore.content} label="Contenu" />
+        <ProgressBar score={geoScore.technical} label="Technique" />
+        <ProgressBar
+          score={geoScore.externalPresence}
+          label="Présence ext."
         />
       </View>
 
-      {/* Strengths & Weaknesses */}
-      <View
+      {/* Key Findings */}
+      <Text
         style={{
-          flexDirection: 'row',
-          gap: SPACING.md,
-          marginBottom: SPACING.lg,
+          fontFamily: theme.fonts.display,
+          fontSize: theme.fontSize.xl,
+          fontWeight: 700,
+          color: theme.colors.textPrimary,
+          marginBottom: 12,
         }}
       >
-        {/* Strengths */}
-        <View style={{ ...styles.card, flex: 1 }}>
+        Constats clés
+      </Text>
+
+      {summary.keyFindings.map((finding, i) => (
+        <View
+          key={`finding-${i}`}
+          style={{
+            ...baseStyles.card,
+            borderLeftWidth: 4,
+            borderLeftColor:
+              FINDING_BORDER_COLORS[i] ?? theme.colors.accent,
+          }}
+          wrap={false}
+        >
           <Text
             style={{
-              ...styles.h3,
-              color: COLORS.success,
-              fontSize: 12,
+              fontFamily: theme.fonts.body,
+              fontSize: theme.fontSize.base,
+              color: theme.colors.textPrimary,
+              lineHeight: 1.5,
             }}
           >
-            Points forts
+            {finding}
           </Text>
-          {geoScore.mainStrengths.map((s, i) => (
-            <View
-              key={`strength-${i}`}
-              style={{
-                flexDirection: 'row',
-                marginBottom: SPACING.xs,
-              }}
-            >
-              <Text style={{ color: COLORS.success, marginRight: SPACING.xs }}>
-                +
-              </Text>
-              <Text style={styles.body}>{s}</Text>
-            </View>
-          ))}
         </View>
+      ))}
 
-        {/* Weaknesses */}
-        <View style={{ ...styles.card, flex: 1 }}>
-          <Text
-            style={{
-              ...styles.h3,
-              color: COLORS.error,
-              fontSize: 12,
-            }}
-          >
-            Points faibles
-          </Text>
-          {geoScore.mainWeaknesses.map((w, i) => (
-            <View
-              key={`weakness-${i}`}
-              style={{
-                flexDirection: 'row',
-                marginBottom: SPACING.xs,
-              }}
-            >
-              <Text style={{ color: COLORS.error, marginRight: SPACING.xs }}>
-                -
-              </Text>
-              <Text style={styles.body}>{w}</Text>
-            </View>
-          ))}
-        </View>
+      {/* Verdict badge */}
+      <View
+        style={{
+          alignSelf: 'flex-start',
+          backgroundColor: verdictColor,
+          borderRadius: 12,
+          paddingHorizontal: 16,
+          paddingVertical: 6,
+          marginTop: 8,
+        }}
+      >
+        <Text
+          style={{
+            fontFamily: theme.fonts.body,
+            fontSize: theme.fontSize.base,
+            fontWeight: 700,
+            color: '#FFFFFF',
+          }}
+        >
+          Visibilité {summary.verdict}
+        </Text>
       </View>
 
-      {/* Methodology */}
-      <View style={styles.card}>
-        <Text style={{ ...styles.h3, fontSize: 12 }}>Méthodologie</Text>
-        <Text style={styles.body}>{geoScore.methodology}</Text>
-      </View>
-
-      <View style={styles.footer}>
+      {/* Footer */}
+      <View style={baseStyles.footer} fixed>
         <Text>Coucou IA</Text>
-        <Text>Synthèse exécutive</Text>
+        <Text>Résumé Exécutif</Text>
       </View>
     </Page>
   );

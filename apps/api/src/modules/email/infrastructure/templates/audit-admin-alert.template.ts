@@ -12,6 +12,9 @@ export interface AuditAdminAlertEmailData {
   startedAt: string | null;
   failedAt: string;
   executionDuration: string | null;
+  refundStatus: 'refunded' | 'failed' | 'not_applicable';
+  refundId: string | null;
+  amountCents: number;
 }
 
 function row(label: string, value: string | null): string {
@@ -51,6 +54,13 @@ export function generateAuditAdminAlertEmail(data: AuditAdminAlertEmailData): {
             ${row('Started At', data.startedAt)}
             ${row('Failed At', data.failedAt)}
             ${row('Duration', data.executionDuration)}
+            ${row('Refund', data.refundStatus === 'refunded'
+              ? `Remboursé (${data.refundId})`
+              : data.refundStatus === 'failed'
+                ? 'ECHEC DU REMBOURSEMENT'
+                : 'N/A'
+            )}
+            ${row('Amount', `${(data.amountCents / 100).toFixed(2)} EUR`)}
           </table>
         </td>
       </tr>
@@ -77,6 +87,8 @@ Un audit a échoué avec le statut ${data.status}.
 - Started At : ${data.startedAt ?? '—'}
 - Failed At : ${data.failedAt}
 - Duration : ${data.executionDuration ?? '—'}
+- Refund : ${data.refundStatus === 'refunded' ? `Remboursé (${data.refundId})` : data.refundStatus === 'failed' ? 'ECHEC DU REMBOURSEMENT' : 'N/A'}
+- Amount : ${(data.amountCents / 100).toFixed(2)} EUR
 
 --
 Coucou IA- Votre visibilité dans les IA

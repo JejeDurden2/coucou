@@ -9,7 +9,12 @@ import { apiClient, ApiClientError } from '@/lib/api-client';
 const IN_PROGRESS_STATUSES = new Set<string>([
   AuditStatus.PAID,
   AuditStatus.PROCESSING,
+  AuditStatus.CRAWLING,
+  AuditStatus.ANALYZING,
 ]);
+
+const POLL_INTERVAL_MS = 10_000;
+const FAST_POLL_INTERVAL_MS = 2_000;
 
 export function useLatestAudit(projectId: string, fastPoll = false) {
   return useQuery({
@@ -19,11 +24,25 @@ export function useLatestAudit(projectId: string, fastPoll = false) {
     refetchInterval: (query) => {
       const data = query.state.data;
       if (data && 'status' in data && IN_PROGRESS_STATUSES.has(data.status)) {
-        return 10_000;
+        return POLL_INTERVAL_MS;
       }
-      if (fastPoll) return 2_000;
+      if (fastPoll) return FAST_POLL_INTERVAL_MS;
       return false;
     },
+  });
+}
+
+export function useAuditReportUrl(
+  projectId: string,
+  auditId: string | undefined,
+  enabled: boolean,
+) {
+  return useQuery({
+    queryKey: ['projects', projectId, 'audit', auditId, 'report-url'],
+    queryFn: () => apiClient.getAuditReportUrl(projectId, auditId!),
+    enabled: enabled && !!auditId,
+    staleTime: 30 * 60 * 1000,
+    gcTime: 60 * 60 * 1000,
   });
 }
 

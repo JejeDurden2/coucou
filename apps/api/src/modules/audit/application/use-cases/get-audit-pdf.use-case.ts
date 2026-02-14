@@ -1,5 +1,4 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { AuditStatus } from '@coucou-ia/shared';
 
 import { Result } from '../../../../common/utils/result';
 import type { DomainError } from '../../../../common/errors/domain-error';
@@ -18,6 +17,7 @@ import {
   type AuditPdfPort,
   AuditNotFoundError,
   AuditReportNotAvailableError,
+  REPORT_STATUSES,
 } from '../../domain';
 
 interface GetAuditPdfOutput {
@@ -30,11 +30,6 @@ type GetAuditPdfError =
   | AuditNotFoundError
   | AuditReportNotAvailableError
   | DomainError;
-
-const REPORT_STATUSES: ReadonlySet<AuditStatus> = new Set([
-  AuditStatus.COMPLETED,
-  AuditStatus.PARTIAL,
-]);
 
 @Injectable()
 export class GetAuditPdfUseCase {

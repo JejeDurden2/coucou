@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { AuditStatus } from '@coucou-ia/shared';
-import type { AuditBrief, AuditResult } from '@coucou-ia/shared';
+import type { AuditResult, TwinCrawlInput } from '@coucou-ia/shared';
 
 import { AuditOrder } from '../domain/entities/audit-order.entity';
 import type { AuditOrderProps } from '../domain/entities/audit-order.entity';
@@ -8,9 +8,8 @@ import { AuditInvalidTransitionError } from '../domain/errors/audit.errors';
 
 const BASE_DATE = new Date('2026-01-15T10:00:00Z');
 
-function mockBrief(): AuditBrief {
+function mockBrief(): TwinCrawlInput {
   return {
-    mission: 'Test mission',
     brand: {
       name: 'TestBrand',
       domain: 'testbrand.com',
@@ -23,33 +22,23 @@ function mockBrief(): AuditBrief {
       },
     },
     scanData: {
-      summary: {
-        totalScans: 10,
-        dateRange: '2026-01-01 - 2026-01-15',
-        globalCitationRate: 0.3,
-        globalAvgPosition: 4.2,
-        trend: 'stable',
-      },
-      byProvider: {},
-      sentiment: {
-        score: 65,
-        themes: [],
-        positiveTerms: [],
-        negativeTerms: [],
-        rawSummary: '',
-      },
-      promptResults: [],
+      clientCitationRate: 0.3,
+      totalQueriesTested: 10,
+      clientMentionsCount: 3,
+      averageSentiment: 'neutral',
+      positionsWhenCited: [2, 4, 5],
+      topPerformingQueries: ['best seo tool'],
+      queriesNotCited: ['seo audit'],
     },
-    competitors: { primary: [] },
+    competitors: {
+      primary: [{ name: 'Competitor A', domain: 'competitor-a.com' }],
+      maxPagesPerCompetitor: 3,
+    },
     callback: {
-      url: 'https://api.test.com/webhooks/twin',
+      url: 'https://api.test.com/webhooks/twin/audit',
       auditId: 'audit-123',
     },
-    outputFormat: {
-      schema: 'audit_result_v1',
-      sections: ['geo_score', 'site_audit', 'competitor_benchmark', 'action_plan', 'external_presence'],
-      language: 'fr',
-    },
+    outputFormat: 'structured_observations',
   };
 }
 
@@ -100,11 +89,27 @@ function mockProps(overrides: Partial<AuditOrderProps> = {}): AuditOrderProps {
     rawResultPayload: null,
     twinAgentId: null,
     reportUrl: null,
+    crawlDataUrl: null,
+    analysisDataUrl: null,
     startedAt: null,
     completedAt: null,
     failedAt: null,
     timeoutAt: null,
     failureReason: null,
+    retryCount: 0,
+    pagesAnalyzedClient: null,
+    pagesAnalyzedCompetitors: null,
+    competitorsAnalyzed: [],
+    storedGeoScore: null,
+    verdict: null,
+    topFindings: [],
+    actionCountCritical: null,
+    actionCountHigh: null,
+    actionCountMedium: null,
+    totalActions: null,
+    externalPresenceScore: null,
+    refundedAt: null,
+    refundId: null,
     createdAt: BASE_DATE,
     updatedAt: BASE_DATE,
     ...overrides,
@@ -149,11 +154,27 @@ describe('AuditOrder', () => {
         rawResultPayload: null,
         twinAgentId: 'agent-1',
         reportUrl: 'https://cdn.test.com/report.pdf',
+        crawlDataUrl: null,
+        analysisDataUrl: null,
         startedAt: BASE_DATE,
         completedAt: BASE_DATE,
         failedAt: null,
         timeoutAt: null,
         failureReason: null,
+        retryCount: 0,
+        pagesAnalyzedClient: null,
+        pagesAnalyzedCompetitors: null,
+        competitorsAnalyzed: [],
+        geoScore: 72,
+        verdict: 'correcte',
+        topFindings: ['Good SEO'],
+        actionCountCritical: 1,
+        actionCountHigh: 3,
+        actionCountMedium: 5,
+        totalActions: 9,
+        externalPresenceScore: 60,
+        refundedAt: null,
+        refundId: null,
         createdAt: BASE_DATE,
         updatedAt: BASE_DATE,
       };
@@ -209,7 +230,52 @@ describe('AuditOrder', () => {
     });
   });
 
-  // ---- markProcessing ----
+  // ---- markCrawling ----
+
+  describe('markCrawling', () => {
+    it('should transition PAID -> CRAWLING with correct timestamps', () => {
+      const order = AuditOrder.create(mockProps({ status: AuditStatus.PAID }));
+      const result = order.markCrawling('twin-agent-42');
+
+      expect(result.ok).toBe(true);
+      if (result.ok) {
+        expect(result.value.status).toBe(AuditStatus.CRAWLING);
+        expect(result.value.twinAgentId).toBe('twin-agent-42');
+        expect(result.value.startedAt).toEqual(
+          new Date('2026-01-15T12:00:00Z'),
+        );
+        expect(result.value.timeoutAt).toEqual(
+          new Date('2026-01-15T12:15:00Z'),
+        );
+      }
+    });
+
+    it('should return error from PENDING', () => {
+      const order = AuditOrder.create(mockProps());
+      const result = order.markCrawling('twin-agent-42');
+
+      expect(result.ok).toBe(false);
+      if (!result.ok) {
+        expect(result.error).toBeInstanceOf(AuditInvalidTransitionError);
+        expect(result.error.metadata?.currentStatus).toBe('PENDING');
+        expect(result.error.metadata?.targetStatus).toBe('CRAWLING');
+      }
+    });
+
+    it('should return error from COMPLETED', () => {
+      const order = AuditOrder.create(
+        mockProps({ status: AuditStatus.COMPLETED }),
+      );
+      const result = order.markCrawling('twin-agent-42');
+
+      expect(result.ok).toBe(false);
+      if (!result.ok) {
+        expect(result.error).toBeInstanceOf(AuditInvalidTransitionError);
+      }
+    });
+  });
+
+  // ---- markProcessing (backward compat) ----
 
   describe('markProcessing', () => {
     it('should transition PAID -> PROCESSING with correct timestamps', () => {
@@ -321,12 +387,15 @@ describe('AuditOrder', () => {
   describe('updateBrief', () => {
     it('should update brief from PAID status', () => {
       const order = AuditOrder.create(mockProps({ status: AuditStatus.PAID }));
-      const newBrief = { ...mockBrief(), mission: 'Updated mission' };
+      const newBrief: TwinCrawlInput = {
+        ...mockBrief(),
+        outputFormat: 'structured_observations',
+      };
       const result = order.updateBrief(newBrief);
 
       expect(result.ok).toBe(true);
       if (result.ok) {
-        expect(result.value.briefPayload.mission).toBe('Updated mission');
+        expect(result.value.briefPayload.outputFormat).toBe('structured_observations');
         expect(result.value.status).toBe(AuditStatus.PAID);
       }
     });
@@ -389,6 +458,19 @@ describe('AuditOrder', () => {
       }
     });
 
+    it('should transition CRAWLING -> FAILED with reason', () => {
+      const order = AuditOrder.create(
+        mockProps({ status: AuditStatus.CRAWLING }),
+      );
+      const result = order.markFailed('Twin unreachable');
+
+      expect(result.ok).toBe(true);
+      if (result.ok) {
+        expect(result.value.status).toBe(AuditStatus.FAILED);
+        expect(result.value.failureReason).toBe('Twin unreachable');
+      }
+    });
+
     it('should return error from PENDING', () => {
       const order = AuditOrder.create(mockProps());
       const result = order.markFailed('Some reason');
@@ -415,9 +497,9 @@ describe('AuditOrder', () => {
   // ---- markTimeout ----
 
   describe('markTimeout', () => {
-    it('should transition PROCESSING -> TIMEOUT', () => {
+    it('should transition CRAWLING -> TIMEOUT', () => {
       const order = AuditOrder.create(
-        mockProps({ status: AuditStatus.PROCESSING }),
+        mockProps({ status: AuditStatus.CRAWLING }),
       );
       const result = order.markTimeout();
 
@@ -427,6 +509,18 @@ describe('AuditOrder', () => {
         expect(result.value.failedAt).toEqual(
           new Date('2026-01-15T12:00:00Z'),
         );
+      }
+    });
+
+    it('should transition PROCESSING -> TIMEOUT', () => {
+      const order = AuditOrder.create(
+        mockProps({ status: AuditStatus.PROCESSING }),
+      );
+      const result = order.markTimeout();
+
+      expect(result.ok).toBe(true);
+      if (result.ok) {
+        expect(result.value.status).toBe(AuditStatus.TIMEOUT);
       }
     });
 
@@ -490,13 +584,25 @@ describe('AuditOrder', () => {
       expect(order.isTerminal).toBe(true);
     });
 
-    it.each([AuditStatus.PENDING, AuditStatus.PAID, AuditStatus.PROCESSING])(
-      'isTerminal should return false for %s',
-      (status) => {
-        const order = AuditOrder.create(mockProps({ status }));
-        expect(order.isTerminal).toBe(false);
-      },
-    );
+    it.each([
+      AuditStatus.PENDING,
+      AuditStatus.PAID,
+      AuditStatus.CRAWLING,
+      AuditStatus.PROCESSING,
+    ])('isTerminal should return false for %s', (status) => {
+      const order = AuditOrder.create(mockProps({ status }));
+      expect(order.isTerminal).toBe(false);
+    });
+
+    it('isCrawling should return true only for CRAWLING', () => {
+      const crawlingOrder = AuditOrder.create(
+        mockProps({ status: AuditStatus.CRAWLING }),
+      );
+      const pendingOrder = AuditOrder.create(mockProps());
+
+      expect(crawlingOrder.isCrawling).toBe(true);
+      expect(pendingOrder.isCrawling).toBe(false);
+    });
 
     it('isProcessing should return true only for PROCESSING', () => {
       const processingOrder = AuditOrder.create(
@@ -508,22 +614,22 @@ describe('AuditOrder', () => {
       expect(pendingOrder.isProcessing).toBe(false);
     });
 
-    it('isTimedOut should return true when PROCESSING and timeoutAt is in the past', () => {
+    it('isTimedOut should return true when CRAWLING and timeoutAt is in the past', () => {
       vi.setSystemTime(new Date('2026-01-15T13:00:00Z'));
       const order = AuditOrder.create(
         mockProps({
-          status: AuditStatus.PROCESSING,
+          status: AuditStatus.CRAWLING,
           timeoutAt: new Date('2026-01-15T12:15:00Z'),
         }),
       );
       expect(order.isTimedOut).toBe(true);
     });
 
-    it('isTimedOut should return false when PROCESSING and timeoutAt is in the future', () => {
+    it('isTimedOut should return false when CRAWLING and timeoutAt is in the future', () => {
       vi.setSystemTime(new Date('2026-01-15T12:10:00Z'));
       const order = AuditOrder.create(
         mockProps({
-          status: AuditStatus.PROCESSING,
+          status: AuditStatus.CRAWLING,
           timeoutAt: new Date('2026-01-15T12:15:00Z'),
         }),
       );
@@ -540,6 +646,20 @@ describe('AuditOrder', () => {
     it('geoScore should return null when resultPayload is null', () => {
       const order = AuditOrder.create(mockProps());
       expect(order.geoScore).toBeNull();
+    });
+
+    it('geoScore should prefer storedGeoScore over resultPayload', () => {
+      const order = AuditOrder.create(
+        mockProps({ storedGeoScore: 55, resultPayload: mockAuditResult() }),
+      );
+      expect(order.geoScore).toBe(55);
+    });
+
+    it('geoScore should fallback to resultPayload when storedGeoScore is null', () => {
+      const order = AuditOrder.create(
+        mockProps({ storedGeoScore: null, resultPayload: mockAuditResult() }),
+      );
+      expect(order.geoScore).toBe(72);
     });
   });
 
@@ -632,51 +752,352 @@ describe('AuditOrder', () => {
     });
   });
 
+  // ---- storeAnalysisResults ----
+
+  describe('storeAnalysisResults', () => {
+    const mockMetadata = {
+      analysisDataUrl: 'audits/audit-123/analysis.json',
+      geoScore: 65,
+      verdict: 'à renforcer' as const,
+      topFindings: ['Good structure', 'Weak content', 'Missing FAQ'],
+      actionCountCritical: 3,
+      actionCountHigh: 5,
+      actionCountMedium: 7,
+      totalActions: 15,
+      externalPresenceScore: 40,
+    };
+
+    it('should store metadata on ANALYZING order without changing status', () => {
+      const order = AuditOrder.create(
+        mockProps({ status: AuditStatus.ANALYZING }),
+      );
+      const result = order.storeAnalysisResults(mockMetadata);
+
+      expect(result.ok).toBe(true);
+      if (result.ok) {
+        expect(result.value.status).toBe(AuditStatus.ANALYZING);
+        expect(result.value.analysisDataUrl).toBe('audits/audit-123/analysis.json');
+        expect(result.value.geoScore).toBe(65);
+        expect(result.value.verdict).toBe('à renforcer');
+        expect(result.value.topFindings).toEqual([
+          'Good structure',
+          'Weak content',
+          'Missing FAQ',
+        ]);
+        expect(result.value.actionCountCritical).toBe(3);
+        expect(result.value.actionCountHigh).toBe(5);
+        expect(result.value.actionCountMedium).toBe(7);
+        expect(result.value.totalActions).toBe(15);
+        expect(result.value.externalPresenceScore).toBe(40);
+        expect(result.value.completedAt).toBeNull();
+      }
+    });
+
+    it('should return error from CRAWLING', () => {
+      const order = AuditOrder.create(
+        mockProps({ status: AuditStatus.CRAWLING }),
+      );
+      const result = order.storeAnalysisResults(mockMetadata);
+
+      expect(result.ok).toBe(false);
+      if (!result.ok) {
+        expect(result.error).toBeInstanceOf(AuditInvalidTransitionError);
+      }
+    });
+
+    it('should return error from COMPLETED', () => {
+      const order = AuditOrder.create(
+        mockProps({ status: AuditStatus.COMPLETED }),
+      );
+      const result = order.storeAnalysisResults(mockMetadata);
+
+      expect(result.ok).toBe(false);
+      if (!result.ok) {
+        expect(result.error).toBeInstanceOf(AuditInvalidTransitionError);
+      }
+    });
+  });
+
+  // ---- markAnalysisCompleted ----
+
+  describe('markAnalysisCompleted', () => {
+    it('should transition ANALYZING -> COMPLETED with completedAt', () => {
+      const order = AuditOrder.create(
+        mockProps({ status: AuditStatus.ANALYZING }),
+      );
+      const result = order.markAnalysisCompleted();
+
+      expect(result.ok).toBe(true);
+      if (result.ok) {
+        expect(result.value.status).toBe(AuditStatus.COMPLETED);
+        expect(result.value.completedAt).toEqual(
+          new Date('2026-01-15T12:00:00Z'),
+        );
+      }
+    });
+
+    it('should return error from CRAWLING', () => {
+      const order = AuditOrder.create(
+        mockProps({ status: AuditStatus.CRAWLING }),
+      );
+      const result = order.markAnalysisCompleted();
+
+      expect(result.ok).toBe(false);
+      if (!result.ok) {
+        expect(result.error).toBeInstanceOf(AuditInvalidTransitionError);
+        expect(result.error.metadata?.currentStatus).toBe('CRAWLING');
+        expect(result.error.metadata?.targetStatus).toBe('COMPLETED');
+      }
+    });
+
+    it('should return error from COMPLETED', () => {
+      const order = AuditOrder.create(
+        mockProps({ status: AuditStatus.COMPLETED }),
+      );
+      const result = order.markAnalysisCompleted();
+
+      expect(result.ok).toBe(false);
+      if (!result.ok) {
+        expect(result.error).toBeInstanceOf(AuditInvalidTransitionError);
+      }
+    });
+  });
+
+  // ---- markRefunded ----
+
+  describe('markRefunded', () => {
+    it('should mark a FAILED order with paymentIntent as refunded', () => {
+      const order = AuditOrder.create(
+        mockProps({
+          status: AuditStatus.FAILED,
+          stripePaymentIntentId: 'pi_test_123',
+        }),
+      );
+      const result = order.markRefunded('re_refund_123');
+
+      expect(result.ok).toBe(true);
+      if (result.ok) {
+        expect(result.value.refundId).toBe('re_refund_123');
+        expect(result.value.refundedAt).toEqual(new Date('2026-01-15T12:00:00Z'));
+        expect(result.value.isRefunded).toBe(true);
+        expect(result.value.canBeRefunded).toBe(false);
+        expect(result.value.status).toBe(AuditStatus.FAILED);
+      }
+    });
+
+    it('should mark a TIMEOUT order as refunded', () => {
+      const order = AuditOrder.create(
+        mockProps({
+          status: AuditStatus.TIMEOUT,
+          stripePaymentIntentId: 'pi_test_123',
+        }),
+      );
+      const result = order.markRefunded('re_refund_456');
+
+      expect(result.ok).toBe(true);
+      if (result.ok) {
+        expect(result.value.refundId).toBe('re_refund_456');
+        expect(result.value.isRefunded).toBe(true);
+      }
+    });
+
+    it('should mark a SCHEMA_ERROR order as refunded', () => {
+      const order = AuditOrder.create(
+        mockProps({
+          status: AuditStatus.SCHEMA_ERROR,
+          stripePaymentIntentId: 'pi_test_123',
+        }),
+      );
+      const result = order.markRefunded('re_refund_789');
+
+      expect(result.ok).toBe(true);
+      if (result.ok) {
+        expect(result.value.refundId).toBe('re_refund_789');
+        expect(result.value.isRefunded).toBe(true);
+      }
+    });
+
+    it('should return error from COMPLETED', () => {
+      const order = AuditOrder.create(
+        mockProps({
+          status: AuditStatus.COMPLETED,
+          stripePaymentIntentId: 'pi_test_123',
+        }),
+      );
+      const result = order.markRefunded('re_refund_123');
+
+      expect(result.ok).toBe(false);
+      if (!result.ok) {
+        expect(result.error).toBeInstanceOf(AuditInvalidTransitionError);
+        expect(result.error.metadata?.currentStatus).toBe('COMPLETED');
+        expect(result.error.metadata?.targetStatus).toBe('REFUND');
+      }
+    });
+
+    it('should return error from PARTIAL', () => {
+      const order = AuditOrder.create(
+        mockProps({
+          status: AuditStatus.PARTIAL,
+          stripePaymentIntentId: 'pi_test_123',
+        }),
+      );
+      const result = order.markRefunded('re_refund_123');
+
+      expect(result.ok).toBe(false);
+      if (!result.ok) {
+        expect(result.error).toBeInstanceOf(AuditInvalidTransitionError);
+      }
+    });
+
+    it('should return error when no stripePaymentIntentId', () => {
+      const order = AuditOrder.create(
+        mockProps({
+          status: AuditStatus.FAILED,
+          stripePaymentIntentId: null,
+        }),
+      );
+      const result = order.markRefunded('re_refund_123');
+
+      expect(result.ok).toBe(false);
+      if (!result.ok) {
+        expect(result.error).toBeInstanceOf(AuditInvalidTransitionError);
+      }
+    });
+
+    it('should return error when already refunded', () => {
+      const order = AuditOrder.create(
+        mockProps({
+          status: AuditStatus.FAILED,
+          stripePaymentIntentId: 'pi_test_123',
+          refundedAt: new Date('2026-01-15T11:00:00Z'),
+          refundId: 're_existing',
+        }),
+      );
+      const result = order.markRefunded('re_refund_123');
+
+      expect(result.ok).toBe(false);
+      if (!result.ok) {
+        expect(result.error).toBeInstanceOf(AuditInvalidTransitionError);
+      }
+    });
+  });
+
+  // ---- canBeRefunded / isRefunded ----
+
+  describe('canBeRefunded', () => {
+    it.each([
+      AuditStatus.FAILED,
+      AuditStatus.TIMEOUT,
+      AuditStatus.SCHEMA_ERROR,
+    ])('should return true for %s with paymentIntent and no prior refund', (status) => {
+      const order = AuditOrder.create(
+        mockProps({ status, stripePaymentIntentId: 'pi_test' }),
+      );
+      expect(order.canBeRefunded).toBe(true);
+    });
+
+    it.each([
+      AuditStatus.COMPLETED,
+      AuditStatus.PARTIAL,
+      AuditStatus.PENDING,
+      AuditStatus.PAID,
+      AuditStatus.CRAWLING,
+      AuditStatus.PROCESSING,
+    ])('should return false for %s', (status) => {
+      const order = AuditOrder.create(
+        mockProps({ status, stripePaymentIntentId: 'pi_test' }),
+      );
+      expect(order.canBeRefunded).toBe(false);
+    });
+
+    it('should return false when no stripePaymentIntentId', () => {
+      const order = AuditOrder.create(
+        mockProps({ status: AuditStatus.FAILED, stripePaymentIntentId: null }),
+      );
+      expect(order.canBeRefunded).toBe(false);
+    });
+
+    it('should return false when already refunded', () => {
+      const order = AuditOrder.create(
+        mockProps({
+          status: AuditStatus.FAILED,
+          stripePaymentIntentId: 'pi_test',
+          refundedAt: new Date(),
+          refundId: 're_existing',
+        }),
+      );
+      expect(order.canBeRefunded).toBe(false);
+    });
+  });
+
+  describe('isRefunded', () => {
+    it('should return true when refundedAt is set', () => {
+      const order = AuditOrder.create(
+        mockProps({
+          refundedAt: new Date(),
+          refundId: 're_test',
+        }),
+      );
+      expect(order.isRefunded).toBe(true);
+    });
+
+    it('should return false when refundedAt is null', () => {
+      const order = AuditOrder.create(mockProps());
+      expect(order.isRefunded).toBe(false);
+    });
+  });
+
   // ---- Full lifecycle ----
 
   describe('full lifecycle', () => {
-    it('should support PENDING -> PAID -> PROCESSING -> COMPLETED', () => {
+    it('should support PENDING -> PAID -> CRAWLING', () => {
       const order = AuditOrder.create(mockProps());
 
       const paid = order.markPaid('pi_123');
       expect(paid.ok).toBe(true);
       if (!paid.ok) return;
 
-      const processing = paid.value.markProcessing('agent-1');
-      expect(processing.ok).toBe(true);
-      if (!processing.ok) return;
+      const crawling = paid.value.markCrawling('agent-1');
+      expect(crawling.ok).toBe(true);
+      if (!crawling.ok) return;
 
-      const completed = processing.value.markCompleted(mockAuditResult());
-      expect(completed.ok).toBe(true);
-      if (!completed.ok) return;
-
-      expect(completed.value.status).toBe(AuditStatus.COMPLETED);
-      expect(completed.value.geoScore).toBe(72);
-      expect(completed.value.isTerminal).toBe(true);
+      expect(crawling.value.status).toBe(AuditStatus.CRAWLING);
+      expect(crawling.value.twinAgentId).toBe('agent-1');
+      expect(crawling.value.isCrawling).toBe(true);
+      expect(crawling.value.isTerminal).toBe(false);
     });
 
-    it('should support full lifecycle including PDF report', () => {
-      const order = AuditOrder.create(mockProps());
-
-      const paid = order.markPaid('pi_123');
-      if (!paid.ok) return;
-
-      const processing = paid.value.markProcessing('agent-1');
-      if (!processing.ok) return;
-
-      const completed = processing.value.markCompleted(mockAuditResult());
-      if (!completed.ok) return;
-
-      const withReport = completed.value.attachReport(
-        'audit-reports/audit-123.pdf',
+    it('should support CRAWLING -> FAILED on error', () => {
+      const order = AuditOrder.create(
+        mockProps({ status: AuditStatus.CRAWLING }),
       );
-      expect(withReport.ok).toBe(true);
-      if (withReport.ok) {
-        expect(withReport.value.reportUrl).toBe(
-          'audit-reports/audit-123.pdf',
-        );
-        expect(withReport.value.status).toBe(AuditStatus.COMPLETED);
-      }
+      const failed = order.markFailed('Twin agent unreachable');
+
+      expect(failed.ok).toBe(true);
+      if (!failed.ok) return;
+
+      expect(failed.value.status).toBe(AuditStatus.FAILED);
+      expect(failed.value.failureReason).toBe('Twin agent unreachable');
+      expect(failed.value.isTerminal).toBe(true);
+    });
+
+    it('should support CRAWLING -> TIMEOUT on expiry', () => {
+      vi.setSystemTime(new Date('2026-01-15T13:00:00Z'));
+      const order = AuditOrder.create(
+        mockProps({
+          status: AuditStatus.CRAWLING,
+          timeoutAt: new Date('2026-01-15T12:15:00Z'),
+        }),
+      );
+
+      expect(order.isTimedOut).toBe(true);
+
+      const timeout = order.markTimeout();
+      expect(timeout.ok).toBe(true);
+      if (!timeout.ok) return;
+
+      expect(timeout.value.status).toBe(AuditStatus.TIMEOUT);
+      expect(timeout.value.isTerminal).toBe(true);
     });
   });
 });

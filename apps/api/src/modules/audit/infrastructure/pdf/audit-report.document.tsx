@@ -1,47 +1,60 @@
 import { Document } from '@react-pdf/renderer';
-import type { AuditResult } from '@coucou-ia/shared';
+import { renderToBuffer } from '@react-pdf/renderer';
+import type { AuditAnalysis } from '@coucou-ia/shared';
 
-import { CoverPage } from './components/cover-page';
-import { ExecutiveSummary } from './components/executive-summary';
-import { CompetitorBenchmarkSection } from './components/competitor-benchmark';
-import { DetailedDiagnosis } from './components/detailed-diagnosis';
+// Import theme to trigger font registration
+import './theme';
+
 import { ActionPlanSection } from './components/action-plan';
+import { CompetitorBenchmarkSection } from './components/competitor-benchmark';
+import { CoverPage } from './components/cover-page';
 import { CtaPage } from './components/cta-page';
+import { ExecutiveSummary } from './components/executive-summary';
+import { ExternalPresence } from './components/external-presence';
+import { GeoScoreDetail } from './components/geo-score-detail';
+import { SiteAudit } from './components/site-audit';
 
-interface AuditReportDocumentProps {
-  auditResult: AuditResult;
-  brandName: string;
-  domain: string;
-  completedAt: Date;
+interface AuditReportProps {
+  analysis: AuditAnalysis;
+  brand: { name: string; domain: string };
 }
 
-export function AuditReportDocument({
-  auditResult,
-  brandName,
-  domain,
-  completedAt,
-}: AuditReportDocumentProps): React.JSX.Element {
+function AuditReportDocument({
+  analysis,
+  brand,
+}: AuditReportProps): React.JSX.Element {
   return (
-    <Document
-      title={`Audit GEO - ${brandName}`}
-      author="Coucou IA"
-      subject={`Rapport d'audit GEO pour ${domain}`}
-      creator="Coucou IA"
-    >
+    <Document title="Audit GEO" author="Coucou IA" creator="Coucou IA">
       <CoverPage
-        brandName={brandName}
-        domain={domain}
-        completedAt={completedAt}
+        brandName={brand.name}
+        brandDomain={brand.domain}
+        geoScore={analysis.geoScore.overall}
+        date={new Date()}
       />
-      <ExecutiveSummary geoScore={auditResult.geoScore} />
+      <ExecutiveSummary
+        summary={analysis.executiveSummary}
+        geoScore={analysis.geoScore}
+      />
+      <GeoScoreDetail geoScore={analysis.geoScore} />
+      <SiteAudit siteAudit={analysis.siteAudit} />
+      <ExternalPresence externalPresence={analysis.externalPresence} />
       <CompetitorBenchmarkSection
-        competitors={auditResult.competitorBenchmark}
-        brandName={brandName}
-        brandScore={auditResult.geoScore.overall}
+        benchmark={analysis.competitorBenchmark}
+        clientGeoScore={analysis.geoScore}
+        clientName={brand.name}
       />
-      <DetailedDiagnosis pages={auditResult.siteAudit.pagesAnalyzed} />
-      <ActionPlanSection actionPlan={auditResult.actionPlan} />
-      <CtaPage brandName={brandName} />
+      <ActionPlanSection actionPlan={analysis.actionPlan} />
+      <CtaPage totalActions={analysis.actionPlan.totalActions} />
     </Document>
   );
+}
+
+export async function renderAuditPdf(
+  analysis: AuditAnalysis,
+  brand: { name: string; domain: string },
+): Promise<Buffer> {
+  const pdfBuffer = await renderToBuffer(
+    <AuditReportDocument analysis={analysis} brand={brand} />,
+  );
+  return Buffer.from(pdfBuffer);
 }

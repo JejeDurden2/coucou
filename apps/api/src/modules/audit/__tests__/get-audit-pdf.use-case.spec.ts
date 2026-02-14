@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { AuditStatus } from '@coucou-ia/shared';
-import type { AuditBrief, AuditResult } from '@coucou-ia/shared';
+import type { AuditResult, TwinCrawlInput } from '@coucou-ia/shared';
 
 import { GetAuditPdfUseCase } from '../application/use-cases/get-audit-pdf.use-case';
 import { AuditOrder } from '../domain/entities/audit-order.entity';
@@ -13,9 +13,8 @@ import { DomainError } from '../../../common/errors/domain-error';
 
 const BASE_DATE = new Date('2026-01-15T10:00:00Z');
 
-function mockBrief(): AuditBrief {
+function mockBrief(): TwinCrawlInput {
   return {
-    mission: 'Test mission',
     brand: {
       name: 'TestBrand',
       domain: 'testbrand.com',
@@ -28,30 +27,17 @@ function mockBrief(): AuditBrief {
       },
     },
     scanData: {
-      summary: {
-        totalScans: 10,
-        dateRange: '2026-01-01 - 2026-01-15',
-        globalCitationRate: 0.3,
-        globalAvgPosition: 4.2,
-        trend: 'stable',
-      },
-      byProvider: {},
-      sentiment: {
-        score: 65,
-        themes: [],
-        positiveTerms: [],
-        negativeTerms: [],
-        rawSummary: '',
-      },
-      promptResults: [],
+      clientCitationRate: 0.3,
+      totalQueriesTested: 10,
+      clientMentionsCount: 3,
+      averageSentiment: 'neutral',
+      positionsWhenCited: [2, 4, 5],
+      topPerformingQueries: ['best seo tool'],
+      queriesNotCited: ['seo audit'],
     },
-    competitors: { primary: [] },
-    callback: { url: 'https://api.test.com/webhooks/twin', auditId: 'audit-123' },
-    outputFormat: {
-      schema: 'audit_result_v1',
-      sections: ['geo_score', 'site_audit', 'competitor_benchmark', 'action_plan', 'external_presence'],
-      language: 'fr',
-    },
+    competitors: { primary: [{ name: 'Competitor A', domain: '' }], maxPagesPerCompetitor: 3 },
+    callback: { url: 'https://api.test.com/webhooks/twin/audit', auditId: 'audit-123' },
+    outputFormat: 'structured_observations',
   };
 }
 
@@ -98,11 +84,27 @@ function mockProps(overrides: Partial<AuditOrderProps> = {}): AuditOrderProps {
     rawResultPayload: null,
     twinAgentId: null,
     reportUrl: null,
+    crawlDataUrl: null,
+    analysisDataUrl: null,
     startedAt: null,
     completedAt: null,
     failedAt: null,
     timeoutAt: null,
     failureReason: null,
+    retryCount: 0,
+    pagesAnalyzedClient: null,
+    pagesAnalyzedCompetitors: null,
+    competitorsAnalyzed: [],
+    storedGeoScore: null,
+    verdict: null,
+    topFindings: [],
+    actionCountCritical: null,
+    actionCountHigh: null,
+    actionCountMedium: null,
+    totalActions: null,
+    externalPresenceScore: null,
+    refundedAt: null,
+    refundId: null,
     createdAt: BASE_DATE,
     updatedAt: BASE_DATE,
     ...overrides,

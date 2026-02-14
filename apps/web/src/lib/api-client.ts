@@ -350,6 +350,15 @@ class ApiClient {
     });
   }
 
+  async getAuditReportUrl(
+    projectId: string,
+    auditId: string,
+  ): Promise<{ url: string; expiresInSeconds: number }> {
+    return this.fetch<{ url: string; expiresInSeconds: number }>(
+      `/projects/${projectId}/audit/${auditId}/report-url`,
+    );
+  }
+
   // Support
   async sendSupportRequest(data: CreateSupportRequestInput): Promise<SupportRequestResponse> {
     return this.fetch<SupportRequestResponse>('/support/contact', {

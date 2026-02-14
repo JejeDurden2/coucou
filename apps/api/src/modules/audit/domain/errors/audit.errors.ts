@@ -77,6 +77,30 @@ export class AuditStorageError extends DomainError {
   }
 }
 
+export class AuditAnalysisError extends DomainError {
+  readonly code = 'AUDIT_ANALYSIS_ERROR' as const;
+  readonly statusCode = 502 as const;
+
+  constructor(reason: string, auditOrderId?: string) {
+    super(`Erreur lors de l'analyse Mistral : ${reason}`, {
+      reason,
+      ...(auditOrderId && { auditOrderId }),
+    });
+  }
+}
+
+export class AuditAnalysisValidationError extends DomainError {
+  readonly code = 'AUDIT_ANALYSIS_VALIDATION_ERROR' as const;
+  readonly statusCode = 500 as const;
+
+  constructor(reason: string, auditOrderId?: string) {
+    super(`Validation de l'analyse échouée : ${reason}`, {
+      reason,
+      ...(auditOrderId && { auditOrderId }),
+    });
+  }
+}
+
 export class AuditReportNotAvailableError extends DomainError {
   readonly code = 'AUDIT_REPORT_NOT_AVAILABLE' as const;
   readonly statusCode = 400 as const;

@@ -12,6 +12,8 @@ export interface AuditFailedEmailData {
   brandName: string;
   supportEmail: string;
   unsubscribeUrl: string;
+  refunded: boolean;
+  refundAmountCents: number;
 }
 
 export function generateAuditFailedEmail(data: AuditFailedEmailData): {
@@ -30,7 +32,20 @@ export function generateAuditFailedEmail(data: AuditFailedEmailData): {
       'warning',
     )}
 
-    ${createParagraph('Nous vous recontacterons dès que votre audit sera prêt, ou vous pouvez contacter notre support.')}
+    ${data.refunded
+      ? createInfoBox(
+          `<p style="margin: 0; font-size: 14px; line-height: 1.6; color: ${EMAIL_COLORS.text};">
+            Votre paiement de <strong>${(data.refundAmountCents / 100).toFixed(2)} EUR</strong> a été intégralement remboursé. Le remboursement apparaîtra sur votre relevé bancaire sous 5 à 10 jours ouvrés.
+          </p>`,
+          'success',
+        )
+      : ''
+    }
+
+    ${data.refunded
+      ? createParagraph('Si vous avez des questions, n\'hésitez pas à contacter notre support.')
+      : createParagraph('Nous vous recontacterons dès que votre audit sera prêt, ou vous pouvez contacter notre support.')
+    }
 
     ${createButton('Contacter le support', `mailto:${data.supportEmail}`)}
 
@@ -43,14 +58,22 @@ export function generateAuditFailedEmail(data: AuditFailedEmailData): {
     previewText: `Un problème est survenu avec l'audit GEO pour ${data.brandName}.`,
   });
 
+  const refundText = data.refunded
+    ? `\nVotre paiement de ${(data.refundAmountCents / 100).toFixed(2)} EUR a été intégralement remboursé. Le remboursement apparaîtra sur votre relevé bancaire sous 5 à 10 jours ouvrés.\n`
+    : '';
+
+  const followUpText = data.refunded
+    ? 'Si vous avez des questions, n\'hésitez pas à contacter notre support.'
+    : 'Nous vous recontacterons dès que votre audit sera prêt, ou vous pouvez contacter notre support.';
+
   const text = `
 Un problème est survenu avec votre audit
 
 Bonjour ${data.firstName},
 
 L'audit GEO pour ${data.brandName} n'a pas pu être complété. Notre équipe a été notifiée et investigue le problème.
-
-Nous vous recontacterons dès que votre audit sera prêt, ou vous pouvez contacter notre support.
+${refundText}
+${followUpText}
 
 Contacter le support : ${data.supportEmail}
 

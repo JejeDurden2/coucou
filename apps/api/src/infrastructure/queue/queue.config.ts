@@ -80,10 +80,24 @@ export const auditJobOptions: DefaultJobOptions = {
 export const AUDIT_PDF_QUEUE_NAME = 'audit-pdf';
 
 export const auditPdfJobOptions: DefaultJobOptions = {
-  attempts: 3,
+  attempts: 2, // 1 retry max
   backoff: {
     type: 'exponential',
-    delay: 5000, // 5s, 10s, 20s
+    delay: 5000, // 5s, 10s
+  },
+  removeOnComplete: {
+    age: 30 * 24 * 60 * 60, // 30 days in seconds
+  },
+  removeOnFail: {
+    age: 90 * 24 * 60 * 60, // 90 days in seconds
+  },
+};
+
+export const auditAnalyzeJobOptions: DefaultJobOptions = {
+  attempts: 2, // 1 retry max (task requirement)
+  backoff: {
+    type: 'exponential',
+    delay: 30000, // 30s between retries (Mistral calls take 30-60s)
   },
   removeOnComplete: {
     age: 30 * 24 * 60 * 60, // 30 days in seconds

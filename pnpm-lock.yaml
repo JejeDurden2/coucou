@@ -47,6 +47,12 @@ importers:
       '@coucou-ia/shared':
         specifier: workspace:*
         version: link:../../packages/shared
+      '@fontsource/bricolage-grotesque':
+        specifier: ^5.2.10
+        version: 5.2.10
+      '@fontsource/fraunces':
+        specifier: ^5.2.9
+        version: 5.2.9
       '@logtail/pino':
         specifier: ^0.5.7
         version: 0.5.7(pino@10.3.1)
@@ -1085,6 +1091,12 @@ packages:
 
   '@floating-ui/utils@0.2.10':
     resolution: {integrity: sha512-aGTxbpbg8/b5JfU1HXSrbH3wXZuLPJcNEcZQFMxLs3oSzgtVu6nFPkbbGGUvBcUjKV2YyB9Wxxabo+HEH9tcRQ==}
+
+  '@fontsource/bricolage-grotesque@5.2.10':
+    resolution: {integrity: sha512-V2xS+1P7C8IrSypXLUx/bLtX/LsTlYtV2k2CsU+S/0t8qepZ2hvKSlyJIx7Ub/iY8Bbnj+IjAuUF9nvFz+BbIg==}
+
+  '@fontsource/fraunces@5.2.9':
+    resolution: {integrity: sha512-XDzuddBtoC7BZgZdBn6b7hsFZY2+V1hgN7yca5fBTKuHjb/lOd45a0Ji8dTUgFhPoL7RdGupo+bC2BFSt6UH8Q==}
 
   '@grpc/grpc-js@1.14.3':
     resolution: {integrity: sha512-Iq8QQQ/7X3Sac15oB6p0FmUg/klxQvXLeileoqrTRGJYLV+/9tubbr9ipz0GKHjmXVsgFPo/+W+2cA8eNcR+XA==}
@@ -8360,6 +8372,10 @@ snapshots:
       react-dom: 19.2.4(react@19.2.4)
 
   '@floating-ui/utils@0.2.10': {}
+
+  '@fontsource/bricolage-grotesque@5.2.10': {}
+
+  '@fontsource/fraunces@5.2.9': {}
 
   '@grpc/grpc-js@1.14.3':
     dependencies:

@@ -18,14 +18,15 @@ import {
 
 type GetLatestAuditError = NotFoundError | ForbiddenError;
 
-const IN_PROGRESS_STATUSES: ReadonlySet<AuditStatus> = new Set([
-  AuditStatus.PAID,
-  AuditStatus.PROCESSING,
-]);
-
 const COMPLETED_STATUSES: ReadonlySet<AuditStatus> = new Set([
   AuditStatus.COMPLETED,
   AuditStatus.PARTIAL,
+]);
+
+const FAILED_STATUSES: ReadonlySet<AuditStatus> = new Set([
+  AuditStatus.FAILED,
+  AuditStatus.TIMEOUT,
+  AuditStatus.SCHEMA_ERROR,
 ]);
 
 @Injectable()
@@ -60,39 +61,76 @@ export class GetLatestAuditUseCase {
       return Result.ok({ hasAudit: false });
     }
 
-    const createdAt = audit.createdAt.toISOString();
-
-    if (IN_PROGRESS_STATUSES.has(audit.status)) {
+    // PAID (or deprecated PROCESSING) = payment received, waiting for crawl
+    if (
+      audit.status === AuditStatus.PAID ||
+      audit.status === AuditStatus.PROCESSING
+    ) {
       return Result.ok({
         hasAudit: true,
-        status: audit.status as
-          | AuditStatus.PAID
-          | AuditStatus.PROCESSING,
-        createdAt,
+        auditId: audit.id,
+        status: AuditStatus.PAID,
+        createdAt: audit.createdAt.toISOString(),
         paidAt: audit.paidAt?.toISOString() ?? null,
-        startedAt: audit.startedAt?.toISOString() ?? null,
       });
     }
 
+    // CRAWLING = Twin agent crawling the site
+    if (audit.status === AuditStatus.CRAWLING) {
+      return Result.ok({
+        hasAudit: true,
+        auditId: audit.id,
+        status: AuditStatus.CRAWLING,
+        createdAt: audit.createdAt.toISOString(),
+        paidAt: audit.paidAt?.toISOString() ?? null,
+      });
+    }
+
+    // ANALYZING = crawl done, Mistral analyzing observations
+    if (audit.status === AuditStatus.ANALYZING) {
+      return Result.ok({
+        hasAudit: true,
+        auditId: audit.id,
+        status: AuditStatus.ANALYZING,
+        pagesAnalyzedClient: audit.pagesAnalyzedClient,
+        competitorsAnalyzed: audit.competitorsAnalyzed,
+      });
+    }
+
+    // COMPLETED (or deprecated PARTIAL) = analysis done, return metadata
     if (COMPLETED_STATUSES.has(audit.status)) {
       return Result.ok({
         hasAudit: true,
-        status: audit.status as AuditStatus.COMPLETED | AuditStatus.PARTIAL,
-        createdAt,
-        result: audit.resultPayload!,
-        reportUrl: audit.reportUrl,
+        auditId: audit.id,
+        status: AuditStatus.COMPLETED,
+        geoScore: audit.geoScore,
+        verdict: audit.verdict,
+        topFindings: audit.topFindings,
+        externalPresenceScore: audit.externalPresenceScore,
+        actionCount: {
+          critical: audit.actionCountCritical,
+          high: audit.actionCountHigh,
+          medium: audit.actionCountMedium,
+        },
+        totalActions: audit.totalActions,
+        competitorsAnalyzed: audit.competitorsAnalyzed,
+        pagesAnalyzedClient: audit.pagesAnalyzedClient,
+        pagesAnalyzedCompetitors: audit.pagesAnalyzedCompetitors,
         completedAt: audit.completedAt!.toISOString(),
       });
     }
 
-    return Result.ok({
-      hasAudit: true,
-      status: audit.status as
-        | AuditStatus.FAILED
-        | AuditStatus.TIMEOUT
-        | AuditStatus.SCHEMA_ERROR,
-      createdAt,
-      failureReason: audit.failureReason,
-    });
+    // FAILED (or deprecated TIMEOUT / SCHEMA_ERROR)
+    if (FAILED_STATUSES.has(audit.status)) {
+      return Result.ok({
+        hasAudit: true,
+        auditId: audit.id,
+        status: AuditStatus.FAILED,
+        failureReason: audit.failureReason,
+      });
+    }
+
+    // Fallback: unknown status → treat as no audit
+    return Result.ok({ hasAudit: false });
   }
 }

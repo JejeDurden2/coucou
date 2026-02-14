@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { AuditStatus } from '@coucou-ia/shared';
-import type { AuditBrief, AuditResult } from '@coucou-ia/shared';
+import type { TwinCrawlInput } from '@coucou-ia/shared';
 
 import { GetLatestAuditUseCase } from '../application/use-cases/get-latest-audit.use-case';
 import { AuditOrder } from '../domain/entities/audit-order.entity';
@@ -10,9 +10,8 @@ import type { ProjectRepository } from '../../project/domain/repositories/projec
 
 const BASE_DATE = new Date('2026-01-15T10:00:00Z');
 
-function mockBrief(): AuditBrief {
+function mockBrief(): TwinCrawlInput {
   return {
-    mission: 'Test mission',
     brand: {
       name: 'TestBrand',
       domain: 'testbrand.com',
@@ -25,59 +24,17 @@ function mockBrief(): AuditBrief {
       },
     },
     scanData: {
-      summary: {
-        totalScans: 10,
-        dateRange: '2026-01-01 - 2026-01-15',
-        globalCitationRate: 0.3,
-        globalAvgPosition: 4.2,
-        trend: 'stable',
-      },
-      byProvider: {},
-      sentiment: {
-        score: 65,
-        themes: [],
-        positiveTerms: [],
-        negativeTerms: [],
-        rawSummary: '',
-      },
-      promptResults: [],
+      clientCitationRate: 0.3,
+      totalQueriesTested: 10,
+      clientMentionsCount: 3,
+      averageSentiment: 'neutral',
+      positionsWhenCited: [2, 4, 5],
+      topPerformingQueries: ['best seo tool'],
+      queriesNotCited: ['seo audit'],
     },
-    competitors: { primary: [] },
-    callback: { url: 'https://api.test.com/webhooks/twin', auditId: 'audit-123' },
-    outputFormat: {
-      schema: 'audit_result_v1',
-      sections: ['geo_score', 'site_audit', 'competitor_benchmark', 'action_plan', 'external_presence'],
-      language: 'fr',
-    },
-  };
-}
-
-function mockAuditResult(): AuditResult {
-  return {
-    geoScore: {
-      overall: 72,
-      structure: 80,
-      content: 65,
-      technical: 70,
-      competitive: 73,
-      methodology: 'Test methodology',
-      mainStrengths: ['Good structure'],
-      mainWeaknesses: ['Low content'],
-    },
-    siteAudit: { pagesAnalyzed: [] },
-    competitorBenchmark: [],
-    actionPlan: { quickWins: [], shortTerm: [], mediumTerm: [] },
-    externalPresence: {
-      sourcesAudited: [],
-      presenceScore: 0,
-      mainGaps: [],
-    },
-    meta: {
-      pagesAnalyzedClient: 5,
-      pagesAnalyzedCompetitors: 10,
-      executionTimeSeconds: 120,
-      completedAt: '2026-01-15T12:00:00Z',
-    },
+    competitors: { primary: [{ name: 'Competitor A', domain: '' }], maxPagesPerCompetitor: 3 },
+    callback: { url: 'https://api.test.com/webhooks/twin/audit', auditId: 'audit-123' },
+    outputFormat: 'structured_observations',
   };
 }
 
@@ -95,11 +52,27 @@ function mockProps(overrides: Partial<AuditOrderProps> = {}): AuditOrderProps {
     rawResultPayload: null,
     twinAgentId: null,
     reportUrl: null,
+    crawlDataUrl: null,
+    analysisDataUrl: null,
     startedAt: null,
     completedAt: null,
     failedAt: null,
     timeoutAt: null,
     failureReason: null,
+    retryCount: 0,
+    pagesAnalyzedClient: null,
+    pagesAnalyzedCompetitors: null,
+    competitorsAnalyzed: [],
+    storedGeoScore: null,
+    verdict: null,
+    topFindings: [],
+    actionCountCritical: null,
+    actionCountHigh: null,
+    actionCountMedium: null,
+    totalActions: null,
+    externalPresenceScore: null,
+    refundedAt: null,
+    refundId: null,
     createdAt: BASE_DATE,
     updatedAt: BASE_DATE,
     ...overrides,
@@ -170,7 +143,7 @@ describe('GetLatestAuditUseCase', () => {
     }
   });
 
-  it('should return in-progress response for PAID status with paidAt', async () => {
+  it('should return PAID response for PAID status', async () => {
     const paidAt = new Date('2026-01-15T11:00:00Z');
     const audit = AuditOrder.create(
       mockProps({ status: AuditStatus.PAID, paidAt }),
@@ -183,21 +156,72 @@ describe('GetLatestAuditUseCase', () => {
     if (result.ok) {
       expect(result.value).toEqual({
         hasAudit: true,
+        auditId: 'audit-123',
         status: AuditStatus.PAID,
         createdAt: BASE_DATE.toISOString(),
         paidAt: paidAt.toISOString(),
-        startedAt: null,
       });
     }
   });
 
-  it('should return in-progress response for PROCESSING status', async () => {
-    const startedAt = new Date('2026-01-15T11:30:00Z');
+  it('should map deprecated PROCESSING status to PAID', async () => {
+    const paidAt = new Date('2026-01-15T11:00:00Z');
     const audit = AuditOrder.create(
       mockProps({
         status: AuditStatus.PROCESSING,
+        paidAt,
+        startedAt: new Date('2026-01-15T11:30:00Z'),
+      }),
+    );
+    auditOrderRepository.findLatestByProjectId.mockResolvedValue(audit);
+
+    const result = await useCase.execute('project-123', 'user-123');
+
+    expect(result.ok).toBe(true);
+    if (result.ok) {
+      expect(result.value).toEqual({
+        hasAudit: true,
+        auditId: 'audit-123',
+        status: AuditStatus.PAID,
+        createdAt: BASE_DATE.toISOString(),
+        paidAt: paidAt.toISOString(),
+      });
+    }
+  });
+
+  it('should return CRAWLING response', async () => {
+    const paidAt = new Date('2026-01-15T11:00:00Z');
+    const audit = AuditOrder.create(
+      mockProps({
+        status: AuditStatus.CRAWLING,
+        paidAt,
+        startedAt: new Date('2026-01-15T11:30:00Z'),
+      }),
+    );
+    auditOrderRepository.findLatestByProjectId.mockResolvedValue(audit);
+
+    const result = await useCase.execute('project-123', 'user-123');
+
+    expect(result.ok).toBe(true);
+    if (result.ok) {
+      expect(result.value).toEqual({
+        hasAudit: true,
+        auditId: 'audit-123',
+        status: AuditStatus.CRAWLING,
+        createdAt: BASE_DATE.toISOString(),
+        paidAt: paidAt.toISOString(),
+      });
+    }
+  });
+
+  it('should return ANALYZING response with crawl metadata', async () => {
+    const audit = AuditOrder.create(
+      mockProps({
+        status: AuditStatus.ANALYZING,
         paidAt: new Date('2026-01-15T11:00:00Z'),
-        startedAt,
+        startedAt: new Date('2026-01-15T11:30:00Z'),
+        pagesAnalyzedClient: 12,
+        competitorsAnalyzed: ['competitor-a.com', 'competitor-b.com'],
       }),
     );
     auditOrderRepository.findLatestByProjectId.mockResolvedValue(audit);
@@ -208,23 +232,31 @@ describe('GetLatestAuditUseCase', () => {
     if (result.ok) {
       expect(result.value).toEqual({
         hasAudit: true,
-        status: AuditStatus.PROCESSING,
-        createdAt: BASE_DATE.toISOString(),
-        paidAt: expect.any(String),
-        startedAt: startedAt.toISOString(),
+        auditId: 'audit-123',
+        status: AuditStatus.ANALYZING,
+        pagesAnalyzedClient: 12,
+        competitorsAnalyzed: ['competitor-a.com', 'competitor-b.com'],
       });
     }
   });
 
-  it('should return completed response for COMPLETED status', async () => {
+  it('should return COMPLETED response with denormalized metadata', async () => {
     const completedAt = new Date('2026-01-15T12:00:00Z');
-    const auditResult = mockAuditResult();
     const audit = AuditOrder.create(
       mockProps({
         status: AuditStatus.COMPLETED,
-        resultPayload: auditResult,
-        reportUrl: 'https://cdn.example.com/report.pdf',
         completedAt,
+        storedGeoScore: 72,
+        verdict: 'correcte',
+        topFindings: ['Good structure', 'Weak content'],
+        externalPresenceScore: 45,
+        actionCountCritical: 2,
+        actionCountHigh: 5,
+        actionCountMedium: 8,
+        totalActions: 15,
+        competitorsAnalyzed: ['competitor-a.com'],
+        pagesAnalyzedClient: 12,
+        pagesAnalyzedCompetitors: 24,
       }),
     );
     auditOrderRepository.findLatestByProjectId.mockResolvedValue(audit);
@@ -235,23 +267,32 @@ describe('GetLatestAuditUseCase', () => {
     if (result.ok) {
       expect(result.value).toEqual({
         hasAudit: true,
+        auditId: 'audit-123',
         status: AuditStatus.COMPLETED,
-        createdAt: BASE_DATE.toISOString(),
-        result: auditResult,
-        reportUrl: 'https://cdn.example.com/report.pdf',
+        geoScore: 72,
+        verdict: 'correcte',
+        topFindings: ['Good structure', 'Weak content'],
+        externalPresenceScore: 45,
+        actionCount: { critical: 2, high: 5, medium: 8 },
+        totalActions: 15,
+        competitorsAnalyzed: ['competitor-a.com'],
+        pagesAnalyzedClient: 12,
+        pagesAnalyzedCompetitors: 24,
         completedAt: completedAt.toISOString(),
       });
     }
   });
 
-  it('should return completed response for PARTIAL status', async () => {
+  it('should map deprecated PARTIAL status to COMPLETED', async () => {
     const completedAt = new Date('2026-01-15T12:00:00Z');
-    const auditResult = mockAuditResult();
     const audit = AuditOrder.create(
       mockProps({
         status: AuditStatus.PARTIAL,
-        resultPayload: auditResult,
         completedAt,
+        storedGeoScore: 55,
+        verdict: 'à renforcer',
+        topFindings: [],
+        totalActions: 3,
       }),
     );
     auditOrderRepository.findLatestByProjectId.mockResolvedValue(audit);
@@ -262,16 +303,23 @@ describe('GetLatestAuditUseCase', () => {
     if (result.ok) {
       expect(result.value).toEqual({
         hasAudit: true,
-        status: AuditStatus.PARTIAL,
-        createdAt: BASE_DATE.toISOString(),
-        result: auditResult,
-        reportUrl: null,
+        auditId: 'audit-123',
+        status: AuditStatus.COMPLETED,
+        geoScore: 55,
+        verdict: 'à renforcer',
+        topFindings: [],
+        externalPresenceScore: null,
+        actionCount: { critical: null, high: null, medium: null },
+        totalActions: 3,
+        competitorsAnalyzed: [],
+        pagesAnalyzedClient: null,
+        pagesAnalyzedCompetitors: null,
         completedAt: completedAt.toISOString(),
       });
     }
   });
 
-  it('should return failed response for FAILED status', async () => {
+  it('should return FAILED response for FAILED status', async () => {
     const audit = AuditOrder.create(
       mockProps({
         status: AuditStatus.FAILED,
@@ -286,14 +334,14 @@ describe('GetLatestAuditUseCase', () => {
     if (result.ok) {
       expect(result.value).toEqual({
         hasAudit: true,
+        auditId: 'audit-123',
         status: AuditStatus.FAILED,
-        createdAt: BASE_DATE.toISOString(),
         failureReason: 'Agent timeout',
       });
     }
   });
 
-  it('should return failed response for TIMEOUT status', async () => {
+  it('should map deprecated TIMEOUT status to FAILED', async () => {
     const audit = AuditOrder.create(
       mockProps({ status: AuditStatus.TIMEOUT }),
     );
@@ -305,14 +353,14 @@ describe('GetLatestAuditUseCase', () => {
     if (result.ok) {
       expect(result.value).toEqual({
         hasAudit: true,
-        status: AuditStatus.TIMEOUT,
-        createdAt: BASE_DATE.toISOString(),
+        auditId: 'audit-123',
+        status: AuditStatus.FAILED,
         failureReason: null,
       });
     }
   });
 
-  it('should return failed response for SCHEMA_ERROR status', async () => {
+  it('should map deprecated SCHEMA_ERROR status to FAILED', async () => {
     const audit = AuditOrder.create(
       mockProps({ status: AuditStatus.SCHEMA_ERROR }),
     );
@@ -324,10 +372,35 @@ describe('GetLatestAuditUseCase', () => {
     if (result.ok) {
       expect(result.value).toEqual({
         hasAudit: true,
-        status: AuditStatus.SCHEMA_ERROR,
-        createdAt: BASE_DATE.toISOString(),
+        auditId: 'audit-123',
+        status: AuditStatus.FAILED,
         failureReason: null,
       });
+    }
+  });
+
+  it('should never expose crawlDataUrl or analysisDataUrl', async () => {
+    const completedAt = new Date('2026-01-15T12:00:00Z');
+    const audit = AuditOrder.create(
+      mockProps({
+        status: AuditStatus.COMPLETED,
+        completedAt,
+        crawlDataUrl: 'r2://secret-crawl-data',
+        analysisDataUrl: 'r2://secret-analysis-data',
+        storedGeoScore: 72,
+      }),
+    );
+    auditOrderRepository.findLatestByProjectId.mockResolvedValue(audit);
+
+    const result = await useCase.execute('project-123', 'user-123');
+
+    expect(result.ok).toBe(true);
+    if (result.ok) {
+      const json = JSON.stringify(result.value);
+      expect(json).not.toContain('crawlDataUrl');
+      expect(json).not.toContain('analysisDataUrl');
+      expect(json).not.toContain('secret-crawl-data');
+      expect(json).not.toContain('secret-analysis-data');
     }
   });
 });

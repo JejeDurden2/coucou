@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import type { AuditBrief } from '@coucou-ia/shared';
+import type { TwinCrawlInput } from '@coucou-ia/shared';
 
 import { Result } from '../../../../common/utils/result';
 import type { DomainError } from '../../../../common/errors/domain-error';
@@ -21,12 +21,12 @@ export class TwinAgentAdapter implements AuditAgentPort {
     this.logger.setContext(TwinAgentAdapter.name);
   }
 
-  async triggerAudit(
-    brief: AuditBrief,
+  async triggerCrawl(
+    input: TwinCrawlInput,
   ): Promise<Result<{ agentId: string }, DomainError>> {
     const triggerId = this.configService.get<string>('TWIN_TRIGGER_ID', '');
     const url = `https://build.twin.so/triggers/${triggerId}/webhook`;
-    const auditId = brief.callback.auditId;
+    const auditId = input.callback.auditId;
 
     let lastError = '';
 
@@ -37,7 +37,7 @@ export class TwinAgentAdapter implements AuditAgentPort {
         const response = await fetch(url, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(brief),
+          body: JSON.stringify(input),
           signal: AbortSignal.timeout(TIMEOUT_MS),
         });
 

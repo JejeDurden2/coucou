@@ -17,6 +17,7 @@ import { CreateAuditCheckoutUseCase } from '../application/use-cases/create-audi
 import { GetLatestAuditUseCase } from '../application/use-cases/get-latest-audit.use-case';
 import { GetAuditHistoryUseCase } from '../application/use-cases/get-audit-history.use-case';
 import { GetAuditPdfUseCase } from '../application/use-cases/get-audit-pdf.use-case';
+import { GetLatestAuditPdfUseCase } from '../application/use-cases/get-latest-audit-pdf.use-case';
 import { GetReportUrlUseCase } from '../application/use-cases/get-report-url.use-case';
 
 @Controller('projects/:projectId/audit')
@@ -27,6 +28,7 @@ export class AuditController {
     private readonly getLatestAuditUseCase: GetLatestAuditUseCase,
     private readonly getAuditHistoryUseCase: GetAuditHistoryUseCase,
     private readonly getAuditPdfUseCase: GetAuditPdfUseCase,
+    private readonly getLatestAuditPdfUseCase: GetLatestAuditPdfUseCase,
     private readonly getReportUrlUseCase: GetReportUrlUseCase,
   ) {}
 
@@ -53,6 +55,23 @@ export class AuditController {
     @CurrentUser() user: AuthenticatedUser,
   ) {
     const result = await this.getAuditHistoryUseCase.execute(
+      projectId,
+      user.id,
+    );
+
+    if (!result.ok) {
+      throw new HttpException(result.error.toJSON(), result.error.statusCode);
+    }
+
+    return result.value;
+  }
+
+  @Get('pdf')
+  async getLatestPdf(
+    @Param('projectId') projectId: string,
+    @CurrentUser() user: AuthenticatedUser,
+  ): Promise<{ url: string; expiresInSeconds: number }> {
+    const result = await this.getLatestAuditPdfUseCase.execute(
       projectId,
       user.id,
     );

@@ -7,8 +7,6 @@ import { LoggerService } from '../../common/logger';
 import { EMAIL_QUEUE_NAME, defaultJobOptions } from './queue.config';
 import type { EmailJobData } from './types/email-job.types';
 
-const ADMIN_NOTIFICATION_EMAIL = 'jerome@coucou-ia.com';
-
 export interface QueueHealthStatus {
   status: 'healthy' | 'unhealthy';
   latencyMs?: number;
@@ -17,6 +15,7 @@ export interface QueueHealthStatus {
 @Injectable()
 export class EmailQueueService implements OnModuleInit, OnModuleDestroy {
   private queueEvents: QueueEvents | null = null;
+  private readonly adminNotificationEmail: string;
 
   constructor(
     @InjectQueue(EMAIL_QUEUE_NAME)
@@ -25,6 +24,7 @@ export class EmailQueueService implements OnModuleInit, OnModuleDestroy {
     private readonly logger: LoggerService,
   ) {
     this.logger.setContext(EmailQueueService.name);
+    this.adminNotificationEmail = this.configService.getOrThrow<string>('ADMIN_NOTIFICATION_EMAIL');
   }
 
   onModuleInit(): void {
@@ -97,7 +97,7 @@ export class EmailQueueService implements OnModuleInit, OnModuleDestroy {
   ): Promise<string> {
     return this.addJob({
       type: 'new-user-notification',
-      to: ADMIN_NOTIFICATION_EMAIL,
+      to: this.adminNotificationEmail,
       data: {
         userName: user.name ?? user.email.split('@')[0],
         userEmail: user.email,

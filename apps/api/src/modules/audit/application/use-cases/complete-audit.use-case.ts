@@ -9,6 +9,7 @@ import {
   type AuditOrder,
 } from '../../domain';
 import { AuditEmailNotificationService } from '../services/audit-email-notification.service';
+import { RefundAuditUseCase } from './refund-audit.use-case';
 import { AuditPdfQueueService } from '../../infrastructure/queue/audit-pdf-queue.service';
 
 @Injectable()
@@ -17,6 +18,7 @@ export class CompleteAuditUseCase {
     @Inject(AUDIT_ORDER_REPOSITORY)
     private readonly auditOrderRepository: AuditOrderRepository,
     private readonly auditEmailNotificationService: AuditEmailNotificationService,
+    private readonly refundAuditUseCase: RefundAuditUseCase,
     private readonly auditPdfQueueService: AuditPdfQueueService,
     private readonly logger: LoggerService,
   ) {
@@ -89,7 +91,11 @@ export class CompleteAuditUseCase {
       }
 
       await this.auditOrderRepository.save(schemaErrorResult.value);
-      await this.auditEmailNotificationService.notifyAuditSchemaError(schemaErrorResult.value);
+
+      const refundResult = await this.refundAuditUseCase.execute(schemaErrorResult.value);
+      const refundedOrder = refundResult.ok ? refundResult.value : schemaErrorResult.value;
+
+      await this.auditEmailNotificationService.notifyAuditSchemaError(refundedOrder);
       return;
     }
 
@@ -142,14 +148,17 @@ export class CompleteAuditUseCase {
 
     await this.auditOrderRepository.save(failedResult.value);
 
+    const refundResult = await this.refundAuditUseCase.execute(failedResult.value);
+    const refundedOrder = refundResult.ok ? refundResult.value : failedResult.value;
+
     this.logger.info('Audit failed', {
       auditId,
       status: 'FAILED',
       reason,
       processingDurationMs,
+      refunded: refundedOrder.isRefunded,
     });
 
-    // Notify user + admin via email
-    await this.auditEmailNotificationService.notifyAuditFailed(failedResult.value);
+    await this.auditEmailNotificationService.notifyAuditFailed(refundedOrder);
   }
 }

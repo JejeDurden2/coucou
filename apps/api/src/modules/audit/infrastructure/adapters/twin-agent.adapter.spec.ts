@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import type { AuditBrief } from '@coucou-ia/shared';
+import type { TwinCrawlInput } from '@coucou-ia/shared';
 
 import { TwinAgentAdapter } from './twin-agent.adapter';
 import { Result } from '../../../../common/utils/result';
@@ -17,8 +17,7 @@ describe('TwinAgentAdapter', () => {
     error: ReturnType<typeof vi.fn>;
   };
 
-  const mockBrief: AuditBrief = {
-    mission: 'test mission',
+  const mockInput: TwinCrawlInput = {
     brand: {
       name: 'Test Brand',
       domain: 'test.com',
@@ -31,34 +30,23 @@ describe('TwinAgentAdapter', () => {
       },
     },
     scanData: {
-      summary: {
-        totalScans: 10,
-        dateRange: '2026-01-01 - 2026-01-30',
-        globalCitationRate: 0.5,
-        globalAvgPosition: 3,
-        trend: 'stable',
-      },
-      byProvider: {},
-      sentiment: {
-        score: 0,
-        themes: [],
-        positiveTerms: [],
-        negativeTerms: [],
-        rawSummary: '',
-      },
-      promptResults: [],
+      clientCitationRate: 0.5,
+      totalQueriesTested: 10,
+      clientMentionsCount: 5,
+      averageSentiment: 'neutral',
+      positionsWhenCited: [1, 3],
+      topPerformingQueries: ['best tool'],
+      queriesNotCited: ['other query'],
     },
-    competitors: { primary: [] },
+    competitors: {
+      primary: [{ name: 'Competitor A', domain: 'competitor-a.com' }],
+      maxPagesPerCompetitor: 3,
+    },
     callback: {
-      url: 'https://api.test.com/webhooks/twin',
-      authHeader: 'Bearer secret',
+      url: 'https://api.test.com/webhooks/twin/audit',
       auditId: 'audit-123',
     },
-    outputFormat: {
-      schema: 'audit_result_v1',
-      sections: ['geo_score'],
-      language: 'fr',
-    },
+    outputFormat: 'structured_observations',
   };
 
   const originalFetch = global.fetch;
@@ -95,13 +83,13 @@ describe('TwinAgentAdapter', () => {
     expect(mockLogger.setContext).toHaveBeenCalledWith('TwinAgentAdapter');
   });
 
-  describe('triggerAudit', () => {
+  describe('triggerCrawl', () => {
     it('should succeed on first attempt', async () => {
       vi.mocked(global.fetch).mockResolvedValueOnce({
         ok: true,
       } as Response);
 
-      const result = await adapter.triggerAudit(mockBrief);
+      const result = await adapter.triggerCrawl(mockInput);
 
       expect(Result.isOk(result)).toBe(true);
       if (Result.isOk(result)) {
@@ -114,7 +102,7 @@ describe('TwinAgentAdapter', () => {
         expect.objectContaining({
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(mockBrief),
+          body: JSON.stringify(mockInput),
         }),
       );
 
@@ -138,7 +126,7 @@ describe('TwinAgentAdapter', () => {
           ok: true,
         } as Response);
 
-      const result = await adapter.triggerAudit(mockBrief);
+      const result = await adapter.triggerCrawl(mockInput);
 
       expect(Result.isOk(result)).toBe(true);
       if (Result.isOk(result)) {
@@ -164,7 +152,7 @@ describe('TwinAgentAdapter', () => {
         .mockResolvedValueOnce({ ok: false, status: 503, text: async () => '' } as Response)
         .mockResolvedValueOnce({ ok: false, status: 500, text: async () => '' } as Response);
 
-      const result = await adapter.triggerAudit(mockBrief);
+      const result = await adapter.triggerCrawl(mockInput);
 
       expect(Result.isErr(result)).toBe(true);
       if (Result.isErr(result)) {
@@ -189,7 +177,7 @@ describe('TwinAgentAdapter', () => {
           ok: true,
         } as Response);
 
-      const result = await adapter.triggerAudit(mockBrief);
+      const result = await adapter.triggerCrawl(mockInput);
 
       expect(Result.isOk(result)).toBe(true);
       if (Result.isOk(result)) {
@@ -213,7 +201,7 @@ describe('TwinAgentAdapter', () => {
         .mockRejectedValueOnce(abortError)
         .mockRejectedValueOnce(abortError);
 
-      const result = await adapter.triggerAudit(mockBrief);
+      const result = await adapter.triggerCrawl(mockInput);
 
       expect(Result.isErr(result)).toBe(true);
       if (Result.isErr(result)) {
@@ -223,12 +211,12 @@ describe('TwinAgentAdapter', () => {
       expect(global.fetch).toHaveBeenCalledTimes(3);
     });
 
-    it('should not log the full brief payload', async () => {
+    it('should not log the full input payload', async () => {
       vi.mocked(global.fetch).mockResolvedValueOnce({
         ok: true,
       } as Response);
 
-      await adapter.triggerAudit(mockBrief);
+      await adapter.triggerCrawl(mockInput);
 
       for (const call of mockLogger.info.mock.calls) {
         const logData = call[1] as Record<string, unknown>;

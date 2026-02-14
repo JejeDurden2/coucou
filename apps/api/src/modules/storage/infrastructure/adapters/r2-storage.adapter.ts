@@ -106,6 +106,37 @@ export class R2StorageAdapter implements FileStoragePort {
     }
   }
 
+  async download(key: string): Promise<Result<Buffer, DomainError>> {
+    try {
+      const response = await this.s3.send(
+        new GetObjectCommand({
+          Bucket: this.bucket,
+          Key: key,
+        }),
+      );
+
+      if (!response.Body) {
+        return Result.err(new FileStorageError('download', `Empty body for key: ${key}`));
+      }
+
+      const bytes = await response.Body.transformToByteArray();
+      const buffer = Buffer.from(bytes);
+
+      this.logger.info('File downloaded from R2', {
+        key,
+        bucket: this.bucket,
+        sizeBytes: buffer.length,
+      });
+
+      return Result.ok(buffer);
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : 'Unknown error';
+      this.logger.error('R2 download failed', { key, error: message });
+      return Result.err(new FileStorageError('download', message));
+    }
+  }
+
   async delete(key: string): Promise<Result<void, DomainError>> {
     try {
       await this.s3.send(

@@ -1,9 +1,21 @@
 import { AuditStatus } from '@coucou-ia/shared';
-import type { AuditBrief, AuditResult } from '@coucou-ia/shared';
+import type { AnalysisVerdict, AuditResult, TwinCrawlInput } from '@coucou-ia/shared';
 
 import type { Result } from '../../../../common/utils/result';
 import { Result as R } from '../../../../common/utils/result';
 import { AuditInvalidTransitionError } from '../errors/audit.errors';
+
+export interface AnalysisMetadata {
+  analysisDataUrl: string;
+  geoScore: number;
+  verdict: AnalysisVerdict;
+  topFindings: string[];
+  actionCountCritical: number;
+  actionCountHigh: number;
+  actionCountMedium: number;
+  totalActions: number;
+  externalPresenceScore: number;
+}
 
 export interface AuditOrderProps {
   id: string;
@@ -13,16 +25,32 @@ export interface AuditOrderProps {
   stripePaymentIntentId: string | null;
   amountCents: number;
   paidAt: Date | null;
-  briefPayload: AuditBrief;
+  briefPayload: TwinCrawlInput;
   resultPayload: AuditResult | null;
   rawResultPayload: unknown | null;
   twinAgentId: string | null;
   reportUrl: string | null;
+  crawlDataUrl: string | null;
+  analysisDataUrl: string | null;
+  retryCount: number;
+  pagesAnalyzedClient: number | null;
+  pagesAnalyzedCompetitors: number | null;
+  competitorsAnalyzed: string[];
+  storedGeoScore: number | null;
+  verdict: string | null;
+  topFindings: string[];
+  actionCountCritical: number | null;
+  actionCountHigh: number | null;
+  actionCountMedium: number | null;
+  totalActions: number | null;
+  externalPresenceScore: number | null;
   startedAt: Date | null;
   completedAt: Date | null;
   failedAt: Date | null;
   timeoutAt: Date | null;
   failureReason: string | null;
+  refundedAt: Date | null;
+  refundId: string | null;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -33,6 +61,17 @@ const TERMINAL_STATUSES: ReadonlySet<AuditStatus> = new Set([
   AuditStatus.FAILED,
   AuditStatus.TIMEOUT,
   AuditStatus.SCHEMA_ERROR,
+]);
+
+const REFUNDABLE_STATUSES: ReadonlySet<AuditStatus> = new Set([
+  AuditStatus.FAILED,
+  AuditStatus.TIMEOUT,
+  AuditStatus.SCHEMA_ERROR,
+]);
+
+export const REPORT_STATUSES: ReadonlySet<AuditStatus> = new Set([
+  AuditStatus.COMPLETED,
+  AuditStatus.PARTIAL,
 ]);
 
 const TIMEOUT_MINUTES = 15;
@@ -57,18 +96,35 @@ export class AuditOrder {
     rawResultPayload: unknown | null;
     twinAgentId: string | null;
     reportUrl: string | null;
+    crawlDataUrl: string | null;
+    analysisDataUrl: string | null;
+    retryCount: number;
+    pagesAnalyzedClient: number | null;
+    pagesAnalyzedCompetitors: number | null;
+    competitorsAnalyzed: string[];
+    geoScore: number | null;
+    verdict: string | null;
+    topFindings: string[];
+    actionCountCritical: number | null;
+    actionCountHigh: number | null;
+    actionCountMedium: number | null;
+    totalActions: number | null;
+    externalPresenceScore: number | null;
     startedAt: Date | null;
     completedAt: Date | null;
     failedAt: Date | null;
     timeoutAt: Date | null;
     failureReason: string | null;
+    refundedAt: Date | null;
+    refundId: string | null;
     createdAt: Date;
     updatedAt: Date;
   }): AuditOrder {
     return new AuditOrder({
       ...data,
-      briefPayload: data.briefPayload as AuditBrief,
+      briefPayload: data.briefPayload as TwinCrawlInput,
       resultPayload: (data.resultPayload as AuditResult) ?? null,
+      storedGeoScore: data.geoScore,
     });
   }
 
@@ -102,7 +158,7 @@ export class AuditOrder {
     return this.props.paidAt;
   }
 
-  get briefPayload(): AuditBrief {
+  get briefPayload(): TwinCrawlInput {
     return this.props.briefPayload;
   }
 
@@ -120,6 +176,30 @@ export class AuditOrder {
 
   get reportUrl(): string | null {
     return this.props.reportUrl;
+  }
+
+  get crawlDataUrl(): string | null {
+    return this.props.crawlDataUrl;
+  }
+
+  get analysisDataUrl(): string | null {
+    return this.props.analysisDataUrl;
+  }
+
+  get retryCount(): number {
+    return this.props.retryCount;
+  }
+
+  get pagesAnalyzedClient(): number | null {
+    return this.props.pagesAnalyzedClient;
+  }
+
+  get pagesAnalyzedCompetitors(): number | null {
+    return this.props.pagesAnalyzedCompetitors;
+  }
+
+  get competitorsAnalyzed(): string[] {
+    return this.props.competitorsAnalyzed;
   }
 
   get startedAt(): Date | null {
@@ -142,6 +222,14 @@ export class AuditOrder {
     return this.props.failureReason;
   }
 
+  get refundedAt(): Date | null {
+    return this.props.refundedAt;
+  }
+
+  get refundId(): string | null {
+    return this.props.refundId;
+  }
+
   get createdAt(): Date {
     return this.props.createdAt;
   }
@@ -160,21 +248,71 @@ export class AuditOrder {
     return this.props.status === AuditStatus.PROCESSING;
   }
 
+  get isCrawling(): boolean {
+    return this.props.status === AuditStatus.CRAWLING;
+  }
+
+  get isAnalyzing(): boolean {
+    return this.props.status === AuditStatus.ANALYZING;
+  }
+
   get isTimedOut(): boolean {
     return (
-      this.props.status === AuditStatus.PROCESSING &&
+      (this.props.status === AuditStatus.CRAWLING ||
+        this.props.status === AuditStatus.ANALYZING ||
+        this.props.status === AuditStatus.PROCESSING) &&
       this.props.timeoutAt !== null &&
       this.props.timeoutAt < new Date()
     );
   }
 
   get geoScore(): number | null {
-    return this.props.resultPayload?.geoScore?.overall ?? null;
+    return this.props.storedGeoScore ?? this.props.resultPayload?.geoScore?.overall ?? null;
+  }
+
+  get verdict(): string | null {
+    return this.props.verdict;
+  }
+
+  get topFindings(): string[] {
+    return this.props.topFindings;
+  }
+
+  get actionCountCritical(): number | null {
+    return this.props.actionCountCritical;
+  }
+
+  get actionCountHigh(): number | null {
+    return this.props.actionCountHigh;
+  }
+
+  get actionCountMedium(): number | null {
+    return this.props.actionCountMedium;
+  }
+
+  get totalActions(): number | null {
+    return this.props.totalActions;
+  }
+
+  get externalPresenceScore(): number | null {
+    return this.props.externalPresenceScore;
+  }
+
+  get isRefunded(): boolean {
+    return this.props.refundedAt !== null;
+  }
+
+  get canBeRefunded(): boolean {
+    return (
+      REFUNDABLE_STATUSES.has(this.props.status) &&
+      this.props.stripePaymentIntentId !== null &&
+      this.props.refundedAt === null
+    );
   }
 
   // ---- Mutations ----
 
-  updateBrief(brief: AuditBrief): Result<AuditOrder, AuditInvalidTransitionError> {
+  updateBrief(brief: TwinCrawlInput): Result<AuditOrder, AuditInvalidTransitionError> {
     if (this.props.status !== AuditStatus.PAID) {
       return R.err(
         new AuditInvalidTransitionError(this.props.status, 'UPDATE_BRIEF'),
@@ -213,6 +351,77 @@ export class AuditOrder {
     );
   }
 
+  markCrawling(
+    twinAgentId: string,
+  ): Result<AuditOrder, AuditInvalidTransitionError> {
+    if (this.props.status !== AuditStatus.PAID) {
+      return R.err(
+        new AuditInvalidTransitionError(
+          this.props.status,
+          AuditStatus.CRAWLING,
+        ),
+      );
+    }
+
+    const now = new Date();
+    const timeoutAt = new Date(now.getTime() + TIMEOUT_MINUTES * 60 * 1000);
+    return R.ok(
+      new AuditOrder({
+        ...this.props,
+        status: AuditStatus.CRAWLING,
+        twinAgentId,
+        startedAt: now,
+        timeoutAt,
+        updatedAt: now,
+      }),
+    );
+  }
+
+  markAnalyzing(crawlData: {
+    crawlDataUrl: string;
+    pagesAnalyzedClient: number;
+    pagesAnalyzedCompetitors: number;
+    competitorsAnalyzed: string[];
+  }): Result<AuditOrder, AuditInvalidTransitionError> {
+    if (this.props.status !== AuditStatus.CRAWLING) {
+      return R.err(
+        new AuditInvalidTransitionError(
+          this.props.status,
+          AuditStatus.ANALYZING,
+        ),
+      );
+    }
+
+    const now = new Date();
+    return R.ok(
+      new AuditOrder({
+        ...this.props,
+        status: AuditStatus.ANALYZING,
+        crawlDataUrl: crawlData.crawlDataUrl,
+        pagesAnalyzedClient: crawlData.pagesAnalyzedClient,
+        pagesAnalyzedCompetitors: crawlData.pagesAnalyzedCompetitors,
+        competitorsAnalyzed: crawlData.competitorsAnalyzed,
+        updatedAt: now,
+      }),
+    );
+  }
+
+  incrementRetry(): Result<AuditOrder, AuditInvalidTransitionError> {
+    if (this.props.status !== AuditStatus.CRAWLING) {
+      return R.err(
+        new AuditInvalidTransitionError(this.props.status, 'INCREMENT_RETRY'),
+      );
+    }
+
+    return R.ok(
+      new AuditOrder({
+        ...this.props,
+        retryCount: this.props.retryCount + 1,
+        updatedAt: new Date(),
+      }),
+    );
+  }
+
   markProcessing(
     twinAgentId: string,
   ): Result<AuditOrder, AuditInvalidTransitionError> {
@@ -242,7 +451,10 @@ export class AuditOrder {
   markCompleted(
     result: AuditResult,
   ): Result<AuditOrder, AuditInvalidTransitionError> {
-    if (this.props.status !== AuditStatus.PROCESSING) {
+    if (
+      this.props.status !== AuditStatus.PROCESSING &&
+      this.props.status !== AuditStatus.ANALYZING
+    ) {
       return R.err(
         new AuditInvalidTransitionError(
           this.props.status,
@@ -266,7 +478,10 @@ export class AuditOrder {
   markPartial(
     result: AuditResult,
   ): Result<AuditOrder, AuditInvalidTransitionError> {
-    if (this.props.status !== AuditStatus.PROCESSING) {
+    if (
+      this.props.status !== AuditStatus.PROCESSING &&
+      this.props.status !== AuditStatus.ANALYZING
+    ) {
       return R.err(
         new AuditInvalidTransitionError(
           this.props.status,
@@ -287,11 +502,63 @@ export class AuditOrder {
     );
   }
 
+  storeAnalysisResults(
+    metadata: AnalysisMetadata,
+  ): Result<AuditOrder, AuditInvalidTransitionError> {
+    if (this.props.status !== AuditStatus.ANALYZING) {
+      return R.err(
+        new AuditInvalidTransitionError(
+          this.props.status,
+          'STORE_ANALYSIS_RESULTS',
+        ),
+      );
+    }
+
+    return R.ok(
+      new AuditOrder({
+        ...this.props,
+        analysisDataUrl: metadata.analysisDataUrl,
+        storedGeoScore: metadata.geoScore,
+        verdict: metadata.verdict,
+        topFindings: metadata.topFindings,
+        actionCountCritical: metadata.actionCountCritical,
+        actionCountHigh: metadata.actionCountHigh,
+        actionCountMedium: metadata.actionCountMedium,
+        totalActions: metadata.totalActions,
+        externalPresenceScore: metadata.externalPresenceScore,
+        updatedAt: new Date(),
+      }),
+    );
+  }
+
+  markAnalysisCompleted(): Result<AuditOrder, AuditInvalidTransitionError> {
+    if (this.props.status !== AuditStatus.ANALYZING) {
+      return R.err(
+        new AuditInvalidTransitionError(
+          this.props.status,
+          AuditStatus.COMPLETED,
+        ),
+      );
+    }
+
+    const now = new Date();
+    return R.ok(
+      new AuditOrder({
+        ...this.props,
+        status: AuditStatus.COMPLETED,
+        completedAt: now,
+        updatedAt: now,
+      }),
+    );
+  }
+
   markFailed(
     reason: string,
   ): Result<AuditOrder, AuditInvalidTransitionError> {
     if (
       this.props.status !== AuditStatus.PAID &&
+      this.props.status !== AuditStatus.CRAWLING &&
+      this.props.status !== AuditStatus.ANALYZING &&
       this.props.status !== AuditStatus.PROCESSING
     ) {
       return R.err(
@@ -315,7 +582,11 @@ export class AuditOrder {
   }
 
   markTimeout(): Result<AuditOrder, AuditInvalidTransitionError> {
-    if (this.props.status !== AuditStatus.PROCESSING) {
+    if (
+      this.props.status !== AuditStatus.CRAWLING &&
+      this.props.status !== AuditStatus.ANALYZING &&
+      this.props.status !== AuditStatus.PROCESSING
+    ) {
       return R.err(
         new AuditInvalidTransitionError(
           this.props.status,
@@ -338,7 +609,11 @@ export class AuditOrder {
   markSchemaError(
     rawResult: unknown,
   ): Result<AuditOrder, AuditInvalidTransitionError> {
-    if (this.props.status !== AuditStatus.PROCESSING) {
+    if (
+      this.props.status !== AuditStatus.CRAWLING &&
+      this.props.status !== AuditStatus.ANALYZING &&
+      this.props.status !== AuditStatus.PROCESSING
+    ) {
       return R.err(
         new AuditInvalidTransitionError(
           this.props.status,
@@ -376,6 +651,26 @@ export class AuditOrder {
       new AuditOrder({
         ...this.props,
         reportUrl: reportKey,
+        updatedAt: now,
+      }),
+    );
+  }
+
+  markRefunded(
+    refundId: string,
+  ): Result<AuditOrder, AuditInvalidTransitionError> {
+    if (!this.canBeRefunded) {
+      return R.err(
+        new AuditInvalidTransitionError(this.props.status, 'REFUND'),
+      );
+    }
+
+    const now = new Date();
+    return R.ok(
+      new AuditOrder({
+        ...this.props,
+        refundId,
+        refundedAt: now,
         updatedAt: now,
       }),
     );

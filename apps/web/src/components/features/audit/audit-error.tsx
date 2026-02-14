@@ -1,25 +1,18 @@
 'use client';
 
 import { AlertTriangle } from 'lucide-react';
-import { AuditStatus } from '@coucou-ia/shared';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 
 interface AuditErrorProps {
-  status: AuditStatus.FAILED | AuditStatus.TIMEOUT | AuditStatus.SCHEMA_ERROR;
-  onRetry: () => void;
-  isRetrying: boolean;
+  failureReason: string | null;
 }
 
-function getErrorMessage(status: AuditStatus): string {
-  if (status === AuditStatus.TIMEOUT) {
-    return "L'analyse prend plus de temps que prévu. Notre équipe a été notifiée.";
-  }
-  return "L'analyse a rencontré un problème.";
-}
+const SUPPORT_MAILTO =
+  'mailto:support@coucou-ia.com?subject=Audit%20GEO%20en%20erreur&body=Bonjour%2C%0A%0AMon%20audit%20GEO%20a%20rencontr%C3%A9%20une%20erreur.%20Pourriez-vous%20v%C3%A9rifier%20%3F%0A%0AMerci';
 
-export function AuditError({ status, onRetry, isRetrying }: AuditErrorProps): React.ReactNode {
+export function AuditError({ failureReason }: AuditErrorProps): React.ReactNode {
   return (
     <div className="space-y-8">
       <div>
@@ -32,14 +25,14 @@ export function AuditError({ status, onRetry, isRetrying }: AuditErrorProps): Re
             <AlertTriangle className="size-6 text-destructive" />
           </div>
           <p className="text-sm text-muted-foreground max-w-md">
-            {getErrorMessage(status)}
+            {failureReason ?? "L'analyse a rencontré un problème."}
           </p>
-          <div className="flex flex-col sm:flex-row gap-3 pt-2">
+          <p className="text-xs text-muted-foreground max-w-md">
+            Si vous avez été débité, un remboursement sera effectué automatiquement.
+          </p>
+          <div className="pt-2">
             <Button variant="outline" asChild>
-              <a href="mailto:support@coucou-ia.com">Contacter le support</a>
-            </Button>
-            <Button onClick={onRetry} disabled={isRetrying}>
-              {isRetrying ? 'Redirection...' : "Relancer l'audit"}
+              <a href={SUPPORT_MAILTO}>Contacter le support</a>
             </Button>
           </div>
         </CardContent>

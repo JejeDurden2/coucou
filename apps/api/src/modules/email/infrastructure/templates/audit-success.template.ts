@@ -11,11 +11,31 @@ export interface AuditSuccessEmailData {
   firstName: string;
   brandName: string;
   score: number;
+  verdict: string | null;
+  externalPresenceScore: number | null;
   keyPoints: string[];
   actionCount: number;
   reportUrl: string;
-  pdfUrl: string | null;
+  pdfUrl: string;
   unsubscribeUrl: string;
+}
+
+function getVerdictColor(verdict: string): string {
+  switch (verdict) {
+    case 'insuffisante':
+      return EMAIL_COLORS.destructive;
+    case 'à renforcer':
+      return EMAIL_COLORS.warning;
+    case 'correcte':
+    case 'excellente':
+      return EMAIL_COLORS.success;
+    default:
+      return EMAIL_COLORS.textMuted;
+  }
+}
+
+function getVerdictLabel(verdict: string): string {
+  return `Visibilité ${verdict}`;
 }
 
 export function generateAuditSuccessEmail(data: AuditSuccessEmailData): {
@@ -28,6 +48,15 @@ export function generateAuditSuccessEmail(data: AuditSuccessEmailData): {
       : data.score >= 40
         ? EMAIL_COLORS.warning
         : EMAIL_COLORS.destructive;
+
+  const verdictHtml = data.verdict
+    ? `
+      <tr>
+        <td align="center" style="padding: 4px 0 0; font-size: 14px; font-weight: 600; color: ${getVerdictColor(data.verdict)};">
+          ${getVerdictLabel(data.verdict)}
+        </td>
+      </tr>`
+    : '';
 
   const keyPointsHtml = data.keyPoints
     .map(
@@ -54,16 +83,40 @@ export function generateAuditSuccessEmail(data: AuditSuccessEmailData): {
           Score GEO
         </td>
       </tr>
+      ${verdictHtml}
     </table>
     `,
     'success',
   );
 
-  const pdfLinkHtml = data.pdfUrl
-    ? `<p style="margin: 16px 0 0; font-size: 14px; text-align: center;">
-        <a href="${data.pdfUrl}" style="color: ${EMAIL_COLORS.primary}; text-decoration: underline;">Télécharger le PDF</a>
-      </p>`
-    : '';
+  const externalPresenceHtml =
+    data.externalPresenceScore !== null
+      ? createInfoBox(
+          `
+      <table role="presentation" style="width: 100%; border-collapse: collapse;">
+        <tr>
+          <td style="padding: 4px 0; font-size: 14px; color: ${EMAIL_COLORS.text};">
+            Présence externe
+          </td>
+          <td align="right" style="padding: 4px 0; font-size: 14px; font-weight: 600; color: ${EMAIL_COLORS.text};">
+            ${data.externalPresenceScore}/100
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2" style="padding: 4px 0 0;">
+            <table role="presentation" style="width: 100%; height: 6px; border-radius: 3px; background-color: ${EMAIL_COLORS.cardHover};">
+              <tr>
+                <td style="width: ${data.externalPresenceScore}%; height: 6px; border-radius: 3px; background-color: ${EMAIL_COLORS.primary};"></td>
+                <td style="height: 6px;"></td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+      `,
+          'primary',
+        )
+      : '';
 
   const content = `
     ${createHeading('Votre audit GEO est prêt', 1)}
@@ -73,6 +126,8 @@ export function generateAuditSuccessEmail(data: AuditSuccessEmailData): {
     ${createParagraph(`L'audit pour <strong>${data.brandName}</strong> est terminé.`)}
 
     ${scoreBoxHtml}
+
+    ${externalPresenceHtml}
 
     ${createHeading('Points clés', 2)}
 
@@ -84,7 +139,9 @@ export function generateAuditSuccessEmail(data: AuditSuccessEmailData): {
 
     ${createButton('Voir le rapport', data.reportUrl)}
 
-    ${pdfLinkHtml}
+    <p style="margin: 16px 0 0; font-size: 14px; text-align: center;">
+      <a href="${data.pdfUrl}" style="color: ${EMAIL_COLORS.primary}; text-decoration: underline;">Télécharger le PDF</a>
+    </p>
 
     <p style="margin: 24px 0 0; font-size: 12px; color: ${EMAIL_COLORS.textMuted}; text-align: center;">
       <a href="${data.unsubscribeUrl}" style="color: ${EMAIL_COLORS.textMuted}; text-decoration: underline;">Se désinscrire des emails</a>
@@ -95,6 +152,11 @@ export function generateAuditSuccessEmail(data: AuditSuccessEmailData): {
     previewText: `Score GEO : ${data.score}/100 pour ${data.brandName} — ${data.actionCount} actions recommandées.`,
   });
 
+  const verdictText = data.verdict ? `\nVerdict : ${getVerdictLabel(data.verdict)}` : '';
+  const externalPresenceText =
+    data.externalPresenceScore !== null
+      ? `\nPrésence externe : ${data.externalPresenceScore}/100`
+      : '';
   const keyPointsText = data.keyPoints.map((point) => `  - ${point}`).join('\n');
 
   const text = `
@@ -104,7 +166,7 @@ Bonjour ${data.firstName},
 
 L'audit pour ${data.brandName} est terminé.
 
-Score GEO : ${data.score}/100
+Score GEO : ${data.score}/100${verdictText}${externalPresenceText}
 
 Points clés :
 ${keyPointsText}
@@ -112,7 +174,9 @@ ${keyPointsText}
 ${data.actionCount} actions recommandées pour améliorer votre score.
 
 Voir le rapport : ${data.reportUrl}
-${data.pdfUrl ? `\nTélécharger le PDF : ${data.pdfUrl}\n` : ''}
+
+Télécharger le PDF : ${data.pdfUrl}
+
 --
 Se désinscrire : ${data.unsubscribeUrl}
 

@@ -1,86 +1,97 @@
-import { Page, View, Text } from '@react-pdf/renderer';
+import { Page, View, Text, Link } from '@react-pdf/renderer';
 
-import { styles, COLORS, SPACING } from '../styles';
+import { theme, baseStyles } from '../theme';
+import { CoucouLogo } from './coucou-logo';
 
 interface CtaPageProps {
-  brandName: string;
+  totalActions: number;
 }
 
-export function CtaPage({ brandName }: CtaPageProps): React.JSX.Element {
+export function CtaPage({ totalActions }: CtaPageProps): React.JSX.Element {
   return (
-    <Page size="A4" style={styles.page}>
+    <Page size="A4" style={baseStyles.page} break>
       <View
         style={{
           flex: 1,
           justifyContent: 'center',
           alignItems: 'center',
-          paddingHorizontal: SPACING.xl,
+          paddingHorizontal: 40,
         }}
       >
+        {/* Main headline */}
         <Text
           style={{
-            fontSize: 24,
-            fontFamily: 'Helvetica-Bold',
-            color: COLORS.white,
+            fontFamily: theme.fonts.display,
+            fontSize: theme.fontSize['3xl'],
+            fontWeight: 700,
+            color: theme.colors.accent,
             textAlign: 'center',
-            marginBottom: SPACING.lg,
+            marginBottom: 24,
           }}
         >
-          {"Passez à l'action"}
+          PASSEZ À L'ACTION
         </Text>
 
+        {/* Dynamic text */}
         <Text
           style={{
-            fontSize: 12,
-            color: COLORS.gray300,
+            fontFamily: theme.fonts.body,
+            fontSize: theme.fontSize.lg,
+            color: theme.colors.textPrimary,
             textAlign: 'center',
-            marginBottom: SPACING.xxl,
             lineHeight: 1.6,
+            marginBottom: 16,
           }}
         >
-          {`Ce rapport a identifié des opportunités concrètes pour ${brandName}. Notre accompagnement étape 3 vous permet de mettre en œuvre chaque recommandation avec un suivi personnalisé.`}
+          {`Ce rapport identifie ${totalActions} optimisations pour améliorer votre visibilité dans les réponses IA.`}
         </Text>
 
-        <View
-          style={{
-            backgroundColor: COLORS.purple,
-            paddingHorizontal: SPACING.xl,
-            paddingVertical: SPACING.md,
-            borderRadius: 8,
-            marginBottom: SPACING.lg,
-          }}
-        >
-          <Text
-            style={{
-              fontSize: 14,
-              fontFamily: 'Helvetica-Bold',
-              color: COLORS.white,
-              textAlign: 'center',
-            }}
-          >
-            {"Découvrir l'accompagnement GEO"}
-          </Text>
-        </View>
-
+        {/* Service description */}
         <Text
           style={{
-            fontSize: 10,
-            color: COLORS.gray400,
+            fontFamily: theme.fonts.body,
+            fontSize: theme.fontSize.base,
+            color: theme.colors.textMuted,
             textAlign: 'center',
+            lineHeight: 1.6,
+            marginBottom: 16,
+          }}
+        >
+          Coucou IA peut exécuter ces recommandations automatiquement sur votre
+          site.
+        </Text>
+
+        {/* Link */}
+        <Link
+          src="https://coucou-ia.com"
+          style={{
+            fontFamily: theme.fonts.body,
+            fontSize: theme.fontSize.lg,
+            color: theme.colors.accent,
+            textDecoration: 'underline',
+            marginBottom: 40,
           }}
         >
           coucou-ia.com
-        </Text>
-      </View>
+        </Link>
 
-      <View
-        style={{
-          ...styles.footer,
-          justifyContent: 'center',
-        }}
-      >
-        <Text style={{ fontSize: 8, color: COLORS.gray500 }}>
-          {'© Coucou IA — Rapport confidentiel'}
+        {/* Accent divider */}
+        <View style={{ ...baseStyles.accentDivider, alignSelf: 'center' }} />
+
+        {/* Logo */}
+        <View style={{ marginBottom: 12 }}>
+          <CoucouLogo width={80} />
+        </View>
+
+        {/* Tagline */}
+        <Text
+          style={{
+            fontFamily: theme.fonts.body,
+            fontSize: theme.fontSize.sm,
+            color: theme.colors.textMuted,
+          }}
+        >
+          Le GEO, c'est le nouveau SEO.
         </Text>
       </View>
     </Page>

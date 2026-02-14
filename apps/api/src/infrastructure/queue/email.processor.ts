@@ -46,6 +46,7 @@ import {
   generateAuditSuccessEmail,
   type AuditSuccessEmailData,
   generateAuditFailedEmail,
+  type AuditFailedEmailData,
   generateAuditAdminAlertEmail,
 } from '../../modules/email';
 
@@ -222,7 +223,9 @@ const EMAIL_CONFIG: Record<EmailJobType, { generator: EmailGenerator; subject: E
   },
   'audit-failed': {
     generator: generateAuditFailedEmail as EmailGenerator,
-    subject: 'Audit GEO — un problème est survenu',
+    subject: ((data: AuditFailedEmailData) =>
+      `Audit GEO — un problème est survenu pour ${data.brandName}`
+    ) as (data: never) => string,
   },
   'audit-admin-alert': {
     generator: generateAuditAdminAlertEmail as EmailGenerator,

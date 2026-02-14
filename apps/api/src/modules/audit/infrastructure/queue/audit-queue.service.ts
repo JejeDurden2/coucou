@@ -7,6 +7,7 @@ import { LoggerService } from '../../../../common/logger';
 import {
   AUDIT_QUEUE_NAME,
   auditJobOptions,
+  auditAnalyzeJobOptions,
   auditTimeoutCheckJobOptions,
 } from '../../../../infrastructure/queue/queue.config';
 
@@ -27,13 +28,31 @@ export interface CompleteAuditJobData {
   result?: unknown;
 }
 
+export interface HandleCrawlCompleteJobData {
+  auditId: string;
+  status: 'completed' | 'partial' | 'failed';
+  observations?: unknown;
+  error?: { code: 'SITE_UNREACHABLE' | 'TIMEOUT' | 'CRAWL_BLOCKED' | 'UNKNOWN'; message: string };
+  meta?: {
+    completedAt: string;
+    pagesAnalyzedClient: number;
+    pagesAnalyzedCompetitors: number;
+    competitorsCount: number;
+    executionTimeSeconds: number;
+  };
+}
+
+export interface AnalyzeWithMistralJobData {
+  auditOrderId: string;
+}
+
 @Injectable()
 export class AuditQueueService implements OnModuleInit, OnModuleDestroy {
   private queueEvents: QueueEvents | null = null;
 
   constructor(
     @InjectQueue(AUDIT_QUEUE_NAME)
-    private readonly auditQueue: Queue<AuditJobData | AuditTimeoutCheckJobData | CompleteAuditJobData>,
+    private readonly auditQueue: Queue<AuditJobData | AuditTimeoutCheckJobData | CompleteAuditJobData | HandleCrawlCompleteJobData | AnalyzeWithMistralJobData>,
     private readonly configService: ConfigService,
     private readonly logger: LoggerService,
   ) {
@@ -112,6 +131,32 @@ export class AuditQueueService implements OnModuleInit, OnModuleDestroy {
       jobId: job.id,
       auditId: data.auditId,
       status: data.status,
+    });
+
+    return job.id ?? '';
+  }
+
+  async addHandleCrawlCompleteJob(data: HandleCrawlCompleteJobData): Promise<string> {
+    const job = await this.auditQueue.add('handle-crawl-complete', data, {
+      ...auditJobOptions,
+      jobId: `crawl-complete-${data.auditId}`,
+    });
+
+    this.logger.info('Crawl complete job queued', {
+      jobId: job.id,
+      auditId: data.auditId,
+      status: data.status,
+    });
+
+    return job.id ?? '';
+  }
+
+  async addAnalyzeWithMistralJob(data: AnalyzeWithMistralJobData): Promise<string> {
+    const job = await this.auditQueue.add('analyze-with-mistral', data, auditAnalyzeJobOptions);
+
+    this.logger.info('Mistral analysis job queued', {
+      jobId: job.id,
+      auditOrderId: data.auditOrderId,
     });
 
     return job.id ?? '';
