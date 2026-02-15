@@ -43,6 +43,10 @@ export type TwinCrawlResultLenientType = z.infer<typeof twinCrawlResultLenientSc
 // Mistral Analysis Output
 // ============================================
 
+// Defensive helpers — clamp & round LLM outputs instead of rejecting
+const scoreSchema = z.number().transform((n) => Math.round(Math.min(100, Math.max(0, n))));
+const impactEffortSchema = z.number().transform((n) => Math.round(Math.min(5, Math.max(1, n))));
+
 const analysisFindingSchema = z.object({
   category: z.enum(['structure', 'content', 'technical', 'external_presence']),
   severity: z.enum(['critical', 'warning', 'info']),
@@ -69,7 +73,7 @@ const analysisPlatformPresenceSchema = z.object({
 const analysisCompetitorSchema = z.object({
   name: z.string(),
   domain: z.string(),
-  estimatedGeoScore: z.number().min(0).max(100),
+  estimatedGeoScore: scoreSchema,
   strengths: z.array(z.string()),
   clientGaps: z.array(z.string()),
   externalPresenceAdvantage: z.array(z.string()),
@@ -78,9 +82,9 @@ const analysisCompetitorSchema = z.object({
 const analysisActionItemSchema = z.object({
   title: z.string(),
   description: z.string(),
-  targetUrl: z.string().nullable(),
-  impact: z.number().int().min(1).max(5),
-  effort: z.number().int().min(1).max(5),
+  targetUrl: z.string().nullable().default(null).transform((v) => (v === '' ? null : v)),
+  impact: impactEffortSchema,
+  effort: impactEffortSchema,
   category: z.enum(['structure', 'content', 'technical', 'external_presence']),
 });
 
@@ -88,15 +92,21 @@ export const auditAnalysisSchema = z.object({
   executiveSummary: z.object({
     headline: z.string(),
     context: z.string(),
-    keyFindings: z.tuple([z.string(), z.string(), z.string()]),
+    keyFindings: z
+      .array(z.string())
+      .min(1)
+      .transform((arr): [string, string, string] => {
+        const padded = [...arr, '', '', ''].slice(0, 3) as [string, string, string];
+        return padded;
+      }),
     verdict: z.enum(['insuffisante', 'à renforcer', 'correcte', 'excellente']),
   }),
   geoScore: z.object({
-    overall: z.number().min(0).max(100),
-    structure: z.number().min(0).max(100),
-    content: z.number().min(0).max(100),
-    technical: z.number().min(0).max(100),
-    externalPresence: z.number().min(0).max(100),
+    overall: scoreSchema,
+    structure: scoreSchema,
+    content: scoreSchema,
+    technical: scoreSchema,
+    externalPresence: scoreSchema,
     structureExplanation: z.string(),
     contentExplanation: z.string(),
     technicalExplanation: z.string(),
@@ -107,7 +117,7 @@ export const auditAnalysisSchema = z.object({
     globalFindings: z.array(analysisFindingSchema),
   }),
   externalPresence: z.object({
-    score: z.number().min(0).max(100),
+    score: scoreSchema,
     platforms: z.array(analysisPlatformPresenceSchema),
     summary: z.string(),
     gaps: z.array(z.string()),
@@ -121,7 +131,7 @@ export const auditAnalysisSchema = z.object({
     quickWins: z.array(analysisActionItemSchema),
     shortTerm: z.array(analysisActionItemSchema),
     mediumTerm: z.array(analysisActionItemSchema),
-    totalActions: z.number().int().nonnegative(),
+    totalActions: z.number().int().nonnegative().optional().default(0),
   }),
 });
 

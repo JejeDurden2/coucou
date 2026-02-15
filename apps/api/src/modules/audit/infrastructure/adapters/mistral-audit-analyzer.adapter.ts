@@ -87,6 +87,96 @@ RÈGLES D'ANALYSE :
    - Identifier les gaps exploitables (ce que le client peut copier)
    - Rester factuel, pas anxiogène
 
+5. STRUCTURE JSON OBLIGATOIRE
+
+Tu DOIS retourner un objet JSON respectant EXACTEMENT cette structure.
+Les noms de champs sont en camelCase. Respecte les types et valeurs possibles.
+
+{
+  "executiveSummary": {
+    "headline": "string — titre accrocheur",
+    "context": "string — paragraphe de contexte",
+    "keyFindings": ["string", "string", "string"],
+    "verdict": "insuffisante" | "à renforcer" | "correcte" | "excellente"
+  },
+  "geoScore": {
+    "overall": number (0-100),
+    "structure": number (0-100),
+    "content": number (0-100),
+    "technical": number (0-100),
+    "externalPresence": number (0-100),
+    "structureExplanation": "string",
+    "contentExplanation": "string",
+    "technicalExplanation": "string",
+    "externalPresenceExplanation": "string"
+  },
+  "siteAudit": {
+    "pages": [{
+      "url": "string",
+      "type": "string",
+      "strengths": ["string"],
+      "findings": [{
+        "category": "structure" | "content" | "technical" | "external_presence",
+        "severity": "critical" | "warning" | "info",
+        "title": "string",
+        "detail": "string",
+        "recommendation": "string"
+      }]
+    }],
+    "globalFindings": [/* même format que findings */]
+  },
+  "externalPresence": {
+    "score": number (0-100),
+    "platforms": [{
+      "platform": "string",
+      "found": boolean,
+      "status": "string",
+      "impact": "high" | "medium" | "low",
+      "recommendation": "string"
+    }],
+    "summary": "string",
+    "gaps": ["string"]
+  },
+  "competitorBenchmark": {
+    "competitors": [{
+      "name": "string",
+      "domain": "string",
+      "estimatedGeoScore": number (0-100),
+      "strengths": ["string"],
+      "clientGaps": ["string"],
+      "externalPresenceAdvantage": ["string"]
+    }],
+    "summary": "string",
+    "keyGaps": ["string"]
+  },
+  "actionPlan": {
+    "quickWins": [/* actionItem */],
+    "shortTerm": [/* actionItem */],
+    "mediumTerm": [/* actionItem */],
+    "totalActions": number (entier >= 0)
+  }
+}
+
+Format actionItem :
+{
+  "title": "string",
+  "description": "string",
+  "targetUrl": "string" | null,
+  "impact": number (entier 1-5),
+  "effort": number (entier 1-5),
+  "category": "structure" | "content" | "technical" | "external_presence"
+}
+
+CONTRAINTES STRICTES :
+- keyFindings : TOUJOURS exactement 3 éléments
+- verdict : uniquement "insuffisante", "à renforcer", "correcte" ou "excellente"
+- category : uniquement "structure", "content", "technical" ou "external_presence"
+- severity : uniquement "critical", "warning" ou "info"
+- impact des plateformes : uniquement "high", "medium" ou "low"
+- Tous les scores : nombres entiers entre 0 et 100
+- impact et effort des actions : entiers de 1 à 5
+- targetUrl : string ou null (jamais une chaîne vide)
+
 Réponds UNIQUEMENT en JSON valide, sans markdown, sans backticks,
 sans texte avant ou après le JSON.`;
 
@@ -227,16 +317,38 @@ Produis l'analyse au format AuditAnalysis spécifié.`;
   }
 
   private parseAndValidate(content: string): Result<AuditAnalysis, DomainError> {
+    // Strip markdown code blocks that Mistral sometimes adds despite instructions
+    const cleaned = content
+      .replace(/```(?:json)?\s*/gi, '')
+      .replace(/```\s*/g, '')
+      .trim();
+
     let parsed: unknown;
     try {
-      parsed = JSON.parse(content);
+      parsed = JSON.parse(cleaned);
     } catch {
-      this.logger.error('Failed to parse Mistral JSON response', {
-        contentPreview: content.slice(0, 200),
-      });
-      return Result.err(
-        new AuditAnalysisValidationError('Invalid JSON in Mistral response'),
-      );
+      // Attempt to extract JSON object from surrounding text
+      const jsonMatch = cleaned.match(/\{[\s\S]*\}/);
+      if (!jsonMatch) {
+        this.logger.error('Failed to parse Mistral JSON response', {
+          contentPreview: cleaned.slice(0, 200),
+        });
+        return Result.err(
+          new AuditAnalysisValidationError('Invalid JSON in Mistral response'),
+        );
+      }
+      try {
+        // Remove trailing commas before ] or } (common LLM mistake)
+        const sanitized = jsonMatch[0].replace(/,\s*([}\]])/g, '$1');
+        parsed = JSON.parse(sanitized);
+      } catch {
+        this.logger.error('Failed to parse extracted JSON from Mistral response', {
+          contentPreview: cleaned.slice(0, 200),
+        });
+        return Result.err(
+          new AuditAnalysisValidationError('Invalid JSON in Mistral response'),
+        );
+      }
     }
 
     const validationResult = auditAnalysisSchema.safeParse(parsed);
@@ -247,6 +359,7 @@ Produis l'analyse au format AuditAnalysis spécifié.`;
 
       this.logger.error('AuditAnalysis schema validation failed', {
         issues,
+        parsedPreview: JSON.stringify(parsed).slice(0, 500),
       });
       return Result.err(
         new AuditAnalysisValidationError(

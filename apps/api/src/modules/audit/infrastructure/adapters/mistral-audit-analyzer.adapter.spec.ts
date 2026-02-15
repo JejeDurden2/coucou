@@ -310,6 +310,83 @@ describe('MistralAuditAnalyzerAdapter', () => {
       );
     });
 
+    it('should handle JSON wrapped in markdown code blocks', async () => {
+      const wrappedContent = '```json\n' + JSON.stringify(validAnalysis) + '\n```';
+      vi.mocked(global.fetch).mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({
+          choices: [{ message: { content: wrappedContent } }],
+          usage: { prompt_tokens: 1000, completion_tokens: 5000, total_tokens: 6000 },
+        }),
+      } as Response);
+
+      const result = await adapter.analyze(mockObservations, mockBrandContext);
+      expect(result.ok).toBe(true);
+    });
+
+    it('should handle trailing commas in JSON', async () => {
+      const jsonWithTrailingComma = JSON.stringify(validAnalysis)
+        .replace(/"totalActions":0}/, '"totalActions":0,}');
+      vi.mocked(global.fetch).mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({
+          choices: [{ message: { content: jsonWithTrailingComma } }],
+          usage: { prompt_tokens: 1000, completion_tokens: 5000, total_tokens: 6000 },
+        }),
+      } as Response);
+
+      const result = await adapter.analyze(mockObservations, mockBrandContext);
+      expect(result.ok).toBe(true);
+    });
+
+    it('should accept keyFindings with 2 items (padded to 3)', async () => {
+      const twoFindings = {
+        ...validAnalysis,
+        executiveSummary: {
+          ...validAnalysis.executiveSummary,
+          keyFindings: ['Finding 1', 'Finding 2'],
+        },
+      };
+      vi.mocked(global.fetch).mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({
+          choices: [{ message: { content: JSON.stringify(twoFindings) } }],
+          usage: { prompt_tokens: 1000, completion_tokens: 5000, total_tokens: 6000 },
+        }),
+      } as Response);
+
+      const result = await adapter.analyze(mockObservations, mockBrandContext);
+      expect(result.ok).toBe(true);
+      if (result.ok) {
+        expect(result.value.executiveSummary.keyFindings).toHaveLength(3);
+      }
+    });
+
+    it('should round decimal scores', async () => {
+      const decimalScores = {
+        ...validAnalysis,
+        geoScore: {
+          ...validAnalysis.geoScore,
+          overall: 65.7,
+          structure: 70.2,
+        },
+      };
+      vi.mocked(global.fetch).mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({
+          choices: [{ message: { content: JSON.stringify(decimalScores) } }],
+          usage: { prompt_tokens: 1000, completion_tokens: 5000, total_tokens: 6000 },
+        }),
+      } as Response);
+
+      const result = await adapter.analyze(mockObservations, mockBrandContext);
+      expect(result.ok).toBe(true);
+      if (result.ok) {
+        expect(result.value.geoScore.overall).toBe(66);
+        expect(result.value.geoScore.structure).toBe(70);
+      }
+    });
+
     it('should not log the full prompt or observations', async () => {
       vi.mocked(global.fetch).mockResolvedValueOnce({
         ok: true,
