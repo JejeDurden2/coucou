@@ -3,7 +3,6 @@ import type { AuditAnalysis } from '@coucou-ia/shared';
 
 import { theme, baseStyles } from '../theme';
 import { BrutalGrid } from './brutal-grid';
-import { MetricHero } from './metric-hero';
 import { PageFooter } from './page-footer';
 import { PlatformRow } from './platform-row';
 import { ScoreCircle } from './score-circle';
@@ -28,12 +27,10 @@ export function ExternalPresence({
       {/* Section Title */}
       <SectionHeader title="PRÉSENCE EXTERNE" />
 
-      {/* Metric Hero - Score */}
-      <MetricHero
-        value={externalPresence.score}
-        label="SCORE PRÉSENCE"
-        variant="accent"
-      />
+      {/* Score Circle - Présence externe */}
+      <View style={{ alignItems: 'flex-start', marginBottom: 20 }}>
+        <ScoreCircle score={externalPresence.score} size="medium" label="SCORE PRÉSENCE" />
+      </View>
 
       {/* Intro - monospace */}
       <Text
@@ -159,7 +156,7 @@ export function ExternalPresence({
                   cx={4}
                   cy={4}
                   r={4}
-                  style={{ fill: theme.colors.destructive }}
+                  fill={theme.colors.destructive}
                 />
               </Svg>
               <Text

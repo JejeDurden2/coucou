@@ -53,39 +53,38 @@ function BrutalScoreBlock({
         {name}
       </Text>
 
-      {/* Score massif */}
-      <Text
-        style={{
-          fontFamily: theme.fonts.mono,
-          fontSize: theme.fontSize['4xl'],
-          fontWeight: 700,
-          color: highlight ? theme.colors.brutalWhite : theme.colors.textPrimary,
-          lineHeight: 1,
-        }}
-      >
-        {score}
-      </Text>
+      {/* ScoreCircle small */}
+      <View style={{ marginVertical: 8 }}>
+        <ScoreCircle score={score} size="small" />
+      </View>
 
       {/* Barre verticale épaisse */}
       <View
         style={{
           width: 30,
           height: 80,
-          backgroundColor: theme.colors.bgCardHover,
-          marginTop: 12,
-          position: 'relative',
+          marginTop: 8,
+          flexDirection: 'column',
         }}
       >
-        <View
-          style={{
-            position: 'absolute',
-            bottom: 0,
-            left: 0,
-            right: 0,
-            height: `${score}%`,
-            backgroundColor: color,
-          }}
-        />
+        {/* Empty track en haut */}
+        {score < 100 && (
+          <View
+            style={{
+              flex: 100 - score,
+              backgroundColor: theme.colors.bgCardHover,
+            }}
+          />
+        )}
+        {/* Fill en bas */}
+        {score > 0 && (
+          <View
+            style={{
+              flex: score,
+              backgroundColor: color,
+            }}
+          />
+        )}
       </View>
     </View>
   );

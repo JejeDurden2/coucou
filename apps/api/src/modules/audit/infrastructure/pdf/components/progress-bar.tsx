@@ -64,21 +64,27 @@ export function ProgressBar({
           style={{
             height: 60,
             width: '100%',
-            backgroundColor: theme.colors.bgCardHover,
-            position: 'relative',
+            flexDirection: 'column',
           }}
         >
-          {/* Fill depuis le bas */}
-          <View
-            style={{
-              position: 'absolute',
-              bottom: 0,
-              left: 0,
-              right: 0,
-              height: `${clampedScore}%`,
-              backgroundColor: color,
-            }}
-          />
+          {/* Empty track en haut */}
+          {clampedScore < 100 && (
+            <View
+              style={{
+                flex: 100 - clampedScore,
+                backgroundColor: theme.colors.bgCardHover,
+              }}
+            />
+          )}
+          {/* Fill en bas */}
+          {clampedScore > 0 && (
+            <View
+              style={{
+                flex: clampedScore,
+                backgroundColor: color,
+              }}
+            />
+          )}
         </View>
 
         {/* Score en monospace */}
@@ -127,18 +133,30 @@ export function ProgressBar({
         style={{
           flex: 1,
           height: 20,
-          backgroundColor: theme.colors.bgCardHover,
+          flexDirection: 'row',
           marginHorizontal: 8,
         }}
       >
         {/* Bar fill - bloc de couleur brutal */}
-        <View
-          style={{
-            height: 20,
-            width: `${clampedScore}%`,
-            backgroundColor: color,
-          }}
-        />
+        {clampedScore > 0 && (
+          <View
+            style={{
+              flex: clampedScore,
+              height: 20,
+              backgroundColor: color,
+            }}
+          />
+        )}
+        {/* Bar empty track */}
+        {clampedScore < 100 && (
+          <View
+            style={{
+              flex: 100 - clampedScore,
+              height: 20,
+              backgroundColor: theme.colors.bgCardHover,
+            }}
+          />
+        )}
       </View>
 
       {/* Score value - monospace */}

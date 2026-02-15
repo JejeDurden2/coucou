@@ -84,23 +84,19 @@ export function ScoreCircle({
           cx={cx}
           cy={cy}
           r={r}
-          style={{
-            fill: 'none',
-            stroke: theme.colors.bgCardHover,
-            strokeWidth,
-          }}
+          fill="none"
+          stroke={theme.colors.bgCardHover}
+          strokeWidth={strokeWidth}
         />
 
         {/* Score arc */}
         {clampedScore > 0 && (
           <Path
             d={describeArc(cx, cy, r, 0, sweepAngle)}
-            style={{
-              fill: 'none',
-              stroke: color,
-              strokeWidth,
-              strokeLinecap: 'round',
-            }}
+            fill="none"
+            stroke={color}
+            strokeWidth={strokeWidth}
+            strokeLinecap="round"
           />
         )}
 
@@ -109,23 +105,19 @@ export function ScoreCircle({
           cx={cx}
           cy={cy}
           r={r + 4}
-          style={{
-            fill: 'none',
-            stroke: color,
-            strokeWidth: 1,
-            opacity: 0.2,
-          }}
+          fill="none"
+          stroke={color}
+          strokeWidth={1}
+          opacity={0.2}
         />
         <Circle
           cx={cx}
           cy={cy}
           r={r + 8}
-          style={{
-            fill: 'none',
-            stroke: color,
-            strokeWidth: 0.5,
-            opacity: 0.1,
-          }}
+          fill="none"
+          stroke={color}
+          strokeWidth={0.5}
+          opacity={0.1}
         />
 
         {/* Score text - monospace pour data */}

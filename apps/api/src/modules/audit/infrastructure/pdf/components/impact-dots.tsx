@@ -50,12 +50,11 @@ export function ImpactDots({
             cx={5 + i * 14}
             cy={5}
             r={5}
-            style={{
-              fill:
-                i < value
-                  ? theme.colors.accent
-                  : theme.colors.bgCardHover,
-            }}
+            fill={
+              i < value
+                ? theme.colors.accent
+                : theme.colors.bgCardHover
+            }
           />
         ))}
       </Svg>
