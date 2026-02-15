@@ -40,7 +40,6 @@ export function SectionHeader({
           fontSize: theme.fontSize.sm,
           fontWeight: 700,
           color: theme.colors.textMuted,
-          letterSpacing: 2,
           textTransform: 'uppercase',
         }}
       >

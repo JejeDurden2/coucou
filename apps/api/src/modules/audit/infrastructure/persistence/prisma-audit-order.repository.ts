@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { $Enums } from '@prisma/client';
 import { AuditStatus } from '@coucou-ia/shared';
 
@@ -21,7 +21,7 @@ const TERMINAL_STATUSES: $Enums.AuditStatus[] = [
 
 @Injectable()
 export class PrismaAuditOrderRepository implements AuditOrderRepository {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(@Inject(PrismaService) private readonly prisma: PrismaService) {}
 
   async save(auditOrder: AuditOrder): Promise<AuditOrder> {
     const data = {

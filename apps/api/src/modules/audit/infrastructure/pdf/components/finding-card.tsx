@@ -61,7 +61,7 @@ export function FindingCard({
           fontSize: theme.fontSize.tiny,
           fontWeight: 700,
           color: severityColor,
-          letterSpacing: 2,
+          letterSpacing: 1.5,
           textTransform: 'uppercase',
           marginBottom: 4,
         }}

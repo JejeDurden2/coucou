@@ -179,7 +179,7 @@ export function ExternalPresence({
       )}
 
       {/* Footer */}
-      <PageFooter left="COUCOU IA" right="PRÉSENCE EXTERNE" />
+      <PageFooter />
     </Page>
   );
 }

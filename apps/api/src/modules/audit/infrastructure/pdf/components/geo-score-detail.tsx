@@ -45,7 +45,7 @@ function BrutalScoreBlock({
           fontSize: theme.fontSize.tiny,
           fontWeight: 700,
           color: highlight ? theme.colors.brutalWhite : theme.colors.textMuted,
-          letterSpacing: 2,
+          letterSpacing: 1.5,
           marginBottom: 8,
           textTransform: 'uppercase',
         }}
@@ -165,7 +165,7 @@ export function GeoScoreDetail({
       </View>
 
       {/* Footer */}
-      <PageFooter left="COUCOU IA" right="03" />
+      <PageFooter />
     </Page>
   );
 }

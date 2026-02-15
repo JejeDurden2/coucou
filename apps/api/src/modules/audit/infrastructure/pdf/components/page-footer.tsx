@@ -2,48 +2,46 @@ import { View, Text } from '@react-pdf/renderer';
 
 import { theme, baseStyles } from '../theme';
 
-interface PageFooterProps {
-  left: string;
-  right: string;
-}
-
 /**
  * PageFooter - Footer standardisé pour toutes les pages
  *
- * Affiche un footer fixe en bas avec texte left/right aligné.
- * Utilise mono font et tiny size pour cohérence brutalist.
- *
- * @param left - Texte aligné à gauche (généralement "COUCOU IA")
- * @param right - Texte aligné à droite (nom de section ou numéro de page)
+ * Affiche un footer fixe en bas avec :
+ * - Ligne séparatrice 0.5pt
+ * - "COUCOU IA" à gauche
+ * - Numéro de page dynamique à droite (format "01", "02", etc.)
  *
  * @example
  * ```tsx
- * <PageFooter left="COUCOU IA" right="02" />
- * <PageFooter left="COUCOU IA" right="AUDIT TECHNIQUE" />
+ * <PageFooter />
  * ```
  */
-export function PageFooter({
-  left,
-  right,
-}: PageFooterProps): React.JSX.Element {
+export function PageFooter(): React.JSX.Element {
   return (
     <View style={baseStyles.footer} fixed>
-      <Text
+      <View
         style={{
-          fontFamily: theme.fonts.mono,
-          fontSize: theme.fontSize.tiny,
+          borderBottomWidth: 0.5,
+          borderBottomColor: theme.colors.border,
+          marginBottom: 4,
         }}
-      >
-        {left}
-      </Text>
-      <Text
-        style={{
-          fontFamily: theme.fonts.mono,
-          fontSize: theme.fontSize.tiny,
-        }}
-      >
-        {right}
-      </Text>
+      />
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+        <Text
+          style={{
+            fontFamily: theme.fonts.mono,
+            fontSize: 7,
+          }}
+        >
+          COUCOU IA
+        </Text>
+        <Text
+          style={{
+            fontFamily: theme.fonts.mono,
+            fontSize: 7,
+          }}
+          render={({ pageNumber }) => String(pageNumber).padStart(2, '0')}
+        />
+      </View>
     </View>
   );
 }

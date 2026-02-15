@@ -65,7 +65,7 @@ export function ExecutiveSummary({
               fontFamily: theme.fonts.mono,
               fontSize: theme.fontSize.tiny,
               color: theme.colors.textMuted,
-              letterSpacing: 2,
+              letterSpacing: 1.5,
               marginBottom: 12,
             }}
           >
@@ -104,7 +104,7 @@ export function ExecutiveSummary({
           fontSize: theme.fontSize.xs,
           fontWeight: 700,
           color: theme.colors.textMuted,
-          letterSpacing: 2,
+          letterSpacing: 1.5,
           marginBottom: 12,
           textTransform: 'uppercase',
         }}
@@ -167,7 +167,7 @@ export function ExecutiveSummary({
       </View>
 
       {/* Footer */}
-      <PageFooter left="COUCOU IA" right="02" />
+      <PageFooter />
     </Page>
   );
 }

@@ -51,7 +51,7 @@ export function DataSlab({
               fontSize: theme.fontSize.sm,
               fontWeight: 700,
               color: theme.colors.brutalWhite,
-              letterSpacing: 4,
+              letterSpacing: 1.5,
               textTransform: 'uppercase',
               marginBottom: 8,
             }}
@@ -84,7 +84,7 @@ export function DataSlab({
           fontSize: theme.fontSize.tiny,
           fontWeight: 700,
           color: theme.colors.brutalWhite,
-          letterSpacing: 4,
+          letterSpacing: 1.5,
           textTransform: 'uppercase',
           marginBottom: 4,
           opacity: 0.7,

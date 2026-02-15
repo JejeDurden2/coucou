@@ -131,7 +131,7 @@ export function ActionPlanSection({
       />
 
       {/* Footer */}
-      <PageFooter left="COUCOU IA" right="PLAN D'ACTION" />
+      <PageFooter />
     </Page>
   );
 }

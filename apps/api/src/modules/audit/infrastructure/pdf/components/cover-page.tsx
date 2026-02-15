@@ -124,7 +124,7 @@ export function CoverPage({
             fontFamily: theme.fonts.mono,
             fontSize: theme.fontSize.tiny,
             color: theme.colors.destructive,
-            letterSpacing: 2,
+            letterSpacing: 3,
             marginTop: 8,
           }}
         >

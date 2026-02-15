@@ -232,12 +232,9 @@ export const baseStyles = StyleSheet.create({
   },
   footer: {
     position: 'absolute',
-    bottom: 20,
+    bottom: 42,
     left: 40,
     right: 40,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    fontSize: theme.fontSize.xs,
     color: theme.colors.textMuted,
   },
 

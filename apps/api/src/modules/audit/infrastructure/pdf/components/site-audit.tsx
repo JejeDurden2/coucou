@@ -225,7 +225,7 @@ export function SiteAudit({
       })}
 
       {/* Footer */}
-      <PageFooter left="COUCOU IA" right="AUDIT TECHNIQUE" />
+      <PageFooter />
     </Page>
   );
 }

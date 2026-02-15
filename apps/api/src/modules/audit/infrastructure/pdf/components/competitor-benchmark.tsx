@@ -285,7 +285,7 @@ export function CompetitorBenchmarkSection({
       )}
 
       {/* Footer */}
-      <PageFooter left="COUCOU IA" right="BENCHMARK CONCURRENTIEL" />
+      <PageFooter />
     </Page>
   );
 }

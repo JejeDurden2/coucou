@@ -76,7 +76,6 @@ export function MetricHero({
           fontSize: theme.fontSize.lg,
           fontWeight: 700,
           color: theme.colors.brutalWhite,
-          letterSpacing: 2,
           textTransform: 'uppercase',
           opacity: 0.9,
         }}
