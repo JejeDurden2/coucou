@@ -516,6 +516,134 @@ export class AuditOrder {
     );
   }
 
+  // ---- Reset methods (for manual retry) ----
+
+  resetForCrawlRetry(): Result<AuditOrder, AuditInvalidTransitionError> {
+    if (
+      this.props.status !== AuditStatus.FAILED &&
+      this.props.status !== AuditStatus.CRAWLING &&
+      this.props.status !== AuditStatus.PAID
+    ) {
+      return R.err(
+        new AuditInvalidTransitionError(this.props.status, 'RESET_FOR_CRAWL'),
+      );
+    }
+
+    if (this.props.refundedAt !== null) {
+      return R.err(
+        new AuditInvalidTransitionError(this.props.status, 'RESET_FOR_CRAWL (refunded)'),
+      );
+    }
+
+    return R.ok(
+      new AuditOrder({
+        ...this.props,
+        status: AuditStatus.PAID,
+        twinAgentId: null,
+        crawlDataUrl: null,
+        analysisDataUrl: null,
+        reportUrl: null,
+        storedGeoScore: null,
+        verdict: null,
+        topFindings: [],
+        actionCountCritical: null,
+        actionCountHigh: null,
+        actionCountMedium: null,
+        totalActions: null,
+        externalPresenceScore: null,
+        pagesAnalyzedClient: null,
+        pagesAnalyzedCompetitors: null,
+        competitorsAnalyzed: [],
+        retryCount: 0,
+        failureReason: null,
+        failedAt: null,
+        completedAt: null,
+        timeoutAt: null,
+        updatedAt: new Date(),
+      }),
+    );
+  }
+
+  resetForAnalysisRetry(): Result<AuditOrder, AuditInvalidTransitionError> {
+    if (
+      this.props.status !== AuditStatus.FAILED &&
+      this.props.status !== AuditStatus.ANALYZING
+    ) {
+      return R.err(
+        new AuditInvalidTransitionError(this.props.status, 'RESET_FOR_ANALYSIS'),
+      );
+    }
+
+    if (this.props.refundedAt !== null) {
+      return R.err(
+        new AuditInvalidTransitionError(this.props.status, 'RESET_FOR_ANALYSIS (refunded)'),
+      );
+    }
+
+    if (!this.props.crawlDataUrl) {
+      return R.err(
+        new AuditInvalidTransitionError(this.props.status, 'RESET_FOR_ANALYSIS (no crawlDataUrl)'),
+      );
+    }
+
+    return R.ok(
+      new AuditOrder({
+        ...this.props,
+        status: AuditStatus.ANALYZING,
+        analysisDataUrl: null,
+        reportUrl: null,
+        storedGeoScore: null,
+        verdict: null,
+        topFindings: [],
+        actionCountCritical: null,
+        actionCountHigh: null,
+        actionCountMedium: null,
+        totalActions: null,
+        externalPresenceScore: null,
+        failureReason: null,
+        failedAt: null,
+        completedAt: null,
+        updatedAt: new Date(),
+      }),
+    );
+  }
+
+  resetForPdfRetry(): Result<AuditOrder, AuditInvalidTransitionError> {
+    if (
+      this.props.status !== AuditStatus.FAILED &&
+      this.props.status !== AuditStatus.COMPLETED &&
+      this.props.status !== AuditStatus.ANALYZING
+    ) {
+      return R.err(
+        new AuditInvalidTransitionError(this.props.status, 'RESET_FOR_PDF'),
+      );
+    }
+
+    if (this.props.refundedAt !== null) {
+      return R.err(
+        new AuditInvalidTransitionError(this.props.status, 'RESET_FOR_PDF (refunded)'),
+      );
+    }
+
+    if (!this.props.analysisDataUrl) {
+      return R.err(
+        new AuditInvalidTransitionError(this.props.status, 'RESET_FOR_PDF (no analysisDataUrl)'),
+      );
+    }
+
+    return R.ok(
+      new AuditOrder({
+        ...this.props,
+        status: AuditStatus.ANALYZING,
+        reportUrl: null,
+        failureReason: null,
+        failedAt: null,
+        completedAt: null,
+        updatedAt: new Date(),
+      }),
+    );
+  }
+
   markRefunded(
     refundId: string,
   ): Result<AuditOrder, AuditInvalidTransitionError> {

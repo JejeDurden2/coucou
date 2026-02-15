@@ -706,6 +706,330 @@ describe('AuditOrder', () => {
     });
   });
 
+  // ---- resetForCrawlRetry ----
+
+  describe('resetForCrawlRetry', () => {
+    it('should reset FAILED -> PAID and clear crawl/analysis data', () => {
+      const order = AuditOrder.create(
+        mockProps({
+          status: AuditStatus.FAILED,
+          stripePaymentIntentId: 'pi_test',
+          twinAgentId: 'agent-1',
+          crawlDataUrl: 'audits/audit-123/observations.json',
+          analysisDataUrl: 'audits/audit-123/analysis.json',
+          reportUrl: 'audits/audit-123/report.pdf',
+          storedGeoScore: 65,
+          verdict: 'à renforcer',
+          topFindings: ['Finding 1'],
+          actionCountCritical: 1,
+          actionCountHigh: 2,
+          actionCountMedium: 3,
+          totalActions: 6,
+          externalPresenceScore: 40,
+          pagesAnalyzedClient: 5,
+          pagesAnalyzedCompetitors: 3,
+          competitorsAnalyzed: ['comp-a.com'],
+          retryCount: 2,
+          failureReason: 'Some failure',
+          failedAt: BASE_DATE,
+          timeoutAt: BASE_DATE,
+        }),
+      );
+      const result = order.resetForCrawlRetry();
+
+      expect(result.ok).toBe(true);
+      if (result.ok) {
+        expect(result.value.status).toBe(AuditStatus.PAID);
+        expect(result.value.twinAgentId).toBeNull();
+        expect(result.value.crawlDataUrl).toBeNull();
+        expect(result.value.analysisDataUrl).toBeNull();
+        expect(result.value.reportUrl).toBeNull();
+        expect(result.value.geoScore).toBeNull();
+        expect(result.value.verdict).toBeNull();
+        expect(result.value.topFindings).toEqual([]);
+        expect(result.value.actionCountCritical).toBeNull();
+        expect(result.value.pagesAnalyzedClient).toBeNull();
+        expect(result.value.competitorsAnalyzed).toEqual([]);
+        expect(result.value.retryCount).toBe(0);
+        expect(result.value.failureReason).toBeNull();
+        expect(result.value.failedAt).toBeNull();
+        expect(result.value.completedAt).toBeNull();
+        expect(result.value.timeoutAt).toBeNull();
+        // Preserved
+        expect(result.value.stripePaymentIntentId).toBe('pi_test');
+        expect(result.value.briefPayload).toBeDefined();
+      }
+    });
+
+    it('should reset CRAWLING -> PAID (stuck crawl)', () => {
+      const order = AuditOrder.create(
+        mockProps({ status: AuditStatus.CRAWLING, twinAgentId: 'agent-1' }),
+      );
+      const result = order.resetForCrawlRetry();
+
+      expect(result.ok).toBe(true);
+      if (result.ok) {
+        expect(result.value.status).toBe(AuditStatus.PAID);
+      }
+    });
+
+    it('should allow from PAID (re-enqueue)', () => {
+      const order = AuditOrder.create(
+        mockProps({ status: AuditStatus.PAID }),
+      );
+      const result = order.resetForCrawlRetry();
+
+      expect(result.ok).toBe(true);
+      if (result.ok) {
+        expect(result.value.status).toBe(AuditStatus.PAID);
+      }
+    });
+
+    it('should return error from PENDING', () => {
+      const order = AuditOrder.create(mockProps());
+      const result = order.resetForCrawlRetry();
+
+      expect(result.ok).toBe(false);
+      if (!result.ok) {
+        expect(result.error).toBeInstanceOf(AuditInvalidTransitionError);
+      }
+    });
+
+    it('should return error from COMPLETED', () => {
+      const order = AuditOrder.create(
+        mockProps({ status: AuditStatus.COMPLETED }),
+      );
+      const result = order.resetForCrawlRetry();
+
+      expect(result.ok).toBe(false);
+      if (!result.ok) {
+        expect(result.error).toBeInstanceOf(AuditInvalidTransitionError);
+      }
+    });
+
+    it('should return error if already refunded', () => {
+      const order = AuditOrder.create(
+        mockProps({
+          status: AuditStatus.FAILED,
+          refundedAt: BASE_DATE,
+          refundId: 're_test',
+        }),
+      );
+      const result = order.resetForCrawlRetry();
+
+      expect(result.ok).toBe(false);
+      if (!result.ok) {
+        expect(result.error).toBeInstanceOf(AuditInvalidTransitionError);
+      }
+    });
+  });
+
+  // ---- resetForAnalysisRetry ----
+
+  describe('resetForAnalysisRetry', () => {
+    it('should reset FAILED -> ANALYZING and clear analysis data', () => {
+      const order = AuditOrder.create(
+        mockProps({
+          status: AuditStatus.FAILED,
+          crawlDataUrl: 'audits/audit-123/observations.json',
+          analysisDataUrl: 'audits/audit-123/analysis.json',
+          reportUrl: 'audits/audit-123/report.pdf',
+          storedGeoScore: 65,
+          verdict: 'à renforcer',
+          topFindings: ['Finding 1'],
+          actionCountCritical: 1,
+          actionCountHigh: 2,
+          actionCountMedium: 3,
+          totalActions: 6,
+          externalPresenceScore: 40,
+          failureReason: 'Mistral API error',
+          failedAt: BASE_DATE,
+        }),
+      );
+      const result = order.resetForAnalysisRetry();
+
+      expect(result.ok).toBe(true);
+      if (result.ok) {
+        expect(result.value.status).toBe(AuditStatus.ANALYZING);
+        expect(result.value.analysisDataUrl).toBeNull();
+        expect(result.value.reportUrl).toBeNull();
+        expect(result.value.geoScore).toBeNull();
+        expect(result.value.verdict).toBeNull();
+        expect(result.value.topFindings).toEqual([]);
+        expect(result.value.failureReason).toBeNull();
+        expect(result.value.failedAt).toBeNull();
+        expect(result.value.completedAt).toBeNull();
+        // Preserved
+        expect(result.value.crawlDataUrl).toBe('audits/audit-123/observations.json');
+      }
+    });
+
+    it('should allow from ANALYZING (re-enqueue stuck analysis)', () => {
+      const order = AuditOrder.create(
+        mockProps({
+          status: AuditStatus.ANALYZING,
+          crawlDataUrl: 'audits/audit-123/observations.json',
+        }),
+      );
+      const result = order.resetForAnalysisRetry();
+
+      expect(result.ok).toBe(true);
+      if (result.ok) {
+        expect(result.value.status).toBe(AuditStatus.ANALYZING);
+      }
+    });
+
+    it('should return error from PAID', () => {
+      const order = AuditOrder.create(
+        mockProps({ status: AuditStatus.PAID }),
+      );
+      const result = order.resetForAnalysisRetry();
+
+      expect(result.ok).toBe(false);
+      if (!result.ok) {
+        expect(result.error).toBeInstanceOf(AuditInvalidTransitionError);
+      }
+    });
+
+    it('should return error when no crawlDataUrl', () => {
+      const order = AuditOrder.create(
+        mockProps({
+          status: AuditStatus.FAILED,
+          crawlDataUrl: null,
+        }),
+      );
+      const result = order.resetForAnalysisRetry();
+
+      expect(result.ok).toBe(false);
+      if (!result.ok) {
+        expect(result.error).toBeInstanceOf(AuditInvalidTransitionError);
+      }
+    });
+
+    it('should return error if already refunded', () => {
+      const order = AuditOrder.create(
+        mockProps({
+          status: AuditStatus.FAILED,
+          crawlDataUrl: 'audits/audit-123/observations.json',
+          refundedAt: BASE_DATE,
+          refundId: 're_test',
+        }),
+      );
+      const result = order.resetForAnalysisRetry();
+
+      expect(result.ok).toBe(false);
+      if (!result.ok) {
+        expect(result.error).toBeInstanceOf(AuditInvalidTransitionError);
+      }
+    });
+  });
+
+  // ---- resetForPdfRetry ----
+
+  describe('resetForPdfRetry', () => {
+    it('should reset FAILED -> ANALYZING and clear report', () => {
+      const order = AuditOrder.create(
+        mockProps({
+          status: AuditStatus.FAILED,
+          analysisDataUrl: 'audits/audit-123/analysis.json',
+          reportUrl: 'audits/audit-123/report.pdf',
+          failureReason: 'PDF generation failed',
+          failedAt: BASE_DATE,
+        }),
+      );
+      const result = order.resetForPdfRetry();
+
+      expect(result.ok).toBe(true);
+      if (result.ok) {
+        expect(result.value.status).toBe(AuditStatus.ANALYZING);
+        expect(result.value.reportUrl).toBeNull();
+        expect(result.value.failureReason).toBeNull();
+        expect(result.value.failedAt).toBeNull();
+        expect(result.value.completedAt).toBeNull();
+        // Preserved
+        expect(result.value.analysisDataUrl).toBe('audits/audit-123/analysis.json');
+      }
+    });
+
+    it('should reset COMPLETED -> ANALYZING for PDF re-generation', () => {
+      const order = AuditOrder.create(
+        mockProps({
+          status: AuditStatus.COMPLETED,
+          analysisDataUrl: 'audits/audit-123/analysis.json',
+          reportUrl: 'audits/audit-123/report.pdf',
+          completedAt: BASE_DATE,
+        }),
+      );
+      const result = order.resetForPdfRetry();
+
+      expect(result.ok).toBe(true);
+      if (result.ok) {
+        expect(result.value.status).toBe(AuditStatus.ANALYZING);
+        expect(result.value.reportUrl).toBeNull();
+        expect(result.value.completedAt).toBeNull();
+      }
+    });
+
+    it('should allow from ANALYZING (re-enqueue stuck PDF)', () => {
+      const order = AuditOrder.create(
+        mockProps({
+          status: AuditStatus.ANALYZING,
+          analysisDataUrl: 'audits/audit-123/analysis.json',
+        }),
+      );
+      const result = order.resetForPdfRetry();
+
+      expect(result.ok).toBe(true);
+      if (result.ok) {
+        expect(result.value.status).toBe(AuditStatus.ANALYZING);
+      }
+    });
+
+    it('should return error from PAID', () => {
+      const order = AuditOrder.create(
+        mockProps({ status: AuditStatus.PAID }),
+      );
+      const result = order.resetForPdfRetry();
+
+      expect(result.ok).toBe(false);
+      if (!result.ok) {
+        expect(result.error).toBeInstanceOf(AuditInvalidTransitionError);
+      }
+    });
+
+    it('should return error when no analysisDataUrl', () => {
+      const order = AuditOrder.create(
+        mockProps({
+          status: AuditStatus.FAILED,
+          analysisDataUrl: null,
+        }),
+      );
+      const result = order.resetForPdfRetry();
+
+      expect(result.ok).toBe(false);
+      if (!result.ok) {
+        expect(result.error).toBeInstanceOf(AuditInvalidTransitionError);
+      }
+    });
+
+    it('should return error if already refunded', () => {
+      const order = AuditOrder.create(
+        mockProps({
+          status: AuditStatus.FAILED,
+          analysisDataUrl: 'audits/audit-123/analysis.json',
+          refundedAt: BASE_DATE,
+          refundId: 're_test',
+        }),
+      );
+      const result = order.resetForPdfRetry();
+
+      expect(result.ok).toBe(false);
+      if (!result.ok) {
+        expect(result.error).toBeInstanceOf(AuditInvalidTransitionError);
+      }
+    });
+  });
+
   // ---- Full lifecycle ----
 
   describe('full lifecycle', () => {

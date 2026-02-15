@@ -20,7 +20,8 @@
     "db:seed": "tsx prisma/seed.ts",
     "sentiment:trigger": "tsx scripts/trigger-sentiment-scan.ts",
     "update:disposable-domains": "tsx scripts/update-disposable-domains.ts",
-    "pdf:test": "tsx scripts/generate-test-audit-pdf.ts"
+    "pdf:test": "tsx scripts/generate-test-audit-pdf.ts",
+    "audit:retry": "tsx scripts/retry-audit-step.ts"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
