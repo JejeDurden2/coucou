@@ -165,7 +165,7 @@ export function GeoScoreDetail({
       </View>
 
       {/* Footer */}
-      <PageFooter />
+      <PageFooter section="DÉTAIL SCORES" />
     </Page>
   );
 }

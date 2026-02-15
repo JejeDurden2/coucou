@@ -1,10 +1,8 @@
 import { Page, View, Text } from '@react-pdf/renderer';
 
 import { theme, baseStyles } from '../theme';
-import { BrutalGrid } from './brutal-grid';
 import { CoucouLogo } from './coucou-logo';
 import { ScoreCircle } from './score-circle';
-import { TypeSlab } from './type-slab';
 
 interface CoverPageProps {
   brandName: string;
@@ -27,120 +25,126 @@ export function CoverPage({
 
   return (
     <Page size="A4" style={baseStyles.page}>
-      {/* Grille technique visible en arrière-plan */}
-      <BrutalGrid variant="subtle" />
+      {/* Layout vertical centré avec espaces généreux */}
+      <View style={{ alignItems: 'center', paddingTop: 150 }}>
+        {/* Logo Coucou IA */}
+        <CoucouLogo width={100} />
 
-      {/* Content container - asymétrique, aligné à gauche */}
-      <View
-        style={{
-          width: '70%', // 70% de la page, 30% vide à droite
-          paddingTop: 60,
-        }}
-      >
-        {/* Titre MASSIF écrasant */}
-        <TypeSlab text="AUDIT" size="massive" align="left" overflow />
-        <TypeSlab text="VISIBILITÉ" size="massive" align="left" overflow />
-        <TypeSlab text="IA" size="massive" align="left" overflow />
+        {/* Espacement 20mm */}
+        <View style={{ height: 57 }} />
 
-        {/* Espace brutal */}
-        <View style={{ height: 40 }} />
+        {/* Trait violet */}
+        <View
+          style={{
+            width: 60,
+            height: 2,
+            backgroundColor: theme.colors.accent,
+          }}
+        />
 
-        {/* Brand name - responsive font size for long names */}
-        <View style={{ marginLeft: -10, marginBottom: 8 }}>
-          <Text
-            style={{
-              fontFamily: theme.fonts.mono,
-              fontSize:
-                brandName.length > 30
-                  ? theme.fontSize['3xl']
-                  : theme.fontSize['4xl'],
-              fontWeight: 700,
-              color: theme.colors.accent,
-              lineHeight: 1.1,
-              letterSpacing: -1,
-            }}
-          >
-            {brandName}
-          </Text>
-        </View>
+        {/* Espacement 15mm */}
+        <View style={{ height: 43 }} />
 
-        {/* Domain - monospace technique */}
+        {/* Titre sur 2 lignes contrôlées */}
         <Text
           style={{
-            fontFamily: theme.fonts.mono,
-            fontSize: theme.fontSize.sm,
+            fontFamily: theme.fonts.body,
+            fontSize: theme.fontSize['2xl'],
             color: theme.colors.textMuted,
-            marginBottom: 32,
+            textAlign: 'center',
+          }}
+        >
+          AUDIT DE
+        </Text>
+        <Text
+          style={{
+            fontFamily: theme.fonts.body,
+            fontSize: 32,
+            fontWeight: 700,
+            color: theme.colors.brutalWhite,
+            textAlign: 'center',
+          }}
+        >
+          VISIBILITÉ IA
+        </Text>
+
+        {/* Espacement 25mm */}
+        <View style={{ height: 71 }} />
+
+        {/* Nom de la marque */}
+        <Text
+          style={{
+            fontFamily: theme.fonts.body,
+            fontSize: theme.fontSize['3xl'],
+            color: theme.colors.accent,
+            textAlign: 'center',
+          }}
+        >
+          {brandName}
+        </Text>
+
+        {/* Domaine */}
+        <Text
+          style={{
+            fontFamily: theme.fonts.body,
+            fontSize: 12,
+            color: theme.colors.textMuted,
+            textAlign: 'center',
+            marginTop: 4,
           }}
         >
           {brandDomain}
         </Text>
 
-        {/* Score Circle ÉNORME avec overlap */}
-        <View
-          style={{
-            marginLeft: -20,
-            marginTop: 20,
-          }}
-        >
-          <ScoreCircle score={geoScore} size="large" label="SCORE GEO" />
-        </View>
-      </View>
+        {/* Espacement 30mm */}
+        <View style={{ height: 85 }} />
 
-      {/* Zone vide brutale - 40% en bas */}
-      <View style={{ flex: 1 }} />
+        {/* Score Circle */}
+        <ScoreCircle score={geoScore} size="large" />
 
-      {/* Métadonnées ultra-small empilées verticalement - coin bas gauche */}
-      <View
-        style={{
-          position: 'absolute',
-          bottom: 40,
-          left: 40,
-          gap: 4,
-        }}
-      >
+        {/* Espacement 15mm */}
+        <View style={{ height: 43 }} />
+
+        {/* Date */}
         <Text
           style={{
-            fontFamily: theme.fonts.mono,
-            fontSize: theme.fontSize.tiny,
+            fontFamily: theme.fonts.body,
+            fontSize: 10,
             color: theme.colors.textMuted,
-            letterSpacing: 1,
+            textAlign: 'center',
           }}
         >
           {formattedDate}
         </Text>
+
+        {/* Préparé par */}
         <Text
           style={{
-            fontFamily: theme.fonts.mono,
-            fontSize: theme.fontSize.tiny,
+            fontFamily: theme.fonts.body,
+            fontSize: 9,
             color: theme.colors.textMuted,
-            letterSpacing: 1,
+            textAlign: 'center',
+            marginTop: 4,
           }}
         >
-          PRÉPARÉ PAR COUCOU IA
+          Préparé par Coucou IA
         </Text>
+
+        {/* Espacement 10mm */}
+        <View style={{ height: 28 }} />
+
+        {/* Confidentiel */}
         <Text
           style={{
-            fontFamily: theme.fonts.mono,
-            fontSize: theme.fontSize.tiny,
-            color: theme.colors.destructive,
+            fontFamily: theme.fonts.body,
+            fontSize: 8,
+            color: theme.colors.textMuted,
+            textAlign: 'center',
             letterSpacing: 3,
-            marginTop: 8,
           }}
         >
           CONFIDENTIEL
         </Text>
-      </View>
-
-      {/* Logo minuscule - coin bas droite (inverse conventionnel) */}
-      <View
-        style={{
-          position: 'absolute',
-          bottom: 40,
-          right: 40,
-        }}
-      >
-        <CoucouLogo width={40} />
       </View>
     </Page>
   );

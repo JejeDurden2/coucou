@@ -285,7 +285,7 @@ export function CompetitorBenchmarkSection({
       )}
 
       {/* Footer */}
-      <PageFooter />
+      <PageFooter section="BENCHMARK CONCURRENTIEL" />
     </Page>
   );
 }

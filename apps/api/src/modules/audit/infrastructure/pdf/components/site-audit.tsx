@@ -225,7 +225,7 @@ export function SiteAudit({
       })}
 
       {/* Footer */}
-      <PageFooter />
+      <PageFooter section="AUDIT TECHNIQUE" />
     </Page>
   );
 }

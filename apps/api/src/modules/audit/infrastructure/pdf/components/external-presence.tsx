@@ -179,7 +179,7 @@ export function ExternalPresence({
       )}
 
       {/* Footer */}
-      <PageFooter />
+      <PageFooter section="PRÉSENCE EXTERNE" />
     </Page>
   );
 }

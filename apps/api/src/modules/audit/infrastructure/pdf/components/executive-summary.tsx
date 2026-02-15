@@ -167,7 +167,7 @@ export function ExecutiveSummary({
       </View>
 
       {/* Footer */}
-      <PageFooter />
+      <PageFooter section="RÉSUMÉ EXÉCUTIF" />
     </Page>
   );
 }

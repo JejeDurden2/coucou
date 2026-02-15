@@ -131,7 +131,7 @@ export function ActionPlanSection({
       />
 
       {/* Footer */}
-      <PageFooter />
+      <PageFooter section="PLAN D'ACTION" />
     </Page>
   );
 }
