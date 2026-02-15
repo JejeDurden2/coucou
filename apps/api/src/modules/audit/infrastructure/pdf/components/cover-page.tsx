@@ -25,13 +25,12 @@ export function CoverPage({
 
   return (
     <Page size="A4" style={baseStyles.page}>
-      {/* Layout vertical centré avec espaces généreux */}
-      <View style={{ alignItems: 'center', paddingTop: 150 }}>
+      {/* Layout vertical centré — espaces proportionnels pour tenir sur 1 page */}
+      <View style={{ alignItems: 'center', paddingTop: 100 }}>
         {/* Logo Coucou IA */}
         <CoucouLogo width={100} />
 
-        {/* Espacement 20mm */}
-        <View style={{ height: 57 }} />
+        <View style={{ height: 50 }} />
 
         {/* Trait violet */}
         <View
@@ -42,16 +41,16 @@ export function CoverPage({
           }}
         />
 
-        {/* Espacement 15mm */}
-        <View style={{ height: 43 }} />
+        <View style={{ height: 36 }} />
 
-        {/* Titre sur 2 lignes contrôlées */}
+        {/* Titre sur 2 lignes contrôlées — pas de césure */}
         <Text
           style={{
             fontFamily: theme.fonts.body,
             fontSize: theme.fontSize['2xl'],
             color: theme.colors.textMuted,
             textAlign: 'center',
+            lineHeight: 1.1,
           }}
         >
           AUDIT DE
@@ -63,13 +62,13 @@ export function CoverPage({
             fontWeight: 700,
             color: theme.colors.brutalWhite,
             textAlign: 'center',
+            lineHeight: 1.1,
           }}
         >
           VISIBILITÉ IA
         </Text>
 
-        {/* Espacement 25mm */}
-        <View style={{ height: 71 }} />
+        <View style={{ height: 55 }} />
 
         {/* Nom de la marque */}
         <Text
@@ -78,6 +77,7 @@ export function CoverPage({
             fontSize: theme.fontSize['3xl'],
             color: theme.colors.accent,
             textAlign: 'center',
+            lineHeight: 1.1,
           }}
         >
           {brandName}
@@ -91,19 +91,18 @@ export function CoverPage({
             color: theme.colors.textMuted,
             textAlign: 'center',
             marginTop: 4,
+            lineHeight: 1.1,
           }}
         >
           {brandDomain}
         </Text>
 
-        {/* Espacement 30mm */}
-        <View style={{ height: 85 }} />
+        <View style={{ height: 65 }} />
 
         {/* Score Circle */}
         <ScoreCircle score={geoScore} size="large" />
 
-        {/* Espacement 15mm */}
-        <View style={{ height: 43 }} />
+        <View style={{ height: 36 }} />
 
         {/* Date */}
         <Text
@@ -112,6 +111,7 @@ export function CoverPage({
             fontSize: 10,
             color: theme.colors.textMuted,
             textAlign: 'center',
+            lineHeight: 1.1,
           }}
         >
           {formattedDate}
@@ -125,13 +125,13 @@ export function CoverPage({
             color: theme.colors.textMuted,
             textAlign: 'center',
             marginTop: 4,
+            lineHeight: 1.1,
           }}
         >
           Préparé par Coucou IA
         </Text>
 
-        {/* Espacement 10mm */}
-        <View style={{ height: 28 }} />
+        <View style={{ height: 24 }} />
 
         {/* Confidentiel */}
         <Text
@@ -141,6 +141,7 @@ export function CoverPage({
             color: theme.colors.textMuted,
             textAlign: 'center',
             letterSpacing: 3,
+            lineHeight: 1.1,
           }}
         >
           CONFIDENTIEL

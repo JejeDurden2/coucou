@@ -1,7 +1,8 @@
-import { Page, View, Text } from '@react-pdf/renderer';
+import { Page, View, Text, Svg, Circle } from '@react-pdf/renderer';
+import { Text as SvgText } from '@react-pdf/renderer';
 import type { AuditAnalysis } from '@coucou-ia/shared';
 
-import { theme, baseStyles } from '../theme';
+import { theme, baseStyles, CATEGORY_LABELS } from '../theme';
 import { BrutalGrid } from './brutal-grid';
 import { PageFooter } from './page-footer';
 import { ProgressBar } from './progress-bar';
@@ -22,7 +23,7 @@ const VERDICT_COLORS: Record<string, string> = {
 const FINDING_BORDER_COLORS = [
   theme.colors.destructive,
   theme.colors.warning,
-  theme.colors.success,
+  theme.colors.accent,
 ];
 
 export function ExecutiveSummary({
@@ -41,7 +42,7 @@ export function ExecutiveSummary({
       <SectionHeader title="RÉSUMÉ EXÉCUTIF" />
 
       {/* Headline MASSIF en monospace - 70% width */}
-      <View style={{ width: '70%', marginBottom: 32 }}>
+      <View style={{ width: '70%', marginBottom: 32, backgroundColor: theme.colors.bgCard, paddingVertical: 12, paddingHorizontal: 16 }}>
         <Text
           style={{
             fontFamily: theme.fonts.mono,
@@ -72,10 +73,10 @@ export function ExecutiveSummary({
             SCORES
           </Text>
           <View style={{ gap: 8 }}>
-            <ProgressBar score={geoScore.structure} label="STRUCT" />
-            <ProgressBar score={geoScore.content} label="CONTENT" />
-            <ProgressBar score={geoScore.technical} label="TECH" />
-            <ProgressBar score={geoScore.externalPresence} label="EXTERN" />
+            <ProgressBar score={geoScore.structure} label={CATEGORY_LABELS['structure']} size="slim" scoreFormat="fraction" />
+            <ProgressBar score={geoScore.content} label={CATEGORY_LABELS['content']} size="slim" scoreFormat="fraction" />
+            <ProgressBar score={geoScore.technical} label={CATEGORY_LABELS['technical']} size="slim" scoreFormat="fraction" />
+            <ProgressBar score={geoScore.externalPresence} label={CATEGORY_LABELS['external_presence']} size="slim" scoreFormat="fraction" />
           </View>
         </View>
 
@@ -113,7 +114,7 @@ export function ExecutiveSummary({
       </Text>
 
       {summary.keyFindings.map((finding, i) => {
-        const shouldOverflow = i === 1; // Le 2ème finding déborde
+        const borderColor = FINDING_BORDER_COLORS[i] ?? theme.colors.accent;
         return (
           <View
             key={`finding-${i}`}
@@ -122,43 +123,66 @@ export function ExecutiveSummary({
               padding: 12,
               marginBottom: 8,
               borderLeftWidth: 3,
-              borderLeftColor: FINDING_BORDER_COLORS[i] ?? theme.colors.accent,
-              marginRight: shouldOverflow ? -60 : 0, // Déborde à droite
+              borderLeftColor: borderColor,
+              flexDirection: 'row',
+              alignItems: 'flex-start',
+              gap: 10,
             }}
             wrap={false}
           >
-            <Text
-              style={{
-                fontFamily: theme.fonts.mono,
-                fontSize: theme.fontSize.sm,
-                color: theme.colors.textPrimary,
-                lineHeight: 1.3,
-              }}
-            >
-              {finding}
-            </Text>
+            {/* Cercle numéroté */}
+            <Svg width={18} height={18} viewBox="0 0 18 18">
+              <Circle cx={9} cy={9} r={9} fill={borderColor} />
+              <SvgText
+                x={9}
+                y={13}
+                style={{
+                  fontSize: 10,
+                  fontFamily: theme.fonts.mono,
+                  fontWeight: 700,
+                  fill: theme.colors.brutalWhite,
+                  textAnchor: 'middle',
+                }}
+              >
+                {String(i + 1)}
+              </SvgText>
+            </Svg>
+
+            {/* Texte du constat */}
+            <View style={{ flex: 1 }}>
+              <Text
+                style={{
+                  fontFamily: theme.fonts.mono,
+                  fontSize: theme.fontSize.sm,
+                  color: theme.colors.textPrimary,
+                  lineHeight: 1.3,
+                }}
+              >
+                {finding}
+              </Text>
+            </View>
           </View>
         );
       })}
 
-      {/* Verdict badge ÉNORME en overlap coin */}
+      {/* Verdict badge pill compact */}
       <View
         style={{
           position: 'absolute',
           bottom: 60,
-          right: 20,
+          right: 40,
           backgroundColor: verdictColor,
-          paddingHorizontal: 24,
-          paddingVertical: 16,
+          paddingHorizontal: 16,
+          paddingVertical: 6,
+          borderRadius: 12,
         }}
       >
         <Text
           style={{
             fontFamily: theme.fonts.mono,
-            fontSize: theme.fontSize.xl,
+            fontSize: theme.fontSize.base,
             fontWeight: 700,
             color: theme.colors.brutalWhite,
-            letterSpacing: 1,
             textTransform: 'uppercase',
           }}
         >

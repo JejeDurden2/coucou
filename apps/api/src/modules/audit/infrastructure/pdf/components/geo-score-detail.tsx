@@ -2,7 +2,6 @@ import { Page, View, Text } from '@react-pdf/renderer';
 import type { AuditAnalysis } from '@coucou-ia/shared';
 
 import { theme, baseStyles, getScoreColor } from '../theme';
-import { BrutalGrid } from './brutal-grid';
 import { PageFooter } from './page-footer';
 import { ScoreCircle } from './score-circle';
 import { SectionHeader } from './section-header';
@@ -11,81 +10,100 @@ interface GeoScoreDetailProps {
   geoScore: AuditAnalysis['geoScore'];
 }
 
-interface BrutalScoreBlockProps {
+interface ScoreCardProps {
   name: string;
   score: number;
-  highlight?: boolean; // Un score en full bleed violet
-  offset?: { x: number; y: number }; // Offset intentionnel
+  explanation: string;
 }
 
-function BrutalScoreBlock({
+function ScoreCard({
   name,
   score,
-  highlight = false,
-  offset = { x: 0, y: 0 },
-}: BrutalScoreBlockProps): React.JSX.Element {
-  const color = getScoreColor(score);
+  explanation,
+}: ScoreCardProps): React.JSX.Element {
+  const clampedScore = Math.max(0, Math.min(100, score));
+  const color = getScoreColor(clampedScore);
 
   return (
     <View
       style={{
-        backgroundColor: highlight ? theme.colors.accent : theme.colors.bgCard,
+        backgroundColor: theme.colors.bgCard,
+        borderRadius: 8,
         padding: 16,
-        marginLeft: offset.x,
-        marginTop: offset.y,
-        borderLeftWidth: 4,
-        borderLeftColor: color,
       }}
       wrap={false}
     >
-      {/* Label monospace */}
-      <Text
-        style={{
-          fontFamily: theme.fonts.mono,
-          fontSize: theme.fontSize.tiny,
-          fontWeight: 700,
-          color: highlight ? theme.colors.brutalWhite : theme.colors.textMuted,
-          letterSpacing: 1.5,
-          marginBottom: 8,
-          textTransform: 'uppercase',
-        }}
-      >
-        {name}
-      </Text>
-
-      {/* ScoreCircle small */}
-      <View style={{ marginVertical: 8 }}>
-        <ScoreCircle score={score} size="small" />
-      </View>
-
-      {/* Barre verticale épaisse */}
+      {/* Header: dimension name + score */}
       <View
         style={{
-          width: 30,
-          height: 80,
-          marginTop: 8,
-          flexDirection: 'column',
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          marginBottom: 8,
         }}
       >
-        {/* Empty track en haut */}
-        {score < 100 && (
+        <Text
+          style={{
+            fontFamily: theme.fonts.body,
+            fontSize: 12,
+            fontWeight: 700,
+            color: theme.colors.textPrimary,
+            textTransform: 'uppercase',
+          }}
+        >
+          {name}
+        </Text>
+        <Text
+          style={{
+            fontFamily: theme.fonts.body,
+            fontSize: 12,
+            fontWeight: 700,
+            color,
+          }}
+        >
+          {clampedScore}/100
+        </Text>
+      </View>
+
+      {/* Progress bar */}
+      <View
+        style={{
+          height: 8,
+          flexDirection: 'row',
+          marginBottom: 10,
+          borderRadius: 4,
+          overflow: 'hidden',
+        }}
+      >
+        {clampedScore > 0 && (
           <View
             style={{
-              flex: 100 - score,
-              backgroundColor: theme.colors.bgCardHover,
-            }}
-          />
-        )}
-        {/* Fill en bas */}
-        {score > 0 && (
-          <View
-            style={{
-              flex: score,
+              flex: clampedScore,
               backgroundColor: color,
             }}
           />
         )}
+        {clampedScore < 100 && (
+          <View
+            style={{
+              flex: 100 - clampedScore,
+              backgroundColor: theme.colors.bgCardHover,
+            }}
+          />
+        )}
       </View>
+
+      {/* Explanation text */}
+      <Text
+        style={{
+          fontFamily: theme.fonts.body,
+          fontSize: theme.fontSize.sm,
+          color: theme.colors.textMuted,
+          lineHeight: 1.4,
+        }}
+      >
+        {explanation}
+      </Text>
     </View>
   );
 }
@@ -95,76 +113,52 @@ export function GeoScoreDetail({
 }: GeoScoreDetailProps): React.JSX.Element {
   return (
     <Page size="A4" style={baseStyles.page} wrap>
-      {/* Grille technique 4x4 visible */}
-      <BrutalGrid variant="heavy" />
-
       {/* Section Title */}
-      <View style={{ marginBottom: 8 }}>
-        <SectionHeader title="DÉTAIL SCORES" />
+      <SectionHeader title="Score GEO Détaillé" />
+
+      {/* Overall Score - centered, medium */}
+      <View style={{ alignItems: 'center', marginBottom: 28 }}>
+        <ScoreCircle score={geoScore.overall} size="medium" label="GLOBAL" />
       </View>
 
-      {/* Overall Score - décentré en haut à gauche */}
-      <View style={{ alignItems: 'flex-start', marginBottom: 40, marginLeft: -10 }}>
-        <ScoreCircle score={geoScore.overall} size="large" label="GLOBAL" />
-      </View>
-
-      {/* Grille 2x2 - containers fixes avec offsets subtils */}
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          gap: 16,
-          marginBottom: 16,
-        }}
-      >
-        {/* Structure - container fixe */}
-        <View style={{ width: '48%' }}>
-          <BrutalScoreBlock
-            name="STRUCTURE"
+      {/* 2x2 Grid — Row 1 */}
+      <View style={{ flexDirection: 'row', gap: 12 }}>
+        <View style={{ flex: 1 }}>
+          <ScoreCard
+            name="Structure"
             score={geoScore.structure}
-            offset={{ x: 0, y: 0 }}
+            explanation={geoScore.structureExplanation}
           />
         </View>
-
-        {/* Contenu - container fixe avec offset léger */}
-        <View style={{ width: '48%' }}>
-          <BrutalScoreBlock
-            name="CONTENU"
+        <View style={{ flex: 1 }}>
+          <ScoreCard
+            name="Contenu"
             score={geoScore.content}
-            offset={{ x: 0, y: 5 }}
+            explanation={geoScore.contentExplanation}
           />
         </View>
       </View>
 
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          gap: 16,
-        }}
-      >
-        {/* Technique - HIGHLIGHT avec background violet */}
-        <View style={{ width: '48%' }}>
-          <BrutalScoreBlock
-            name="TECHNIQUE"
+      {/* 2x2 Grid — Row 2 */}
+      <View style={{ flexDirection: 'row', gap: 12, marginTop: 12 }}>
+        <View style={{ flex: 1 }}>
+          <ScoreCard
+            name="Technique"
             score={geoScore.technical}
-            highlight
-            offset={{ x: 0, y: -5 }}
+            explanation={geoScore.technicalExplanation}
           />
         </View>
-
-        {/* Présence externe - container fixe */}
-        <View style={{ width: '48%' }}>
-          <BrutalScoreBlock
-            name="PRÉSENCE"
+        <View style={{ flex: 1 }}>
+          <ScoreCard
+            name="Présence ext."
             score={geoScore.externalPresence}
-            offset={{ x: 0, y: 8 }}
+            explanation={geoScore.externalPresenceExplanation}
           />
         </View>
       </View>
 
       {/* Footer */}
-      <PageFooter section="DÉTAIL SCORES" />
+      <PageFooter section="Score GEO Détaillé" />
     </Page>
   );
 }

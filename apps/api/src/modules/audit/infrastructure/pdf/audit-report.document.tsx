@@ -10,6 +10,7 @@ import { CompetitorBenchmarkSection } from './components/competitor-benchmark';
 import { CoverPage } from './components/cover-page';
 import { CtaPage } from './components/cta-page';
 
+import { ExecutiveSummary } from './components/executive-summary';
 import { ExternalPresence } from './components/external-presence';
 import { GeoScoreDetail } from './components/geo-score-detail';
 import { SiteAudit } from './components/site-audit';
@@ -30,6 +31,10 @@ function AuditReportDocument({
         brandDomain={brand.domain}
         geoScore={analysis.geoScore.overall}
         date={new Date()}
+      />
+      <ExecutiveSummary
+        summary={analysis.executiveSummary}
+        geoScore={analysis.geoScore}
       />
       <GeoScoreDetail geoScore={analysis.geoScore} />
       <SiteAudit siteAudit={analysis.siteAudit} />

@@ -7,6 +7,8 @@ interface ProgressBarProps {
   label: string;
   width?: number;
   variant?: 'horizontal' | 'vertical'; // Support pour orientation verticale brutalist
+  size?: 'default' | 'slim'; // slim = barre fine 6px pour résumé exécutif
+  scoreFormat?: 'raw' | 'fraction'; // 'raw' = "55", 'fraction' = "55/100"
 }
 
 /**
@@ -36,6 +38,8 @@ export function ProgressBar({
   label,
   width,
   variant = 'horizontal',
+  size = 'default',
+  scoreFormat = 'raw',
 }: ProgressBarProps): React.JSX.Element {
   const clampedScore = Math.max(0, Math.min(100, score));
   const color = getScoreColor(clampedScore);
@@ -103,13 +107,22 @@ export function ProgressBar({
     );
   }
 
-  // Horizontal variant - plus épais et brutal
+  // Horizontal variant - configurable via size prop
+  const isSlim = size === 'slim';
+  const labelWidth = isSlim ? 100 : 60;
+  const labelFontSize = isSlim ? theme.fontSize.base : theme.fontSize.tiny;
+  const labelLetterSpacing = isSlim ? 0 : 1;
+  const labelTextTransform = isSlim ? ('none' as const) : ('uppercase' as const);
+  const barHeight = isSlim ? 6 : 20;
+  const scoreWidth = isSlim ? 45 : 30;
+  const scoreText = scoreFormat === 'fraction' ? `${clampedScore}/100` : String(clampedScore);
+
   return (
     <View
       style={{
         flexDirection: 'row',
         alignItems: 'center',
-        marginBottom: 8,
+        marginBottom: isSlim ? 4 : 8,
         width,
       }}
     >
@@ -117,32 +130,32 @@ export function ProgressBar({
       <Text
         style={{
           fontFamily: theme.fonts.mono,
-          fontSize: theme.fontSize.tiny,
+          fontSize: labelFontSize,
           fontWeight: 700,
           color: theme.colors.textMuted,
-          width: 60,
-          letterSpacing: 1,
-          textTransform: 'uppercase',
+          width: labelWidth,
+          letterSpacing: labelLetterSpacing,
+          textTransform: labelTextTransform,
         }}
       >
         {label}
       </Text>
 
-      {/* Bar container - plus épais (20px au lieu de 8px) */}
+      {/* Bar container */}
       <View
         style={{
           flex: 1,
-          height: 20,
+          height: barHeight,
           flexDirection: 'row',
           marginHorizontal: 8,
         }}
       >
-        {/* Bar fill - bloc de couleur brutal */}
+        {/* Bar fill */}
         {clampedScore > 0 && (
           <View
             style={{
               flex: clampedScore,
-              height: 20,
+              height: barHeight,
               backgroundColor: color,
             }}
           />
@@ -152,7 +165,7 @@ export function ProgressBar({
           <View
             style={{
               flex: 100 - clampedScore,
-              height: 20,
+              height: barHeight,
               backgroundColor: theme.colors.bgCardHover,
             }}
           />
@@ -166,11 +179,11 @@ export function ProgressBar({
           fontSize: theme.fontSize.base,
           fontWeight: 700,
           color: theme.colors.textPrimary,
-          width: 30,
+          width: scoreWidth,
           textAlign: 'right',
         }}
       >
-        {clampedScore}
+        {scoreText}
       </Text>
     </View>
   );
