@@ -21,13 +21,6 @@ export interface AuditTimeoutCheckJobData {
   auditOrderId: string;
 }
 
-export interface CompleteAuditJobData {
-  auditId: string;
-  status: 'completed' | 'partial' | 'failed';
-  error?: string;
-  result?: unknown;
-}
-
 export interface HandleCrawlCompleteJobData {
   auditId: string;
   status: 'completed' | 'partial' | 'failed';
@@ -52,7 +45,7 @@ export class AuditQueueService implements OnModuleInit, OnModuleDestroy {
 
   constructor(
     @InjectQueue(AUDIT_QUEUE_NAME)
-    private readonly auditQueue: Queue<AuditJobData | AuditTimeoutCheckJobData | CompleteAuditJobData | HandleCrawlCompleteJobData | AnalyzeWithMistralJobData>,
+    private readonly auditQueue: Queue<AuditJobData | AuditTimeoutCheckJobData | HandleCrawlCompleteJobData | AnalyzeWithMistralJobData>,
     private readonly configService: ConfigService,
     private readonly logger: LoggerService,
   ) {
@@ -116,21 +109,6 @@ export class AuditQueueService implements OnModuleInit, OnModuleDestroy {
       jobId: job.id,
       auditOrderId: data.auditOrderId,
       delayMs,
-    });
-
-    return job.id ?? '';
-  }
-
-  async addCompleteJob(data: CompleteAuditJobData): Promise<string> {
-    const job = await this.auditQueue.add('complete-audit', data, {
-      ...auditJobOptions,
-      jobId: `complete-audit-${data.auditId}`,
-    });
-
-    this.logger.info('Audit completion job queued', {
-      jobId: job.id,
-      auditId: data.auditId,
-      status: data.status,
     });
 
     return job.id ?? '';

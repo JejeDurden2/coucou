@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Prisma, $Enums } from '@prisma/client';
+import { $Enums } from '@prisma/client';
 import { AuditStatus } from '@coucou-ia/shared';
 
 import { PrismaService } from '../../../../prisma';
@@ -16,17 +16,8 @@ function fromPrismaStatus(status: $Enums.AuditStatus): AuditStatus {
 
 const TERMINAL_STATUSES: $Enums.AuditStatus[] = [
   AuditStatus.COMPLETED,
-  AuditStatus.PARTIAL,
   AuditStatus.FAILED,
-  AuditStatus.TIMEOUT,
-  AuditStatus.SCHEMA_ERROR,
 ].map(toPrismaStatus);
-
-function jsonOrDbNull(value: unknown): Prisma.InputJsonValue | typeof Prisma.DbNull {
-  return value === null || value === undefined
-    ? Prisma.DbNull
-    : (value as Prisma.InputJsonValue);
-}
 
 @Injectable()
 export class PrismaAuditOrderRepository implements AuditOrderRepository {
@@ -40,9 +31,7 @@ export class PrismaAuditOrderRepository implements AuditOrderRepository {
       stripePaymentIntentId: auditOrder.stripePaymentIntentId,
       amountCents: auditOrder.amountCents,
       paidAt: auditOrder.paidAt,
-      briefPayload: auditOrder.briefPayload as unknown as Prisma.InputJsonValue,
-      resultPayload: jsonOrDbNull(auditOrder.resultPayload),
-      rawResultPayload: jsonOrDbNull(auditOrder.rawResultPayload),
+      briefPayload: auditOrder.briefPayload as unknown as object,
       twinAgentId: auditOrder.twinAgentId,
       reportUrl: auditOrder.reportUrl,
       crawlDataUrl: auditOrder.crawlDataUrl,
@@ -149,7 +138,6 @@ export class PrismaAuditOrderRepository implements AuditOrderRepository {
           in: [
             AuditStatus.CRAWLING,
             AuditStatus.ANALYZING,
-            AuditStatus.PROCESSING,
           ].map(toPrismaStatus),
         },
         timeoutAt: { lt: new Date() },

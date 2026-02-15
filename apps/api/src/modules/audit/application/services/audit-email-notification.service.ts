@@ -1,6 +1,5 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import type { AuditResult } from '@coucou-ia/shared';
 
 import { LoggerService } from '../../../../common/logger';
 import { EmailQueueService } from '../../../../infrastructure/queue/email-queue.service';
@@ -59,10 +58,9 @@ export class AuditEmailNotificationService {
 
       const keyPoints = auditOrder.topFindings.length > 0
         ? auditOrder.topFindings.slice(0, 3)
-        : this.extractKeyPointsFromPayload(auditOrder.resultPayload);
+        : [];
 
-      const actionCount = auditOrder.totalActions
-        ?? this.countActionsFromPayload(auditOrder.resultPayload);
+      const actionCount = auditOrder.totalActions ?? 0;
 
       const unsubscribeToken = this.unsubscribeTokenService.generateToken(auditOrder.userId);
       const apiUrl = this.configService.getOrThrow<string>('API_URL');
@@ -98,21 +96,13 @@ export class AuditEmailNotificationService {
   }
 
   async notifyAuditFailed(auditOrder: AuditOrder): Promise<void> {
-    await this.sendFailureNotifications(auditOrder, 'FAILED');
-  }
-
-  async notifyAuditTimeout(auditOrder: AuditOrder): Promise<void> {
-    await this.sendFailureNotifications(auditOrder, 'TIMEOUT');
-  }
-
-  async notifyAuditSchemaError(auditOrder: AuditOrder): Promise<void> {
-    await this.sendFailureNotifications(auditOrder, 'SCHEMA_ERROR');
+    await this.sendFailureNotifications(auditOrder);
   }
 
   private async sendFailureNotifications(
     auditOrder: AuditOrder,
-    status: 'FAILED' | 'TIMEOUT' | 'SCHEMA_ERROR',
   ): Promise<void> {
+    const status = 'FAILED';
     try {
       const user = await this.loadUser(auditOrder.userId);
       if (!user) return;
@@ -195,25 +185,6 @@ export class AuditEmailNotificationService {
 
   private extractFirstName(name: string): string {
     return name.split(' ')[0];
-  }
-
-  private extractKeyPointsFromPayload(resultPayload: AuditResult | null): string[] {
-    if (!resultPayload) return [];
-
-    return [
-      ...resultPayload.geoScore.mainStrengths.slice(0, 2),
-      ...resultPayload.geoScore.mainWeaknesses.slice(0, 1),
-    ].slice(0, 3);
-  }
-
-  private countActionsFromPayload(resultPayload: AuditResult | null): number {
-    if (!resultPayload) return 0;
-
-    return (
-      resultPayload.actionPlan.quickWins.length +
-      resultPayload.actionPlan.shortTerm.length +
-      resultPayload.actionPlan.mediumTerm.length
-    );
   }
 
   private computeDuration(startedAt: Date | null, failedAt: Date | null): string | null {

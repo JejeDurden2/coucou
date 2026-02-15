@@ -434,7 +434,7 @@ describe('BriefAssemblerService', () => {
       if (!result.ok) return;
 
       expect(result.value.callback.url).toBe(
-        'https://api.coucou-ia.com/webhooks/twin/audit',
+        'https://api.coucou-ia.com/webhooks/twin/crawl-complete',
       );
       expect(result.value.callback.auditId).toBe('audit-456');
     });

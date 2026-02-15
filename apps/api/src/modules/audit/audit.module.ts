@@ -13,7 +13,6 @@ import { AUDIT_ANALYZER_PORT } from './domain/ports/audit-analyzer.port';
 import { BriefAssemblerService } from './application/services/brief-assembler.service';
 import { CreateAuditCheckoutUseCase } from './application/use-cases/create-audit-checkout.use-case';
 import { HandleAuditPaymentUseCase } from './application/use-cases/handle-audit-payment.use-case';
-import { CompleteAuditUseCase } from './application/use-cases/complete-audit.use-case';
 import { GetLatestAuditUseCase } from './application/use-cases/get-latest-audit.use-case';
 import { GetAuditHistoryUseCase } from './application/use-cases/get-audit-history.use-case';
 import { GetAuditPdfUseCase } from './application/use-cases/get-audit-pdf.use-case';
@@ -51,7 +50,6 @@ import { TwinWebhookController } from './presentation/twin-webhook.controller';
     BriefAssemblerService,
     CreateAuditCheckoutUseCase,
     HandleAuditPaymentUseCase,
-    CompleteAuditUseCase,
     HandleCrawlCompleteUseCase,
     RefundAuditUseCase,
     AnalyzeWithMistralUseCase,

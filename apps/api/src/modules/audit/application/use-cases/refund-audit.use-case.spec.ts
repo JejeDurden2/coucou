@@ -52,8 +52,6 @@ function createFailedOrder(overrides: Record<string, unknown> = {}): AuditOrder 
     amountCents: 4900,
     paidAt: new Date('2026-02-10T10:00:00Z'),
     briefPayload: mockBrief(),
-    resultPayload: null,
-    rawResultPayload: null,
     twinAgentId: 'agent-1',
     reportUrl: null,
     crawlDataUrl: null,
@@ -150,19 +148,8 @@ describe('RefundAuditUseCase', () => {
     );
   });
 
-  it('should refund a TIMEOUT audit', async () => {
-    const auditOrder = createFailedOrder({ status: AuditStatus.TIMEOUT });
-
-    const result = await useCase.execute(auditOrder);
-
-    expect(result.ok).toBe(true);
-    if (!result.ok) return;
-    expect(mockStripeService.createRefund).toHaveBeenCalledWith('pi_test_123');
-    expect(result.value.isRefunded).toBe(true);
-  });
-
-  it('should refund a SCHEMA_ERROR audit', async () => {
-    const auditOrder = createFailedOrder({ status: AuditStatus.SCHEMA_ERROR });
+  it('should refund a FAILED audit with specific failure reason', async () => {
+    const auditOrder = createFailedOrder({ failureReason: 'Audit timed out' });
 
     const result = await useCase.execute(auditOrder);
 
@@ -209,17 +196,6 @@ describe('RefundAuditUseCase', () => {
 
   it('should skip refund for COMPLETED audit', async () => {
     const auditOrder = createFailedOrder({ status: AuditStatus.COMPLETED });
-
-    const result = await useCase.execute(auditOrder);
-
-    expect(result.ok).toBe(true);
-    if (!result.ok) return;
-    expect(mockStripeService.createRefund).not.toHaveBeenCalled();
-    expect(result.value.isRefunded).toBe(false);
-  });
-
-  it('should skip refund for PARTIAL audit', async () => {
-    const auditOrder = createFailedOrder({ status: AuditStatus.PARTIAL });
 
     const result = await useCase.execute(auditOrder);
 

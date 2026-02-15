@@ -116,8 +116,6 @@ export class CreateAuditCheckoutUseCase {
       amountCents: price.unit_amount,
       paidAt: null,
       briefPayload: briefResult.value,
-      resultPayload: null,
-      rawResultPayload: null,
       twinAgentId: null,
       reportUrl: null,
       crawlDataUrl: null,

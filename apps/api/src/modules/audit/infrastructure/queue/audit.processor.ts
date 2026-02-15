@@ -14,14 +14,12 @@ import {
 import { BriefAssemblerService } from '../../application/services/brief-assembler.service';
 import { AuditEmailNotificationService } from '../../application/services/audit-email-notification.service';
 import { RefundAuditUseCase } from '../../application/use-cases/refund-audit.use-case';
-import { CompleteAuditUseCase } from '../../application/use-cases/complete-audit.use-case';
 import { HandleCrawlCompleteUseCase } from '../../application/use-cases/handle-crawl-complete.use-case';
 import { AnalyzeWithMistralUseCase } from '../../application/use-cases/analyze-with-mistral.use-case';
 import { AuditQueueService } from './audit-queue.service';
 import type {
   AuditJobData,
   AuditTimeoutCheckJobData,
-  CompleteAuditJobData,
   HandleCrawlCompleteJobData,
   AnalyzeWithMistralJobData,
 } from './audit-queue.service';
@@ -42,7 +40,6 @@ export class AuditProcessor extends WorkerHost {
     private readonly auditQueueService: AuditQueueService,
     private readonly auditEmailNotificationService: AuditEmailNotificationService,
     private readonly refundAuditUseCase: RefundAuditUseCase,
-    private readonly completeAuditUseCase: CompleteAuditUseCase,
     private readonly handleCrawlCompleteUseCase: HandleCrawlCompleteUseCase,
     private readonly analyzeWithMistralUseCase: AnalyzeWithMistralUseCase,
     private readonly logger: LoggerService,
@@ -57,8 +54,6 @@ export class AuditProcessor extends WorkerHost {
         return this.processRunAudit(job as Job<AuditJobData>);
       case 'check-audit-timeout':
         return this.processTimeoutCheck(job as Job<AuditTimeoutCheckJobData>);
-      case 'complete-audit':
-        return this.processCompleteAudit(job as Job<CompleteAuditJobData>);
       case 'handle-crawl-complete':
         return this.processHandleCrawlComplete(job as Job<HandleCrawlCompleteJobData>);
       case 'analyze-with-mistral':
@@ -184,40 +179,26 @@ export class AuditProcessor extends WorkerHost {
       return;
     }
 
-    const timeoutResult = auditOrder.markTimeout();
-    if (!timeoutResult.ok) {
+    const failedResult = auditOrder.markFailed('Audit timed out');
+    if (!failedResult.ok) {
       this.logger.warn('Failed to mark audit as timed out', {
         auditOrderId,
-        error: timeoutResult.error.message,
+        error: failedResult.error.message,
       });
       return;
     }
 
-    await this.auditOrderRepository.save(timeoutResult.value);
+    await this.auditOrderRepository.save(failedResult.value);
 
-    const refundResult = await this.refundAuditUseCase.execute(timeoutResult.value);
-    const refundedOrder = refundResult.ok ? refundResult.value : timeoutResult.value;
+    const refundResult = await this.refundAuditUseCase.execute(failedResult.value);
+    const refundedOrder = refundResult.ok ? refundResult.value : failedResult.value;
 
-    await this.auditEmailNotificationService.notifyAuditTimeout(refundedOrder);
+    await this.auditEmailNotificationService.notifyAuditFailed(refundedOrder);
 
-    this.logger.info('Audit order marked as TIMEOUT', {
+    this.logger.info('Audit order marked as FAILED (timeout)', {
       auditOrderId,
       refunded: refundedOrder.isRefunded,
     });
-  }
-
-  private async processCompleteAudit(
-    job: Job<CompleteAuditJobData>,
-  ): Promise<void> {
-    const { auditId, status } = job.data;
-
-    this.logger.info('Processing audit completion', {
-      jobId: job.id,
-      auditId,
-      status,
-    });
-
-    await this.completeAuditUseCase.execute(job.data);
   }
 
   private async processHandleCrawlComplete(

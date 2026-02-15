@@ -18,17 +18,6 @@ import {
 
 type GetLatestAuditError = NotFoundError | ForbiddenError;
 
-const COMPLETED_STATUSES: ReadonlySet<AuditStatus> = new Set([
-  AuditStatus.COMPLETED,
-  AuditStatus.PARTIAL,
-]);
-
-const FAILED_STATUSES: ReadonlySet<AuditStatus> = new Set([
-  AuditStatus.FAILED,
-  AuditStatus.TIMEOUT,
-  AuditStatus.SCHEMA_ERROR,
-]);
-
 @Injectable()
 export class GetLatestAuditUseCase {
   constructor(
@@ -61,11 +50,8 @@ export class GetLatestAuditUseCase {
       return Result.ok({ hasAudit: false });
     }
 
-    // PAID (or deprecated PROCESSING) = payment received, waiting for crawl
-    if (
-      audit.status === AuditStatus.PAID ||
-      audit.status === AuditStatus.PROCESSING
-    ) {
+    // PAID = payment received, waiting for crawl
+    if (audit.status === AuditStatus.PAID) {
       return Result.ok({
         hasAudit: true,
         auditId: audit.id,
@@ -97,8 +83,8 @@ export class GetLatestAuditUseCase {
       });
     }
 
-    // COMPLETED (or deprecated PARTIAL) = analysis done, return metadata
-    if (COMPLETED_STATUSES.has(audit.status)) {
+    // COMPLETED = analysis done, return metadata
+    if (audit.status === AuditStatus.COMPLETED) {
       return Result.ok({
         hasAudit: true,
         auditId: audit.id,
@@ -120,8 +106,8 @@ export class GetLatestAuditUseCase {
       });
     }
 
-    // FAILED (or deprecated TIMEOUT / SCHEMA_ERROR)
-    if (FAILED_STATUSES.has(audit.status)) {
+    // FAILED
+    if (audit.status === AuditStatus.FAILED) {
       return Result.ok({
         hasAudit: true,
         auditId: audit.id,

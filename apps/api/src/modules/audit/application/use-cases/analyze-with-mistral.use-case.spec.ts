@@ -130,8 +130,6 @@ function createAnalyzingOrder(): AuditOrder {
     amountCents: 4900,
     paidAt: new Date('2026-02-10T10:00:00Z'),
     briefPayload: mockBrief(),
-    resultPayload: null,
-    rawResultPayload: null,
     twinAgentId: 'agent-1',
     reportUrl: null,
     crawlDataUrl: 'audits/audit-123/crawl-data.json',
@@ -313,7 +311,6 @@ describe('AnalyzeWithMistralUseCase', () => {
   it('should skip when audit is already terminal', async () => {
     const completedOrder = AuditOrder.create({
       ...createAnalyzingOrder().toJSON(),
-      rawResultPayload: null,
       status: AuditStatus.COMPLETED,
       storedGeoScore: null,
     });
@@ -331,7 +328,6 @@ describe('AnalyzeWithMistralUseCase', () => {
   it('should skip when audit is not in ANALYZING status', async () => {
     const crawlingOrder = AuditOrder.create({
       ...createAnalyzingOrder().toJSON(),
-      rawResultPayload: null,
       status: AuditStatus.CRAWLING,
       storedGeoScore: null,
     });
@@ -349,7 +345,6 @@ describe('AnalyzeWithMistralUseCase', () => {
   it('should mark as failed and refund when crawlDataUrl is missing', async () => {
     const orderNoCrawlData = AuditOrder.create({
       ...createAnalyzingOrder().toJSON(),
-      rawResultPayload: null,
       crawlDataUrl: null,
       status: AuditStatus.ANALYZING,
       storedGeoScore: null,

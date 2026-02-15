@@ -29,10 +29,7 @@ export function generateAuditAdminAlertEmail(data: AuditAdminAlertEmailData): {
   html: string;
   text: string;
 } {
-  const statusColor =
-    data.status === 'TIMEOUT'
-      ? EMAIL_COLORS.warning
-      : EMAIL_COLORS.destructive;
+  const statusColor = EMAIL_COLORS.destructive;
 
   const content = `
     ${createHeading('Audit GEO échoué', 1)}

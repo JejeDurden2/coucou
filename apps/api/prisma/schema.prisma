@@ -52,12 +52,8 @@ enum AuditStatus {
   PAID
   CRAWLING
   ANALYZING
-  PROCESSING
   COMPLETED
-  PARTIAL
   FAILED
-  TIMEOUT
-  SCHEMA_ERROR
 }
 
 // ============================================
@@ -268,10 +264,8 @@ model AuditOrder {
   amountCents           Int         @map("amount_cents")
   paidAt                DateTime?   @map("paid_at")
 
-  // Brief & results
+  // Brief
   briefPayload          Json        @map("brief_payload")
-  resultPayload         Json?       @map("result_payload")
-  rawResultPayload      Json?       @map("raw_result_payload")
 
   // Twin
   twinAgentId           String?     @map("twin_agent_id")

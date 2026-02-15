@@ -1,5 +1,5 @@
 import { AuditStatus } from '@coucou-ia/shared';
-import type { AnalysisVerdict, AuditResult, TwinCrawlInput } from '@coucou-ia/shared';
+import type { AnalysisVerdict, TwinCrawlInput } from '@coucou-ia/shared';
 
 import type { Result } from '../../../../common/utils/result';
 import { Result as R } from '../../../../common/utils/result';
@@ -26,8 +26,6 @@ export interface AuditOrderProps {
   amountCents: number;
   paidAt: Date | null;
   briefPayload: TwinCrawlInput;
-  resultPayload: AuditResult | null;
-  rawResultPayload: unknown | null;
   twinAgentId: string | null;
   reportUrl: string | null;
   crawlDataUrl: string | null;
@@ -57,21 +55,15 @@ export interface AuditOrderProps {
 
 const TERMINAL_STATUSES: ReadonlySet<AuditStatus> = new Set([
   AuditStatus.COMPLETED,
-  AuditStatus.PARTIAL,
   AuditStatus.FAILED,
-  AuditStatus.TIMEOUT,
-  AuditStatus.SCHEMA_ERROR,
 ]);
 
 const REFUNDABLE_STATUSES: ReadonlySet<AuditStatus> = new Set([
   AuditStatus.FAILED,
-  AuditStatus.TIMEOUT,
-  AuditStatus.SCHEMA_ERROR,
 ]);
 
 export const REPORT_STATUSES: ReadonlySet<AuditStatus> = new Set([
   AuditStatus.COMPLETED,
-  AuditStatus.PARTIAL,
 ]);
 
 const TIMEOUT_MINUTES = 15;
@@ -92,8 +84,6 @@ export class AuditOrder {
     amountCents: number;
     paidAt: Date | null;
     briefPayload: unknown;
-    resultPayload: unknown | null;
-    rawResultPayload: unknown | null;
     twinAgentId: string | null;
     reportUrl: string | null;
     crawlDataUrl: string | null;
@@ -123,7 +113,6 @@ export class AuditOrder {
     return new AuditOrder({
       ...data,
       briefPayload: data.briefPayload as TwinCrawlInput,
-      resultPayload: (data.resultPayload as AuditResult) ?? null,
       storedGeoScore: data.geoScore,
     });
   }
@@ -160,14 +149,6 @@ export class AuditOrder {
 
   get briefPayload(): TwinCrawlInput {
     return this.props.briefPayload;
-  }
-
-  get resultPayload(): AuditResult | null {
-    return this.props.resultPayload;
-  }
-
-  get rawResultPayload(): unknown | null {
-    return this.props.rawResultPayload;
   }
 
   get twinAgentId(): string | null {
@@ -244,10 +225,6 @@ export class AuditOrder {
     return TERMINAL_STATUSES.has(this.props.status);
   }
 
-  get isProcessing(): boolean {
-    return this.props.status === AuditStatus.PROCESSING;
-  }
-
   get isCrawling(): boolean {
     return this.props.status === AuditStatus.CRAWLING;
   }
@@ -259,15 +236,14 @@ export class AuditOrder {
   get isTimedOut(): boolean {
     return (
       (this.props.status === AuditStatus.CRAWLING ||
-        this.props.status === AuditStatus.ANALYZING ||
-        this.props.status === AuditStatus.PROCESSING) &&
+        this.props.status === AuditStatus.ANALYZING) &&
       this.props.timeoutAt !== null &&
       this.props.timeoutAt < new Date()
     );
   }
 
   get geoScore(): number | null {
-    return this.props.storedGeoScore ?? this.props.resultPayload?.geoScore?.overall ?? null;
+    return this.props.storedGeoScore ?? null;
   }
 
   get verdict(): string | null {
@@ -422,39 +398,8 @@ export class AuditOrder {
     );
   }
 
-  markProcessing(
-    twinAgentId: string,
-  ): Result<AuditOrder, AuditInvalidTransitionError> {
-    if (this.props.status !== AuditStatus.PAID) {
-      return R.err(
-        new AuditInvalidTransitionError(
-          this.props.status,
-          AuditStatus.PROCESSING,
-        ),
-      );
-    }
-
-    const now = new Date();
-    const timeoutAt = new Date(now.getTime() + TIMEOUT_MINUTES * 60 * 1000);
-    return R.ok(
-      new AuditOrder({
-        ...this.props,
-        status: AuditStatus.PROCESSING,
-        twinAgentId,
-        startedAt: now,
-        timeoutAt,
-        updatedAt: now,
-      }),
-    );
-  }
-
-  markCompleted(
-    result: AuditResult,
-  ): Result<AuditOrder, AuditInvalidTransitionError> {
-    if (
-      this.props.status !== AuditStatus.PROCESSING &&
-      this.props.status !== AuditStatus.ANALYZING
-    ) {
+  markCompleted(): Result<AuditOrder, AuditInvalidTransitionError> {
+    if (this.props.status !== AuditStatus.ANALYZING) {
       return R.err(
         new AuditInvalidTransitionError(
           this.props.status,
@@ -468,34 +413,6 @@ export class AuditOrder {
       new AuditOrder({
         ...this.props,
         status: AuditStatus.COMPLETED,
-        resultPayload: result,
-        completedAt: now,
-        updatedAt: now,
-      }),
-    );
-  }
-
-  markPartial(
-    result: AuditResult,
-  ): Result<AuditOrder, AuditInvalidTransitionError> {
-    if (
-      this.props.status !== AuditStatus.PROCESSING &&
-      this.props.status !== AuditStatus.ANALYZING
-    ) {
-      return R.err(
-        new AuditInvalidTransitionError(
-          this.props.status,
-          AuditStatus.PARTIAL,
-        ),
-      );
-    }
-
-    const now = new Date();
-    return R.ok(
-      new AuditOrder({
-        ...this.props,
-        status: AuditStatus.PARTIAL,
-        resultPayload: result,
         completedAt: now,
         updatedAt: now,
       }),
@@ -558,8 +475,7 @@ export class AuditOrder {
     if (
       this.props.status !== AuditStatus.PAID &&
       this.props.status !== AuditStatus.CRAWLING &&
-      this.props.status !== AuditStatus.ANALYZING &&
-      this.props.status !== AuditStatus.PROCESSING
+      this.props.status !== AuditStatus.ANALYZING
     ) {
       return R.err(
         new AuditInvalidTransitionError(
@@ -581,66 +497,10 @@ export class AuditOrder {
     );
   }
 
-  markTimeout(): Result<AuditOrder, AuditInvalidTransitionError> {
-    if (
-      this.props.status !== AuditStatus.CRAWLING &&
-      this.props.status !== AuditStatus.ANALYZING &&
-      this.props.status !== AuditStatus.PROCESSING
-    ) {
-      return R.err(
-        new AuditInvalidTransitionError(
-          this.props.status,
-          AuditStatus.TIMEOUT,
-        ),
-      );
-    }
-
-    const now = new Date();
-    return R.ok(
-      new AuditOrder({
-        ...this.props,
-        status: AuditStatus.TIMEOUT,
-        failedAt: now,
-        updatedAt: now,
-      }),
-    );
-  }
-
-  markSchemaError(
-    rawResult: unknown,
-  ): Result<AuditOrder, AuditInvalidTransitionError> {
-    if (
-      this.props.status !== AuditStatus.CRAWLING &&
-      this.props.status !== AuditStatus.ANALYZING &&
-      this.props.status !== AuditStatus.PROCESSING
-    ) {
-      return R.err(
-        new AuditInvalidTransitionError(
-          this.props.status,
-          AuditStatus.SCHEMA_ERROR,
-        ),
-      );
-    }
-
-    const now = new Date();
-    return R.ok(
-      new AuditOrder({
-        ...this.props,
-        status: AuditStatus.SCHEMA_ERROR,
-        rawResultPayload: rawResult,
-        failedAt: now,
-        updatedAt: now,
-      }),
-    );
-  }
-
   attachReport(
     reportKey: string,
   ): Result<AuditOrder, AuditInvalidTransitionError> {
-    if (
-      this.props.status !== AuditStatus.COMPLETED &&
-      this.props.status !== AuditStatus.PARTIAL
-    ) {
+    if (this.props.status !== AuditStatus.COMPLETED) {
       return R.err(
         new AuditInvalidTransitionError(this.props.status, 'ATTACH_REPORT'),
       );
@@ -678,8 +538,7 @@ export class AuditOrder {
 
   // ---- Serialization ----
 
-  toJSON(): Omit<AuditOrderProps, 'rawResultPayload'> {
-    const { rawResultPayload: _, ...rest } = this.props;
-    return { ...rest };
+  toJSON(): AuditOrderProps {
+    return { ...this.props };
   }
 }

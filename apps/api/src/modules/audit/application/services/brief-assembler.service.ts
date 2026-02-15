@@ -98,7 +98,8 @@ export class BriefAssemblerService {
           averageSentiment: this.deriveSentimentLabel(sentimentScore),
         },
         callback: {
-          url: `${apiUrl}/webhooks/twin/audit`,
+          url: `${apiUrl}/webhooks/twin/crawl-complete`,
+          authHeader: `Bearer ${this.configService.get<string>('TWIN_CALLBACK_SECRET', '')}`,
           auditId,
         },
         outputFormat: 'structured_observations',

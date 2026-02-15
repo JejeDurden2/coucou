@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { AuditStatus } from '@coucou-ia/shared';
-import type { AuditResult, TwinCrawlInput } from '@coucou-ia/shared';
+import type { TwinCrawlInput } from '@coucou-ia/shared';
 
 import { GetAuditPdfUseCase } from '../application/use-cases/get-audit-pdf.use-case';
 import { AuditOrder } from '../domain/entities/audit-order.entity';
@@ -41,35 +41,6 @@ function mockBrief(): TwinCrawlInput {
   };
 }
 
-function mockAuditResult(): AuditResult {
-  return {
-    geoScore: {
-      overall: 72,
-      structure: 80,
-      content: 65,
-      technical: 70,
-      competitive: 73,
-      methodology: 'Test methodology',
-      mainStrengths: ['Good structure'],
-      mainWeaknesses: ['Low content'],
-    },
-    siteAudit: { pagesAnalyzed: [] },
-    competitorBenchmark: [],
-    actionPlan: { quickWins: [], shortTerm: [], mediumTerm: [] },
-    externalPresence: {
-      sourcesAudited: [],
-      presenceScore: 0,
-      mainGaps: [],
-    },
-    meta: {
-      pagesAnalyzedClient: 5,
-      pagesAnalyzedCompetitors: 10,
-      executionTimeSeconds: 120,
-      completedAt: '2026-01-15T12:00:00Z',
-    },
-  };
-}
-
 function mockProps(overrides: Partial<AuditOrderProps> = {}): AuditOrderProps {
   return {
     id: 'audit-123',
@@ -80,8 +51,6 @@ function mockProps(overrides: Partial<AuditOrderProps> = {}): AuditOrderProps {
     amountCents: 4900,
     paidAt: null,
     briefPayload: mockBrief(),
-    resultPayload: null,
-    rawResultPayload: null,
     twinAgentId: null,
     reportUrl: null,
     crawlDataUrl: null,
@@ -158,7 +127,6 @@ describe('GetAuditPdfUseCase', () => {
     const audit = AuditOrder.create(
       mockProps({
         status: AuditStatus.COMPLETED,
-        resultPayload: mockAuditResult(),
         completedAt: new Date('2026-01-15T12:00:00Z'),
       }),
     );
@@ -176,7 +144,6 @@ describe('GetAuditPdfUseCase', () => {
     const audit = AuditOrder.create(
       mockProps({
         status: AuditStatus.COMPLETED,
-        resultPayload: mockAuditResult(),
         completedAt: new Date('2026-01-15T12:00:00Z'),
       }),
     );
@@ -227,7 +194,6 @@ describe('GetAuditPdfUseCase', () => {
       mockProps({
         projectId: 'project-999',
         status: AuditStatus.COMPLETED,
-        resultPayload: mockAuditResult(),
         completedAt: new Date('2026-01-15T12:00:00Z'),
       }),
     );
@@ -245,10 +211,9 @@ describe('GetAuditPdfUseCase', () => {
     const statuses = [
       AuditStatus.PENDING,
       AuditStatus.PAID,
-      AuditStatus.PROCESSING,
+      AuditStatus.CRAWLING,
+      AuditStatus.ANALYZING,
       AuditStatus.FAILED,
-      AuditStatus.TIMEOUT,
-      AuditStatus.SCHEMA_ERROR,
     ];
 
     for (const status of statuses) {
@@ -268,7 +233,6 @@ describe('GetAuditPdfUseCase', () => {
     const audit = AuditOrder.create(
       mockProps({
         status: AuditStatus.COMPLETED,
-        resultPayload: mockAuditResult(),
         completedAt: new Date('2026-01-15T12:00:00Z'),
       }),
     );
@@ -283,21 +247,4 @@ describe('GetAuditPdfUseCase', () => {
     }
   });
 
-  it('should work for PARTIAL status', async () => {
-    const audit = AuditOrder.create(
-      mockProps({
-        status: AuditStatus.PARTIAL,
-        resultPayload: mockAuditResult(),
-        completedAt: new Date('2026-01-15T12:00:00Z'),
-      }),
-    );
-    auditOrderRepository.findById.mockResolvedValue(audit);
-
-    const result = await useCase.execute('project-123', 'audit-123', 'user-123');
-
-    expect(result.ok).toBe(true);
-    if (result.ok) {
-      expect(result.value.redirectUrl).toBe('https://cdn.example.com/signed-report.pdf');
-    }
-  });
 });

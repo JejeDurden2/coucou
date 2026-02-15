@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { AuditStatus } from '@coucou-ia/shared';
-import type { AuditResult, TwinCrawlInput } from '@coucou-ia/shared';
+import type { TwinCrawlInput } from '@coucou-ia/shared';
 
 import { GetAuditHistoryUseCase } from '../application/use-cases/get-audit-history.use-case';
 import { AuditOrder } from '../domain/entities/audit-order.entity';
@@ -38,35 +38,6 @@ function mockBrief(): TwinCrawlInput {
   };
 }
 
-function mockAuditResult(): AuditResult {
-  return {
-    geoScore: {
-      overall: 72,
-      structure: 80,
-      content: 65,
-      technical: 70,
-      competitive: 73,
-      methodology: 'Test methodology',
-      mainStrengths: ['Good structure'],
-      mainWeaknesses: ['Low content'],
-    },
-    siteAudit: { pagesAnalyzed: [] },
-    competitorBenchmark: [],
-    actionPlan: { quickWins: [], shortTerm: [], mediumTerm: [] },
-    externalPresence: {
-      sourcesAudited: [],
-      presenceScore: 0,
-      mainGaps: [],
-    },
-    meta: {
-      pagesAnalyzedClient: 5,
-      pagesAnalyzedCompetitors: 10,
-      executionTimeSeconds: 120,
-      completedAt: '2026-01-15T12:00:00Z',
-    },
-  };
-}
-
 function mockProps(overrides: Partial<AuditOrderProps> = {}): AuditOrderProps {
   return {
     id: 'audit-123',
@@ -77,8 +48,6 @@ function mockProps(overrides: Partial<AuditOrderProps> = {}): AuditOrderProps {
     amountCents: 4900,
     paidAt: null,
     briefPayload: mockBrief(),
-    resultPayload: null,
-    rawResultPayload: null,
     twinAgentId: null,
     reportUrl: null,
     crawlDataUrl: null,
@@ -165,7 +134,7 @@ describe('GetAuditHistoryUseCase', () => {
       mockProps({
         id: 'audit-1',
         status: AuditStatus.COMPLETED,
-        resultPayload: mockAuditResult(),
+        storedGeoScore: 72,
         completedAt: new Date('2026-01-15T12:00:00Z'),
       }),
     );

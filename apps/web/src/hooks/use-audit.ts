@@ -8,7 +8,6 @@ import { apiClient, ApiClientError } from '@/lib/api-client';
 
 const IN_PROGRESS_STATUSES = new Set<string>([
   AuditStatus.PAID,
-  AuditStatus.PROCESSING,
   AuditStatus.CRAWLING,
   AuditStatus.ANALYZING,
 ]);

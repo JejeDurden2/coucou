@@ -44,6 +44,7 @@ export function BrutalGrid({
 
   return (
     <View
+      fixed
       style={{
         position: 'absolute',
         top: 0,

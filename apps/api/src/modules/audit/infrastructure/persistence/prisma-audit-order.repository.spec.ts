@@ -58,8 +58,6 @@ describe('PrismaAuditOrderRepository', () => {
     amountCents: 4900,
     paidAt: null,
     briefPayload: mockBrief,
-    resultPayload: null,
-    rawResultPayload: null,
     twinAgentId: null,
     reportUrl: null,
     crawlDataUrl: null,
@@ -225,7 +223,7 @@ describe('PrismaAuditOrderRepository', () => {
     it('should return active audit order excluding terminal statuses', async () => {
       const activeRecord = {
         ...mockRecord,
-        status: AuditStatus.PROCESSING,
+        status: AuditStatus.CRAWLING,
       };
       mockPrisma.auditOrder.findFirst.mockResolvedValue(activeRecord);
 
@@ -237,17 +235,14 @@ describe('PrismaAuditOrderRepository', () => {
           status: {
             notIn: [
               AuditStatus.COMPLETED,
-              AuditStatus.PARTIAL,
               AuditStatus.FAILED,
-              AuditStatus.TIMEOUT,
-              AuditStatus.SCHEMA_ERROR,
             ],
           },
         },
         orderBy: { createdAt: 'desc' },
       });
       expect(result).toBeInstanceOf(AuditOrder);
-      expect(result?.status).toBe(AuditStatus.PROCESSING);
+      expect(result?.status).toBe(AuditStatus.CRAWLING);
     });
 
     it('should return null when no active audit exists', async () => {
@@ -260,10 +255,10 @@ describe('PrismaAuditOrderRepository', () => {
   });
 
   describe('findTimedOutAudits', () => {
-    it('should return processing audits past their timeout', async () => {
+    it('should return crawling/analyzing audits past their timeout', async () => {
       const timedOutRecord = {
         ...mockRecord,
-        status: AuditStatus.PROCESSING,
+        status: AuditStatus.CRAWLING,
         timeoutAt: new Date('2026-02-10T09:00:00Z'),
       };
       mockPrisma.auditOrder.findMany.mockResolvedValue([timedOutRecord]);
@@ -276,14 +271,13 @@ describe('PrismaAuditOrderRepository', () => {
             in: [
               AuditStatus.CRAWLING,
               AuditStatus.ANALYZING,
-              AuditStatus.PROCESSING,
             ],
           },
           timeoutAt: { lt: expect.any(Date) },
         },
       });
       expect(result).toHaveLength(1);
-      expect(result[0].status).toBe(AuditStatus.PROCESSING);
+      expect(result[0].status).toBe(AuditStatus.CRAWLING);
     });
 
     it('should return empty array when no timed out audits', async () => {

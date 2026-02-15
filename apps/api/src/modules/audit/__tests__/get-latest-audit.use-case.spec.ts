@@ -48,8 +48,6 @@ function mockProps(overrides: Partial<AuditOrderProps> = {}): AuditOrderProps {
     amountCents: 4900,
     paidAt: null,
     briefPayload: mockBrief(),
-    resultPayload: null,
-    rawResultPayload: null,
     twinAgentId: null,
     reportUrl: null,
     crawlDataUrl: null,
@@ -164,31 +162,6 @@ describe('GetLatestAuditUseCase', () => {
     }
   });
 
-  it('should map deprecated PROCESSING status to PAID', async () => {
-    const paidAt = new Date('2026-01-15T11:00:00Z');
-    const audit = AuditOrder.create(
-      mockProps({
-        status: AuditStatus.PROCESSING,
-        paidAt,
-        startedAt: new Date('2026-01-15T11:30:00Z'),
-      }),
-    );
-    auditOrderRepository.findLatestByProjectId.mockResolvedValue(audit);
-
-    const result = await useCase.execute('project-123', 'user-123');
-
-    expect(result.ok).toBe(true);
-    if (result.ok) {
-      expect(result.value).toEqual({
-        hasAudit: true,
-        auditId: 'audit-123',
-        status: AuditStatus.PAID,
-        createdAt: BASE_DATE.toISOString(),
-        paidAt: paidAt.toISOString(),
-      });
-    }
-  });
-
   it('should return CRAWLING response', async () => {
     const paidAt = new Date('2026-01-15T11:00:00Z');
     const audit = AuditOrder.create(
@@ -283,42 +256,6 @@ describe('GetLatestAuditUseCase', () => {
     }
   });
 
-  it('should map deprecated PARTIAL status to COMPLETED', async () => {
-    const completedAt = new Date('2026-01-15T12:00:00Z');
-    const audit = AuditOrder.create(
-      mockProps({
-        status: AuditStatus.PARTIAL,
-        completedAt,
-        storedGeoScore: 55,
-        verdict: 'à renforcer',
-        topFindings: [],
-        totalActions: 3,
-      }),
-    );
-    auditOrderRepository.findLatestByProjectId.mockResolvedValue(audit);
-
-    const result = await useCase.execute('project-123', 'user-123');
-
-    expect(result.ok).toBe(true);
-    if (result.ok) {
-      expect(result.value).toEqual({
-        hasAudit: true,
-        auditId: 'audit-123',
-        status: AuditStatus.COMPLETED,
-        geoScore: 55,
-        verdict: 'à renforcer',
-        topFindings: [],
-        externalPresenceScore: null,
-        actionCount: { critical: null, high: null, medium: null },
-        totalActions: 3,
-        competitorsAnalyzed: [],
-        pagesAnalyzedClient: null,
-        pagesAnalyzedCompetitors: null,
-        completedAt: completedAt.toISOString(),
-      });
-    }
-  });
-
   it('should return FAILED response for FAILED status', async () => {
     const audit = AuditOrder.create(
       mockProps({
@@ -337,44 +274,6 @@ describe('GetLatestAuditUseCase', () => {
         auditId: 'audit-123',
         status: AuditStatus.FAILED,
         failureReason: 'Agent timeout',
-      });
-    }
-  });
-
-  it('should map deprecated TIMEOUT status to FAILED', async () => {
-    const audit = AuditOrder.create(
-      mockProps({ status: AuditStatus.TIMEOUT }),
-    );
-    auditOrderRepository.findLatestByProjectId.mockResolvedValue(audit);
-
-    const result = await useCase.execute('project-123', 'user-123');
-
-    expect(result.ok).toBe(true);
-    if (result.ok) {
-      expect(result.value).toEqual({
-        hasAudit: true,
-        auditId: 'audit-123',
-        status: AuditStatus.FAILED,
-        failureReason: null,
-      });
-    }
-  });
-
-  it('should map deprecated SCHEMA_ERROR status to FAILED', async () => {
-    const audit = AuditOrder.create(
-      mockProps({ status: AuditStatus.SCHEMA_ERROR }),
-    );
-    auditOrderRepository.findLatestByProjectId.mockResolvedValue(audit);
-
-    const result = await useCase.execute('project-123', 'user-123');
-
-    expect(result.ok).toBe(true);
-    if (result.ok) {
-      expect(result.value).toEqual({
-        hasAudit: true,
-        auditId: 'audit-123',
-        status: AuditStatus.FAILED,
-        failureReason: null,
       });
     }
   });
