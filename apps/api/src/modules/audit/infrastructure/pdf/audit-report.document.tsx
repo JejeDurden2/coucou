@@ -45,7 +45,7 @@ function AuditReportDocument({
         clientName={brand.name}
       />
       <ActionPlanSection actionPlan={analysis.actionPlan} />
-      <CtaPage totalActions={analysis.actionPlan.totalActions} />
+      <CtaPage totalActions={analysis.actionPlan.totalActions} geoScore={analysis.geoScore.overall} />
     </Document>
   );
 }

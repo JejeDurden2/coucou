@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { AuditStatus } from '@coucou-ia/shared';
-import type { AuditAnalysis, TwinObservations } from '@coucou-ia/shared';
+import type { AuditAnalysis, CompetitorFactualData, TwinObservations } from '@coucou-ia/shared';
 
 import { LoggerService } from '../../../../common/logger';
 import { Result } from '../../../../common/utils/result';
@@ -114,6 +114,9 @@ export class AnalyzeWithMistralUseCase {
 
     const analysis = analysisResult.value;
 
+    // 5b. Enrich analysis with factual observation data for PDF comparison table
+    enrichWithFactualData(analysis, observations);
+
     this.logger.info('Mistral analysis succeeded', {
       auditOrderId,
       geoScore: analysis.geoScore.overall,
@@ -181,6 +184,43 @@ export class AnalyzeWithMistralUseCase {
     const refundResult = await this.refundAuditUseCase.execute(failedResult.value);
     const refundedOrder = refundResult.ok ? refundResult.value : failedResult.value;
     await this.auditEmailNotificationService.notifyAuditFailed(refundedOrder);
+  }
+}
+
+function enrichWithFactualData(
+  analysis: AuditAnalysis,
+  observations: TwinObservations,
+): void {
+  // Client factual data — aggregated from page observations + external sources
+  const clientFactualData: CompetitorFactualData = {
+    hasSchemaOrg: observations.pages.some((p) => p.hasSchemaOrg),
+    hasFAQSchema: observations.pages.some((p) => p.hasStructuredFAQ),
+    hasAuthorInfo: observations.pages.some((p) => p.hasAuthorInfo),
+    wikipediaFound: observations.external.wikipedia.found,
+    trustpilotRating: observations.external.trustpilot.rating,
+    trustpilotReviewCount: observations.external.trustpilot.reviewCount,
+    citationRate: observations.llmScanData.clientCitationRate,
+  };
+  analysis.competitorBenchmark.clientFactualData = clientFactualData;
+
+  // Competitor factual data — matched by domain from twin observations
+  const observedCompetitors = new Map(
+    observations.competitors.map((c) => [c.domain, c]),
+  );
+
+  for (const competitor of analysis.competitorBenchmark.competitors) {
+    const observed = observedCompetitors.get(competitor.domain);
+    if (!observed) continue;
+
+    competitor.factualData = {
+      hasSchemaOrg: observed.hasSchemaOrg,
+      hasFAQSchema: observed.hasFAQSchema,
+      hasAuthorInfo: observed.hasAuthorInfo,
+      wikipediaFound: observed.wikipediaFound,
+      trustpilotRating: observed.trustpilotRating,
+      trustpilotReviewCount: observed.trustpilotReviewCount,
+      citationRate: observed.citationRate,
+    };
   }
 }
 

@@ -7,9 +7,10 @@ import { TypeSlab } from './type-slab';
 
 interface CtaPageProps {
   totalActions: number;
+  geoScore: number;
 }
 
-export function CtaPage({ totalActions }: CtaPageProps): React.JSX.Element {
+export function CtaPage({ totalActions, geoScore }: CtaPageProps): React.JSX.Element {
   return (
     <Page size="A4" style={baseStyles.page} break>
       {/* Grille technique subtile */}
@@ -58,6 +59,19 @@ export function CtaPage({ totalActions }: CtaPageProps): React.JSX.Element {
           </View>
         </View>
 
+        {/* Score reminder */}
+        <Text
+          style={{
+            fontFamily: theme.fonts.mono,
+            fontSize: theme.fontSize.lg,
+            fontWeight: 700,
+            color: theme.colors.textPrimary,
+            marginBottom: 16,
+          }}
+        >
+          {`Score actuel : ${geoScore}/100 → Objectif : 70+/100`}
+        </Text>
+
         {/* URL comme point focal avec règle */}
         <View style={{ marginBottom: 8 }}>
           <Link
@@ -80,9 +94,22 @@ export function CtaPage({ totalActions }: CtaPageProps): React.JSX.Element {
             width: 120,
             height: 3,
             backgroundColor: theme.colors.accent,
-            marginBottom: 40,
+            marginBottom: 16,
           }}
         />
+
+        {/* Contact email */}
+        <Link
+          src="mailto:contact@coucou-ia.com"
+          style={{
+            fontFamily: theme.fonts.mono,
+            fontSize: theme.fontSize.base,
+            color: theme.colors.textMuted,
+            textDecoration: 'none',
+          }}
+        >
+          Contactez-nous : contact@coucou-ia.com
+        </Link>
       </View>
 
       {/* Zone vide dramatique - 40% */}

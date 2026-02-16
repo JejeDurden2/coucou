@@ -1,4 +1,4 @@
-import { View, Text, Svg, Circle } from '@react-pdf/renderer';
+import { View, Text } from '@react-pdf/renderer';
 
 import { theme } from '../theme';
 
@@ -8,24 +8,13 @@ interface ImpactDotsProps {
 }
 
 /**
- * ImpactDots - Five-dot visual intensity indicator for brutalist layouts
+ * ImpactDots - Five-dot visual intensity indicator using Unicode characters
  *
- * Renders a compact row of five circular dots where filled dots represent impact
- * intensity. Uses high-contrast accent color fills for clear data communication.
- * Ideal for quick-scan metrics in dense PDF reports.
+ * Renders a compact row of five Unicode dots (● filled, ○ empty) for reliable
+ * rendering in react-pdf. Uses accent color for filled dots, muted for empty.
  *
- * @param value - Impact level from 1 (low) to 5 (high), determines how many dots are filled
- * @param label - Descriptive text displayed before the dots (e.g., "Impact", "Priority")
- *
- * @example
- * ```tsx
- * <ImpactDots value={4} label="Impact" />
- * ```
- *
- * @example
- * ```tsx
- * <ImpactDots value={2} label="Priority" />
- * ```
+ * @param value - Intensity level from 1 (low) to 5 (high)
+ * @param label - Descriptive text displayed before the dots (e.g., "Impact", "Effort")
  */
 export function ImpactDots({
   value,
@@ -35,29 +24,30 @@ export function ImpactDots({
     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
       <Text
         style={{
-          fontFamily: theme.fonts.body,
-          fontSize: theme.fontSize.sm,
+          fontFamily: theme.fonts.mono,
+          fontSize: theme.fontSize.xs,
           color: theme.colors.textMuted,
-          marginRight: 4,
+          marginRight: 2,
         }}
       >
         {label}
       </Text>
-      <Svg width={70} height={10} viewBox="0 0 70 10">
+      <Text style={{ fontFamily: theme.fonts.mono, fontSize: theme.fontSize.sm }}>
         {Array.from({ length: 5 }, (_, i) => (
-          <Circle
+          <Text
             key={`dot-${i}`}
-            cx={5 + i * 14}
-            cy={5}
-            r={5}
-            fill={
-              i < value
-                ? theme.colors.accent
-                : theme.colors.bgCardHover
-            }
-          />
+            style={{
+              color:
+                i < value
+                  ? theme.colors.accent
+                  : theme.colors.bgCardHover,
+            }}
+          >
+            {i < value ? '●' : '○'}
+            {i < 4 ? ' ' : ''}
+          </Text>
         ))}
-      </Svg>
+      </Text>
     </View>
   );
 }

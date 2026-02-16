@@ -330,6 +330,15 @@ export const testAuditAnalysis: AuditAnalysis = {
         name: 'Atelier Boisé',
         domain: 'atelier-boise.fr',
         estimatedGeoScore: 68,
+        factualData: {
+          hasSchemaOrg: true,
+          hasFAQSchema: true,
+          hasAuthorInfo: true,
+          wikipediaFound: true,
+          trustpilotRating: 4.8,
+          trustpilotReviewCount: 450,
+          citationRate: 0.65,
+        },
         strengths: [
           'Balisage Schema.org complet (LocalBusiness, Service, FAQ)',
           'Blog actif avec 2-3 articles par mois',
@@ -351,6 +360,15 @@ export const testAuditAnalysis: AuditAnalysis = {
         name: 'Menuiserie Martin',
         domain: 'menuiserie-martin.fr',
         estimatedGeoScore: 55,
+        factualData: {
+          hasSchemaOrg: true,
+          hasFAQSchema: true,
+          hasAuthorInfo: false,
+          wikipediaFound: false,
+          trustpilotRating: 3.9,
+          trustpilotReviewCount: 85,
+          citationRate: 0.35,
+        },
         strengths: [
           'Présence active sur 6 plateformes externes',
           'Contenu service détaillé avec FAQ intégrées',
@@ -367,6 +385,15 @@ export const testAuditAnalysis: AuditAnalysis = {
         ],
       },
     ],
+    clientFactualData: {
+      hasSchemaOrg: false,
+      hasFAQSchema: false,
+      hasAuthorInfo: false,
+      wikipediaFound: false,
+      trustpilotRating: 4.2,
+      trustpilotReviewCount: 128,
+      citationRate: 0.35,
+    },
     summary:
       "Menuiserie Dubois est en retard sur ses deux principaux concurrents. Atelier Boisé domine grâce à une stratégie de contenu structuré et une présence Wikipedia. Menuiserie Martin compense un contenu moyen par une forte présence sur les plateformes tierces. Le principal levier d'amélioration pour Menuiserie Dubois est l'implémentation des données structurées et le renforcement de la présence externe.",
     keyGaps: [

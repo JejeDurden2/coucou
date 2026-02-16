@@ -55,6 +55,8 @@ export function ExternalPresence({
           paddingVertical: 6,
         }}
       >
+        {/* Spacer for ✓/✗ icon column */}
+        <View style={{ width: 16 }} />
         <Text
           style={{
             fontFamily: theme.fonts.body,
@@ -83,7 +85,7 @@ export function ExternalPresence({
             fontSize: theme.fontSize.sm,
             fontWeight: 700,
             color: theme.colors.textMuted,
-            width: 100,
+            width: 80,
             textAlign: 'right',
           }}
         >

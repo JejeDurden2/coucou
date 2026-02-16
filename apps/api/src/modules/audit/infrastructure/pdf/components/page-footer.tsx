@@ -1,6 +1,7 @@
 import { View, Text } from '@react-pdf/renderer';
 
 import { theme, baseStyles } from '../theme';
+import { CoucouLogo } from './coucou-logo';
 
 interface PageFooterProps {
   section?: string;
@@ -30,14 +31,7 @@ export function PageFooter({ section }: PageFooterProps): React.JSX.Element {
         }}
       />
       <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-        <Text
-          style={{
-            fontFamily: theme.fonts.mono,
-            fontSize: 7,
-          }}
-        >
-          COUCOU IA
-        </Text>
+        <CoucouLogo width={14} />
         <Text
           style={{
             fontFamily: theme.fonts.mono,

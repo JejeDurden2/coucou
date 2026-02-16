@@ -298,6 +298,16 @@ export interface AnalysisPlatformPresence {
   recommendation: string;
 }
 
+export interface CompetitorFactualData {
+  hasSchemaOrg: boolean;
+  hasFAQSchema: boolean;
+  hasAuthorInfo: boolean;
+  wikipediaFound: boolean;
+  trustpilotRating: number | null;
+  trustpilotReviewCount: number | null;
+  citationRate: number;
+}
+
 export interface AnalysisCompetitor {
   name: string;
   domain: string;
@@ -305,6 +315,7 @@ export interface AnalysisCompetitor {
   strengths: string[];
   clientGaps: string[];
   externalPresenceAdvantage: string[];
+  factualData?: CompetitorFactualData;
 }
 
 export interface AnalysisActionItem {
@@ -352,6 +363,7 @@ export interface AuditAnalysis {
     competitors: AnalysisCompetitor[];
     summary: string;
     keyGaps: string[];
+    clientFactualData?: CompetitorFactualData;
   };
 
   actionPlan: {

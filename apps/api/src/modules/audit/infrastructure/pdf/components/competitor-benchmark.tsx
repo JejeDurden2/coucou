@@ -1,5 +1,5 @@
 import { Page, View, Text } from '@react-pdf/renderer';
-import type { AuditAnalysis, AnalysisCompetitor } from '@coucou-ia/shared';
+import type { AuditAnalysis } from '@coucou-ia/shared';
 
 import { theme, baseStyles, getScoreColor } from '../theme';
 import { BrutalGrid } from './brutal-grid';
@@ -12,6 +12,14 @@ interface CompetitorBenchmarkProps {
   clientGeoScore: AuditAnalysis['geoScore'];
   clientName: string;
 }
+
+// ── Cell components ──────────────────────────────────────────
+
+const cellText = {
+  fontFamily: theme.fonts.body,
+  fontSize: theme.fontSize.sm,
+  textAlign: 'center' as const,
+};
 
 function ScoreCell({
   score,
@@ -28,30 +36,70 @@ function ScoreCell({
       : getScoreColor(score);
 
   return (
-    <Text
-      style={{
-        fontFamily: theme.fonts.body,
-        fontSize: theme.fontSize.base,
-        fontWeight: 700,
-        color,
-        textAlign: 'center',
-      }}
-    >
+    <Text style={{ ...cellText, fontSize: theme.fontSize.base, fontWeight: 700, color }}>
       {score}
     </Text>
   );
 }
 
-function TableRow({
+function BooleanCell({ value }: { value: boolean }): React.JSX.Element {
+  return (
+    <Text
+      style={{
+        ...cellText,
+        fontSize: theme.fontSize.base,
+        fontWeight: 700,
+        color: value ? theme.colors.success : theme.colors.destructive,
+      }}
+    >
+      {value ? '\u2713' : '\u2717'}
+    </Text>
+  );
+}
+
+function RatingCell({
+  rating,
+  count,
+}: {
+  rating: number | null;
+  count: number | null;
+}): React.JSX.Element {
+  if (rating === null) {
+    return <View />;
+  }
+
+  const display = count !== null ? `${rating}/5 (${count})` : `${rating}/5`;
+  return (
+    <Text style={{ ...cellText, fontWeight: 700, color: theme.colors.textPrimary }}>
+      {display}
+    </Text>
+  );
+}
+
+function PercentCell({ value }: { value: number }): React.JSX.Element {
+  return (
+    <Text style={{ ...cellText, fontWeight: 700, color: getScoreColor(value) }}>
+      {`${Math.round(value * 100)}%`}
+    </Text>
+  );
+}
+
+function EmptyCell(): React.JSX.Element {
+  return <View />;
+}
+
+// ── Row component ────────────────────────────────────────────
+
+function ComparisonRow({
   label,
-  clientScore,
-  competitors,
-  isComparisonRow,
+  clientCell,
+  competitorCells,
+  emptyColumns,
 }: {
   label: string;
-  clientScore: number;
-  competitors: AnalysisCompetitor[];
-  isComparisonRow: boolean;
+  clientCell: React.JSX.Element;
+  competitorCells: React.JSX.Element[];
+  emptyColumns: number;
 }): React.JSX.Element {
   return (
     <View
@@ -63,19 +111,10 @@ function TableRow({
         borderBottomColor: theme.colors.border,
       }}
     >
-      {/* Label */}
-      <Text
-        style={{
-          fontFamily: theme.fonts.body,
-          fontSize: theme.fontSize.sm,
-          color: theme.colors.textMuted,
-          width: '25%',
-        }}
-      >
+      <Text style={{ ...cellText, textAlign: 'left', color: theme.colors.textMuted, width: '25%' }}>
         {label}
       </Text>
 
-      {/* Client score (highlighted) */}
       <View
         style={{
           width: '25%',
@@ -84,50 +123,25 @@ function TableRow({
           paddingVertical: 4,
         }}
       >
-        <ScoreCell score={clientScore} />
+        {clientCell}
       </View>
 
-      {/* Competitor scores */}
-      {competitors.slice(0, 2).map((comp) => (
-        <View key={comp.domain} style={{ width: '25%', paddingVertical: 4 }}>
-          {isComparisonRow ? (
-            <ScoreCell
-              score={comp.estimatedGeoScore}
-              compareWith={clientScore}
-            />
-          ) : (
-            <Text
-              style={{
-                fontFamily: theme.fonts.body,
-                fontSize: theme.fontSize.sm,
-                color: theme.colors.textMuted,
-                textAlign: 'center',
-              }}
-            >
-              —
-            </Text>
-          )}
+      {competitorCells.map((cell, i) => (
+        <View key={`comp-${i}`} style={{ width: '25%', paddingVertical: 4 }}>
+          {cell}
         </View>
       ))}
 
-      {/* Fill empty competitor columns if less than 2 */}
-      {competitors.length < 2 && (
-        <View style={{ width: '25%' }}>
-          <Text
-            style={{
-              fontFamily: theme.fonts.body,
-              fontSize: theme.fontSize.sm,
-              color: theme.colors.textMuted,
-              textAlign: 'center',
-            }}
-          >
-            —
-          </Text>
+      {Array.from({ length: emptyColumns }).map((_, i) => (
+        <View key={`empty-${i}`} style={{ width: '25%', paddingVertical: 4 }}>
+          <EmptyCell />
         </View>
-      )}
+      ))}
     </View>
   );
 }
+
+// ── Main section ─────────────────────────────────────────────
 
 export function CompetitorBenchmarkSection({
   benchmark,
@@ -135,8 +149,10 @@ export function CompetitorBenchmarkSection({
   clientName,
 }: CompetitorBenchmarkProps): React.JSX.Element {
   const competitors = benchmark.competitors;
+  const displayed = competitors.slice(0, 2);
+  const emptyColumns = Math.max(0, 2 - displayed.length);
+  const clientFd = benchmark.clientFactualData;
 
-  // Warn if more than 2 competitors (table only shows 2)
   if (competitors.length > 2) {
     console.warn(
       `[CompetitorBenchmark] ${competitors.length} competitors found, but only 2 will be displayed in comparison table. All competitors will be shown in individual cards.`,
@@ -145,10 +161,7 @@ export function CompetitorBenchmarkSection({
 
   return (
     <Page size="A4" style={baseStyles.page} wrap>
-      {/* Grille technique */}
       <BrutalGrid variant="subtle" />
-
-      {/* Section Title */}
       <SectionHeader title="BENCHMARK CONCURRENTIEL" />
 
       {/* Comparison table */}
@@ -176,7 +189,7 @@ export function CompetitorBenchmarkSection({
           >
             {clientName}
           </Text>
-          {competitors.slice(0, 2).map((comp) => (
+          {displayed.map((comp) => (
             <Text
               key={comp.domain}
               style={{
@@ -191,41 +204,115 @@ export function CompetitorBenchmarkSection({
               {comp.name}
             </Text>
           ))}
-          {competitors.length < 2 && <View style={{ width: '25%' }} />}
+          {emptyColumns > 0 && <View style={{ width: `${emptyColumns * 25}%` as `${number}%` }} />}
         </View>
 
-        {/* Score GEO row (comparison) */}
-        <TableRow
-          label="Score GEO"
-          clientScore={clientGeoScore.overall}
-          competitors={competitors}
-          isComparisonRow
+        {/* Score GEO */}
+        <ComparisonRow
+          label="Score GEO estim\u00e9"
+          clientCell={<ScoreCell score={clientGeoScore.overall} />}
+          competitorCells={displayed.map((c) => (
+            <ScoreCell
+              key={c.domain}
+              score={c.estimatedGeoScore}
+              compareWith={clientGeoScore.overall}
+            />
+          ))}
+          emptyColumns={emptyColumns}
         />
 
-        {/* Client-only dimension rows */}
-        <TableRow
-          label="Structure"
-          clientScore={clientGeoScore.structure}
-          competitors={competitors}
-          isComparisonRow={false}
+        {/* Schema.org */}
+        <ComparisonRow
+          label="Schema.org"
+          clientCell={clientFd ? <BooleanCell value={clientFd.hasSchemaOrg} /> : <EmptyCell />}
+          competitorCells={displayed.map((c) =>
+            c.factualData ? (
+              <BooleanCell key={c.domain} value={c.factualData.hasSchemaOrg} />
+            ) : (
+              <EmptyCell key={c.domain} />
+            ),
+          )}
+          emptyColumns={emptyColumns}
         />
-        <TableRow
-          label="Contenu"
-          clientScore={clientGeoScore.content}
-          competitors={competitors}
-          isComparisonRow={false}
+
+        {/* FAQ structurée */}
+        <ComparisonRow
+          label="FAQ structur\u00e9e"
+          clientCell={clientFd ? <BooleanCell value={clientFd.hasFAQSchema} /> : <EmptyCell />}
+          competitorCells={displayed.map((c) =>
+            c.factualData ? (
+              <BooleanCell key={c.domain} value={c.factualData.hasFAQSchema} />
+            ) : (
+              <EmptyCell key={c.domain} />
+            ),
+          )}
+          emptyColumns={emptyColumns}
         />
-        <TableRow
-          label="Technique"
-          clientScore={clientGeoScore.technical}
-          competitors={competitors}
-          isComparisonRow={false}
+
+        {/* Contenu auteur */}
+        <ComparisonRow
+          label="Contenu auteur"
+          clientCell={clientFd ? <BooleanCell value={clientFd.hasAuthorInfo} /> : <EmptyCell />}
+          competitorCells={displayed.map((c) =>
+            c.factualData ? (
+              <BooleanCell key={c.domain} value={c.factualData.hasAuthorInfo} />
+            ) : (
+              <EmptyCell key={c.domain} />
+            ),
+          )}
+          emptyColumns={emptyColumns}
         />
-        <TableRow
-          label="Présence ext."
-          clientScore={clientGeoScore.externalPresence}
-          competitors={competitors}
-          isComparisonRow={false}
+
+        {/* Wikipedia */}
+        <ComparisonRow
+          label="Wikipedia"
+          clientCell={clientFd ? <BooleanCell value={clientFd.wikipediaFound} /> : <EmptyCell />}
+          competitorCells={displayed.map((c) =>
+            c.factualData ? (
+              <BooleanCell key={c.domain} value={c.factualData.wikipediaFound} />
+            ) : (
+              <EmptyCell key={c.domain} />
+            ),
+          )}
+          emptyColumns={emptyColumns}
+        />
+
+        {/* Trustpilot */}
+        <ComparisonRow
+          label="Trustpilot"
+          clientCell={
+            clientFd ? (
+              <RatingCell rating={clientFd.trustpilotRating} count={clientFd.trustpilotReviewCount} />
+            ) : (
+              <EmptyCell />
+            )
+          }
+          competitorCells={displayed.map((c) =>
+            c.factualData ? (
+              <RatingCell
+                key={c.domain}
+                rating={c.factualData.trustpilotRating}
+                count={c.factualData.trustpilotReviewCount}
+              />
+            ) : (
+              <EmptyCell key={c.domain} />
+            ),
+          )}
+          emptyColumns={emptyColumns}
+        />
+
+        {/* Citation rate IA */}
+        <ComparisonRow
+          label="Citation rate IA"
+          clientCell={clientFd ? <PercentCell value={clientFd.citationRate} /> : <EmptyCell />}
+          competitorCells={displayed.map((c) =>
+            c.factualData ? (
+              <PercentCell key={c.domain} value={c.factualData.citationRate} />
+            ) : (
+              <EmptyCell key={c.domain} />
+            ),
+          )}
+          emptyColumns={emptyColumns}
         />
       </View>
 
@@ -284,7 +371,6 @@ export function CompetitorBenchmarkSection({
         </View>
       )}
 
-      {/* Footer */}
       <PageFooter section="BENCHMARK CONCURRENTIEL" />
     </Page>
   );

@@ -1,63 +1,27 @@
-import { View, Text } from '@react-pdf/renderer';
+import { View, Text, Svg, Circle } from '@react-pdf/renderer';
 import type { AnalysisPlatformPresence } from '@coucou-ia/shared';
 
-import { theme } from '../theme';
-import { ImpactDots } from './impact-dots';
+import { theme, IMPACT_LABELS, IMPACT_COLORS } from '../theme';
 
 interface PlatformRowProps {
   platform: AnalysisPlatformPresence;
 }
 
-const IMPACT_VALUE: Record<string, 1 | 2 | 3 | 4 | 5> = {
-  high: 5,
-  medium: 3,
-  low: 1,
-};
+function getImpactBadgeColor(
+  found: boolean,
+  impact: string,
+): string {
+  if (!found && (impact === 'high' || impact === 'medium')) {
+    return theme.colors.destructive;
+  }
+  return IMPACT_COLORS[impact] ?? theme.colors.textMuted;
+}
 
-/**
- * PlatformRow - Tabular data row for external platform presence analysis
- *
- * Renders a bordered row displaying platform name, discovery status, and impact dots.
- * Features color-coded status indicators (green for found, muted for missing) and
- * automatic impact level conversion. Designed for scannable data tables in PDF reports.
- *
- * @param platform - Platform presence object containing name, found status, discovery status, and impact level
- *
- * @example
- * ```tsx
- * <PlatformRow
- *   platform={{
- *     platform: "Google Business Profile",
- *     found: true,
- *     status: "Réclamé et vérifié",
- *     impact: "high"
- *   }}
- * />
- * ```
- *
- * @example
- * ```tsx
- * <PlatformRow
- *   platform={{
- *     platform: "Yelp",
- *     found: false,
- *     status: "",
- *     impact: "medium"
- *   }}
- * />
- * ```
- */
 export function PlatformRow({
   platform,
 }: PlatformRowProps): React.JSX.Element {
-  const impactValue = IMPACT_VALUE[platform.impact];
-
-  // Warn if impact value is unknown
-  if (!impactValue) {
-    console.warn(
-      `[PlatformRow] Unknown impact value: "${platform.impact}" for platform "${platform.platform}". Defaulting to 3 (medium).`,
-    );
-  }
+  const impactLabel = IMPACT_LABELS[platform.impact] ?? platform.impact;
+  const badgeColor = getImpactBadgeColor(platform.found, platform.impact);
 
   return (
     <View
@@ -69,12 +33,29 @@ export function PlatformRow({
         borderBottomColor: theme.colors.border,
       }}
     >
+      {/* ✓/✗ icon */}
+      <Text
+        style={{
+          fontFamily: theme.fonts.mono,
+          fontSize: theme.fontSize.base,
+          fontWeight: 700,
+          color: platform.found
+            ? theme.colors.success
+            : theme.colors.destructive,
+          width: 16,
+        }}
+      >
+        {platform.found ? '✓' : '✗'}
+      </Text>
+
       {/* Platform name */}
       <Text
         style={{
           fontFamily: theme.fonts.body,
           fontSize: theme.fontSize.base,
-          color: theme.colors.textPrimary,
+          color: platform.found
+            ? theme.colors.textPrimary
+            : theme.colors.textMuted,
           width: 120,
         }}
       >
@@ -95,8 +76,23 @@ export function PlatformRow({
         {platform.found ? platform.status : 'Non trouvé'}
       </Text>
 
-      {/* Impact dots */}
-      <ImpactDots value={impactValue ?? 3} label="Impact" />
+      {/* Impact badge */}
+      <View style={{ flexDirection: 'row', alignItems: 'center', width: 80, justifyContent: 'flex-end' }}>
+        <Svg width={6} height={6} viewBox="0 0 6 6">
+          <Circle cx={3} cy={3} r={3} fill={badgeColor} />
+        </Svg>
+        <Text
+          style={{
+            fontFamily: theme.fonts.mono,
+            fontSize: theme.fontSize.sm,
+            fontWeight: 700,
+            color: badgeColor,
+            marginLeft: 4,
+          }}
+        >
+          {impactLabel}
+        </Text>
+      </View>
     </View>
   );
 }

@@ -188,9 +188,42 @@ describe('AnalyzeWithMistralUseCase', () => {
   };
 
   const observations = {
-    clientSite: { pages: [] },
+    pages: [],
+    technical: {
+      hasSitemap: false,
+      sitemapUrl: null,
+      sitemapPageCount: null,
+      hasRobotsTxt: false,
+      robotsAllowsCrawling: true,
+      loadTimeMs: null,
+      ttfbMs: null,
+    },
+    external: {
+      wikipedia: { found: false, url: null, articleLength: null, hasInfobox: null },
+      trustpilot: { found: false, url: null, rating: null, reviewCount: null, claimed: null },
+      googleBusiness: { found: false, rating: null, reviewCount: null },
+      pagesJaunes: { found: false, url: null },
+      societecom: { found: false, url: null },
+      crunchbase: { found: false, url: null },
+      linkedinCompany: { found: false, url: null, followerCount: null },
+      pressMentions: { count: 0, sources: [] },
+    },
     competitors: [],
-    externalPresence: { platforms: [] },
+    llmScanData: {
+      clientCitationRate: 0,
+      totalQueriesTested: 0,
+      clientMentionsCount: 0,
+      averageSentiment: 'neutral' as const,
+      positionsWhenCited: [],
+      topPerformingQueries: [],
+      queriesNotCited: [],
+    },
+    qualitativeNotes: {
+      mainStrengths: [],
+      mainWeaknesses: [],
+      quickWinSuggestions: [],
+      strategicSuggestions: [],
+    },
   };
 
   beforeEach(() => {

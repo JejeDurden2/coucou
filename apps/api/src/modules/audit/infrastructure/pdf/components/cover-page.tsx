@@ -140,7 +140,7 @@ export function CoverPage({
             fontSize: 8,
             color: theme.colors.textMuted,
             textAlign: 'center',
-            letterSpacing: 3,
+            letterSpacing: 2,
             lineHeight: 1.1,
           }}
         >

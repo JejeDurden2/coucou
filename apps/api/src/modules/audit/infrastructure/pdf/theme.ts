@@ -184,6 +184,18 @@ export const SEVERITY_LABELS: Record<string, string> = {
   info: 'Info',
 };
 
+export const IMPACT_LABELS: Record<string, string> = {
+  high: 'Élevé',
+  medium: 'Moyen',
+  low: 'Faible',
+};
+
+export const IMPACT_COLORS: Record<string, string> = {
+  high: theme.colors.success,
+  medium: theme.colors.accent,
+  low: theme.colors.textMuted,
+};
+
 export const CATEGORY_LABELS: Record<string, string> = {
   structure: 'Structure',
   content: 'Contenu',

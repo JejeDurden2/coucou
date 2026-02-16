@@ -17,11 +17,13 @@ function ActionSection({
   actions,
   borderColor,
   titleColor,
+  indexOffset,
 }: {
   title: string;
   actions: AnalysisActionItem[];
   borderColor: string;
   titleColor: string;
+  indexOffset: number;
 }): React.JSX.Element | null {
   if (actions.length === 0) return null;
 
@@ -29,35 +31,53 @@ function ActionSection({
 
   return (
     <View style={{ marginBottom: 20 }}>
-      {/* Section header avec règle décorative */}
+      {/* Section header — ligne pleine largeur + titre + compteur */}
       <View style={{ marginBottom: 12 }}>
-        <Text
-          style={{
-            fontFamily: theme.fonts.mono,
-            fontSize: theme.fontSize.base,
-            fontWeight: 700,
-            color: titleColor,
-            letterSpacing: 1,
-            textTransform: 'uppercase',
-            marginBottom: 4,
-          }}
-        >
-          {title}
-        </Text>
         <View
           style={{
-            width: 80,
-            height: 2,
+            width: '100%',
+            height: 3,
             backgroundColor: borderColor,
+            marginBottom: 8,
           }}
         />
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}
+        >
+          <Text
+            style={{
+              fontFamily: theme.fonts.mono,
+              fontSize: theme.fontSize.base,
+              fontWeight: 700,
+              color: titleColor,
+              letterSpacing: 1,
+              textTransform: 'uppercase',
+            }}
+          >
+            {title}
+          </Text>
+          <Text
+            style={{
+              fontFamily: theme.fonts.mono,
+              fontSize: theme.fontSize.xs,
+              fontWeight: 700,
+              color: titleColor,
+            }}
+          >
+            {actions.length} action{actions.length > 1 ? 's' : ''}
+          </Text>
+        </View>
       </View>
 
       {/* Action cards en 2 colonnes */}
       <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: 8 }}>
         {sortedActions.map((action, i) => (
           <View key={`action-${i}`} style={{ width: '48%' }}>
-            <ActionCard action={action} />
+            <ActionCard action={action} index={indexOffset + i} />
           </View>
         ))}
       </View>
@@ -108,26 +128,29 @@ export function ActionPlanSection({
 
       {/* Quick Wins */}
       <ActionSection
-        title="QUICK WINS — 1-2 SEMAINES"
+        title="QUICK WINS — 1-2 semaines"
         actions={actionPlan.quickWins}
         borderColor={theme.colors.success}
         titleColor={theme.colors.success}
+        indexOffset={0}
       />
 
       {/* Court terme */}
       <ActionSection
-        title="COURT TERME — 1-2 MOIS"
+        title="COURT TERME — 1-2 mois"
         actions={actionPlan.shortTerm}
         borderColor={theme.colors.accent}
         titleColor={theme.colors.accent}
+        indexOffset={actionPlan.quickWins.length}
       />
 
       {/* Moyen terme */}
       <ActionSection
-        title="MOYEN TERME — 3-6 MOIS"
+        title="MOYEN TERME — 3-6 mois"
         actions={actionPlan.mediumTerm}
         borderColor={theme.colors.textMuted}
         titleColor={theme.colors.textMuted}
+        indexOffset={actionPlan.quickWins.length + actionPlan.shortTerm.length}
       />
 
       {/* Footer */}

@@ -70,6 +70,16 @@ const analysisPlatformPresenceSchema = z.object({
   recommendation: z.string(),
 });
 
+const competitorFactualDataSchema = z.object({
+  hasSchemaOrg: z.boolean(),
+  hasFAQSchema: z.boolean(),
+  hasAuthorInfo: z.boolean(),
+  wikipediaFound: z.boolean(),
+  trustpilotRating: z.number().nullable(),
+  trustpilotReviewCount: z.number().nullable(),
+  citationRate: z.number(),
+});
+
 const analysisCompetitorSchema = z.object({
   name: z.string(),
   domain: z.string(),
@@ -77,6 +87,7 @@ const analysisCompetitorSchema = z.object({
   strengths: z.array(z.string()),
   clientGaps: z.array(z.string()),
   externalPresenceAdvantage: z.array(z.string()),
+  factualData: competitorFactualDataSchema.optional(),
 });
 
 const analysisActionItemSchema = z.object({
@@ -126,6 +137,7 @@ export const auditAnalysisSchema = z.object({
     competitors: z.array(analysisCompetitorSchema),
     summary: z.string(),
     keyGaps: z.array(z.string()),
+    clientFactualData: competitorFactualDataSchema.optional(),
   }),
   actionPlan: z.object({
     quickWins: z.array(analysisActionItemSchema),

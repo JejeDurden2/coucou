@@ -1,74 +1,96 @@
 import { View, Text } from '@react-pdf/renderer';
 import type { AnalysisCompetitor } from '@coucou-ia/shared';
 
-import { theme, baseStyles } from '../theme';
+import { theme, baseStyles, getScoreColor } from '../theme';
+import { ProgressBar } from './progress-bar';
 
 interface CompetitorCardProps {
   competitor: AnalysisCompetitor;
 }
 
-/**
- * CompetitorCard - Carte de concurrent avec analyse
- *
- * Affiche un concurrent avec name, domain, strengths, clientGaps, et externalPresenceAdvantage.
- * Layout card standard avec sections colorées par type d'information.
- *
- * @param competitor - Concurrent avec name, domain, strengths, clientGaps, externalPresenceAdvantage
- *
- * @example
- * ```tsx
- * <CompetitorCard competitor={{
- *   name: 'Concurrent A',
- *   domain: 'concurrent-a.com',
- *   estimatedGeoScore: 75,
- *   strengths: ['SEO mature', 'Contenu riche'],
- *   clientGaps: ['Manque de blog', 'Pas de FAQ'],
- *   externalPresenceAdvantage: ['Active sur LinkedIn', 'Guest blogging régulier']
- * }} />
- * ```
- */
+const sectionLabel = {
+  fontFamily: theme.fonts.mono,
+  fontSize: theme.fontSize.xs,
+  fontWeight: 700 as const,
+  color: theme.colors.textMuted,
+  letterSpacing: 1,
+  textTransform: 'uppercase' as const,
+  marginBottom: 4,
+};
+
 export function CompetitorCard({
   competitor,
 }: CompetitorCardProps): React.JSX.Element {
+  const scoreColor = getScoreColor(competitor.estimatedGeoScore);
+
   return (
     <View style={baseStyles.card} wrap={false}>
-      {/* Name + domain */}
-      <Text
+      {/* Header: name + score */}
+      <View
         style={{
-          fontFamily: theme.fonts.display,
-          fontSize: theme.fontSize.lg,
-          fontWeight: 700,
-          color: theme.colors.textPrimary,
-          marginBottom: 2,
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'flex-start',
+          marginBottom: 4,
         }}
       >
-        {competitor.name}
-      </Text>
-      <Text
-        style={{
-          fontFamily: theme.fonts.body,
-          fontSize: theme.fontSize.sm,
-          color: theme.colors.textMuted,
-          marginBottom: 12,
-        }}
-      >
-        {competitor.domain}
-      </Text>
-
-      {/* Forces */}
-      {competitor.strengths.length > 0 && (
-        <View style={{ marginBottom: 8 }}>
+        <View style={{ flex: 1 }}>
+          <Text
+            style={{
+              fontFamily: theme.fonts.display,
+              fontSize: theme.fontSize.lg,
+              fontWeight: 700,
+              color: theme.colors.textPrimary,
+              marginBottom: 2,
+            }}
+          >
+            {competitor.name}
+          </Text>
           <Text
             style={{
               fontFamily: theme.fonts.body,
               fontSize: theme.fontSize.sm,
-              fontWeight: 700,
-              color: theme.colors.textPrimary,
-              marginBottom: 4,
+              color: theme.colors.textMuted,
             }}
           >
-            Forces
+            {competitor.domain}
           </Text>
+        </View>
+        <Text
+          style={{
+            fontFamily: theme.fonts.mono,
+            fontSize: theme.fontSize.base,
+            fontWeight: 700,
+            color: scoreColor,
+          }}
+        >
+          {`${competitor.estimatedGeoScore}/100`}
+        </Text>
+      </View>
+
+      {/* Score progress bar */}
+      <View style={{ marginBottom: 12 }}>
+        <ProgressBar
+          score={competitor.estimatedGeoScore}
+          label=""
+          size="slim"
+          scoreFormat="raw"
+        />
+      </View>
+
+      {/* Divider */}
+      <View
+        style={{
+          borderBottomWidth: 0.5,
+          borderBottomColor: theme.colors.border,
+          marginBottom: 10,
+        }}
+      />
+
+      {/* Forces */}
+      {competitor.strengths.length > 0 && (
+        <View style={{ marginBottom: 10 }}>
+          <Text style={sectionLabel}>Forces</Text>
           {competitor.strengths.map((s, i) => (
             <Text
               key={`s-${i}`}
@@ -86,20 +108,10 @@ export function CompetitorCard({
         </View>
       )}
 
-      {/* Gaps exploitables */}
+      {/* Ce que vous pouvez exploiter */}
       {competitor.clientGaps.length > 0 && (
-        <View style={{ marginBottom: 8 }}>
-          <Text
-            style={{
-              fontFamily: theme.fonts.body,
-              fontSize: theme.fontSize.sm,
-              fontWeight: 700,
-              color: theme.colors.textPrimary,
-              marginBottom: 4,
-            }}
-          >
-            Gaps exploitables
-          </Text>
+        <View style={{ marginBottom: 10 }}>
+          <Text style={sectionLabel}>Ce que vous pouvez exploiter</Text>
           {competitor.clientGaps.map((g, i) => (
             <Text
               key={`g-${i}`}
@@ -120,17 +132,7 @@ export function CompetitorCard({
       {/* Avantages présence externe */}
       {competitor.externalPresenceAdvantage.length > 0 && (
         <View>
-          <Text
-            style={{
-              fontFamily: theme.fonts.body,
-              fontSize: theme.fontSize.sm,
-              fontWeight: 700,
-              color: theme.colors.textPrimary,
-              marginBottom: 4,
-            }}
-          >
-            Avantages présence externe
-          </Text>
+          <Text style={sectionLabel}>Avantages pr{'\u00e9'}sence externe</Text>
           {competitor.externalPresenceAdvantage.map((a, i) => (
             <Text
               key={`a-${i}`}
