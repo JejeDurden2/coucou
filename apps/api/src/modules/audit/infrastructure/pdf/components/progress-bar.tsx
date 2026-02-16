@@ -56,7 +56,6 @@ export function ProgressBar({
             fontWeight: 700,
             color: theme.colors.textMuted,
             marginBottom: 4,
-            letterSpacing: 1,
             textTransform: 'uppercase',
           }}
         >
@@ -111,7 +110,6 @@ export function ProgressBar({
   const isSlim = size === 'slim';
   const labelWidth = isSlim ? 100 : 60;
   const labelFontSize = isSlim ? theme.fontSize.base : theme.fontSize.tiny;
-  const labelLetterSpacing = isSlim ? 0 : 1;
   const labelTextTransform = isSlim ? ('none' as const) : ('uppercase' as const);
   const barHeight = isSlim ? 6 : 20;
   const scoreWidth = isSlim ? 45 : 30;
@@ -134,7 +132,6 @@ export function ProgressBar({
           fontWeight: 700,
           color: theme.colors.textMuted,
           width: labelWidth,
-          letterSpacing: labelLetterSpacing,
           textTransform: labelTextTransform,
         }}
       >

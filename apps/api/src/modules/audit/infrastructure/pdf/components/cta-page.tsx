@@ -129,7 +129,6 @@ export function CtaPage({ totalActions, geoScore }: CtaPageProps): React.JSX.Ele
             fontSize: theme.fontSize.base,
             fontWeight: 700,
             color: theme.colors.textMuted,
-            letterSpacing: 1,
           }}
         >
           LE GEO, C'EST LE NOUVEAU SEO.

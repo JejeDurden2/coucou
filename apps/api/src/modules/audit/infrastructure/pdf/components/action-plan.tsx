@@ -54,7 +54,6 @@ function ActionSection({
               fontSize: theme.fontSize.base,
               fontWeight: 700,
               color: titleColor,
-              letterSpacing: 1,
               textTransform: 'uppercase',
             }}
           >

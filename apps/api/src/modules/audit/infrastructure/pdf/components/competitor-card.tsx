@@ -13,7 +13,6 @@ const sectionLabel = {
   fontSize: theme.fontSize.xs,
   fontWeight: 700 as const,
   color: theme.colors.textMuted,
-  letterSpacing: 1,
   textTransform: 'uppercase' as const,
   marginBottom: 4,
 };

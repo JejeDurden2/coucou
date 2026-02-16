@@ -1,4 +1,4 @@
-import { View, Text } from '@react-pdf/renderer';
+import { View, Text, Svg, Circle } from '@react-pdf/renderer';
 
 import { theme } from '../theme';
 
@@ -8,10 +8,10 @@ interface ImpactDotsProps {
 }
 
 /**
- * ImpactDots - Five-dot visual intensity indicator using Unicode characters
+ * ImpactDots - Five-dot visual intensity indicator using SVG circles
  *
- * Renders a compact row of five Unicode dots (● filled, ○ empty) for reliable
- * rendering in react-pdf. Uses accent color for filled dots, muted for empty.
+ * Renders a compact row of five SVG circles (filled/empty) that render
+ * reliably in react-pdf without font glyph dependencies.
  *
  * @param value - Intensity level from 1 (low) to 5 (high)
  * @param label - Descriptive text displayed before the dots (e.g., "Impact", "Effort")
@@ -21,7 +21,7 @@ export function ImpactDots({
   label,
 }: ImpactDotsProps): React.JSX.Element {
   return (
-    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 4 }}>
+    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 3 }}>
       <Text
         style={{
           fontFamily: theme.fonts.mono,
@@ -32,22 +32,16 @@ export function ImpactDots({
       >
         {label}
       </Text>
-      <Text style={{ fontFamily: theme.fonts.mono, fontSize: theme.fontSize.sm }}>
-        {Array.from({ length: 5 }, (_, i) => (
-          <Text
-            key={`dot-${i}`}
-            style={{
-              color:
-                i < value
-                  ? theme.colors.accent
-                  : theme.colors.bgCardHover,
-            }}
-          >
-            {i < value ? '●' : '○'}
-            {i < 4 ? ' ' : ''}
-          </Text>
-        ))}
-      </Text>
+      {Array.from({ length: 5 }, (_, i) => (
+        <Svg key={`dot-${i}`} width={8} height={8} viewBox="0 0 8 8">
+          <Circle
+            cx={4}
+            cy={4}
+            r={3.5}
+            fill={i < value ? theme.colors.accent : theme.colors.bgCardHover}
+          />
+        </Svg>
+      ))}
     </View>
   );
 }

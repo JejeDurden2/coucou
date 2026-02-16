@@ -85,7 +85,6 @@ export function SiteAudit({
                 fontSize: theme.fontSize.base,
                 fontWeight: 700,
                 color: theme.colors.destructive,
-                letterSpacing: 1,
                 textTransform: 'uppercase',
                 marginBottom: 4,
               }}
@@ -119,7 +118,7 @@ export function SiteAudit({
           return null;
 
         return (
-          <View key={`page-${pageIdx}`} style={{ marginBottom: 16 }}>
+          <View key={`page-${pageIdx}`} style={{ marginBottom: pageIdx < pages.length - 1 ? 16 : 0 }}>
             {/* En-tête de page - badge typé + URL */}
             <View style={{ marginBottom: 8 }} wrap={false}>
               {/* Row 1: Type badge + description */}
@@ -144,7 +143,6 @@ export function SiteAudit({
                       fontSize: theme.fontSize.xs,
                       fontWeight: 700,
                       color: (PAGE_TYPE_STYLES[page.type] ?? PAGE_TYPE_STYLES.other).text,
-                      letterSpacing: 1,
                     }}
                   >
                     {PAGE_TYPE_LABELS[page.type] ?? page.type.toUpperCase()}
