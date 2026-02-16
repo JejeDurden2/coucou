@@ -1,47 +1,19 @@
-import { View, Text } from '@react-pdf/renderer';
+import { View, Text, Svg, Circle } from '@react-pdf/renderer';
 import type { AnalysisFinding } from '@coucou-ia/shared';
 
-import { theme } from '../theme';
-
-const SEVERITY_COLORS: Record<AnalysisFinding['severity'], string> = {
-  critical: theme.colors.destructive,
-  warning: theme.colors.warning,
-  info: theme.colors.accent,
-};
-
-const SEVERITY_LABELS: Record<AnalysisFinding['severity'], string> = {
-  critical: 'CRITIQUE',
-  warning: 'ATTENTION',
-  info: 'INFO',
-};
+import { theme, SEVERITY_COLORS, SEVERITY_LABELS } from '../theme';
 
 interface FindingCardProps {
   finding: AnalysisFinding;
 }
 
-/**
- * FindingCard - Carte de constat technique
- *
- * Affiche un finding d'audit avec severity, title, detail, et recommendation.
- * Utilise color-coding pour severity (critical=red, warning=amber, info=purple).
- * Bordure gauche épaisse (5px) colorée selon severity.
- *
- * @param finding - Constat technique avec severity, title, detail, recommendation
- *
- * @example
- * ```tsx
- * <FindingCard finding={{
- *   severity: 'critical',
- *   title: 'Balises meta manquantes',
- *   detail: 'La page n\'a pas de meta description',
- *   recommendation: 'Ajouter une meta description de 150-160 caractères'
- * }} />
- * ```
- */
 export function FindingCard({
   finding,
 }: FindingCardProps): React.JSX.Element {
-  const severityColor = SEVERITY_COLORS[finding.severity];
+  const severityColor =
+    SEVERITY_COLORS[finding.severity] ?? theme.colors.textMuted;
+  const severityLabel =
+    SEVERITY_LABELS[finding.severity] ?? finding.severity;
 
   return (
     <View
@@ -49,31 +21,42 @@ export function FindingCard({
         backgroundColor: theme.colors.bgCard,
         padding: 10,
         marginBottom: 8,
-        borderLeftWidth: 5,
+        borderLeftWidth: 3,
         borderLeftColor: severityColor,
       }}
       wrap={false}
     >
-      {/* Severity label - monospace caps */}
-      <Text
+      {/* Severity label with dot prefix */}
+      <View
         style={{
-          fontFamily: theme.fonts.mono,
-          fontSize: theme.fontSize.tiny,
-          fontWeight: 700,
-          color: severityColor,
-          letterSpacing: 1.5,
-          textTransform: 'uppercase',
+          flexDirection: 'row',
+          alignItems: 'center',
+          gap: 4,
           marginBottom: 4,
         }}
       >
-        {SEVERITY_LABELS[finding.severity]}
-      </Text>
+        <Svg width={6} height={6} viewBox="0 0 6 6">
+          <Circle cx={3} cy={3} r={3} fill={severityColor} />
+        </Svg>
+        <Text
+          style={{
+            fontFamily: theme.fonts.mono,
+            fontSize: theme.fontSize.xs,
+            fontWeight: 700,
+            color: severityColor,
+            letterSpacing: 1.5,
+            textTransform: 'uppercase',
+          }}
+        >
+          {severityLabel}
+        </Text>
+      </View>
 
-      {/* Title - monospace bold */}
+      {/* Title */}
       <Text
         style={{
           fontFamily: theme.fonts.mono,
-          fontSize: theme.fontSize.sm,
+          fontSize: theme.fontSize.base,
           fontWeight: 700,
           color: theme.colors.textPrimary,
           marginBottom: 4,
@@ -83,30 +66,50 @@ export function FindingCard({
         {finding.title}
       </Text>
 
-      {/* Detail - dense */}
+      {/* Detail */}
       <Text
         style={{
           fontFamily: theme.fonts.mono,
-          fontSize: theme.fontSize.tiny,
+          fontSize: theme.fontSize.sm,
           color: theme.colors.textMuted,
           lineHeight: 1.4,
-          marginBottom: 4,
+          marginBottom: 6,
         }}
       >
         {finding.detail}
       </Text>
 
-      {/* Recommendation - arrow + monospace */}
-      <Text
+      {/* Recommendation sub-block */}
+      <View
         style={{
-          fontFamily: theme.fonts.mono,
-          fontSize: theme.fontSize.tiny,
-          color: theme.colors.accent,
-          lineHeight: 1.4,
+          backgroundColor: theme.colors.bgCardHover,
+          padding: 8,
         }}
       >
-        → {finding.recommendation}
-      </Text>
+        <Text
+          style={{
+            fontFamily: theme.fonts.mono,
+            fontSize: theme.fontSize.xs,
+            fontWeight: 700,
+            color: theme.colors.textMuted,
+            letterSpacing: 1,
+            textTransform: 'uppercase',
+            marginBottom: 3,
+          }}
+        >
+          RECOMMANDATION
+        </Text>
+        <Text
+          style={{
+            fontFamily: theme.fonts.mono,
+            fontSize: theme.fontSize.sm,
+            color: theme.colors.textPrimary,
+            lineHeight: 1.4,
+          }}
+        >
+          {finding.recommendation}
+        </Text>
+      </View>
     </View>
   );
 }

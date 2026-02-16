@@ -1,7 +1,12 @@
 import { Page, View, Text } from '@react-pdf/renderer';
 import type { AuditAnalysis, AnalysisFinding } from '@coucou-ia/shared';
 
-import { theme, baseStyles } from '../theme';
+import {
+  theme,
+  baseStyles,
+  PAGE_TYPE_STYLES,
+  PAGE_TYPE_DESCRIPTIONS,
+} from '../theme';
 import { BrutalGrid } from './brutal-grid';
 import { FindingCard } from './finding-card';
 import { MetricHero } from './metric-hero';
@@ -115,44 +120,55 @@ export function SiteAudit({
 
         return (
           <View key={`page-${pageIdx}`} style={{ marginBottom: 16 }}>
-            {/* En-tête de page - monospace avec barre */}
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                marginBottom: 8,
-                gap: 8,
-              }}
-              wrap={false}
-            >
-              {/* Type badge - monospace brutal */}
+            {/* En-tête de page - badge typé + URL */}
+            <View style={{ marginBottom: 8 }} wrap={false}>
+              {/* Row 1: Type badge + description */}
               <View
                 style={{
-                  backgroundColor: theme.colors.accent,
-                  paddingHorizontal: 8,
-                  paddingVertical: 3,
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  gap: 8,
+                  marginBottom: 3,
                 }}
               >
+                <View
+                  style={{
+                    backgroundColor: (PAGE_TYPE_STYLES[page.type] ?? PAGE_TYPE_STYLES.other).bg,
+                    paddingHorizontal: 8,
+                    paddingVertical: 3,
+                  }}
+                >
+                  <Text
+                    style={{
+                      fontFamily: theme.fonts.mono,
+                      fontSize: theme.fontSize.xs,
+                      fontWeight: 700,
+                      color: (PAGE_TYPE_STYLES[page.type] ?? PAGE_TYPE_STYLES.other).text,
+                      letterSpacing: 1,
+                    }}
+                  >
+                    {PAGE_TYPE_LABELS[page.type] ?? page.type.toUpperCase()}
+                  </Text>
+                </View>
+
                 <Text
                   style={{
                     fontFamily: theme.fonts.mono,
-                    fontSize: theme.fontSize.tiny,
+                    fontSize: theme.fontSize.base,
                     fontWeight: 700,
-                    color: theme.colors.brutalWhite,
-                    letterSpacing: 1,
+                    color: theme.colors.textPrimary,
                   }}
                 >
-                  {PAGE_TYPE_LABELS[page.type] ?? page.type}
+                  {PAGE_TYPE_DESCRIPTIONS[page.type] ?? page.type}
                 </Text>
               </View>
 
-              {/* URL - monospace truncated */}
+              {/* Row 2: URL */}
               <Text
                 style={{
                   fontFamily: theme.fonts.mono,
-                  fontSize: theme.fontSize.tiny,
+                  fontSize: theme.fontSize.xs,
                   color: theme.colors.textMuted,
-                  flex: 1,
                 }}
               >
                 {page.url}
@@ -177,7 +193,7 @@ export function SiteAudit({
                       <Text
                         style={{
                           fontFamily: theme.fonts.mono,
-                          fontSize: theme.fontSize.tiny,
+                          fontSize: theme.fontSize.xs,
                           color: theme.colors.success,
                           marginRight: 3,
                         }}
@@ -187,7 +203,7 @@ export function SiteAudit({
                       <Text
                         style={{
                           fontFamily: theme.fonts.mono,
-                          fontSize: theme.fontSize.tiny,
+                          fontSize: theme.fontSize.xs,
                           color: theme.colors.textMuted,
                         }}
                       >

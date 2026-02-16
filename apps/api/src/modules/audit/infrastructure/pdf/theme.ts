@@ -191,6 +191,37 @@ export const CATEGORY_LABELS: Record<string, string> = {
   external_presence: 'Présence ext.',
 };
 
+// ─── Page Type Config ────────────────────────────────────────────────
+
+export interface PageTypeStyle {
+  bg: string; // Pre-blended background (color at ~12% on #09090B)
+  text: string; // Foreground text color
+}
+
+export const PAGE_TYPE_STYLES: Record<string, PageTypeStyle> = {
+  homepage: { bg: '#1A1328', text: '#8B5CF6' },
+  service: { bg: '#0F1530', text: '#3B82F6' },
+  blog: { bg: '#0E1C15', text: '#22C55E' },
+  pricing: { bg: '#1E1808', text: '#F59E0B' },
+  faq: { bg: '#1E1808', text: '#F59E0B' },
+  about: { bg: '#19191C', text: '#A1A1AA' },
+  legal: { bg: '#19191C', text: '#A1A1AA' },
+  contact: { bg: '#131B24', text: '#38BDF8' },
+  other: { bg: '#19191C', text: '#A1A1AA' },
+};
+
+export const PAGE_TYPE_DESCRIPTIONS: Record<string, string> = {
+  homepage: "Page d'accueil",
+  about: 'A propos',
+  service: 'Page service',
+  blog: 'Article de blog',
+  pricing: 'Page tarifs',
+  faq: 'Foire aux questions',
+  legal: 'Mentions légales',
+  contact: 'Page contact',
+  other: 'Autre page',
+};
+
 // ─── Base Styles ─────────────────────────────────────────────────────
 
 export const baseStyles = StyleSheet.create({
