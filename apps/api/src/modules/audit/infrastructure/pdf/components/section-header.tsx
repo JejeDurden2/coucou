@@ -33,6 +33,7 @@ export function SectionHeader({
         justifyContent: align === 'right' ? 'flex-end' : 'flex-start',
         marginBottom: 24,
       }}
+      minPresenceAhead={150}
     >
       <Text
         style={{

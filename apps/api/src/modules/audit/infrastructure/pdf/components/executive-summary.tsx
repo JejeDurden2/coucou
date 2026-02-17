@@ -41,16 +41,16 @@ export function ExecutiveSummary({
       {/* Section Title */}
       <SectionHeader title="RÉSUMÉ EXÉCUTIF" />
 
-      {/* Headline MASSIF en monospace - 70% width */}
-      <View style={{ width: '70%', marginBottom: 32, backgroundColor: theme.colors.bgCard, paddingVertical: 12, paddingHorizontal: 16 }}>
+      {/* Headline compact en monospace - 70% width */}
+      <View style={{ width: '70%', marginBottom: 16, backgroundColor: theme.colors.bgCard, paddingVertical: 8, paddingHorizontal: 16 }}>
         <Text
           style={{
             fontFamily: theme.fonts.mono,
-            fontSize: theme.fontSize['5xl'],
+            fontSize: theme.fontSize.xl,
             fontWeight: 700,
             color: theme.colors.textPrimary,
-            lineHeight: 1.1,
-            letterSpacing: -1,
+            lineHeight: 1.2,
+            letterSpacing: -0.5,
           }}
         >
           {summary.headline}
@@ -58,7 +58,7 @@ export function ExecutiveSummary({
       </View>
 
       {/* Layout 3 colonnes inégales: 30% / 10% / 60% */}
-      <View style={{ flexDirection: 'row', marginBottom: 24, gap: 8 }}>
+      <View style={{ flexDirection: 'row', marginBottom: 12, gap: 8 }}>
         {/* Colonne 1 - Scores (30%) */}
         <View style={{ width: '30%' }}>
           <Text
@@ -66,7 +66,7 @@ export function ExecutiveSummary({
               fontFamily: theme.fonts.mono,
               fontSize: theme.fontSize.tiny,
               color: theme.colors.textMuted,
-              marginBottom: 12,
+              marginBottom: 8,
             }}
           >
             SCORES
@@ -87,7 +87,7 @@ export function ExecutiveSummary({
           <Text
             style={{
               fontFamily: theme.fonts.mono,
-              fontSize: theme.fontSize.base,
+              fontSize: theme.fontSize.sm,
               color: theme.colors.textPrimary,
               lineHeight: 1.4,
             }}
@@ -104,7 +104,7 @@ export function ExecutiveSummary({
           fontSize: theme.fontSize.xs,
           fontWeight: 700,
           color: theme.colors.textMuted,
-          marginBottom: 12,
+          marginBottom: 8,
           textTransform: 'uppercase',
         }}
       >
@@ -118,13 +118,13 @@ export function ExecutiveSummary({
             key={`finding-${i}`}
             style={{
               backgroundColor: theme.colors.bgCard,
-              padding: 12,
-              marginBottom: 8,
+              padding: 8,
+              marginBottom: i < summary.keyFindings.length - 1 ? 6 : 0,
               borderLeftWidth: 3,
               borderLeftColor: borderColor,
               flexDirection: 'row',
               alignItems: 'flex-start',
-              gap: 10,
+              gap: 6,
             }}
             wrap={false}
           >

@@ -98,8 +98,8 @@ export function ExternalPresence({
 
       {/* Platform rows */}
       {sortedPlatforms.length > 0 ? (
-        sortedPlatforms.map((platform) => (
-          <PlatformRow key={platform.platform} platform={platform} />
+        sortedPlatforms.map((platform, i) => (
+          <PlatformRow key={platform.platform} platform={platform} isLast={i === sortedPlatforms.length - 1} />
         ))
       ) : (
         <View

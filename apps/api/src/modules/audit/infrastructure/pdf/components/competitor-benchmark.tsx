@@ -110,6 +110,7 @@ function ComparisonRow({
         borderBottomWidth: 0.5,
         borderBottomColor: theme.colors.border,
       }}
+      wrap={false}
     >
       <Text style={{ ...cellText, textAlign: 'left', color: theme.colors.textMuted, width: '25%' }}>
         {label}

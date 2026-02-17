@@ -78,7 +78,7 @@ export function SiteAudit({
       {globalFindings.length > 0 && (
         <View style={{ marginBottom: 20 }}>
           {/* Section header avec règle */}
-          <View style={{ marginBottom: 12 }}>
+          <View style={{ marginBottom: 12 }} minPresenceAhead={80}>
             <Text
               style={{
                 fontFamily: theme.fonts.mono,
@@ -120,7 +120,7 @@ export function SiteAudit({
         return (
           <View key={`page-${pageIdx}`} style={{ marginBottom: pageIdx < pages.length - 1 ? 16 : 0 }}>
             {/* En-tête de page - badge typé + URL */}
-            <View style={{ marginBottom: 8 }} wrap={false}>
+            <View style={{ marginBottom: 8 }} wrap={false} minPresenceAhead={100}>
               {/* Row 1: Type badge + description */}
               <View
                 style={{

@@ -5,6 +5,7 @@ import { theme, IMPACT_LABELS, IMPACT_COLORS } from '../theme';
 
 interface PlatformRowProps {
   platform: AnalysisPlatformPresence;
+  isLast?: boolean;
 }
 
 function getImpactBadgeColor(
@@ -19,6 +20,7 @@ function getImpactBadgeColor(
 
 export function PlatformRow({
   platform,
+  isLast = false,
 }: PlatformRowProps): React.JSX.Element {
   const impactLabel = IMPACT_LABELS[platform.impact] ?? platform.impact;
   const badgeColor = getImpactBadgeColor(platform.found, platform.impact);
@@ -29,9 +31,10 @@ export function PlatformRow({
         flexDirection: 'row',
         alignItems: 'center',
         paddingVertical: 6,
-        borderBottomWidth: 1,
+        borderBottomWidth: isLast ? 0 : 1,
         borderBottomColor: theme.colors.border,
       }}
+      wrap={false}
     >
       {/* ✓/✗ icon */}
       <Text

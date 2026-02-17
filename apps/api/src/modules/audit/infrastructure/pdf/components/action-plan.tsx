@@ -32,7 +32,7 @@ function ActionSection({
   return (
     <View style={{ marginBottom: 20 }}>
       {/* Section header — ligne pleine largeur + titre + compteur */}
-      <View style={{ marginBottom: 12 }}>
+      <View style={{ marginBottom: 12 }} minPresenceAhead={120}>
         <View
           style={{
             width: '100%',
