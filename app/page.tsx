@@ -27,6 +27,8 @@ const jsonLd = {
       url: siteUrl,
       description,
       email: contactEmail,
+      // Requis par Google pour les resultats enrichis LocalBusiness.
+      image: `${siteUrl}/opengraph-image`,
       address: {
         "@type": "PostalAddress",
         streetAddress: "460 avenue de Pessicart",
@@ -94,7 +96,7 @@ export default function Home() {
           __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
         }}
       />
-      <main>
+      <main id="contenu">
         <Hero />
         <Problem />
         <Services />

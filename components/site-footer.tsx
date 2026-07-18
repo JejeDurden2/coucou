@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import { Button } from "@/components/ui/button";
 import {
   bookingHref,
@@ -31,16 +33,16 @@ export function SiteFooter() {
           <div className="flex flex-col gap-8 sm:flex-row sm:gap-16 lg:gap-20">
             <nav className="flex flex-col gap-3">
               {nav.map((link) => (
-                <a key={link.href} href={link.href} className={linkClasses}>
+                <Link key={link.href} href={link.href} className={linkClasses}>
                   {link.label}
-                </a>
+                </Link>
               ))}
             </nav>
             <nav className="flex flex-col gap-3">
               {footerLegalLinks.map((link) => (
-                <a key={link.href} href={link.href} className={linkClasses}>
+                <Link key={link.href} href={link.href} className={linkClasses}>
                   {link.label}
-                </a>
+                </Link>
               ))}
             </nav>
           </div>

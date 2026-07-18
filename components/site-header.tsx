@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { Menu } from "lucide-react";
 import { useMotionValueEvent, useScroll } from "motion/react";
 
@@ -38,8 +39,8 @@ export function SiteHeader() {
       )}
     >
       <div className="mx-auto flex h-16 max-w-[1200px] items-center justify-between gap-4 px-6">
-        <a
-          href="#top"
+        <Link
+          href="/#top"
           className={cn(
             linkClasses,
             "flex items-center gap-2 font-display text-base font-bold tracking-[-0.01em] text-foreground"
@@ -47,11 +48,11 @@ export function SiteHeader() {
         >
           <span>{siteName}</span>
           <span aria-hidden className="size-1.5 rounded-sm bg-primary" />
-        </a>
+        </Link>
 
         <nav className="hidden items-center gap-8 lg:flex">
           {nav.map((link) => (
-            <a
+            <Link
               key={link.href}
               href={link.href}
               className={cn(
@@ -60,7 +61,7 @@ export function SiteHeader() {
               )}
             >
               {link.label}
-            </a>
+            </Link>
           ))}
         </nav>
 
@@ -89,7 +90,7 @@ export function SiteHeader() {
                   <SheetClose
                     key={link.href}
                     nativeButton={false}
-                    render={<a href={link.href} />}
+                    render={<Link href={link.href} />}
                     className={cn(
                       linkClasses,
                       "rounded-md px-3 py-3 text-base text-muted-foreground hover:bg-accent hover:text-foreground"

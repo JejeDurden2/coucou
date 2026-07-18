@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { SiteHeader } from "@/components/site-header";
@@ -51,6 +51,11 @@ export const metadata: Metadata = {
   },
 };
 
+// Hex de --background (oklch 0.145 0.006 255) : barre du navigateur mobile assortie au fond.
+export const viewport: Viewport = {
+  themeColor: "#090a0d",
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -67,6 +72,12 @@ export default function RootLayout({
         <noscript>
           <style>{`[data-reveal]{opacity:1 !important;transform:none !important}`}</style>
         </noscript>
+        <a
+          href="#contenu"
+          className="sr-only focus-visible:not-sr-only focus-visible:fixed focus-visible:top-3 focus-visible:left-3 focus-visible:z-60 focus-visible:rounded-md focus-visible:bg-background focus-visible:px-4 focus-visible:py-2.5 focus-visible:text-sm focus-visible:font-medium focus-visible:text-foreground focus-visible:ring-2 focus-visible:ring-ring"
+        >
+          Aller au contenu principal
+        </a>
         <SiteHeader />
         {children}
         <SiteFooter />

@@ -82,6 +82,8 @@
   }
   html {
     @apply font-sans;
+    /* Scrollbars et controles natifs sombres (Windows, mobile). */
+    color-scheme: dark;
   }
   /* Anchored navigation only; disabled for reduced-motion users (§6). */
   @media (prefers-reduced-motion: no-preference) {

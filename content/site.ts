@@ -24,10 +24,11 @@ export const menuLabel = "Menu";
 // TODO fondateur : remplacer par l'URL de reservation (Cal.com / Calendly).
 export const bookingHref = `mailto:${contactEmail}?subject=Diagnostic%20IA%20gratuit`;
 
+// Ancres prefixees par "/" : depuis les pages legales, "#services" seul est un lien mort.
 export const nav: NavLink[] = [
-  { label: "Services", href: "#services" },
-  { label: "Méthode", href: "#methode" },
-  { label: "Garantie", href: "#garantie" },
+  { label: "Services", href: "/#services" },
+  { label: "Méthode", href: "/#methode" },
+  { label: "Garantie", href: "/#garantie" },
 ];
 
 export const footerLegalLinks: NavLink[] = [

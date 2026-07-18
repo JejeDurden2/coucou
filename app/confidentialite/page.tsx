@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 
 export default function ConfidentialitePage() {
   return (
-    <main>
+    <main id="contenu">
       <article className="mx-auto max-w-[1200px] px-6 pt-20 pb-24 lg:pt-28 lg:pb-32">
         <div className="mx-auto max-w-[65ch]">
           <h1 className="text-balance font-display text-[2rem] leading-[1.08] font-bold tracking-[-0.02em] lg:text-[2.75rem]">

@@ -14,7 +14,7 @@ export const metadata: Metadata = {
 
 export default function NotFound() {
   return (
-    <main className="flex min-h-[calc(100svh-4rem)] items-center">
+    <main id="contenu" className="flex min-h-[calc(100svh-4rem)] items-center">
       <div className="mx-auto w-full max-w-[1200px] px-6 py-20 text-center">
         <p className="flex items-center justify-center gap-2.5 font-mono text-sm text-muted-foreground">
           <span aria-hidden className="size-2 shrink-0 rounded-sm bg-primary" />
