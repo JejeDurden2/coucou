@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { CasUsagePageTemplate } from "@/components/sections/cas-usage-page";
-import { pageMetadata, spokeJsonLd } from "@/lib/seo";
+import { pageMetadata, resolveRelated, spokeJsonLd } from "@/lib/seo";
 import { casUsagePages } from "@/content/cas-usage-pages";
 import { secteurs } from "@/content/secteurs";
 
@@ -32,24 +32,25 @@ export default async function CasUsageSpokePage({ params }: Params) {
     notFound();
   }
 
-  // Resolve cross-links to real secteur pages; unmatched slugs drop out
-  // silently (the other collection is filled in parallel).
-  const relatedSecteurs = page.relatedSecteurs.flatMap((relatedSlug) => {
-    const target = secteurs.find((secteur) => secteur.slug === relatedSlug);
-    return target
-      ? [{ href: `/secteurs/${target.slug}`, name: target.name }]
-      : [];
-  });
+  const relatedSecteurs = resolveRelated(
+    page.relatedSecteurs,
+    secteurs,
+    "/secteurs"
+  );
+
+  // Un seul fil d'ariane : le <Breadcrumb> visible et le JSON-LD BreadcrumbList
+  // partagent ce tableau. Dernier maillon sans href : c'est la page courante.
+  const breadcrumb = [
+    { label: "Accueil", href: "/" },
+    { label: "Cas d'usage", href: "/cas-usage" },
+    { label: page.name },
+  ];
 
   const jsonLd = spokeJsonLd({
     name: page.h1,
     description: page.metaDescription,
     path: `/cas-usage/${slug}`,
-    breadcrumb: [
-      { name: "Accueil", path: "/" },
-      { name: "Cas d'usage", path: "/cas-usage" },
-      { name: page.name, path: `/cas-usage/${slug}` },
-    ],
+    breadcrumb,
     faq: page.faq,
   });
 
@@ -62,7 +63,11 @@ export default async function CasUsageSpokePage({ params }: Params) {
         }}
       />
       <main id="contenu">
-        <CasUsagePageTemplate page={page} relatedSecteurs={relatedSecteurs} />
+        <CasUsagePageTemplate
+          page={page}
+          breadcrumb={breadcrumb}
+          relatedSecteurs={relatedSecteurs}
+        />
       </main>
     </>
   );

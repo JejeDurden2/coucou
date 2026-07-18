@@ -4,21 +4,7 @@
 // Slugs verrouillés : reponse-appels-offres, assistant-support-client,
 // traitement-documents, recherche-interne, qualification-leads.
 
-export type CasUsageFaqItem = {
-  question: string;
-  answer: string;
-};
-
-export type CasUsageBusinessCase = {
-  // Situation de départ concrète (taille d'équipe, volumétrie, tâche).
-  context: string;
-  // Chiffre court pour le metric-block (ex. "-80 % de saisie"), jamais une phrase.
-  metric: string;
-  // Phrase d'appui sous le chiffre.
-  result: string;
-  // Toujours "Exemple" : aucune référence client n'est validée.
-  label: string;
-};
+import type { BusinessCase, FaqItem } from "@/content/secteurs";
 
 export type CasUsagePage = {
   slug: string;
@@ -39,9 +25,9 @@ export type CasUsagePage = {
   whyNotSaas: string;
   // Prérequis côté client : données, outils, volumétrie (2 à 4 items).
   prerequisites: string[];
-  businessCase: CasUsageBusinessCase;
+  businessCase: BusinessCase;
   // 4 ou 5 questions. Alimente le JSON-LD FAQPage.
-  faq: CasUsageFaqItem[];
+  faq: FaqItem[];
   // Slugs de /secteurs pour le maillage croisé (2 ou 3).
   relatedSecteurs: string[];
 };

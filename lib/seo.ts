@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 
+import type { Crumb } from "@/components/breadcrumb";
 import { siteName, siteUrl } from "@/content/site";
+import type { FaqItem } from "@/content/secteurs";
 
 // Shared SEO helpers for the programmatic pages (hubs + spokes).
 // metadataBase (app/layout.tsx) resolves the relative paths to absolute URLs.
@@ -31,11 +33,24 @@ export function pageMetadata({
   };
 }
 
-type Crumb = { name: string; path: string };
-type FaqEntry = { question: string; answer: string };
+// Résout des slugs croisés vers l'autre collection (secteur <-> cas d'usage).
+// Un slug sans correspondance disparaît silencieusement : jamais de lien mort.
+export function resolveRelated(
+  slugs: string[],
+  collection: { slug: string; name: string }[],
+  basePath: string
+): { href: string; name: string }[] {
+  return slugs.flatMap((slug) => {
+    const target = collection.find((entry) => entry.slug === slug);
+    return target
+      ? [{ href: `${basePath}/${target.slug}`, name: target.name }]
+      : [];
+  });
+}
 
 // Service (provider Coucou IA) + BreadcrumbList + FAQPage, same @graph pattern
 // as app/page.tsx. Stringify + escape "<" at the call site, like the home page.
+// `breadcrumb` is the same array fed to the visible <Breadcrumb>.
 export function spokeJsonLd({
   name,
   description,
@@ -47,7 +62,7 @@ export function spokeJsonLd({
   description: string;
   path: string;
   breadcrumb: Crumb[];
-  faq: FaqEntry[];
+  faq: FaqItem[];
 }) {
   const url = `${siteUrl}${path}`;
   return {
@@ -75,8 +90,9 @@ export function spokeJsonLd({
         itemListElement: breadcrumb.map((crumb, index) => ({
           "@type": "ListItem",
           position: index + 1,
-          name: crumb.name,
-          item: `${siteUrl}${crumb.path}`,
+          name: crumb.label,
+          // item est optionnel pour la page courante (dernier maillon sans href).
+          ...(crumb.href ? { item: `${siteUrl}${crumb.href}` } : {}),
         })),
       },
       {

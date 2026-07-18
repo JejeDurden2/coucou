@@ -2,7 +2,7 @@ import Link from "next/link";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { Breadcrumb } from "@/components/breadcrumb";
+import { Breadcrumb, type Crumb } from "@/components/breadcrumb";
 import { MetricBlock } from "@/components/metric-block";
 import { ScrollReveal } from "@/components/scroll-reveal";
 import { bookingHref, ctaLabel } from "@/content/site";
@@ -17,7 +17,7 @@ export function SpokeHero({
   h1,
   intro,
 }: {
-  breadcrumb: { label: string; href?: string }[];
+  breadcrumb: Crumb[];
   h1: string;
   intro: string;
 }) {

@@ -9,12 +9,13 @@ export type SecteurUseCase = {
   description: string;
 };
 
-export type SecteurFaqItem = {
+// Partagés avec les pages cas d'usage (cas-usage-pages.ts) et lib/seo.ts.
+export type FaqItem = {
   question: string;
   answer: string;
 };
 
-export type SecteurBusinessCase = {
+export type BusinessCase = {
   // Situation de départ concrète (taille d'équipe, volumétrie, tâche).
   context: string;
   // Chiffre court pour le metric-block (ex. "-70 % de saisie"), jamais une phrase.
@@ -42,9 +43,9 @@ export type SecteurPage = {
   useCases: SecteurUseCase[];
   // Contrainte réglementaire propre au secteur (secret professionnel, HDS, ACPR...).
   compliance: { title: string; body: string };
-  businessCase: SecteurBusinessCase;
+  businessCase: BusinessCase;
   // 4 ou 5 questions. Alimente le JSON-LD FAQPage.
-  faq: SecteurFaqItem[];
+  faq: FaqItem[];
   // Slugs de /cas-usage pour le maillage croisé (2 ou 3).
   relatedCasUsage: string[];
 };

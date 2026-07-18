@@ -9,28 +9,23 @@ import {
 } from "@/components/spoke-partials";
 import { Cta } from "@/components/sections/cta";
 import { FaqList } from "@/components/sections/faq";
+import type { Crumb } from "@/components/breadcrumb";
 import type { CasUsagePage } from "@/content/cas-usage-pages";
 
 // Cas d'usage spoke template. The hero intro carries the douleur (per the type)
 // and whyNotSaas + prerequisites are the unique content this playbook requires.
 export function CasUsagePageTemplate({
   page,
+  breadcrumb,
   relatedSecteurs,
 }: {
   page: CasUsagePage;
+  breadcrumb: Crumb[];
   relatedSecteurs: { href: string; name: string }[];
 }) {
   return (
     <>
-      <SpokeHero
-        breadcrumb={[
-          { label: "Accueil", href: "/" },
-          { label: "Cas d'usage", href: "/cas-usage" },
-          { label: page.name },
-        ]}
-        h1={page.h1}
-        intro={page.intro}
-      />
+      <SpokeHero breadcrumb={breadcrumb} h1={page.h1} intro={page.intro} />
 
       {/* Avant / après, étape par étape. */}
       <section className="border-t border-border">

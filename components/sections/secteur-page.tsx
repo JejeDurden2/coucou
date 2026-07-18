@@ -9,28 +9,23 @@ import {
 } from "@/components/spoke-partials";
 import { Cta } from "@/components/sections/cta";
 import { FaqList } from "@/components/sections/faq";
+import type { Crumb } from "@/components/breadcrumb";
 import type { SecteurPage } from "@/content/secteurs";
 
 // Secteur spoke template. Order follows docs/programmatic-seo.md §4: hero,
 // douleurs, cas d'usage sectoriels, business case, conformité, méthode, FAQ, CTA.
 export function SecteurPageTemplate({
   page,
+  breadcrumb,
   relatedCasUsage,
 }: {
   page: SecteurPage;
+  breadcrumb: Crumb[];
   relatedCasUsage: { href: string; name: string }[];
 }) {
   return (
     <>
-      <SpokeHero
-        breadcrumb={[
-          { label: "Accueil", href: "/" },
-          { label: "Secteurs", href: "/secteurs" },
-          { label: page.name },
-        ]}
-        h1={page.h1}
-        intro={page.intro}
-      />
+      <SpokeHero breadcrumb={breadcrumb} h1={page.h1} intro={page.intro} />
 
       {/* Le problème, dans les mots du secteur. */}
       <section className="border-t border-border">

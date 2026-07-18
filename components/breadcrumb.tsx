@@ -2,10 +2,11 @@ import Link from "next/link";
 
 import { cn } from "@/lib/utils";
 
-// Visible breadcrumb for the spokes and hubs (hub -> page). The matching
-// JSON-LD BreadcrumbList is built in the page via lib/seo. The last item is
-// the current page and renders as plain text with aria-current.
-type Crumb = { label: string; href?: string };
+// Visible breadcrumb for the spokes and hubs (hub -> page). The routes build
+// this array once and feed it to both this component and the JSON-LD
+// BreadcrumbList (lib/seo). The last item is the current page and renders as
+// plain text with aria-current.
+export type Crumb = { label: string; href?: string };
 
 const linkClasses =
   "rounded-sm outline-none transition-colors hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background";
