@@ -23,6 +23,8 @@ export type Hero = {
   axisY: string;
   axisX: string;
   baselineLabel: string;
+  prodLabel: string;
+  legendLabel: string;
   traceAlt: string;
 };
 
@@ -31,17 +33,19 @@ export const hero: Hero = {
   headlineHollow: "des comptes.",
   lede: "On chiffre le gain avant d'écrire une ligne de code, on livre en production, on mesure. Garanti par écrit.",
   reassurance: "30 minutes. Gratuit. Un avis franc.",
-  note: "Si l'IA n'a rien à vous rapporter, vous le saurez à la fin de l'appel. Pas au bout de six mois de mission.",
+  note: "Vous repartez avec les deux ou trois endroits où l'IA peut créer de la valeur chez vous. Souvent là où vous ne l'attendiez pas.",
   readout: {
-    label: "Temps de traitement",
+    label: "Dernier relevé",
     value: 40,
     prefix: "-",
     suffix: " %",
-    caption: "exemple illustratif",
+    caption: "de temps de traitement, exemple illustratif",
   },
   axisY: "Gain mesuré ↑",
   axisX: "Temps →",
   baselineLabel: "Si rien ne change",
+  prodLabel: "Mise en production",
+  legendLabel: "Relevé mensuel",
   traceAlt:
-    "Courbe d'exemple : le gain mesuré monte par paliers après la mise en production, au-dessus de la ligne de base si rien ne change.",
+    "Courbe d'exemple : le gain reste à zéro jusqu'à la mise en production, puis monte par paliers à chaque relevé mensuel avant de se stabiliser, nettement au-dessus de la ligne si rien ne change.",
 };

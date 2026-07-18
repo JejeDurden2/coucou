@@ -198,8 +198,9 @@
    the readout card entrance reuses ScrollReveal. */
 @media (prefers-reduced-motion: no-preference) {
   .trace-draw {
-    stroke-dasharray: 1000;
-    stroke-dashoffset: 1000;
+    /* Longueur du tracé de roi-trace.tsx (arrondie au supérieur). */
+    stroke-dasharray: 830;
+    stroke-dashoffset: 830;
     animation: draw-trace 1.4s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards;
   }
   .trace-pt {
