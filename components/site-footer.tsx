@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
+import { LogoMark } from "@/components/logo-mark";
 import {
   bookingHref,
   ctaLabel,
@@ -22,8 +23,8 @@ export function SiteFooter() {
         <div className="flex flex-col gap-12 lg:flex-row lg:items-start lg:justify-between lg:gap-8">
           <div className="max-w-[42ch]">
             <div className="flex items-center gap-2 font-display text-base font-bold tracking-[-0.01em] text-foreground">
+              <LogoMark className="size-6 text-primary" />
               <span>{siteName}</span>
-              <span aria-hidden className="size-1.5 rounded-sm bg-primary" />
             </div>
             <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
               {footerPositioning}
