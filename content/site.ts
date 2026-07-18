@@ -11,11 +11,9 @@ export const siteName = "Coucou IA";
 export const tagline =
   "L'IA qui rapporte, installée en production. ROI garanti, pas des slides.";
 
-// TODO fondateur : confirmer le domaine definitif.
-export const siteUrl = "https://coucou-ia.fr";
+export const siteUrl = "https://coucou-ia.com";
 
-// TODO fondateur : confirmer l'adresse de contact.
-export const contactEmail = "contact@coucou-ia.fr";
+export const contactEmail = "jerome@coucou-ia.com";
 
 // Libelle du CTA. Unique sur tout le site : ne jamais creer de variante.
 export const ctaLabel = "Réserver un diagnostic";
@@ -23,7 +21,7 @@ export const ctaLabel = "Réserver un diagnostic";
 // Libelle du menu mobile (declencheur + titre du tiroir, pour l'accessibilite).
 export const menuLabel = "Menu";
 
-// TODO fondateur : remplacer par l'URL de reservation (Cal.com / Calendly) et confirmer l'email.
+// TODO fondateur : remplacer par l'URL de reservation (Cal.com / Calendly).
 export const bookingHref = `mailto:${contactEmail}?subject=Diagnostic%20IA%20gratuit`;
 
 export const nav: NavLink[] = [
