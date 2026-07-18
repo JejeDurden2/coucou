@@ -1,7 +1,7 @@
 # Contexte Product Marketing : Coucou IA
 
-**Version du document :** v1
-**Dernière mise à jour :** 2026-07-18
+**Version du document :** v1.1
+**Dernière mise à jour :** 2026-07-19
 
 > Document de référence partagé. Toutes les autres skills marketing (`.agents/skills/`) s'appuient sur ce contexte pour le produit, l'audience et le positionnement. Rédigé en français : la production marketing sortante est en français. Forme de politesse : **« vous »**.
 > Les éléments inventés à confirmer par le fondateur sont marqués **[À VALIDER]**. Ne pas les présenter comme des faits vérifiés.
@@ -185,6 +185,8 @@
 
 **Règle du clin d'œil :** le « Coucou » vit dans les accroches, les micro-copies et les transitions (« Coucou, c'est nous. »). Il ne vit jamais dans les preuves, les chiffres ou les engagements contractuels : là, tout est sobre et sérieux.
 
+**Accroche du site (hero, depuis v1.1) :** « L'IA va changer votre quotidien. On sait par où commencer. » Angle « carte des possibles » : le client sait déjà que l'IA va compter pour son activité, il ne sait pas par où commencer ; nous cartographions ce que l'IA rend possible chez lui (par métier, par cas d'usage), puis nous le mettons en production. Cet angle remplace l'ancien positionnement « redevabilité » (« L'IA vous doit des comptes »), retiré : il déplaçait le clin d'œil sur la dette de l'IA envers l'entreprise plutôt que sur notre rôle de guide.
+
 ---
 
 ## Preuves & crédibilité
@@ -222,4 +224,5 @@
 
 ## Changelog
 *Le plus récent en premier. Une ligne par révision : ce qui a changé et pourquoi.*
+- v1.1 (2026-07-19) : hero pivot : retrait de l'angle « L'IA vous doit des comptes », adoption de l'angle « carte des possibles » (le client sait que l'IA compte, nous savons par où commencer), nouvelle accroche du site.
 - v1 (2026-07-18) : contexte initial. Rédigé à partir des faits verrouillés par le fondateur (rebrand Coucou IA : conseil IA marché français, 2 services, cible PME/ETI, différenciateur ROI garanti, ton « clin d'œil / expertise sérieuse »). Concurrents, douleurs, objections et preuves rédigés à partir du contexte marché français ; specifics inventés marqués [À VALIDER].

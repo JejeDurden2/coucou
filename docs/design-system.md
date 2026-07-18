@@ -94,12 +94,17 @@ Rules: headlines `text-balance`; body/lede `text-pretty`, capped `max-w-[65ch]`.
 
 ## 5. Signature visual motifs
 
-**"Le tracé": a faint measurement grid plus one lime signal.** ROI is measurement; the motif is a plotting grid.
+Two motifs, cleanly split by role: the hero owns one large moving signature; every other section only ever gets the quiet, static "tracé" grid.
 
-- **Grid field:** a very low-contrast square grid (`--border` at ~40-60% via a `background-image` linear-gradient or SVG), used behind the hero and one proof section only. Fades out with a radial mask so it never fills the whole viewport. Never on every section.
-- **Ambient glow:** exactly **one**, a large, very-low-opacity lime radial behind the hero focal point (blur-heavy, `--primary` at ~8-12% alpha). Optionally one soft glow behind the primary CTA on hover. Nowhere else.
+**(a) "La carte des possibles": the hero centerpiece.** A full-viewport ambient flow-field particle canvas (fine grey trailing strokes, ~7% of particles lime, trails fading, masked out toward the bottom of the viewport) runs behind the hero copy, with one lime radial glow top-right and four thin corner frame marks. On the right, a map-like SVG fans faint rays from a lime origin point out to small dots and six arrowed rays, each pointing to a use-case card. Every 2.6s, one ray and its card light up in lime, the single moving lime signal on the page, then hand off to the next ray/card. This is the one place the brand allows sustained, looping motion (see §6); nowhere else on the site moves like this.
+
+**(b) "Le tracé": a faint measurement grid, for proof and guarantee sections only.** ROI is measurement; the motif is a plotting grid (`.trace-grid` in `app/globals.css`). It does **not** appear in the hero, which uses the flow-field/carte motif above instead.
+
+- **Grid field:** a very low-contrast square grid (`--border` at ~40-60% via a `background-image` linear-gradient or SVG), used behind the guarantee/proof section and the pSEO spoke pages (secteurs, cas d'usage) only. Fades out with a radial mask so it never fills the whole viewport. Never on every section.
 - **The lime signal:** accent used as precise marks: a 2px lime underline/tick under a key metric, a thin lime left-border on a quoted result, the active nav indicator, the focus ring. Small, surgical, high-signal.
-- **Metric / ROI display:** the brand's centerpiece. Big `Space Grotesk` `tabular-nums` figure (`--foreground`, or `--primary` for the single hero headline stat), a Geist Mono uppercase label above in `muted-foreground`, and an optional delta badge (`success` + `▲`). See §7.
+- **Metric / ROI display:** the brand's centerpiece for proof sections. Big `Space Grotesk` `tabular-nums` figure (`--foreground`), a Geist Mono uppercase label above in `muted-foreground`, and an optional delta badge (`success` + `▲`). See §7.
+
+**Ambient glow:** exactly **one** page-level ambient glow, the lime radial top-right of the hero (blur-heavy, `--primary` at ~8-12% alpha), plus two motivated exceptions and nothing else: the active carte card/ray's lime outline glow during its 2.6s highlight, and the soft glow behind the primary CTA on hover.
 
 **Gradients/glows must NOT:** tint text (no gradient/lime text), stack multiple colored glows, appear on cards/buttons by default, or become a purple/blue mesh background. If in doubt, remove it.
 
@@ -111,9 +116,10 @@ Principles: motion communicates hierarchy, sequence, or feedback, never decorati
 
 - **Durations:** micro (hover, press) 120-160ms; entrances/reveals 240-320ms.
 - **Easing:** entrances `cubic-bezier(0.16, 1, 0.3, 1)` (ease-out-expo); hover/press `ease-out`.
-- **What animates:** hero entrance (short opacity+`y` stagger), section scroll-reveal (`whileInView`, `once: true`, `y: 16` to `0`), CTA hover (`-translate-y-px` plus subtle lime glow), nav background blur-in on scroll, one hero stat count-up.
-- **What never animates:** the logo/wordmark, body text, metric numbers (except the single hero count-up), anything on an infinite loop. No marquees. No parallax.
-- **`prefers-reduced-motion`:** disable all transforms, count-up, and scroll-reveals; render final state, keeping only instant opacity if needed. Use Motion's `useReducedMotion`.
+- **What animates:** hero entrance (short opacity+`y` stagger), section scroll-reveal (`whileInView`, `once: true`, `y: 16` to `0`), CTA hover (`-translate-y-px` plus subtle lime glow), nav background blur-in on scroll.
+- **The one sanctioned loop:** the hero's ambient flow-field canvas and its 2.6s "carte des possibles" ray/card cycle run continuously. This is the single, deliberate exception to the no-infinite-loop rule below, allowed because it reads as low-contrast, slow ambient signal (one moving element at a time) rather than decoration.
+- **What never animates:** the logo/wordmark, body text, metric numbers, anything on an infinite loop outside the hero exception above. No marquees. No parallax.
+- **`prefers-reduced-motion`:** disable all transforms and scroll-reveals; render final state. The hero canvas falls back to one static pre-rendered frame (no particle motion) and the carte shows a static state with the first ray/card lit, no cycling. Use Motion's `useReducedMotion`.
 - Continuous values (scroll, pointer) use Motion values, never `useState`.
 
 ---
@@ -129,7 +135,7 @@ Principles: motion communicates hierarchy, sequence, or feedback, never decorati
 
 **Card:** `bg-card border border-border rounded-lg p-6`. Full composition (`CardHeader/Title/Description/Content/Footer`). Use cards only where elevation means hierarchy (service offers, proof); otherwise group with `border-t` plus spacing. Optional hover: `border` brightens to `--input`; no lift, no glow.
 
-**Nav / Header:** sticky, height 64px (max 80px), single line at `lg`. Transparent over hero, then on scroll `bg-background/80 backdrop-blur border-b border-border`. Left: wordmark. Center/right: 3 or 4 links (Services, Méthode, Résultats). Far right: primary CTA. Mobile: Sheet drawer, hamburger; CTA stays visible.
+**Nav / Header:** sticky, height 64px (max 80px), single line at `lg`. Transparent over hero, then on scroll `bg-background/80 backdrop-blur border-b border-border`. Left: wordmark. Center/right: 3 or 4 links (Services, Méthode, Résultats). Far right: secondary CTA (the hero CTA is the only primary button above the fold). Mobile: Sheet drawer, hamburger; CTA stays visible.
 
 **Footer:** `border-t border-border`, `bg-background`, `py-16`. Columns: wordmark plus one-line positioning; nav links; legal (Mentions légales, Confidentialité); the CTA repeated once. Muted text, hairline dividers. No newsletter unless briefed.
 
@@ -149,7 +155,7 @@ Principles: motion communicates hierarchy, sequence, or feedback, never decorati
 - **Focus-visible:** 2px `--ring` (lime) outline plus 2px offset on every interactive element. Never remove outlines without a visible replacement. Lime ring gives ≥14:1 on dark.
 - **Targets:** interactive elements ≥ 44×44px (buttons min `h-10`; pad small icon buttons to `size-11`).
 - Every section collapses to one column < 768px, declared per component. Hero fits the initial viewport (headline ≤ 2 lines, sub ≤ 20 words, CTA visible without scroll).
-- Semantic HTML; images have alt; the count-up and reveals respect reduced motion.
+- Semantic HTML; images have alt; the hero flow-field canvas, the carte des possibles cycle, and scroll-reveals all respect reduced motion.
 
 ---
 
@@ -159,7 +165,7 @@ Principles: motion communicates hierarchy, sequence, or feedback, never decorati
 - Near-black plus neutral grays plus one disciplined lime. Let 90% of the page be quiet.
 - Lead with ROI: real, measurable numbers in metric blocks.
 - Tight 8px radius, hairline borders, precise type, generous whitespace.
-- One ambient hero glow, one grid field, surgical lime accents.
+- One ambient hero glow, one tracé grid field on proof/spoke pages, surgical lime accents.
 
 **Don't**
 - Purple/violet or blue "AI glow"; gradient or lime-tinted text; rainbow mesh backgrounds.

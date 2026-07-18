@@ -132,52 +132,16 @@
   );
 }
 
-/* Hero « instrument » (§5): two-scale plotting grid, a fine 40px pitch under a
-   200px major line, fading out before the method strip. Hero only; the
-   guarantee section keeps .trace-grid. */
-.instrument-grid {
-  background-image:
-    linear-gradient(
-      to right,
-      color-mix(in oklch, var(--border) 65%, transparent) 1px,
-      transparent 1px
-    ),
-    linear-gradient(
-      to bottom,
-      color-mix(in oklch, var(--border) 65%, transparent) 1px,
-      transparent 1px
-    ),
-    linear-gradient(
-      to right,
-      color-mix(in oklch, var(--border) 30%, transparent) 1px,
-      transparent 1px
-    ),
-    linear-gradient(
-      to bottom,
-      color-mix(in oklch, var(--border) 30%, transparent) 1px,
-      transparent 1px
-    );
-  background-size:
-    200px 200px,
-    200px 200px,
-    40px 40px,
-    40px 40px;
+/* Hero flow-field canvas: fade the trailing particles out over the bottom of
+   the section (pure alpha mask, no brand color). */
+.hero-flow-mask {
   -webkit-mask-image: linear-gradient(
     to bottom,
     black 0%,
-    black 62%,
+    black 60%,
     transparent 96%
   );
-  mask-image: linear-gradient(to bottom, black 0%, black 62%, transparent 96%);
-}
-
-/* Ruler ticks over the hero method strip: one hairline every 72px. */
-.ruler-ticks {
-  background: repeating-linear-gradient(
-    to right,
-    color-mix(in oklch, var(--border) 80%, transparent) 0 1px,
-    transparent 1px 72px
-  );
+  mask-image: linear-gradient(to bottom, black 0%, black 60%, transparent 96%);
 }
 
 /* Second headline line: hollow letterforms stroked from the foreground token.
@@ -192,30 +156,34 @@
   }
 }
 
-/* ROI trace sequence (§6): the path draws once on load, data points pop in
-   along it. Gated behind no-preference so reduced-motion users see the final,
-   fully drawn state. Per-point delays are set inline where the trace renders;
-   the readout card entrance reuses ScrollReveal. */
+/* Hero « carte des possibles » entrance (§6): the cards rise in, the rays and
+   dots fade in along a stagger. Per-element animation-delay is set inline where
+   each piece renders. Gated behind no-preference so reduced-motion users get the
+   final state with no motion; the left column reuses ScrollReveal. */
 @media (prefers-reduced-motion: no-preference) {
-  .trace-draw {
-    /* Longueur du tracé de roi-trace.tsx (arrondie au supérieur). */
-    stroke-dasharray: 830;
-    stroke-dashoffset: 830;
-    animation: draw-trace 1.4s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards;
+  .hero-in {
+    animation: hero-in 0.32s cubic-bezier(0.16, 1, 0.3, 1) both;
   }
-  .trace-pt {
-    opacity: 0;
-    animation: pt-in 0.2s ease-out forwards;
+  .hero-fade {
+    animation: pt-in 0.5s ease-out both;
   }
 }
 
-@keyframes draw-trace {
+@keyframes hero-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
   to {
-    stroke-dashoffset: 0;
+    opacity: 1;
+    transform: none;
   }
 }
 
 @keyframes pt-in {
+  from {
+    opacity: 0;
+  }
   to {
     opacity: 1;
   }

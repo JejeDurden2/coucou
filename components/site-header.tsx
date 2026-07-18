@@ -7,6 +7,7 @@ import { useMotionValueEvent, useScroll } from "motion/react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { LogoMark } from "@/components/logo-mark";
 import {
   Sheet,
   SheetClose,
@@ -46,8 +47,8 @@ export function SiteHeader() {
             "flex items-center gap-2 font-display text-base font-bold tracking-[-0.01em] text-foreground"
           )}
         >
+          <LogoMark className="size-6 text-primary" />
           <span>{siteName}</span>
-          <span aria-hidden className="size-1.5 rounded-sm bg-primary" />
         </Link>
 
         <nav className="hidden items-center gap-8 lg:flex">
@@ -66,7 +67,7 @@ export function SiteHeader() {
         </nav>
 
         <div className="flex items-center gap-2">
-          <Button nativeButton={false} render={<a href={bookingHref} />} size="default">
+          <Button nativeButton={false} render={<a href={bookingHref} />} variant="secondary" size="default">
             {ctaLabel}
           </Button>
 

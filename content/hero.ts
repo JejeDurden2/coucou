@@ -1,51 +1,41 @@
-// Section hero « instrument » : la courbe porte l'argument, le texte le signe.
+// Section hero « la carte des possibles » : le client sait que l'IA compte,
+// mais pas par où commencer. Nous, si. La carte montre ce que l'IA rend
+// possible chez lui : six cas d'usage qui s'illuminent l'un après l'autre.
 // Le libellé du CTA vient de site.ts (ctaLabel) : ne pas le dupliquer ici.
-// « L'IA vous doit des comptes » : rendre des comptes (l'exigence) et les
-// comptes (les chiffres). Le clin d'œil de la marque tient dans ce double sens.
 
-export type HeroReadout = {
-  label: string;
-  // Cible du compteur : l'unique count-up autorisé (design-system §6).
-  value: number;
-  prefix: string;
-  suffix: string;
-  caption: string;
+export type HeroMapItem = {
+  // Catégorie mono en capitales, puis le bénéfice concret sur une ligne.
+  category: string;
+  line: string;
 };
 
 export type Hero = {
-  // Deux lignes, une par rendu : la seconde est tracée en creux (.text-hollow).
+  // Bandeau mono au-dessus du titre.
+  kicker: string;
+  // Deux temps : le premier plein, le second tracé en creux (.text-hollow).
   headlineSolid: string;
   headlineHollow: string;
   lede: string;
+  // Note mono à côté du CTA.
   reassurance: string;
-  note: string;
-  readout: HeroReadout;
-  axisY: string;
-  axisX: string;
-  baselineLabel: string;
-  prodLabel: string;
-  legendLabel: string;
-  traceAlt: string;
+  // Libellé de la carte (nom accessible de la liste + étiquette visible).
+  mapLabel: string;
+  mapItems: HeroMapItem[];
 };
 
 export const hero: Hero = {
-  headlineSolid: "L'IA vous doit",
-  headlineHollow: "des comptes.",
-  lede: "On chiffre le gain avant d'écrire une ligne de code, on livre en production, on mesure. Garanti par écrit.",
-  reassurance: "30 minutes. Gratuit. Un avis franc.",
-  note: "Vous repartez avec les deux ou trois endroits où l'IA peut créer de la valeur chez vous. Souvent là où vous ne l'attendiez pas.",
-  readout: {
-    label: "Dernier relevé",
-    value: 40,
-    prefix: "-",
-    suffix: " %",
-    caption: "de temps de traitement, exemple illustratif",
-  },
-  axisY: "Gain mesuré ↑",
-  axisX: "Temps →",
-  baselineLabel: "Si rien ne change",
-  prodLabel: "Mise en production",
-  legendLabel: "Relevé mensuel",
-  traceAlt:
-    "Courbe d'exemple : le gain reste à zéro jusqu'à la mise en production, puis monte par paliers à chaque relevé mensuel avant de se stabiliser, nettement au-dessus de la ligne si rien ne change.",
+  kicker: "Conseil IA pour les PME et ETI.",
+  headlineSolid: "L'IA va changer votre quotidien.",
+  headlineHollow: "On sait par où commencer.",
+  lede: "Produire plus vite, ouvrir un marché, automatiser ce qui vous pèse : on trouve ce que l'IA rend possible pour vous, et on le met en production.",
+  reassurance: "30 minutes, gratuit, sans engagement.",
+  mapLabel: "La carte des possibles",
+  mapItems: [
+    { category: "Productivité", line: "Vos devis chiffrés en minutes, pas en jours" },
+    { category: "Nouveaux marchés", line: "Votre offre en 12 langues" },
+    { category: "Service client", line: "Des réponses même à 3 h du matin" },
+    { category: "Compétences", line: "Vos données analysées, sans data scientist" },
+    { category: "Automatisation", line: "Relances et saisie en pilote automatique" },
+    { category: "Savoir-faire", line: "Vos archives, interrogeables en une question" },
+  ],
 };
