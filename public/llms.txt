@@ -1,0 +1,19 @@
+# Coucou IA
+
+Coucou IA est un cabinet de conseil et développement IA pour les PME françaises (10 à 250 salariés) et les ETI. Deux métiers complémentaires : l'audit et la stratégie IA (diagnostic de l'existant, cartographie des opportunités, business case chiffré, feuille de route) et le développement IA sur mesure (agents IA, RAG, automatisations, intégration aux outils existants). Le différenciant : le ROI garanti, un engagement écrit sur le résultat, pas une réflexion facturée sans système derrière. Le premier contact est un diagnostic gratuit de 30 minutes, sans engagement.
+
+## Pages
+
+- [Accueil](https://coucou-ia.fr/) : les deux offres, la méthode en quatre étapes, la garantie ROI, des cas d'usage concrets et les questions fréquentes.
+- [Mentions légales](https://coucou-ia.fr/mentions-legales) : identité de l'éditeur, siège social et informations légales de la société COUCOU IA.
+- [Confidentialité](https://coucou-ia.fr/confidentialite) : politique de confidentialité et traitement des données personnelles.
+
+## Faits clés
+
+- Services : audit & stratégie IA, développement IA sur mesure (agents IA, RAG, automatisations, intégrations).
+- Cible : PME de 10 à 250 salariés et ETI, en France.
+- Différenciant : ROI garanti, engagement écrit sur le résultat.
+- Premier contact : diagnostic gratuit de 30 minutes, sans engagement.
+- Contact : contact@coucou-ia.fr
+- SIREN : 100498070
+- Siège social : Nice, France.
