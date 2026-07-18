@@ -45,7 +45,7 @@ export function SiteFooter() {
             </nav>
           </div>
 
-          <Button render={<a href={bookingHref} />} size="default">
+          <Button nativeButton={false} render={<a href={bookingHref} />} size="default">
             {ctaLabel}
           </Button>
         </div>

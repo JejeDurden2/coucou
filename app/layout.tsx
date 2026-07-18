@@ -62,6 +62,11 @@ export default function RootLayout({
       className={`dark ${spaceGrotesk.variable} ${geistSans.variable} ${geistMono.variable}`}
     >
       <body className="bg-background text-foreground antialiased">
+        {/* No-JS escape: reveals SSR with inline opacity:0; this !important
+            stylesheet (only applied when JS is off) forces their final state. */}
+        <noscript>
+          <style>{`[data-reveal]{opacity:1 !important;transform:none !important}`}</style>
+        </noscript>
         <SiteHeader />
         {children}
         <SiteFooter />

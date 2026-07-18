@@ -65,7 +65,7 @@ export function SiteHeader() {
         </nav>
 
         <div className="flex items-center gap-2">
-          <Button render={<a href={bookingHref} />} size="default">
+          <Button nativeButton={false} render={<a href={bookingHref} />} size="default">
             {ctaLabel}
           </Button>
 
@@ -88,6 +88,7 @@ export function SiteHeader() {
                 {nav.map((link) => (
                   <SheetClose
                     key={link.href}
+                    nativeButton={false}
                     render={<a href={link.href} />}
                     className={cn(
                       linkClasses,

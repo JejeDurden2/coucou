@@ -17,7 +17,7 @@ export function Cta() {
             {finalCta.sub}
           </p>
           <div className="mt-10">
-            <Button render={<a href={bookingHref} />} size="lg">
+            <Button nativeButton={false} render={<a href={bookingHref} />} size="lg">
               {ctaLabel}
               <ArrowRight data-icon="inline-end" />
             </Button>

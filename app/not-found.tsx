@@ -30,11 +30,11 @@ export default function NotFound() {
         </p>
 
         <div className="mt-9 flex flex-col items-center justify-center gap-4 sm:flex-row">
-          <Button render={<a href={bookingHref} />} size="lg">
+          <Button nativeButton={false} render={<a href={bookingHref} />} size="lg">
             {ctaLabel}
             <ArrowRight data-icon="inline-end" />
           </Button>
-          <Button render={<Link href="/" />} variant="secondary" size="lg">
+          <Button nativeButton={false} render={<Link href="/" />} variant="secondary" size="lg">
             {notFound.homeLabel}
           </Button>
         </div>

@@ -31,7 +31,7 @@ export function Hero() {
       </div>
 
       <div className="relative mx-auto w-full max-w-[1200px] px-6">
-        <div className="max-w-[52rem]">
+        <div className="max-w-6xl">
           <ScrollReveal delay={0}>
             <p className="flex items-center gap-2.5 font-mono text-sm text-muted-foreground">
               <span aria-hidden className="size-2 shrink-0 rounded-sm bg-primary" />
@@ -40,7 +40,7 @@ export function Hero() {
           </ScrollReveal>
 
           <ScrollReveal delay={0.06}>
-            <h1 className="mt-6 text-balance font-display text-5xl leading-[1.02] font-bold tracking-[-0.03em] sm:text-6xl lg:text-7xl">
+            <h1 className="mt-6 text-balance font-display text-5xl leading-[1.02] font-bold tracking-[-0.03em] sm:text-[3.5rem]">
               {hero.headline}
             </h1>
           </ScrollReveal>
@@ -53,7 +53,7 @@ export function Hero() {
 
           <ScrollReveal delay={0.18}>
             <div className="mt-9 flex flex-col gap-4 sm:flex-row sm:items-center">
-              <Button render={<a href={bookingHref} />} size="lg">
+              <Button nativeButton={false} render={<a href={bookingHref} />} size="lg">
                 {ctaLabel}
                 <ArrowRight data-icon="inline-end" />
               </Button>
