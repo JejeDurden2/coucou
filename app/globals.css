@@ -131,3 +131,91 @@
     transparent 72%
   );
 }
+
+/* Hero « instrument » (§5): two-scale plotting grid, a fine 40px pitch under a
+   200px major line, fading out before the method strip. Hero only; the
+   guarantee section keeps .trace-grid. */
+.instrument-grid {
+  background-image:
+    linear-gradient(
+      to right,
+      color-mix(in oklch, var(--border) 65%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      color-mix(in oklch, var(--border) 65%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to right,
+      color-mix(in oklch, var(--border) 30%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      color-mix(in oklch, var(--border) 30%, transparent) 1px,
+      transparent 1px
+    );
+  background-size:
+    200px 200px,
+    200px 200px,
+    40px 40px,
+    40px 40px;
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    black 0%,
+    black 62%,
+    transparent 96%
+  );
+  mask-image: linear-gradient(to bottom, black 0%, black 62%, transparent 96%);
+}
+
+/* Ruler ticks over the hero method strip: one hairline every 72px. */
+.ruler-ticks {
+  background: repeating-linear-gradient(
+    to right,
+    color-mix(in oklch, var(--border) 80%, transparent) 0 1px,
+    transparent 1px 72px
+  );
+}
+
+/* Second headline line: hollow letterforms stroked from the foreground token.
+   Falls back to solid text where text-stroke is unsupported. */
+.text-hollow {
+  color: transparent;
+  -webkit-text-stroke: 1.5px var(--foreground);
+}
+@supports not (-webkit-text-stroke: 1px black) {
+  .text-hollow {
+    color: var(--foreground);
+  }
+}
+
+/* ROI trace sequence (§6): the path draws once on load, data points pop in
+   along it. Gated behind no-preference so reduced-motion users see the final,
+   fully drawn state. Per-point delays are set inline where the trace renders;
+   the readout card entrance reuses ScrollReveal. */
+@media (prefers-reduced-motion: no-preference) {
+  .trace-draw {
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
+    animation: draw-trace 1.4s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards;
+  }
+  .trace-pt {
+    opacity: 0;
+    animation: pt-in 0.2s ease-out forwards;
+  }
+}
+
+@keyframes draw-trace {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes pt-in {
+  to {
+    opacity: 1;
+  }
+}
