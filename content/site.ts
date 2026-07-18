@@ -21,14 +21,16 @@ export const ctaLabel = "Réserver un diagnostic";
 // Libelle du menu mobile (declencheur + titre du tiroir, pour l'accessibilite).
 export const menuLabel = "Menu";
 
-// TODO fondateur : remplacer par l'URL de reservation (Cal.com / Calendly).
-export const bookingHref = `mailto:${contactEmail}?subject=Diagnostic%20IA%20gratuit`;
+// URL de reservation publique Cal.com : le CTA unique pointe ici partout.
+export const bookingHref = "https://cal.com/jerome-desmares-izhobq/30min";
 
 // Ancres prefixees par "/" : depuis les pages legales, "#services" seul est un lien mort.
 export const nav: NavLink[] = [
   { label: "Services", href: "/#services" },
   { label: "Méthode", href: "/#methode" },
   { label: "Garantie", href: "/#garantie" },
+  { label: "Secteurs", href: "/secteurs" },
+  { label: "Cas d'usage", href: "/cas-usage" },
 ];
 
 export const footerLegalLinks: NavLink[] = [

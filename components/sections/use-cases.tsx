@@ -1,3 +1,6 @@
+import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
+
 import { Badge } from "@/components/ui/badge";
 import { ScrollReveal } from "@/components/scroll-reveal";
 import { useCases } from "@/content/use-cases";
@@ -20,10 +23,17 @@ export function UseCases() {
         <div className="mt-12 border-t border-border">
           {useCases.cases.map((useCase, index) => (
             <ScrollReveal key={useCase.title} delay={index * 0.04}>
-              <div className="grid grid-cols-1 gap-4 border-b border-border py-7 md:grid-cols-12 md:gap-8">
+              <Link
+                href={`/cas-usage/${useCase.slug}`}
+                className="group/uc grid grid-cols-1 gap-4 rounded-lg border-b border-border py-7 outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4 focus-visible:ring-offset-background md:grid-cols-12 md:gap-8"
+              >
                 <div className="md:col-span-7">
-                  <h3 className="font-display text-xl leading-snug font-medium tracking-[-0.01em]">
+                  <h3 className="flex items-center gap-2 font-display text-xl leading-snug font-medium tracking-[-0.01em]">
                     {useCase.title}
+                    <ArrowUpRight
+                      aria-hidden
+                      className="size-4 shrink-0 text-muted-foreground transition-colors group-hover/uc:text-foreground"
+                    />
                   </h3>
                   <p className="mt-2 max-w-[60ch] text-pretty leading-relaxed text-muted-foreground">
                     {useCase.description}
@@ -40,7 +50,7 @@ export function UseCases() {
                     {useCase.gain}
                   </p>
                 </div>
-              </div>
+              </Link>
             </ScrollReveal>
           ))}
         </div>
