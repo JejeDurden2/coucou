@@ -83,4 +83,49 @@
   html {
     @apply font-sans;
   }
+  /* Anchored navigation only; disabled for reduced-motion users (§6). */
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+}
+
+/* "Le tracé" (design-system §5): the two signature motifs, defined here so
+   components stay token-only. Used exactly twice (hero + guarantee metrics).
+   Colors derive from --border / --primary via color-mix; the radial mask is
+   pure alpha, so no brand color is ever hard-coded in a component. */
+.trace-grid {
+  background-image:
+    linear-gradient(
+      to right,
+      color-mix(in oklch, var(--border) 55%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      color-mix(in oklch, var(--border) 55%, transparent) 1px,
+      transparent 1px
+    );
+  background-size: 56px 56px;
+  -webkit-mask-image: radial-gradient(
+    ellipse 82% 72% at center,
+    black 0%,
+    black 34%,
+    transparent 78%
+  );
+  mask-image: radial-gradient(
+    ellipse 82% 72% at center,
+    black 0%,
+    black 34%,
+    transparent 78%
+  );
+}
+
+.trace-glow {
+  background: radial-gradient(
+    closest-side,
+    color-mix(in oklch, var(--primary) 12%, transparent),
+    transparent 72%
+  );
 }

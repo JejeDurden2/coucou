@@ -13,6 +13,7 @@ export type ServicesSection = {
   eyebrow: string;
   title: string;
   sub: string;
+  livrableLabel: string;
   offers: Service[];
 };
 
@@ -20,6 +21,7 @@ export const services: ServicesSection = {
   eyebrow: "Nos deux métiers",
   title: "Deux métiers, un seul objectif : votre ROI.",
   sub: "La vision stratégique d'un cabinet et les mains dans le code d'une équipe technique. Sous le même toit. Ni l'un sans l'autre.",
+  livrableLabel: "Livrable",
   offers: [
     {
       id: "audit",

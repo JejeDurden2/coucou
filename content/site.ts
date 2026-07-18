@@ -20,6 +20,9 @@ export const contactEmail = "contact@coucou-ia.fr";
 // Libelle du CTA. Unique sur tout le site : ne jamais creer de variante.
 export const ctaLabel = "Réserver un diagnostic";
 
+// Libelle du menu mobile (declencheur + titre du tiroir, pour l'accessibilite).
+export const menuLabel = "Menu";
+
 // TODO fondateur : remplacer par l'URL de reservation (Cal.com / Calendly) et confirmer l'email.
 export const bookingHref = `mailto:${contactEmail}?subject=Diagnostic%20IA%20gratuit`;
 
