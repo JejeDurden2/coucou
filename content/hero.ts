@@ -1,6 +1,6 @@
-// Section hero « la carte des possibles » : le client sait que l'IA compte,
-// mais pas par où commencer. Nous, si. La carte montre ce que l'IA rend
-// possible chez lui : six cas d'usage qui s'illuminent l'un après l'autre.
+// Section hero « la carte des possibles » : le client sait que l’IA compte,
+// mais pas par où commencer. Nous, si. La carte montre ce que l’IA rend
+// possible chez lui : six cas d’usage qui s’illuminent l’un après l’autre.
 // Le libellé du CTA vient de site.ts (ctaLabel) : ne pas le dupliquer ici.
 
 export type HeroMapItem = {
@@ -25,9 +25,9 @@ export type Hero = {
 
 export const hero: Hero = {
   kicker: "Conseil IA pour les PME et ETI.",
-  headlineSolid: "L'IA va changer votre quotidien.",
+  headlineSolid: "L’IA va changer votre quotidien.",
   headlineHollow: "On sait par où commencer.",
-  lede: "Produire plus vite, ouvrir un marché, automatiser ce qui vous pèse : on trouve ce que l'IA rend possible pour vous, et on le met en production.",
+  lede: "Produire plus vite, ouvrir un marché, automatiser ce qui vous pèse : on trouve ce que l’IA rend possible pour vous, et on le met en production.",
   reassurance: "30 minutes, gratuit, sans engagement.",
   mapLabel: "La carte des possibles",
   mapItems: [

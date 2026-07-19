@@ -19,7 +19,7 @@ export function Breadcrumb({
   className?: string;
 }) {
   return (
-    <nav aria-label="Fil d'ariane" className={className}>
+    <nav aria-label="Fil d’ariane" className={className}>
       <ol className="flex flex-wrap items-center gap-2 font-mono text-xs text-muted-foreground">
         {items.map((item, index) => {
           const last = index === items.length - 1;

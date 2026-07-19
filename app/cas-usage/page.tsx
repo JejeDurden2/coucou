@@ -21,7 +21,7 @@ export default function CasUsageHubPage() {
   return (
     <main id="contenu">
       <HubSection
-        breadcrumbLabel="Cas d'usage"
+        breadcrumbLabel="Cas d’usage"
         h1={casUsageHub.h1}
         intro={casUsageHub.intro}
         items={items}

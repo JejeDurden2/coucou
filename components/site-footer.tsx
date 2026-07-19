@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { Button } from "@/components/ui/button";
+import { FooterYear } from "@/components/footer-year";
 import { LogoMark } from "@/components/logo-mark";
 import {
   bookingHref,
@@ -15,8 +16,6 @@ const linkClasses =
   "rounded-sm text-sm text-muted-foreground outline-none transition-colors hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4 focus-visible:ring-offset-background";
 
 export function SiteFooter() {
-  const year = new Date().getFullYear();
-
   return (
     <footer className="border-t border-border">
       <div className="mx-auto max-w-[1200px] px-6 py-16">
@@ -32,14 +31,14 @@ export function SiteFooter() {
           </div>
 
           <div className="flex flex-col gap-8 sm:flex-row sm:gap-16 lg:gap-20">
-            <nav className="flex flex-col gap-3">
+            <nav aria-label="Pages du site" className="flex flex-col gap-3">
               {nav.map((link) => (
                 <Link key={link.href} href={link.href} className={linkClasses}>
                   {link.label}
                 </Link>
               ))}
             </nav>
-            <nav className="flex flex-col gap-3">
+            <nav aria-label="Informations légales" className="flex flex-col gap-3">
               {footerLegalLinks.map((link) => (
                 <Link key={link.href} href={link.href} className={linkClasses}>
                   {link.label}
@@ -55,7 +54,7 @@ export function SiteFooter() {
 
         <div className="mt-14 border-t border-border pt-6">
           <p className="font-mono text-xs tabular-nums text-muted-foreground">
-            © {year} {siteName}
+            © <FooterYear /> {siteName}
           </p>
         </div>
       </div>

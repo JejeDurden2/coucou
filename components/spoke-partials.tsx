@@ -6,8 +6,9 @@ import { Breadcrumb, type Crumb } from "@/components/breadcrumb";
 import { MetricBlock } from "@/components/metric-block";
 import { ScrollReveal } from "@/components/scroll-reveal";
 import { bookingHref, ctaLabel } from "@/content/site";
+import { spokes } from "@/content/spokes";
 
-// Blocks shared by both spoke templates (secteur + cas d'usage). Composed from
+// Blocks shared by both spoke templates (secteur + cas d’usage). Composed from
 // the existing primitives; tokens only. Kept partial (not full sections) so the
 // two page templates stay readable.
 
@@ -72,7 +73,7 @@ export function BusinessCaseBlock({
           <ScrollReveal className="relative grid grid-cols-1 gap-8 p-8 lg:grid-cols-2 lg:gap-12 lg:p-12">
             <div>
               <span className="font-mono text-xs uppercase tracking-[0.12em] text-muted-foreground">
-                Business case
+                {spokes.businessCaseLabel}
               </span>
               <p className="mt-4 max-w-[52ch] text-pretty text-lg leading-relaxed text-foreground">
                 {context}
@@ -100,12 +101,10 @@ export function MethodRecap() {
         <ScrollReveal className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between lg:gap-16">
           <div className="max-w-[46rem]">
             <h2 className="text-balance font-display text-2xl leading-snug font-medium tracking-[-0.01em] lg:text-[1.75rem]">
-              Notre méthode, du diagnostic à la production
+              {spokes.methodRecap.title}
             </h2>
             <p className="mt-4 max-w-[60ch] text-pretty leading-relaxed text-muted-foreground">
-              On part de votre activité, on chiffre le retour attendu, puis on
-              livre un système en production, mesuré sur ses résultats. Le ROI
-              est garanti, pas seulement promis.
+              {spokes.methodRecap.body}
             </p>
           </div>
           <div className="flex flex-col gap-3 sm:flex-row">
@@ -115,7 +114,7 @@ export function MethodRecap() {
               variant="secondary"
               size="default"
             >
-              La méthode en détail
+              {spokes.methodRecap.methodLink}
             </Button>
             <Button
               nativeButton={false}
@@ -123,7 +122,7 @@ export function MethodRecap() {
               variant="secondary"
               size="default"
             >
-              La garantie ROI
+              {spokes.methodRecap.guaranteeLink}
             </Button>
           </div>
         </ScrollReveal>

@@ -33,7 +33,7 @@ export function pageMetadata({
   };
 }
 
-// Résout des slugs croisés vers l'autre collection (secteur <-> cas d'usage).
+// Résout des slugs croisés vers l’autre collection (secteur <-> cas d’usage).
 // Un slug sans correspondance disparaît silencieusement : jamais de lien mort.
 export function resolveRelated(
   slugs: string[],

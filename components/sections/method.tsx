@@ -21,8 +21,12 @@ export function Method() {
           {method.steps.map((step, index) => {
             const last = index === method.steps.length - 1;
             return (
-              <ScrollReveal key={step.number} delay={index * 0.05}>
-                <li className="relative grid grid-cols-[3.5rem_1fr] gap-x-6 pb-12 last:pb-0 lg:grid-cols-[5rem_1fr] lg:gap-x-10">
+              // The reveal wrapper lives inside the li: an ol only accepts li children.
+              <li key={step.number} className="relative pb-12 last:pb-0">
+                <ScrollReveal
+                  delay={index * 0.05}
+                  className="grid grid-cols-[3.5rem_1fr] gap-x-6 lg:grid-cols-[5rem_1fr] lg:gap-x-10"
+                >
                   {!last ? (
                     <span
                       aria-hidden
@@ -52,8 +56,8 @@ export function Method() {
                       {step.detail}
                     </p>
                   </div>
-                </li>
-              </ScrollReveal>
+                </ScrollReveal>
+              </li>
             );
           })}
         </ol>

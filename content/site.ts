@@ -9,7 +9,7 @@ export type NavLink = {
 export const siteName = "Coucou IA";
 
 export const tagline =
-  "L'IA va changer votre quotidien. On sait par où commencer, et on s'engage sur le ROI.";
+  "L’IA va changer votre quotidien. On sait par où commencer, et on s’engage sur le ROI.";
 
 export const siteUrl = "https://coucou-ia.com";
 
@@ -18,7 +18,7 @@ export const contactEmail = "jerome@coucou-ia.com";
 // Libelle du CTA. Unique sur tout le site : ne jamais creer de variante.
 export const ctaLabel = "Réserver un diagnostic";
 
-// Libelle du menu mobile (declencheur + titre du tiroir, pour l'accessibilite).
+// Libelle du menu mobile (declencheur + titre du tiroir, pour l’accessibilite).
 export const menuLabel = "Menu";
 
 // URL de reservation publique Cal.com : le CTA unique pointe ici partout.
@@ -30,7 +30,7 @@ export const nav: NavLink[] = [
   { label: "Méthode", href: "/#methode" },
   { label: "Garantie", href: "/#garantie" },
   { label: "Secteurs", href: "/secteurs" },
-  { label: "Cas d'usage", href: "/cas-usage" },
+  { label: "Cas d’usage", href: "/cas-usage" },
 ];
 
 export const footerLegalLinks: NavLink[] = [
@@ -38,7 +38,7 @@ export const footerLegalLinks: NavLink[] = [
   { label: "Confidentialité", href: "/confidentialite" },
 ];
 
-// Positionnement d'une ligne pour le pied de page.
+// Positionnement d’une ligne pour le pied de page.
 export const footerPositioning =
   "Conseil et développement IA pour les PME et ETI françaises. Un ROI mesurable, garanti.";
 

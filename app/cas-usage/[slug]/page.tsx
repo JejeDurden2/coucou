@@ -38,11 +38,11 @@ export default async function CasUsageSpokePage({ params }: Params) {
     "/secteurs"
   );
 
-  // Un seul fil d'ariane : le <Breadcrumb> visible et le JSON-LD BreadcrumbList
-  // partagent ce tableau. Dernier maillon sans href : c'est la page courante.
+  // Un seul fil d’ariane : le <Breadcrumb> visible et le JSON-LD BreadcrumbList
+  // partagent ce tableau. Dernier maillon sans href : c’est la page courante.
   const breadcrumb = [
     { label: "Accueil", href: "/" },
-    { label: "Cas d'usage", href: "/cas-usage" },
+    { label: "Cas d’usage", href: "/cas-usage" },
     { label: page.name },
   ];
 

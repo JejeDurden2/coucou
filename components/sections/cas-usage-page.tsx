@@ -11,8 +11,9 @@ import { Cta } from "@/components/sections/cta";
 import { FaqList } from "@/components/sections/faq";
 import type { Crumb } from "@/components/breadcrumb";
 import type { CasUsagePage } from "@/content/cas-usage-pages";
+import { spokes } from "@/content/spokes";
 
-// Cas d'usage spoke template. The hero intro carries the douleur (per the type)
+// Cas d’usage spoke template. The hero intro carries the douleur (per the type)
 // and whyNotSaas + prerequisites are the unique content this playbook requires.
 export function CasUsagePageTemplate({
   page,
@@ -32,13 +33,13 @@ export function CasUsagePageTemplate({
         <div className="mx-auto max-w-[1200px] px-6 py-16 lg:py-20">
           <ScrollReveal className="max-w-[46rem]">
             <h2 className="text-balance font-display text-2xl leading-snug font-medium tracking-[-0.01em] lg:text-[1.75rem]">
-              Avant, après
+              {spokes.casUsage.beforeAfterTitle}
             </h2>
           </ScrollReveal>
           <div className="mt-10 grid grid-cols-1 gap-8 md:grid-cols-2 md:gap-12">
             <div>
               <span className="font-mono text-xs uppercase tracking-[0.12em] text-muted-foreground">
-                {"Aujourd'hui"}
+                {spokes.casUsage.beforeLabel}
               </span>
               <ul className="mt-5 flex flex-col gap-4">
                 {page.before.map((step) => (
@@ -57,7 +58,7 @@ export function CasUsagePageTemplate({
             </div>
             <div className="md:border-l md:border-border md:pl-12">
               <span className="font-mono text-xs uppercase tracking-[0.12em] text-primary">
-                Avec le système en production
+                {spokes.casUsage.afterLabel}
               </span>
               <ul className="mt-5 flex flex-col gap-4">
                 {page.after.map((step) => (
@@ -83,7 +84,7 @@ export function CasUsagePageTemplate({
         <div className="mx-auto max-w-[1200px] px-6 py-16 lg:py-20">
           <ScrollReveal className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-16">
             <h2 className="text-balance font-display text-2xl leading-snug font-medium tracking-[-0.01em] lg:col-span-5 lg:text-[1.75rem]">
-              Pourquoi un outil générique ne suffit pas
+              {spokes.casUsage.whyNotSaasTitle}
             </h2>
             <p className="max-w-[62ch] text-pretty text-lg leading-relaxed text-muted-foreground lg:col-span-7">
               {page.whyNotSaas}
@@ -97,7 +98,7 @@ export function CasUsagePageTemplate({
         <div className="mx-auto max-w-[1200px] px-6 py-16 lg:py-20">
           <ScrollReveal className="max-w-[46rem]">
             <h2 className="text-balance font-display text-2xl leading-snug font-medium tracking-[-0.01em] lg:text-[1.75rem]">
-              Ce dont nous avons besoin de votre côté
+              {spokes.casUsage.prerequisitesTitle}
             </h2>
           </ScrollReveal>
           <ul className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -126,9 +127,9 @@ export function CasUsagePageTemplate({
 
       <MethodRecap />
 
-      <RelatedLinks heading="Secteurs concernés" links={relatedSecteurs} />
+      <RelatedLinks heading={spokes.casUsage.relatedHeading} links={relatedSecteurs} />
 
-      <FaqList title="Questions fréquentes" items={page.faq} />
+      <FaqList title={spokes.faqTitle} items={page.faq} />
 
       <Cta />
     </>

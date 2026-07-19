@@ -11,9 +11,10 @@ import { Cta } from "@/components/sections/cta";
 import { FaqList } from "@/components/sections/faq";
 import type { Crumb } from "@/components/breadcrumb";
 import type { SecteurPage } from "@/content/secteurs";
+import { spokes } from "@/content/spokes";
 
 // Secteur spoke template. Order follows docs/programmatic-seo.md §4: hero,
-// douleurs, cas d'usage sectoriels, business case, conformité, méthode, FAQ, CTA.
+// douleurs, cas d’usage sectoriels, business case, conformité, méthode, FAQ, CTA.
 export function SecteurPageTemplate({
   page,
   breadcrumb,
@@ -32,7 +33,7 @@ export function SecteurPageTemplate({
         <div className="mx-auto max-w-[1200px] px-6 py-16 lg:py-20">
           <ScrollReveal className="grid grid-cols-1 gap-10 lg:grid-cols-2 lg:gap-16">
             <h2 className="text-balance font-display text-2xl leading-snug font-medium tracking-[-0.01em] lg:text-[1.75rem]">
-              {"Ce qui vous coûte du temps aujourd'hui"}
+              {spokes.secteur.painsTitle}
             </h2>
             <ul className="flex flex-col gap-6">
               {page.painPoints.map((pain) => (
@@ -48,12 +49,12 @@ export function SecteurPageTemplate({
         </div>
       </section>
 
-      {/* Cas d'usage sectoriels. */}
+      {/* Cas d’usage sectoriels. */}
       <section className="border-t border-border">
         <div className="mx-auto max-w-[1200px] px-6 py-16 lg:py-20">
           <ScrollReveal className="max-w-[46rem]">
             <h2 className="text-balance font-display text-2xl leading-snug font-medium tracking-[-0.01em] lg:text-[1.75rem]">
-              {"Où l'IA crée de la valeur chez vous"}
+              {spokes.secteur.useCasesTitle}
             </h2>
           </ScrollReveal>
           <div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-2">
@@ -102,9 +103,9 @@ export function SecteurPageTemplate({
 
       <MethodRecap />
 
-      <RelatedLinks heading="Cas d'usage associés" links={relatedCasUsage} />
+      <RelatedLinks heading={spokes.secteur.relatedHeading} links={relatedCasUsage} />
 
-      <FaqList title="Questions fréquentes" items={page.faq} />
+      <FaqList title={spokes.faqTitle} items={page.faq} />
 
       <Cta />
     </>

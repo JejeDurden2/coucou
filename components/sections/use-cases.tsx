@@ -29,7 +29,9 @@ export function UseCases() {
               >
                 <div className="md:col-span-7">
                   <h3 className="flex items-center gap-2 font-display text-xl leading-snug font-medium tracking-[-0.01em]">
-                    {useCase.title}
+                    <span className="underline-offset-4 group-hover/uc:underline">
+                      {useCase.title}
+                    </span>
                     <ArrowUpRight
                       aria-hidden
                       className="size-4 shrink-0 text-muted-foreground transition-colors group-hover/uc:text-foreground"

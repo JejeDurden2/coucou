@@ -8,9 +8,11 @@ import { hero } from "@/content/hero";
 // « La carte des possibles » : a fixed 532x540 composition scaled to fit its
 // column (ResizeObserver, transform-origin top center). A decorative SVG draws
 // the origin, faint rays and the six arrows; the six cards are real text (a ul)
-// so screen readers get the content. Every 2.6s (first switch after 1.3s) the
-// active card cycles, lighting its lime arrow + outline. Reduced motion: no
-// cycle (card 0 stays lit) and entrance keyframes are gated off in globals.css.
+// so screen readers get the content. The active card cycles once through the
+// six (first switch after 1.3s, then every 2.6s), lighting its lime arrow +
+// outline, and rests on the first: motion stays finite (design-system §6).
+// Reduced motion: no cycle (card 0 stays lit) and entrance keyframes are gated
+// off in globals.css.
 
 // Geometry is presentation, not content: it lives here, next to the SVG.
 const ORIGIN = { x: -20, y: 270 };
@@ -60,7 +62,7 @@ export function PossiblesMap() {
   const [active, setActive] = useState(0);
   const reducedMotion = useReducedMotion();
 
-  // Scale-to-fit: match the design's _fit(), guarding the hidden (width 0) case.
+  // Scale-to-fit: match the design’s _fit(), guarding the hidden (width 0) case.
   useEffect(() => {
     const outer = outerRef.current;
     if (!outer) return;
@@ -71,12 +73,18 @@ export function PossiblesMap() {
     return () => ro.disconnect();
   }, []);
 
-  // Cycle the active card. Reduced motion keeps card 0 lit, no timers.
+  // Cycle the active card once through the six, then stop back on the first
+  // (no infinite loop). Reduced motion keeps card 0 lit, no timers.
   useEffect(() => {
     if (reducedMotion) return;
+    let ticks = 0;
     let interval: ReturnType<typeof setInterval>;
     const start = setTimeout(() => {
-      interval = setInterval(() => setActive((a) => (a + 1) % 6), 2600);
+      interval = setInterval(() => {
+        ticks += 1;
+        setActive(ticks % 6);
+        if (ticks === 6) clearInterval(interval);
+      }, 2600);
     }, 1300);
     return () => {
       clearTimeout(start);

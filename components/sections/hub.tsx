@@ -3,6 +3,7 @@ import { ArrowUpRight } from "lucide-react";
 
 import { Breadcrumb } from "@/components/breadcrumb";
 import { ScrollReveal } from "@/components/scroll-reveal";
+import { spokes } from "@/content/spokes";
 
 // Hub template (/secteurs, /cas-usage): H1 + intro, then a card grid to the
 // spokes. An empty items list renders the intro with no cards, no crash, since
@@ -49,7 +50,7 @@ export function HubSection({
                   {item.description}
                 </p>
                 <span className="mt-auto inline-flex items-center gap-1.5 pt-2 font-mono text-xs uppercase tracking-[0.1em] text-primary">
-                  Découvrir
+                  {spokes.hubCardCta}
                   <ArrowUpRight aria-hidden className="size-3.5" />
                 </span>
               </Link>

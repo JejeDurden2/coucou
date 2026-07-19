@@ -51,7 +51,7 @@ export function SiteHeader() {
           <span>{siteName}</span>
         </Link>
 
-        <nav className="hidden items-center gap-8 lg:flex">
+        <nav aria-label="Navigation principale" className="hidden items-center gap-8 lg:flex">
           {nav.map((link) => (
             <Link
               key={link.href}

@@ -9,7 +9,7 @@ import { notFound } from "@/content/not-found";
 export const metadata: Metadata = {
   title: "Page introuvable",
   description:
-    "Cette page n'existe pas ou plus. Retournez à l'accueil de Coucou IA.",
+    "Cette page n’existe pas ou plus. Retournez à l’accueil de Coucou IA.",
 };
 
 export default function NotFound() {

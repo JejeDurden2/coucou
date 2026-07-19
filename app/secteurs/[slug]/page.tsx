@@ -38,8 +38,8 @@ export default async function SecteurSpokePage({ params }: Params) {
     "/cas-usage"
   );
 
-  // Un seul fil d'ariane : le <Breadcrumb> visible et le JSON-LD BreadcrumbList
-  // partagent ce tableau. Dernier maillon sans href : c'est la page courante.
+  // Un seul fil d’ariane : le <Breadcrumb> visible et le JSON-LD BreadcrumbList
+  // partagent ce tableau. Dernier maillon sans href : c’est la page courante.
   const breadcrumb = [
     { label: "Accueil", href: "/" },
     { label: "Secteurs", href: "/secteurs" },
