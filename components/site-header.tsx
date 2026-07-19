@@ -15,7 +15,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { bookingHref, ctaLabel, menuLabel, nav, siteName } from "@/content/site";
+import { bookingUrl, ctaLabel, menuLabel, nav, siteName } from "@/content/site";
 
 const linkClasses =
   "rounded-sm outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4 focus-visible:ring-offset-background";
@@ -70,7 +70,7 @@ export function SiteHeader() {
         </nav>
 
         <div className="flex items-center gap-2">
-          <Button nativeButton={false} render={<a href={bookingHref} />} variant="secondary" size="default">
+          <Button nativeButton={false} render={<a href={bookingUrl("header")} />} variant="secondary" size="default">
             {ctaLabel}
           </Button>
 

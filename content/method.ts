@@ -19,7 +19,7 @@ export const method: MethodSection = {
   steps: [
     {
       number: "01",
-      title: "Diagnostic",
+      title: "Repérage",
       description:
         "On démarre par 30 minutes, gratuites et sans engagement. On regarde votre activité et on repère où l’IA peut vraiment vous faire gagner du temps ou de l’argent. Si rien ne tient la route chez vous, on vous le dit.",
       detail: "30 minutes, gratuit, sans engagement.",

@@ -3,7 +3,7 @@ import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ScrollReveal } from "@/components/scroll-reveal";
 import { finalCta } from "@/content/cta";
-import { bookingHref, ctaLabel } from "@/content/site";
+import { bookingUrl, ctaLabel } from "@/content/site";
 
 export function Cta() {
   return (
@@ -17,7 +17,7 @@ export function Cta() {
             {finalCta.sub}
           </p>
           <div className="mt-10">
-            <Button nativeButton={false} render={<a href={bookingHref} />} size="lg">
+            <Button nativeButton={false} render={<a href={bookingUrl("cta-final")} />} size="lg">
               {ctaLabel}
               <ArrowRight data-icon="inline-end" />
             </Button>

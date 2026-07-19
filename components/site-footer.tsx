@@ -1,10 +1,12 @@
 import Link from "next/link";
 
+import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { FooterYear } from "@/components/footer-year";
 import { LogoMark } from "@/components/logo-mark";
 import {
-  bookingHref,
+  bookingUrl,
+  contactEmail,
   ctaLabel,
   footerLegalLinks,
   footerPositioning,
@@ -28,6 +30,12 @@ export function SiteFooter() {
             <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
               {footerPositioning}
             </p>
+            <a
+              href={`mailto:${contactEmail}`}
+              className={cn(linkClasses, "mt-4 inline-block")}
+            >
+              {contactEmail}
+            </a>
           </div>
 
           <div className="flex flex-col gap-8 sm:flex-row sm:gap-16 lg:gap-20">
@@ -47,7 +55,7 @@ export function SiteFooter() {
             </nav>
           </div>
 
-          <Button nativeButton={false} render={<a href={bookingHref} />} size="default">
+          <Button nativeButton={false} render={<a href={bookingUrl("footer")} />} size="default">
             {ctaLabel}
           </Button>
         </div>

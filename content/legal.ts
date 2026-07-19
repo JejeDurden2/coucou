@@ -76,7 +76,7 @@ export const confidentialite: LegalPage = {
     {
       heading: "Données que vous nous transmettez",
       paragraphs: [
-        "Si vous nous écrivez pour réserver un diagnostic ou poser une question, nous recevons les informations que vous choisissez de nous communiquer (nom, adresse e-mail, message).",
+        "Si vous nous écrivez pour réserver un repérage ou poser une question, nous recevons les informations que vous choisissez de nous communiquer (nom, adresse e-mail, message).",
         "Ces données servent uniquement à vous répondre et à organiser l’échange. Nous ne les utilisons à aucune autre fin et ne les revendons jamais.",
         "Elles sont conservées le temps nécessaire au traitement de votre demande, puis supprimées ou archivées conformément à nos obligations légales.",
       ],

@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Breadcrumb, type Crumb } from "@/components/breadcrumb";
 import { MetricBlock } from "@/components/metric-block";
 import { ScrollReveal } from "@/components/scroll-reveal";
-import { bookingHref, ctaLabel } from "@/content/site";
+import { bookingUrl, ctaLabel } from "@/content/site";
 import { spokes } from "@/content/spokes";
 
 // Blocks shared by both spoke templates (secteur + cas d’usage). Composed from
@@ -36,7 +36,7 @@ export function SpokeHero({
           <div className="mt-9">
             <Button
               nativeButton={false}
-              render={<a href={bookingHref} />}
+              render={<a href={bookingUrl("spoke-hero")} />}
               size="lg"
             >
               {ctaLabel}

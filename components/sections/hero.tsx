@@ -6,7 +6,7 @@ import { PossiblesMap } from "@/components/possibles-map";
 import { ScrollReveal } from "@/components/scroll-reveal";
 import { cn } from "@/lib/utils";
 import { hero } from "@/content/hero";
-import { bookingHref, ctaLabel } from "@/content/site";
+import { bookingUrl, ctaLabel } from "@/content/site";
 
 // Hero « la carte des possibles »: a flow-field canvas, one ambient violet radial
 // and four corner marks frame the viewport. The left column carries the pitch;
@@ -65,7 +65,7 @@ export function Hero() {
 
           <ScrollReveal delay={0.18}>
             <div className="mt-9 flex flex-col gap-4 sm:flex-row sm:items-center">
-              <Button nativeButton={false} render={<a href={bookingHref} />} size="lg">
+              <Button nativeButton={false} render={<a href={bookingUrl("hero")} />} size="lg">
                 {ctaLabel}
                 <ArrowRight data-icon="inline-end" />
               </Button>
@@ -74,6 +74,24 @@ export function Hero() {
               </span>
             </div>
           </ScrollReveal>
+
+          {/* La carte des possibles est cachée sous lg : ces six items portent
+              le copy le plus concret du hero. Liste statique (aucune animation),
+              rendue serveur, placée après le CTA pour ne pas le repousser hors
+              de l’écran sur le hero min-h-svh. */}
+          <ul className="mt-10 border-t border-border lg:hidden">
+            {hero.mapItems.map((item) => (
+              <li
+                key={item.category}
+                className="flex flex-col gap-1 border-b border-border py-3"
+              >
+                <span className="font-mono text-xs tracking-[0.12em] text-muted-foreground uppercase">
+                  {item.category}
+                </span>
+                <span className="text-foreground">{item.line}</span>
+              </li>
+            ))}
+          </ul>
         </div>
 
         <div className="hidden lg:block">

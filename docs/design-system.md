@@ -129,7 +129,7 @@ Principles: motion communicates hierarchy, sequence, or feedback, never decorati
 ## 7. Component specs
 
 **Button** (shadcn `Button`, extend via `cva` variants, don't hand-style):
-- `primary` (default): `bg-primary text-primary-foreground`, `rounded-lg`, `font-medium`. Hover `-translate-y-px` plus subtle blue glow; active `scale-[0.98]`. The `Réserver un diagnostic` CTA.
+- `primary` (default): `bg-primary text-primary-foreground`, `rounded-lg`, `font-medium`. Hover `-translate-y-px` plus subtle blue glow; active `scale-[0.98]`. The `Réserver mon repérage gratuit` CTA.
 - `secondary`: `bg-secondary text-foreground border border-border`, hover `bg-accent`.
 - `ghost`: transparent, hover `bg-accent`.
 - `link`: blue text, underline on hover.

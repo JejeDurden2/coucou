@@ -28,7 +28,7 @@ export const hero: Hero = {
   headlineSolid: "L’IA va changer votre quotidien.",
   headlineHollow: "On sait par où commencer.",
   lede: "Produire plus vite, ouvrir un marché, automatiser ce qui vous pèse : on trouve ce que l’IA rend possible pour vous, et on le met en production.",
-  reassurance: "30 minutes, gratuit, sans engagement.",
+  reassurance: "30 minutes, sans engagement.",
   mapLabel: "La carte des possibles",
   mapItems: [
     { category: "Productivité", line: "Vos devis chiffrés en minutes, pas en jours" },

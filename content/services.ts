@@ -20,7 +20,7 @@ export type ServicesSection = {
 export const services: ServicesSection = {
   eyebrow: "Nos deux métiers",
   title: "Deux métiers, un seul objectif : votre ROI.",
-  sub: "La vision stratégique d’un cabinet, les mains dans le code. Un seul interlocuteur du diagnostic à la production : rien ne se perd en route.",
+  sub: "La vision stratégique d’un cabinet, les mains dans le code. Un seul interlocuteur du repérage à la production : rien ne se perd en route.",
   livrableLabel: "Livrable",
   offers: [
     {
@@ -30,7 +30,7 @@ export const services: ServicesSection = {
       description:
         "On part de votre activité, pas de la techno. On regarde vos process, vos données et vos irritants, puis on chiffre le retour attendu de chaque opportunité.",
       deliverables: [
-        "Diagnostic de l’existant : process, données et outils déjà en place",
+        "État des lieux : process, données et outils déjà en place",
         "Votre carte des possibles : les opportunités IA classées par impact et faisabilité",
         "Business case chiffré pour chaque piste prioritaire (ROI attendu)",
         "Feuille de route IA priorisée, réaliste pour vos équipes",
@@ -44,7 +44,7 @@ export const services: ServicesSection = {
       title: "Développement IA sur mesure",
       hook: "On construit le système, on le branche sur vos outils, on le met en production.",
       description:
-        "Agents IA, RAG, automatisations : on développe ce dont le diagnostic a prouvé la valeur. Intégré à vos outils, sécurisé, mesuré sur ses résultats. Pas un POC de démo.",
+        "Agents IA, RAG, automatisations : on développe ce dont le business case a prouvé la valeur. Intégré à vos outils, sécurisé, mesuré sur ses résultats. Pas un POC de démo.",
       deliverables: [
         "Agents IA qui exécutent vos tâches de bout en bout",
         "Systèmes RAG : l’IA répond à partir de VOS documents et données",

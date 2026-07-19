@@ -20,7 +20,7 @@ export const useCases: UseCasesSection = {
   title: "Cinq exemples concrets. Le vôtre reste à écrire.",
   sub: "Voici où l’IA fait gagner du temps dans des entreprises comme la vôtre.",
   disclaimer:
-    "Exemples illustratifs. Chaque chiffre dépend de votre contexte : le vrai, c’est le business case de VOTRE diagnostic qui l’établit.",
+    "Exemples illustratifs. Chaque chiffre dépend de votre contexte : le vrai, c’est le business case de VOTRE repérage qui l’établit.",
   cases: [
     {
       title: "Réponse aux appels d’offres",

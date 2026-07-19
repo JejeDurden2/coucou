@@ -16,13 +16,17 @@ export const siteUrl = "https://coucou-ia.com";
 export const contactEmail = "jerome@coucou-ia.com";
 
 // Libelle du CTA. Unique sur tout le site : ne jamais creer de variante.
-export const ctaLabel = "Réserver un diagnostic";
+export const ctaLabel = "Réserver mon repérage gratuit";
 
 // Libelle du menu mobile (declencheur + titre du tiroir, pour l’accessibilite).
 export const menuLabel = "Menu";
 
 // URL de reservation publique Cal.com : le CTA unique pointe ici partout.
-export const bookingHref = "https://cal.com/jerome-desmares-izhobq/30min";
+const bookingHref = "https://cal.com/jerome-desmares-izhobq/30min";
+
+// ponytail: attribution par emplacement via UTM (visible cote Cal.com), zero JS client.
+export const bookingUrl = (placement: string) =>
+  `${bookingHref}?utm_source=site&utm_medium=cta&utm_content=${placement}`;
 
 // Ancres prefixees par "/" : depuis les pages legales, "#services" seul est un lien mort.
 export const nav: NavLink[] = [
@@ -43,4 +47,4 @@ export const footerPositioning =
 
 // Meta description (~145 caracteres, mots-cles en tete : conseil IA / PME / ETI).
 export const description =
-  "Conseil IA pour PME et ETI : on trouve ce que l’IA rend possible chez vous et on le met en production. Business case chiffré, diagnostic gratuit.";
+  "Conseil IA pour PME et ETI : on trouve ce que l’IA rend possible chez vous et on le met en production. Business case chiffré, repérage gratuit.";

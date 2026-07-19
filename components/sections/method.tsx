@@ -1,6 +1,11 @@
+import { ArrowRight } from "lucide-react";
+
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { ScrollReveal } from "@/components/scroll-reveal";
+import { hero } from "@/content/hero";
 import { method } from "@/content/method";
+import { bookingUrl, ctaLabel } from "@/content/site";
 
 export function Method() {
   return (
@@ -61,6 +66,18 @@ export function Method() {
             );
           })}
         </ol>
+
+        {/* L’étape 01 est le repérage : c’est ici, après la méthode, le point
+            de décision naturel. Même bouton que le hero, même micro-note. */}
+        <ScrollReveal className="mt-14 flex flex-col items-start gap-4 sm:flex-row sm:items-center lg:mt-16">
+          <Button nativeButton={false} render={<a href={bookingUrl("methode")} />} size="lg">
+            {ctaLabel}
+            <ArrowRight data-icon="inline-end" />
+          </Button>
+          <span className="font-mono text-sm text-foreground-dim">
+            {hero.reassurance}
+          </span>
+        </ScrollReveal>
       </div>
     </section>
   );

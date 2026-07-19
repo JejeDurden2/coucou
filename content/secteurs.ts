@@ -66,7 +66,7 @@ export const secteurs: SecteurPage[] = [
     name: "Expertise comptable",
     metaTitle: "IA pour cabinet comptable : cas d’usage et ROI | Coucou IA",
     metaDescription:
-      "IA pour cabinet comptable : pré-affectation des écritures, liasses fiscales, réponses clients. ROI chiffré avant engagement. Diagnostic gratuit.",
+      "IA pour cabinet comptable : pré-affectation des écritures, liasses fiscales, réponses clients. ROI chiffré avant engagement. Repérage gratuit.",
     h1: "IA pour cabinet comptable : moins de saisie, plus de conseil",
     intro:
       "Entre la saisie qui s’accumule et la période fiscale qui arrive toujours trop vite, vos collaborateurs n’ont plus le temps de faire ce pour quoi les clients vous paient vraiment : conseiller.",
@@ -124,7 +124,7 @@ export const secteurs: SecteurPage[] = [
       {
         question: "Est-ce compatible avec notre logiciel de production comptable ?",
         answer:
-          "Le système s’intègre à vos outils existants, il ne les remplace pas. Le diagnostic identifie précisément où l’IA se branche dans votre chaîne de production actuelle.",
+          "Le système s’intègre à vos outils existants, il ne les remplace pas. Le repérage identifie précisément où l’IA se branche dans votre chaîne de production actuelle.",
       },
       {
         question: "Quel retour sur investissement avant qu’on s’engage ?",
@@ -144,7 +144,7 @@ export const secteurs: SecteurPage[] = [
     name: "Cabinets juridiques",
     metaTitle: "IA pour cabinet d’avocats : cas d’usage et ROI | Coucou IA",
     metaDescription:
-      "IA pour cabinet d’avocats : recherche documentaire, premiers jets de conclusions, suivi des délais. ROI chiffré avant engagement. Diagnostic gratuit.",
+      "IA pour cabinet d’avocats : recherche documentaire, premiers jets de conclusions, suivi des délais. ROI chiffré avant engagement. Repérage gratuit.",
     h1: "IA pour cabinet d’avocats : moins de recherche, plus de dossiers traités",
     intro:
       "Entre la recherche dans des dossiers qui s’empilent et la rédaction de premiers jets qui recommence à chaque affaire, vos collaborateurs perdent du temps sur des tâches que la mémoire du cabinet devrait déjà couvrir.",
@@ -223,7 +223,7 @@ export const secteurs: SecteurPage[] = [
     name: "Industrie",
     metaTitle: "IA pour l’industrie PME : cas d’usage et ROI | Coucou IA",
     metaDescription:
-      "IA pour l’industrie PME : réponse aux DCE, documentation technique, reporting de production. ROI chiffré avant engagement. Diagnostic gratuit.",
+      "IA pour l’industrie PME : réponse aux DCE, documentation technique, reporting de production. ROI chiffré avant engagement. Repérage gratuit.",
     h1: "IA pour l’industrie PME : de l’atelier au dossier d’appel d’offres",
     intro:
       "Entre les DCE à boucler en quelques jours et les données d’atelier éparpillées entre les machines et les tableurs, vos équipes passent plus de temps à chercher l’information qu’à produire.",
@@ -280,7 +280,7 @@ export const secteurs: SecteurPage[] = [
       {
         question: "Est-ce compatible avec nos systèmes existants (ERP, MES) ?",
         answer:
-          "Le système s’intègre à vos outils existants, il ne les remplace pas. Le diagnostic identifie précisément où l’IA se branche dans votre chaîne actuelle.",
+          "Le système s’intègre à vos outils existants, il ne les remplace pas. Le repérage identifie précisément où l’IA se branche dans votre chaîne actuelle.",
       },
       {
         question: "Quel est le retour sur investissement avant qu’on investisse ?",
@@ -300,7 +300,7 @@ export const secteurs: SecteurPage[] = [
     name: "Services B2B",
     metaTitle: "IA pour services B2B : cas d’usage et ROI | Coucou IA",
     metaDescription:
-      "IA pour services B2B : propositions commerciales, recherche de missions passées, qualification des leads. ROI chiffré avant engagement. Diagnostic gratuit.",
+      "IA pour services B2B : propositions commerciales, recherche de missions passées, qualification des leads. ROI chiffré avant engagement. Repérage gratuit.",
     h1: "IA pour services B2B : moins de tâches répétitives, plus de missions",
     intro:
       "Entre les propositions commerciales à refaire à chaque client et les questions de suivi qui reviennent sans arrêt, vos consultants passent plus de temps sur l’administratif que sur la mission elle-même.",
@@ -377,7 +377,7 @@ export const secteurs: SecteurPage[] = [
     name: "Assurance et mutuelle",
     metaTitle: "IA pour assurance et mutuelle : usages et ROI | Coucou IA",
     metaDescription:
-      "IA pour assurance et mutuelle : pré-instruction des sinistres, réponses aux adhérents. ROI chiffré avant engagement. Diagnostic gratuit.",
+      "IA pour assurance et mutuelle : pré-instruction des sinistres, réponses aux adhérents. ROI chiffré avant engagement. Repérage gratuit.",
     h1: "IA pour l’assurance et la mutuelle : des sinistres traités plus vite",
     intro:
       "Entre les dossiers sinistres qui s’accumulent et les adhérents qui posent toujours les mêmes questions sur leurs garanties, vos gestionnaires passent plus de temps à chercher l’information qu’à traiter le dossier.",
@@ -444,7 +444,7 @@ export const secteurs: SecteurPage[] = [
       {
         question: "Ça s’intègre à notre système de gestion existant ?",
         answer:
-          "Oui, le système s’intègre à vos outils existants, il ne les remplace pas. Le diagnostic identifie où l’IA se branche dans votre process actuel.",
+          "Oui, le système s’intègre à vos outils existants, il ne les remplace pas. Le repérage identifie où l’IA se branche dans votre process actuel.",
       },
     ],
     relatedCasUsage: ["traitement-documents", "assistant-support-client", "recherche-interne"],
@@ -454,7 +454,7 @@ export const secteurs: SecteurPage[] = [
     name: "Santé et médico-social",
     metaTitle: "IA pour santé et médico-social : usages et ROI | Coucou IA",
     metaDescription:
-      "IA pour la santé et le médico-social : transmissions, dossiers patients, questions familles. ROI chiffré avant engagement. Diagnostic gratuit.",
+      "IA pour la santé et le médico-social : transmissions, dossiers patients, questions familles. ROI chiffré avant engagement. Repérage gratuit.",
     h1: "IA pour la santé et le médico-social : moins de paperasse, plus de soin",
     intro:
       "Entre les transmissions à rédiger, les dossiers patients à retrouver et les questions des familles qui reviennent sans cesse, vos équipes soignantes passent du temps sur l’administratif qui devrait revenir au soin.",
@@ -487,7 +487,7 @@ export const secteurs: SecteurPage[] = [
     ],
     compliance: {
       title: "Données de santé et hébergement HDS",
-      body: "Les systèmes que nous concevons sont pensés, dès la conception, pour un hébergement conforme aux exigences applicables aux données de santé (HDS). L’IA prépare et assiste, elle ne pose jamais de diagnostic ni ne prend de décision médicale : cela reste entièrement entre les mains des soignants. Le tout dans le cadre du RGPD et de l’AI Act.",
+      body: "Les systèmes que nous concevons sont pensés, dès la conception, pour un hébergement conforme aux exigences applicables aux données de santé (HDS). L’IA prépare et assiste, elle n’émet jamais d’avis médical ni ne prend de décision médicale : cela reste entièrement entre les mains des soignants. Le tout dans le cadre du RGPD et de l’AI Act.",
     },
     businessCase: {
       context:

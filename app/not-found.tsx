@@ -3,7 +3,7 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { bookingHref, ctaLabel } from "@/content/site";
+import { bookingUrl, ctaLabel } from "@/content/site";
 import { notFound } from "@/content/not-found";
 
 export const metadata: Metadata = {
@@ -30,7 +30,7 @@ export default function NotFound() {
         </p>
 
         <div className="mt-9 flex flex-col items-center justify-center gap-4 sm:flex-row">
-          <Button nativeButton={false} render={<a href={bookingHref} />} size="lg">
+          <Button nativeButton={false} render={<a href={bookingUrl("404")} />} size="lg">
             {ctaLabel}
             <ArrowRight data-icon="inline-end" />
           </Button>
