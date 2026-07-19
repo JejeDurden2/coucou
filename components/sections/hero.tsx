@@ -26,7 +26,7 @@ export function Hero() {
       id="top"
       className="relative -mt-16 flex min-h-svh flex-col overflow-hidden pt-16"
     >
-      <FlowField className="hero-flow-mask pointer-events-none absolute inset-0" />
+      <FlowField className="hero-flow-mask pointer-events-none absolute inset-0 size-full" />
       <div
         aria-hidden
         className="trace-glow pointer-events-none absolute top-5 -right-35 h-150 w-190"
