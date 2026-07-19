@@ -1,59 +1,72 @@
-// Les deux offres : Audit & stratégie IA / Développement IA sur mesure.
+// Les deux métiers, mis en scène « le pli » : deux volets d’une même feuille
+// (Trouver / Construire), la marque origami se plie à la charnière. Les deux
+// closers répondent au sub : le rapport du cabinet, la démo de l’agence.
 
 export type Service = {
   id: string;
+  step: string;
+  // Verbe affiché en display sur le volet ("Trouver.", "Construire.").
+  verb: string;
   title: string;
-  hook: string;
+  // Utilisée uniquement dans le JSON-LD de la page d’accueil.
   description: string;
+  hook: string;
   deliverables: string[];
   livrable: string;
 };
 
 export type ServicesSection = {
-  eyebrow: string;
   title: string;
   sub: string;
+  // Libellé mono le long de la charnière du pli.
+  spineLabel: string;
   livrableLabel: string;
+  // Lève l’objection « je ne sais pas laquelle des deux offres me concerne ».
+  ctaHook: string;
   offers: Service[];
 };
 
 export const services: ServicesSection = {
-  eyebrow: "Nos deux métiers",
-  title: "Deux métiers, un seul objectif : votre ROI.",
-  sub: "La vision stratégique d’un cabinet, les mains dans le code. Un seul interlocuteur du point de départ à la production : rien ne se perd en route.",
-  livrableLabel: "Livrable",
+  title: "On trouve où l’IA rapporte. Puis on le construit.",
+  sub: "Un cabinet vous laisse un rapport. Une agence, une démo. Nous, on plie les deux métiers en un seul : même interlocuteur du point de départ à la production.",
+  spineLabel: "Rien ne se perd en route",
+  livrableLabel: "Vous repartez avec",
+  ctaHook:
+    "Vous ne savez pas par lequel commencer ? C’est exactement à ça que sert le point de départ.",
   offers: [
     {
       id: "audit",
+      step: "01",
+      verb: "Trouver.",
       title: "Audit & stratégie IA",
-      hook: "On dresse votre carte des possibles : où l’IA rapporte chez vous, et où elle ne sert à rien.",
       description:
         "On part de votre activité, pas de la techno. On regarde vos process, vos données et vos irritants, puis on chiffre le retour attendu de chaque opportunité.",
+      hook: "On dresse votre carte des possibles : où l’IA rapporte chez vous, et où elle ne sert à rien.",
       deliverables: [
-        "État des lieux : process, données et outils déjà en place",
-        "Votre carte des possibles : les opportunités IA classées par impact et faisabilité",
-        "Business case chiffré pour chaque piste prioritaire (ROI attendu)",
-        "Feuille de route IA priorisée, réaliste pour vos équipes",
-        "Cadre RGPD et AI Act pensé dès la conception",
+        "L’état des lieux : vos process, vos données, vos outils",
+        "Les opportunités IA classées par impact et faisabilité",
+        "Un business case chiffré pour chaque piste prioritaire",
+        "Le cadre RGPD et AI Act posé dès la conception",
       ],
       livrable:
-        "Un plan d’action classé par impact, pas un rapport qui dort dans un tiroir.",
+        "Une feuille de route chiffrée, classée par impact. Pas un rapport qui dort dans un tiroir.",
     },
     {
       id: "developpement",
+      step: "02",
+      verb: "Construire.",
       title: "Développement IA sur mesure",
-      hook: "On construit le système, on le branche sur vos outils, on le met en production.",
       description:
-        "Agents IA, RAG, automatisations : on développe ce dont le business case a prouvé la valeur. Intégré à vos outils, sécurisé, mesuré sur ses résultats. Pas un POC de démo.",
+        "Agents IA, RAG, automatisations : on développe ce dont le business case a prouvé la valeur. Intégré à vos outils, sécurisé, mesuré sur ses résultats.",
+      hook: "On prend la feuille de route et on la construit : agents IA, RAG, automatisations, branchés sur vos outils.",
       deliverables: [
-        "Agents IA qui exécutent vos tâches de bout en bout",
-        "Systèmes RAG : l’IA répond à partir de VOS documents et données",
-        "Automatisation du traitement de documents et des flux répétitifs",
-        "Intégration dans vos outils existants (ERP, CRM, Drive, mails)",
-        "Mise en production, mesure du ROI et suivi dans le temps",
+        "Des agents IA qui exécutent vos tâches de bout en bout",
+        "Des systèmes RAG : l’IA répond à partir de VOS documents",
+        "L’automatisation des documents et des flux répétitifs",
+        "L’intégration à vos outils : ERP, CRM, Drive, mails",
       ],
       livrable:
-        "Un système qui tourne en production, mesuré sur ses résultats.",
+        "Un système qui tourne en production, mesuré sur ses résultats. Pas une démo.",
     },
   ],
 };

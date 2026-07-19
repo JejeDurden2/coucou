@@ -1,85 +1,131 @@
-import { Check } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
-import { cn } from "@/lib/utils";
-import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { FoldMark, FoldPanel } from "@/components/fold-reveal";
 import { ScrollReveal } from "@/components/scroll-reveal";
-import { services } from "@/content/services";
+import { hero } from "@/content/hero";
+import { services, type Service } from "@/content/services";
+import { bookingUrl, ctaLabel } from "@/content/site";
+
+// « Le pli » : les deux métiers sont les deux volets d’une même feuille.
+// Diptyque symétrique, charnière centrale où la marque origami se plie,
+// puis un seul CTA qui résout le choix entre les deux volets.
+
+function OfferPanel({ offer }: { offer: Service }) {
+  return (
+    <div className="flex h-full flex-col p-8">
+      <p className="font-mono text-xs uppercase tracking-[0.12em] text-muted-foreground">
+        {offer.step} · {offer.title}
+      </p>
+      <h3 className="mt-4 font-display text-[1.75rem] leading-none font-bold tracking-[-0.02em] lg:text-[2.5rem]">
+        {offer.verb}
+      </h3>
+      <p className="mt-5 max-w-[44ch] text-pretty text-lg leading-relaxed text-foreground">
+        {offer.hook}
+      </p>
+
+      <ul className="mt-7 mb-8 flex flex-col gap-3">
+        {offer.deliverables.map((deliverable) => (
+          <li
+            key={deliverable}
+            className="flex items-start gap-3 text-sm leading-relaxed text-muted-foreground"
+          >
+            <span aria-hidden className="font-mono text-foreground-dim">
+              +
+            </span>
+            <span>{deliverable}</span>
+          </li>
+        ))}
+      </ul>
+
+      <div className="mt-auto flex items-start gap-3 border-t border-border pt-6">
+        <span aria-hidden className="mt-1 h-0.5 w-4 shrink-0 bg-primary" />
+        <div>
+          <span className="font-mono text-xs uppercase tracking-[0.12em] text-muted-foreground">
+            {services.livrableLabel}
+          </span>
+          <p className="mt-1.5 text-pretty leading-relaxed text-foreground">
+            {offer.livrable}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export function Services() {
+  const [audit, developpement] = services.offers;
+
   return (
     <section id="services" className="scroll-mt-20 border-t border-border">
       <div className="mx-auto max-w-[1200px] px-6 py-20 lg:py-28">
-        <ScrollReveal className="max-w-[46rem]">
-          <p className="font-mono text-xs uppercase tracking-[0.12em] text-muted-foreground">
-            {services.eyebrow}
-          </p>
-          <h2 className="mt-4 text-balance font-display text-[2rem] leading-[1.08] font-bold tracking-[-0.02em] lg:text-[2.75rem]">
+        <ScrollReveal className="mx-auto max-w-[46rem] text-center">
+          <h2 className="text-balance font-display text-[2rem] leading-[1.08] font-bold tracking-[-0.02em] lg:text-[2.75rem]">
             {services.title}
           </h2>
-          <p className="mt-5 max-w-[54ch] text-pretty text-lg leading-relaxed text-muted-foreground">
+          <p className="mx-auto mt-5 max-w-[58ch] text-pretty text-lg leading-relaxed text-muted-foreground">
             {services.sub}
           </p>
         </ScrollReveal>
 
-        <div className="mt-14 flex flex-col gap-6">
-          {services.offers.map((offer, index) => {
-            const mirrored = index % 2 === 1;
-            return (
-              <ScrollReveal key={offer.id} delay={index * 0.05}>
-                <Card className="[--card-spacing:--spacing(8)]">
-                  <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-12">
-                    <div className={cn("lg:col-span-5", mirrored && "lg:order-2")}>
-                      <h3 className="font-display text-2xl leading-snug font-medium tracking-[-0.01em]">
-                        {offer.title}
-                      </h3>
-                      <p className="mt-4 text-pretty text-lg leading-relaxed text-foreground">
-                        {offer.hook}
-                      </p>
-                      <p className="mt-4 text-pretty leading-relaxed text-muted-foreground">
-                        {offer.description}
-                      </p>
+        <div className="mt-14 grid grid-cols-1 gap-6 lg:mt-16 lg:grid-cols-[1fr_4.5rem_1fr] lg:gap-0">
+          <FoldPanel
+            side="left"
+            className="rounded-lg border border-border bg-card lg:rounded-r-none"
+          >
+            <OfferPanel offer={audit} />
+          </FoldPanel>
 
-                      <div className="mt-6 flex items-start gap-3 border-t border-border pt-6">
-                        <span
-                          aria-hidden
-                          className="mt-1 h-0.5 w-4 shrink-0 bg-primary"
-                        />
-                        <div>
-                          <span className="font-mono text-xs uppercase tracking-[0.12em] text-muted-foreground">
-                            {services.livrableLabel}
-                          </span>
-                          <p className="mt-1.5 text-sm leading-relaxed text-foreground">
-                            {offer.livrable}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
+          {/* Charnière mobile : la feuille est pliée en pile, le pli passe entre
+              les deux volets. */}
+          <div className="flex flex-col items-center gap-3 py-2 lg:hidden">
+            <div className="flex w-full items-center gap-4">
+              <span aria-hidden className="h-px flex-1 bg-border" />
+              <FoldMark className="rounded-md border border-border p-2.5" />
+              <span aria-hidden className="h-px flex-1 bg-border" />
+            </div>
+            <span className="font-mono text-xs uppercase tracking-[0.12em] text-muted-foreground">
+              {services.spineLabel}
+            </span>
+          </div>
 
-                    <ul
-                      className={cn(
-                        "flex flex-col lg:col-span-7",
-                        mirrored && "lg:order-1"
-                      )}
-                    >
-                      {offer.deliverables.map((deliverable) => (
-                        <li
-                          key={deliverable}
-                          className="flex items-start gap-3 border-b border-border py-3.5 text-sm leading-relaxed text-muted-foreground first:pt-0 last:border-b-0 last:pb-0"
-                        >
-                          <Check
-                            aria-hidden
-                            className="mt-0.5 size-4 shrink-0 text-primary"
-                          />
-                          <span>{deliverable}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </Card>
-              </ScrollReveal>
-            );
-          })}
+          {/* Charnière desktop : la ligne du pli, l’oiseau qui se plie, le
+              libellé le long de la charnière. */}
+          <div className="hidden flex-col items-center gap-4 lg:flex">
+            <span aria-hidden className="w-px flex-1 bg-border" />
+            <FoldMark className="rounded-md border border-border p-2.5" />
+            <span className="font-mono text-xs uppercase tracking-[0.12em] text-muted-foreground [writing-mode:vertical-rl]">
+              {services.spineLabel}
+            </span>
+            <span aria-hidden className="w-px flex-1 bg-border" />
+          </div>
+
+          <FoldPanel
+            side="right"
+            className="rounded-lg border border-border bg-card lg:rounded-l-none"
+          >
+            <OfferPanel offer={developpement} />
+          </FoldPanel>
         </div>
+
+        <ScrollReveal className="mt-14 flex flex-col items-center gap-6 text-center lg:mt-16">
+          <p className="max-w-[46ch] text-pretty text-lg leading-relaxed text-foreground">
+            {services.ctaHook}
+          </p>
+          <div className="flex flex-col items-center gap-4 sm:flex-row">
+            <Button
+              nativeButton={false}
+              render={<a href={bookingUrl("services")} />}
+              size="lg"
+            >
+              {ctaLabel}
+              <ArrowRight data-icon="inline-end" />
+            </Button>
+            <span className="font-mono text-sm text-foreground-dim">
+              {hero.reassurance}
+            </span>
+          </div>
+        </ScrollReveal>
       </div>
     </section>
   );
