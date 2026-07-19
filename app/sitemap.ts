@@ -2,6 +2,7 @@ import type { MetadataRoute } from "next";
 import { siteUrl } from "@/content/site";
 import { secteurs } from "@/content/secteurs";
 import { casUsagePages } from "@/content/cas-usage-pages";
+import { ressources } from "@/content/ressources";
 
 // Pas de lastModified : new Date() estampillait la date de build, un signal
 // faux que Google apprend a ignorer. changeFrequency et priority sont ignores.
@@ -18,6 +19,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
     })),
     ...casUsagePages.map((casUsage) => ({
       url: `${siteUrl}/cas-usage/${casUsage.slug}`,
+    })),
+    // Les cartes (/ressources/[slug]/carte) sont noindex : jamais dans le sitemap.
+    ...ressources.map((ressource) => ({
+      url: `${siteUrl}/ressources/${ressource.slug}`,
     })),
   ];
 }

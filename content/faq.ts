@@ -19,12 +19,12 @@ export const faq: FaqSection = {
     {
       question: "L’IA, est-ce vraiment pour une entreprise comme la nôtre ?",
       answer:
-        "L’IA n’est pas réservée aux géants de la tech. On commence par un repérage gratuit qui identifie des cas d’usage concrets dans votre activité. Et si l’IA n’apporte rien chez vous, on vous le dit franchement.",
+        "L’IA n’est pas réservée aux géants de la tech. On commence par un premier échange gratuit qui identifie des cas d’usage concrets dans votre activité. Et si l’IA n’apporte rien chez vous, on vous le dit franchement.",
     },
     {
       question: "Combien ça coûte ?",
       answer:
-        "Le tarif dépend du périmètre, découvert pendant le repérage. On ne publie pas de prix : un prix sans périmètre ne veut rien dire. Vous recevez un business case chiffré avant tout engagement, donc vous voyez le retour attendu avant de décider.",
+        "Le tarif dépend du périmètre, découvert lors de ce premier échange. On ne publie pas de prix : un prix sans périmètre ne veut rien dire. Vous recevez un business case chiffré avant tout engagement, donc vous voyez le retour attendu avant de décider.",
     },
     {
       question: "Comment nos données sont-elles protégées ?",

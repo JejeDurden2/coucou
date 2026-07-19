@@ -6,7 +6,7 @@ export const spokes = {
   businessCaseLabel: "Business case",
   faqTitle: "Questions fréquentes",
   methodRecap: {
-    title: "Notre méthode, du repérage à la production",
+    title: "Notre méthode, du point de départ à la production",
     body: "On part de votre activité, on chiffre le retour attendu, puis on livre un système en production, mesuré sur ses résultats.",
     methodLink: "La méthode en détail",
   },

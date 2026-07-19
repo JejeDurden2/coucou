@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, ArrowUpRight } from "lucide-react";
+import { ArrowRight, ArrowUpRight, ShieldCheck } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Breadcrumb, type Crumb } from "@/components/breadcrumb";
@@ -87,6 +87,31 @@ export function BusinessCaseBlock({
             </div>
           </ScrollReveal>
         </div>
+      </div>
+    </section>
+  );
+}
+
+// Conformité section shared by the secteur and carte templates: the ShieldCheck
+// motif, one title, one body.
+export function ComplianceBlock({ title, body }: { title: string; body: string }) {
+  return (
+    <section className="border-t border-border">
+      <div className="mx-auto max-w-[1200px] px-6 py-16 lg:py-20">
+        <ScrollReveal className="flex max-w-4xl flex-col gap-4 sm:flex-row sm:gap-6">
+          <ShieldCheck
+            aria-hidden
+            className="size-5 shrink-0 text-primary sm:mt-1"
+          />
+          <div>
+            <h2 className="font-display text-2xl leading-snug font-medium tracking-[-0.01em] lg:text-[1.75rem]">
+              {title}
+            </h2>
+            <p className="mt-3 max-w-[72ch] text-pretty leading-relaxed text-muted-foreground">
+              {body}
+            </p>
+          </div>
+        </ScrollReveal>
       </div>
     </section>
   );

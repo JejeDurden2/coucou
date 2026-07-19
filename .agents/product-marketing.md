@@ -1,6 +1,6 @@
 # Contexte Product Marketing : Coucou IA
 
-**Version du document :** v1.3
+**Version du document :** v1.4
 **Dernière mise à jour :** 2026-07-19
 
 > Document de référence partagé. Toutes les autres skills marketing (`.agents/skills/`) s'appuient sur ce contexte pour le produit, l'audience et le positionnement. Rédigé en français : la production marketing sortante est en français. Forme de politesse : **« vous »**.
@@ -18,7 +18,7 @@
 
 **Type d'activité :** Société de services (prestations projet), pas un SaaS. Facturation au projet / à la mission.
 
-**Modèle économique & tarifs :** Sur devis, après conversation commerciale. **Les prix ne sont jamais publiés.** Le tarif dépend du périmètre, découvert lors du repérage. Point de conversion principal : **réserver un repérage gratuit**.
+**Modèle économique & tarifs :** Sur devis, après conversation commerciale. **Les prix ne sont jamais publiés.** Le tarif dépend du périmètre, découvert lors de ce premier échange. Point de conversion principal : **trouver son point de départ (appel gratuit de 30 min)**.
 
 ### Les deux services
 
@@ -112,7 +112,7 @@
 | Objection | Réponse |
 |-----------|---------|
 | **« C'est trop cher pour nous. »** | On ne démarre jamais sans un business case chiffré : vous voyez le retour attendu avant d'engager. On chiffre le retour attendu avant d'engager : l'enjeu n'est pas le coût, c'est ce que ça vous rapporte. Et on calibre pour une PME, pas pour un grand groupe. |
-| **« L'IA, ce n'est pas pour une entreprise comme la nôtre. »** | L'IA n'est pas réservée aux géants de la tech. On commence par un repérage gratuit qui identifie des cas d'usage concrets dans VOTRE activité. Si l'IA n'apporte rien chez vous, on vous le dit franchement. |
+| **« L'IA, ce n'est pas pour une entreprise comme la nôtre. »** | L'IA n'est pas réservée aux géants de la tech. On commence par trouver votre point de départ, un échange gratuit qui identifie des cas d'usage concrets dans VOTRE activité. Si l'IA n'apporte rien chez vous, on vous le dit franchement. |
 | **« La sécurité et la confidentialité de nos données ? »** | On conçoit dès le départ dans le respect du RGPD et de l'AI Act, avec des architectures qui gardent vos données sous contrôle (hébergement adapté, pas de fuite vers des modèles publics quand ce n'est pas voulu). La souveraineté des données est un point de départ, pas une option. |
 | **« On a déjà essayé ChatGPT, ça n'a rien changé. »** | ChatGPT tout seul, c'est un outil individuel, pas un système d'entreprise. La valeur vient quand l'IA est branchée sur VOS données et VOS process, en production, mesurée. C'est exactement notre métier : pas le prompt, le système. |
 | **« On a déjà été échaudés par un POC qui n'a jamais abouti. »** | C'est justement pour ça qu'on existe. On ne livre pas un POC de démo, on livre un système en production, mesuré sur ses résultats. Le POC qui reste au labo, ce n'est pas un livrable, c'est un échec facturé. |
@@ -125,7 +125,7 @@
 
 **Push (ce qui les pousse à changer) :** pression concurrentielle qui monte, tâches chronophages qui s'accumulent, pénurie et coût des talents IA en interne, sentiment de retard, budgets déjà perdus dans des tentatives infructueuses.
 
-**Pull (ce qui les attire vers nous) :** la promesse qu'on leur montre enfin par où commencer et un système qui tourne vraiment ; le bon interlocuteur, à leur échelle ; le repérage gratuit sans engagement ; un discours direct qui les change du jargon des consultants.
+**Pull (ce qui les attire vers nous) :** la promesse qu'on leur montre enfin par où commencer et un système qui tourne vraiment ; le bon interlocuteur, à leur échelle ; un point de départ gratuit et sans engagement ; un discours direct qui les change du jargon des consultants.
 
 **Habit (ce qui les retient) :** « on verra plus tard », le confort des process actuels, la crainte de perturber l'exploitation, le manque de temps pour piloter un projet, le « on n'a personne en interne pour suivre ça ».
 
@@ -147,7 +147,7 @@
 - « Pour une fois, ça a vraiment tourné en production. »
 - « Le nom fait sourire, mais le boulot est du sérieux. »
 
-**Mots à utiliser :** par où commencer, ce que l'IA rend possible, champ des possibles, ROI, résultat mesurable, en production, temps gagné, coûts réduits, business case, repérage, sur mesure, concret, vos données, vos outils, feuille de route.
+**Mots à utiliser :** par où commencer, ce que l'IA rend possible, champ des possibles, ROI, résultat mesurable, en production, temps gagné, coûts réduits, business case, point de départ, sur mesure, concret, vos données, vos outils, feuille de route.
 
 **Mots à éviter :** disruption, révolution, magie, buzzwords creux, « game changer », promesses vagues, jargon technique gratuit (embeddings, transformers…) face à un dirigeant non technique, « solution clé en main » (sonne SaaS générique).
 
@@ -181,7 +181,7 @@
    - ❌ À ÉVITER : « Nos solutions IA innovantes révolutionnent votre productivité grâce à des technologies de pointe. »
 
 3. **Appel à l'action**
-   - ✅ À FAIRE : « Réservez votre repérage gratuit. 30 minutes, on vous dit franchement où l'IA vous rapporte, et où elle ne sert à rien. »
+   - ✅ À FAIRE : « Trouvez votre point de départ. 30 minutes, on vous dit franchement où l'IA vous rapporte, et où elle ne sert à rien. »
    - ❌ À ÉVITER : « Contactez-nous dès aujourd'hui pour découvrir comment l'IA peut transformer votre entreprise ! »
 
 **Règle du clin d'œil :** le « Coucou » vit dans les accroches, les micro-copies et les transitions (« Coucou, c'est nous. »). Il ne vit jamais dans les preuves, les chiffres ou les business cases : là, tout est sobre et sérieux.
@@ -215,9 +215,9 @@
 
 **Objectif business :** générer un flux qualifié de PME/ETI françaises et signer des missions (audit puis développement) ; installer Coucou IA comme la référence « on vous montre par où commencer avec l'IA » sur ce segment.
 
-**Action de conversion clé :** **réserver un repérage gratuit** (appel). Toute la production marketing converge vers ce CTA unique.
+**Action de conversion clé :** **trouver son point de départ (appel gratuit de 30 min)**. Toute la production marketing converge vers ce CTA unique.
 
-**Metrics actuelles :** [À VALIDER, phase de lancement, à instrumenter : visites → prise de RDV → repérages réalisés → missions signées].
+**Metrics actuelles :** [À VALIDER, phase de lancement, à instrumenter : visites → prise de RDV → échanges réalisés → missions signées].
 
 **Contexte technique du site :** Next.js sur Vercel. Identité visuelle dark, registre enterprise-tech (références Linear / Vercel / Anthropic).
 
@@ -225,6 +225,7 @@
 
 ## Changelog
 *Le plus récent en premier. Une ligne par révision : ce qui a changé et pourquoi.*
+- v1.4 (2026-07-19) : « repérage » écarté par le fondateur ; l'appel gratuit devient « le point de départ » (on le trouve), CTA unique « Trouver mon point de départ », nom de repli « ce premier échange ».
 - v1.3 (2026-07-19) : le mot « diagnostic » est banni (connotation médicale, décision fondateur) ; l'appel de conversion devient « le repérage », le CTA unique devient « Réserver mon repérage gratuit ».
 - v1.2 (2026-07-19) : pivot du différenciateur, « ROI garanti » abandonné au profit de « ouvrir le champ des possibles » (décision fondateur en session grilling) ; le business case chiffré reste la preuve de méthode ; section Garantie supprimée de la homepage, remplacée à terme par des démos.
 - v1.1 (2026-07-19) : hero pivot : retrait de l'angle « L'IA vous doit des comptes », adoption de l'angle « carte des possibles » (le client sait que l'IA compte, nous savons par où commencer), nouvelle accroche du site.

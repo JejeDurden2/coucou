@@ -67,7 +67,7 @@ export function Method() {
           })}
         </ol>
 
-        {/* L’étape 01 est le repérage : c’est ici, après la méthode, le point
+        {/* L’étape 01 est le point de départ : c’est ici, après la méthode, le point
             de décision naturel. Même bouton que le hero, même micro-note. */}
         <ScrollReveal className="mt-14 flex flex-col items-start gap-4 sm:flex-row sm:items-center lg:mt-16">
           <Button nativeButton={false} render={<a href={bookingUrl("methode")} />} size="lg">

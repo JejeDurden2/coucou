@@ -75,18 +75,18 @@ Contenu unique exigé par page cas d'usage :
 
 - Title secteur : `IA pour [secteur] : cas d'usage et ROI | Coucou IA` (≤ 60 caractères, ajuster par secteur).
 - Title cas d'usage : `[Bénéfice actif] avec l'IA : le guide PME | Coucou IA` (ex. « Répondre aux appels d'offres avec l'IA »).
-- Meta description : 150 caractères, mots-clés en tête, se termine par la promesse repérage gratuit.
+- Meta description : 150 caractères, mots-clés en tête, se termine par la promesse d'un premier échange gratuit.
 
 ### Structure (H2 dans l'ordre)
 
-1. Hero : H1 avec la requête cible, sous-titre orienté douleur du persona, CTA `Réserver mon repérage gratuit`.
+1. Hero : H1 avec la requête cible, sous-titre orienté douleur du persona, CTA `Trouver mon point de départ`.
 2. Le problème dans ce secteur / sur cette tâche (verbatim client).
 3. Cas d'usage concrets (secteur) ou avant / après (cas d'usage).
 4. Business case exemple (metric-block, étiqueté « Exemple »).
 5. Conformité et données (RGPD, AI Act, spécificité sectorielle).
 6. Méthode en bref, lien vers `/#methode`.
 7. FAQ.
-8. CTA final : bloc repérage gratuit.
+8. CTA final : bloc point de départ gratuit.
 
 ### Maillage interne
 
@@ -109,7 +109,7 @@ Pas de CMS, pas de MDX, pas de nouvelle dépendance : le contenu reste des modul
 - Un composant de gabarit par playbook dans `components/sections/`, composé des primitives existantes (metric-block, sections). Aucun `"use client"` au niveau page.
 - Hubs : `app/secteurs/page.tsx` et `app/cas-usage/page.tsx`, liste de cartes vers les spokes.
 
-Règles de copie inchangées et non négociables : français, vous, aucun em-dash, CTA unique `Réserver mon repérage gratuit`, jamais de prix, chiffres réels ou étiquetés « Exemple ».
+Règles de copie inchangées et non négociables : français, vous, aucun em-dash, CTA unique `Trouver mon point de départ`, jamais de prix, chiffres réels ou étiquetés « Exemple ».
 
 ## 6. Phase 2 : déclencheurs, pas de calendrier
 

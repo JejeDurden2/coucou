@@ -48,7 +48,7 @@ export const casUsagePages: CasUsagePage[] = [
     name: "Réponse aux appels d’offres",
     metaTitle: "Répondre aux appels d’offres avec l’IA | Coucou IA",
     metaDescription:
-      "Répondre aux appels d’offres avec l’IA : un premier jet généré à partir de vos documents, vos équipes valident. Réservez votre repérage gratuit.",
+      "Répondre aux appels d’offres avec l’IA : un premier jet généré à partir de vos documents, vos équipes valident. Trouvez votre point de départ : 30 minutes gratuites.",
     h1: "Répondre aux appels d’offres avec l’IA",
     intro:
       "Un appel d’offres tombe un vendredi soir, l’échéance dans dix jours, et c’est reparti : retrouver les bonnes références, recopier ce qui a déjà servi vingt fois, espérer n’avoir rien oublié.",
@@ -118,7 +118,7 @@ export const casUsagePages: CasUsagePage[] = [
     name: "Assistant support client",
     metaTitle: "Assistant IA support client | Coucou IA",
     metaDescription:
-      "Assistant IA support client : un chatbot d’entreprise qui répond avec vos documents et transfère les cas complexes à vos équipes. Repérage gratuit.",
+      "Assistant IA support client : un chatbot d’entreprise qui répond avec vos documents et transfère les cas complexes à vos équipes. Premier échange gratuit.",
     h1: "Un assistant IA support client qui répond avec vos vraies réponses",
     intro:
       "Les mêmes questions reviennent chaque semaine, les tickets s’accumulent le soir et le week-end, et vos agents passent leur journée à répéter ce qu’ils ont déjà écrit cent fois.",
@@ -191,7 +191,7 @@ export const casUsagePages: CasUsagePage[] = [
     name: "Traitement de documents",
     metaTitle: "Automatiser le traitement de documents avec l’IA | Coucou IA",
     metaDescription:
-      "Automatisation du traitement de factures et documents avec l’IA : extraction, contrôle, envoi direct dans votre ERP. Repérage gratuit.",
+      "Automatisation du traitement de factures et documents avec l’IA : extraction, contrôle, envoi direct dans votre ERP. Premier échange gratuit.",
     h1: "Automatiser le traitement de vos factures et documents avec l’IA",
     intro:
       "Un dossier partagé qui déborde de PDF à trier, une ressaisie qui recommence chaque matin, et l’erreur de frappe qui finit toujours par coûter cher.",
@@ -260,7 +260,7 @@ export const casUsagePages: CasUsagePage[] = [
     name: "Recherche interne intelligente",
     metaTitle: "Recherche documentaire interne avec l’IA | Coucou IA",
     metaDescription:
-      "Recherche documentaire interne avec l’IA : retrouvez l’information en entreprise en quelques secondes, sur tous vos outils. Repérage gratuit.",
+      "Recherche documentaire interne avec l’IA : retrouvez l’information en entreprise en quelques secondes, sur tous vos outils. Premier échange gratuit.",
     h1: "Une recherche documentaire interne qui retrouve enfin l’information",
     intro:
       "L’information existe quelque part dans l’entreprise, mais personne ne sait où : Drive, mails, ERP, SharePoint, ou la mémoire d’un collègue en congés.",
@@ -329,7 +329,7 @@ export const casUsagePages: CasUsagePage[] = [
     name: "Qualification des leads",
     metaTitle: "Qualifier vos leads automatiquement avec l’IA | Coucou IA",
     metaDescription:
-      "Qualification automatique des leads : triez vos demandes entrantes et routez-les au bon commercial, sans perdre de temps. Repérage gratuit.",
+      "Qualification automatique des leads : triez vos demandes entrantes et routez-les au bon commercial, sans perdre de temps. Premier échange gratuit.",
     h1: "Qualification automatique des leads et tri des demandes entrantes",
     intro:
       "Les demandes arrivent de partout, le formulaire du site, un mail, un appel, LinkedIn, et un commercial passe sa matinée à deviner lesquelles valent le coup.",

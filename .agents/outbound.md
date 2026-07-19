@@ -6,7 +6,7 @@
 
 ## En-tête
 
-**Objectif :** décrocher les 10 premiers repérages (call gratuit de 30 min).
+**Objectif :** décrocher les 10 premiers points de départ (call gratuit de 30 min).
 **Canal n°1 :** outbound LinkedIn + email, en séquence combinée. Le site (https://coucou-ia.com) sert de validation quand le prospect va vérifier, pas de source de leads.
 **Lien de réservation (jamais avant une réponse positive) :** https://cal.com/jerome-desmares-izhobq/30min
 **Cartes des possibles (lead magnet, par secteur) :** https://coucou-ia.com/ressources/carte-expertise-comptable (compta), https://coucou-ia.com/ressources/carte-industrie (industrie). Le lien envoyé au prospect est toujours celui de la landing, jamais le lien direct vers le PDF : c'est la landing qui capture l'email.
@@ -113,7 +113,7 @@ Variables entre crochets réduites au minimum. Chacune est suivie d'un exemple r
 >
 > Promis, c'est mon dernier message : je ne veux pas encombrer votre boîte.
 >
-> Si un jour la saisie ou le pic de la période fiscale devient le sujet de trop, vous saurez où me trouver. Le repérage reste ouvert : 30 min, sans engagement, et je vous dis franchement si l'IA a sa place chez vous, y compris si la réponse est non.
+> Si un jour la saisie ou le pic de la période fiscale devient le sujet de trop, vous saurez où me trouver. Ce premier échange reste ouvert : 30 min, sans engagement, et je vous dis franchement si l'IA a sa place chez vous, y compris si la réponse est non.
 >
 > D'ici là, bon courage pour les échéances.
 >
@@ -157,7 +157,7 @@ Variables entre crochets réduites au minimum. Chacune est suivie d'un exemple r
 >
 > Promis, c'est mon dernier message : je ne veux pas encombrer votre boîte.
 >
-> Si un jour les délais de réponse aux appels d'offres ou la doc éparpillée dans l'atelier deviennent le sujet de trop, vous savez où me trouver. Le repérage reste ouvert : 30 min, sans engagement, et je vous dis franchement si l'IA a sa place chez vous.
+> Si un jour les délais de réponse aux appels d'offres ou la doc éparpillée dans l'atelier deviennent le sujet de trop, vous savez où me trouver. Ce premier échange reste ouvert : 30 min, sans engagement, et je vous dis franchement si l'IA a sa place chez vous.
 >
 > Bonne continuation, et bon courage pour les prochains DCE.
 >
@@ -193,7 +193,7 @@ Règle d'or : le lien Cal.com n'apparaît qu'à partir d'une réponse engagée. 
 > Une plaquette vous parlerait de moi, pas de vous. Ce qui est vraiment utile, c'est 30 min sur VOTRE cas, chiffres à l'appui : un créneau ici [lien]. En attendant, j'ai mieux qu'une plaquette : la carte des cas d'usage IA pour [votre activité], vous verrez si ça vous parle avant même qu'on en discute [carte].
 
 **« Combien ça coûte ? »**
-> Honnêtement, je ne peux pas vous donner un prix sérieux sans connaître le périmètre : ça n'aurait aucun sens de vous avancer un chiffre au hasard. C'est justement ce que le repérage sert à cadrer. Il est gratuit, 30 min, et à la fin vous savez ce qui vaut le coup d'être chiffré, et ce qui ne vaut pas la peine. On en parle ? [lien]
+> Honnêtement, je ne peux pas vous donner un prix sérieux sans connaître le périmètre : ça n'aurait aucun sens de vous avancer un chiffre au hasard. C'est justement ce que le point de départ sert à cadrer. Il est gratuit, 30 min, et à la fin vous savez ce qui vaut le coup d'être chiffré, et ce qui ne vaut pas la peine. On en parle ? [lien]
 
 ---
 
@@ -212,7 +212,7 @@ Règle d'or : le lien Cal.com n'apparaît qu'à partir d'une réponse engagée. 
 - Mardi à jeudi : cœur des envois et des relances (meilleurs jours en B2B).
 - Vendredi : rattrapage, réponses, mise à jour du tableau, préparation de la liste suivante. Pas d'email le vendredi après-midi ni le week-end.
 
-**Ordre de grandeur réaliste :** 75 invitations / semaine, ~30 à 40 % acceptées, soit ~25 à 30 conversations possibles / semaine. Sur 3 semaines de séquence complète, ce volume suffit largement à viser 10 repérages, à condition de traiter chaque réponse vite et bien.
+**Ordre de grandeur réaliste :** 75 invitations / semaine, ~30 à 40 % acceptées, soit ~25 à 30 conversations possibles / semaine. Sur 3 semaines de séquence complète, ce volume suffit largement à viser 10 points de départ, à condition de traiter chaque réponse vite et bien.
 
 ---
 
@@ -225,7 +225,7 @@ Une simple feuille de calcul (Google Sheets), une ligne par prospect. Pas d'outi
 | Claire D. | Cabinet Martin | Compta | LinkedIn | Msg ouverture | J2 | Connecté | Email 1 | J6 | Annonce collab. comptable |
 | Paul R. | Métalux | Industrie | Email | Email 1 | J6 | Email 1 envoyé | Email 2 | J11 | Répond à des AO (BOAMP) |
 
-**Valeurs de « Statut » :** À contacter, Invité, Connecté, Msg LinkedIn envoyé, Email 1, Email 2, Carte envoyée, Breakup, Répondu (intéressé), RDV pris, Repérage fait, Pas intéressé, Clos.
+**Valeurs de « Statut » :** À contacter, Invité, Connecté, Msg LinkedIn envoyé, Email 1, Email 2, Carte envoyée, Breakup, Répondu (intéressé), RDV pris, Échange fait, Pas intéressé, Clos.
 
 La colonne « Date » de prochaine action pilote la journée : chaque matin, on filtre sur les lignes dont la date est aujourd'hui ou avant.
 

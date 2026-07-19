@@ -16,7 +16,7 @@ export const siteUrl = "https://coucou-ia.com";
 export const contactEmail = "jerome@coucou-ia.com";
 
 // Libelle du CTA. Unique sur tout le site : ne jamais creer de variante.
-export const ctaLabel = "Réserver mon repérage gratuit";
+export const ctaLabel = "Trouver mon point de départ";
 
 // Libelle du menu mobile (declencheur + titre du tiroir, pour l’accessibilite).
 export const menuLabel = "Menu";
@@ -47,4 +47,4 @@ export const footerPositioning =
 
 // Meta description (~145 caracteres, mots-cles en tete : conseil IA / PME / ETI).
 export const description =
-  "Conseil IA pour PME et ETI : on trouve ce que l’IA rend possible chez vous et on le met en production. Business case chiffré, repérage gratuit.";
+  "Conseil IA pour PME et ETI : on trouve ce que l’IA rend possible chez vous et on le met en production. Business case chiffré, premier échange gratuit.";

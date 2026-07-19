@@ -1,7 +1,7 @@
 # Coucou IA: Working Contract
 
 ## Overview
-Coucou IA is an AI consulting company for the French market (PME de 10 à 250 salariés and ETI). Two offers: **Audit & stratégie IA** (états des lieux, cartographie d'opportunités, business cases ROI, roadmaps) and **Développement IA sur mesure** (agents IA, RAG, automatisations, intégrations). Differentiator: **ouvrir le champ des possibles**: we show non-expert dirigeants what AI makes possible in their business and where to start, sans jargon, then ship it to production. ROI survives as method (business case chiffré avant d'engager, résultats mesurés), never as a guarantee: the word "garanti" is banned from all copy. The word "diagnostic" is banned too (medical connotation): the discovery call is called **"le repérage"**. The site has one job: build credibility (dark enterprise-tech) and convert visitors into **booked repérage calls (réservations de repérage)**. Pricing is never published. 100% French, `vous`, no i18n.
+Coucou IA is an AI consulting company for the French market (PME de 10 à 250 salariés and ETI). Two offers: **Audit & stratégie IA** (états des lieux, cartographie d'opportunités, business cases ROI, roadmaps) and **Développement IA sur mesure** (agents IA, RAG, automatisations, intégrations). Differentiator: **ouvrir le champ des possibles**: we show non-expert dirigeants what AI makes possible in their business and where to start, sans jargon, then ship it to production. ROI survives as method (business case chiffré avant d'engager, résultats mesurés), never as a guarantee: the word "garanti" is banned from all copy. The word "diagnostic" is banned too (medical connotation): the discovery call is called **"le point de départ"** (fallback noun in prose: **"ce premier échange"**). The site has one job: build credibility (dark enterprise-tech) and convert visitors into **booked "point de départ" calls**. Pricing is never published. 100% French, `vous`, no i18n.
 
 ## Stack (locked)
 - Next.js 16+ (App Router), React 19, TypeScript `strict`
@@ -53,7 +53,7 @@ Full spec: **`docs/design-system.md`**. Tokens live in `app/globals.css` (`@them
 - **Voice:** confident, direct, avec un clin d'œil. The name "Coucou" is an asset: playful but never unserious; expert without jargon-dumping. Short sentences. Address the reader's problem, then the outcome.
 - **ROI claims must be concrete and measurable:** `-40 % de temps de traitement`, `3 j/semaine récupérés`, not `gagnez du temps` or `boostez votre productivité`. Every claim is either real, labeled as example, or cut.
 - Pricing **never** on the site.
-- **One CTA label, everywhere:** `Réserver mon repérage gratuit` (nav, hero, footer, sections). No synonyms ("Contactez-nous", "Prendre RDV" are banned).
+- **One CTA label, everywhere:** `Trouver mon point de départ` (nav, hero, footer, sections). No synonyms ("Contactez-nous", "Prendre RDV" are banned).
 
 ## Never do
 - Publish pricing, or invent client names/logos/testimonials as if real (label mock data).

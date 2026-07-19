@@ -20,7 +20,7 @@ export type ServicesSection = {
 export const services: ServicesSection = {
   eyebrow: "Nos deux métiers",
   title: "Deux métiers, un seul objectif : votre ROI.",
-  sub: "La vision stratégique d’un cabinet, les mains dans le code. Un seul interlocuteur du repérage à la production : rien ne se perd en route.",
+  sub: "La vision stratégique d’un cabinet, les mains dans le code. Un seul interlocuteur du point de départ à la production : rien ne se perd en route.",
   livrableLabel: "Livrable",
   offers: [
     {

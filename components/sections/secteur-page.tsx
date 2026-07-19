@@ -1,12 +1,12 @@
-import { ShieldCheck } from "lucide-react";
-
 import { ScrollReveal } from "@/components/scroll-reveal";
 import {
   BusinessCaseBlock,
+  ComplianceBlock,
   MethodRecap,
   RelatedLinks,
   SpokeHero,
 } from "@/components/spoke-partials";
+import { CarteUpgrade } from "@/components/sections/carte-upgrade";
 import { Cta } from "@/components/sections/cta";
 import { FaqList } from "@/components/sections/faq";
 import type { Crumb } from "@/components/breadcrumb";
@@ -82,30 +82,15 @@ export function SecteurPageTemplate({
       />
 
       {/* Conformité et données, spécificité du secteur. */}
-      <section className="border-t border-border">
-        <div className="mx-auto max-w-[1200px] px-6 py-16 lg:py-20">
-          <ScrollReveal className="flex max-w-[56rem] flex-col gap-4 sm:flex-row sm:gap-6">
-            <ShieldCheck
-              aria-hidden
-              className="size-5 shrink-0 text-primary sm:mt-1"
-            />
-            <div>
-              <h2 className="font-display text-2xl leading-snug font-medium tracking-[-0.01em] lg:text-[1.75rem]">
-                {page.compliance.title}
-              </h2>
-              <p className="mt-3 max-w-[72ch] text-pretty leading-relaxed text-muted-foreground">
-                {page.compliance.body}
-              </p>
-            </div>
-          </ScrollReveal>
-        </div>
-      </section>
+      <ComplianceBlock title={page.compliance.title} body={page.compliance.body} />
 
       <MethodRecap />
 
       <RelatedLinks heading={spokes.secteur.relatedHeading} links={relatedCasUsage} />
 
       <FaqList title={spokes.faqTitle} items={page.faq} />
+
+      <CarteUpgrade secteurSlug={page.slug} />
 
       <Cta />
     </>
