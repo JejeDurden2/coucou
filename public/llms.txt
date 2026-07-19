@@ -1,10 +1,37 @@
 # Coucou IA
 
-Coucou IA est un cabinet de conseil et développement IA pour les PME françaises (10 à 250 salariés) et les ETI. Deux métiers complémentaires : l'audit et la stratégie IA (diagnostic de l'existant, cartographie des opportunités, business case chiffré, feuille de route) et le développement IA sur mesure (agents IA, RAG, automatisations, intégration aux outils existants). Le différenciant : on montre aux dirigeants ce que l'IA rend possible chez eux, par où commencer, sans jargon, et on le met en production, avec un business case chiffré avant tout engagement. Le premier contact est un diagnostic gratuit de 30 minutes, sans engagement.
+Coucou IA est un cabinet de conseil et développement IA pour les PME françaises (10 à 250 salariés) et les ETI. Deux métiers complémentaires : l'audit et la stratégie IA (état des lieux, cartographie des opportunités, business case chiffré, feuille de route) et le développement IA sur mesure (agents IA, RAG, automatisations, intégration aux outils existants). Le différenciant : on montre aux dirigeants ce que l'IA rend possible chez eux, par où commencer, sans jargon, et on le met en production, avec un business case chiffré avant tout engagement. Le premier contact : trouver son point de départ, un échange gratuit de 30 minutes, sans engagement.
 
 ## Pages
 
 - [Accueil](https://coucou-ia.com/) : les deux offres, la méthode en quatre étapes, des cas d'usage concrets et les questions fréquentes.
+
+## Secteurs
+
+- [Secteurs](https://coucou-ia.com/secteurs) : l'IA appliquée par secteur, cas d'usage concrets et ROI mesurable.
+- [Expertise comptable](https://coucou-ia.com/secteurs/expertise-comptable) : pré-affectation des écritures, liasses fiscales, réponses clients.
+- [Cabinets juridiques](https://coucou-ia.com/secteurs/cabinets-juridiques) : recherche documentaire, premiers jets de conclusions, suivi des délais.
+- [Industrie](https://coucou-ia.com/secteurs/industrie) : réponse aux DCE, documentation technique, reporting de production.
+- [Services B2B](https://coucou-ia.com/secteurs/services-b2b) : propositions commerciales, recherche de missions passées, qualification des leads.
+- [Assurance et mutuelle](https://coucou-ia.com/secteurs/assurance-mutuelle) : pré-instruction des sinistres, réponses aux adhérents.
+- [Santé et médico-social](https://coucou-ia.com/secteurs/sante-medico-social) : transmissions, dossiers patients, questions des familles.
+
+## Cas d'usage
+
+- [Cas d'usage](https://coucou-ia.com/cas-usage) : cinq automatisations IA déployées en production dans les PME.
+- [Réponse aux appels d'offres](https://coucou-ia.com/cas-usage/reponse-appels-offres) : un premier jet généré à partir de vos documents, vos équipes valident.
+- [Assistant support client](https://coucou-ia.com/cas-usage/assistant-support-client) : un chatbot d'entreprise qui répond avec vos documents et transfère les cas complexes.
+- [Traitement de documents](https://coucou-ia.com/cas-usage/traitement-documents) : extraction, contrôle et envoi des factures et documents dans votre ERP.
+- [Recherche interne intelligente](https://coucou-ia.com/cas-usage/recherche-interne) : retrouver l'information en quelques secondes, sur tous vos outils.
+- [Qualification des leads](https://coucou-ia.com/cas-usage/qualification-leads) : trier les demandes entrantes et les router au bon commercial.
+
+## Ressources
+
+- [La carte des possibles : expertise comptable](https://coucou-ia.com/ressources/carte-expertise-comptable) : les cas d'usage IA d'un cabinet comptable, classés par impact et faisabilité.
+- [La carte des possibles : industrie](https://coucou-ia.com/ressources/carte-industrie) : les cas d'usage IA d'une PME industrielle, classés par impact et faisabilité.
+
+## Informations légales
+
 - [Mentions légales](https://coucou-ia.com/mentions-legales) : identité de l'éditeur, siège social et informations légales de la société COUCOU IA.
 - [Confidentialité](https://coucou-ia.com/confidentialite) : politique de confidentialité et traitement des données personnelles.
 
@@ -13,7 +40,7 @@ Coucou IA est un cabinet de conseil et développement IA pour les PME française
 - Services : audit & stratégie IA, développement IA sur mesure (agents IA, RAG, automatisations, intégrations).
 - Cible : PME de 10 à 250 salariés et ETI, en France.
 - Différenciant : par où commencer avec l'IA, business case chiffré avant tout engagement, livraison en production.
-- Premier contact : diagnostic gratuit de 30 minutes, sans engagement.
+- Premier contact : trouver son point de départ, un échange gratuit de 30 minutes, sans engagement.
 - Contact : jerome@coucou-ia.com
 - SIREN : 100498070
 - Siège social : Nice, France.

@@ -144,7 +144,7 @@ export const secteurs: SecteurPage[] = [
     name: "Cabinets juridiques",
     metaTitle: "IA pour cabinet d’avocats : cas d’usage et ROI | Coucou IA",
     metaDescription:
-      "IA pour cabinet d’avocats : recherche documentaire, premiers jets de conclusions, suivi des délais. ROI chiffré avant engagement. Premier échange gratuit.",
+      "IA pour cabinet d’avocats : recherche documentaire, premiers jets de conclusions, suivi des délais. ROI chiffré, premier échange gratuit.",
     h1: "IA pour cabinet d’avocats : moins de recherche, plus de dossiers traités",
     intro:
       "Entre la recherche dans des dossiers qui s’empilent et la rédaction de premiers jets qui recommence à chaque affaire, vos collaborateurs perdent du temps sur des tâches que la mémoire du cabinet devrait déjà couvrir.",
@@ -300,7 +300,7 @@ export const secteurs: SecteurPage[] = [
     name: "Services B2B",
     metaTitle: "IA pour services B2B : cas d’usage et ROI | Coucou IA",
     metaDescription:
-      "IA pour services B2B : propositions commerciales, recherche de missions passées, qualification des leads. ROI chiffré avant engagement. Premier échange gratuit.",
+      "IA pour services B2B : propositions commerciales, recherche de missions passées, qualification des leads. ROI chiffré, premier échange gratuit.",
     h1: "IA pour services B2B : moins de tâches répétitives, plus de missions",
     intro:
       "Entre les propositions commerciales à refaire à chaque client et les questions de suivi qui reviennent sans arrêt, vos consultants passent plus de temps sur l’administratif que sur la mission elle-même.",

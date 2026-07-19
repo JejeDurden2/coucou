@@ -48,7 +48,7 @@ export const casUsagePages: CasUsagePage[] = [
     name: "Réponse aux appels d’offres",
     metaTitle: "Répondre aux appels d’offres avec l’IA | Coucou IA",
     metaDescription:
-      "Répondre aux appels d’offres avec l’IA : un premier jet généré à partir de vos documents, vos équipes valident. Trouvez votre point de départ : 30 minutes gratuites.",
+      "Répondre aux appels d’offres avec l’IA : un premier jet généré à partir de vos documents, vos équipes valident. Premier échange gratuit.",
     h1: "Répondre aux appels d’offres avec l’IA",
     intro:
       "Un appel d’offres tombe un vendredi soir, l’échéance dans dix jours, et c’est reparti : retrouver les bonnes références, recopier ce qui a déjà servi vingt fois, espérer n’avoir rien oublié.",
@@ -118,7 +118,7 @@ export const casUsagePages: CasUsagePage[] = [
     name: "Assistant support client",
     metaTitle: "Assistant IA support client | Coucou IA",
     metaDescription:
-      "Assistant IA support client : un chatbot d’entreprise qui répond avec vos documents et transfère les cas complexes à vos équipes. Premier échange gratuit.",
+      "Assistant IA support client : un chatbot d’entreprise qui répond avec vos documents et transfère les cas complexes. Premier échange gratuit.",
     h1: "Un assistant IA support client qui répond avec vos vraies réponses",
     intro:
       "Les mêmes questions reviennent chaque semaine, les tickets s’accumulent le soir et le week-end, et vos agents passent leur journée à répéter ce qu’ils ont déjà écrit cent fois.",

@@ -41,10 +41,10 @@ export const metadata: Metadata = {
     title: defaultTitle,
     description,
   },
+  // Pas de title/description : les pages intérieures ne redéfinissent pas
+  // `twitter`, un texte en dur ici écraserait le leur. X retombe sur les og:.
   twitter: {
     card: "summary_large_image",
-    title: defaultTitle,
-    description,
   },
   robots: {
     index: true,
