@@ -22,6 +22,8 @@ const linkClasses =
 
 export function SiteHeader() {
   const [scrolled, setScrolled] = useState(false);
+  // Rejoue le pliage du logo au survol de la marque : remonter le svg via key.
+  const [logoRun, setLogoRun] = useState(0);
   const { scrollY } = useScroll();
 
   // Boolean threshold: React bails on an unchanged value, so the header
@@ -46,8 +48,9 @@ export function SiteHeader() {
             linkClasses,
             "flex items-center gap-2 font-display text-base font-bold tracking-[-0.01em] text-foreground"
           )}
+          onMouseEnter={() => setLogoRun((run) => run + 1)}
         >
-          <LogoMark className="size-6 text-primary" />
+          <LogoMark key={logoRun} animated className="size-6 text-primary" />
           <span>{siteName}</span>
         </Link>
 

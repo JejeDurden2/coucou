@@ -6,9 +6,20 @@ import { cn } from "@/lib/utils";
 // trou (fill-rule evenodd) : le fond traverse sur n’importe quel support.
 // Geometrie construite : 9 sommets sur un cercle de rayon 10, ancrages du bec
 // a -44, -18 et +10 degres, base du bec parallele aux aretes du visage.
-export function LogoMark({ className }: { className?: string }) {
+export function LogoMark({
+  className,
+  animated = false,
+}: {
+  className?: string;
+  /* Joue le pliage origami au montage (.lm-anim, globals.css). Rejouer = remonter via key. */
+  animated?: boolean;
+}) {
   return (
-    <svg viewBox="0 0 32 32" aria-hidden className={cn("shrink-0", className)}>
+    <svg
+      viewBox="0 0 32 32"
+      aria-hidden
+      className={cn("shrink-0", animated && "lm-anim", className)}
+    >
       <polygon
         fill="currentColor"
         points="12.25,6.3 5.53,8.93 2.6,16 5.53,23.07 12.25,25.7"
