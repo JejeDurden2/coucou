@@ -39,9 +39,9 @@ Run `pnpm typecheck && pnpm lint` before declaring any task done.
 
 ## Design system
 Full spec: **`docs/design-system.md`**. Tokens live in `app/globals.css` (`@theme`). Non-negotiables:
-1. **Tokens only.** No arbitrary hex/rgb in components (`bg-[#aff03c]` banned). Use `bg-primary`, `text-muted-foreground`, etc.
+1. **Tokens only.** No arbitrary hex/rgb in components (`bg-[#2fb6ff]` banned). Use `bg-primary`, `text-muted-foreground`, etc.
 2. **Dark-first, one theme.** The whole site is dark. No section inverts to light.
-3. **Accent discipline.** ONE accent (electric lime) on the whole page: CTAs, key metrics, focus rings, one signature motif. Never a second accent, never lime on body text.
+3. **Accent discipline.** ONE interactive accent (electric blue) on the whole page: CTAs, key metrics, focus rings, one signature motif. The violet `--accent-2` is atmosphere only (hero ambient glow, flow-field particles): never on actions, metrics, or body text. Never a third accent.
 4. **No glow soup.** Glow allowed only as one ambient hero radial plus the primary CTA hover. No glow on every card, no purple/blue mesh gradients, no gradient text.
 5. **One radius scale** (8px family) everywhere; pill only for badges/tags.
 6. **Metrics are the hero.** ROI numbers use the metric-block spec (tabular-nums), never body-text-styled.

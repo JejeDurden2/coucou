@@ -16,7 +16,7 @@ export function Method() {
         </ScrollReveal>
 
         {/* Vertical measured rail: the numbers are the nodes, the hairline is
-            the tracé, the last step turns lime as the ROI terminus. */}
+            the tracé, the last step turns blue as the ROI terminus. */}
         <ol className="mt-14 lg:mt-16">
           {method.steps.map((step, index) => {
             const last = index === method.steps.length - 1;

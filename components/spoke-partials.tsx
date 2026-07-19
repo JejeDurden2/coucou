@@ -49,7 +49,7 @@ export function SpokeHero({
   );
 }
 
-// Business case: the one lime-marked metric on the page, "Exemple" label kept
+// Business case: the one blue-marked metric on the page, "Exemple" label kept
 // visible above the figure. The single trace-grid field allowed per spoke.
 export function BusinessCaseBlock({
   context,

@@ -2,7 +2,7 @@ import { cn } from "@/lib/utils";
 
 // Metric / stat block (design-system §7): Geist Mono uppercase label, then a
 // large Space Grotesk tabular-nums figure. No boxed card. `marked` renders the
-// single 2px lime underline reserved for one key element on the page.
+// single 2px blue underline reserved for one key element on the page.
 
 type MetricBlockProps = {
   value: string;

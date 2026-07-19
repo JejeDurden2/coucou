@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 
 // Marque Coucou IA : tete de coucou en papier plie (origami), monochrome.
-// La couleur vient de currentColor : `text-primary` (lime integrale) sur fond
+// La couleur vient de currentColor : `text-primary` (bleu electrique) sur fond
 // sombre, `text-primary-foreground` (encre) sur fond clair. L’oeil est un vrai
 // trou (fill-rule evenodd) : le fond traverse sur n’importe quel support.
 // Geometrie construite : 9 sommets sur un cercle de rayon 10, ancrages du bec

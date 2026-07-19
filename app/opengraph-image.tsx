@@ -8,9 +8,9 @@ export const alt =
 
 // Couleurs en dur car ImageResponse ne lit pas les tokens CSS de app/globals.css.
 // Elles miroitent exactement --background, --foreground et --primary du design system.
-const BACKGROUND = "#090a0d";
-const FOREGROUND = "#f3f5f8";
-const LIME = "#aff03c";
+const BACKGROUND = "#090b10";
+const FOREGROUND = "#f3f5fa";
+const BLUE = "#2fb6ff";
 
 export default function OpengraphImage() {
   return new ImageResponse(
@@ -30,16 +30,16 @@ export default function OpengraphImage() {
         <div style={{ display: "flex", alignItems: "center", gap: 18 }}>
           <svg width="52" height="52" viewBox="0 0 32 32">
             <polygon
-              fill={LIME}
+              fill={BLUE}
               points="12.25,6.3 5.53,8.93 2.6,16 5.53,23.07 12.25,25.7"
             />
             <path
-              fill={LIME}
+              fill={BLUE}
               fillRule="evenodd"
               d="M12.95 6.15V25.85L19.67 23.07L22.45 17.74L22.11 12.91L19.79 9.05ZM15.1 12.1a2.1 2.1 0 1 0 4.2 0a2.1 2.1 0 1 0-4.2 0Z"
             />
             <polygon
-              fill={LIME}
+              fill={BLUE}
               points="21.16,10.07 30.3,13.5 23.03,16.63 22.72,12.72"
             />
           </svg>
@@ -55,7 +55,7 @@ export default function OpengraphImage() {
           </span>
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: 28 }}>
-          <div style={{ display: "flex", width: 72, height: 4, backgroundColor: LIME }} />
+          <div style={{ display: "flex", width: 72, height: 4, backgroundColor: BLUE }} />
           <div
             style={{
               display: "flex",

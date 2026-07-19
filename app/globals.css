@@ -45,21 +45,24 @@
 /* Dark-first, one theme (docs/design-system.md §2). <html> always carries
    .dark, no light variant is ever mirrored in :root. */
 .dark {
-  --background: oklch(0.145 0.006 255);
-  --card: oklch(0.178 0.007 255);
-  --popover: oklch(0.205 0.008 255);
-  --muted: oklch(0.205 0.008 255);
-  --foreground: oklch(0.97 0.004 255);
-  --muted-foreground: oklch(0.705 0.012 255);
-  --foreground-dim: oklch(0.56 0.012 255);
-  --border: oklch(0.27 0.008 255);
-  --input: oklch(0.3 0.008 255);
-  --primary: oklch(0.88 0.21 128);
-  --primary-foreground: oklch(0.165 0.03 128);
-  --accent: oklch(0.205 0.01 128);
+  --background: oklch(0.145 0.008 260);
+  --card: oklch(0.178 0.009 260);
+  --popover: oklch(0.205 0.01 260);
+  --muted: oklch(0.205 0.01 260);
+  --foreground: oklch(0.97 0.005 260);
+  --muted-foreground: oklch(0.705 0.012 260);
+  --foreground-dim: oklch(0.56 0.012 260);
+  --border: oklch(0.27 0.01 260);
+  --input: oklch(0.3 0.01 260);
+  --primary: oklch(0.74 0.15 240);
+  --primary-foreground: oklch(0.17 0.035 240);
+  --accent: oklch(0.205 0.014 240);
   --accent-foreground: var(--foreground);
-  --secondary: oklch(0.205 0.008 255);
-  --ring: oklch(0.88 0.21 128);
+  --secondary: oklch(0.205 0.01 260);
+  --ring: oklch(0.74 0.15 240);
+  /* Accent 2: hot violet, atmosphere only (ambient glows, flow-field
+     particles). Never on actions, never on text. */
+  --accent-2: oklch(0.68 0.2 308);
   --success: oklch(0.76 0.15 158);
   --warning: oklch(0.82 0.15 80);
   --destructive: oklch(0.68 0.19 22);
@@ -94,8 +97,8 @@
 }
 
 /* "Le tracé" (design-system §5): the two signature motifs, defined here so
-   components stay token-only. Used exactly twice (hero + guarantee metrics).
-   Colors derive from --border / --primary via color-mix; the radial mask is
+   components stay token-only. Used sparingly (hero glow + spoke grid fields).
+   Colors derive from --border / --accent-2 via color-mix; the radial mask is
    pure alpha, so no brand color is ever hard-coded in a component. */
 .trace-grid {
   background-image:
@@ -127,7 +130,7 @@
 .trace-glow {
   background: radial-gradient(
     closest-side,
-    color-mix(in oklch, var(--primary) 12%, transparent),
+    color-mix(in oklch, var(--accent-2) 20%, transparent),
     transparent 72%
   );
 }

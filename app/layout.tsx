@@ -53,7 +53,7 @@ export const metadata: Metadata = {
 
 // Hex de --background (oklch 0.145 0.006 255) : barre du navigateur mobile assortie au fond.
 export const viewport: Viewport = {
-  themeColor: "#090a0d",
+  themeColor: "#090b10",
 };
 
 export default function RootLayout({

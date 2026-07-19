@@ -9,7 +9,7 @@ import { hero } from "@/content/hero";
 // column (ResizeObserver, transform-origin top center). A decorative SVG draws
 // the origin, faint rays and the six arrows; the six cards are real text (a ul)
 // so screen readers get the content. The active card cycles once through the
-// six (first switch after 1.3s, then every 2.6s), lighting its lime arrow +
+// six (first switch after 1.3s, then every 2.6s), lighting its blue arrow +
 // outline, and rests on the first: motion stays finite (design-system §6).
 // Reduced motion: no cycle (card 0 stays lit) and entrance keyframes are gated
 // off in globals.css.
@@ -36,7 +36,7 @@ const FAINT_RAYS: [number, number, number, number][] = [
 ];
 
 // Arrow rays pointing at the six cards: [x, y, entranceDelay]. The dim arrow is
-// always visible; the lime arrow (same geometry) fades in only when active.
+// always visible; the blue arrow (same geometry) fades in only when active.
 const ARROW_RAYS: [number, number, number][] = [
   [288, 51, 0.45],
   [312, 139, 0.53],
@@ -132,7 +132,7 @@ export function PossiblesMap() {
               />
             </marker>
             <marker
-              id="ccArrowLime"
+              id="ccArrowBlue"
               viewBox="0 0 10 10"
               refX="8"
               refY="5"
@@ -181,11 +181,11 @@ export function PossiblesMap() {
 
           {ARROW_RAYS.map(([x, y], index) => (
             <path
-              key={`lime-${x}-${y}`}
+              key={`blue-${x}-${y}`}
               d={`M${ORIGIN.x},${ORIGIN.y} L${x},${y}`}
               className="fill-none stroke-primary"
               strokeWidth="1.5"
-              markerEnd="url(#ccArrowLime)"
+              markerEnd="url(#ccArrowBlue)"
               style={{
                 opacity: active === index ? 1 : 0,
                 transition: "opacity 0.45s ease-out",
