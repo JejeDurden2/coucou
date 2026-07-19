@@ -1,6 +1,6 @@
-// La garantie ROI : la piece maitresse. Ton sobre, zero clin d'oeil.
+// La garantie ROI : la piece maitresse. Ton sobre, zero clin d'oeil.
 // Les metrics sont vrais par construction (faits structurels), pas des chiffres de performance.
-// TODO fondateur : formaliser avec un juriste les modalites exactes de la garantie
+// TODO fondateur : formaliser avec un juriste les modalites exactes de la garantie
 // (perimetre, seuils, contrepartie) avant la mise en ligne.
 
 export type GuaranteePrinciple = {

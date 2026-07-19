@@ -1,6 +1,6 @@
-// Pages secteurs (/secteurs/[slug]). Spec : docs/programmatic-seo.md.
+// Pages secteurs (/secteurs/[slug]). Spec : docs/programmatic-seo.md.
 // Chiffres = exemples illustratifs (label "Exemple"), jamais des références validées.
-// Slugs verrouillés : expertise-comptable, cabinets-juridiques, industrie,
+// Slugs verrouillés : expertise-comptable, cabinets-juridiques, industrie,
 // services-b2b, assurance-mutuelle, sante-medico-social.
 
 export type SecteurUseCase = {
@@ -22,20 +22,20 @@ export type BusinessCase = {
   metric: string;
   // Phrase d'appui sous le chiffre.
   result: string;
-  // Toujours "Exemple" : aucune référence client n'est validée.
+  // Toujours "Exemple" : aucune référence client n'est validée.
   label: string;
 };
 
 export type SecteurPage = {
   slug: string;
-  // Nom court du secteur : cartes du hub, breadcrumb, liens croisés.
+  // Nom court du secteur : cartes du hub, breadcrumb, liens croisés.
   name: string;
   // ≤ 60 caractères.
   metaTitle: string;
   // ~150 caractères, mots-clés en tête.
   metaDescription: string;
   h1: string;
-  // Sous-titre hero : la douleur du persona, pas la techno.
+  // Sous-titre hero : la douleur du persona, pas la techno.
   intro: string;
   // Le problème dans les mots du secteur (3 items).
   painPoints: string[];
@@ -52,9 +52,9 @@ export type SecteurPage = {
 
 // Copie du hub /secteurs.
 export const secteursHub = {
-  metaTitle: "IA par secteur : cas d'usage pour PME et ETI | Coucou IA",
+  metaTitle: "IA par secteur : cas d'usage pour PME et ETI | Coucou IA",
   metaDescription:
-    "L'IA appliquée à votre secteur : expertise comptable, industrie, assurance, santé, juridique, services B2B. Cas d'usage concrets et ROI mesurable.",
+    "L'IA appliquée à votre secteur : expertise comptable, industrie, assurance, santé, juridique, services B2B. Cas d'usage concrets et ROI mesurable.",
   h1: "L'IA qui rapporte, secteur par secteur",
   intro:
     "Chaque métier a ses tâches chronophages et ses contraintes. Voici où l'IA crée de la valeur dans le vôtre, concrètement.",
@@ -64,12 +64,12 @@ export const secteurs: SecteurPage[] = [
   {
     slug: "expertise-comptable",
     name: "Expertise comptable",
-    metaTitle: "IA pour cabinet comptable : cas d'usage et ROI | Coucou IA",
+    metaTitle: "IA pour cabinet comptable : cas d'usage et ROI | Coucou IA",
     metaDescription:
-      "IA pour cabinet comptable : pré-affectation des écritures, liasses fiscales, réponses clients. ROI chiffré avant engagement. Diagnostic gratuit.",
-    h1: "IA pour cabinet comptable : moins de saisie, plus de conseil",
+      "IA pour cabinet comptable : pré-affectation des écritures, liasses fiscales, réponses clients. ROI chiffré avant engagement. Diagnostic gratuit.",
+    h1: "IA pour cabinet comptable : moins de saisie, plus de conseil",
     intro:
-      "Entre la saisie qui s'accumule et la période fiscale qui arrive toujours trop vite, vos collaborateurs n'ont plus le temps de faire ce pour quoi les clients vous paient vraiment : conseiller.",
+      "Entre la saisie qui s'accumule et la période fiscale qui arrive toujours trop vite, vos collaborateurs n'ont plus le temps de faire ce pour quoi les clients vous paient vraiment : conseiller.",
     painPoints: [
       "Vos collaborateurs ressaisissent encore les pièces comptables une par une, alors que le nombre de dossiers ne cesse d'augmenter.",
       "La période fiscale concentre bilans, liasses et déclarations sur quelques semaines, et l'équipe encaisse le pic chaque année, sans renfort durable.",
@@ -99,7 +99,7 @@ export const secteurs: SecteurPage[] = [
     ],
     compliance: {
       title: "Secret professionnel et déontologie de l'Ordre",
-      body: "Les systèmes que nous concevons respectent, dès la conception, le secret professionnel et les règles déontologiques de l'Ordre des experts-comptables. Vos données clients restent sous votre contrôle : hébergement adapté, aucune pièce comptable envoyée à un modèle public sans que vous l'ayez choisi. Le tout dans le cadre du RGPD et de l'AI Act.",
+      body: "Les systèmes que nous concevons respectent, dès la conception, le secret professionnel et les règles déontologiques de l'Ordre des experts-comptables. Vos données clients restent sous votre contrôle : hébergement adapté, aucune pièce comptable envoyée à un modèle public sans que vous l'ayez choisi. Le tout dans le cadre du RGPD et de l'AI Act.",
     },
     businessCase: {
       context:
@@ -111,7 +111,7 @@ export const secteurs: SecteurPage[] = [
     },
     faq: [
       {
-        question: "Un cabinet comptable peut-il vraiment confier ses pièces à l'IA ?",
+        question: "Un cabinet comptable peut-il vraiment confier ses pièces à l'IA ?",
         answer:
           "Le secret professionnel n'est pas négociable pour nous non plus. Les systèmes sont conçus pour que vos données restent sous votre contrôle, avec un hébergement adapté et sans envoi vers des modèles publics sans votre accord. Chaque écriture proposée par l'IA reste validée par un collaborateur.",
       },
@@ -122,17 +122,17 @@ export const secteurs: SecteurPage[] = [
           "Un outil générique s'arrête souvent dès qu'il rencontre un format de pièce inhabituel. Ici, le système est construit sur VOS pièces et VOS process, et mesuré sur ses résultats, pas sur une démo qui reste au stade de test.",
       },
       {
-        question: "Est-ce compatible avec notre logiciel de production comptable ?",
+        question: "Est-ce compatible avec notre logiciel de production comptable ?",
         answer:
           "Le système s'intègre à vos outils existants, il ne les remplace pas. Le diagnostic identifie précisément où l'IA se branche dans votre chaîne de production actuelle.",
       },
       {
-        question: "Quel retour sur investissement avant qu'on s'engage ?",
+        question: "Quel retour sur investissement avant qu'on s'engage ?",
         answer:
-          "Vous recevez un business case chiffré avant tout engagement : volumétrie de votre cabinet, gain estimé, coût. Vous décidez en connaissance de cause.",
+          "Vous recevez un business case chiffré avant tout engagement : volumétrie de votre cabinet, gain estimé, coût. Vous décidez en connaissance de cause.",
       },
       {
-        question: "Nos données clients restent-elles confidentielles ?",
+        question: "Nos données clients restent-elles confidentielles ?",
         answer:
           "Oui, c'est le point de départ, pas une option. Secret professionnel, RGPD et AI Act encadrent la conception de chaque système dès le premier jour.",
       },
@@ -142,10 +142,10 @@ export const secteurs: SecteurPage[] = [
   {
     slug: "cabinets-juridiques",
     name: "Cabinets juridiques",
-    metaTitle: "IA pour cabinet d'avocats : cas d'usage et ROI | Coucou IA",
+    metaTitle: "IA pour cabinet d'avocats : cas d'usage et ROI | Coucou IA",
     metaDescription:
-      "IA pour cabinet d'avocats : recherche documentaire, premiers jets de conclusions, suivi des délais. ROI chiffré avant engagement. Diagnostic gratuit.",
-    h1: "IA pour cabinet d'avocats : moins de recherche, plus de dossiers traités",
+      "IA pour cabinet d'avocats : recherche documentaire, premiers jets de conclusions, suivi des délais. ROI chiffré avant engagement. Diagnostic gratuit.",
+    h1: "IA pour cabinet d'avocats : moins de recherche, plus de dossiers traités",
     intro:
       "Entre la recherche dans des dossiers qui s'empilent et la rédaction de premiers jets qui recommence à chaque affaire, vos collaborateurs perdent du temps sur des tâches que la mémoire du cabinet devrait déjà couvrir.",
     painPoints: [
@@ -190,12 +190,12 @@ export const secteurs: SecteurPage[] = [
     faq: [
       {
         question:
-          "Le secret professionnel est non négociable pour nous, comment est-il garanti ?",
+          "Le secret professionnel est non négociable pour nous, comment est-il garanti ?",
         answer:
           "C'est le point de départ de chaque système que nous concevons, pas une option ajoutée après coup. Vos dossiers restent sous votre contrôle, avec un hébergement adapté et dans le respect du RIN.",
       },
       {
-        question: "Un avocat garde-t-il la main sur ce que produit l'IA ?",
+        question: "Un avocat garde-t-il la main sur ce que produit l'IA ?",
         answer:
           "Toujours. L'IA prépare un premier jet ou une synthèse, l'avocat révise, corrige et signe. La décision et la responsabilité restent entièrement de son côté.",
       },
@@ -211,9 +211,9 @@ export const secteurs: SecteurPage[] = [
           "C'est justement pour ça qu'on existe. On ne livre pas une démo, on livre un système en production, utilisé au quotidien et mesuré sur ses résultats.",
       },
       {
-        question: "Quel est le retour sur investissement pour un cabinet de notre taille ?",
+        question: "Quel est le retour sur investissement pour un cabinet de notre taille ?",
         answer:
-          "Vous recevez un business case chiffré avant tout engagement : volume de dossiers, gain de temps estimé, coût. La décision se prend sur des chiffres, pas sur une promesse.",
+          "Vous recevez un business case chiffré avant tout engagement : volume de dossiers, gain de temps estimé, coût. La décision se prend sur des chiffres, pas sur une promesse.",
       },
     ],
     relatedCasUsage: ["recherche-interne", "traitement-documents", "qualification-leads"],
@@ -221,10 +221,10 @@ export const secteurs: SecteurPage[] = [
   {
     slug: "industrie",
     name: "Industrie",
-    metaTitle: "IA pour l'industrie PME : cas d'usage et ROI | Coucou IA",
+    metaTitle: "IA pour l'industrie PME : cas d'usage et ROI | Coucou IA",
     metaDescription:
-      "IA pour l'industrie PME : réponse aux DCE, documentation technique, reporting de production. ROI chiffré avant engagement. Diagnostic gratuit.",
-    h1: "IA pour l'industrie PME : de l'atelier au dossier d'appel d'offres",
+      "IA pour l'industrie PME : réponse aux DCE, documentation technique, reporting de production. ROI chiffré avant engagement. Diagnostic gratuit.",
+    h1: "IA pour l'industrie PME : de l'atelier au dossier d'appel d'offres",
     intro:
       "Entre les DCE à boucler en quelques jours et les données d'atelier éparpillées entre les machines et les tableurs, vos équipes passent plus de temps à chercher l'information qu'à produire.",
     painPoints: [
@@ -256,7 +256,7 @@ export const secteurs: SecteurPage[] = [
     ],
     compliance: {
       title: "Propriété industrielle et données de production",
-      body: "Les systèmes que nous concevons protègent, dès la conception, vos données de production et votre propriété industrielle. Rien ne sort de votre périmètre sans votre accord : hébergement adapté, aucun plan ni procédé envoyé à un modèle public par défaut. Le tout dans le cadre du RGPD et de l'AI Act.",
+      body: "Les systèmes que nous concevons protègent, dès la conception, vos données de production et votre propriété industrielle. Rien ne sort de votre périmètre sans votre accord : hébergement adapté, aucun plan ni procédé envoyé à un modèle public par défaut. Le tout dans le cadre du RGPD et de l'AI Act.",
     },
     businessCase: {
       context:
@@ -268,7 +268,7 @@ export const secteurs: SecteurPage[] = [
     },
     faq: [
       {
-        question: "Nos données de production sont sensibles, peuvent-elles sortir de l'usine ?",
+        question: "Nos données de production sont sensibles, peuvent-elles sortir de l'usine ?",
         answer:
           "Non, pas sans votre accord. Les systèmes sont conçus pour garder vos données de production et votre propriété industrielle sous votre contrôle, avec un hébergement adapté.",
       },
@@ -278,17 +278,17 @@ export const secteurs: SecteurPage[] = [
           "C'est le problème qu'on résout. On ne livre pas un prototype de démonstration, on livre un système en production, utilisé au quotidien et mesuré sur ses résultats.",
       },
       {
-        question: "Est-ce compatible avec nos systèmes existants (ERP, MES) ?",
+        question: "Est-ce compatible avec nos systèmes existants (ERP, MES) ?",
         answer:
           "Le système s'intègre à vos outils existants, il ne les remplace pas. Le diagnostic identifie précisément où l'IA se branche dans votre chaîne actuelle.",
       },
       {
-        question: "Quel est le retour sur investissement avant qu'on investisse ?",
+        question: "Quel est le retour sur investissement avant qu'on investisse ?",
         answer:
-          "Vous recevez un business case chiffré avant tout engagement : volumétrie, gain estimé, coût. Vous décidez sur des chiffres, pas sur une promesse.",
+          "Vous recevez un business case chiffré avant tout engagement : volumétrie, gain estimé, coût. Vous décidez sur des chiffres, pas sur une promesse.",
       },
       {
-        question: "Nos équipes d'atelier ne sont pas des experts IA, est-ce un problème ?",
+        question: "Nos équipes d'atelier ne sont pas des experts IA, est-ce un problème ?",
         answer:
           "Non. On pilote le projet de bout en bout et on documente ce qu'on livre. Vos équipes utilisent le système sans avoir à monter une équipe data en interne.",
       },
@@ -298,14 +298,14 @@ export const secteurs: SecteurPage[] = [
   {
     slug: "services-b2b",
     name: "Services B2B",
-    metaTitle: "IA pour services B2B : cas d'usage et ROI | Coucou IA",
+    metaTitle: "IA pour services B2B : cas d'usage et ROI | Coucou IA",
     metaDescription:
-      "IA pour services B2B : propositions commerciales, recherche de missions passées, qualification des leads. ROI chiffré avant engagement. Diagnostic gratuit.",
-    h1: "IA pour services B2B : moins de tâches répétitives, plus de missions",
+      "IA pour services B2B : propositions commerciales, recherche de missions passées, qualification des leads. ROI chiffré avant engagement. Diagnostic gratuit.",
+    h1: "IA pour services B2B : moins de tâches répétitives, plus de missions",
     intro:
       "Entre les propositions commerciales à refaire à chaque client et les questions de suivi qui reviennent sans arrêt, vos consultants passent plus de temps sur l'administratif que sur la mission elle-même.",
     painPoints: [
-      "Chaque nouvelle mission redémarre de zéro : proposition commerciale, cadrage, comptes rendus, alors que la structure change peu d'un client à l'autre.",
+      "Chaque nouvelle mission redémarre de zéro : proposition commerciale, cadrage, comptes rendus, alors que la structure change peu d'un client à l'autre.",
       "Vos consultants perdent du temps à retrouver une information dans les livrables et échanges de missions passées, plutôt qu'à la produire pour le client actuel.",
       "Les demandes récurrentes (statut de mission, questions administratives) mobilisent des collaborateurs seniors sur des tâches qui ne demandent pas leur expertise.",
     ],
@@ -333,7 +333,7 @@ export const secteurs: SecteurPage[] = [
     ],
     compliance: {
       title: "Confidentialité client et réversibilité",
-      body: "Les systèmes que nous concevons cloisonnent, dès la conception, les données de chaque client : pas de mélange entre missions. Vous restez maître de vos données et de leur réversibilité en cas de changement de prestataire. Le tout dans le cadre du RGPD et de l'AI Act.",
+      body: "Les systèmes que nous concevons cloisonnent, dès la conception, les données de chaque client : pas de mélange entre missions. Vous restez maître de vos données et de leur réversibilité en cas de changement de prestataire. Le tout dans le cadre du RGPD et de l'AI Act.",
     },
     businessCase: {
       context:
@@ -345,7 +345,7 @@ export const secteurs: SecteurPage[] = [
     },
     faq: [
       {
-        question: "Nos données clients ne doivent jamais se mélanger entre missions, est-ce garanti ?",
+        question: "Nos données clients ne doivent jamais se mélanger entre missions, est-ce garanti ?",
         answer:
           "Oui, c'est un principe de conception, pas une option. Chaque client reste cloisonné, sans mélange entre missions.",
       },
@@ -355,7 +355,7 @@ export const secteurs: SecteurPage[] = [
           "ChatGPT seul répond à partir de connaissances générales. Notre système est branché sur VOS références et VOS trames réelles, le résultat ressemble à ce que vous produisez déjà, en plus rapide.",
       },
       {
-        question: "Combien de temps avant de voir un résultat concret ?",
+        question: "Combien de temps avant de voir un résultat concret ?",
         answer:
           "Vous recevez un business case chiffré avant tout engagement, avec un délai de mise en production estimé. On priorise ce qui rapporte le plus vite.",
       },
@@ -365,9 +365,9 @@ export const secteurs: SecteurPage[] = [
           "Ce n'est pas votre rôle, c'est le nôtre. On pilote de bout en bout et on documente ce qu'on livre.",
       },
       {
-        question: "Si on arrête la mission avec vous, on récupère quoi ?",
+        question: "Si on arrête la mission avec vous, on récupère quoi ?",
         answer:
-          "Vos données et ce qui a été construit restent à vous : la réversibilité est prévue dès la conception, vous ne dépendez pas de nous pour continuer à les utiliser.",
+          "Vos données et ce qui a été construit restent à vous : la réversibilité est prévue dès la conception, vous ne dépendez pas de nous pour continuer à les utiliser.",
       },
     ],
     relatedCasUsage: ["reponse-appels-offres", "recherche-interne", "qualification-leads"],
@@ -375,16 +375,16 @@ export const secteurs: SecteurPage[] = [
   {
     slug: "assurance-mutuelle",
     name: "Assurance et mutuelle",
-    metaTitle: "IA pour assurance et mutuelle : usages et ROI | Coucou IA",
+    metaTitle: "IA pour assurance et mutuelle : usages et ROI | Coucou IA",
     metaDescription:
-      "IA pour assurance et mutuelle : pré-instruction des sinistres, réponses aux adhérents. ROI chiffré avant engagement. Diagnostic gratuit.",
-    h1: "IA pour l'assurance et la mutuelle : des sinistres traités plus vite",
+      "IA pour assurance et mutuelle : pré-instruction des sinistres, réponses aux adhérents. ROI chiffré avant engagement. Diagnostic gratuit.",
+    h1: "IA pour l'assurance et la mutuelle : des sinistres traités plus vite",
     intro:
       "Entre les dossiers sinistres qui s'accumulent et les adhérents qui posent toujours les mêmes questions sur leurs garanties, vos gestionnaires passent plus de temps à chercher l'information qu'à traiter le dossier.",
     painPoints: [
-      "Le traitement des sinistres s'accumule : chaque dossier demande de collecter les pièces, vérifier les garanties et rédiger une réponse, dossier par dossier.",
+      "Le traitement des sinistres s'accumule : chaque dossier demande de collecter les pièces, vérifier les garanties et rédiger une réponse, dossier par dossier.",
       "Les adhérents posent les mêmes questions sur leurs garanties et remboursements, et elles saturent les lignes du service relation adhérents.",
-      "Les documents contractuels (conditions générales, avenants) sont dispersés : retrouver la bonne clause pour un cas précis prend du temps à chaque dossier.",
+      "Les documents contractuels (conditions générales, avenants) sont dispersés : retrouver la bonne clause pour un cas précis prend du temps à chaque dossier.",
     ],
     useCases: [
       {
@@ -410,7 +410,7 @@ export const secteurs: SecteurPage[] = [
     ],
     compliance: {
       title: "ACPR et Solvabilité II",
-      body: "Les systèmes que nous concevons sont conçus pour respecter, dès la conception, les exigences de gouvernance de l'ACPR et de la directive Solvabilité II. La décision finale sur un dossier reste toujours entre les mains de votre gestionnaire : l'IA prépare, elle ne décide pas. Le tout dans le cadre du RGPD et de l'AI Act.",
+      body: "Les systèmes que nous concevons sont conçus pour respecter, dès la conception, les exigences de gouvernance de l'ACPR et de la directive Solvabilité II. La décision finale sur un dossier reste toujours entre les mains de votre gestionnaire : l'IA prépare, elle ne décide pas. Le tout dans le cadre du RGPD et de l'AI Act.",
     },
     businessCase: {
       context:
@@ -422,12 +422,12 @@ export const secteurs: SecteurPage[] = [
     },
     faq: [
       {
-        question: "Une IA peut-elle intervenir sur des dossiers sinistres sans risque réglementaire ?",
+        question: "Une IA peut-elle intervenir sur des dossiers sinistres sans risque réglementaire ?",
         answer:
-          "Le système est conçu pour respecter les exigences de l'ACPR et de Solvabilité II. Il prépare le dossier, il ne le décide pas : la décision reste entièrement entre les mains de votre gestionnaire.",
+          "Le système est conçu pour respecter les exigences de l'ACPR et de Solvabilité II. Il prépare le dossier, il ne le décide pas : la décision reste entièrement entre les mains de votre gestionnaire.",
       },
       {
-        question: "Nos données adhérents sont sensibles, comment sont-elles protégées ?",
+        question: "Nos données adhérents sont sensibles, comment sont-elles protégées ?",
         answer:
           "Elles restent sous votre contrôle, avec un hébergement adapté et dans le respect du RGPD. La souveraineté des données est un point de départ, pas une option.",
       },
@@ -437,12 +437,12 @@ export const secteurs: SecteurPage[] = [
           "Un chatbot générique répond à côté parce qu'il ne connaît pas vos contrats. Notre système est branché sur vos garanties et vos process réels, et les cas complexes remontent toujours à un conseiller.",
       },
       {
-        question: "Quel est le retour sur investissement avant d'engager le projet ?",
+        question: "Quel est le retour sur investissement avant d'engager le projet ?",
         answer:
-          "Vous recevez un business case chiffré avant tout engagement : volumétrie de dossiers, gain estimé, coût. Vous décidez sur des chiffres.",
+          "Vous recevez un business case chiffré avant tout engagement : volumétrie de dossiers, gain estimé, coût. Vous décidez sur des chiffres.",
       },
       {
-        question: "Ça s'intègre à notre système de gestion existant ?",
+        question: "Ça s'intègre à notre système de gestion existant ?",
         answer:
           "Oui, le système s'intègre à vos outils existants, il ne les remplace pas. Le diagnostic identifie où l'IA se branche dans votre process actuel.",
       },
@@ -452,14 +452,14 @@ export const secteurs: SecteurPage[] = [
   {
     slug: "sante-medico-social",
     name: "Santé et médico-social",
-    metaTitle: "IA pour santé et médico-social : usages et ROI | Coucou IA",
+    metaTitle: "IA pour santé et médico-social : usages et ROI | Coucou IA",
     metaDescription:
-      "IA pour la santé et le médico-social : transmissions, dossiers patients, questions familles. ROI chiffré avant engagement. Diagnostic gratuit.",
-    h1: "IA pour la santé et le médico-social : moins de paperasse, plus de soin",
+      "IA pour la santé et le médico-social : transmissions, dossiers patients, questions familles. ROI chiffré avant engagement. Diagnostic gratuit.",
+    h1: "IA pour la santé et le médico-social : moins de paperasse, plus de soin",
     intro:
       "Entre les transmissions à rédiger, les dossiers patients à retrouver et les questions des familles qui reviennent sans cesse, vos équipes soignantes passent du temps sur l'administratif qui devrait revenir au soin.",
     painPoints: [
-      "Les dossiers patients ou résidents s'accumulent : comptes rendus, transmissions, admissions, chaque étape redemande une saisie manuelle.",
+      "Les dossiers patients ou résidents s'accumulent : comptes rendus, transmissions, admissions, chaque étape redemande une saisie manuelle.",
       "Les informations réparties entre soignants et entre équipes rendent difficile de retrouver rapidement l'historique d'un patient ou d'un résident.",
       "Les familles et partenaires posent des questions récurrentes sur l'admission, le suivi ou les démarches administratives, ce qui mobilise des soignants sur des tâches non soignantes.",
     ],
@@ -487,7 +487,7 @@ export const secteurs: SecteurPage[] = [
     ],
     compliance: {
       title: "Données de santé et hébergement HDS",
-      body: "Les systèmes que nous concevons sont pensés, dès la conception, pour un hébergement conforme aux exigences applicables aux données de santé (HDS). L'IA prépare et assiste, elle ne pose jamais de diagnostic ni ne prend de décision médicale : cela reste entièrement entre les mains des soignants. Le tout dans le cadre du RGPD et de l'AI Act.",
+      body: "Les systèmes que nous concevons sont pensés, dès la conception, pour un hébergement conforme aux exigences applicables aux données de santé (HDS). L'IA prépare et assiste, elle ne pose jamais de diagnostic ni ne prend de décision médicale : cela reste entièrement entre les mains des soignants. Le tout dans le cadre du RGPD et de l'AI Act.",
     },
     businessCase: {
       context:
@@ -499,12 +499,12 @@ export const secteurs: SecteurPage[] = [
     },
     faq: [
       {
-        question: "Une IA peut-elle intervenir sur des données de santé sans risque ?",
+        question: "Une IA peut-elle intervenir sur des données de santé sans risque ?",
         answer:
           "Le système est pensé dès la conception pour un hébergement conforme aux exigences des données de santé, et dans le respect du RGPD et de l'AI Act. Les décisions médicales restent entièrement entre les mains des soignants.",
       },
       {
-        question: "Nos données patients ne peuvent pas sortir de l'établissement, est-ce compatible ?",
+        question: "Nos données patients ne peuvent pas sortir de l'établissement, est-ce compatible ?",
         answer:
           "Oui. Les systèmes sont conçus pour garder vos données sous votre contrôle, avec un hébergement adapté à cette exigence.",
       },
@@ -514,7 +514,7 @@ export const secteurs: SecteurPage[] = [
           "Ce n'est pas son rôle. L'IA prépare un premier jet ou une synthèse, chaque sortie est validée par un soignant. La décision clinique reste humaine, du début à la fin.",
       },
       {
-        question: "Combien de temps avant un résultat concret pour nos équipes ?",
+        question: "Combien de temps avant un résultat concret pour nos équipes ?",
         answer:
           "Vous recevez un business case chiffré avant tout engagement, avec un périmètre et un délai de mise en production estimés.",
       },

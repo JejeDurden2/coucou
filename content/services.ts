@@ -1,4 +1,4 @@
-// Les deux offres : Audit & stratégie IA / Développement IA sur mesure.
+// Les deux offres : Audit & stratégie IA / Développement IA sur mesure.
 
 export type Service = {
   id: string;
@@ -20,18 +20,18 @@ export type ServicesSection = {
 export const services: ServicesSection = {
   eyebrow: "Nos deux métiers",
   title: "Deux métiers, un seul objectif : votre ROI.",
-  sub: "La vision stratégique d'un cabinet et les mains dans le code d'une équipe technique. Sous le même toit. Ni l'un sans l'autre.",
+  sub: "La vision stratégique d'un cabinet, les mains dans le code. Un seul interlocuteur du diagnostic à la production : rien ne se perd en route.",
   livrableLabel: "Livrable",
   offers: [
     {
       id: "audit",
       title: "Audit & stratégie IA",
-      hook: "On cartographie où l'IA rapporte chez vous. Et où elle ne sert à rien.",
+      hook: "On dresse votre carte des possibles : où l'IA rapporte chez vous, et où elle ne sert à rien.",
       description:
         "On part de votre activité, pas de la techno. On regarde vos process, vos données et vos irritants, puis on chiffre le retour attendu de chaque opportunité.",
       deliverables: [
         "Diagnostic de l'existant : process, données et outils déjà en place",
-        "Cartographie des opportunités IA, classées par impact et faisabilité",
+        "Votre carte des possibles : les opportunités IA classées par impact et faisabilité",
         "Business case chiffré pour chaque piste prioritaire (ROI attendu)",
         "Feuille de route IA priorisée, réaliste pour vos équipes",
         "Cadre RGPD et AI Act pensé dès la conception",

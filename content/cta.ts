@@ -7,5 +7,5 @@ export type FinalCta = {
 
 export const finalCta: FinalCta = {
   title: "Coucou. Et si on chiffrait votre ROI ?",
-  sub: "30 minutes, gratuites et sans engagement. On vous dit franchement où l'IA vous rapporte, et où elle ne sert à rien.",
+  sub: "30 minutes, gratuites et sans engagement. Vous repartez avec un avis franc et vos premières pistes : où l'IA rapporte chez vous, et où elle ne sert à rien.",
 };

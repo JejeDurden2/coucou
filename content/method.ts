@@ -1,4 +1,4 @@
-// Les 4 étapes. Chaque étape rend la garantie crédible : on chiffre avant, on livre, on mesure.
+// Les 4 étapes. Chaque étape rend la garantie crédible : on chiffre avant, on livre, on mesure.
 
 export type MethodStep = {
   number: string;

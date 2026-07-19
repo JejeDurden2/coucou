@@ -1,5 +1,5 @@
-// Pages légales : mentions légales et confidentialité. Ton sobre, aucun clin d'oeil.
-// TODO fondateur : faire relire ces deux pages par un juriste avant la mise en ligne.
+// Pages légales : mentions légales et confidentialité. Ton sobre, aucun clin d'oeil.
+// TODO fondateur : faire relire ces deux pages par un juriste avant la mise en ligne.
 
 import { contactEmail } from "@/content/site";
 
@@ -32,7 +32,7 @@ export const mentionsLegales: LegalPage = {
     },
     {
       heading: "Directeur de la publication",
-      // TODO fondateur : nommer explicitement le directeur de la publication si souhaité.
+      // TODO fondateur : nommer explicitement le directeur de la publication si souhaité.
       paragraphs: ["Le représentant légal de la société COUCOU IA."],
     },
     {

@@ -1,5 +1,5 @@
 // FAQ issue des objections + anti-persona + prix. Questions formulées comme un dirigeant les pose.
-// Pas de clin d'oeil dans les réponses prix et sécurité : tout est sobre.
+// Pas de clin d'oeil dans les réponses prix et sécurité : tout est sobre.
 
 export type FaqItem = {
   question: string;
@@ -46,6 +46,11 @@ export const faq: FaqSection = {
       question: "On n'a personne en interne pour piloter un projet IA.",
       answer:
         "C'est notre rôle, pas le vôtre. On pilote de bout en bout, on s'intègre à vos outils existants et on documente ce qu'on livre. Vos équipes utilisent le système sans avoir à monter une équipe data.",
+    },
+    {
+      question: "Qui travaille concrètement sur notre projet ?",
+      answer:
+        "La même personne du premier appel à la mise en production : celle qui conçoit la stratégie écrit aussi le code. Pas de junior intercalé, pas de sous-traitance, rien ne se perd entre l'audit et le système. Et tout ce qui est livré est documenté et intégré à vos outils : le système vous appartient et tourne sans nous.",
     },
     {
       question: "Pour qui n'est-ce PAS fait ?",

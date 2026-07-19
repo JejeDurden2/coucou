@@ -1,4 +1,4 @@
-// Page 404. Seul endroit du site ou le clin d'oeil porte sur une erreur : reste bref, reste dans le ton.
+// Page 404. Seul endroit du site ou le clin d'oeil porte sur une erreur : reste bref, reste dans le ton.
 
 export type NotFoundContent = {
   accroche: string;
