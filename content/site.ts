@@ -9,7 +9,7 @@ export type NavLink = {
 export const siteName = "Coucou IA";
 
 export const tagline =
-  "L’IA va changer votre quotidien. On sait par où commencer, et on s’engage sur le ROI.";
+  "L’IA va changer votre quotidien. On sait par où commencer, et on le met en production.";
 
 export const siteUrl = "https://coucou-ia.com";
 
@@ -28,7 +28,6 @@ export const bookingHref = "https://cal.com/jerome-desmares-izhobq/30min";
 export const nav: NavLink[] = [
   { label: "Services", href: "/#services" },
   { label: "Méthode", href: "/#methode" },
-  { label: "Garantie", href: "/#garantie" },
   { label: "Secteurs", href: "/secteurs" },
   { label: "Cas d’usage", href: "/cas-usage" },
 ];
@@ -40,8 +39,8 @@ export const footerLegalLinks: NavLink[] = [
 
 // Positionnement d’une ligne pour le pied de page.
 export const footerPositioning =
-  "Conseil et développement IA pour les PME et ETI françaises. Un ROI mesurable, garanti.";
+  "Conseil et développement IA pour les PME et ETI françaises. On trouve ce que l’IA rend possible chez vous, et on le construit.";
 
-// Meta description (~150 caracteres, mots-cles en tete : conseil IA / PME / ETI / ROI).
+// Meta description (~145 caracteres, mots-cles en tete : conseil IA / PME / ETI).
 export const description =
-  "Conseil IA pour PME et ETI françaises : audit, business case chiffré, développement sur mesure et mise en production. ROI garanti, diagnostic gratuit.";
+  "Conseil IA pour PME et ETI : on trouve ce que l’IA rend possible chez vous et on le met en production. Business case chiffré, diagnostic gratuit.";

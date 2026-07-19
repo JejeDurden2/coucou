@@ -1,10 +1,10 @@
 # Coucou IA
 
-Coucou IA est un cabinet de conseil et développement IA pour les PME françaises (10 à 250 salariés) et les ETI. Deux métiers complémentaires : l'audit et la stratégie IA (diagnostic de l'existant, cartographie des opportunités, business case chiffré, feuille de route) et le développement IA sur mesure (agents IA, RAG, automatisations, intégration aux outils existants). Le différenciant : le ROI garanti, un engagement écrit sur le résultat, pas une réflexion facturée sans système derrière. Le premier contact est un diagnostic gratuit de 30 minutes, sans engagement.
+Coucou IA est un cabinet de conseil et développement IA pour les PME françaises (10 à 250 salariés) et les ETI. Deux métiers complémentaires : l'audit et la stratégie IA (diagnostic de l'existant, cartographie des opportunités, business case chiffré, feuille de route) et le développement IA sur mesure (agents IA, RAG, automatisations, intégration aux outils existants). Le différenciant : on montre aux dirigeants ce que l'IA rend possible chez eux, par où commencer, sans jargon, et on le met en production, avec un business case chiffré avant tout engagement. Le premier contact est un diagnostic gratuit de 30 minutes, sans engagement.
 
 ## Pages
 
-- [Accueil](https://coucou-ia.com/) : les deux offres, la méthode en quatre étapes, la garantie ROI, des cas d'usage concrets et les questions fréquentes.
+- [Accueil](https://coucou-ia.com/) : les deux offres, la méthode en quatre étapes, des cas d'usage concrets et les questions fréquentes.
 - [Mentions légales](https://coucou-ia.com/mentions-legales) : identité de l'éditeur, siège social et informations légales de la société COUCOU IA.
 - [Confidentialité](https://coucou-ia.com/confidentialite) : politique de confidentialité et traitement des données personnelles.
 
@@ -12,7 +12,7 @@ Coucou IA est un cabinet de conseil et développement IA pour les PME française
 
 - Services : audit & stratégie IA, développement IA sur mesure (agents IA, RAG, automatisations, intégrations).
 - Cible : PME de 10 à 250 salariés et ETI, en France.
-- Différenciant : ROI garanti, engagement écrit sur le résultat.
+- Différenciant : par où commencer avec l'IA, business case chiffré avant tout engagement, livraison en production.
 - Premier contact : diagnostic gratuit de 30 minutes, sans engagement.
 - Contact : jerome@coucou-ia.com
 - SIREN : 100498070

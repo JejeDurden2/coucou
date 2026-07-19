@@ -92,8 +92,8 @@ export function BusinessCaseBlock({
   );
 }
 
-// Recap linking back to the home method + garantie sections (internal nav,
-// secondary buttons, never the booking CTA).
+// Recap linking back to the home method section (internal nav,
+// secondary button, never the booking CTA).
 export function MethodRecap() {
   return (
     <section className="border-t border-border">
@@ -115,14 +115,6 @@ export function MethodRecap() {
               size="default"
             >
               {spokes.methodRecap.methodLink}
-            </Button>
-            <Button
-              nativeButton={false}
-              render={<Link href="/#garantie" />}
-              variant="secondary"
-              size="default"
-            >
-              {spokes.methodRecap.guaranteeLink}
             </Button>
           </div>
         </ScrollReveal>

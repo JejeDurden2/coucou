@@ -84,7 +84,7 @@ Contenu unique exigé par page cas d'usage :
 3. Cas d'usage concrets (secteur) ou avant / après (cas d'usage).
 4. Business case exemple (metric-block, étiqueté « Exemple »).
 5. Conformité et données (RGPD, AI Act, spécificité sectorielle).
-6. Méthode en bref, lien vers `/#methode` et `/#garantie`.
+6. Méthode en bref, lien vers `/#methode`.
 7. FAQ.
 8. CTA final : bloc diagnostic gratuit.
 

@@ -1,4 +1,4 @@
-// Les 4 étapes. Chaque étape rend la garantie crédible : on chiffre avant, on livre, on mesure.
+// Les 4 étapes : on chiffre avant, on livre en production, on mesure.
 
 export type MethodStep = {
   number: string;
@@ -42,7 +42,7 @@ export const method: MethodSection = {
       number: "04",
       title: "Mesure du ROI",
       description:
-        "Une fois en service, on mesure les résultats réels face au business case de départ. Temps gagné, coûts réduits, chiffres à l’appui. C’est là que l’engagement se vérifie.",
+        "Une fois en service, on mesure les résultats réels face au business case de départ. Temps gagné, coûts réduits, chiffres à l’appui. Vous savez ce que le système vous rapporte, noir sur blanc.",
       detail: "Résultats réels, comparés au business case.",
     },
   ],

@@ -4,7 +4,7 @@ import { tagline } from "@/content/site";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 export const alt =
-  "Coucou IA : conseil et développement IA pour PME et ETI, ROI garanti.";
+  "Coucou IA : conseil et développement IA pour PME et ETI. On sait par où commencer.";
 
 // Couleurs en dur car ImageResponse ne lit pas les tokens CSS de app/globals.css.
 // Elles miroitent exactement --background, --foreground et --primary du design system.

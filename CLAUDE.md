@@ -1,7 +1,7 @@
 # Coucou IA: Working Contract
 
 ## Overview
-Coucou IA is an AI consulting company for the French market (PME de 10 à 250 salariés and ETI). Two offers: **Audit & stratégie IA** (diagnostics, cartographie d'opportunités, business cases ROI, roadmaps) and **Développement IA sur mesure** (agents IA, RAG, automatisations, intégrations). Differentiator: **ROI garanti**, meaning we ship working systems and commit to measurable outcomes, not slide decks. The site has one job: build credibility (dark enterprise-tech) and convert visitors into **booked diagnostic calls**. Pricing is never published. 100% French, `vous`, no i18n.
+Coucou IA is an AI consulting company for the French market (PME de 10 à 250 salariés and ETI). Two offers: **Audit & stratégie IA** (diagnostics, cartographie d'opportunités, business cases ROI, roadmaps) and **Développement IA sur mesure** (agents IA, RAG, automatisations, intégrations). Differentiator: **ouvrir le champ des possibles**: we show non-expert dirigeants what AI makes possible in their business and where to start, sans jargon, then ship it to production. ROI survives as method (business case chiffré avant d'engager, résultats mesurés), never as a guarantee: the word "garanti" is banned from all copy. The site has one job: build credibility (dark enterprise-tech) and convert visitors into **booked diagnostic calls**. Pricing is never published. 100% French, `vous`, no i18n.
 
 ## Stack (locked)
 - Next.js 16+ (App Router), React 19, TypeScript `strict`
