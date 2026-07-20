@@ -1,8 +1,9 @@
 # Playbook outbound : Coucou IA
 
-**Version :** v1.1
-**Date :** 2026-07-19
+**Version :** v1.2
+**Date :** 2026-07-20
 **Auteur / interlocuteur unique :** Jérôme (Coucou IA, Nice)
+**Exécution (depuis le 2026-07-20) :** les séquences de ce playbook tournent dans Lemlist : campagnes « Outbound expertise comptable » et « Outbound industrie », montées par l'API avec les messages de la section 3 tels quels. Les emails partent seuls à la cadence J6/J11/J18, les étapes LinkedIn passent par l'extension Lemlist (semi-auto). Le Sheets de la section 6 reste utile pour les notes et signaux, plus pour la cadence : Lemlist trace les touches, et le webhook Cal.com stoppe la séquence de qui réserve.
 
 ## En-tête
 

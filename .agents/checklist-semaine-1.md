@@ -1,20 +1,20 @@
 # Checklist semaine 1 : les actions que seul le fondateur peut faire
 
-**Version :** v1 (2026-07-19). Tout le reste (code, copy, séquences) est déjà prêt dans le repo et les docs `.agents/`. Cette liste ne contient que ce qui demande tes accès. Ordre = ordre d'exécution recommandé. Temps total estimé : 2 à 3 heures.
+**Version :** v1.1 (2026-07-20, bascule Brevo → Lemlist). Tout le reste (code, copy, séquences) est déjà prêt dans le repo, les docs `.agents/` et les 4 campagnes Lemlist. Cette liste ne contient que ce qui demande tes accès. Ordre = ordre d'exécution recommandé. Temps total estimé : 2 à 3 heures (+ le délai de chauffe email).
 
-## 1. Délivrabilité email (avant toute prospection, ~30 min)
+## 1. Boîte d'envoi et délivrabilité (avant toute prospection, ~45 min)
 
 État constaté au 2026-07-19 (vérification DNS réelle) :
-- SPF : `v=spf1 include:_spf.mx.cloudflare.net ~all` : Cloudflare uniquement, **Brevo absent**.
-- DKIM Brevo : **absent**. DMARC : **absent**. MX : Cloudflare Email Routing (réception OK).
+- SPF : `v=spf1 include:_spf.mx.cloudflare.net ~all` : Cloudflare uniquement.
+- DKIM : **absent**. DMARC : **absent**. MX : Cloudflare Email Routing (réception seule).
 
-À faire dans Brevo puis dans la zone DNS (Cloudflare) :
-1. Brevo → Réglages → Expéditeurs, domaines et IP → Authentifier le domaine `coucou-ia.com`. Brevo affiche 2-3 enregistrements exacts (DKIM `mail._domainkey`, code de vérification, et la valeur SPF à inclure). Les copier tels quels dans Cloudflare DNS.
-2. Ajouter le SPF Brevo à l'enregistrement existant (un seul enregistrement SPF par domaine) : remplacer par `v=spf1 include:_spf.mx.cloudflare.net include:spf.brevo.com ~all` (vérifier le nom exact affiché par Brevo).
-3. Créer DMARC : TXT sur `_dmarc.coucou-ia.com` : `v=DMARC1; p=none; rua=mailto:jerome@coucou-ia.com` (mode observation d'abord, on durcira plus tard).
-4. Dans Brevo, re-cliquer « Vérifier » jusqu'au vert.
+**L'alias Cloudflare ne suffit pas.** Cloudflare Email Routing reçoit et transfère, il n'envoie pas : `jerome@coucou-ia.com` n'a pas de boîte. Envoyer « en tant que » cet alias depuis un Gmail perso signe les emails en `gmail.com` : authentification non alignée avec `coucou-ia.com`, exactement ce que Gmail et Yahoo filtrent le plus durement sur le cold email. Le Gmail perso connecté à Lemlist sert aux tests, jamais à la prospection.
 
-Sans ça, l'email de livraison de la carte et la future séquence nurture risquent le spam. Les emails outbound envoyés depuis Gmail passent, mais garde un volume faible et progressif (le playbook le prévoit).
+À faire :
+1. Créer une vraie boîte `jerome@coucou-ia.com` : Google Workspace Starter (~7 €/mois). Suivre l'assistant : les MX passent chez Google (la réception quitte Cloudflare Routing, l'alias devient inutile), SPF devient `v=spf1 include:_spf.google.com ~all`, activer DKIM dans l'admin Google.
+2. Créer DMARC : TXT sur `_dmarc.coucou-ia.com` : `v=DMARC1; p=none; rua=mailto:jerome@coucou-ia.com` (observation d'abord, on durcira plus tard).
+3. Connecter cette boîte dans Lemlist (Settings → Senders) et activer **lemwarm** : 2 à 3 semaines de chauffe avant tout volume. Les invitations LinkedIn, elles, peuvent démarrer sans attendre.
+4. Vérifier avec le check de délivrabilité intégré à Lemlist avant le premier envoi réel.
 
 ## 2. Search Console (~10 min)
 
@@ -35,10 +35,10 @@ Bonne nouvelle : un TXT `google-site-verification` existe déjà sur le domaine,
   3. Qu'est-ce qui vous amène ? (texte long, facultatif)
 - **Langue / notifications :** passer l'interface et les emails de confirmation + rappel en français ; activer le rappel à J-1 (réduit les no-show).
 
-**b) Le webhook** (rend chaque réservation visible dans les logs + par email) :
+**b) Le webhook** (trace chaque réservation dans les logs et stoppe les séquences Lemlist du prospect qui réserve ; Cal.com te notifie déjà par email) :
 1. Générer un secret (une longue chaîne aléatoire), l'ajouter dans Vercel → Settings → Environment Variables : `CAL_WEBHOOK_SECRET`.
 2. Cal.com → Settings → Developer → Webhooks → New : URL `https://coucou-ia.com/api/cal-webhook`, événement « Booking created », secret = le même.
-3. Tester avec une fausse réservation : tu dois recevoir l'email `[rdv]` et voir la ligne `[rdv]` dans les logs Vercel. (Le code est déjà en place : `app/api/cal-webhook/route.ts`.)
+3. Tester avec une fausse réservation : la ligne `[rdv]` doit apparaître dans les logs Vercel. (Le code est déjà en place : `app/api/cal-webhook/route.ts`.)
 
 ## 4. Profil LinkedIn (~30 min)
 
@@ -48,14 +48,18 @@ Appliquer `.agents/linkedin.md` section 1 (photo, titre, bannière, infos, lien)
 
 https://business.google.com → créer la fiche COUCOU IA (adresse du siège, catégorie « Consultant », site coucou-ia.com, description reprise du hero). Sert le SEO local Nice/PACA et recevra les futurs avis clients réels.
 
-## 6. Brevo : monter les 2 automatisations nurture (~30 min)
+## 6. Lemlist : activer les 4 campagnes déjà montées (~30 min)
 
-Suivre `.agents/nurture.md` : 2 automatisations (compta, industrie), 3 emails chacune, textes prêts à coller. À faire après l'étape 1 (délivrabilité), sinon les emails partiront mal armés.
+Les campagnes existent (montées par l'API le 2026-07-20, contenus depuis `.agents/outbound.md` et `.agents/nurture.md`) : Outbound expertise comptable, Outbound industrie, Nurture carte expertise comptable (`cam_qnKzY6bXNxtSinjAF`), Nurture carte industrie (`cam_YLiMdN5H3wAW84wYs`).
+1. Installer l'extension Chrome Lemlist et connecter ton compte LinkedIn (nécessaire aux étapes invitation + message des 2 campagnes outbound).
+2. Sur chaque campagne : associer la boîte d'envoi (étape 1 de cette checklist), relire les étapes, vérifier le planning (mardi-jeudi en cœur, jamais le week-end) et, sur les 2 nurture, le lien de désinscription.
+3. Lancer les 2 campagnes **nurture** dès que la boîte est chauffée : le site pousse déjà les leads dedans.
+4. Les 2 campagnes **outbound** ne se lancent qu'avec la liste de prospects (étape 7) et après validation de ton profil LinkedIn (étape 4).
 
 ## 7. Lancer la semaine 1 du playbook outbound
 
-Une fois 1 et 4 faits : construire la liste (50-75 cabinets compta Nice/PACA, critères dans `.agents/outbound.md` §1) et envoyer le premier lot d'invitations (10-15/jour pour commencer, compte récent oblige).
+Une fois 1, 4 et 6 faits : construire la liste (50-75 cabinets compta Nice/PACA, critères dans `.agents/outbound.md` §1), l'importer dans la campagne « Outbound expertise comptable », et démarrer à 10-15 invitations/jour (compte récent oblige).
 
 ## Optionnel mais utile
-- **Ré-authentifier les connecteurs claude.ai** (Gmail, Google Drive, HubSpot) dans les réglages claude.ai → Connecteurs : ça me permettra de suivre les réponses outbound et préparer les revues hebdo automatiquement.
-- **Vercel → vérifier que `BREVO_API_KEY` est bien posée en production** (sinon les leads partent en logs avec le marqueur `[lead-alerte]`, jamais chez Brevo).
+- **Ré-authentifier les connecteurs claude.ai** (Gmail, Google Drive, HubSpot) dans les réglages claude.ai → Connecteurs : utile pour les revues hebdo semi-automatiques (les réponses outbound, elles, sont désormais suivies via l'API Lemlist).
+- **Vercel → poser `LEMLIST_API_KEY` en production** (sinon les leads des cartes partent en logs avec le marqueur `[lead-alerte]`, jamais chez Lemlist). Supprimer `BREVO_API_KEY` si elle existe.

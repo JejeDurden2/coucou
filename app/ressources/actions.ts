@@ -4,8 +4,7 @@
 // Signature imposee par useActionState : (prevState, formData). Le slug
 // voyage dans un champ cache du formulaire (voir components/ressource-form.tsx).
 
-import { contactEmail, siteUrl } from "@/content/site";
-import { ressources, ressourcesShared } from "@/content/ressources";
+import { ressources } from "@/content/ressources";
 
 export type SubscribeState = {
   status: "idle" | "success" | "error";
@@ -13,54 +12,27 @@ export type SubscribeState = {
 };
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-const BREVO_CONTACTS_URL = "https://api.brevo.com/v3/contacts";
-const BREVO_EMAIL_URL = "https://api.brevo.com/v3/smtp/email";
 
-// Le corps de l'email (paragraphes separes par une ligne vide dans
-// content/ressources.ts, du contenu maison : pas d'echappement necessaire)
-// enveloppe en <p>, plus le lien direct vers la carte.
-function bodyToHtml(body: string, carteUrl: string): string {
-  const paragraphs = body
-    .split(/\n{2,}/)
-    .map((paragraph) => `<p>${paragraph.trim()}</p>`)
-    .join("");
-  return `${paragraphs}<p><a href="${carteUrl}">${ressourcesShared.successCarteLabel}</a></p>`;
-}
-
-async function sendViaBrevo(
-  apiKey: string,
-  email: string,
-  slug: string,
-  subject: string,
-  htmlContent: string
-): Promise<void> {
-  const headers = {
-    "api-key": apiKey,
-    "Content-Type": "application/json",
-    accept: "application/json",
-  };
-
-  const contactRes = await fetch(BREVO_CONTACTS_URL, {
-    method: "POST",
-    headers,
-    body: JSON.stringify({ email, attributes: { RESSOURCE: slug }, updateEnabled: true }),
-  });
-  if (!contactRes.ok) {
-    throw new Error(`Brevo contacts a repondu ${contactRes.status}`);
-  }
-
-  const emailRes = await fetch(BREVO_EMAIL_URL, {
-    method: "POST",
-    headers,
-    body: JSON.stringify({
-      sender: { name: "Jérôme, Coucou IA", email: contactEmail },
-      to: [{ email }],
-      subject,
-      htmlContent,
-    }),
-  });
-  if (!emailRes.ok) {
-    throw new Error(`Brevo smtp/email a repondu ${emailRes.status}`);
+// Le lead entre dans la campagne nurture Lemlist du secteur : l'etape 1
+// (delai 0) livre la carte par email, les relances J+3 / J+10 / J+21 suivent.
+// L'envoi respecte le planning de la campagne (heures ouvrees) : la page de
+// succes donne de toute facon l'acces direct a la carte.
+async function addToLemlist(apiKey: string, campaignId: string, email: string): Promise<void> {
+  const res = await fetch(
+    `https://api.lemlist.com/api/campaigns/${campaignId}/leads/${encodeURIComponent(email)}?deduplicate=true`,
+    {
+      method: "POST",
+      headers: {
+        Authorization: `Basic ${Buffer.from(`:${apiKey}`).toString("base64")}`,
+        "Content-Type": "application/json",
+      },
+      body: "{}",
+    }
+  );
+  // Re-soumission du meme email : Lemlist repond 400 "Lead already in the
+  // campaign", le prospect a deja sa sequence, c'est un succes.
+  if (!res.ok && res.status !== 400) {
+    throw new Error(`Lemlist a repondu ${res.status}`);
   }
 }
 
@@ -84,52 +56,23 @@ export async function subscribeRessource(
     return { status: "error", error: "server" };
   }
 
-  const carteUrl = `${siteUrl}/ressources/${ressource.slug}/carte`;
-  const apiKey = process.env.BREVO_API_KEY;
+  const apiKey = process.env.LEMLIST_API_KEY;
 
   if (apiKey) {
     try {
-      await sendViaBrevo(
-        apiKey,
-        email,
-        ressource.slug,
-        ressource.email.subject,
-        bodyToHtml(ressource.email.body, carteUrl)
-      );
+      await addToLemlist(apiKey, ressource.lemlistCampaignId, email);
       return { status: "success" };
     } catch (error) {
-      // ponytail: Brevo en panne ne doit jamais bloquer le prospect, la carte
-      // reste accessible depuis la page de succes. Le lead est signale au
-      // fondateur (email de secours si Brevo repond encore, sinon marqueur
-      // grep-able dans les logs Vercel : chercher "lead-alerte").
+      // ponytail: Lemlist en panne ne doit jamais bloquer le prospect, la carte
+      // reste accessible depuis la page de succes. Le lead reste visible dans
+      // les logs Vercel : chercher "lead-alerte".
       console.error(`[lead-alerte] ${email} -> ${ressource.slug}`, error);
-      await notifyFounder(apiKey, email, ressource.slug);
       return { status: "success" };
     }
   }
 
-  // ponytail: pas de cle Brevo configuree (dev local ou prod pas encore branchee) :
+  // ponytail: pas de cle Lemlist configuree (dev local ou prod pas encore branchee) :
   // le lead part quand meme dans les logs Vercel plutot que de rester perdu.
-  console.error(`[lead-alerte] BREVO_API_KEY absente, lead non traite : ${email} -> ${ressource.slug}`);
+  console.error(`[lead-alerte] LEMLIST_API_KEY absente, lead non traite : ${email} -> ${ressource.slug}`);
   return { status: "success" };
-}
-
-// Filet de securite : si la livraison au prospect a echoue, on tente au moins
-// de prevenir le fondateur par email (l'echec peut etre partiel : contact cree
-// mais envoi refuse). Best-effort, ne jette jamais.
-async function notifyFounder(apiKey: string, email: string, slug: string): Promise<void> {
-  try {
-    await fetch(BREVO_EMAIL_URL, {
-      method: "POST",
-      headers: { "api-key": apiKey, "Content-Type": "application/json", accept: "application/json" },
-      body: JSON.stringify({
-        sender: { name: "Site Coucou IA", email: contactEmail },
-        to: [{ email: contactEmail }],
-        subject: `[lead-alerte] carte non livrée : ${email}`,
-        htmlContent: `<p>La livraison de la carte « ${slug} » a échoué pour ${email}. À relancer à la main.</p>`,
-      }),
-    });
-  } catch {
-    // Deja trace via [lead-alerte] : rien de plus a faire ici.
-  }
 }

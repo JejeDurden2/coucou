@@ -77,7 +77,7 @@ export const confidentialite: LegalPage = {
     {
       heading: "Données que vous nous transmettez",
       paragraphs: [
-        "Si vous demandez une ressource (par exemple une carte des possibles), votre adresse e-mail sert à vous l’envoyer, puis à vous adresser quelques e-mails en lien avec cette ressource. Chaque e-mail contient un lien de désinscription en un clic. Ces envois passent par Brevo, prestataire français conforme au RGPD, qui traite votre adresse pour notre compte.",
+        "Si vous demandez une ressource (par exemple une carte des possibles), votre adresse e-mail sert à vous l’envoyer, puis à vous adresser quelques e-mails en lien avec cette ressource. Chaque e-mail contient un lien de désinscription en un clic. Ces envois passent par Lemlist (édité par lempire, société française), prestataire conforme au RGPD, qui traite votre adresse pour notre compte.",
         "Si vous réservez un premier échange, la prise de rendez-vous passe par l’outil Cal.com, qui recueille les informations que vous renseignez (nom, e-mail, réponses au formulaire de réservation) pour organiser cet échange.",
         "Si vous nous écrivez directement, nous recevons les informations que vous choisissez de nous communiquer (nom, adresse e-mail, message).",
         "Ces données servent uniquement à vous répondre, vous envoyer ce que vous avez demandé et organiser l’échange. Nous ne les utilisons à aucune autre fin et ne les revendons jamais.",
@@ -88,7 +88,7 @@ export const confidentialite: LegalPage = {
       heading: "Sous-traitants",
       paragraphs: [
         "Vercel Inc. (États-Unis) : hébergement du site et mesure d’audience sans cookie.",
-        "Brevo (France) : envoi des ressources par e-mail et gestion de la liste de contacts.",
+        "Lemlist, édité par lempire (France) : envoi des ressources par e-mail et gestion de la liste de contacts.",
         "Cal.com : prise de rendez-vous pour le premier échange.",
       ],
     },

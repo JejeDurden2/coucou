@@ -33,8 +33,9 @@ export type RessourcePage = {
   h1: string;
   intro: string;
   bullets: [string, string, string];
-  // Email de livraison (le lien vers la carte est ajouté par le code).
-  email: { subject: string; body: string };
+  // Campagne nurture Lemlist du secteur : l'étape 1 livre la carte par email,
+  // les relances suivent (contenu des emails : .agents/nurture.md).
+  lemlistCampaignId: string;
   // La carte elle-même (/ressources/[slug]/carte, noindex).
   carte: {
     title: string;
@@ -90,10 +91,7 @@ export const ressources: RessourcePage[] = [
       "Pour chacun, l’ordre de grandeur du gain et trois questions pour savoir si c’est chez vous.",
       "La carte de synthèse : quoi lancer en premier, quoi garder pour plus tard.",
     ],
-    email: {
-      subject: "votre carte des possibles",
-      body: "Bonjour,\n\nComme promis, voici la carte des possibles pour les cabinets d’expertise comptable : les cas d’usage de l’IA dans votre métier, classés par impact et par faisabilité, avec une grille pour évaluer chacun chez vous.\n\nParcourez-la, et dites-moi si un des cas vous parle. On en discute en 30 min quand vous voulez.\n\nJérôme, Coucou IA",
-    },
+    lemlistCampaignId: "cam_qnKzY6bXNxtSinjAF",
     carte: {
       title: "La carte des possibles : cabinet d’expertise comptable",
       lede: "Coucou. Vous savez déjà que l’IA va compter pour la profession comptable. Ce que personne ne vous dit, c’est par où commencer dans votre cabinet, sans jargon et sans y passer vos soirées. Cette carte répond à cette question : les cas d’usage de votre métier, du plus rentable au plus simple, posés à plat.",
@@ -201,10 +199,7 @@ export const ressources: RessourcePage[] = [
       "Pour chacun, l’ordre de grandeur du gain et trois questions pour savoir si c’est chez vous.",
       "La carte de synthèse : quoi lancer en premier, quoi garder pour plus tard.",
     ],
-    email: {
-      subject: "votre carte des possibles",
-      body: "Bonjour,\n\nComme promis, voici la carte des possibles pour les PME industrielles : les cas d’usage de l’IA dans votre activité, classés par impact et par faisabilité, avec une grille pour évaluer chacun chez vous.\n\nParcourez-la, et dites-moi si un des cas vous parle. On en discute en 30 min quand vous voulez.\n\nJérôme, Coucou IA",
-    },
+    lemlistCampaignId: "cam_YLiMdN5H3wAW84wYs",
     carte: {
       title: "La carte des possibles : PME industrielle",
       lede: "Coucou. Vous savez déjà que l’IA va compter pour l’industrie. Ce que personne ne vous dit, c’est par où commencer dans votre atelier et votre bureau d’études, sans jargon et sans usine à gaz. Cette carte répond à cette question : les cas d’usage de votre activité, du plus rentable au plus simple, posés à plat.",

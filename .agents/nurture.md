@@ -1,16 +1,33 @@
 # Séquence nurture post-carte : Coucou IA
 
-**Version :** v1 (2026-07-19)
+**Version :** v1.1 (2026-07-20)
 **Dépend de :** `.agents/lead-magnets.md` v1, `.agents/product-marketing.md` v1.4
-**Déclencheur :** téléchargement d'une carte (attribut Brevo `RESSOURCE` = `carte-expertise-comptable` ou `carte-industrie`). L'email J0 de livraison existe déjà (server action du site) : cette séquence commence à J+3.
+**Déclencheur :** téléchargement d'une carte. La server action du site (`app/ressources/actions.ts`) ajoute le lead à la campagne Lemlist de son secteur (`lemlistCampaignId` dans `content/ressources.ts`) : l'email J0 de livraison est l'étape 1 de la campagne, la séquence enchaîne.
 **Règles :** français, vous, aucun tiret cadratin, un seul ask par email, aucune pression, chiffres toujours étiquetés illustration, désinscription en un clic, signature « Jérôme, Coucou IA ». Le lien Cal.com est celui du site avec UTM : `https://cal.com/jerome-desmares-izhobq/30min?utm_source=email&utm_medium=nurture&utm_content=jX-[secteur]`.
-**Arrêt automatique :** la séquence s'interrompt si la personne réserve un point de départ ou répond à un email (toute réponse passe en conversation manuelle, priorité absolue).
+**Arrêt automatique :** la séquence s'interrompt si la personne réserve un point de départ (webhook Cal.com → lead marqué « intéressé » dans toutes ses campagnes Lemlist) ou répond à un email (Lemlist stoppe à la réponse ; toute réponse passe en conversation manuelle, priorité absolue).
 
-## Montage dans Brevo (une automatisation par secteur)
+## Montage dans Lemlist (fait le 2026-07-20 par l'API, une campagne par secteur)
 
-1. Automatisation « Nurture carte compta » : déclencheur = contact créé ou mis à jour avec `RESSOURCE = carte-expertise-comptable` ; attendre 3 jours → email 1 ; attendre 7 jours → email 2 ; attendre 11 jours → email 3 ; fin.
-2. Dupliquer pour `carte-industrie` avec les variantes ci-dessous.
-3. Condition de sortie sur chaque attente : a répondu ou a cliqué le lien Cal.com (si l'événement est disponible dans votre plan Brevo ; sinon, sortie manuelle à la réservation).
+| Campagne | ID | Étapes |
+|---|---|---|
+| Nurture carte expertise comptable | `cam_qnKzY6bXNxtSinjAF` | J0 livraison, J+3, J+10, J+21 |
+| Nurture carte industrie | `cam_YLiMdN5H3wAW84wYs` | J0 livraison, J+3, J+10, J+21 |
+
+Reste côté fondateur avant activation : connecter la boîte d'envoi, vérifier que le lien de désinscription est actif sur les 2 campagnes, relire, lancer. L'envoi J0 suit le planning de la campagne (heures ouvrées) : la page de merci du site donne de toute façon l'accès direct à la carte.
+
+## Email J0 (livraison, étape 1 de chaque campagne)
+
+Objet : `votre carte des possibles`. Corps (variante compta ; l'industrie remplace « les cabinets d'expertise comptable » par « les PME industrielles » et « votre métier » par « votre activité ») :
+
+> Bonjour,
+>
+> Comme promis, voici la carte des possibles pour les cabinets d'expertise comptable : les cas d'usage de l'IA dans votre métier, classés par impact et par faisabilité, avec une grille pour évaluer chacun chez vous.
+>
+> Parcourez-la, et dites-moi si un des cas vous parle. On en discute en 30 min quand vous voulez.
+>
+> Jérôme, Coucou IA
+>
+> [Consulter la carte](https://coucou-ia.com/ressources/carte-expertise-comptable/carte)
 
 ---
 
@@ -111,4 +128,5 @@
 | Désinscription | < 2 % par email | > 5 % : le rythme est trop dense, espacer |
 
 ## Changelog
+- v1.1 (2026-07-20) : bascule Brevo → Lemlist. Les 2 campagnes sont montées par l'API (IDs ci-dessus), l'email J0 de livraison devient l'étape 1 (il quitte `content/ressources.ts`), l'arrêt automatique à la réservation est branché sur le webhook Cal.com.
 - v1 (2026-07-19) : première séquence, 3 emails x 2 secteurs, à monter dans Brevo (2 automatisations).

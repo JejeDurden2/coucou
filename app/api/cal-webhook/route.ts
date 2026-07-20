@@ -1,14 +1,12 @@
 // Webhook Cal.com : rend chaque reservation visible cote Coucou IA
-// (marqueur [rdv] dans les logs Vercel + email de notification via Brevo).
+// (marqueur [rdv] dans les logs Vercel) et stoppe les sequences Lemlist du
+// prospect qui reserve (l'arret automatique promis par .agents/nurture.md ;
+// Cal.com notifie deja le fondateur par email, pas besoin de doublon).
 // Configuration cote Cal.com : Settings > Developer > Webhooks, URL
 // https://coucou-ia.com/api/cal-webhook, evenement BOOKING_CREATED, secret
 // identique a la variable d'environnement CAL_WEBHOOK_SECRET (Vercel).
 
 import { createHmac, timingSafeEqual } from "node:crypto";
-
-import { contactEmail } from "@/content/site";
-
-const BREVO_EMAIL_URL = "https://api.brevo.com/v3/smtp/email";
 
 type CalPayload = {
   triggerEvent?: string;
@@ -59,26 +57,28 @@ export async function POST(request: Request): Promise<Response> {
   };
 
   // ponytail: le log est la source de verite (grep "[rdv]" dans Vercel),
-  // l'email Brevo est un confort best-effort par-dessus.
+  // l'arret Lemlist est un best-effort par-dessus.
   console.log(`[rdv] ${JSON.stringify(resume)}`);
 
-  const apiKey = process.env.BREVO_API_KEY;
-  if (apiKey && evenement === "BOOKING_CREATED") {
+  const apiKey = process.env.LEMLIST_API_KEY;
+  const emailInvite = invite?.email;
+  if (apiKey && emailInvite && evenement === "BOOKING_CREATED") {
     try {
-      await fetch(BREVO_EMAIL_URL, {
-        method: "POST",
-        headers: { "api-key": apiKey, "Content-Type": "application/json", accept: "application/json" },
-        body: JSON.stringify({
-          sender: { name: "Site Coucou IA", email: contactEmail },
-          to: [{ email: contactEmail }],
-          subject: `[rdv] ${resume.invite} : ${resume.debut}`,
-          htmlContent: `<p>Point de départ réservé.</p><pre>${JSON.stringify(resume, null, 2)
-            .replace(/</g, "&lt;")
-            .replace(/>/g, "&gt;")}</pre>`,
-        }),
-      });
+      // Marque le lead "interessé" dans toutes ses campagnes Lemlist :
+      // ses sequences (outbound comme nurture) s'arretent immediatement.
+      const res = await fetch(
+        `https://api.lemlist.com/api/leads/interested/${encodeURIComponent(emailInvite)}`,
+        {
+          method: "POST",
+          headers: { Authorization: `Basic ${Buffer.from(`:${apiKey}`).toString("base64")}` },
+        }
+      );
+      // 404 = le prospect n'etait dans aucune campagne (venu par le site) : normal.
+      if (!res.ok && res.status !== 404) {
+        throw new Error(`Lemlist a repondu ${res.status}`);
+      }
     } catch (error) {
-      console.error("[rdv] notification Brevo en echec", error);
+      console.error("[rdv] arret des sequences Lemlist en echec", error);
     }
   }
 
