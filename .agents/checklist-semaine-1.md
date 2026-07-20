@@ -6,8 +6,10 @@
 
 ~~Créer la boîte `jerome@coucou-ia.com` (Google Workspace)~~ **FAIT (2026-07-20).** ~~La connecter dans Lemlist (Settings → Senders)~~ **FAIT (2026-07-20).** ~~Désactiver Email Routing, MX `smtp.google.com`, SPF Google, DMARC `p=none`~~ **FAIT (2026-07-20 au soir, via l'API Cloudflare, vérifié sur résolveurs Google et Cloudflare).** La réception arrive désormais dans la boîte Workspace : l'ancien transfert Cloudflare vers le Gmail perso ne fonctionne plus.
 
+~~Publier la clé DKIM~~ **FAIT (2026-07-20 au soir, TXT `google._domainkey` publié via l'API Cloudflare et vérifié complet sur les résolveurs publics).**
+
 Reste, dans l'ordre :
-1. **DKIM** : admin Google (admin.google.com) → Applications → Google Workspace → Gmail → Authentifier les e-mails → « Générer un enregistrement ». Donner la valeur TXT à Claude (qui la publie dans Cloudflare par l'API), puis cliquer « Lancer l'authentification ». C'est la dernière pièce de l'authentification : sans DKIM aligné, le cold email reste fragile face à Gmail et Yahoo.
+1. Dans l'admin Google (Gmail → Authentifier les e-mails) : cliquer **« Lancer l'authentification »** maintenant que l'enregistrement est publié. Google peut mettre jusqu'à 48 h à le voir, en pratique quelques minutes.
 2. Dans Lemlist : activer **lemwarm** sur la boîte : 2 à 3 semaines de chauffe avant tout volume (le creux d'août tombe bien pour ça). Les invitations LinkedIn, elles, peuvent démarrer sans attendre.
 3. Vérifier avec le check de délivrabilité intégré à Lemlist avant le premier envoi réel.
 
