@@ -100,10 +100,10 @@ export default function Home() {
       <main id="contenu">
         <Hero />
         <Problem />
+        <Realisations />
         <Services />
         <Method />
         <UseCases />
-        <Realisations />
         <Fondateur />
         <Faq />
         <Cta />

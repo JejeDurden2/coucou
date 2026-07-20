@@ -9,7 +9,7 @@ export type NavLink = {
 export const siteName = "Coucou IA";
 
 export const tagline =
-  "L’IA va changer votre quotidien. On sait par où commencer, et on le met en production.";
+  "Tout le monde vous parle d’IA. On sait par où commencer, et on le met en production.";
 
 export const siteUrl = "https://coucou-ia.com";
 

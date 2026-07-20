@@ -3,7 +3,11 @@ import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ScrollReveal } from "@/components/scroll-reveal";
 import { finalCta } from "@/content/cta";
+import { ressources } from "@/content/ressources";
 import { bookingUrl, ctaLabel } from "@/content/site";
+
+const carteLinkClasses =
+  "rounded-sm text-muted-foreground underline underline-offset-4 outline-none transition-colors hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4 focus-visible:ring-offset-background";
 
 export function Cta() {
   return (
@@ -22,6 +26,17 @@ export function Cta() {
               <ArrowRight data-icon="inline-end" />
             </Button>
           </div>
+          <p className="mt-8 font-mono text-sm text-foreground-dim">
+            {finalCta.softExitIntro}{" "}
+            {ressources.map((ressource, index) => (
+              <span key={ressource.slug}>
+                {index > 0 && <span aria-hidden> · </span>}
+                <a href={`/ressources/${ressource.slug}`} className={carteLinkClasses}>
+                  {ressource.name}
+                </a>
+              </span>
+            ))}
+          </p>
         </ScrollReveal>
       </div>
     </section>

@@ -50,7 +50,12 @@ export const faq: FaqSection = {
     {
       question: "Qui travaille concrètement sur notre projet ?",
       answer:
-        "La même personne du premier appel à la mise en production : celle qui conçoit la stratégie écrit aussi le code. Pas de junior intercalé, pas de sous-traitance, rien ne se perd entre l’audit et le système. Et tout ce qui est livré est documenté et intégré à vos outils : le système vous appartient et tourne sans nous.",
+        "La même personne du premier appel à la mise en production : celle qui conçoit la stratégie écrit aussi le code. Pas de junior intercalé, pas de sous-traitance, rien ne se perd entre l’audit et le système.",
+    },
+    {
+      question: "Une structure d’une personne, ce n’est pas un risque ?",
+      answer:
+        "La question est légitime, la réponse est concrète. Tout ce qu’on livre est documenté et intégré à vos outils : le système vous appartient, tourne chez vous et ne dépend pas de nous pour fonctionner. Si Coucou IA s’arrête demain, votre système continue, et n’importe quel développeur peut le reprendre avec la documentation.",
     },
     {
       question: "Pour qui n’est-ce PAS fait ?",
