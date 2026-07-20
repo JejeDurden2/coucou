@@ -1,10 +1,11 @@
 # Playbook outbound : Coucou IA
 
-**Version :** v1.2
+**Version :** v1.3
 **Date :** 2026-07-20
 **Auteur / interlocuteur unique :** Jérôme (Coucou IA, Nice)
 **Exécution (depuis le 2026-07-20) :** les séquences de ce playbook tournent dans Lemlist : campagnes « Outbound expertise comptable » et « Outbound industrie ». Le Sheets de la section 6 reste utile pour les notes et signaux, plus pour la cadence : Lemlist trace les touches, et le webhook Cal.com stoppe la séquence de qui réserve.
-**Mode LinkedIn seul (décision fondateur du 2026-07-20) :** l'emailing est mis de côté (pas de boîte d'envoi sur le domaine pour l'instant). Les 2 campagnes sont donc : invitation J0, ouverture J2, relance à angle nouveau J9 (l'angle de l'email 2 : période fiscale ou délais AO), breakup J16, le tout en messages LinkedIn via l'extension. Conséquences le temps de ce mode : la bascule email de la section 2 est suspendue, et un prospect qui n'accepte pas l'invitation sort de la séquence sans relance possible. Les emails J6/J11/J18 de la section 3 reprennent tels quels le jour où une boîte `jerome@coucou-ia.com` existe (checklist semaine 1, étape 1).
+**Emailing rétabli (2026-07-20 au soir) :** le fondateur a créé la boîte Google Workspace `jerome@coucou-ia.com` et l'a connectée à Lemlist ; le mode LinkedIn seul décidé le matin même est annulé. Les 2 campagnes ont retrouvé par l'API la séquence multicanal d'origine : invitation J0, ouverture J2, emails J6 / J11 / J18. **Aucun email ne part pour autant :** au 2026-07-20 le DNS n'a pas suivi (MX encore chez Cloudflare, aucun SPF, ni DKIM ni DMARC). Bascule DNS puis 2 à 3 semaines de lemwarm avant le premier envoi réel (checklist semaine 1, étape 1).
+**Ordre des secteurs pour l'été (décision fondateur du 2026-07-20) :** l'été est le pire moment pour démarcher les cabinets comptables (associés en congés après les échéances). On démarre donc par le secteur 2, les PME industrielles ; la campagne compta se lance à la rentrée (fin août / début septembre, quand les cabinets préparent la saison). À garder en tête : beaucoup de PME industrielles ferment aussi 2 à 3 semaines en août. Le calendrier réaliste : invitations LinkedIn industrie dès que le profil est prêt (fin juillet), chauffe email pendant le creux d'août, pleine cadence multicanal à la rentrée.
 
 ## En-tête
 
@@ -12,7 +13,7 @@
 **Canal n°1 :** outbound LinkedIn + email, en séquence combinée. Le site (https://coucou-ia.com) sert de validation quand le prospect va vérifier, pas de source de leads.
 **Lien de réservation (jamais avant une réponse positive) :** https://cal.com/jerome-desmares-izhobq/30min
 **Cartes des possibles (lead magnet, par secteur) :** https://coucou-ia.com/ressources/carte-expertise-comptable (compta), https://coucou-ia.com/ressources/carte-industrie (industrie). Le lien envoyé au prospect est toujours celui de la landing, jamais le lien direct vers le PDF : c'est la landing qui capture l'email.
-**Tête de pont :** secteur 1 = expertise comptable, secteur 2 = PME industrielles. Fallback si un secteur ne répond pas : services B2B.
+**Tête de pont :** secteur 1 = expertise comptable, secteur 2 = PME industrielles. Fallback si un secteur ne répond pas : services B2B. Ordre d'exécution été 2026 : industrie d'abord, compta à la rentrée (voir l'en-tête).
 **Pitch de référence (verrouillé) :** « Vous savez que l'IA compte, personne ne vous dit par où commencer chez vous. Moi si, en 30 min, sans jargon. »
 
 ### Rappel des principes (à relire avant chaque envoi)

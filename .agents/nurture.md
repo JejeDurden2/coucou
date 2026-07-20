@@ -13,7 +13,7 @@
 | Nurture carte expertise comptable | `cam_qnKzY6bXNxtSinjAF` | J0 livraison, J+3, J+10, J+21 |
 | Nurture carte industrie | `cam_YLiMdN5H3wAW84wYs` | J0 livraison, J+3, J+10, J+21 |
 
-Reste côté fondateur avant activation : connecter la boîte d'envoi, vérifier que le lien de désinscription est actif sur les 2 campagnes, relire, lancer. L'envoi J0 suit le planning de la campagne (heures ouvrées) : la page de merci du site donne de toute façon l'accès direct à la carte.
+La boîte `jerome@coucou-ia.com` (Google Workspace) est créée et connectée à Lemlist depuis le 2026-07-20. Reste côté fondateur avant activation : finir le DNS et la chauffe lemwarm (checklist semaine 1, étape 1), sélectionner la boîte comme expéditeur des 2 campagnes, vérifier que le lien de désinscription est actif, relire, lancer. En attendant, le site pousse déjà les leads dans les campagnes : la liste se construit, rien ne part, et la page de merci donne de toute façon l'accès direct à la carte.
 
 ## Email J0 (livraison, étape 1 de chaque campagne)
 

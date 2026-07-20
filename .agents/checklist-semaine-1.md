@@ -1,22 +1,24 @@
 # Checklist semaine 1 : les actions que seul le fondateur peut faire
 
-**Version :** v1.1 (2026-07-20, bascule Brevo → Lemlist). Tout le reste (code, copy, séquences) est déjà prêt dans le repo, les docs `.agents/` et les 4 campagnes Lemlist. Cette liste ne contient que ce qui demande tes accès. Ordre = ordre d'exécution recommandé. Temps total estimé : 2 à 3 heures (+ le délai de chauffe email).
+**Version :** v1.2 (2026-07-20 soir : boîte Workspace créée, emailing rétabli, industrie avant compta pour l'été). Tout le reste (code, copy, séquences) est déjà prêt dans le repo, les docs `.agents/` et les 4 campagnes Lemlist. Cette liste ne contient que ce qui demande tes accès. Ordre = ordre d'exécution recommandé.
 
-## 1. Boîte d'envoi et délivrabilité (~45 min). REPORTÉE (décision fondateur du 2026-07-20)
+## 1. Finir la délivrabilité de la boîte (~20 min). URGENT : rien ne doit partir avant
 
-Pas de compte Google pro pour l'instant : l'emailing attend, la prospection passe en LinkedIn seul (campagnes outbound adaptées, voir étape 6) et la carte est servie par la page de merci du site. Tout ce qui suit reste la marche à suivre le jour où l'envoi email reprend.
+~~Créer la boîte `jerome@coucou-ia.com` (Google Workspace)~~ **FAIT (2026-07-20).** ~~La connecter dans Lemlist (Settings → Senders)~~ **FAIT (2026-07-20).**
 
-État constaté au 2026-07-19 (vérification DNS réelle) :
-- SPF : `v=spf1 include:_spf.mx.cloudflare.net ~all` : Cloudflare uniquement.
-- DKIM : **absent**. DMARC : **absent**. MX : Cloudflare Email Routing (réception seule).
+Mais le DNS n'a pas suivi. État constaté au 2026-07-20 au soir (vérification réelle, résolveurs Google et Cloudflare) :
+- **MX : encore chez Cloudflare Email Routing.** Les réponses des prospects n'arriveront jamais dans la boîte Workspace (ni dans Lemlist) tant que c'est le cas.
+- **SPF : absent.** L'ancien enregistrement Cloudflare a disparu, rien ne l'a remplacé.
+- **DKIM : absent. DMARC : absent.**
 
-**L'alias Cloudflare ne suffit pas.** Cloudflare Email Routing reçoit et transfère, il n'envoie pas : `jerome@coucou-ia.com` n'a pas de boîte. Envoyer « en tant que » cet alias depuis un Gmail perso signe les emails en `gmail.com` : authentification non alignée avec `coucou-ia.com`, exactement ce que Gmail et Yahoo filtrent le plus durement sur le cold email. Le Gmail perso connecté à Lemlist sert aux tests, jamais à la prospection.
-
-À faire :
-1. Créer une vraie boîte `jerome@coucou-ia.com` : Google Workspace Starter (~7 €/mois). Suivre l'assistant : les MX passent chez Google (la réception quitte Cloudflare Routing, l'alias devient inutile), SPF devient `v=spf1 include:_spf.google.com ~all`, activer DKIM dans l'admin Google.
-2. Créer DMARC : TXT sur `_dmarc.coucou-ia.com` : `v=DMARC1; p=none; rua=mailto:jerome@coucou-ia.com` (observation d'abord, on durcira plus tard).
-3. Connecter cette boîte dans Lemlist (Settings → Senders) et activer **lemwarm** : 2 à 3 semaines de chauffe avant tout volume. Les invitations LinkedIn, elles, peuvent démarrer sans attendre.
-4. Vérifier avec le check de délivrabilité intégré à Lemlist avant le premier envoi réel.
+Un email envoyé maintenant partirait sans aucune authentification alignée : direction spam, et le domaine grillé avant d'avoir servi. À faire dans Cloudflare → DNS (15 min) :
+1. Désactiver Email Routing (Cloudflare → Email → Routing) : il retient les MX. L'alias ne sert plus, la boîte Workspace prend le relais pour la réception.
+2. MX : `smtp.google.com`, priorité 1 (l'enregistrement unique moderne de Google Workspace ; l'assistant admin Google le propose tel quel).
+3. SPF : TXT sur `coucou-ia.com` : `v=spf1 include:_spf.google.com ~all`.
+4. DKIM : admin Google (admin.google.com) → Applications → Google Workspace → Gmail → Authentifier les emails → générer la clé, puis copier le TXT `google._domainkey` dans Cloudflare et activer.
+5. DMARC : TXT sur `_dmarc.coucou-ia.com` : `v=DMARC1; p=none; rua=mailto:jerome@coucou-ia.com` (observation d'abord, on durcira plus tard).
+6. Dans Lemlist : activer **lemwarm** sur la boîte : 2 à 3 semaines de chauffe avant tout volume (le creux d'août tombe bien pour ça). Les invitations LinkedIn, elles, peuvent démarrer sans attendre.
+7. Vérifier avec le check de délivrabilité intégré à Lemlist avant le premier envoi réel.
 
 ## 2. Search Console (~10 min)
 
@@ -54,12 +56,12 @@ https://business.google.com → créer la fiche COUCOU IA (adresse du siège, ca
 
 Les campagnes existent (montées par l'API le 2026-07-20, contenus depuis `.agents/outbound.md` et `.agents/nurture.md`) : Outbound expertise comptable, Outbound industrie, Nurture carte expertise comptable (`cam_qnKzY6bXNxtSinjAF`), Nurture carte industrie (`cam_YLiMdN5H3wAW84wYs`).
 1. ~~Installer l'extension Chrome Lemlist et connecter ton compte LinkedIn.~~ **FAIT (2026-07-20).**
-2. Les 2 campagnes **outbound** sont passées en LinkedIn seul le 2026-07-20 (invitation J0, ouverture J2, relance J9, breakup J16) : relire les 4 étapes dans Lemlist, vérifier le planning (mardi-jeudi en cœur, jamais le week-end). Elles se lancent avec la liste de prospects (étape 7) et après validation de ton profil LinkedIn (étape 4).
-3. Les 2 campagnes **nurture** restent en pause tant qu'aucune boîte d'envoi n'existe (étape 1 reportée). Le site pousse déjà les leads dedans : rien ne part, la liste se construit, et la séquence complète (livraison + relances) démarrera au lancement.
+2. Les 2 campagnes **outbound** ont retrouvé leur séquence multicanal le 2026-07-20 au soir (invitation J0, ouverture J2, emails J6 / J11 / J18) : relire les 5 étapes dans Lemlist, sélectionner la boîte `jerome@coucou-ia.com` comme expéditeur de la campagne, vérifier le planning (mardi-jeudi en cœur, jamais le week-end). **On lance l'industrie d'abord** (décision du 2026-07-20 : l'été est le pire moment pour démarcher les comptables) ; la campagne compta attend la rentrée.
+3. Les 2 campagnes **nurture** s'activent quand la chauffe lemwarm est finie (étape 1). Le site pousse déjà les leads dedans : la liste se construit, et la séquence complète (livraison + relances) démarrera à l'activation.
 
 ## 7. Lancer la semaine 1 du playbook outbound
 
-Une fois 1, 4 et 6 faits : construire la liste (50-75 cabinets compta Nice/PACA, critères dans `.agents/outbound.md` §1), l'importer dans la campagne « Outbound expertise comptable », et démarrer à 10-15 invitations/jour (compte récent oblige).
+Une fois 1, 4 et 6 faits : construire la liste (50-75 PME industrielles Sud/PACA, critères dans `.agents/outbound.md` §1 « Industrie »), l'importer dans la campagne « Outbound industrie », et démarrer à 10-15 invitations/jour (compte récent oblige). Attention aux fermetures d'août : les invitations envoyées à des dirigeants en congés dorment, prévoir la pleine cadence pour la rentrée. La liste compta (50-75 cabinets Nice/PACA) se construit fin août pour un lancement de rentrée.
 
 ## Optionnel mais utile
 - **Ré-authentifier les connecteurs claude.ai** (Gmail, Google Drive, HubSpot) dans les réglages claude.ai → Connecteurs : utile pour les revues hebdo semi-automatiques (les réponses outbound, elles, sont désormais suivies via l'API Lemlist).
