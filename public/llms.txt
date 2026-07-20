@@ -4,7 +4,7 @@ Coucou IA est un cabinet de conseil et développement IA pour les PME française
 
 ## Pages
 
-- [Accueil](https://coucou-ia.com/) : les deux offres, la méthode en quatre étapes, des cas d'usage concrets, deux produits construits par Coucou IA (Livia, Lecturer) et les questions fréquentes.
+- [Accueil](https://coucou-ia.com/) : les deux offres, la méthode en quatre étapes, des cas d'usage concrets, deux produits construits par Coucou IA (Livia, Lecturer), le fondateur Jérôme Desmares et les questions fréquentes.
 
 ## Secteurs
 
