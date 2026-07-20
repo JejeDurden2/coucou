@@ -9,6 +9,8 @@ export type Realisation = {
   sector: string;
   description: string;
   metric: string;
+  // Citation validée par son auteur avant publication, jamais inventée.
+  quote?: { text: string; author: string };
 };
 
 export type RealisationsSection = {
@@ -35,6 +37,11 @@ export const realisations: RealisationsSection = {
       description:
         "Un agent IA qui tient la conformité Qualiopi en continu : il surveille les 32 indicateurs, réclame les preuves manquantes et prépare l'audit.",
       metric: "la préparation d'un audit passe de 3 semaines à 2 jours",
+      // Validée par Stevie Bengono le 20 juillet 2026.
+      quote: {
+        text: "Jérôme a pris Livia du premier besoin client à la production. Un agent IA qui suit les 32 indicateurs Qualiopi en continu, construit et fiabilisé en quelques mois. Je n'ai jamais eu à traduire entre le métier et la technique : il fait les deux.",
+        author: "Stevie Bengono, cofondateur et CEO de Livia",
+      },
     },
     {
       name: "Lecturer",

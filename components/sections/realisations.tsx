@@ -55,6 +55,17 @@ export function Realisations() {
                   {item.description}
                 </p>
 
+                {item.quote ? (
+                  <figure className="mb-8 border-l-2 border-border pl-4">
+                    <blockquote className="text-pretty leading-relaxed text-muted-foreground">
+                      «&nbsp;{item.quote.text}&nbsp;»
+                    </blockquote>
+                    <figcaption className="mt-3 font-mono text-xs uppercase tracking-[0.12em] text-muted-foreground">
+                      {item.quote.author}
+                    </figcaption>
+                  </figure>
+                ) : null}
+
                 <div className="mt-auto flex items-start gap-3 border-t border-border pt-6">
                   <span aria-hidden className="mt-1 h-0.5 w-4 shrink-0 bg-primary" />
                   <div>
