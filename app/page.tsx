@@ -4,6 +4,7 @@ import { Faq } from "@/components/sections/faq";
 import { Hero } from "@/components/sections/hero";
 import { Method } from "@/components/sections/method";
 import { Problem } from "@/components/sections/problem";
+import { Realisations } from "@/components/sections/realisations";
 import { Services } from "@/components/sections/services";
 import { UseCases } from "@/components/sections/use-cases";
 import { faq } from "@/content/faq";
@@ -101,6 +102,7 @@ export default function Home() {
         <Services />
         <Method />
         <UseCases />
+        <Realisations />
         <Faq />
         <Cta />
       </main>
