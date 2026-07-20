@@ -2,7 +2,9 @@
 
 **Version :** v1.1 (2026-07-20, bascule Brevo → Lemlist). Tout le reste (code, copy, séquences) est déjà prêt dans le repo, les docs `.agents/` et les 4 campagnes Lemlist. Cette liste ne contient que ce qui demande tes accès. Ordre = ordre d'exécution recommandé. Temps total estimé : 2 à 3 heures (+ le délai de chauffe email).
 
-## 1. Boîte d'envoi et délivrabilité (avant toute prospection, ~45 min)
+## 1. Boîte d'envoi et délivrabilité (~45 min). REPORTÉE (décision fondateur du 2026-07-20)
+
+Pas de compte Google pro pour l'instant : l'emailing attend, la prospection passe en LinkedIn seul (campagnes outbound adaptées, voir étape 6) et la carte est servie par la page de merci du site. Tout ce qui suit reste la marche à suivre le jour où l'envoi email reprend.
 
 État constaté au 2026-07-19 (vérification DNS réelle) :
 - SPF : `v=spf1 include:_spf.mx.cloudflare.net ~all` : Cloudflare uniquement.
@@ -51,10 +53,9 @@ https://business.google.com → créer la fiche COUCOU IA (adresse du siège, ca
 ## 6. Lemlist : activer les 4 campagnes déjà montées (~30 min)
 
 Les campagnes existent (montées par l'API le 2026-07-20, contenus depuis `.agents/outbound.md` et `.agents/nurture.md`) : Outbound expertise comptable, Outbound industrie, Nurture carte expertise comptable (`cam_qnKzY6bXNxtSinjAF`), Nurture carte industrie (`cam_YLiMdN5H3wAW84wYs`).
-1. Installer l'extension Chrome Lemlist et connecter ton compte LinkedIn (nécessaire aux étapes invitation + message des 2 campagnes outbound).
-2. Sur chaque campagne : associer la boîte d'envoi (étape 1 de cette checklist), relire les étapes, vérifier le planning (mardi-jeudi en cœur, jamais le week-end) et, sur les 2 nurture, le lien de désinscription.
-3. Lancer les 2 campagnes **nurture** dès que la boîte est chauffée : le site pousse déjà les leads dedans.
-4. Les 2 campagnes **outbound** ne se lancent qu'avec la liste de prospects (étape 7) et après validation de ton profil LinkedIn (étape 4).
+1. ~~Installer l'extension Chrome Lemlist et connecter ton compte LinkedIn.~~ **FAIT (2026-07-20).**
+2. Les 2 campagnes **outbound** sont passées en LinkedIn seul le 2026-07-20 (invitation J0, ouverture J2, relance J9, breakup J16) : relire les 4 étapes dans Lemlist, vérifier le planning (mardi-jeudi en cœur, jamais le week-end). Elles se lancent avec la liste de prospects (étape 7) et après validation de ton profil LinkedIn (étape 4).
+3. Les 2 campagnes **nurture** restent en pause tant qu'aucune boîte d'envoi n'existe (étape 1 reportée). Le site pousse déjà les leads dedans : rien ne part, la liste se construit, et la séquence complète (livraison + relances) démarrera au lancement.
 
 ## 7. Lancer la semaine 1 du playbook outbound
 
@@ -62,4 +63,4 @@ Une fois 1, 4 et 6 faits : construire la liste (50-75 cabinets compta Nice/PACA,
 
 ## Optionnel mais utile
 - **Ré-authentifier les connecteurs claude.ai** (Gmail, Google Drive, HubSpot) dans les réglages claude.ai → Connecteurs : utile pour les revues hebdo semi-automatiques (les réponses outbound, elles, sont désormais suivies via l'API Lemlist).
-- **Vercel → poser `LEMLIST_API_KEY` en production** (sinon les leads des cartes partent en logs avec le marqueur `[lead-alerte]`, jamais chez Lemlist). Supprimer `BREVO_API_KEY` si elle existe.
+- ~~**Vercel → poser `LEMLIST_API_KEY` en production.**~~ **FAIT (2026-07-20).** Supprimer `BREVO_API_KEY` si elle existe encore.

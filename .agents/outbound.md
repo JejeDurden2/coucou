@@ -3,7 +3,8 @@
 **Version :** v1.2
 **Date :** 2026-07-20
 **Auteur / interlocuteur unique :** Jérôme (Coucou IA, Nice)
-**Exécution (depuis le 2026-07-20) :** les séquences de ce playbook tournent dans Lemlist : campagnes « Outbound expertise comptable » et « Outbound industrie », montées par l'API avec les messages de la section 3 tels quels. Les emails partent seuls à la cadence J6/J11/J18, les étapes LinkedIn passent par l'extension Lemlist (semi-auto). Le Sheets de la section 6 reste utile pour les notes et signaux, plus pour la cadence : Lemlist trace les touches, et le webhook Cal.com stoppe la séquence de qui réserve.
+**Exécution (depuis le 2026-07-20) :** les séquences de ce playbook tournent dans Lemlist : campagnes « Outbound expertise comptable » et « Outbound industrie ». Le Sheets de la section 6 reste utile pour les notes et signaux, plus pour la cadence : Lemlist trace les touches, et le webhook Cal.com stoppe la séquence de qui réserve.
+**Mode LinkedIn seul (décision fondateur du 2026-07-20) :** l'emailing est mis de côté (pas de boîte d'envoi sur le domaine pour l'instant). Les 2 campagnes sont donc : invitation J0, ouverture J2, relance à angle nouveau J9 (l'angle de l'email 2 : période fiscale ou délais AO), breakup J16, le tout en messages LinkedIn via l'extension. Conséquences le temps de ce mode : la bascule email de la section 2 est suspendue, et un prospect qui n'accepte pas l'invitation sort de la séquence sans relance possible. Les emails J6/J11/J18 de la section 3 reprennent tels quels le jour où une boîte `jerome@coucou-ia.com` existe (checklist semaine 1, étape 1).
 
 ## En-tête
 

@@ -59,9 +59,9 @@ export const ressourcesShared = {
   formPrivacyNote: "Pas de spam. Un email, la carte, c'est tout.",
   formErrorInvalid: "Cette adresse email ne semble pas valide.",
   formErrorServer: "Une erreur est survenue. Réessayez, ou écrivez-nous.",
-  successTitle: "C'est envoyé.",
+  successTitle: "C'est tout bon.",
   successBody:
-    "La carte arrive dans votre boîte mail. Pressé ? Elle est aussi juste là :",
+    "Votre carte vous attend juste là :",
   successCarteLabel: "Consulter la carte",
   illustrationLabel: "Illustration, pas une référence client",
   questionsTitle: "Est-ce chez vous ?",
