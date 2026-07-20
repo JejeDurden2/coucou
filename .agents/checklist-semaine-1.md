@@ -6,7 +6,7 @@
 
 ~~Créer la boîte `jerome@coucou-ia.com` (Google Workspace)~~ **FAIT (2026-07-20).** ~~La connecter dans Lemlist (Settings → Senders)~~ **FAIT (2026-07-20).** ~~Désactiver Email Routing, MX `smtp.google.com`, SPF Google, DMARC `p=none`~~ **FAIT (2026-07-20 au soir, via l'API Cloudflare, vérifié sur résolveurs Google et Cloudflare).** La réception arrive désormais dans la boîte Workspace : l'ancien transfert Cloudflare vers le Gmail perso ne fonctionne plus.
 
-~~Publier la clé DKIM~~ **FAIT (2026-07-20 au soir, TXT `google._domainkey` publié via l'API Cloudflare et vérifié complet sur les résolveurs publics).**
+~~Publier la clé DKIM~~ **FAIT (2026-07-20 au soir, TXT `google._domainkey` publié via l'API Cloudflare et vérifié complet sur les résolveurs publics).** ~~Domaine de tracking Lemlist~~ **FAIT (même soir : CNAME `alpha.coucou-ia.com` → `custom.lemlist.com` en DNS only + TXT `lemlist-verif`, publiés et vérifiés ; les liens trackés porteront le domaine plutôt que celui, partagé, de lemlist).**
 
 Reste, dans l'ordre :
 1. Dans l'admin Google (Gmail → Authentifier les e-mails) : cliquer **« Lancer l'authentification »** maintenant que l'enregistrement est publié. Google peut mettre jusqu'à 48 h à le voir, en pratique quelques minutes.
