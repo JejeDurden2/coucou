@@ -2,23 +2,14 @@
 
 **Version :** v1.2 (2026-07-20 soir : boîte Workspace créée, emailing rétabli, industrie avant compta pour l'été). Tout le reste (code, copy, séquences) est déjà prêt dans le repo, les docs `.agents/` et les 4 campagnes Lemlist. Cette liste ne contient que ce qui demande tes accès. Ordre = ordre d'exécution recommandé.
 
-## 1. Finir la délivrabilité de la boîte (~20 min). URGENT : rien ne doit partir avant
+## 1. Finir la délivrabilité de la boîte. Presque terminée
 
-~~Créer la boîte `jerome@coucou-ia.com` (Google Workspace)~~ **FAIT (2026-07-20).** ~~La connecter dans Lemlist (Settings → Senders)~~ **FAIT (2026-07-20).**
+~~Créer la boîte `jerome@coucou-ia.com` (Google Workspace)~~ **FAIT (2026-07-20).** ~~La connecter dans Lemlist (Settings → Senders)~~ **FAIT (2026-07-20).** ~~Désactiver Email Routing, MX `smtp.google.com`, SPF Google, DMARC `p=none`~~ **FAIT (2026-07-20 au soir, via l'API Cloudflare, vérifié sur résolveurs Google et Cloudflare).** La réception arrive désormais dans la boîte Workspace : l'ancien transfert Cloudflare vers le Gmail perso ne fonctionne plus.
 
-Mais le DNS n'a pas suivi. État constaté au 2026-07-20 au soir (vérification réelle, résolveurs Google et Cloudflare) :
-- **MX : encore chez Cloudflare Email Routing.** Les réponses des prospects n'arriveront jamais dans la boîte Workspace (ni dans Lemlist) tant que c'est le cas.
-- **SPF : absent.** L'ancien enregistrement Cloudflare a disparu, rien ne l'a remplacé.
-- **DKIM : absent. DMARC : absent.**
-
-Un email envoyé maintenant partirait sans aucune authentification alignée : direction spam, et le domaine grillé avant d'avoir servi. À faire dans Cloudflare → DNS (15 min) :
-1. Désactiver Email Routing (Cloudflare → Email → Routing) : il retient les MX. L'alias ne sert plus, la boîte Workspace prend le relais pour la réception.
-2. MX : `smtp.google.com`, priorité 1 (l'enregistrement unique moderne de Google Workspace ; l'assistant admin Google le propose tel quel).
-3. SPF : TXT sur `coucou-ia.com` : `v=spf1 include:_spf.google.com ~all`.
-4. DKIM : admin Google (admin.google.com) → Applications → Google Workspace → Gmail → Authentifier les emails → générer la clé, puis copier le TXT `google._domainkey` dans Cloudflare et activer.
-5. DMARC : TXT sur `_dmarc.coucou-ia.com` : `v=DMARC1; p=none; rua=mailto:jerome@coucou-ia.com` (observation d'abord, on durcira plus tard).
-6. Dans Lemlist : activer **lemwarm** sur la boîte : 2 à 3 semaines de chauffe avant tout volume (le creux d'août tombe bien pour ça). Les invitations LinkedIn, elles, peuvent démarrer sans attendre.
-7. Vérifier avec le check de délivrabilité intégré à Lemlist avant le premier envoi réel.
+Reste, dans l'ordre :
+1. **DKIM** : admin Google (admin.google.com) → Applications → Google Workspace → Gmail → Authentifier les e-mails → « Générer un enregistrement ». Donner la valeur TXT à Claude (qui la publie dans Cloudflare par l'API), puis cliquer « Lancer l'authentification ». C'est la dernière pièce de l'authentification : sans DKIM aligné, le cold email reste fragile face à Gmail et Yahoo.
+2. Dans Lemlist : activer **lemwarm** sur la boîte : 2 à 3 semaines de chauffe avant tout volume (le creux d'août tombe bien pour ça). Les invitations LinkedIn, elles, peuvent démarrer sans attendre.
+3. Vérifier avec le check de délivrabilité intégré à Lemlist avant le premier envoi réel.
 
 ## 2. Search Console (~10 min)
 
