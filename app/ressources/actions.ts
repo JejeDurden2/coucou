@@ -99,15 +99,37 @@ export async function subscribeRessource(
       return { status: "success" };
     } catch (error) {
       // ponytail: Brevo en panne ne doit jamais bloquer le prospect, la carte
-      // reste accessible depuis la page de succes. Le lead vit dans les logs
-      // Vercel en attendant une relance manuelle ou un fix d'infra Brevo.
-      console.error(`[lead] ${email} -> ${ressource.slug}`, error);
+      // reste accessible depuis la page de succes. Le lead est signale au
+      // fondateur (email de secours si Brevo repond encore, sinon marqueur
+      // grep-able dans les logs Vercel : chercher "lead-alerte").
+      console.error(`[lead-alerte] ${email} -> ${ressource.slug}`, error);
+      await notifyFounder(apiKey, email, ressource.slug);
       return { status: "success" };
     }
   }
 
   // ponytail: pas de cle Brevo configuree (dev local ou prod pas encore branchee) :
   // le lead part quand meme dans les logs Vercel plutot que de rester perdu.
-  console.log(`[lead] ${email} -> ${ressource.slug}`);
+  console.error(`[lead-alerte] BREVO_API_KEY absente, lead non traite : ${email} -> ${ressource.slug}`);
   return { status: "success" };
+}
+
+// Filet de securite : si la livraison au prospect a echoue, on tente au moins
+// de prevenir le fondateur par email (l'echec peut etre partiel : contact cree
+// mais envoi refuse). Best-effort, ne jette jamais.
+async function notifyFounder(apiKey: string, email: string, slug: string): Promise<void> {
+  try {
+    await fetch(BREVO_EMAIL_URL, {
+      method: "POST",
+      headers: { "api-key": apiKey, "Content-Type": "application/json", accept: "application/json" },
+      body: JSON.stringify({
+        sender: { name: "Site Coucou IA", email: contactEmail },
+        to: [{ email: contactEmail }],
+        subject: `[lead-alerte] carte non livrée : ${email}`,
+        htmlContent: `<p>La livraison de la carte « ${slug} » a échoué pour ${email}. À relancer à la main.</p>`,
+      }),
+    });
+  } catch {
+    // Deja trace via [lead-alerte] : rien de plus a faire ici.
+  }
 }

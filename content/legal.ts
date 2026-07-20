@@ -59,26 +59,37 @@ export const mentionsLegales: LegalPage = {
 
 export const confidentialite: LegalPage = {
   title: "Politique de confidentialité",
-  updated: "18 juillet 2026",
+  updated: "19 juillet 2026",
   sections: [
     {
       heading: "En résumé",
       paragraphs: [
-        "Ce site est une vitrine. Il ne dépose aucun cookie, n’utilise aucun outil de mesure d’audience et ne collecte aucune donnée à votre insu. Vous le consultez, rien n’est enregistré de votre côté.",
+        "Ce site ne dépose aucun cookie et ne vous identifie pas individuellement. Il utilise une mesure d’audience sans cookie (statistiques agrégées et anonymes). Les seules données personnelles que nous recevons sont celles que vous choisissez de nous transmettre : votre adresse e-mail pour recevoir une ressource, ou vos coordonnées pour réserver un premier échange.",
       ],
     },
     {
       heading: "Cookies et mesure d’audience",
       paragraphs: [
-        "Aucun. Pas de cookie de suivi, pas d’outil d’analytics, pas de traceur publicitaire. Aucun bandeau de consentement ne vous est demandé, parce qu’il n’y a rien à consentir.",
+        "Le site ne dépose aucun cookie de suivi ni traceur publicitaire. Aucun bandeau de consentement ne vous est demandé, parce qu’aucun cookie ne le nécessite.",
+        "Nous utilisons Vercel Analytics, un outil de mesure d’audience sans cookie : il compte les pages vues de façon agrégée (page consultée, pays, type d’appareil) sans identifiant individuel ni suivi d’un site à l’autre. Ces statistiques ne permettent pas de vous identifier.",
       ],
     },
     {
       heading: "Données que vous nous transmettez",
       paragraphs: [
-        "Si vous nous écrivez pour réserver un premier échange ou poser une question, nous recevons les informations que vous choisissez de nous communiquer (nom, adresse e-mail, message).",
-        "Ces données servent uniquement à vous répondre et à organiser l’échange. Nous ne les utilisons à aucune autre fin et ne les revendons jamais.",
+        "Si vous demandez une ressource (par exemple une carte des possibles), votre adresse e-mail sert à vous l’envoyer, puis à vous adresser quelques e-mails en lien avec cette ressource. Chaque e-mail contient un lien de désinscription en un clic. Ces envois passent par Brevo, prestataire français conforme au RGPD, qui traite votre adresse pour notre compte.",
+        "Si vous réservez un premier échange, la prise de rendez-vous passe par l’outil Cal.com, qui recueille les informations que vous renseignez (nom, e-mail, réponses au formulaire de réservation) pour organiser cet échange.",
+        "Si vous nous écrivez directement, nous recevons les informations que vous choisissez de nous communiquer (nom, adresse e-mail, message).",
+        "Ces données servent uniquement à vous répondre, vous envoyer ce que vous avez demandé et organiser l’échange. Nous ne les utilisons à aucune autre fin et ne les revendons jamais.",
         "Elles sont conservées le temps nécessaire au traitement de votre demande, puis supprimées ou archivées conformément à nos obligations légales.",
+      ],
+    },
+    {
+      heading: "Sous-traitants",
+      paragraphs: [
+        "Vercel Inc. (États-Unis) : hébergement du site et mesure d’audience sans cookie.",
+        "Brevo (France) : envoi des ressources par e-mail et gestion de la liste de contacts.",
+        "Cal.com : prise de rendez-vous pour le premier échange.",
       ],
     },
     {
@@ -97,7 +108,7 @@ export const confidentialite: LegalPage = {
     {
       heading: "Évolution de cette politique",
       paragraphs: [
-        "Si le site venait à intégrer un formulaire, un outil de réservation ou une mesure d’audience, cette politique serait mise à jour avant toute nouvelle collecte.",
+        "Si les outils ou les collectes décrits ici évoluent, cette politique est mise à jour avant toute nouvelle collecte, avec sa date de révision.",
       ],
     },
   ],
