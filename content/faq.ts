@@ -29,7 +29,7 @@ export const faq: FaqSection = {
     {
       question: "Comment nos données sont-elles protégées ?",
       answer:
-        "On conçoit dès le départ dans le respect du RGPD et de l’AI Act. Vos données restent sous votre contrôle : hébergement adapté, pas de fuite vers des modèles publics quand ce n’est pas voulu. La souveraineté des données est un point de départ, pas une option.",
+        "On conçoit dès le départ dans le respect du RGPD et de l’AI Act. Vos données restent sous votre contrôle : hébergement adapté, pas de fuite vers des modèles publics sans votre accord. La souveraineté des données est un point de départ, pas une option.",
     },
     {
       question:

@@ -55,6 +55,15 @@ Full spec: **`docs/design-system.md`**. Tokens live in `app/globals.css` (`@them
 - Pricing **never** on the site.
 - **One CTA label, everywhere:** `Trouver mon point de départ` (nav, hero, footer, sections). No synonyms ("Contactez-nous", "Prendre RDV" are banned).
 
+## Writing rules (Orwell)
+These six rules govern **both** the French site copy **and** every word Claude Code writes back to the user (messages, commit copy, PR text, comments). Apply them by default; break one only under rule 6.
+1. **No stale figures of speech.** Never use a metaphor, simile ou image que vous avez l'habitude de voir imprimée. Cliché AI-speak ("libérez tout le potentiel", "révolutionnez", "boostez") is banned by this rule, not just by voice.
+2. **Short word over long.** Never use a long word where a short one does the job. `utiliser` over `mettre en œuvre` when they mean the same thing.
+3. **Cut every word you can.** If a word can be removed without loss, remove it. First draft, then delete.
+4. **Active over passive.** Prefer the active voice. "Nous chiffrons le business case" over "le business case est chiffré".
+5. **No jargon.** Never use a foreign phrase, an anglicism, a scientific or jargon word when an everyday French equivalent exists. This is the copy side of "sans jargon": keep tech terms (RAG, agents IA) only when they are the plainest name for the thing.
+6. **Never barbarous.** Break any of these five rules sooner than write something clearly ugly or unclear. Clarity wins over the rule.
+
 ## Never do
 - Publish pricing, or invent client names/logos/testimonials as if real (label mock data).
 - Add a second accent color, gradient text, glassmorphism, or purple/AI-cliché gradients.

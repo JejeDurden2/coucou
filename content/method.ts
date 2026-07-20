@@ -15,7 +15,7 @@ export type MethodSection = {
 
 export const method: MethodSection = {
   title: "De l’intuition floue au système qui tourne.",
-  sub: "Quatre étapes. Chacune conçue pour dérisquer la suivante. À la fin, vous savez exactement ce que l’IA vous rapporte.",
+  sub: "Quatre étapes. Chacune sécurise la suivante. À la fin, vous savez exactement ce que l’IA vous rapporte.",
   steps: [
     {
       number: "01",
