@@ -53,7 +53,9 @@ Les campagnes existent (montées par l'API le 2026-07-20, contenus depuis `.agen
 
 ## 7. Lancer la semaine 1 du playbook outbound
 
-Une fois 1, 4 et 6 faits : construire la liste (50-75 PME industrielles Sud/PACA, critères dans `.agents/outbound.md` §1 « Industrie »), l'importer dans la campagne « Outbound industrie », et démarrer à 10-15 invitations/jour (compte récent oblige). Attention aux fermetures d'août : les invitations envoyées à des dirigeants en congés dorment, prévoir la pleine cadence pour la rentrée. La liste compta (50-75 cabinets Nice/PACA) se construit fin août pour un lancement de rentrée.
+~~Construire la liste de PME industrielles Sud/PACA~~ **FAIT (2026-07-21) : 74 entreprises sourcées et priorisées dans `~/marketing-plans/coucou-ia/materials/prospects-industrie-v1.csv`** (priorité A = 06, B = 83, C = 13, D = 84/04/05 ; colonnes signal, dirigeant, LinkedIn quand trouvé, note de prudence quand il y en a une). Avant chaque invitation : vérifier le profil LinkedIn (ceux du CSV viennent de recherches publiques, quelques homonymes possibles, les cas douteux sont notés) et compléter ceux marqués « ? ».
+
+Reste : une fois 4 et 6 faits, faire importer les prospects retenus dans la campagne « Outbound industrie » (Claude le fait par l'API sur demande), et démarrer à 10-15 invitations/jour (compte récent oblige). **Ne pas lancer la campagne avant le ~10 août :** elle contient les emails J6/J11/J18, qui partiraient d'une boîte en pleine chauffe si les invitations démarrent trop tôt. Fermetures d'août obligent, la pleine cadence se joue à la rentrée. La liste compta (50-75 cabinets Nice/PACA) se construit fin août pour un lancement de rentrée.
 
 ## Optionnel mais utile
 - **Ré-authentifier les connecteurs claude.ai** (Gmail, Google Drive, HubSpot) dans les réglages claude.ai → Connecteurs : utile pour les revues hebdo semi-automatiques (les réponses outbound, elles, sont désormais suivies via l'API Lemlist).
