@@ -30,7 +30,7 @@ export function Method() {
               <li key={step.number} className="relative pb-12 last:pb-0">
                 <ScrollReveal
                   delay={index * 0.05}
-                  className="grid grid-cols-[3.5rem_1fr] gap-x-6 lg:grid-cols-[5rem_1fr] lg:gap-x-10"
+                  className="grid grid-cols-[3.5rem_1fr] gap-x-6 lg:grid-cols-[5rem_1fr_18rem] lg:gap-x-10"
                 >
                   {!last ? (
                     <span
@@ -57,10 +57,18 @@ export function Method() {
                     <p className="mt-3 max-w-[62ch] text-pretty leading-relaxed text-muted-foreground">
                       {step.description}
                     </p>
-                    <p className="mt-3 font-mono text-xs text-muted-foreground">
+                    {/* Sous lg, le detail reste sous la description. À lg il migre
+                        dans la colonne de mesure (3e cellule ci-dessous). */}
+                    <p className="mt-3 font-mono text-xs text-muted-foreground lg:hidden">
                       {step.detail}
                     </p>
                   </div>
+
+                  {/* Colonne de mesure : le tracé chiffré, aligné à droite du
+                      container, sur la ligne du titre. Uniquement à lg. */}
+                  <p className="hidden font-mono text-xs text-muted-foreground lg:block lg:self-start lg:mt-1.5 lg:text-right">
+                    {step.detail}
+                  </p>
                 </ScrollReveal>
               </li>
             );

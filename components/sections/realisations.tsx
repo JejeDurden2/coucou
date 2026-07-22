@@ -21,7 +21,7 @@ export function Realisations() {
           </p>
         </ScrollReveal>
 
-        <div className="mt-12 grid grid-cols-1 gap-6 lg:grid-cols-2">
+        <div className="mt-12 grid grid-cols-1 gap-6 lg:grid-cols-2 lg:items-start">
           {realisations.items.map((item, index) => (
             <ScrollReveal key={item.name} delay={index * 0.04}>
               <a

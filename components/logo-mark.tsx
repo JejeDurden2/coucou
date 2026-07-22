@@ -9,16 +9,19 @@ import { cn } from "@/lib/utils";
 export function LogoMark({
   className,
   animated = false,
+  style,
 }: {
   className?: string;
   /* Joue le pliage origami au montage (.lm-anim, globals.css). Rejouer = remonter via key. */
   animated?: boolean;
+  style?: React.CSSProperties;
 }) {
   return (
     <svg
       viewBox="0 0 32 32"
       aria-hidden
       className={cn("shrink-0", animated && "lm-anim", className)}
+      style={style}
     >
       <polygon
         fill="currentColor"

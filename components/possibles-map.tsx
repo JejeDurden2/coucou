@@ -3,11 +3,12 @@
 import { useEffect, useRef, useState } from "react";
 import { useReducedMotion } from "motion/react";
 
+import { LogoMark } from "@/components/logo-mark";
 import { hero } from "@/content/hero";
 
 // « La carte des possibles » : a fixed 532x540 composition scaled to fit its
 // column (ResizeObserver, transform-origin top center). A decorative SVG draws
-// the origin, faint rays and the six arrows; the six cards are real text (a ul)
+// the coucou mark at the origin, faint rays and the six arrows; the six cards are real text (a ul)
 // so screen readers get the content. The active card cycles once through the
 // six (first switch after 1.3s, then every 2.6s), lighting its blue arrow +
 // outline, and rests on the first: motion stays finite (design-system §6).
@@ -15,7 +16,9 @@ import { hero } from "@/content/hero";
 // off in globals.css.
 
 // Geometry is presentation, not content: it lives here, next to the SVG.
-const ORIGIN = { x: -20, y: 270 };
+// ORIGIN is where the rays fan out: the coucou mark's beak sits on it (x = beak
+// tip), vertically centered on y, so the brand is the source of the possibles.
+const ORIGIN = { x: 31, y: 270 };
 
 // Faint short rays, each ending in a tiny dot: [x, y, pathDelay, dotDelay].
 const FAINT_RAYS: [number, number, number, number][] = [
@@ -192,19 +195,19 @@ export function PossiblesMap() {
               }}
             />
           ))}
-
-          <circle
-            cx={ORIGIN.x}
-            cy={ORIGIN.y}
-            r="3.5"
-            className="hero-fade fill-primary"
-            style={{
-              filter:
-                "drop-shadow(0 0 6px color-mix(in oklch, var(--primary) 70%, transparent))",
-              animationDelay: "0.35s",
-            }}
-          />
         </svg>
+
+        {/* The source: the origami coucou head (LogoMark) sits on ORIGIN, not an anonymous blue dot. */}
+        <LogoMark
+          className="hero-fade absolute size-8 text-primary"
+          style={{
+            left: ORIGIN.x - 30.3,
+            top: ORIGIN.y - 16,
+            filter:
+              "drop-shadow(0 0 6px color-mix(in oklch, var(--primary) 70%, transparent))",
+            animationDelay: "0.35s",
+          }}
+        />
 
         <ul aria-label={hero.mapLabel}>
           {hero.mapItems.map((item, index) => {

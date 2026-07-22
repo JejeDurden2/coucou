@@ -26,10 +26,10 @@ export function Hero() {
       id="top"
       className="relative -mt-16 flex min-h-svh flex-col overflow-hidden pt-16"
     >
-      <FlowField className="hero-flow-mask pointer-events-none absolute inset-0 size-full" />
+      <FlowField className="hero-flow-mask pointer-events-none absolute inset-0 hidden size-full lg:block" />
       <div
         aria-hidden
-        className="trace-glow pointer-events-none absolute top-5 -right-35 h-150 w-190"
+        className="trace-glow pointer-events-none absolute top-5 -right-40 h-100 w-120 opacity-60 lg:-right-35 lg:h-150 lg:w-190 lg:opacity-100"
       />
       {cornerMarks.map((position) => (
         <div

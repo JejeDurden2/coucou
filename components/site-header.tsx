@@ -51,7 +51,7 @@ export function SiteHeader() {
           onMouseEnter={() => setLogoRun((run) => run + 1)}
         >
           <LogoMark key={logoRun} animated className="size-6 text-primary" />
-          <span>{siteName}</span>
+          <span className="whitespace-nowrap">{siteName}</span>
         </Link>
 
         <nav aria-label="Navigation principale" className="hidden items-center gap-8 lg:flex">
@@ -70,7 +70,13 @@ export function SiteHeader() {
         </nav>
 
         <div className="flex items-center gap-2">
-          <Button nativeButton={false} render={<a href={bookingUrl("header")} />} variant="secondary" size="default">
+          <Button
+            nativeButton={false}
+            render={<a href={bookingUrl("header")} />}
+            variant="secondary"
+            size="default"
+            className="hidden sm:inline-flex"
+          >
             {ctaLabel}
           </Button>
 
@@ -104,6 +110,15 @@ export function SiteHeader() {
                   </SheetClose>
                 ))}
               </nav>
+              <div className="border-t border-border px-4 pt-4">
+                <Button
+                  nativeButton={false}
+                  render={<a href={bookingUrl("header")} />}
+                  className="w-full"
+                >
+                  {ctaLabel}
+                </Button>
+              </div>
             </SheetContent>
           </Sheet>
         </div>

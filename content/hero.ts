@@ -26,7 +26,7 @@ export type Hero = {
 export const hero: Hero = {
   kicker: "Conseil IA pour les PME et ETI.",
   headlineSolid: "Tout le monde vous parle d’IA.",
-  headlineHollow: "On sait par où commencer.",
+  headlineHollow: "On sait par où commencer.",
   lede: "Produire plus vite, ouvrir un marché, automatiser ce qui vous pèse : on trouve ce que l’IA rend possible pour vous, et on le met en production.",
   reassurance: "30 minutes, gratuit, sans engagement.",
   mapLabel: "La carte des possibles",
