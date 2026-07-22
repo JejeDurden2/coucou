@@ -12,8 +12,14 @@ const carteLinkClasses =
 // `placement` : attribution UTM par page (utm_content côté Cal.com).
 export function Cta({ placement = "cta-final" }: { placement?: string } = {}) {
   return (
-    <section className="border-t border-border">
-      <div className="mx-auto max-w-[1200px] px-6 py-24 lg:py-32">
+    <section className="relative overflow-hidden border-t border-border">
+      {/* Écho violet du hero : la page se ferme sur la même lumière (bookend).
+          Décentré en bas à gauche, cœur hors viewport, opacité sous le hero. */}
+      <div
+        aria-hidden
+        className="trace-glow pointer-events-none absolute -bottom-32 -left-32 h-100 w-120 opacity-40 lg:-bottom-40 lg:-left-40 lg:h-140 lg:w-160 lg:opacity-50"
+      />
+      <div className="relative mx-auto max-w-[1200px] px-6 py-24 lg:py-32">
         <ScrollReveal className="mx-auto flex max-w-[46rem] flex-col items-center text-center">
           <h2 className="text-balance font-display text-[2.5rem] leading-[1.05] font-bold tracking-[-0.03em] sm:text-5xl lg:text-6xl">
             {finalCta.title}

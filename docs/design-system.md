@@ -12,7 +12,7 @@ Dark enterprise-tech that **means business**: near-black surfaces, precise typog
 Dark-first. Defined in OKLCH in `app/globals.css` under `.dark` (the site's only theme) and mirrored in `@theme inline` as `--color-*`. All ratios below verified against `--background`.
 
 ### Accent choice: electric blue `#2fb6ff` / `oklch(0.74 0.15 240)`, violet atmosphere `#ab5ef7`
-Direction: **cold neon tech**, a neon blue signal on blue-cast near-blacks. Blue reads as engineering credibility (Linear, Vercel) and is bright enough to carry both as a button fill (with near-black text) and as a hairline signal. The discipline is split in two: `--primary` is the ONE interactive signal (CTA, key metric, focus ring, active marks). `--accent-2` is a hot violet reserved for **atmosphere only**: the hero's single ambient glow and a few flow-field particles. Violet never colors an action, a metric, or text.
+Direction: **cold neon tech**, a neon blue signal on blue-cast near-blacks. Blue reads as engineering credibility (Linear, Vercel) and is bright enough to carry both as a button fill (with near-black text) and as a hairline signal. The discipline is split in two: `--primary` is the ONE interactive signal (CTA, key metric, focus ring, active marks). `--accent-2` is a hot violet reserved for **atmosphere only**: three sanctioned ambient glows (§5) and a few hero flow-field particles. Violet never colors an action, a metric, or text.
 
 ### Tokens
 
@@ -106,7 +106,12 @@ Two motifs, cleanly split by role: the hero owns one large moving signature; eve
 - **The blue signal:** accent used as precise marks: a 2px blue underline/tick under a key metric, a thin blue left-border on a quoted result, the active nav indicator, the focus ring. Small, surgical, high-signal.
 - **Metric / ROI display:** the brand's centerpiece for proof sections. Big `Space Grotesk` `tabular-nums` figure (`--foreground`), a Geist Mono uppercase label above in `muted-foreground`, and an optional delta badge (`success` + `▲`). See §7.
 
-**Ambient glow:** exactly **one** page-level ambient glow, the violet radial top-right of the hero (blur-heavy, `--accent-2` at ~20% alpha), plus two motivated exceptions and nothing else: the active carte card/ray's blue outline glow during its 2.6s highlight, and the soft glow behind the primary CTA on hover.
+**Ambient glow (violet, `--accent-2`):** a **closed list of three** page-level violet atmosphere glows, all built from the one `.trace-glow` radial (`--accent-2` at ~20% alpha, blur-heavy, then sized/placed/dimmed per use via `className` + `opacity`), and nothing else:
+1. **Hero, top-right** (`opacity` up to 100%, the largest): the page's opening light.
+2. **Final CTA, bottom-left, overflowing the viewport** (`opacity` ~40-50%, below the hero): the page closes on the light it opened with (a "bookend"). Decentred, bright core off-screen, never a centred halo, never directly under a running paragraph.
+3. **Services diptych hinge, behind the desktop FoldMark** (`opacity` ~40%, `overflow-hidden`-clipped to the ~72px fold channel, desktop only): a thin vertical bloom, as if the fold concentrated the light.
+
+No fourth violet glow, ever; nothing else on the page gets one. Separate from this violet list, two motivated **blue** glows stay allowed: the active carte card/ray's outline glow during its 2.6s highlight, and the soft glow behind the primary CTA on hover.
 
 **Gradients/glows must NOT:** tint text (no gradient or accent-tinted text), stack multiple colored glows, appear on cards/buttons by default, or become a multi-color mesh background. If in doubt, remove it.
 
@@ -167,10 +172,10 @@ Principles: motion communicates hierarchy, sequence, or feedback, never decorati
 - Near-black plus neutral grays plus one disciplined blue signal. Let 90% of the page be quiet.
 - Lead with ROI: real, measurable numbers in metric blocks.
 - Tight 8px radius, hairline borders, precise type, generous whitespace.
-- One ambient violet hero glow, one tracé grid field on proof/spoke pages, surgical blue accents.
+- The three sanctioned ambient violet glows and no more (hero top-right, final CTA bottom-left, services hinge), one tracé grid field on proof/spoke pages, surgical blue accents.
 
 **Don't**
-- Violet outside the hero atmosphere (glow + particles): never on actions, metrics, or text.
+- Violet outside its three sanctioned glows plus the hero flow-field particles: never on actions, metrics, or text, and never a fourth glow.
 - Gradient or accent-tinted text; rainbow mesh backgrounds; stacked colored glows.
 - Glassmorphism soup: no frosted blur on every card.
 - A third accent color, or blue creeping onto body copy.

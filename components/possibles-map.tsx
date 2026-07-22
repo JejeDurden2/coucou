@@ -20,6 +20,27 @@ import { hero } from "@/content/hero";
 // tip), vertically centered on y, so the brand is the source of the possibles.
 const ORIGIN = { x: 31, y: 270 };
 
+// Origami mark size (px). Larger than a dot so it reads as the brand, not a
+// floating blue blob. left/top place viewBox point (30.3, 16) — beak tip x,
+// vertical center — exactly on ORIGIN, so the beak stays on the fan's axis
+// whatever MARK_PX is (both offsets derive from it).
+const MARK_PX = 44;
+
+// Rays start this far (px) from ORIGIN along their own direction, leaving a
+// clean ring around the beak: the fan reads as sourced from the mark, not
+// piercing it. The head sits left of ORIGIN, the fan opens right, so this gap
+// is pure breathing room, never overlapping the head.
+const RAY_GAP = 14;
+
+// Start point of a ray aimed at (x, y): ORIGIN pushed RAY_GAP px along the
+// unit vector toward the target.
+function rayStart(x: number, y: number): readonly [number, number] {
+  const dx = x - ORIGIN.x;
+  const dy = y - ORIGIN.y;
+  const len = Math.hypot(dx, dy);
+  return [ORIGIN.x + (dx / len) * RAY_GAP, ORIGIN.y + (dy / len) * RAY_GAP];
+}
+
 // Faint short rays, each ending in a tiny dot: [x, y, pathDelay, dotDelay].
 const FAINT_RAYS: [number, number, number, number][] = [
   [120, 55, 0.7, 0.75],
@@ -153,58 +174,68 @@ export function PossiblesMap() {
             </marker>
           </defs>
 
-          {FAINT_RAYS.map(([x, y, pathDelay, dotDelay]) => (
-            <g key={`faint-${x}-${y}`}>
+          {FAINT_RAYS.map(([x, y, pathDelay, dotDelay]) => {
+            const [sx, sy] = rayStart(x, y);
+            return (
+              <g key={`faint-${x}-${y}`}>
+                <path
+                  d={`M${sx},${sy} L${x},${y}`}
+                  className="hero-fade fill-none stroke-foreground-dim/30"
+                  strokeWidth="1"
+                  style={{ animationDelay: `${pathDelay}s` }}
+                />
+                <circle
+                  cx={x}
+                  cy={y}
+                  r="1.8"
+                  className="hero-fade fill-foreground-dim/55"
+                  style={{ animationDelay: `${dotDelay}s` }}
+                />
+              </g>
+            );
+          })}
+
+          {ARROW_RAYS.map(([x, y, delay]) => {
+            const [sx, sy] = rayStart(x, y);
+            return (
               <path
-                d={`M${ORIGIN.x},${ORIGIN.y} L${x},${y}`}
-                className="hero-fade fill-none stroke-foreground-dim/30"
-                strokeWidth="1"
-                style={{ animationDelay: `${pathDelay}s` }}
+                key={`dim-${x}-${y}`}
+                d={`M${sx},${sy} L${x},${y}`}
+                className="hero-fade fill-none stroke-foreground-dim/65"
+                strokeWidth="1.2"
+                markerEnd="url(#ccArrowDim)"
+                style={{ animationDelay: `${delay}s` }}
               />
-              <circle
-                cx={x}
-                cy={y}
-                r="1.8"
-                className="hero-fade fill-foreground-dim/55"
-                style={{ animationDelay: `${dotDelay}s` }}
+            );
+          })}
+
+          {ARROW_RAYS.map(([x, y], index) => {
+            const [sx, sy] = rayStart(x, y);
+            return (
+              <path
+                key={`blue-${x}-${y}`}
+                d={`M${sx},${sy} L${x},${y}`}
+                className="fill-none stroke-primary"
+                strokeWidth="1.5"
+                markerEnd="url(#ccArrowBlue)"
+                style={{
+                  opacity: active === index ? 1 : 0,
+                  transition: "opacity 0.45s ease-out",
+                }}
               />
-            </g>
-          ))}
-
-          {ARROW_RAYS.map(([x, y, delay]) => (
-            <path
-              key={`dim-${x}-${y}`}
-              d={`M${ORIGIN.x},${ORIGIN.y} L${x},${y}`}
-              className="hero-fade fill-none stroke-foreground-dim/65"
-              strokeWidth="1.2"
-              markerEnd="url(#ccArrowDim)"
-              style={{ animationDelay: `${delay}s` }}
-            />
-          ))}
-
-          {ARROW_RAYS.map(([x, y], index) => (
-            <path
-              key={`blue-${x}-${y}`}
-              d={`M${ORIGIN.x},${ORIGIN.y} L${x},${y}`}
-              className="fill-none stroke-primary"
-              strokeWidth="1.5"
-              markerEnd="url(#ccArrowBlue)"
-              style={{
-                opacity: active === index ? 1 : 0,
-                transition: "opacity 0.45s ease-out",
-              }}
-            />
-          ))}
+            );
+          })}
         </svg>
 
         {/* The source: the origami coucou head (LogoMark) sits on ORIGIN, not an anonymous blue dot. */}
         <LogoMark
-          className="hero-fade absolute size-8 text-primary"
+          className="hero-fade absolute text-primary"
           style={{
-            left: ORIGIN.x - 30.3,
-            top: ORIGIN.y - 16,
-            filter:
-              "drop-shadow(0 0 6px color-mix(in oklch, var(--primary) 70%, transparent))",
+            width: MARK_PX,
+            height: MARK_PX,
+            left: ORIGIN.x - 30.3 * (MARK_PX / 32),
+            top: ORIGIN.y - 16 * (MARK_PX / 32),
+            filter: "drop-shadow(0 2px 5px rgb(0 0 0 / 0.45))",
             animationDelay: "0.35s",
           }}
         />

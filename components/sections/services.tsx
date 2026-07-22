@@ -91,7 +91,13 @@ export function Services() {
 
           {/* Charnière desktop : la ligne du pli, l’oiseau qui se plie, le
               libellé le long de la charnière. */}
-          <div className="hidden flex-col items-center gap-4 lg:flex">
+          <div className="relative isolate hidden flex-col items-center gap-4 overflow-hidden lg:flex">
+            {/* Le pli concentre la lumière : lueur violette fine, clippée au
+                canal de la charnière (72px), derrière le FoldMark. */}
+            <div
+              aria-hidden
+              className="trace-glow pointer-events-none absolute top-1/2 left-1/2 -z-10 h-72 w-72 -translate-x-1/2 -translate-y-1/2 opacity-40"
+            />
             <span aria-hidden className="w-px flex-1 bg-border" />
             <FoldMark className="rounded-md border border-border p-2.5" />
             <span className="font-mono text-xs uppercase tracking-[0.12em] text-muted-foreground [writing-mode:vertical-rl]">

@@ -88,6 +88,13 @@
     /* Scrollbars et controles natifs sombres (Windows, mobile). */
     color-scheme: dark;
   }
+  /* Tailwind v4 aligne le preflight sur le navigateur : button = cursor
+     default. On remet le pointeur sur tout l'interactif non desactive (les
+     <a href> l'ont deja par defaut). */
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
   /* Anchored navigation only; disabled for reduced-motion users (§6). */
   @media (prefers-reduced-motion: no-preference) {
     html {
