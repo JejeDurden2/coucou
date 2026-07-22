@@ -1,6 +1,8 @@
 # SEO programmatique : stratégie Coucou IA
 
-Version v1 (2026-07-18). Périmètre validé par recherche SERP le 2026-07-18.
+Version v1.1 (2026-07-22). Périmètre validé par recherche SERP le 2026-07-18.
+
+**Avancées sur décision fondateur (2026-07-22) :** deux extensions prévues en phase 2 sont livrées sans attendre les déclencheurs : le glossaire (`/glossaire`, 14 termes, JSON-LD DefinedTerm, objectif AI-SEO) et les pages comparaison (`/comparaison`, 4 pages : grand cabinet, ESN, freelance IA, ChatGPT seul, idée n°11 du plan). S'y ajoute la grille interactive (`/outils/par-ou-commencer`), version jouable des cartes. Les déclencheurs du §6 restent valables pour le reste (croisements secteur x cas d'usage, pages villes).
 S'appuie sur `.agents/product-marketing.md`. Les secteurs cibles y sont marqués [À VALIDER] : **valider la liste avec le fondateur avant de produire les pages.**
 
 ## 1. État des lieux honnête

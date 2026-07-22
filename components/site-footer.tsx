@@ -10,6 +10,7 @@ import {
   ctaLabel,
   footerLegalLinks,
   footerPositioning,
+  footerResourceLinks,
   nav,
   siteName,
 } from "@/content/site";
@@ -41,6 +42,13 @@ export function SiteFooter() {
           <div className="flex flex-col gap-8 sm:flex-row sm:gap-16 lg:gap-20">
             <nav aria-label="Pages du site" className="flex flex-col gap-3">
               {nav.map((link) => (
+                <Link key={link.href} href={link.href} className={linkClasses}>
+                  {link.label}
+                </Link>
+              ))}
+            </nav>
+            <nav aria-label="Ressources" className="flex flex-col gap-3">
+              {footerResourceLinks.map((link) => (
                 <Link key={link.href} href={link.href} className={linkClasses}>
                   {link.label}
                 </Link>

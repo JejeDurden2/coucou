@@ -41,6 +41,13 @@ export const footerLegalLinks: NavLink[] = [
   { label: "Confidentialité", href: "/confidentialite" },
 ];
 
+// Pages outils et contenu : liées ici pour qu'aucune ne soit orpheline.
+export const footerResourceLinks: NavLink[] = [
+  { label: "Bien choisir son partenaire IA", href: "/comparaison" },
+  { label: "Glossaire : l’IA sans jargon", href: "/glossaire" },
+  { label: "Par où commencer ?", href: "/outils/par-ou-commencer" },
+];
+
 // Positionnement d’une ligne pour le pied de page.
 export const footerPositioning =
   "Conseil et développement IA pour les PME et ETI françaises. On trouve ce que l’IA rend possible chez vous, et on le construit.";

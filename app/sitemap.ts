@@ -3,6 +3,8 @@ import { siteUrl } from "@/content/site";
 import { secteurs } from "@/content/secteurs";
 import { casUsagePages } from "@/content/cas-usage-pages";
 import { ressources } from "@/content/ressources";
+import { comparaisons } from "@/content/comparaisons";
+import { glossaire } from "@/content/glossaire";
 
 // Pas de lastModified : new Date() estampillait la date de build, un signal
 // faux que Google apprend a ignorer. changeFrequency et priority sont ignores.
@@ -24,5 +26,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...ressources.map((ressource) => ({
       url: `${siteUrl}/ressources/${ressource.slug}`,
     })),
+    { url: `${siteUrl}/comparaison` },
+    ...comparaisons.map((comparaison) => ({
+      url: `${siteUrl}/comparaison/${comparaison.slug}`,
+    })),
+    { url: `${siteUrl}/glossaire` },
+    ...glossaire.map((terme) => ({
+      url: `${siteUrl}/glossaire/${terme.slug}`,
+    })),
+    { url: `${siteUrl}/outils/par-ou-commencer` },
   ];
 }
