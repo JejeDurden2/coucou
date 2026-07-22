@@ -9,7 +9,8 @@ import { bookingUrl, ctaLabel } from "@/content/site";
 const carteLinkClasses =
   "rounded-sm text-muted-foreground underline underline-offset-4 outline-none transition-colors hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4 focus-visible:ring-offset-background";
 
-export function Cta() {
+// `placement` : attribution UTM par page (utm_content côté Cal.com).
+export function Cta({ placement = "cta-final" }: { placement?: string } = {}) {
   return (
     <section className="border-t border-border">
       <div className="mx-auto max-w-[1200px] px-6 py-24 lg:py-32">
@@ -21,7 +22,7 @@ export function Cta() {
             {finalCta.sub}
           </p>
           <div className="mt-10">
-            <Button nativeButton={false} render={<a href={bookingUrl("cta-final")} />} size="lg">
+            <Button nativeButton={false} render={<a href={bookingUrl(placement)} />} size="lg">
               {ctaLabel}
               <ArrowRight data-icon="inline-end" />
             </Button>
