@@ -1,7 +1,15 @@
 "use client";
 
 import { useActionState, useState } from "react";
-import { ArrowLeft, ArrowRight, Check, Copy, RotateCcw, type LucideIcon } from "lucide-react";
+import {
+  AlertTriangle,
+  ArrowLeft,
+  ArrowRight,
+  Check,
+  Copy,
+  RotateCcw,
+  type LucideIcon,
+} from "lucide-react";
 import { motion, useReducedMotion } from "motion/react";
 
 import { Button } from "@/components/ui/button";
@@ -9,13 +17,17 @@ import { cn } from "@/lib/utils";
 import { bookingUrl, ctaLabel } from "@/content/site";
 import {
   buildKitPrompt,
+  hasHighVolume,
   hasPersonalData,
   isAutomation,
   kit,
+  kitCostsFor,
+  kitGateLine,
   kitLeadFields,
   kitVerdictBricks,
   kitRgpd,
   kitStepsFor,
+  kitWatchPointsFor,
   visibleQuestions,
   type KitDraft,
 } from "@/content/kit";
@@ -81,6 +93,51 @@ function openerFor(draft: KitDraft): string | null {
   return null;
 }
 
+// Deuxième lecture du verdict : ce que ce type de projet exige en priorité.
+function readingFor(draft: KitDraft): string | null {
+  const projet = draft.projet;
+  if (projet === "outil-interne" || projet === "produit" || projet === "espace-client") {
+    return kit.projetReadings[projet];
+  }
+  return null;
+}
+
+// Bloc encadré à puces : le RGPD et les points de vigilance partagent le dessin.
+function PointPanel({
+  icon: Icon,
+  title,
+  intro,
+  points,
+  note,
+}: {
+  icon: LucideIcon;
+  title: string;
+  intro?: string;
+  points: readonly string[];
+  note?: string;
+}) {
+  return (
+    <div className="flex flex-col gap-4 rounded-lg border border-border bg-background p-6">
+      <h3 className={sectionTitle}>{title}</h3>
+      {intro ? (
+        <p className="max-w-[54ch] text-pretty leading-relaxed text-muted-foreground">{intro}</p>
+      ) : null}
+      <ul className="flex flex-col gap-3">
+        {points.map((point) => (
+          <li
+            key={point}
+            className="flex items-start gap-3 text-pretty text-sm leading-relaxed text-muted-foreground"
+          >
+            <Icon aria-hidden className="mt-0.5 size-4 shrink-0 text-primary" />
+            <span>{point}</span>
+          </li>
+        ))}
+      </ul>
+      {note ? <p className="text-sm leading-relaxed text-muted-foreground">{note}</p> : null}
+    </div>
+  );
+}
+
 export function KitForm() {
   const reduce = useReducedMotion();
 
@@ -120,7 +177,7 @@ export function KitForm() {
           .trace-glow), jamais sur une action ni un texte (§3 du design system). */}
       <div
         aria-hidden
-        className="trace-glow pointer-events-none absolute -top-44 -right-44 h-100 w-120 opacity-50"
+        className="trace-glow pointer-events-none absolute -top-44 -right-44 h-100 w-120 opacity-50"
       />
       {!done ? (
         <p className={cn(eyebrow, "text-muted-foreground")}>
@@ -195,6 +252,20 @@ export function KitForm() {
           <p className="max-w-[54ch] text-pretty leading-relaxed text-muted-foreground">
             {kit.automationBodySecond}
           </p>
+          <div className="flex flex-col gap-4">
+            <h3 className={sectionTitle}>{kit.automationQuestionsTitle}</h3>
+            <ol className="flex flex-col gap-3">
+              {kit.automationQuestions.map((question, position) => (
+                <li
+                  key={question}
+                  className="flex max-w-[62ch] gap-3 text-pretty text-sm leading-relaxed text-muted-foreground"
+                >
+                  <span className="font-mono tabular-nums text-primary">{position + 1}.</span>
+                  <span>{question}</span>
+                </li>
+              ))}
+            </ol>
+          </div>
           <div>
             <Button
               nativeButton={false}
@@ -213,6 +284,7 @@ export function KitForm() {
     }
 
     const opener = openerFor(draft);
+    const reading = readingFor(draft);
     // Avant l'email : le langage et une seule brique inconnue, le reste flouté.
     const { teaser, locked } = kitVerdictBricks(draft);
     const bricks = [...teaser, ...locked];
@@ -230,6 +302,11 @@ export function KitForm() {
             {opener ? (
               <p className="max-w-[54ch] text-pretty leading-relaxed text-muted-foreground">
                 {opener}
+              </p>
+            ) : null}
+            {reading ? (
+              <p className="max-w-[54ch] text-pretty leading-relaxed text-muted-foreground">
+                {reading}
               </p>
             ) : null}
           </div>
@@ -261,7 +338,7 @@ export function KitForm() {
           </ul>
         </div>
 
-        {unlocked ? renderKit() : renderGate()}
+        {unlocked ? renderKit() : renderGate(bricks.length)}
 
         <div className="flex flex-wrap items-center gap-x-6 gap-y-3 border-t border-border pt-6">
           <MiniButton
@@ -275,12 +352,16 @@ export function KitForm() {
     );
   }
 
-  function renderGate() {
+  function renderGate(brickCount: number) {
     return (
       <div className="flex flex-col gap-4 rounded-lg border border-border bg-background p-6">
         <h3 className={sectionTitle}>{kit.gateTitle}</h3>
         <p className="max-w-[54ch] text-pretty leading-relaxed text-muted-foreground">
           {kit.gateBody}
+        </p>
+        {/* La taille de ce qui est encore fermé, chiffrée pour ces réponses-là. */}
+        <p className="max-w-[54ch] text-pretty tabular-nums leading-relaxed text-foreground">
+          {kitGateLine(kitStepsFor(draft).length, brickCount)}
         </p>
 
         <form action={formAction} className="mt-2 flex max-w-md flex-col gap-4">
@@ -342,6 +423,8 @@ export function KitForm() {
   }
 
   function renderKit() {
+    const watchPoints = kitWatchPointsFor(draft);
+
     return (
       <div role="status" aria-live="polite" className="flex flex-col gap-10">
         <div className="flex flex-col gap-4">
@@ -380,25 +463,47 @@ export function KitForm() {
           ))}
         </ol>
 
-        {hasPersonalData(draft) ? (
-          <div className="flex flex-col gap-4 rounded-lg border border-border bg-background p-6">
-            <h3 className={sectionTitle}>{kitRgpd.title}</h3>
-            <p className="max-w-[54ch] text-pretty leading-relaxed text-muted-foreground">
-              {kitRgpd.intro}
+        {/* La facture du mois, brique par brique, pour cette pile-là seulement. */}
+        <div className="flex flex-col gap-4">
+          <h3 className={sectionTitle}>{kit.costsTitle}</h3>
+          <p className="max-w-[54ch] text-pretty leading-relaxed text-muted-foreground">
+            {kit.costsNote}
+          </p>
+          <ul className="divide-y divide-border">
+            {kitCostsFor(draft).map((line) => (
+              <li
+                key={line.name}
+                className="flex flex-wrap items-baseline justify-between gap-x-8 gap-y-1 py-3 first:pt-0 last:pb-0"
+              >
+                <span className="text-sm text-foreground">{line.name}</span>
+                <span className="font-mono text-sm tabular-nums text-muted-foreground">
+                  {line.cost}
+                </span>
+              </li>
+            ))}
+          </ul>
+          <p className="max-w-[54ch] text-pretty tabular-nums leading-relaxed text-foreground">
+            {kit.costsTotal}
+          </p>
+          {hasHighVolume(draft) ? (
+            <p className="max-w-[54ch] text-pretty tabular-nums text-sm leading-relaxed text-muted-foreground">
+              {kit.costsVolumeNote}
             </p>
-            <ul className="flex flex-col gap-3">
-              {kitRgpd.points.map((point) => (
-                <li
-                  key={point}
-                  className="flex items-start gap-3 text-pretty text-sm leading-relaxed text-muted-foreground"
-                >
-                  <Check aria-hidden className="mt-0.5 size-4 shrink-0 text-primary" />
-                  <span>{point}</span>
-                </li>
-              ))}
-            </ul>
-            <p className="text-sm leading-relaxed text-muted-foreground">{kitRgpd.note}</p>
-          </div>
+          ) : null}
+        </div>
+
+        {watchPoints.length > 0 ? (
+          <PointPanel icon={AlertTriangle} title={kit.watchTitle} points={watchPoints} />
+        ) : null}
+
+        {hasPersonalData(draft) ? (
+          <PointPanel
+            icon={Check}
+            title={kitRgpd.title}
+            intro={kitRgpd.intro}
+            points={kitRgpd.points}
+            note={kitRgpd.note}
+          />
         ) : null}
 
         <div className="flex flex-col gap-4">
