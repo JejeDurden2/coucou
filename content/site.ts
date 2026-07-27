@@ -46,6 +46,7 @@ export const footerResourceLinks: NavLink[] = [
   { label: "Bien choisir son partenaire IA", href: "/comparaison" },
   { label: "Glossaire : l’IA sans jargon", href: "/glossaire" },
   { label: "Par où commencer ?", href: "/outils/par-ou-commencer" },
+  { label: "Kit de démarrage", href: "/outils/kit-de-demarrage" },
 ];
 
 // Positionnement d’une ligne pour le pied de page.

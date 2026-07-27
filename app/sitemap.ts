@@ -35,5 +35,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: `${siteUrl}/glossaire/${terme.slug}`,
     })),
     { url: `${siteUrl}/outils/par-ou-commencer` },
+    { url: `${siteUrl}/outils/kit-de-demarrage` },
   ];
 }
