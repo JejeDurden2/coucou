@@ -1,14 +1,17 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 
 import { Breadcrumb } from "@/components/breadcrumb";
 import { KitForm } from "@/components/kit-form";
-import { pageMetadata } from "@/lib/seo";
-import { kit } from "@/content/kit";
-import { siteUrl } from "@/content/site";
+import { FaqList } from "@/components/sections/faq";
+import { pageMetadata, spokeJsonLd } from "@/lib/seo";
+import { kit, kitCross, kitFaq, kitFaqTitle } from "@/content/kit";
 
 // Kit de démarrage : l'outil du dirigeant qui fait écrire son premier outil par
 // une IA et bloque sur tout le reste. Server Component ; l'arbre de décision et
 // la capture email vivent dans le leaf client <KitForm>. Copie : content/kit.ts.
+// La FAQ est rendue côté serveur : c'est elle qui porte le texte indexable et
+// citable de la page (le parcours interactif reste maigre pour un crawler).
 
 const path = "/outils/kit-de-demarrage";
 
@@ -20,39 +23,14 @@ export const metadata: Metadata = pageMetadata({
 
 const breadcrumb = [{ label: "Accueil", href: "/" }, { label: "Kit de démarrage" }];
 
-// JSON-LD Service + BreadcrumbList, même modèle que /outils/par-ou-commencer.
-const url = `${siteUrl}${path}`;
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@graph": [
-    {
-      "@type": "Service",
-      "@id": `${url}#service`,
-      name: kit.serviceName,
-      description: kit.metaDescription,
-      url,
-      provider: {
-        "@type": "ProfessionalService",
-        name: "COUCOU IA",
-        url: siteUrl,
-      },
-      areaServed: {
-        "@type": "Country",
-        name: "France",
-      },
-    },
-    {
-      "@type": "BreadcrumbList",
-      "@id": `${url}#breadcrumb`,
-      itemListElement: breadcrumb.map((crumb, index) => ({
-        "@type": "ListItem",
-        position: index + 1,
-        name: crumb.label,
-        ...(crumb.href ? { item: `${siteUrl}${crumb.href}` } : {}),
-      })),
-    },
-  ],
-};
+// Service + BreadcrumbList + FAQPage, le même @graph que les spokes.
+const jsonLd = spokeJsonLd({
+  name: kit.serviceName,
+  description: kit.metaDescription,
+  path,
+  breadcrumb,
+  faq: kitFaq,
+});
 
 export default function KitDeDemarragePage() {
   return (
@@ -78,8 +56,18 @@ export default function KitDeDemarragePage() {
             <div className="mt-10 max-w-[46rem]">
               <KitForm />
             </div>
+            <p className="mt-8 max-w-[46rem] text-sm leading-relaxed text-muted-foreground">
+              {kitCross.body}{" "}
+              <Link
+                href={kitCross.href}
+                className="rounded-sm text-primary underline-offset-4 outline-none hover:underline focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+              >
+                {kitCross.linkLabel}
+              </Link>
+            </p>
           </div>
         </section>
+        <FaqList title={kitFaqTitle} items={kitFaq} />
       </main>
     </>
   );

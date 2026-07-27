@@ -72,3 +72,10 @@ export const grille = {
   retryLabel: "Tester un autre cas",
   restartLabel: "Recommencer",
 } as const;
+
+// Lien croisé vers l'autre outil (/outils/kit-de-demarrage).
+export const grilleCross = {
+  body: "Vous préférez construire vous-même, avec une IA ?",
+  linkLabel: "Le kit de démarrage vous donne la pile, les étapes et le prompt",
+  href: "/outils/kit-de-demarrage",
+} as const;

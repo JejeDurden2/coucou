@@ -25,6 +25,11 @@ Coucou IA est un cabinet de conseil et développement IA pour les PME française
 - [Recherche interne intelligente](https://coucou-ia.com/cas-usage/recherche-interne) : retrouver l'information en quelques secondes, sur tous vos outils.
 - [Qualification des leads](https://coucou-ia.com/cas-usage/qualification-leads) : trier les demandes entrantes et les router au bon commercial.
 
+## Outils gratuits
+
+- [Par où commencer](https://coucou-ia.com/outils/par-ou-commencer) : la grille interactive pour tester un cas d'usage IA en trois questions (volume, données, douleur) et obtenir un verdict franc.
+- [Kit de démarrage](https://coucou-ia.com/outils/kit-de-demarrage) : six questions pour créer son premier outil avec l'IA. Le kit donne la pile conseillée (GitHub, Next.js, Vercel, Supabase région UE, Resend, nom de domaine), les étapes dans l'ordre avec le piège de chacune, et le prompt à coller dans Claude.
+
 ## Ressources
 
 - [La carte des possibles : expertise comptable](https://coucou-ia.com/ressources/carte-expertise-comptable) : les cas d'usage IA d'un cabinet comptable, classés par impact et faisabilité.

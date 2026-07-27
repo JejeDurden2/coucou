@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 
 import { Breadcrumb } from "@/components/breadcrumb";
 import { GrilleInteractive, type GrilleSector } from "@/components/grille-interactive";
 import { pageMetadata } from "@/lib/seo";
-import { grille } from "@/content/grille";
+import { grille, grilleCross } from "@/content/grille";
 import { ressources } from "@/content/ressources";
 import { siteUrl } from "@/content/site";
 
@@ -93,6 +94,15 @@ export default function ParOuCommencerPage() {
             <div className="mt-10 max-w-[46rem]">
               <GrilleInteractive sectors={sectors} />
             </div>
+            <p className="mt-8 max-w-[46rem] text-sm leading-relaxed text-muted-foreground">
+              {grilleCross.body}{" "}
+              <Link
+                href={grilleCross.href}
+                className="rounded-sm text-primary underline-offset-4 outline-none hover:underline focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+              >
+                {grilleCross.linkLabel}
+              </Link>
+            </p>
           </div>
         </section>
       </main>

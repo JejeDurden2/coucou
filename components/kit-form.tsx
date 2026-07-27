@@ -12,8 +12,8 @@ import {
   hasPersonalData,
   isAutomation,
   kit,
-  kitBricks,
   kitLeadFields,
+  kitVerdictBricks,
   kitRgpd,
   kitStepsFor,
   visibleQuestions,
@@ -115,7 +115,13 @@ export function KitForm() {
   const content = renderPhase();
 
   return (
-    <div className="rounded-lg border border-border bg-card p-6 sm:p-8">
+    <div className="relative overflow-hidden rounded-lg border border-border bg-card p-6 sm:p-8">
+      {/* Le seul violet de la page : une nappe d'ambiance (--accent-2 via
+          .trace-glow), jamais sur une action ni un texte (§3 du design system). */}
+      <div
+        aria-hidden
+        className="trace-glow pointer-events-none absolute -top-44 -right-44 h-100 w-120 opacity-50"
+      />
       {!done ? (
         <p className={cn(eyebrow, "text-muted-foreground")}>
           {kit.progressLabel}{" "}
@@ -207,7 +213,9 @@ export function KitForm() {
     }
 
     const opener = openerFor(draft);
-    const bricks = kitBricks(draft);
+    // Avant l'email : le langage et une seule brique inconnue, le reste flouté.
+    const { teaser, locked } = kitVerdictBricks(draft);
+    const bricks = [...teaser, ...locked];
 
     return (
       <div className="flex flex-col gap-10">
@@ -229,17 +237,27 @@ export function KitForm() {
           {/* Une brique par ligne, séparées par des filets : le seul signal bleu du
               verdict reste le sourtitre, jamais six barres d'accent. */}
           <ul className="divide-y divide-border">
-            {bricks.map((brick) => (
-              <li key={brick.name} className="flex flex-col gap-1 py-5 first:pt-0 last:pb-0">
-                <span className="font-display text-base font-medium text-foreground">
-                  {brick.name}
-                </span>
-                <span className="text-sm leading-relaxed text-muted-foreground">
-                  {kit.stackPlainPrefix} {brick.plain}
-                </span>
-                <span className="text-sm leading-relaxed text-foreground">{brick.reason}</span>
-              </li>
-            ))}
+            {bricks.map((brick, position) => {
+              const masked = !unlocked && position >= teaser.length;
+              return (
+                <li
+                  key={brick.name}
+                  aria-hidden={masked || undefined}
+                  className={cn(
+                    "flex flex-col gap-1 py-5 first:pt-0 last:pb-0",
+                    masked && "pointer-events-none blur-sm select-none"
+                  )}
+                >
+                  <span className="font-display text-base font-medium text-foreground">
+                    {brick.name}
+                  </span>
+                  <span className="text-sm leading-relaxed text-muted-foreground">
+                    {kit.stackPlainPrefix} {brick.plain}
+                  </span>
+                  <span className="text-sm leading-relaxed text-foreground">{brick.reason}</span>
+                </li>
+              );
+            })}
           </ul>
         </div>
 

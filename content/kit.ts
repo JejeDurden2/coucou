@@ -4,6 +4,8 @@
 // Arbre de décision statique : aucun appel modèle, aucune API. Copie comprise.
 // L'espace insécable (U+00A0) précède ? ! : comme dans le reste du site.
 
+import type { FaqItem } from "@/content/secteurs";
+
 // Les valeurs sont uniques dans tout l'arbre : une faute de frappe dans une
 // condition ne compile pas (TypeScript refuse la comparaison sans recouvrement).
 export type KitAnswers = {
@@ -204,6 +206,11 @@ export type KitBrick = {
   // Pourquoi elle est dans votre pile à vous.
   reason: string;
   when?: (draft: KitDraft) => boolean;
+  // Aperçu avant la porte email : le langage est toujours montré, plus une
+  // seule brique que le visiteur ne connaît pas (rang 1 d'abord). Le reste
+  // est flouté jusqu'à l'email.
+  teaser?: true;
+  insider?: 1 | 2 | 3;
 };
 
 const kitStack: KitBrick[] = [
@@ -215,18 +222,21 @@ const kitStack: KitBrick[] = [
   },
   {
     name: "Next.js en TypeScript",
+    teaser: true,
     plain: "le cadre dans lequel votre application est écrite.",
     reason:
       "Les pages, le serveur et l’accès aux données dans un seul projet : moins de pièces à assembler, moins de choses à comprendre.",
   },
   {
     name: "Vercel",
+    insider: 3,
     plain: "le serveur qui publie votre application sur internet.",
     reason:
       "Branché sur votre dépôt : vous poussez le code, la mise en ligne se fait toute seule.",
   },
   {
     name: "Supabase, région UE",
+    insider: 1,
     plain: "votre base de données et vos comptes utilisateurs au même endroit.",
     reason:
       "Vos données rangées ailleurs que sur votre disque dur, avec les comptes qui vont avec, et hébergées en Europe.",
@@ -234,6 +244,7 @@ const kitStack: KitBrick[] = [
   },
   {
     name: "Resend",
+    insider: 2,
     plain: "le service qui envoie vos emails à votre place.",
     reason:
       "Un email parti de votre application n’arrive nulle part s’il ne prouve pas qu’il vient de votre domaine. C’est tout le travail de Resend.",
@@ -247,8 +258,15 @@ const kitStack: KitBrick[] = [
   },
 ];
 
-export function kitBricks(draft: KitDraft): KitBrick[] {
-  return kitStack.filter((brick) => !brick.when || brick.when(draft));
+// L'aperçu gratuit : le langage et une seule brique inconnue du grand public.
+// Le reste part dans `locked`, flouté jusqu'à l'email.
+export function kitVerdictBricks(draft: KitDraft): { teaser: KitBrick[]; locked: KitBrick[] } {
+  const bricks = kitStack.filter((brick) => !brick.when || brick.when(draft));
+  const insider = bricks
+    .filter((brick) => brick.insider)
+    .sort((a, b) => (a.insider ?? 9) - (b.insider ?? 9))[0];
+  const teaser = bricks.filter((brick) => brick.teaser || brick === insider);
+  return { teaser, locked: bricks.filter((brick) => !teaser.includes(brick)) };
 }
 
 // La liste des gestes qu'une IA ne peut pas faire à votre place, dans l'ordre.
@@ -411,12 +429,12 @@ export function buildKitPrompt(draft: KitDraft): string {
 
 // Toute la copie de la page et de l'outil.
 export const kit = {
-  metaTitle: "Kit de démarrage : lancer votre premier outil | Coucou IA",
+  metaTitle: "Kit de démarrage : votre premier outil avec l’IA | Coucou IA",
   metaDescription:
     "Vous faites écrire votre premier outil par une IA et vous bloquez sur le dépôt, la base, l’hébergement ? Six questions, et vous repartez avec votre kit.",
   serviceName: "Kit de démarrage : votre premier outil",
 
-  h1: "Votre premier outil : le kit de démarrage",
+  h1: "Votre premier outil avec l’IA : le kit de démarrage",
   intro:
     "Le code, ça va : l’IA vous en écrit. C’est tout le reste qui coince. Dépôt, base de données, hébergement, comptes, emails, nom de domaine. Six questions, et vous repartez avec la liste de ce qu’il faut créer, dans l’ordre, et le prompt qui va avec.",
 
@@ -442,7 +460,7 @@ export const kit = {
   // Porte email : le kit complet est derrière.
   gateTitle: "La suite du kit vous attend.",
   gateBody:
-    "La liste complète de ce qu’il faut créer, dans l’ordre, avec le temps que ça prend et le piège de chaque étape. Et le prompt à coller dans Claude pour démarrer droit.",
+    "Le reste de votre pile, la liste complète de ce qu’il faut créer, dans l’ordre, avec le temps que ça prend et le piège de chaque étape. Et le prompt à coller dans Claude pour démarrer droit.",
   gateEmailLabel: "Votre email professionnel",
   gateEmailPlaceholder: "prenom@entreprise.fr",
   gateFirstNameLabel: "Votre prénom (facultatif)",
@@ -480,3 +498,42 @@ export const kit = {
   closingBody:
     "Après, ça se corse : tenir la charge, verrouiller les accès, brancher vos logiciels, reprendre un prototype qui tient au scotch. C’est notre métier. Ce premier échange, c’est 30 min pour regarder où vous en êtes et ce qu’il manque.",
 } as const;
+
+// Lien croisé vers l'autre outil (/outils/par-ou-commencer).
+export const kitCross = {
+  body: "Pas sûr que ce soit le bon premier chantier ?",
+  linkLabel: "Testez vos cas d’usage sur la grille par où commencer",
+  href: "/outils/par-ou-commencer",
+} as const;
+
+// FAQ visible et FAQPage (JSON-LD) : des réponses complètes, citables telles
+// quelles par un moteur de recherche ou une IA, sans dépendre du reste de la page.
+export const kitFaqTitle = "Vos questions avant de vous lancer";
+
+export const kitFaq: FaqItem[] = [
+  {
+    question: "Peut-on créer une application sans savoir coder ?",
+    answer:
+      "Oui. Une IA comme Claude écrit le code d’un outil de gestion, d’un espace client ou d’un premier produit. Ce qui bloque, c’est tout le reste : le dépôt de code, l’hébergement, la base de données, le nom de domaine. Le kit de démarrage liste ces étapes dans l’ordre.",
+  },
+  {
+    question: "Quels outils faut-il pour mettre une application en ligne ?",
+    answer:
+      "Cinq briques suffisent pour un premier outil : GitHub pour ranger le code, Vercel pour l’hébergement, Supabase pour la base de données et les comptes utilisateurs (en région européenne), Resend pour les emails, et un nom de domaine réservé chez OVH ou Cloudflare.",
+  },
+  {
+    question: "Combien de temps faut-il pour tout installer ?",
+    answer:
+      "Comptez environ deux heures de manipulations, réparties sur deux jours : les comptes se créent en une soirée, mais un nom de domaine met parfois 24 h à répondre partout. La construction de l’outil lui-même dépend de votre projet.",
+  },
+  {
+    question: "Le kit de démarrage est-il gratuit ?",
+    answer:
+      "Oui. Vous répondez à six questions, vous voyez tout de suite les premières briques, et le kit complet s’ouvre contre votre email : la liste des étapes et le prompt à coller dans Claude. Notre métier commence après, quand votre outil doit tenir en production.",
+  },
+  {
+    question: "Pourquoi l’IA ne fait-elle pas tout, justement ?",
+    answer:
+      "Une IA écrit du code mais ne clique pas à votre place : elle ne crée pas vos comptes, ne paie pas votre nom de domaine, ne range pas vos clés d’accès. Le kit détaille ces gestes dans l’ordre, avec le piège à éviter à chaque étape.",
+  },
+];
