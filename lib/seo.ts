@@ -9,27 +9,31 @@ import type { FaqItem } from "@/content/secteurs";
 
 // The metaTitle fields already carry the "| Coucou IA" brand suffix, so we set
 // `title.absolute` to bypass the layout template and avoid a doubled suffix.
+// `article` bascule l'openGraph en type "article" (pages /blog) : mêmes champs,
+// plus les dates et l'auteur. Absent, la page reste un "website".
 export function pageMetadata({
   title,
   description,
   path,
+  article,
 }: {
   title: string;
   description: string;
   path: string;
+  article?: {
+    publishedTime: string;
+    modifiedTime?: string;
+    authors: string[];
+  };
 }): Metadata {
+  const openGraph = { locale: "fr_FR", siteName, url: path, title, description };
   return {
     title: { absolute: title },
     description,
     alternates: { canonical: path },
-    openGraph: {
-      type: "website",
-      locale: "fr_FR",
-      siteName,
-      url: path,
-      title,
-      description,
-    },
+    openGraph: article
+      ? { ...openGraph, type: "article", ...article }
+      : { ...openGraph, type: "website" },
   };
 }
 

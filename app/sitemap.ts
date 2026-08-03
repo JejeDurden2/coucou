@@ -5,6 +5,7 @@ import { casUsagePages } from "@/content/cas-usage-pages";
 import { ressources } from "@/content/ressources";
 import { comparaisons } from "@/content/comparaisons";
 import { glossaire } from "@/content/glossaire";
+import { articles } from "@/content/blog";
 
 // Pas de lastModified : new Date() estampillait la date de build, un signal
 // faux que Google apprend a ignorer. changeFrequency et priority sont ignores.
@@ -33,6 +34,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${siteUrl}/glossaire` },
     ...glossaire.map((terme) => ({
       url: `${siteUrl}/glossaire/${terme.slug}`,
+    })),
+    { url: `${siteUrl}/blog` },
+    ...articles.map((article) => ({
+      url: `${siteUrl}/blog/${article.slug}`,
     })),
     { url: `${siteUrl}/outils/par-ou-commencer` },
     { url: `${siteUrl}/outils/kit-de-demarrage` },

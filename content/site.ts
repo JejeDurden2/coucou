@@ -34,6 +34,7 @@ export const nav: NavLink[] = [
   { label: "Méthode", href: "/#methode" },
   { label: "Secteurs", href: "/secteurs" },
   { label: "Cas d’usage", href: "/cas-usage" },
+  { label: "Blog", href: "/blog" },
 ];
 
 export const footerLegalLinks: NavLink[] = [
