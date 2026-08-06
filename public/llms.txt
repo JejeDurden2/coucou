@@ -28,6 +28,7 @@ Coucou IA est un cabinet de conseil et développement IA pour les PME française
 ## Blog
 
 - [Blog](https://coucou-ia.com/blog) : l'IA en entreprise sans jargon, méthode, décryptages et cas concrets pour les dirigeants de PME et ETI. Flux RSS : https://coucou-ia.com/blog/rss.xml
+- [L'AI Act pour une PME : ce qui s'applique vraiment](https://coucou-ia.com/blog/ai-act-pme-obligations) : ce que l'AI Act impose au 2 août 2026 (transparence de l'article 50, maîtrise de l'IA de l'article 4), la distinction fournisseur ou déployeur, et le report du haut risque à décembre 2027.
 - [Chiffrer un projet IA avant de le lancer](https://coucou-ia.com/blog/business-case-ia) : les trois chiffres d'un business case IA (temps passé, temps visé, coût de mise en production), comment les mesurer et quand renoncer.
 
 ## Outils gratuits

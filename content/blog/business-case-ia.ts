@@ -204,7 +204,7 @@ export const businessCaseIa: BlogArticle = {
         "On ne lance pas, et c’est l’argent le mieux économisé de l’année. Regardez la tâche suivante sur votre liste : c’est souvent la deuxième ou la troisième qui coche le volume, les données et la douleur. Au passage, un business case négatif montre presque toujours un gain gratuit : une double saisie à supprimer ou des fichiers à ranger, sans acheter quoi que ce soit.",
     },
   ],
-  relatedArticles: [],
+  relatedArticles: ["ai-act-pme-obligations"],
   relatedCasUsage: ["reponse-appels-offres", "traitement-documents"],
   relatedSecteurs: ["services-b2b", "expertise-comptable"],
 };

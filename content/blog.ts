@@ -6,6 +6,7 @@
 
 import type { FaqItem } from "@/content/secteurs";
 import { plain } from "@/lib/inline";
+import { aiActPmeObligations } from "@/content/blog/ai-act-pme-obligations";
 import { businessCaseIa } from "@/content/blog/business-case-ia";
 
 // Quatre catégories, verrouillées : au-delà, le blog se disperse.
@@ -50,7 +51,10 @@ export type BlogArticle = {
 };
 
 // Du plus récent au plus ancien : le hub et le flux RSS lisent ce tableau tel quel.
-export const articles: BlogArticle[] = [businessCaseIa].sort((a, b) =>
+export const articles: BlogArticle[] = [
+  aiActPmeObligations,
+  businessCaseIa,
+].sort((a, b) =>
   b.publishedAt.localeCompare(a.publishedAt)
 );
 
