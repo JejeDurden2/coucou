@@ -8,6 +8,7 @@ import type { FaqItem } from "@/content/secteurs";
 import { plain } from "@/lib/inline";
 import { aiActPmeObligations } from "@/content/blog/ai-act-pme-obligations";
 import { businessCaseIa } from "@/content/blog/business-case-ia";
+import { openclawVsHermesAgent } from "@/content/blog/openclaw-vs-hermes-agent";
 
 // Quatre catégories, verrouillées : au-delà, le blog se disperse.
 export type BlogCategory = "méthode" | "décryptage" | "cas concret" | "coulisses";
@@ -54,6 +55,7 @@ export type BlogArticle = {
 export const articles: BlogArticle[] = [
   aiActPmeObligations,
   businessCaseIa,
+  openclawVsHermesAgent,
 ].sort((a, b) =>
   b.publishedAt.localeCompare(a.publishedAt)
 );

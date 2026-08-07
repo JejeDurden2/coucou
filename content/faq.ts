@@ -38,6 +38,12 @@ export const faq: FaqSection = {
         "ChatGPT tout seul, c’est un outil individuel, pas un système d’entreprise. La valeur arrive quand l’IA est branchée sur vos données et vos process, en production, et mesurée. Notre métier, ce n’est pas le prompt, c’est le système.",
     },
     {
+      question:
+        "On entend beaucoup parler d’OpenClaw et de Hermes Agent. Faut-il les installer ?",
+      answer:
+        "Pas avant d’avoir posé le business case. Ces agents open source sont impressionnants, mais brancher chez vous un outil qui exécute des commandes et lit vos fichiers demande des garde-fous : sécurité, RGPD, supervision. On décrypte les deux sur le site, on chiffre ce que ça rapporterait chez vous, puis on déploie celui qui se justifie. Parfois, la réponse est aucun des deux.",
+    },
+    {
       question: "On a déjà été échaudés par un POC qui n’a jamais abouti.",
       answer:
         "C’est justement pour ça qu’on existe. On ne livre pas un POC de démo, on livre un système en production, mesuré sur ses résultats. Un prototype qui reste au labo, pour nous, ce n’est pas un livrable.",

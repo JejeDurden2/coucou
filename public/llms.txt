@@ -25,11 +25,18 @@ Coucou IA est un cabinet de conseil et développement IA pour les PME française
 - [Recherche interne intelligente](https://coucou-ia.com/cas-usage/recherche-interne) : retrouver l'information en quelques secondes, sur tous vos outils.
 - [Qualification des leads](https://coucou-ia.com/cas-usage/qualification-leads) : trier les demandes entrantes et les router au bon commercial.
 
+## Agents IA
+
+- [Agents IA](https://coucou-ia.com/agents-ia) : OpenClaw et Hermes Agent décryptés pour les PME : ce qu'ils font, ce qu'ils coûtent, leurs risques de sécurité et RGPD.
+- [OpenClaw](https://coucou-ia.com/agents-ia/openclaw) : l'assistant IA open source auto-hébergé, piloté depuis WhatsApp : forces, risques de sécurité, conformité RGPD, coût réel.
+- [Hermes Agent](https://coucou-ia.com/agents-ia/hermes-agent) : l'agent IA open source de Nous Research qui écrit ses propres compétences : forces, limites de jeunesse, supervision nécessaire.
+
 ## Blog
 
 - [Blog](https://coucou-ia.com/blog) : l'IA en entreprise sans jargon, méthode, décryptages et cas concrets pour les dirigeants de PME et ETI. Flux RSS : https://coucou-ia.com/blog/rss.xml
 - [L'AI Act pour une PME : ce qui s'applique vraiment](https://coucou-ia.com/blog/ai-act-pme-obligations) : ce que l'AI Act impose au 2 août 2026 (transparence de l'article 50, maîtrise de l'IA de l'article 4), la distinction fournisseur ou déployeur, et le report du haut risque à décembre 2027.
 - [Chiffrer un projet IA avant de le lancer](https://coucou-ia.com/blog/business-case-ia) : les trois chiffres d'un business case IA (temps passé, temps visé, coût de mise en production), comment les mesurer et quand renoncer.
+- [OpenClaw ou Hermes Agent : lequel installer dans votre PME ?](https://coucou-ia.com/blog/openclaw-vs-hermes-agent) : décryptage des deux agents IA open source qui montent, leurs limites réelles, et les garde-fous à poser avant d'en installer un.
 
 ## Outils gratuits
 

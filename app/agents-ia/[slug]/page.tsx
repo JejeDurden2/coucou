@@ -1,0 +1,207 @@
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
+
+import { ScrollReveal } from "@/components/scroll-reveal";
+import { SpokeHero, RelatedLinks } from "@/components/spoke-partials";
+import { Cta } from "@/components/sections/cta";
+import { FaqList } from "@/components/sections/faq";
+import { pageMetadata, spokeJsonLd } from "@/lib/seo";
+import { agents, agentsCopy } from "@/content/agents";
+import { spokes } from "@/content/spokes";
+
+type Params = { params: Promise<{ slug: string }> };
+
+export function generateStaticParams() {
+  return agents.map((agent) => ({ slug: agent.slug }));
+}
+
+export async function generateMetadata({ params }: Params): Promise<Metadata> {
+  const { slug } = await params;
+  const page = agents.find((agent) => agent.slug === slug);
+  if (!page) {
+    return {};
+  }
+  return pageMetadata({
+    title: page.metaTitle,
+    description: page.metaDescription,
+    path: `/agents-ia/${slug}`,
+  });
+}
+
+export default async function AgentSpokePage({ params }: Params) {
+  const { slug } = await params;
+  const page = agents.find((agent) => agent.slug === slug);
+  if (!page) {
+    notFound();
+  }
+
+  // Un seul fil d’ariane : le <Breadcrumb> visible (dans SpokeHero) et le
+  // JSON-LD BreadcrumbList partagent ce tableau. Dernier maillon sans href.
+  const breadcrumb = [
+    { label: "Accueil", href: "/" },
+    { label: "Agents IA", href: "/agents-ia" },
+    { label: page.name },
+  ];
+
+  const jsonLd = spokeJsonLd({
+    name: page.h1,
+    description: page.metaDescription,
+    path: `/agents-ia/${slug}`,
+    breadcrumb,
+    faq: page.faq,
+  });
+
+  const otherAgent = agents.find((agent) => agent.slug !== page.slug);
+  const relatedLinks = [
+    ...(otherAgent
+      ? [{ href: `/agents-ia/${otherAgent.slug}`, name: otherAgent.name }]
+      : []),
+    { href: agentsCopy.compareLinkHref, name: agentsCopy.compareLinkName },
+  ];
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
+        }}
+      />
+      <main id="contenu">
+        <SpokeHero breadcrumb={breadcrumb} h1={page.h1} intro={page.intro} />
+
+        {/* Le verdict en 30 secondes, en tête. Le seul accent bleu de la section. */}
+        <section className="border-t border-border">
+          <div className="mx-auto max-w-[1200px] px-6 py-16 lg:py-20">
+            <ScrollReveal className="max-w-4xl border-l-2 border-primary pl-6 lg:pl-8">
+              <span className="font-mono text-xs uppercase tracking-[0.12em] text-primary">
+                {agentsCopy.verdictLabel}
+              </span>
+              <p className="mt-4 text-pretty text-lg leading-relaxed text-foreground lg:text-xl">
+                {page.verdict}
+              </p>
+            </ScrollReveal>
+          </div>
+        </section>
+
+        {/* Fiche d’identité : jamais de prix Coucou IA, seulement le coût de l’outil. */}
+        <section className="border-t border-border">
+          <div className="mx-auto max-w-[1200px] px-6 py-16 lg:py-20">
+            <ScrollReveal className="max-w-[46rem]">
+              <h2 className="text-balance font-display text-2xl leading-snug font-medium tracking-[-0.01em] lg:text-[1.75rem]">
+                {agentsCopy.factsTitle}
+              </h2>
+            </ScrollReveal>
+            <ScrollReveal className="mt-10 overflow-hidden rounded-lg border border-border">
+              {page.facts.map((fact, index) => (
+                <div
+                  key={fact.label}
+                  className={`grid grid-cols-1 border-t border-border sm:grid-cols-[minmax(0,14rem)_1fr]${
+                    index === 0 ? " border-t-0" : ""
+                  }`}
+                >
+                  <div className="px-6 py-5">
+                    <span className="font-mono text-xs uppercase tracking-[0.12em] text-muted-foreground">
+                      {fact.label}
+                    </span>
+                  </div>
+                  <div className="border-t border-border px-6 py-5 sm:border-t-0 sm:border-l sm:border-border">
+                    <p className="text-pretty text-sm leading-relaxed text-foreground">
+                      {fact.value}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </ScrollReveal>
+          </div>
+        </section>
+
+        {/* Ce qui marche vraiment. */}
+        <section className="border-t border-border">
+          <div className="mx-auto max-w-[1200px] px-6 py-16 lg:py-20">
+            <ScrollReveal className="max-w-[46rem]">
+              <h2 className="text-balance font-display text-2xl leading-snug font-medium tracking-[-0.01em] lg:text-[1.75rem]">
+                {agentsCopy.strengthsTitle}
+              </h2>
+            </ScrollReveal>
+            <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-3">
+              {page.strengths.map((strength, index) => (
+                <ScrollReveal key={strength.title} delay={index * 0.04}>
+                  <div className="h-full rounded-lg border border-border bg-card p-6">
+                    <h3 className="font-display text-lg leading-snug font-medium tracking-[-0.01em] text-foreground">
+                      {strength.title}
+                    </h3>
+                    <p className="mt-3 text-pretty text-sm leading-relaxed text-muted-foreground">
+                      {strength.body}
+                    </p>
+                  </div>
+                </ScrollReveal>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Ce qui doit vous alerter. Marqueurs neutres, pas d’accent bleu. */}
+        <section className="border-t border-border">
+          <div className="mx-auto max-w-[1200px] px-6 py-16 lg:py-20">
+            <ScrollReveal className="max-w-[46rem]">
+              <h2 className="text-balance font-display text-2xl leading-snug font-medium tracking-[-0.01em] lg:text-[1.75rem]">
+                {agentsCopy.risksTitle}
+              </h2>
+            </ScrollReveal>
+            <div className="mt-6 flex flex-col lg:mt-8">
+              {page.risks.map((risk, index) => (
+                <ScrollReveal key={risk.title} delay={index * 0.04}>
+                  <div className="grid grid-cols-1 gap-3 border-t border-border py-8 lg:grid-cols-12 lg:gap-10">
+                    <h3 className="text-balance font-display text-xl leading-snug font-medium tracking-[-0.01em] lg:col-span-5">
+                      {risk.title}
+                    </h3>
+                    <p className="max-w-[62ch] text-pretty leading-relaxed text-muted-foreground lg:col-span-7">
+                      {risk.body}
+                    </p>
+                  </div>
+                </ScrollReveal>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Quand ça a du sens pour une PME. */}
+        <section className="border-t border-border">
+          <div className="mx-auto max-w-[1200px] px-6 py-16 lg:py-20">
+            <ScrollReveal className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-16">
+              <div className="lg:col-span-5">
+                <h2 className="text-balance font-display text-2xl leading-snug font-medium tracking-[-0.01em] lg:text-[1.75rem]">
+                  {page.forWho.title}
+                </h2>
+                <p className="mt-4 max-w-[46ch] text-pretty leading-relaxed text-muted-foreground">
+                  {page.forWho.body}
+                </p>
+              </div>
+              <ul className="flex flex-col gap-4 lg:col-span-7">
+                {page.forWho.cases.map((item) => (
+                  <li
+                    key={item}
+                    className="flex items-start gap-3 rounded-lg border border-border bg-card p-5 text-pretty leading-relaxed text-foreground"
+                  >
+                    <span
+                      aria-hidden
+                      className="mt-2 size-1.5 shrink-0 rounded-full bg-foreground-dim"
+                    />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </ScrollReveal>
+          </div>
+        </section>
+
+        <FaqList title={spokes.faqTitle} items={page.faq} />
+
+        <RelatedLinks heading={agentsCopy.crossLinkHeading} links={relatedLinks} />
+
+        <Cta placement={`agents-ia-${page.slug}`} />
+      </main>
+    </>
+  );
+}

@@ -45,6 +45,7 @@ export const footerLegalLinks: NavLink[] = [
 // Pages outils et contenu : liées ici pour qu'aucune ne soit orpheline.
 export const footerResourceLinks: NavLink[] = [
   { label: "Bien choisir son partenaire IA", href: "/comparaison" },
+  { label: "OpenClaw, Hermes Agent : le décryptage", href: "/agents-ia" },
   { label: "Glossaire : l’IA sans jargon", href: "/glossaire" },
   { label: "Par où commencer ?", href: "/outils/par-ou-commencer" },
   { label: "Kit de démarrage", href: "/outils/kit-de-demarrage" },

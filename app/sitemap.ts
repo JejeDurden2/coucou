@@ -4,6 +4,7 @@ import { secteurs } from "@/content/secteurs";
 import { casUsagePages } from "@/content/cas-usage-pages";
 import { ressources } from "@/content/ressources";
 import { comparaisons } from "@/content/comparaisons";
+import { agents } from "@/content/agents";
 import { glossaire } from "@/content/glossaire";
 import { articles } from "@/content/blog";
 
@@ -30,6 +31,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${siteUrl}/comparaison` },
     ...comparaisons.map((comparaison) => ({
       url: `${siteUrl}/comparaison/${comparaison.slug}`,
+    })),
+    { url: `${siteUrl}/agents-ia` },
+    ...agents.map((agent) => ({
+      url: `${siteUrl}/agents-ia/${agent.slug}`,
     })),
     { url: `${siteUrl}/glossaire` },
     ...glossaire.map((terme) => ({
