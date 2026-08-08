@@ -109,7 +109,7 @@ export const ressources: RessourcePage[] = [
       "Pour chacun, l’ordre de grandeur du gain et trois questions pour savoir si c’est chez vous.",
       "La carte de synthèse : quoi lancer en premier, quoi garder pour plus tard.",
     ],
-    brevoListId: 0, // TODO: ID de la liste Brevo "Nurture carte expertise comptable"
+    brevoListId: 3, // Liste Brevo "Nurture carte expertise comptable"
     carte: {
       title: "La carte des possibles : cabinet d’expertise comptable",
       lede: "Coucou. Vous savez déjà que l’IA va compter pour la profession comptable. Ce que personne ne vous dit, c’est par où commencer dans votre cabinet, sans jargon et sans y passer vos soirées. Cette carte répond à cette question : les cas d’usage de votre métier, du plus rentable au plus simple, posés à plat.",
@@ -217,7 +217,7 @@ export const ressources: RessourcePage[] = [
       "Pour chacun, l’ordre de grandeur du gain et trois questions pour savoir si c’est chez vous.",
       "La carte de synthèse : quoi lancer en premier, quoi garder pour plus tard.",
     ],
-    brevoListId: 0, // TODO: ID de la liste Brevo "Nurture carte industrie"
+    brevoListId: 4, // Liste Brevo "Nurture carte industrie"
     carte: {
       title: "La carte des possibles : PME industrielle",
       lede: "Coucou. Vous savez déjà que l’IA va compter pour l’industrie. Ce que personne ne vous dit, c’est par où commencer dans votre atelier et votre bureau d’études, sans jargon et sans usine à gaz. Cette carte répond à cette question : les cas d’usage de votre activité, du plus rentable au plus simple, posés à plat.",

@@ -50,7 +50,7 @@ export type KitQuestion = {
 
 // Liste Brevo du kit : l'automation renvoie le kit par email, les relances suivent.
 // TODO: ID de la liste Brevo "Nurture kit de démarrage" (checklist-semaine-1.md).
-export const kitBrevoListId = 0;
+export const kitBrevoListId = 5;
 
 // Prédicats de l'arbre. Une seule source pour la page, le prompt et les étapes.
 export const isAutomation = (draft: KitDraft) => draft.projet === "automatisation";

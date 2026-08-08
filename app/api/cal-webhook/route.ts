@@ -11,8 +11,8 @@ import { ressources } from "@/content/ressources";
 import { kitBrevoListId } from "@/content/kit";
 
 // Listes Brevo "Outbound" (prospection email, montees a la main dans Brevo,
-// hors code du site) : a remplacer une fois creees (checklist-semaine-1.md).
-const OUTBOUND_LIST_IDS = [0, 0]; // expertise comptable, industrie
+// hors code du site).
+const OUTBOUND_LIST_IDS = [6, 7]; // expertise comptable, industrie
 
 // Toutes les listes dont un lead qui reserve doit sortir : chaque automation
 // Brevo doit avoir sa condition de sortie reglee sur "retire de la liste"

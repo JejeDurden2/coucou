@@ -1,8 +1,8 @@
-# Séquence nurture post-carte : Coucou IA
+# Séquences nurture (cartes et kit) : Coucou IA
 
-**Version :** v2.0 (2026-08-04)
+**Version :** v2.1 (2026-08-08)
 **Dépend de :** `.agents/lead-magnets.md` v1, `.agents/product-marketing.md` v1.4
-**Déclencheur :** téléchargement d'une carte. La server action du site (`app/ressources/actions.ts`) ajoute le lead à la liste Brevo de son secteur (`brevoListId` dans `content/ressources.ts`) : une automation Brevo prend le relais, l'email J0 de livraison est sa première étape, la séquence enchaîne.
+**Déclencheur :** téléchargement d'une carte (`app/ressources/actions.ts` → `brevoListId` de `content/ressources.ts`, listes 3 et 4) ou déblocage du kit de démarrage (`app/outils/kit-de-demarrage/actions.ts` → `kitBrevoListId` de `content/kit.ts`, liste 5). Une automation Brevo prend le relais, l'email J0 de livraison est sa première étape, la séquence enchaîne.
 **Règles :** français, vous, aucun tiret cadratin, un seul ask par email, aucune pression, chiffres toujours étiquetés illustration, désinscription en un clic, signature « Jérôme, Coucou IA ». Le lien Cal.com est celui du site avec UTM : `https://cal.com/jerome-desmares-izhobq/30min?utm_source=email&utm_medium=nurture&utm_content=jX-[secteur]`.
 **Arrêt automatique :** la séquence s'interrompt si la personne réserve un point de départ (webhook Cal.com → `app/api/cal-webhook/route.ts` retire le lead de toutes ses listes Brevo) ou répond à un email (toute réponse passe en conversation manuelle, priorité absolue ; Brevo n'arrête pas l'automation tout seul sur une réponse, contrairement à Lemlist, donc surveiller la boîte de réception reste indispensable).
 
@@ -10,14 +10,15 @@
 
 Contrairement à Lemlist, la création d'une campagne complète par API n'existe pas côté Brevo : les contacts et les listes se créent par API (déjà branché côté site), mais l'automation elle-même (les étapes, les délais, le contenu) se construit dans l'interface Brevo. Étapes précises dans `checklist-semaine-1.md`.
 
-| Automation | Liste déclencheuse | Étapes |
+| Automation | Liste déclencheuse (créée le 2026-08-08 par API) | Étapes |
 |---|---|---|
-| Nurture carte expertise comptable | `content/ressources.ts` → `brevoListId` (TODO, à créer) | J0 livraison, J+3, J+10, J+21 |
-| Nurture carte industrie | `content/ressources.ts` → `brevoListId` (TODO, à créer) | J0 livraison, J+3, J+10, J+21 |
+| Nurture carte expertise comptable | liste 3, `content/ressources.ts` → `brevoListId` | J0 livraison, J+3, J+10, J+21 |
+| Nurture carte industrie | liste 4, `content/ressources.ts` → `brevoListId` | J0 livraison, J+3, J+10, J+21 |
+| Nurture kit de démarrage | liste 5, `content/kit.ts` → `kitBrevoListId` | J0 livraison, J+3, J+10, J+21 |
 
 **Condition de sortie à régler sur chaque automation (essentiel) :** « contact retiré de la liste déclencheuse » doit sortir le contact de l'automation. C'est ce qui fait fonctionner l'arrêt automatique du webhook Cal.com (qui appelle `unlinkListIds`) : sans ce réglage, un lead qui réserve continuerait de recevoir les relances.
 
-La boîte `jerome@coucou-ia.com` (Google Workspace) reste l'expéditeur voulu, mais Brevo demande sa propre authentification de domaine, séparée de celle faite pour Lemlist (checklist semaine 1, étape 1). Tant que la liste et l'automation ne sont pas créées côté Brevo, `brevoListId` reste à `0` dans le code : le site logue le lead dans Vercel (`[lead-alerte]`) au lieu de le perdre, et la page de merci donne de toute façon l'accès direct à la carte.
+La boîte `jerome@coucou-ia.com` (Google Workspace) reste l'expéditeur voulu, mais Brevo demande sa propre authentification de domaine, séparée de celle faite pour Lemlist (checklist semaine 1, étape 1). Les listes existent et les IDs sont dans le code (2026-08-08) : le site pousse déjà les leads dans Brevo ; seules les automations restent à construire dans l'interface. Si Brevo tombe, le lead reste visible dans les logs Vercel (`[lead-alerte]`), et la page de merci donne de toute façon l'accès direct au contenu.
 
 ## Email J0 (livraison, étape 1 de chaque campagne)
 
@@ -123,6 +124,62 @@ Objet : `votre carte des possibles`. Corps (variante compta ; l'industrie rempla
 
 ---
 
+## Kit de démarrage
+
+Le kit se débloque sur la page (le contenu complet s'affiche après l'email) : le J0 ne livre pas un document, il redonne le chemin. La page repose ses dix questions à chaque visite, les réponses reconstruisent le kit à l'identique en deux minutes. Lien Cal.com avec `utm_content=jX-kit`.
+
+### Email J0 (livraison, étape 1), objet : `votre kit de démarrage`
+
+> Bonjour,
+>
+> Votre kit est débloqué : la pile conseillée, les étapes dans l'ordre avec le piège de chacune, ce que ça coûte par mois, et le prompt à coller dans Claude pour démarrer droit.
+>
+> [Retrouver mon kit](https://coucou-ia.com/outils/kit-de-demarrage)
+>
+> La page repose ses dix questions, comptez deux minutes : vos réponses reconstruisent votre kit à l'identique.
+>
+> Un point vous bloque déjà ? Répondez à cet email, je vous dis franchement comment je m'y prendrais.
+>
+> Jérôme, Coucou IA
+
+### Email 1 (J+3), objet : `le piège n°1`
+
+> Bonjour,
+>
+> Le piège qui coince le plus de premiers outils, ce n'est pas le code : l'IA vous l'écrit. C'est le prototype qui reste sur un ordinateur.
+>
+> Tant que votre outil vit sur votre machine, il n'existe pas vraiment : une panne de disque et tout disparaît, et personne d'autre que vous ne peut s'en servir. Le remède tient en deux gestes du kit : un dépôt GitHub aujourd'hui, un hébergeur cette semaine. Une heure en tout, et votre outil survit à votre ordinateur.
+>
+> Si c'est déjà fait, vous êtes plus loin que la plupart. Sinon, c'est le bon geste de la semaine.
+>
+> Jérôme, Coucou IA
+
+### Email 2 (J+10), objet : `ce que ça coûte vraiment`
+
+> Bonjour,
+>
+> Un chiffre pour situer votre premier outil (illustration, pas un devis) : comptez 20 à 70 € par mois pour un outil sérieux, l'essentiel pour l'IA qui écrit le code, le reste pour l'hébergement et le nom de domaine.
+>
+> Ce n'est donc pas le budget qui décide, c'est le temps. Si votre outil commence à compter pour l'entreprise (des collègues qui s'en servent, des clients, des données à ne pas perdre), c'est exactement le travail qu'on fait chez Coucou IA : reprendre ce qui existe et l'amener en production, proprement.
+>
+> 30 minutes pour en parler, gratuites, sans engagement : [lien Cal.com]
+>
+> Jérôme, Coucou IA
+
+### Email 3 (J+21), objet : `dernier email`
+
+> Bonjour,
+>
+> Promis, c'est le dernier de cette série.
+>
+> Ce que je retiens pour vous : le kit reste en ligne, vos réponses le reconstruisent en deux minutes, et il n'y a aucune date limite. Le bon moment, c'est celui où votre outil devient sérieux : des utilisateurs, des données qui comptent, l'envie de passer du bricolage qui marche au système qui tient. Ce jour-là, 30 minutes suffisent pour voir ce qui manque, y compris si la réponse est « rien » : [lien Cal.com]
+>
+> D'ici là, bon code, et bonne route à votre outil.
+>
+> Jérôme, Coucou IA
+
+---
+
 ## Mesure
 
 | Métrique | Cible | Alerte |
@@ -132,6 +189,7 @@ Objet : `votre carte des possibles`. Corps (variante compta ; l'industrie rempla
 | Désinscription | < 2 % par email | > 5 % : le rythme est trop dense, espacer |
 
 ## Changelog
+- v2.1 (2026-08-08) : séquence kit de démarrage écrite (J0 + 3 emails). Listes Brevo créées par API (3 compta, 4 industrie, 5 kit, 6 outbound compta, 7 outbound industrie), IDs posés dans le code, `BREVO_API_KEY` posée sur Vercel. Reste : les automations dans l'interface Brevo.
 - v2.0 (2026-08-04) : bascule Lemlist → Brevo (décision fondateur, `.agents/outbound.md` v2.0 pour le contexte complet). Le site pousse désormais les leads vers `content/ressources.ts` → `brevoListId` (`lib/brevo.ts`), plus `lemlistCampaignId`. Les automations restent à créer dans l'interface Brevo (l'API ne le permet pas) : IDs de liste encore à `0`, voir checklist-semaine-1.md.
 - v1.1 (2026-07-20) : bascule Brevo → Lemlist. Les 2 campagnes sont montées par l'API, l'email J0 de livraison devient l'étape 1 (il quitte `content/ressources.ts`), l'arrêt automatique à la réservation est branché sur le webhook Cal.com.
 - v1 (2026-07-19) : première séquence, 3 emails x 2 secteurs, à monter dans Brevo (2 automatisations).

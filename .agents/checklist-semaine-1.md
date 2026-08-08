@@ -41,7 +41,7 @@ Bonne nouvelle : un TXT `google-site-verification` existe déjà sur le domaine,
 - **Langue / notifications :** passer l'interface et les emails de confirmation + rappel en français ; activer le rappel à J-1 (réduit les no-show).
 
 **b) Le webhook** (trace chaque réservation dans les logs et stoppe les automations Brevo du prospect qui réserve ; Cal.com te notifie déjà par email) :
-1. Générer un secret (une longue chaîne aléatoire), l'ajouter dans Vercel → Settings → Environment Variables : `CAL_WEBHOOK_SECRET`.
+1. ~~Générer un secret~~ **FAIT (2026-08-08, Claude) : le secret est généré, sa valeur est dans la conversation.** L'ajouter dans Vercel : `vercel env add CAL_WEBHOOK_SECRET production` (le CLI est maintenant lié au projet `coucou`), ou Vercel → Settings → Environment Variables.
 2. Cal.com → Settings → Developer → Webhooks → New : URL `https://coucou-ia.com/api/cal-webhook`, événement « Booking created », secret = le même.
 3. Tester avec une fausse réservation : la ligne `[rdv]` doit apparaître dans les logs Vercel. (Le code est déjà en place : `app/api/cal-webhook/route.ts`.)
 
@@ -53,27 +53,16 @@ Appliquer `.agents/linkedin.md` section 1 (photo, titre, bannière, infos, lien)
 
 https://business.google.com → créer la fiche COUCOU IA (adresse du siège, catégorie « Consultant », site coucou-ia.com, description reprise du hero). Sert le SEO local Nice/PACA et recevra les futurs avis clients réels.
 
-## 6. Brevo : créer les listes et les automations (~1 h 30, rien n'existe encore côté Brevo)
+## 6. Brevo : créer les automations (~1 h 30 ; listes et attributs FAITS le 2026-08-08 par API)
 
-Contrairement à Lemlist, l'API Brevo crée des contacts et des listes, mais pas des automations complètes (étapes, délais, contenu) : cette partie se fait à la main dans l'interface. La clé API a été utilisée pour vérifier le compte, mais **le compte a l'accès par IP restreint** (Settings → Security → Authorised IPs) : les appels de création de liste ont échoué avec cette IP non reconnue : `2a01:cb1d:379:b800:4488:2c35:20dd:31a4`. Deux options : ajouter cette IP à la liste autorisée puis redemander la création des listes par API, ou suivre les étapes manuelles ci-dessous (pas plus long).
+L'API Brevo ne crée pas les automations (étapes, délais, contenu) : cette partie se fait à la main dans l'interface. Tout le reste est fait (2026-08-08, Claude, la restriction IP ayant été levée) :
 
-1. **Attributs de contact** (Contacts → Settings → Contact attributes → Add attribute) : créer `PRENOM` (texte) et `NOTES` (texte). Sans ça, les leads qui donnent leur prénom ou leurs réponses au kit échouent silencieusement côté Brevo (le lead reste visible dans les logs Vercel, `[lead-alerte]`, mais n'entre jamais dans la liste).
-2. **5 listes** (Contacts → Lists → Create a list), une par flux :
-   - Nurture carte expertise comptable
-   - Nurture carte industrie
-   - Nurture kit de démarrage
-   - Outbound expertise comptable
-   - Outbound industrie
-
-   Noter l'ID numérique de chacune (visible dans l'URL de la liste ou via l'API) et le reporter dans le code, à la place des `0` placeholders :
-   - `content/ressources.ts` → `brevoListId` (carte compta et carte industrie)
-   - `content/kit.ts` → `kitBrevoListId`
-   - `app/api/cal-webhook/route.ts` → `OUTBOUND_LIST_IDS` (compta, industrie, dans cet ordre)
-3. **2 automations nurture** (Automation → Create a workflow → démarrer d'un workflow vide, déclencheur « contact added to a list ») : une par liste nurture carte, contenu dans `.agents/nurture.md` (email J0 livraison + relances J+3 / J+10 / J+21, par secteur). **Condition de sortie à régler sur « contact retiré de la liste » : indispensable**, c'est ce qui fait fonctionner l'arrêt automatique du webhook Cal.com.
+1. ~~**Attributs de contact** `PRENOM` et `NOTES`~~ **FAIT (2026-08-08, par API).**
+2. ~~**5 listes** et report des IDs dans le code~~ **FAIT (2026-08-08, par API) : 3 Nurture carte expertise comptable, 4 Nurture carte industrie, 5 Nurture kit de démarrage, 6 Outbound expertise comptable, 7 Outbound industrie.** IDs posés dans `content/ressources.ts`, `content/kit.ts` et `app/api/cal-webhook/route.ts`.
+3. **3 automations nurture** (Automation → Create a workflow → démarrer d'un workflow vide, déclencheur « contact added to a list ») : une par liste nurture (compta, industrie, kit), contenu dans `.agents/nurture.md` (email J0 livraison + relances J+3 / J+10 / J+21 ; la séquence kit est écrite depuis le 2026-08-08). **Condition de sortie à régler sur « contact retiré de la liste » : indispensable**, c'est ce qui fait fonctionner l'arrêt automatique du webhook Cal.com.
 4. **2 automations outbound** (même principe) : contenu dans `.agents/outbound.md` section 3 (email J0 / J5 / J12, par secteur). Même condition de sortie.
-5. **Nurture kit de démarrage :** la liste peut être créée maintenant, mais la séquence email n'est pas encore écrite (contrairement aux cartes) ; l'automation attend son contenu avant d'être activée. Le site pousse déjà les leads dedans en attendant.
-6. Sélectionner `jerome@coucou-ia.com` comme expéditeur de chaque automation (une fois le domaine authentifié, étape 1), vérifier que le lien de désinscription est visible dans chaque email, relire, activer.
-7. Poser `BREVO_API_KEY` en production (Vercel → Settings → Environment Variables). Supprimer `LEMLIST_API_KEY` si elle existe encore.
+5. Sélectionner `jerome@coucou-ia.com` comme expéditeur de chaque automation (une fois le domaine authentifié, étape 1), vérifier que le lien de désinscription est visible dans chaque email, relire, activer.
+6. ~~Poser `BREVO_API_KEY` en production~~ **FAIT (2026-08-08 : Production + Preview via `vercel env add`, le repo est maintenant lié au projet Vercel `coucou`).** `LEMLIST_API_KEY` n'existait pas, rien à supprimer.
 
 ## 7. Lancer la semaine 1 du playbook outbound
 
