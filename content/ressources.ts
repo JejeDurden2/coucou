@@ -33,9 +33,10 @@ export type RessourcePage = {
   h1: string;
   intro: string;
   bullets: [string, string, string];
-  // Campagne nurture Lemlist du secteur : l'étape 1 livre la carte par email,
-  // les relances suivent (contenu des emails : .agents/nurture.md).
-  lemlistCampaignId: string;
+  // Liste nurture Brevo du secteur : l'automation livre la carte par email,
+  // les relances suivent (contenu des emails : .agents/nurture.md). ID à
+  // remplacer une fois la liste créée dans Brevo (checklist-semaine-1.md).
+  brevoListId: number;
   // La carte elle-même (/ressources/[slug]/carte, noindex).
   carte: {
     title: string;
@@ -91,7 +92,7 @@ export const ressources: RessourcePage[] = [
       "Pour chacun, l’ordre de grandeur du gain et trois questions pour savoir si c’est chez vous.",
       "La carte de synthèse : quoi lancer en premier, quoi garder pour plus tard.",
     ],
-    lemlistCampaignId: "cam_qnKzY6bXNxtSinjAF",
+    brevoListId: 0, // TODO: ID de la liste Brevo "Nurture carte expertise comptable"
     carte: {
       title: "La carte des possibles : cabinet d’expertise comptable",
       lede: "Coucou. Vous savez déjà que l’IA va compter pour la profession comptable. Ce que personne ne vous dit, c’est par où commencer dans votre cabinet, sans jargon et sans y passer vos soirées. Cette carte répond à cette question : les cas d’usage de votre métier, du plus rentable au plus simple, posés à plat.",
@@ -199,7 +200,7 @@ export const ressources: RessourcePage[] = [
       "Pour chacun, l’ordre de grandeur du gain et trois questions pour savoir si c’est chez vous.",
       "La carte de synthèse : quoi lancer en premier, quoi garder pour plus tard.",
     ],
-    lemlistCampaignId: "cam_YLiMdN5H3wAW84wYs",
+    brevoListId: 0, // TODO: ID de la liste Brevo "Nurture carte industrie"
     carte: {
       title: "La carte des possibles : PME industrielle",
       lede: "Coucou. Vous savez déjà que l’IA va compter pour l’industrie. Ce que personne ne vous dit, c’est par où commencer dans votre atelier et votre bureau d’études, sans jargon et sans usine à gaz. Cette carte répond à cette question : les cas d’usage de votre activité, du plus rentable au plus simple, posés à plat.",

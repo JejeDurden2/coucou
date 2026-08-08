@@ -30,7 +30,7 @@ export type KitDraft = Partial<Record<KitQuestionId, KitValue>>;
 
 export type KitOption = {
   value: KitValue;
-  // Libellé du bouton (on s'adresse au visiteur) et valeur envoyée à Lemlist.
+  // Libellé du bouton (on s'adresse au visiteur) et valeur envoyée à Brevo.
   label: string;
   // Reprise à la première personne, pour le prompt à copier.
   recap: string;
@@ -47,8 +47,9 @@ export type KitQuestion = {
   skipWhen?: (draft: KitDraft) => boolean;
 };
 
-// Campagne Lemlist du kit : l'étape 1 renvoie le kit par email, les relances suivent.
-export const kitLemlistCampaignId = "cam_mY6HiTaMEN9k6btJw";
+// Liste Brevo du kit : l'automation renvoie le kit par email, les relances suivent.
+// TODO: ID de la liste Brevo "Nurture kit de démarrage" (checklist-semaine-1.md).
+export const kitBrevoListId = 0;
 
 // Prédicats de l'arbre. Une seule source pour la page, le prompt et les étapes.
 export const isAutomation = (draft: KitDraft) => draft.projet === "automatisation";
@@ -290,7 +291,7 @@ function optionOf(draft: KitDraft, id: KitQuestionId): KitOption | undefined {
   );
 }
 
-// Réponses envoyées à Lemlist : le lead arrive déjà qualifié. Toute nouvelle
+// Réponses envoyées à Brevo : le lead arrive déjà qualifié. Toute nouvelle
 // question part d'elle-même, sans rien changer à la server action.
 export function kitLeadFields(draft: KitDraft): { name: KitQuestionId; value: string }[] {
   const complete = withDerived(draft);

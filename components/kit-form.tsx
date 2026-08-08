@@ -32,7 +32,7 @@ import {
   type KitDraft,
 } from "@/content/kit";
 import { subscribeKit } from "@/app/outils/kit-de-demarrage/actions";
-import type { SubscribeState } from "@/lib/lemlist";
+import type { SubscribeState } from "@/lib/brevo";
 
 // Seul leaf client du kit de démarrage. Tout l'arbre de décision vit dans
 // content/kit.ts : ici, l'état local (réponses, étape, presse-papiers) et la
@@ -365,7 +365,7 @@ export function KitForm() {
         </p>
 
         <form action={formAction} className="mt-2 flex max-w-md flex-col gap-4">
-          {/* Les réponses partent en variables Lemlist : le lead arrive qualifié. */}
+          {/* Les réponses partent regroupées dans l'attribut NOTES Brevo : le lead arrive qualifié. */}
           {kitLeadFields(draft).map((field) => (
             <input key={field.name} type="hidden" name={field.name} value={field.value} />
           ))}

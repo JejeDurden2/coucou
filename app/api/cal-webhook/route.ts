@@ -1,5 +1,5 @@
 // Webhook Cal.com : rend chaque reservation visible cote Coucou IA
-// (marqueur [rdv] dans les logs Vercel) et stoppe les sequences Lemlist du
+// (marqueur [rdv] dans les logs Vercel) et stoppe les automations Brevo du
 // prospect qui reserve (l'arret automatique promis par .agents/nurture.md ;
 // Cal.com notifie deja le fondateur par email, pas besoin de doublon).
 // Configuration cote Cal.com : Settings > Developer > Webhooks, URL
@@ -7,6 +7,17 @@
 // identique a la variable d'environnement CAL_WEBHOOK_SECRET (Vercel).
 
 import { createHmac, timingSafeEqual } from "node:crypto";
+import { ressources } from "@/content/ressources";
+import { kitBrevoListId } from "@/content/kit";
+
+// Listes Brevo "Outbound" (prospection email, montees a la main dans Brevo,
+// hors code du site) : a remplacer une fois creees (checklist-semaine-1.md).
+const OUTBOUND_LIST_IDS = [0, 0]; // expertise comptable, industrie
+
+// Toutes les listes dont un lead qui reserve doit sortir : chaque automation
+// Brevo doit avoir sa condition de sortie reglee sur "retire de la liste"
+// (checklist-semaine-1.md) pour que ce retrait stoppe vraiment ses relances.
+const ALL_LIST_IDS = [...ressources.map((r) => r.brevoListId), kitBrevoListId, ...OUTBOUND_LIST_IDS];
 
 type CalPayload = {
   triggerEvent?: string;
@@ -57,28 +68,30 @@ export async function POST(request: Request): Promise<Response> {
   };
 
   // ponytail: le log est la source de verite (grep "[rdv]" dans Vercel),
-  // l'arret Lemlist est un best-effort par-dessus.
+  // l'arret Brevo est un best-effort par-dessus.
   console.log(`[rdv] ${JSON.stringify(resume)}`);
 
-  const apiKey = process.env.LEMLIST_API_KEY;
+  const apiKey = process.env.BREVO_API_KEY;
   const emailInvite = invite?.email;
   if (apiKey && emailInvite && evenement === "BOOKING_CREATED") {
     try {
-      // Marque le lead "interessé" dans toutes ses campagnes Lemlist :
-      // ses sequences (outbound comme nurture) s'arretent immediatement.
-      const res = await fetch(
-        `https://api.lemlist.com/api/leads/interested/${encodeURIComponent(emailInvite)}`,
-        {
-          method: "POST",
-          headers: { Authorization: `Basic ${Buffer.from(`:${apiKey}`).toString("base64")}` },
-        }
-      );
-      // 404 = le prospect n'etait dans aucune campagne (venu par le site) : normal.
+      // Retire le lead de toutes les listes Brevo : ses automations
+      // (outbound comme nurture) s'arretent des que chacune sort le contact
+      // qui quitte sa liste declencheuse.
+      const res = await fetch(`https://api.brevo.com/v3/contacts/${encodeURIComponent(emailInvite)}`, {
+        method: "PUT",
+        headers: {
+          "api-key": apiKey,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ unlinkListIds: ALL_LIST_IDS }),
+      });
+      // 404 = le prospect n'etait dans aucune liste (venu directement par Cal.com) : normal.
       if (!res.ok && res.status !== 404) {
-        throw new Error(`Lemlist a repondu ${res.status}`);
+        throw new Error(`Brevo a repondu ${res.status}`);
       }
     } catch (error) {
-      console.error("[rdv] arret des sequences Lemlist en echec", error);
+      console.error("[rdv] arret des automations Brevo en echec", error);
     }
   }
 

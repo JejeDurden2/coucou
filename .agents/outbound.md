@@ -1,19 +1,26 @@
 # Playbook outbound : Coucou IA
 
-**Version :** v1.3
-**Date :** 2026-07-20
+**Version :** v2.0
+**Date :** 2026-08-04
 **Auteur / interlocuteur unique :** Jérôme (Coucou IA, Nice)
-**Exécution (depuis le 2026-07-20) :** les séquences de ce playbook tournent dans Lemlist : campagnes « Outbound expertise comptable » et « Outbound industrie ». Le Sheets de la section 6 reste utile pour les notes et signaux, plus pour la cadence : Lemlist trace les touches, et le webhook Cal.com stoppe la séquence de qui réserve.
-**Emailing rétabli (2026-07-20 au soir) :** le fondateur a créé la boîte Google Workspace `jerome@coucou-ia.com` et l'a connectée à Lemlist ; le mode LinkedIn seul décidé le matin même est annulé. Les 2 campagnes ont retrouvé par l'API la séquence multicanal d'origine : invitation J0, ouverture J2, emails J6 / J11 / J18. **Aucun email ne part pour autant :** au 2026-07-20 le DNS n'a pas suivi (MX encore chez Cloudflare, aucun SPF, ni DKIM ni DMARC). Bascule DNS puis 2 à 3 semaines de lemwarm avant le premier envoi réel (checklist semaine 1, étape 1).
-**Ordre des secteurs pour l'été (décision fondateur du 2026-07-20) :** l'été est le pire moment pour démarcher les cabinets comptables (associés en congés après les échéances). On démarre donc par le secteur 2, les PME industrielles ; la campagne compta se lance à la rentrée (fin août / début septembre, quand les cabinets préparent la saison). À garder en tête : beaucoup de PME industrielles ferment aussi 2 à 3 semaines en août. Le calendrier réaliste : invitations LinkedIn industrie dès que le profil est prêt (fin juillet), chauffe email pendant le creux d'août, pleine cadence multicanal à la rentrée.
+
+**Changement de v1.3 (2026-07-20, exécution Lemlist) :** décision fondateur du 2026-08-04, bascule de l'exécution vers Brevo. **Conséquence directe : l'outbound perd le volet LinkedIn.** Brevo n'a aucune fonction d'invitation ni de message LinkedIn ; la séquence devient un cold email pur, 3 touches. Ce n'est pas qu'un changement d'outil, c'est un changement de canal pour toute la prospection.
+
+**Deux blocages à lever avant le premier envoi :**
+1. **La liste industrie (74 entreprises, `prospects-industrie-v1.csv`) n'a aucune adresse email.** Elle a été sourcée pour du LinkedIn (nom du dirigeant, URL LinkedIn, site web), pas pour de l'email : c'était le bon choix pour Lemlist, ça ne l'est plus pour Brevo. Il faut trouver ou vérifier un email par prospect avant tout import (voir section 1, sourcing).
+2. **Le domaine `coucou-ia.com` n'est pas authentifié côté Brevo.** L'authentification déjà faite pour Lemlist (SPF/DKIM Google Workspace, checklist semaine 1) couvre l'envoi via Gmail, pas l'envoi via les serveurs Brevo : ce sont deux authentifications séparées, à ajouter en plus, pas à la place. Sans ça, les emails partent en indésirables. Voir checklist-semaine-1.md.
+
+**Ce qui ne change pas :** le ciblage, les deux secteurs, l'objectif (10 premiers points de départ), le pitch, les principes d'écriture, le lien de réservation.
+
+**À savoir avant de se lancer :** Brevo est un outil d'emailing marketing, pas un outil de cold email dédié comme l'était Lemlist (qui envoie depuis une vraie boîte Gmail, ce qui rassure les filtres antispam). Un envoi de prospection à froid depuis une plateforme marketing est plus surveillé par les filtres antispam qu'un envoi depuis une boîte humaine. Démarrer prudemment (section 5), surveiller le taux de rebond dès les premiers envois, et ne jamais charger un email non vérifié dans la liste.
 
 ## En-tête
 
 **Objectif :** décrocher les 10 premiers points de départ (call gratuit de 30 min).
-**Canal n°1 :** outbound LinkedIn + email, en séquence combinée. Le site (https://coucou-ia.com) sert de validation quand le prospect va vérifier, pas de source de leads.
+**Canal :** cold email, 3 touches. Le site (https://coucou-ia.com) sert de validation quand le prospect va vérifier, pas de source de leads.
 **Lien de réservation (jamais avant une réponse positive) :** https://cal.com/jerome-desmares-izhobq/30min
 **Cartes des possibles (lead magnet, par secteur) :** https://coucou-ia.com/ressources/carte-expertise-comptable (compta), https://coucou-ia.com/ressources/carte-industrie (industrie). Le lien envoyé au prospect est toujours celui de la landing, jamais le lien direct vers le PDF : c'est la landing qui capture l'email.
-**Tête de pont :** secteur 1 = expertise comptable, secteur 2 = PME industrielles. Fallback si un secteur ne répond pas : services B2B. Ordre d'exécution été 2026 : industrie d'abord, compta à la rentrée (voir l'en-tête).
+**Tête de pont :** secteur 1 = expertise comptable, secteur 2 = PME industrielles. Fallback si un secteur ne répond pas : services B2B. Ordre d'exécution été 2026 : industrie d'abord, compta à la rentrée (décision du 2026-07-20, inchangée).
 **Pitch de référence (verrouillé) :** « Vous savez que l'IA compte, personne ne vous dit par où commencer chez vous. Moi si, en 30 min, sans jargon. »
 
 ### Rappel des principes (à relire avant chaque envoi)
@@ -34,7 +41,7 @@
 
 - **Taille de cabinet :** 5 à 40 collaborateurs (cœur de cible 8 à 25). Assez gros pour avoir de la volumétrie de saisie et un vrai pic de période fiscale, assez petit pour que le dirigeant décide et signe seul.
 - **Rôle du décideur :** expert-comptable associé, gérant, dirigeant du cabinet. En cabinet, c'est l'associé qui signe.
-- **Où le trouver sur LinkedIn :** titres « Expert-comptable », « Expert-comptable associé », « Dirigeant / Gérant » + « cabinet d'expertise comptable ». Filtrer d'abord la géo Nice / PACA (proximité = meilleur taux d'acceptation et de RDV), puis élargir. Repérer aussi ceux qui parlent de leur logiciel de production (Pennylane, Fulll, ACD, Cegid, Sage) ou de la profession face à l'IA.
+- **Où le trouver et trouver son email :** titres « Expert-comptable », « Expert-comptable associé », « Dirigeant / Gérant » + « cabinet d'expertise comptable » sur LinkedIn, géo Nice / PACA d'abord, puis élargir. LinkedIn sert à identifier la bonne personne et à repérer les signaux, pas à la contacter : une fois le nom trouvé, chercher l'email professionnel (page « contact » ou « équipe » du site du cabinet, format standard prénom.nom@cabinet.fr à vérifier avant tout envoi).
 - **Signaux de personnalisation à chercher :**
   - Offre d'emploi « collaborateur comptable » récente : signe de surcharge, donc de saisie qui déborde.
   - Timing période fiscale : les liasses se concentrent au printemps, un message qui tombe juste avant le pic résonne.
@@ -45,31 +52,28 @@
 
 - **Taille :** 30 à 250 salariés (cœur de cible 40 à 150). Établie, rentable, avec un flux réel de DCE / chiffrage.
 - **Rôle du décideur :** dirigeant / DG / gérant, directeur industriel, directeur commercial, responsable bureau d'études ou chiffrage. En PME industrielle, le dirigeant décide.
-- **Où le trouver sur LinkedIn :** titres « Dirigeant », « PDG », « Directeur général », « Directeur industriel », « Responsable chiffrage / bureau d'études », dans les secteurs mécanique, métallurgie, plasturgie, usinage, sous-traitance industrielle. Géo Sud / PACA d'abord. Sources de signaux hors LinkedIn : marchés publics (BOAMP) pour repérer qui répond à des AO, salons (Global Industrie), certifications ISO 9001.
+- **Où le trouver et trouver son email :** titres « Dirigeant », « PDG », « Directeur général », « Directeur industriel », « Responsable chiffrage / bureau d'études », dans les secteurs mécanique, métallurgie, plasturgie, usinage, sous-traitance industrielle. Géo Sud / PACA d'abord. Sources de signaux hors LinkedIn : marchés publics (BOAMP) pour repérer qui répond à des AO, salons (Global Industrie), certifications ISO 9001. L'email professionnel se trouve sur le site de l'entreprise (page contact) ou par le format standard de l'entreprise, à vérifier avant tout envoi.
 - **Signaux de personnalisation à chercher :**
   - Attribution ou dépôt de marchés / réponses à des AO : la douleur DCE est réelle et actuelle.
   - Recrutement « chargé d'affaires », « deviseur », « technico-commercial », « responsable QSE » : surcharge chiffrage ou qualité.
   - Croissance : nouvel atelier, investissement machine, embauches.
   - Mention d'un ERP / MES (Clipper, Sylob, Silog) ou posts sur la difficulté à répondre à temps aux appels d'offres.
 
+**Sur la liste industrie déjà sourcée (`prospects-industrie-v1.csv`, 74 entreprises) :** utilisable pour le ciblage et les signaux tels quels. Aucune n'a d'email : compléter la colonne avant import dans Brevo, en vérifiant chaque adresse (un email qui rebondit abîme la réputation du domaine plus vite qu'un lead perdu n'en coûte).
+
 ---
 
-## 2. Séquence type (cadence sur 3 semaines)
+## 2. Séquence type (cadence sur 12 jours)
 
-Écarts croissants. Chaque relance apporte un angle NOUVEAU. Dernier message = breakup courtois et définitif.
+Trois touches email, écarts croissants. Chaque relance apporte un angle NOUVEAU. Dernier message = breakup courtois et définitif.
 
-| Jour | Canal | Action |
-|------|-------|--------|
-| J0 | LinkedIn | Invitation de connexion, **sans note** |
-| J2 | LinkedIn | Si invitation acceptée : message d'ouverture (le pitch) |
-| J6 | Email | Email 1, angle « douleur n°1 » (bascule email si pas de réponse LinkedIn à J2, ou si l'invitation n'est pas acceptée à J5) |
-| J11 | Email | Email 2, angle NOUVEAU (autre douleur + illustration chiffrée étiquetée) |
-| J18 | Email | Email 3, breakup |
+| Jour | Action |
+|------|--------|
+| J0 | Email 1, angle « douleur n°1 » |
+| J5 | Email 2, angle NOUVEAU (autre douleur + illustration chiffrée étiquetée) |
+| J12 | Email 3, breakup |
 
-**Connexion : sans note. Pourquoi :** une note qui pitche fait chuter l'acceptation et gaspille le premier angle personnalisé ; le profil fait la crédibilité, le vrai message vient après acceptation, où il ne ressemble pas à une pub agrafée à une demande d'ami.
-**Variante (optionnelle, uniquement si signal fort et personnel) :** une micro-note d'une ligne qui mentionne le signal, sans aucun ask ni pitch. Exemple : « Bonjour [Prénom], vu votre annonce pour un collaborateur comptable, je regarde justement comment les cabinets encaissent la charge de saisie en ce moment. Au plaisir d'échanger. »
-
-**Règle de bascule LinkedIn → email :** si l'invitation n'est pas acceptée sous 4-5 jours, on ne relance pas sur LinkedIn, on passe à l'email (si l'adresse est trouvable). Si elle est acceptée mais que le message d'ouverture reste sans réponse, l'email 1 prend le relais avec un angle un peu différent.
+**Règle de bascule :** si l'email 1 reste sans réponse à J5, l'email 2 prend le relais avec un angle différent. Une réponse à n'importe quelle étape sort le prospect de la séquence (voir section 4) et passe en conversation manuelle, priorité absolue.
 
 ---
 
@@ -80,11 +84,7 @@ Variables entre crochets réduites au minimum. Chacune est suivie d'un exemple r
 
 ### Expertise comptable
 
-**Message d'ouverture LinkedIn (J2, après acceptation)**
-
-> Bonjour [Prénom], la saisie des pièces qui s'accumule pendant que le nombre de dossiers grimpe, c'est le quotidien de beaucoup de cabinets en ce moment. Tout le monde sent que l'IA va compter là-dessus, mais personne ne dit par où commencer concrètement. Moi si, en 30 min et sans jargon. Ça vous parle ?
-
-**Email 1 (J6), objet : `la saisie`**
+**Email 1 (J0), objet : `la saisie`**
 
 > Bonjour [Prénom],
 >
@@ -98,7 +98,7 @@ Variables entre crochets réduites au minimum. Chacune est suivie d'un exemple r
 >
 > Jérôme, Coucou IA
 
-**Email 2 (J11), objet : `période fiscale`**
+**Email 2 (J5), objet : `période fiscale`**
 
 > Bonjour [Prénom],
 >
@@ -110,7 +110,7 @@ Variables entre crochets réduites au minimum. Chacune est suivie d'un exemple r
 >
 > Jérôme, Coucou IA
 
-**Email 3 (J18, breakup), objet : `je vous laisse`**
+**Email 3 (J12, breakup), objet : `je vous laisse`**
 
 > Bonjour [Prénom],
 >
@@ -124,11 +124,7 @@ Variables entre crochets réduites au minimum. Chacune est suivie d'un exemple r
 
 ### Industrie
 
-**Message d'ouverture LinkedIn (J2, après acceptation)**
-
-> Bonjour [Prénom], répondre à un DCE, c'est encore rassembler des dizaines de pièces techniques à la main, sous délai serré, à chaque fois. Beaucoup de dirigeants industriels sentent que l'IA pourrait aider là-dessus, mais personne ne dit par où commencer concrètement. Moi si, en 30 min et sans jargon. Ça vous parle ?
-
-**Email 1 (J6), objet : `vos DCE`**
+**Email 1 (J0), objet : `vos DCE`**
 
 > Bonjour [Prénom],
 >
@@ -142,7 +138,7 @@ Variables entre crochets réduites au minimum. Chacune est suivie d'un exemple r
 >
 > Jérôme, Coucou IA
 
-**Email 2 (J11), objet : `les délais`**
+**Email 2 (J5), objet : `les délais`**
 
 > Bonjour [Prénom],
 >
@@ -154,7 +150,7 @@ Variables entre crochets réduites au minimum. Chacune est suivie d'un exemple r
 >
 > Jérôme, Coucou IA
 
-**Email 3 (J18, breakup), objet : `je vous laisse`**
+**Email 3 (J12, breakup), objet : `je vous laisse`**
 
 > Bonjour [Prénom],
 >
@@ -200,22 +196,22 @@ Règle d'or : le lien Cal.com n'apparaît qu'à partir d'une réponse engagée. 
 
 ---
 
-## 5. Rythme hebdo solo (30 à 45 min / jour)
+## 5. Rythme hebdo solo (20 à 30 min / jour)
 
-**Limites LinkedIn :** l'invitation est plafonnée autour de 100 / semaine (plus strict pour un compte récent ou peu connecté). On reste **sous 75 / semaine** pour ne pas se faire limiter. Si le compte est neuf, commencer à 10 / jour et monter progressivement.
+**Limites d'envoi :** contrairement à Lemlist (qui envoie depuis la vraie boîte Gmail), Brevo envoie depuis ses propres serveurs. Un domaine tout juste authentifié côté Brevo doit monter en charge progressivement, comme le lemwarm le faisait pour la boîte : commencer autour de **20 à 30 emails/jour** la première semaine, doubler la deuxième semaine si le taux de rebond reste sous 2 % et qu'aucune plainte spam n'est remontée dans Brevo, puis stabiliser. Ne jamais dépasser la capacité de la liste vérifiée du jour : mieux vaut envoyer moins que charger un email non vérifié.
 
-**Découpage d'une journée type (30-45 min) :**
+**Découpage d'une journée type (20-30 min) :**
 1. Traiter les réponses reçues d'abord (10 min). Priorité absolue : répondre dans l'heure si possible, dans la journée sinon.
-2. Envoyer 10 à 15 nouvelles invitations ciblées (15 min) : recherche des profils + envoi, sans note.
-3. Faire les relances dues du jour (10-15 min) : messages LinkedIn post-acceptation, emails 1 / 2 / 3 selon la cadence J6 / J11 / J18.
+2. Vérifier et ajouter 10 à 15 nouveaux emails à la liste du secteur en cours (10 min) : recherche + vérification de l'adresse avant tout envoi.
+3. Laisser Brevo exécuter les relances dues du jour (l'automation gère J0 / J5 / J12, rien à envoyer à la main une fois le contact dans la liste).
 4. Mettre à jour le tableau de suivi (5 min).
 
 **Semaine type :**
-- Lundi : constituer la liste de la semaine, envoyer le premier lot d'invitations.
-- Mardi à jeudi : cœur des envois et des relances (meilleurs jours en B2B).
-- Vendredi : rattrapage, réponses, mise à jour du tableau, préparation de la liste suivante. Pas d'email le vendredi après-midi ni le week-end.
+- Lundi : constituer et vérifier la liste de la semaine, l'ajouter à Brevo.
+- Mardi à jeudi : meilleurs jours en B2B pour un premier envoi, si le volume du jour le permet.
+- Vendredi : rattrapage, réponses, mise à jour du tableau, préparation de la liste suivante. Pas d'envoi le vendredi après-midi ni le week-end.
 
-**Ordre de grandeur réaliste :** 75 invitations / semaine, ~30 à 40 % acceptées, soit ~25 à 30 conversations possibles / semaine. Sur 3 semaines de séquence complète, ce volume suffit largement à viser 10 points de départ, à condition de traiter chaque réponse vite et bien.
+**Ordre de grandeur réaliste :** avec une liste vérifiée et une montée en charge prudente, viser 20 à 30 nouveaux prospects/semaine dans la séquence. Moins rapide qu'un rythme LinkedIn + email, mais plus sûr pour la réputation d'un domaine qui démarre sur Brevo.
 
 ---
 
@@ -223,12 +219,12 @@ Règle d'or : le lien Cal.com n'apparaît qu'à partir d'une réponse engagée. 
 
 Une simple feuille de calcul (Google Sheets), une ligne par prospect. Pas d'outil à acheter en v1.
 
-| Prospect | Entreprise | Secteur | Canal | Dernière touche | Date | Statut | Prochaine action | Date | Signal / notes |
-|----------|-----------|---------|-------|-----------------|------|--------|------------------|------|----------------|
-| Claire D. | Cabinet Martin | Compta | LinkedIn | Msg ouverture | J2 | Connecté | Email 1 | J6 | Annonce collab. comptable |
-| Paul R. | Métalux | Industrie | Email | Email 1 | J6 | Email 1 envoyé | Email 2 | J11 | Répond à des AO (BOAMP) |
+| Prospect | Entreprise | Secteur | Email vérifié | Dernière touche | Date | Statut | Prochaine action | Date | Signal / notes |
+|----------|-----------|---------|---------------|-----------------|------|--------|------------------|------|----------------|
+| Claire D. | Cabinet Martin | Compta | Oui | Email 1 | J0 | Email 1 envoyé | Email 2 | J5 | Annonce collab. comptable |
+| Paul R. | Métalux | Industrie | Oui | Email 2 | J5 | Email 2 envoyé | Email 3 | J12 | Répond à des AO (BOAMP) |
 
-**Valeurs de « Statut » :** À contacter, Invité, Connecté, Msg LinkedIn envoyé, Email 1, Email 2, Carte envoyée, Breakup, Répondu (intéressé), RDV pris, Échange fait, Pas intéressé, Clos.
+**Valeurs de « Statut » :** À vérifier (email), À contacter, Email 1, Email 2, Carte envoyée, Breakup (email 3), Répondu (intéressé), RDV pris, Échange fait, Pas intéressé, Rebond (email invalide), Clos.
 
 La colonne « Date » de prochaine action pilote la journée : chaque matin, on filtre sur les lignes dont la date est aujourd'hui ou avant.
 
@@ -236,10 +232,10 @@ La colonne « Date » de prochaine action pilote la journée : chaque matin, on 
 
 ## 7. Critères d'arrêt / pivot
 
-Seuils concrets, à évaluer chaque semaine. Une « touche complète » = un prospect ayant reçu au moins l'ouverture + email 1.
+Seuils concrets, à évaluer chaque semaine. Une « touche complète » = un prospect ayant reçu au moins l'email 1.
 
-- **Taux de réponse < 5 % après 50 touches complètes sur un secteur** : changer d'angle, en commençant par le message d'ouverture (pas la séquence entière).
-- **Taux d'acceptation LinkedIn < 20 % sur 50 invitations** : le problème est le profil ou le ciblage, pas le message. Revoir photo, titre, bannière, et resserrer le ciblage avant de toucher aux textes.
-- **2 angles d'ouverture testés (2 x 50 touches) toujours < 5 % sur un secteur** : basculer sur le secteur 2, puis sur le fallback services B2B.
-- **5 réponses « intéressé » mais 0 RDV pris** : la friction est dans la transition vers le call. Revoir la réponse type et vérifier que le lien Cal.com fonctionne et propose des créneaux proches.
+- **Taux de rebond > 3 % sur une semaine d'envoi :** arrêt immédiat des envois du secteur concerné. Le sourcing d'emails n'est pas assez fiable : revérifier la liste avant de reprendre, sous peine d'abîmer la réputation du domaine pour tous les envois (outbound et nurture).
+- **Taux de réponse < 5 % après 50 touches complètes sur un secteur :** changer d'angle, en commençant par l'email 1 (pas la séquence entière).
+- **2 angles d'email 1 testés (2 x 50 touches) toujours < 5 % sur un secteur :** basculer sur le secteur 2, puis sur le fallback services B2B.
+- **5 réponses « intéressé » mais 0 RDV pris :** la friction est dans la transition vers le call. Revoir la réponse type et vérifier que le lien Cal.com fonctionne et propose des créneaux proches.
 - **Contrôle de cap :** viser un taux de réponse global > 8 à 10 % et au moins 1 RDV pour ~15 à 20 conversations engagées. En dessous deux semaines de suite, recalibrer message ou ciblage.

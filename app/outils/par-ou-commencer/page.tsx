@@ -23,7 +23,7 @@ export const metadata: Metadata = pageMetadata({
 
 const breadcrumb = [{ label: "Accueil", href: "/" }, { label: "Par où commencer" }];
 
-// On ne passe au client que ce dont la grille se sert : ni campagne Lemlist,
+// On ne passe au client que ce dont la grille se sert : ni liste Brevo,
 // ni copie de la carte n'atteignent le bundle client.
 const sectors: GrilleSector[] = ressources.map((ressource) => ({
   slug: ressource.slug,

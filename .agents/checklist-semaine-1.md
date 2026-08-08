@@ -1,6 +1,6 @@
 # Checklist semaine 1 : les actions que seul le fondateur peut faire
 
-**Version :** v1.2 (2026-07-20 soir : boîte Workspace créée, emailing rétabli, industrie avant compta pour l'été). Tout le reste (code, copy, séquences) est déjà prêt dans le repo, les docs `.agents/` et les 4 campagnes Lemlist. Cette liste ne contient que ce qui demande tes accès. Ordre = ordre d'exécution recommandé.
+**Version :** v1.3 (2026-08-04 : bascule Lemlist → Brevo, voir `.agents/outbound.md` v2.0 et `.agents/nurture.md` v2.0 pour le contexte complet). Tout le reste (code, copy, séquences) est déjà prêt dans le repo et les docs `.agents/`. Ce qui manque encore côté Brevo, c'est ce que l'API ne peut pas faire à ta place (créer les automations) et ce qui n'existe que dans ton compte (clé API, authentification du domaine). Cette liste ne contient que ce qui demande tes accès. Ordre = ordre d'exécution recommandé.
 
 ## 1. Finir la délivrabilité de la boîte. Presque terminée
 
@@ -8,9 +8,18 @@
 
 ~~Publier la clé DKIM~~ **FAIT (2026-07-20 au soir, TXT `google._domainkey` publié via l'API Cloudflare et vérifié complet sur les résolveurs publics).** ~~Domaine de tracking Lemlist~~ **FAIT (même soir : CNAME `alpha.coucou-ia.com` → `custom.lemlist.com` en DNS only + TXT `lemlist-verif`, publiés et vérifiés ; les liens trackés porteront le domaine plutôt que celui, partagé, de lemlist).**
 
-~~Lancer l'authentification DKIM côté Google, activer lemwarm~~ **FAIT (2026-07-20 au soir).** La chauffe tourne : **2 à 3 semaines avant tout volume email**, soit une boîte prête vers la mi-août. Les invitations LinkedIn, elles, peuvent démarrer sans attendre.
+~~Lancer l'authentification DKIM côté Google, activer lemwarm~~ **FAIT (2026-07-20 au soir), mais ne sert plus à rien seul depuis la bascule Brevo.** Cette authentification couvrait l'envoi Lemlist, qui passait par la vraie boîte Gmail. Brevo envoie depuis ses propres serveurs : il faut une authentification séparée, en plus de celle-ci (elle reste utile pour la réception et pour tout email envoyé directement depuis Gmail).
 
-Dernier geste avant le premier envoi réel (à la fin de la chauffe) : le check de délivrabilité intégré à Lemlist.
+**Nouveau : authentifier `coucou-ia.com` côté Brevo (~20 min, avant tout envoi).**
+1. Brevo → Settings → Senders, Domains & Dedicated IPs → Domains → ajouter `coucou-ia.com`.
+2. Brevo donne 3 enregistrements DNS à ajouter chez Cloudflare : un TXT de vérification de propriété, un TXT/CNAME DKIM (sélecteur propre à Brevo, différent de celui de Google), et une ligne SPF. **Pour le SPF : ne pas remplacer l'enregistrement existant**, ajouter l'`include` Brevo à la suite de celui de Google dans le même TXT (un domaine n'a qu'un seul enregistrement SPF, avec plusieurs `include` possibles).
+3. Attendre la vérification (quelques minutes à quelques heures), confirmée dans Brevo.
+4. Ajouter `jerome@coucou-ia.com` comme expéditeur vérifié (Senders → Add a sender), depuis le domaine authentifié.
+5. Pas d'équivalent lemwarm automatique côté Brevo : la montée en charge se fait à la main, en respectant les volumes de `.agents/outbound.md` section 5 (20-30 emails/jour pour démarrer).
+
+Dernier geste avant le premier envoi réel : vérifier le statut du domaine dans Brevo (doit afficher « vérifié », pas juste « en attente »).
+
+**Nettoyage optionnel :** le domaine de tracking Lemlist (`alpha.coucou-ia.com` → `custom.lemlist.com`) ne sert plus à rien une fois Lemlist arrêté ; peut être supprimé du DNS Cloudflare sans urgence. Si Lemlist n'est plus utilisé du tout, penser aussi à mettre l'abonnement en pause côté compte Lemlist (économie, action côté facturation uniquement).
 
 ## 2. Search Console (~10 min)
 
@@ -31,34 +40,52 @@ Bonne nouvelle : un TXT `google-site-verification` existe déjà sur le domaine,
   3. Qu'est-ce qui vous amène ? (texte long, facultatif)
 - **Langue / notifications :** passer l'interface et les emails de confirmation + rappel en français ; activer le rappel à J-1 (réduit les no-show).
 
-**b) Le webhook** (trace chaque réservation dans les logs et stoppe les séquences Lemlist du prospect qui réserve ; Cal.com te notifie déjà par email) :
+**b) Le webhook** (trace chaque réservation dans les logs et stoppe les automations Brevo du prospect qui réserve ; Cal.com te notifie déjà par email) :
 1. Générer un secret (une longue chaîne aléatoire), l'ajouter dans Vercel → Settings → Environment Variables : `CAL_WEBHOOK_SECRET`.
 2. Cal.com → Settings → Developer → Webhooks → New : URL `https://coucou-ia.com/api/cal-webhook`, événement « Booking created », secret = le même.
 3. Tester avec une fausse réservation : la ligne `[rdv]` doit apparaître dans les logs Vercel. (Le code est déjà en place : `app/api/cal-webhook/route.ts`.)
 
 ## 4. Profil LinkedIn (~30 min)
 
-Appliquer `.agents/linkedin.md` section 1 (photo, titre, bannière, infos, lien). **Aucune invitation ne part avant ça** : le profil fait la crédibilité, l'invitation est sans note.
+Appliquer `.agents/linkedin.md` section 1 (photo, titre, bannière, infos, lien). L'outbound n'envoie plus d'invitation LinkedIn (bascule Brevo, email seul), mais un prospect qui reçoit un email à froid va souvent chercher l'expéditeur sur LinkedIn avant de répondre : le profil reste la première vérification de crédibilité, à faire avant le premier envoi.
 
 ## 5. Google Business Profile (~15 min)
 
 https://business.google.com → créer la fiche COUCOU IA (adresse du siège, catégorie « Consultant », site coucou-ia.com, description reprise du hero). Sert le SEO local Nice/PACA et recevra les futurs avis clients réels.
 
-## 6. Lemlist : activer les 4 campagnes déjà montées (~30 min)
+## 6. Brevo : créer les listes et les automations (~1 h 30, rien n'existe encore côté Brevo)
 
-Les campagnes existent (montées par l'API le 2026-07-20, contenus depuis `.agents/outbound.md` et `.agents/nurture.md`) : Outbound expertise comptable, Outbound industrie, Nurture carte expertise comptable (`cam_qnKzY6bXNxtSinjAF`), Nurture carte industrie (`cam_YLiMdN5H3wAW84wYs`).
-1. ~~Installer l'extension Chrome Lemlist et connecter ton compte LinkedIn.~~ **FAIT (2026-07-20).**
-2. Les 2 campagnes **outbound** ont retrouvé leur séquence multicanal le 2026-07-20 au soir (invitation J0, ouverture J2, emails J6 / J11 / J18) : relire les 5 étapes dans Lemlist, sélectionner la boîte `jerome@coucou-ia.com` comme expéditeur de la campagne, vérifier le planning (mardi-jeudi en cœur, jamais le week-end). **On lance l'industrie d'abord** (décision du 2026-07-20 : l'été est le pire moment pour démarcher les comptables) ; la campagne compta attend la rentrée.
-3. Les 2 campagnes **nurture** s'activent quand la chauffe lemwarm est finie (étape 1). Le site pousse déjà les leads dedans : la liste se construit, et la séquence complète (livraison + relances) démarrera à l'activation.
+Contrairement à Lemlist, l'API Brevo crée des contacts et des listes, mais pas des automations complètes (étapes, délais, contenu) : cette partie se fait à la main dans l'interface. La clé API a été utilisée pour vérifier le compte, mais **le compte a l'accès par IP restreint** (Settings → Security → Authorised IPs) : les appels de création de liste ont échoué avec cette IP non reconnue : `2a01:cb1d:379:b800:4488:2c35:20dd:31a4`. Deux options : ajouter cette IP à la liste autorisée puis redemander la création des listes par API, ou suivre les étapes manuelles ci-dessous (pas plus long).
+
+1. **Attributs de contact** (Contacts → Settings → Contact attributes → Add attribute) : créer `PRENOM` (texte) et `NOTES` (texte). Sans ça, les leads qui donnent leur prénom ou leurs réponses au kit échouent silencieusement côté Brevo (le lead reste visible dans les logs Vercel, `[lead-alerte]`, mais n'entre jamais dans la liste).
+2. **5 listes** (Contacts → Lists → Create a list), une par flux :
+   - Nurture carte expertise comptable
+   - Nurture carte industrie
+   - Nurture kit de démarrage
+   - Outbound expertise comptable
+   - Outbound industrie
+
+   Noter l'ID numérique de chacune (visible dans l'URL de la liste ou via l'API) et le reporter dans le code, à la place des `0` placeholders :
+   - `content/ressources.ts` → `brevoListId` (carte compta et carte industrie)
+   - `content/kit.ts` → `kitBrevoListId`
+   - `app/api/cal-webhook/route.ts` → `OUTBOUND_LIST_IDS` (compta, industrie, dans cet ordre)
+3. **2 automations nurture** (Automation → Create a workflow → démarrer d'un workflow vide, déclencheur « contact added to a list ») : une par liste nurture carte, contenu dans `.agents/nurture.md` (email J0 livraison + relances J+3 / J+10 / J+21, par secteur). **Condition de sortie à régler sur « contact retiré de la liste » : indispensable**, c'est ce qui fait fonctionner l'arrêt automatique du webhook Cal.com.
+4. **2 automations outbound** (même principe) : contenu dans `.agents/outbound.md` section 3 (email J0 / J5 / J12, par secteur). Même condition de sortie.
+5. **Nurture kit de démarrage :** la liste peut être créée maintenant, mais la séquence email n'est pas encore écrite (contrairement aux cartes) ; l'automation attend son contenu avant d'être activée. Le site pousse déjà les leads dedans en attendant.
+6. Sélectionner `jerome@coucou-ia.com` comme expéditeur de chaque automation (une fois le domaine authentifié, étape 1), vérifier que le lien de désinscription est visible dans chaque email, relire, activer.
+7. Poser `BREVO_API_KEY` en production (Vercel → Settings → Environment Variables). Supprimer `LEMLIST_API_KEY` si elle existe encore.
 
 ## 7. Lancer la semaine 1 du playbook outbound
 
-~~Construire la liste de PME industrielles Sud/PACA~~ **FAIT (2026-07-21) : 74 entreprises sourcées et priorisées dans `~/marketing-plans/coucou-ia/materials/prospects-industrie-v1.csv`** (priorité A = 06, B = 83, C = 13, D = 84/04/05 ; colonnes signal, dirigeant, LinkedIn quand trouvé, note de prudence quand il y en a une). Avant chaque invitation : vérifier le profil LinkedIn (ceux du CSV viennent de recherches publiques, quelques homonymes possibles, les cas douteux sont notés) et compléter ceux marqués « ? ».
+~~Construire la liste de PME industrielles Sud/PACA~~ **FAIT (2026-07-21) : 74 entreprises sourcées et priorisées dans `~/marketing-plans/coucou-ia/materials/prospects-industrie-v1.csv`** (priorité A = 06, B = 83, C = 13, D = 84/04/05 ; colonnes signal, dirigeant, LinkedIn quand trouvé, note de prudence quand il y en a une).
 
-~~Importer les prospects dans la campagne « Outbound industrie »~~ **FAIT (2026-07-21, par l'API) : les 74 leads sont dans la campagne (statut draft, rien ne part)**, avec dirigeant et fonction pour tous (les 15 holdings ont été percées jusqu'à la personne physique), profil LinkedIn pour une trentaine, et les colonnes priorité/ville/secteur/signal/note comme variables de personnalisation. Les 2 URLs LinkedIn douteuses (Gravic, Ragni) n'ont pas été importées : à compléter à la main après vérification, comme les profils manquants, directement dans Lemlist.
+~~Importer les prospects dans la campagne Lemlist « Outbound industrie »~~ **FAIT (2026-07-21) mais reste sur Lemlist, pas migré.** Les 74 leads n'ont jamais quitté Lemlist : depuis la bascule Brevo, ils sont à réimporter dans la nouvelle liste Brevo « Outbound industrie » (étape 6). **Nouveau blocage : le CSV source n'a aucune colonne email**, il a été sourcé pour du LinkedIn (nom, URL LinkedIn), pas pour de l'email. Avant tout import Brevo :
+1. Trouver l'email professionnel de chacun des 74 dirigeants (page contact du site, format standard de l'entreprise) et l'ajouter au CSV.
+2. Vérifier chaque adresse (un vérificateur d'email, ou a minima un envoi de test) avant import : un taux de rebond élevé dès le premier envoi abîme la réputation du domaine pour tous les envois Brevo, outbound comme nurture.
+3. Compléter au passage les profils encore marqués « ? » ou les 2 URLs LinkedIn douteuses (Gravic, Ragni), utiles pour la personnalisation même sans invitation à envoyer.
 
-Reste : une fois 4 et 6 faits, démarrer à 10-15 invitations/jour (compte récent oblige). **Ne pas lancer la campagne avant le ~10 août :** elle contient les emails J6/J11/J18, qui partiraient d'une boîte en pleine chauffe si les invitations démarrent trop tôt. Fermetures d'août obligent, la pleine cadence se joue à la rentrée. La liste compta (50-75 cabinets Nice/PACA) se construit fin août pour un lancement de rentrée.
+Reste ensuite : une fois 4 et 6 faits, démarrer à 20-30 emails/jour (`.agents/outbound.md` section 5). **Ne pas lancer avant que le domaine soit vérifié dans Brevo** (étape 1) : sans authentification, les emails partent en indésirables dès le premier envoi. Fermetures d'août obligent, la pleine cadence se joue de toute façon à la rentrée. La liste compta (50-75 cabinets Nice/PACA) se construit fin août pour un lancement de rentrée, email compris dès le sourcing cette fois.
 
 ## Optionnel mais utile
-- **Ré-authentifier les connecteurs claude.ai** (Gmail, Google Drive, HubSpot) dans les réglages claude.ai → Connecteurs : utile pour les revues hebdo semi-automatiques (les réponses outbound, elles, sont désormais suivies via l'API Lemlist).
-- ~~**Vercel → poser `LEMLIST_API_KEY` en production.**~~ **FAIT (2026-07-20).** Supprimer `BREVO_API_KEY` si elle existe encore.
+- **Ré-authentifier les connecteurs claude.ai** (Gmail, Google Drive, HubSpot) dans les réglages claude.ai → Connecteurs : utile pour les revues hebdo semi-automatiques (les réponses outbound se suivent maintenant à l'œil dans la boîte mail, Brevo n'a pas d'inbox unifiée comme Lemlist).
+- **Vercel → `BREVO_API_KEY` et suppression de `LEMLIST_API_KEY`** : voir section 6, étape 7, c'est là que ça se fait.

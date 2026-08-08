@@ -4,15 +4,15 @@
 // Signature imposee par useActionState : (prevState, formData). Le slug
 // voyage dans un champ cache du formulaire (voir components/ressource-form.tsx).
 
-// Le lead entre dans la campagne nurture Lemlist du secteur : l'etape 1
-// (delai 0) livre la carte par email, les relances J+3 / J+10 / J+21 suivent.
-// L'envoi respecte le planning de la campagne (heures ouvrees) : la page de
+// Le lead entre dans la liste nurture Brevo du secteur : l'automation livre
+// la carte par email (etape 0), les relances J+3 / J+10 / J+21 suivent.
+// L'envoi respecte le planning de l'automation (heures ouvrees) : la page de
 // succes donne de toute facon l'acces direct a la carte.
 
-import { captureLead, type SubscribeState } from "@/lib/lemlist";
+import { captureLead, type SubscribeState } from "@/lib/brevo";
 import { ressources } from "@/content/ressources";
 
-export type { SubscribeState } from "@/lib/lemlist";
+export type { SubscribeState } from "@/lib/brevo";
 
 export async function subscribeRessource(
   _prevState: SubscribeState,
@@ -24,5 +24,5 @@ export async function subscribeRessource(
     return { status: "error", error: "server" };
   }
 
-  return captureLead(formData, ressource.lemlistCampaignId, ressource.slug);
+  return captureLead(formData, ressource.brevoListId, ressource.slug);
 }

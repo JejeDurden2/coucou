@@ -1,19 +1,23 @@
 # Séquence nurture post-carte : Coucou IA
 
-**Version :** v1.1 (2026-07-20)
+**Version :** v2.0 (2026-08-04)
 **Dépend de :** `.agents/lead-magnets.md` v1, `.agents/product-marketing.md` v1.4
-**Déclencheur :** téléchargement d'une carte. La server action du site (`app/ressources/actions.ts`) ajoute le lead à la campagne Lemlist de son secteur (`lemlistCampaignId` dans `content/ressources.ts`) : l'email J0 de livraison est l'étape 1 de la campagne, la séquence enchaîne.
+**Déclencheur :** téléchargement d'une carte. La server action du site (`app/ressources/actions.ts`) ajoute le lead à la liste Brevo de son secteur (`brevoListId` dans `content/ressources.ts`) : une automation Brevo prend le relais, l'email J0 de livraison est sa première étape, la séquence enchaîne.
 **Règles :** français, vous, aucun tiret cadratin, un seul ask par email, aucune pression, chiffres toujours étiquetés illustration, désinscription en un clic, signature « Jérôme, Coucou IA ». Le lien Cal.com est celui du site avec UTM : `https://cal.com/jerome-desmares-izhobq/30min?utm_source=email&utm_medium=nurture&utm_content=jX-[secteur]`.
-**Arrêt automatique :** la séquence s'interrompt si la personne réserve un point de départ (webhook Cal.com → lead marqué « intéressé » dans toutes ses campagnes Lemlist) ou répond à un email (Lemlist stoppe à la réponse ; toute réponse passe en conversation manuelle, priorité absolue).
+**Arrêt automatique :** la séquence s'interrompt si la personne réserve un point de départ (webhook Cal.com → `app/api/cal-webhook/route.ts` retire le lead de toutes ses listes Brevo) ou répond à un email (toute réponse passe en conversation manuelle, priorité absolue ; Brevo n'arrête pas l'automation tout seul sur une réponse, contrairement à Lemlist, donc surveiller la boîte de réception reste indispensable).
 
-## Montage dans Lemlist (fait le 2026-07-20 par l'API, une campagne par secteur)
+## Montage dans Brevo (à faire côté fondateur, l'API Brevo ne crée pas les automations)
 
-| Campagne | ID | Étapes |
+Contrairement à Lemlist, la création d'une campagne complète par API n'existe pas côté Brevo : les contacts et les listes se créent par API (déjà branché côté site), mais l'automation elle-même (les étapes, les délais, le contenu) se construit dans l'interface Brevo. Étapes précises dans `checklist-semaine-1.md`.
+
+| Automation | Liste déclencheuse | Étapes |
 |---|---|---|
-| Nurture carte expertise comptable | `cam_qnKzY6bXNxtSinjAF` | J0 livraison, J+3, J+10, J+21 |
-| Nurture carte industrie | `cam_YLiMdN5H3wAW84wYs` | J0 livraison, J+3, J+10, J+21 |
+| Nurture carte expertise comptable | `content/ressources.ts` → `brevoListId` (TODO, à créer) | J0 livraison, J+3, J+10, J+21 |
+| Nurture carte industrie | `content/ressources.ts` → `brevoListId` (TODO, à créer) | J0 livraison, J+3, J+10, J+21 |
 
-La boîte `jerome@coucou-ia.com` (Google Workspace) est créée et connectée à Lemlist depuis le 2026-07-20. Reste côté fondateur avant activation : finir le DNS et la chauffe lemwarm (checklist semaine 1, étape 1), sélectionner la boîte comme expéditeur des 2 campagnes, vérifier que le lien de désinscription est actif, relire, lancer. En attendant, le site pousse déjà les leads dans les campagnes : la liste se construit, rien ne part, et la page de merci donne de toute façon l'accès direct à la carte.
+**Condition de sortie à régler sur chaque automation (essentiel) :** « contact retiré de la liste déclencheuse » doit sortir le contact de l'automation. C'est ce qui fait fonctionner l'arrêt automatique du webhook Cal.com (qui appelle `unlinkListIds`) : sans ce réglage, un lead qui réserve continuerait de recevoir les relances.
+
+La boîte `jerome@coucou-ia.com` (Google Workspace) reste l'expéditeur voulu, mais Brevo demande sa propre authentification de domaine, séparée de celle faite pour Lemlist (checklist semaine 1, étape 1). Tant que la liste et l'automation ne sont pas créées côté Brevo, `brevoListId` reste à `0` dans le code : le site logue le lead dans Vercel (`[lead-alerte]`) au lieu de le perdre, et la page de merci donne de toute façon l'accès direct à la carte.
 
 ## Email J0 (livraison, étape 1 de chaque campagne)
 
@@ -128,5 +132,6 @@ Objet : `votre carte des possibles`. Corps (variante compta ; l'industrie rempla
 | Désinscription | < 2 % par email | > 5 % : le rythme est trop dense, espacer |
 
 ## Changelog
-- v1.1 (2026-07-20) : bascule Brevo → Lemlist. Les 2 campagnes sont montées par l'API (IDs ci-dessus), l'email J0 de livraison devient l'étape 1 (il quitte `content/ressources.ts`), l'arrêt automatique à la réservation est branché sur le webhook Cal.com.
+- v2.0 (2026-08-04) : bascule Lemlist → Brevo (décision fondateur, `.agents/outbound.md` v2.0 pour le contexte complet). Le site pousse désormais les leads vers `content/ressources.ts` → `brevoListId` (`lib/brevo.ts`), plus `lemlistCampaignId`. Les automations restent à créer dans l'interface Brevo (l'API ne le permet pas) : IDs de liste encore à `0`, voir checklist-semaine-1.md.
+- v1.1 (2026-07-20) : bascule Brevo → Lemlist. Les 2 campagnes sont montées par l'API, l'email J0 de livraison devient l'étape 1 (il quitte `content/ressources.ts`), l'arrêt automatique à la réservation est branché sur le webhook Cal.com.
 - v1 (2026-07-19) : première séquence, 3 emails x 2 secteurs, à monter dans Brevo (2 automatisations).
