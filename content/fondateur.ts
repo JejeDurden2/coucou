@@ -13,6 +13,13 @@ export type FondateurSection = {
   linkedinUrl: string;
 };
 
+// Meta de la page /fondateur (la marque est déjà dans le titre, pas de suffixe).
+export const fondateurPage = {
+  metaTitle: "Jérôme Desmares, fondateur de Coucou IA",
+  metaDescription:
+    "Dix ans à entreprendre et construire des logiciels : luxe, fintech, édition comptable. Du point de départ à la production, vous gardez le même interlocuteur.",
+};
+
 export const fondateur: FondateurSection = {
   kicker: "Qui est derrière Coucou IA",
   name: "Jérôme Desmares",

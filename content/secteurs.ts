@@ -64,7 +64,7 @@ export const secteurs: SecteurPage[] = [
   {
     slug: "expertise-comptable",
     name: "Expertise comptable",
-    metaTitle: "IA pour cabinet comptable : cas d’usage et ROI | Coucou IA",
+    metaTitle: "IA cabinet comptable : cas d’usage et ROI | Coucou IA",
     metaDescription:
       "IA pour cabinet comptable : pré-affectation des écritures, liasses fiscales, réponses clients. ROI chiffré avant engagement. Premier échange gratuit.",
     h1: "IA pour cabinet comptable : moins de saisie, plus de conseil",
@@ -142,7 +142,7 @@ export const secteurs: SecteurPage[] = [
   {
     slug: "cabinets-juridiques",
     name: "Cabinets juridiques",
-    metaTitle: "IA pour cabinet d’avocats : cas d’usage et ROI | Coucou IA",
+    metaTitle: "IA cabinet d’avocats : cas d’usage et ROI | Coucou IA",
     metaDescription:
       "IA pour cabinet d’avocats : recherche documentaire, premiers jets de conclusions, suivi des délais. ROI chiffré, premier échange gratuit.",
     h1: "IA pour cabinet d’avocats : moins de recherche, plus de dossiers traités",
@@ -190,7 +190,7 @@ export const secteurs: SecteurPage[] = [
     faq: [
       {
         question:
-          "Le secret professionnel est non négociable pour nous, comment est-il garanti ?",
+          "Le secret professionnel est non négociable pour nous, comment est-il protégé ?",
         answer:
           "C’est le point de départ de chaque système que nous concevons, pas une option ajoutée après coup. Vos dossiers restent sous votre contrôle, avec un hébergement adapté et dans le respect du RIN.",
       },
@@ -221,7 +221,7 @@ export const secteurs: SecteurPage[] = [
   {
     slug: "industrie",
     name: "Industrie",
-    metaTitle: "IA pour l’industrie PME : cas d’usage et ROI | Coucou IA",
+    metaTitle: "IA pour l’industrie : cas d’usage et ROI | Coucou IA",
     metaDescription:
       "IA pour l’industrie PME : réponse aux DCE, documentation technique, reporting de production. ROI chiffré avant engagement. Premier échange gratuit.",
     h1: "IA pour l’industrie PME : de l’atelier au dossier d’appel d’offres",
@@ -345,7 +345,7 @@ export const secteurs: SecteurPage[] = [
     },
     faq: [
       {
-        question: "Nos données clients ne doivent jamais se mélanger entre missions, est-ce garanti ?",
+        question: "Nos données clients ne doivent jamais se mélanger entre missions, est-ce vraiment le cas ?",
         answer:
           "Oui, c’est un principe de conception, pas une option. Chaque client reste cloisonné, sans mélange entre missions.",
       },
@@ -452,7 +452,7 @@ export const secteurs: SecteurPage[] = [
   {
     slug: "sante-medico-social",
     name: "Santé et médico-social",
-    metaTitle: "IA pour santé et médico-social : usages et ROI | Coucou IA",
+    metaTitle: "IA santé et médico-social : usages et ROI | Coucou IA",
     metaDescription:
       "IA pour la santé et le médico-social : transmissions, dossiers patients, questions familles. ROI chiffré avant engagement. Premier échange gratuit.",
     h1: "IA pour la santé et le médico-social : moins de paperasse, plus de soin",

@@ -165,7 +165,7 @@ export const agents: AgentPage[] = [
     intro:
       "Hermes Agent est un framework d’agent open source publié par Nous Research début 2026. Sa particularité : il écrit ses propres compétences réutilisables après chaque tâche et s’améliore avec l’usage. Voici ce qu’il fait vraiment, et pourquoi la supervision humaine reste indispensable.",
     verdict:
-      "Hermes Agent est l’un des projets les plus intéressants du moment : auto-hébergé, multi-canal, et surtout capable d’écrire ses propres compétences réutilisables au fil des tâches. L’adoption a été très rapide en 2026, portée par une grosse mise à jour début août (voix en temps réel, communication d’agent à agent, recherche avec sources vérifiables). Mais c’est un logiciel jeune, encore en versions 0.x : pas de garantie de stabilité entre deux mises à jour, documentation incomplète, aucun journal d’audit structuré. Et si personne ne relit les compétences qu’il s’écrit lui-même, une erreur peut se répéter à chaque usage. Avant de le brancher sur vos process, je pose la supervision qui manque : relecture des skills, données en local, obligations RGPD posées noir sur blanc.",
+      "Hermes Agent est l’un des projets les plus intéressants du moment : auto-hébergé, multi-canal, et surtout capable d’écrire ses propres compétences réutilisables au fil des tâches. L’adoption a été très rapide en 2026, portée par une grosse mise à jour début août (voix en temps réel, communication d’agent à agent, recherche avec sources vérifiables). Mais c’est un logiciel jeune, encore en versions 0.x : pas de stabilité assurée entre deux mises à jour, documentation incomplète, aucun journal d’audit structuré. Et si personne ne relit les compétences qu’il s’écrit lui-même, une erreur peut se répéter à chaque usage. Avant de le brancher sur vos process, je pose la supervision qui manque : relecture des skills, données en local, obligations RGPD posées noir sur blanc.",
     facts: [
       { label: "Éditeur", value: "Nous Research" },
       { label: "Licence", value: "MIT (open source)" },
@@ -190,7 +190,7 @@ export const agents: AgentPage[] = [
     risks: [
       {
         title: "Un logiciel encore jeune",
-        body: "Hermes Agent tourne en versions 0.x, sans garantie de stabilité entre deux mises à jour. Ce qui fonctionne aujourd’hui peut changer demain.",
+        body: "Hermes Agent tourne en versions 0.x, sans stabilité assurée entre deux mises à jour. Ce qui fonctionne aujourd’hui peut changer demain.",
       },
       {
         title: "Documentation incomplète",
@@ -223,7 +223,7 @@ export const agents: AgentPage[] = [
       {
         question: "Hermes Agent est-il fiable pour une entreprise ?",
         answer:
-          "C’est un logiciel jeune, en versions 0.x, sans garantie de stabilité entre deux mises à jour et avec une documentation incomplète. Les compétences qu’il s’écrit lui-même doivent être relues : sans supervision humaine, une erreur peut se répéter à chaque usage.",
+          "C’est un logiciel jeune, en versions 0.x, sans stabilité assurée entre deux mises à jour et avec une documentation incomplète. Les compétences qu’il s’écrit lui-même doivent être relues : sans supervision humaine, une erreur peut se répéter à chaque usage.",
       },
       {
         question: "Combien coûte Hermes Agent ?",

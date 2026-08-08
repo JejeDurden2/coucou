@@ -10,7 +10,16 @@ const carteLinkClasses =
   "rounded-sm text-muted-foreground underline underline-offset-4 outline-none transition-colors hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4 focus-visible:ring-offset-background";
 
 // `placement` : attribution UTM par page (utm_content côté Cal.com).
-export function Cta({ placement = "cta-final" }: { placement?: string } = {}) {
+// `secteurSlug` : sur une page secteur, la sortie douce ne propose que la carte
+// de ce secteur ; sans carte pour ce secteur, elle propose le kit de démarrage.
+export function Cta({
+  placement = "cta-final",
+  secteurSlug,
+}: { placement?: string; secteurSlug?: string } = {}) {
+  const cartes = secteurSlug
+    ? ressources.filter((ressource) => ressource.secteurSlug === secteurSlug)
+    : ressources;
+
   return (
     <section className="relative overflow-hidden border-t border-border">
       {/* Écho violet du hero : la page se ferme sur la même lumière (bookend).
@@ -34,15 +43,26 @@ export function Cta({ placement = "cta-final" }: { placement?: string } = {}) {
             </Button>
           </div>
           <p className="mt-8 font-mono text-sm text-foreground-dim">
-            {finalCta.softExitIntro}{" "}
-            {ressources.map((ressource, index) => (
-              <span key={ressource.slug}>
-                {index > 0 && <span aria-hidden> · </span>}
-                <a href={`/ressources/${ressource.slug}`} className={carteLinkClasses}>
-                  {ressource.name}
+            {cartes.length > 0 ? (
+              <>
+                {finalCta.softExitIntro}{" "}
+                {cartes.map((ressource, index) => (
+                  <span key={ressource.slug}>
+                    {index > 0 && <span aria-hidden> · </span>}
+                    <a href={`/ressources/${ressource.slug}`} className={carteLinkClasses}>
+                      {ressource.name}
+                    </a>
+                  </span>
+                ))}
+              </>
+            ) : (
+              <>
+                {finalCta.softExitKitIntro}{" "}
+                <a href="/outils/kit-de-demarrage" className={carteLinkClasses}>
+                  {finalCta.softExitKitLabel}
                 </a>
-              </span>
-            ))}
+              </>
+            )}
           </p>
         </ScrollReveal>
       </div>

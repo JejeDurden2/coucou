@@ -34,6 +34,7 @@ export const nav: NavLink[] = [
   { label: "Méthode", href: "/#methode" },
   { label: "Secteurs", href: "/secteurs" },
   { label: "Cas d’usage", href: "/cas-usage" },
+  { label: "Outils", href: "/outils" },
   { label: "Blog", href: "/blog" },
 ];
 
@@ -49,6 +50,8 @@ export const footerResourceLinks: NavLink[] = [
   { label: "Glossaire : l’IA sans jargon", href: "/glossaire" },
   { label: "Par où commencer ?", href: "/outils/par-ou-commencer" },
   { label: "Kit de démarrage", href: "/outils/kit-de-demarrage" },
+  { label: "Les cartes des possibles", href: "/ressources" },
+  { label: "Qui est derrière Coucou IA", href: "/fondateur" },
 ];
 
 // Positionnement d’une ligne pour le pied de page.

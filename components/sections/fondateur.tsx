@@ -8,7 +8,8 @@ import portrait from "@/public/brand/jerome-desmares.jpg";
 // Le visage derrière le CTA : photo réelle, parcours vérifiable (le lien
 // LinkedIn sort du site, même logique que les réalisations).
 
-export function Fondateur() {
+// `titleAs` : h2 sur la page d'accueil (section), h1 sur la page /fondateur.
+export function Fondateur({ titleAs: Title = "h2" }: { titleAs?: "h1" | "h2" }) {
   return (
     <section className="border-t border-border">
       <div className="mx-auto max-w-[1200px] px-6 py-20 lg:py-28">
@@ -24,9 +25,9 @@ export function Fondateur() {
             <span className="font-mono text-xs uppercase tracking-[0.12em] text-muted-foreground">
               {fondateur.kicker}
             </span>
-            <h2 className="mt-4 font-display text-[2rem] leading-[1.08] font-bold tracking-[-0.02em] lg:text-[2.75rem]">
+            <Title className="mt-4 font-display text-[2rem] leading-[1.08] font-bold tracking-[-0.02em] lg:text-[2.75rem]">
               {fondateur.name}
-            </h2>
+            </Title>
             <p className="mt-2 font-mono text-sm text-foreground-dim">
               {fondateur.role}
             </p>

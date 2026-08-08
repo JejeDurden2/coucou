@@ -5,6 +5,7 @@ Coucou IA est un cabinet de conseil et développement IA pour les PME française
 ## Pages
 
 - [Accueil](https://coucou-ia.com/) : les deux offres, la méthode en quatre étapes, des cas d'usage concrets, deux produits construits par Coucou IA (Livia, Lecturer), le fondateur Jérôme Desmares et les questions fréquentes.
+- [Le fondateur](https://coucou-ia.com/fondateur) : Jérôme Desmares, plus de dix ans à entreprendre et construire des logiciels (luxe, fintech, édition comptable). Le même interlocuteur du point de départ à la production.
 
 ## Secteurs
 
@@ -31,6 +32,32 @@ Coucou IA est un cabinet de conseil et développement IA pour les PME française
 - [OpenClaw](https://coucou-ia.com/agents-ia/openclaw) : l'assistant IA open source auto-hébergé, piloté depuis WhatsApp : forces, risques de sécurité, conformité RGPD, coût réel.
 - [Hermes Agent](https://coucou-ia.com/agents-ia/hermes-agent) : l'agent IA open source de Nous Research qui écrit ses propres compétences : forces, limites de jeunesse, supervision nécessaire.
 
+## Comparaisons
+
+- [Bien choisir son partenaire IA](https://coucou-ia.com/comparaison) : Coucou IA face aux autres options d'un dirigeant de PME, comparées franchement.
+- [Grand cabinet de conseil](https://coucou-ia.com/comparaison/grand-cabinet-conseil) : Coucou IA ou un grand cabinet de conseil pour votre projet IA.
+- [ESN](https://coucou-ia.com/comparaison/esn) : Coucou IA ou une ESN pour développer votre IA sur mesure.
+- [Freelance IA](https://coucou-ia.com/comparaison/freelance-ia) : Coucou IA ou un freelance IA pour votre premier projet.
+- [ChatGPT tout seul](https://coucou-ia.com/comparaison/chatgpt-seul) : ce que ChatGPT seul couvre, et ce qui demande un système en production.
+
+## Glossaire
+
+- [Glossaire](https://coucou-ia.com/glossaire) : les termes de l'IA expliqués sans jargon pour dirigeants de PME.
+- [IA générative](https://coucou-ia.com/glossaire/ia-generative)
+- [Grand modèle de langage (LLM)](https://coucou-ia.com/glossaire/llm)
+- [RAG](https://coucou-ia.com/glossaire/rag)
+- [Agent IA](https://coucou-ia.com/glossaire/agent-ia)
+- [Machine learning](https://coucou-ia.com/glossaire/machine-learning)
+- [Prompt](https://coucou-ia.com/glossaire/prompt)
+- [Hallucination](https://coucou-ia.com/glossaire/hallucination)
+- [Fine-tuning](https://coucou-ia.com/glossaire/fine-tuning)
+- [Automatisation ou IA ?](https://coucou-ia.com/glossaire/automatisation-vs-ia)
+- [POC](https://coucou-ia.com/glossaire/poc)
+- [Mise en production](https://coucou-ia.com/glossaire/mise-en-production)
+- [AI Act](https://coucou-ia.com/glossaire/ai-act)
+- [Token](https://coucou-ia.com/glossaire/token)
+- [IA souveraine](https://coucou-ia.com/glossaire/ia-souveraine)
+
 ## Blog
 
 - [Blog](https://coucou-ia.com/blog) : l'IA en entreprise sans jargon, méthode, décryptages et cas concrets pour les dirigeants de PME et ETI. Flux RSS : https://coucou-ia.com/blog/rss.xml
@@ -40,11 +67,13 @@ Coucou IA est un cabinet de conseil et développement IA pour les PME française
 
 ## Outils gratuits
 
+- [Outils](https://coucou-ia.com/outils) : les deux outils gratuits pour passer de l'envie au concret.
 - [Par où commencer](https://coucou-ia.com/outils/par-ou-commencer) : la grille interactive pour tester un cas d'usage IA en trois questions (volume, données, douleur) et obtenir un verdict franc.
 - [Kit de démarrage](https://coucou-ia.com/outils/kit-de-demarrage) : une dizaine de questions pour créer son premier outil avec l'IA. Le kit donne la pile conseillée (Claude Code, GitHub, Next.js, Vercel, Supabase région UE, Resend, Stripe, nom de domaine), les étapes dans l'ordre avec le piège de chacune, ce que ça coûte par mois, les points de vigilance, et le prompt à coller dans Claude.
 
 ## Ressources
 
+- [Les cartes des possibles](https://coucou-ia.com/ressources) : une carte par secteur, les cas d'usage IA classés par impact et faisabilité.
 - [La carte des possibles : expertise comptable](https://coucou-ia.com/ressources/carte-expertise-comptable) : les cas d'usage IA d'un cabinet comptable, classés par impact et faisabilité.
 - [La carte des possibles : industrie](https://coucou-ia.com/ressources/carte-industrie) : les cas d'usage IA d'une PME industrielle, classés par impact et faisabilité.
 

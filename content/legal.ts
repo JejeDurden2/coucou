@@ -16,7 +16,7 @@ export type LegalPage = {
 
 export const mentionsLegales: LegalPage = {
   title: "Mentions légales",
-  updated: "18 juillet 2026",
+  updated: "8 août 2026",
   sections: [
     {
       heading: "Éditeur du site",
@@ -32,13 +32,13 @@ export const mentionsLegales: LegalPage = {
     },
     {
       heading: "Directeur de la publication",
-      // TODO fondateur : nommer explicitement le directeur de la publication si souhaité.
-      paragraphs: ["Le représentant légal de la société COUCOU IA."],
+      paragraphs: ["Jérôme Desmares, président de COUCOU IA."],
     },
     {
       heading: "Hébergement",
       paragraphs: [
         "Le site est hébergé par Vercel Inc., 340 S Lemon Ave #4133, Walnut, CA 91789, États-Unis.",
+        "Téléphone de l’hébergeur : +1 559 288 7060.",
         "Site de l’hébergeur : vercel.com.",
       ],
     },
@@ -51,7 +51,7 @@ export const mentionsLegales: LegalPage = {
     {
       heading: "Responsabilité",
       paragraphs: [
-        "COUCOU IA s’efforce de tenir les informations de ce site à jour, sans garantir leur exactitude ni leur exhaustivité. Le contenu peut évoluer à tout moment.",
+        "COUCOU IA s’efforce de tenir les informations de ce site à jour, sans pouvoir en assurer l’exactitude ni l’exhaustivité. Le contenu peut évoluer à tout moment.",
       ],
     },
   ],
@@ -59,7 +59,7 @@ export const mentionsLegales: LegalPage = {
 
 export const confidentialite: LegalPage = {
   title: "Politique de confidentialité",
-  updated: "19 juillet 2026",
+  updated: "8 août 2026",
   sections: [
     {
       heading: "En résumé",
@@ -81,7 +81,7 @@ export const confidentialite: LegalPage = {
         "Si vous réservez un premier échange, la prise de rendez-vous passe par l’outil Cal.com, qui recueille les informations que vous renseignez (nom, e-mail, réponses au formulaire de réservation) pour organiser cet échange.",
         "Si vous nous écrivez directement, nous recevons les informations que vous choisissez de nous communiquer (nom, adresse e-mail, message).",
         "Ces données servent uniquement à vous répondre, vous envoyer ce que vous avez demandé et organiser l’échange. Nous ne les utilisons à aucune autre fin et ne les revendons jamais.",
-        "Elles sont conservées le temps nécessaire au traitement de votre demande, puis supprimées ou archivées conformément à nos obligations légales.",
+        "Elles sont conservées au plus trois ans après notre dernier échange, puis supprimées.",
       ],
     },
     {
@@ -103,6 +103,7 @@ export const confidentialite: LegalPage = {
       heading: "Hébergement et journaux techniques",
       paragraphs: [
         "Le site est hébergé par Vercel Inc. (États-Unis). L’hébergeur peut traiter des données techniques de connexion (journaux serveur) à des fins de sécurité et de bon fonctionnement, sans que COUCOU IA n’exploite ces données à des fins de suivi.",
+        "Vercel Inc. adhère au cadre de protection des données UE-États-Unis (Data Privacy Framework) : les transferts hors Union européenne s’appuient sur ce cadre.",
       ],
     },
     {

@@ -9,6 +9,7 @@ import { Realisations } from "@/components/sections/realisations";
 import { Services } from "@/components/sections/services";
 import { UseCases } from "@/components/sections/use-cases";
 import { faq } from "@/content/faq";
+import { fondateur } from "@/content/fondateur";
 import { services } from "@/content/services";
 import { contactEmail, description, siteName, siteUrl } from "@/content/site";
 
@@ -40,6 +41,16 @@ const jsonLd = {
       areaServed: {
         "@type": "Country",
         name: "France",
+      },
+      // Le parcours vérifiable du fondateur est l'argument de confiance :
+      // exposé aux moteurs, pas seulement aux visiteurs.
+      sameAs: [fondateur.linkedinUrl],
+      founder: {
+        "@type": "Person",
+        name: fondateur.name,
+        jobTitle: fondateur.role,
+        url: `${siteUrl}/fondateur`,
+        sameAs: [fondateur.linkedinUrl],
       },
       vatID: "FR83100498070",
       identifier: {

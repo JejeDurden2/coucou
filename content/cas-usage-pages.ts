@@ -34,7 +34,7 @@ export type CasUsagePage = {
 
 // Copie du hub /cas-usage.
 export const casUsageHub = {
-  metaTitle: "Cas d’usage IA : automatisations concrètes en PME | Coucou IA",
+  metaTitle: "Cas d’usage IA : automatisations en PME | Coucou IA",
   metaDescription:
     "Appels d’offres, support client, traitement de documents, recherche interne, qualification des leads : cinq automatisations IA déployées en production.",
   h1: "Ce que l’IA automatise vraiment dans une PME",
@@ -189,7 +189,7 @@ export const casUsagePages: CasUsagePage[] = [
   {
     slug: "traitement-documents",
     name: "Traitement de documents",
-    metaTitle: "Automatiser le traitement de documents avec l’IA | Coucou IA",
+    metaTitle: "Traitement de documents avec l’IA | Coucou IA",
     metaDescription:
       "Automatisation du traitement de factures et documents avec l’IA : extraction, contrôle, envoi direct dans votre ERP. Premier échange gratuit.",
     h1: "Automatiser le traitement de vos factures et documents avec l’IA",

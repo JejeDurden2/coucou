@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 
 import { BlogHub } from "@/components/sections/blog-hub";
+import { Cta } from "@/components/sections/cta";
 import { pageMetadata } from "@/lib/seo";
 import { articles, blogHub } from "@/content/blog";
 import { siteUrl } from "@/content/site";
@@ -65,6 +66,7 @@ export default function BlogHubPage() {
       />
       <main id="contenu">
         <BlogHub />
+        <Cta placement="blog-hub" />
       </main>
     </>
   );

@@ -6,6 +6,7 @@
 // L'espace insécable (U+00A0) précède ? ! : % € comme dans le reste du site.
 
 import type { FaqItem } from "@/content/secteurs";
+import { contactEmail } from "@/content/site";
 
 // Les valeurs sont uniques dans tout l'arbre : une faute de frappe dans une
 // condition ne compile pas (TypeScript refuse la comparaison sans recouvrement).
@@ -684,9 +685,9 @@ export function kitGateLine(steps: number, bricks: number): string {
 
 // Toute la copie de la page et de l'outil.
 export const kit = {
-  metaTitle: "Kit de démarrage : votre premier outil avec l’IA | Coucou IA",
+  metaTitle: "Kit de démarrage : premier outil avec l’IA | Coucou IA",
   metaDescription:
-    "Vous faites écrire votre premier outil par une IA et vous bloquez sur le dépôt, la base, l’hébergement ? Une dizaine de questions, et vous repartez avec votre kit.",
+    "Vous faites écrire votre premier outil par une IA et vous bloquez sur le dépôt ou l’hébergement ? Une dizaine de questions, et vous repartez avec votre kit.",
   serviceName: "Kit de démarrage : votre premier outil",
 
   h1: "Votre premier outil avec l’IA : le kit de démarrage",
@@ -733,7 +734,7 @@ export const kit = {
   gatePendingLabel: "Un instant…",
   gatePrivacyNote: "Pas de spam. Le kit, et c’est tout.",
   gateErrorInvalid: "Cette adresse email ne semble pas valide.",
-  gateErrorServer: "Une erreur est survenue. Réessayez, ou écrivez-nous.",
+  gateErrorServer: `Une erreur est survenue. Réessayez, ou écrivez-nous : ${contactEmail}.`,
 
   // Kit complet.
   kitEyebrow: "Le kit",

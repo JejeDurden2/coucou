@@ -92,7 +92,7 @@ export function SecteurPageTemplate({
 
       <CarteUpgrade secteurSlug={page.slug} />
 
-      <Cta />
+      <Cta secteurSlug={page.slug} />
     </>
   );
 }

@@ -34,7 +34,7 @@ export type GlossaireTerm = {
 
 // Copie du hub /glossaire.
 export const glossaireHub = {
-  metaTitle: "L’IA sans jargon : le glossaire pour dirigeants | Coucou IA",
+  metaTitle: "Glossaire IA sans jargon pour dirigeants | Coucou IA",
   metaDescription:
     "Le glossaire de l’IA sans jargon pour dirigeants de PME : RAG, agent IA, LLM, hallucination, AI Act. Chaque terme en clair, et ce que ça change chez vous.",
   h1: "L’IA sans jargon",
@@ -141,7 +141,7 @@ export const glossaire: GlossaireTerm[] = [
     h1: "Le machine learning, expliqué à un dirigeant",
     metaTitle: "Machine learning : la définition simple | Coucou IA",
     metaDescription:
-      "Machine learning (apprentissage automatique) : un programme qui apprend à partir d’exemples plutôt que de règles écrites. Définition simple, l’image, un exemple.",
+      "Machine learning (apprentissage automatique) : un programme qui apprend à partir d’exemples plutôt que de règles écrites. Définition simple, image, exemple.",
     definition:
       "Le machine learning (apprentissage automatique) est la méthode qui permet à un programme d’apprendre à partir d’exemples, au lieu d’être programmé règle par règle. On lui montre beaucoup de cas passés, il en tire des régularités pour traiter des cas nouveaux.",
     explanation:
@@ -198,7 +198,7 @@ export const glossaire: GlossaireTerm[] = [
     h1: "Le fine-tuning : spécialiser un modèle d’IA",
     metaTitle: "Fine-tuning : la définition simple | Coucou IA",
     metaDescription:
-      "Fine-tuning : réentraîner un modèle existant sur vos exemples pour qu’il colle à votre métier. Définition simple pour dirigeant, quand c’est utile, quand ça ne l’est pas.",
+      "Fine-tuning : réentraîner un modèle existant sur vos exemples pour qu’il colle à votre métier. Définition simple, quand c’est utile, quand ça ne l’est pas.",
     definition:
       "Le fine-tuning consiste à spécialiser un modèle existant en le réentraînant sur vos propres exemples, pour qu’il colle à votre ton, votre format ou votre métier. On ne repart pas de zéro : on ajuste un modèle déjà entraîné.",
     explanation:
@@ -217,7 +217,7 @@ export const glossaire: GlossaireTerm[] = [
     h1: "Automatisation ou IA : quelle différence ?",
     metaTitle: "Automatisation ou IA : la différence | Coucou IA",
     metaDescription:
-      "Automatisation ou IA : l’automatisation suit des règles fixes, l’IA gère les cas variés et ambigus. La distinction que tout dirigeant confond, expliquée simplement.",
+      "Automatisation ou IA : l’automatisation suit des règles fixes, l’IA gère les cas variés et ambigus. La distinction à connaître, expliquée simplement.",
     definition:
       "L’automatisation exécute des règles fixes que vous avez définies (« si facture reçue, alors classer ici »). L’IA, elle, gère les cas variés et ambigus où aucune règle simple ne suffit. La bonne solution combine souvent les deux.",
     explanation:
@@ -236,7 +236,7 @@ export const glossaire: GlossaireTerm[] = [
     h1: "Le POC : pourquoi tant de projets IA meurent au labo",
     metaTitle: "POC IA : définition et pourquoi ils meurent | Coucou IA",
     metaDescription:
-      "POC (preuve de concept) : un prototype qui montre qu’une idée d’IA est faisable. Utile pour tester, dangereux quand il ne devient jamais un vrai système. Pourquoi.",
+      "POC (preuve de concept) : un prototype qui montre qu’une idée d’IA est faisable. Utile pour tester, dangereux quand il ne devient jamais un vrai système.",
     definition:
       "Un POC (proof of concept, preuve de concept) est un prototype qui montre qu’une idée d’IA est faisable. Utile pour tester vite, dangereux quand il ne devient jamais un vrai système : la démo impressionne, la production ne suit pas.",
     explanation:
@@ -255,7 +255,7 @@ export const glossaire: GlossaireTerm[] = [
     h1: "La mise en production : là où l’IA rapporte vraiment",
     metaTitle: "Mise en production IA : la définition | Coucou IA",
     metaDescription:
-      "Mise en production : le moment où un système d’IA passe de la démo à l’usage quotidien réel. C’est là que la valeur se crée, et là que la plupart des projets calent.",
+      "Mise en production : le moment où un système d’IA passe de la démo à l’usage quotidien réel. C’est là que la valeur se crée, et là que les projets calent.",
     definition:
       "La mise en production, c’est le moment où un système d’IA passe de la démonstration à l’usage quotidien réel, par vos équipes, sur vos vraies données. C’est là que la valeur se crée, et là que la plupart des projets calent.",
     explanation:
@@ -274,7 +274,7 @@ export const glossaire: GlossaireTerm[] = [
     h1: "L’AI Act : la règle du jeu de l’IA en Europe",
     metaTitle: "AI Act : la définition simple pour dirigeant | Coucou IA",
     metaDescription:
-      "AI Act : le règlement européen sur l’IA, qui classe les usages par niveau de risque. Définition simple pour dirigeant de PME, et ce que ça change pour vos projets.",
+      "AI Act : le règlement européen sur l’IA, qui classe les usages par niveau de risque. Définition simple pour dirigeant, et ce que ça change pour vos projets.",
     definition:
       "L’AI Act est le règlement européen sur l’intelligence artificielle, en application par étapes depuis 2024. Il classe les usages de l’IA par niveau de risque et impose des obligations croissantes à mesure que le risque augmente.",
     explanation:
@@ -293,7 +293,7 @@ export const glossaire: GlossaireTerm[] = [
     h1: "Le token : l’unité qui décide du coût de l’IA",
     metaTitle: "Token IA : la définition simple | Coucou IA",
     metaDescription:
-      "Token : l’unité de texte que l’IA lit et écrit, et sur laquelle les fournisseurs facturent. Définition simple pour dirigeant, l’image du compteur, et ce que ça change.",
+      "Token : l’unité de texte que l’IA lit et écrit, et sur laquelle les fournisseurs facturent. Définition simple, l’image du compteur, et ce que ça change.",
     definition:
       "Un token est l’unité de texte que l’IA lit et écrit : un petit morceau de mot, environ trois ou quatre caractères en français. Les fournisseurs facturent au nombre de tokens, et chaque modèle a une limite de tokens qu’il peut traiter d’un coup.",
     explanation:
@@ -312,7 +312,7 @@ export const glossaire: GlossaireTerm[] = [
     h1: "L’IA souveraine : garder vos données sous contrôle",
     metaTitle: "IA souveraine : la définition simple | Coucou IA",
     metaDescription:
-      "IA souveraine : une IA conçue pour que vos données restent sous votre contrôle, hébergées en Europe, sans fuite vers des modèles publics. Définition et exemple PME.",
+      "IA souveraine : une IA conçue pour que vos données restent sous votre contrôle, hébergées en Europe, sans fuite vers des modèles publics, avec un exemple PME.",
     definition:
       "Une IA souveraine, c’est une IA conçue pour que vos données restent sous votre contrôle : hébergement maîtrisé (souvent en France ou en Europe) et aucune fuite vers des modèles publics sans votre accord. Vous gardez la main sur l’endroit où vont vos données et sur qui peut les lire.",
     explanation:

@@ -3,6 +3,7 @@ import { Geist, Geist_Mono, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
+import { MobileCtaBar } from "@/components/mobile-cta-bar";
 import { description, siteName, siteUrl } from "@/content/site";
 import { Analytics } from "@vercel/analytics/next";
 
@@ -82,6 +83,7 @@ export default function RootLayout({
         <SiteHeader />
         {children}
         <SiteFooter />
+        <MobileCtaBar />
         <Analytics />
       </body>
     </html>

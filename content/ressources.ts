@@ -2,6 +2,8 @@
 // Spec : .agents/lead-magnets.md. Un objet par secteur de tête de pont.
 // Chiffres = ordres de grandeur étiquetés « illustration », jamais des références clients.
 
+import { contactEmail } from "@/content/site";
+
 export type CarteUseCase = {
   title: string;
   // Le problème en langage métier, sans techno.
@@ -59,7 +61,7 @@ export const ressourcesShared = {
   formSubmitLabel: "Recevoir la carte",
   formPrivacyNote: "Pas de spam. Un email, la carte, c'est tout.",
   formErrorInvalid: "Cette adresse email ne semble pas valide.",
-  formErrorServer: "Une erreur est survenue. Réessayez, ou écrivez-nous.",
+  formErrorServer: `Une erreur est survenue. Réessayez, ou écrivez-nous : ${contactEmail}.`,
   successTitle: "C'est tout bon.",
   successBody:
     "Votre carte vous attend juste là :",
@@ -74,7 +76,22 @@ export const ressourcesShared = {
   upgradeBody:
     "Les cas d'usage de votre métier, classés par impact et faisabilité, avec une grille pour évaluer chacun chez vous.",
   upgradeCta: "Découvrir la carte des possibles",
+  // Repli des secteurs sans carte : le kit de démarrage, valable pour tous.
+  upgradeKitTitle: "Commencez par le kit de démarrage",
+  upgradeKitBody:
+    "Une dizaine de questions pour cadrer votre premier outil IA : les étapes dans l'ordre, les coûts réels et les pièges à éviter.",
+  upgradeKitCta: "Ouvrir le kit de démarrage",
 } as const;
+
+// Copie du hub /ressources.
+export const ressourcesHub = {
+  metaTitle: "Les cartes des possibles : l’IA par métier | Coucou IA",
+  metaDescription:
+    "Les cas d’usage IA de votre métier, classés par impact et faisabilité. Une carte par secteur, envoyée par email, avec une grille pour évaluer chacun chez vous.",
+  h1: "Les cartes des possibles",
+  intro:
+    "Une carte par secteur : les cas d’usage IA de votre métier, classés par impact et par faisabilité, pour savoir quoi lancer en premier.",
+};
 
 export const ressources: RessourcePage[] = [
   {

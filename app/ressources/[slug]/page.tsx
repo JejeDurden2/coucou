@@ -31,8 +31,11 @@ export default async function RessourceSpokePage({ params }: Params) {
     notFound();
   }
 
-  // Landing de capture : pas de hub /ressources, le fil d'ariane reste court.
-  const breadcrumb = [{ label: "Accueil", href: "/" }, { label: page.name }];
+  const breadcrumb = [
+    { label: "Accueil", href: "/" },
+    { label: "Ressources", href: "/ressources" },
+    { label: page.name },
+  ];
 
   return (
     <main id="contenu">

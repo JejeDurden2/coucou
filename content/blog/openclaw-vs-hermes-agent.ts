@@ -15,7 +15,7 @@ export const openclawVsHermesAgent: BlogArticle = {
   keyTakeaways: [
     "OpenClaw et Hermes Agent sont deux agents IA open source et gratuits à installer : ce qui coûte, c'est le serveur, l'accès au modèle et la surveillance dans la durée, jamais le logiciel lui-même.",
     "OpenClaw exécute des commandes, lit et écrit des fichiers, navigue sur le web depuis WhatsApp ou Slack : puissant, donc risqué si personne ne ferme la porte derrière lui.",
-    "Hermes Agent écrit ses propres compétences après chaque tâche et s'améliore avec l'usage, mais c'est un logiciel jeune, en version 0.x, sans garantie de stabilité.",
+    "Hermes Agent écrit ses propres compétences après chaque tâche et s'améliore avec l'usage, mais c'est un logiciel jeune, en version 0.x, sans stabilité assurée.",
     "Aucun des deux ne remplace un business case : le choix de l'outil vient après la mesure du problème, jamais avant.",
   ],
   blocks: [
@@ -68,7 +68,7 @@ export const openclawVsHermesAgent: BlogArticle = {
     },
     {
       kind: "p",
-      text: "C'est un logiciel jeune, encore en versions 0.x, sans garantie de stabilité et avec une documentation incomplète. Il n'a pas de journal d'audit structuré pour retracer ce que l'agent a fait et pourquoi. Dans les deux cas, la supervision humaine n'est pas une option, c'est la condition pour que l'outil reste sous contrôle.",
+      text: "C'est un logiciel jeune, encore en versions 0.x, sans stabilité assurée et avec une documentation incomplète. Il n'a pas de journal d'audit structuré pour retracer ce que l'agent a fait et pourquoi. Dans les deux cas, la supervision humaine n'est pas une option, c'est la condition pour que l'outil reste sous contrôle.",
     },
     {
       kind: "h2",
@@ -115,7 +115,7 @@ export const openclawVsHermesAgent: BlogArticle = {
     },
     {
       kind: "p",
-      text: "Ces règles ne sont pas propres à OpenClaw ou Hermes Agent : elles s'appliquent à tout agent IA autonome, qu'il vienne d'un projet open source ou d'un éditeur qui publie un prix. La différence, avec ces deux outils, c'est qu'aucune structure ne les applique à votre place. C'est écrit noir sur blanc dans leurs propres limites : pas de certification pour l'un, pas de garantie de stabilité pour l'autre.",
+      text: "Ces règles ne sont pas propres à OpenClaw ou Hermes Agent : elles s'appliquent à tout agent IA autonome, qu'il vienne d'un projet open source ou d'un éditeur qui publie un prix. La différence, avec ces deux outils, c'est qu'aucune structure ne les applique à votre place. C'est écrit noir sur blanc dans leurs propres limites : pas de certification pour l'un, pas de stabilité assurée pour l'autre.",
     },
     {
       kind: "h2",
@@ -144,7 +144,7 @@ export const openclawVsHermesAgent: BlogArticle = {
     {
       question: "C'est quoi Hermes Agent ?",
       answer:
-        "Un framework d'agent IA open source (licence MIT), publié par Nous Research en février 2026. Vous l'hébergez vous-même et le pilotez depuis Telegram, Slack, WhatsApp ou la ligne de commande. Sa particularité : il écrit ses propres compétences réutilisables après chaque tâche et s'améliore avec l'usage. C'est un logiciel jeune, encore en versions 0.x, sans garantie de stabilité.",
+        "Un framework d'agent IA open source (licence MIT), publié par Nous Research en février 2026. Vous l'hébergez vous-même et le pilotez depuis Telegram, Slack, WhatsApp ou la ligne de commande. Sa particularité : il écrit ses propres compétences réutilisables après chaque tâche et s'améliore avec l'usage. C'est un logiciel jeune, encore en versions 0.x, sans stabilité assurée.",
     },
     {
       question: "OpenClaw et Hermes Agent sont-ils gratuits ?",

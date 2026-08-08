@@ -14,6 +14,7 @@ import { articles } from "@/content/blog";
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
     { url: siteUrl },
+    { url: `${siteUrl}/fondateur` },
     { url: `${siteUrl}/mentions-legales` },
     { url: `${siteUrl}/confidentialite` },
     { url: `${siteUrl}/secteurs` },
@@ -25,6 +26,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: `${siteUrl}/cas-usage/${casUsage.slug}`,
     })),
     // Les cartes (/ressources/[slug]/carte) sont noindex : jamais dans le sitemap.
+    { url: `${siteUrl}/ressources` },
     ...ressources.map((ressource) => ({
       url: `${siteUrl}/ressources/${ressource.slug}`,
     })),
@@ -44,6 +46,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...articles.map((article) => ({
       url: `${siteUrl}/blog/${article.slug}`,
     })),
+    { url: `${siteUrl}/outils` },
     { url: `${siteUrl}/outils/par-ou-commencer` },
     { url: `${siteUrl}/outils/kit-de-demarrage` },
   ];

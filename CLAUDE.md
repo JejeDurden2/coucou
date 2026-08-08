@@ -21,10 +21,10 @@ Run `pnpm typecheck && pnpm lint` before declaring any task done.
 ## Architecture
 - `app/`: App Router routes, `layout.tsx`, `page.tsx`, route groups. Server Components by default.
 - `components/ui/`: shadcn primitives. **Never hand-edit for one-off styling.** Extend via composition or a new `cva` variant; theming comes from tokens only.
-- `components/sections/`: page sections (`hero.tsx`, `services.tsx`, `method.tsx`, `proof.tsx`, `cta.tsx`). One section is one file.
+- `components/sections/`: page sections (`hero.tsx`, `services.tsx`, `method.tsx`, `realisations.tsx`, `cta.tsx`). One section is one file.
 - `components/`: shared composed components (`site-header.tsx`, `site-footer.tsx`, `metric-block.tsx`).
-- `lib/`: `utils.ts` (`cn`), `metadata.ts`, helpers.
-- `content/`: all French copy as typed TS modules (`services.ts`, `proof.ts`). Copy is data, not JSX literals scattered across components. Single source, reused.
+- `lib/`: `utils.ts` (`cn`), `seo.ts`, helpers.
+- `content/`: all French copy as typed TS modules (`services.ts`, `realisations.ts`). Copy is data, not JSX literals scattered across components. Single source, reused.
 - **Server Components by default.** Add `"use client"` only at the interactive leaf (a button with state, a scroll-reveal wrapper), never on a section or layout.
 - Interactive/motion components are isolated leaves. Static sections render on the server.
 
