@@ -50,8 +50,12 @@ Prendre le premier sujet non traité, sauf actualité forte qui justifie un déc
 - [ ] Automatiser sans casser : intégrer l'IA aux outils que vos équipes utilisent déjà (méthode)
 - [ ] IA et données clients : ce qu'un dirigeant de PME doit exiger avant de signer (décryptage)
 - [ ] Agent IA, assistant, automatisation : trois mots, trois budgets, trois résultats (décryptage)
-- [ ] Ce que la facture d'un projet IA contient vraiment (sans donner de prix : les postes de coût) (décryptage)
+- [x] Ce que la facture d'un projet IA contient vraiment (sans donner de prix : les postes de coût) (décryptage) — `prix-projet-ia`
+- [x] Diag Data IA : l'aide publique qui finance 40 % d'un état des lieux (décryptage, actualité) — `diag-data-ia-bpifrance`
 - [ ] Mesurer un projet IA après la mise en production : les chiffres qui comptent (méthode)
+- [ ] Vous triez des CV avec de l'IA ? La CNIL contrôle ce sujet en 2026 (décryptage, source : cnil.fr contrôles prioritaires 2026 ; haut risque annexe III au 2 déc. 2027)
+- [ ] Facturation électronique au 1er septembre 2026 : vos données seront enfin structurées, voilà ce que ça ouvre (décryptage, cible DAF et cabinets comptables)
+- [ ] Charte IA d'entreprise : le modèle et les cinq décisions qu'elle doit trancher (méthode, candidate lead magnet à brancher sur le kit)
 
 Backlog vide ou sujet daté : en proposer trois nouveaux dans le même esprit, en choisir un, l'ajouter ici.
 

@@ -64,6 +64,8 @@ Coucou IA est un cabinet de conseil et développement IA pour les PME française
 - [L'AI Act pour une PME : ce qui s'applique vraiment](https://coucou-ia.com/blog/ai-act-pme-obligations) : ce que l'AI Act impose au 2 août 2026 (transparence de l'article 50, maîtrise de l'IA de l'article 4), la distinction fournisseur ou déployeur, et le report du haut risque à décembre 2027.
 - [Chiffrer un projet IA avant de le lancer](https://coucou-ia.com/blog/business-case-ia) : les trois chiffres d'un business case IA (temps passé, temps visé, coût de mise en production), comment les mesurer et quand renoncer.
 - [OpenClaw ou Hermes Agent : lequel installer dans votre PME ?](https://coucou-ia.com/blog/openclaw-vs-hermes-agent) : décryptage des deux agents IA open source qui montent, leurs limites réelles, et les garde-fous à poser avant d'en installer un.
+- [Diag Data IA : l'aide publique que personne ne vous a signalée](https://coucou-ia.com/blog/diag-data-ia-bpifrance) : 8 jours d'expert facturés 10 000 € HT et pris en charge à 40 % par France 2030, les critères d'éligibilité, le déroulé, ce que le dispositif ne couvre pas.
+- [Ce que la facture d'un projet IA contient vraiment](https://coucou-ia.com/blog/prix-projet-ia) : les cinq postes qui font varier le prix d'un agent IA (branchements, données, autonomie, conformité, fonctionnement) et les six questions pour lire un devis.
 
 ## Outils gratuits
 

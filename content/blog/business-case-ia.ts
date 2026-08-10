@@ -117,7 +117,7 @@ export const businessCaseIa: BlogArticle = {
     },
     {
       kind: "p",
-      text: "Je ne publie pas de prix, et un prestataire qui vous en donne un avant d’avoir vu vos données vend un catalogue, pas un projet. Ce que vous devez exiger, c’est un chiffrage détaillé par poste, séparant l’investissement de départ du coût annuel de fonctionnement. Le premier se rembourse, le second se soustrait au gain, chaque année.",
+      text: "Je ne publie pas de prix, et un prestataire qui vous en donne un avant d’avoir vu vos données vend un catalogue, pas un projet. Ce que vous devez exiger, c’est un [chiffrage détaillé par poste](/blog/prix-projet-ia), séparant l’investissement de départ du coût annuel de fonctionnement. Le premier se rembourse, le second se soustrait au gain, chaque année.",
     },
     {
       kind: "h2",
@@ -181,6 +181,10 @@ export const businessCaseIa: BlogArticle = {
         "Demandez un chiffrage détaillé de la mise en production, poste par poste.",
         "Comparez, et acceptez le non si le non gagne.",
       ],
+    },
+    {
+      kind: "p",
+      text: "Si l’exercice complet vous semble lourd, sachez que l’État finance une partie du travail : le [Diag Data IA de Bpifrance](/blog/diag-data-ia-bpifrance) prend en charge 40 % d’un état des lieux mené par un expert agréé. Il rend une feuille de route ; les trois chiffres de cet article restent votre affaire.",
     },
     {
       kind: "p",
