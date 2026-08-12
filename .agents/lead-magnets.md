@@ -1,7 +1,9 @@
 # Plan lead magnet : Coucou IA
 
-**Version :** v1
-**Date :** 2026-07-19
+**Version :** v1.1
+**Date :** 2026-08-12 (v1 : 2026-07-19)
+
+> **v1.1 (repositionnement niches) :** cinq cartes ajoutées pour les niches Côte d'Azur, mises en avant devant les deux déclinaisons v1 : `carte-immobilier`, `carte-location-saisonniere`, `carte-hotellerie`, `carte-artisans-batiment`, `carte-yachting` (listes Brevo nurture 8 à 12, à créer avec leurs automations). Les cartes expertise comptable et industrie restent en ligne, en fin de liste.
 **Dépend de :** `.agents/product-marketing.md` (v1.2), `.agents/outbound.md` (v1)
 
 ## Décision
