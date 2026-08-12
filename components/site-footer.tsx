@@ -8,6 +8,7 @@ import {
   bookingUrl,
   contactEmail,
   ctaLabel,
+  footerHeadings,
   footerLegalLinks,
   footerPositioning,
   footerResourceLinks,
@@ -19,11 +20,15 @@ import { villes } from "@/content/villes";
 const linkClasses =
   "rounded-sm text-sm text-muted-foreground outline-none transition-colors hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4 focus-visible:ring-offset-background";
 
+const headingClasses =
+  "font-mono text-xs font-medium uppercase tracking-[0.12em] text-foreground-dim";
+
 export function SiteFooter() {
   return (
     <footer className="border-t border-border">
-      <div className="mx-auto max-w-[1200px] px-6 py-16">
-        <div className="flex flex-col gap-12 lg:flex-row lg:items-start lg:justify-between lg:gap-8">
+      <div className="mx-auto max-w-[1200px] px-6 py-16 lg:py-20">
+        <div className="grid gap-12 lg:grid-cols-[minmax(0,4fr)_minmax(0,7fr)] lg:gap-20">
+          {/* Bloc marque : identité, positionnement, contact et le CTA unique. */}
           <div className="max-w-[42ch]">
             <div className="flex items-center gap-2 font-display text-base font-bold tracking-[-0.01em] text-foreground">
               <LogoMark className="size-6 text-primary" />
@@ -38,17 +43,24 @@ export function SiteFooter() {
             >
               {contactEmail}
             </a>
+            <div className="mt-8">
+              <Button nativeButton={false} render={<a href={bookingUrl("footer")} />} size="default">
+                {ctaLabel}
+              </Button>
+            </div>
           </div>
 
-          <div className="flex flex-col gap-8 sm:flex-row sm:flex-wrap sm:gap-16 lg:gap-20">
-            <nav aria-label="Pages du site" className="flex flex-col gap-3">
+          <div className="grid grid-cols-2 gap-x-8 gap-y-12 sm:grid-cols-3">
+            <nav aria-label={footerHeadings.site} className="flex flex-col gap-3">
+              <p className={headingClasses}>{footerHeadings.site}</p>
               {nav.map((link) => (
                 <Link key={link.href} href={link.href} className={linkClasses}>
                   {link.label}
                 </Link>
               ))}
             </nav>
-            <nav aria-label="Ressources" className="flex flex-col gap-3">
+            <nav aria-label={footerHeadings.ressources} className="flex flex-col gap-3">
+              <p className={headingClasses}>{footerHeadings.ressources}</p>
               {footerResourceLinks.map((link) => (
                 <Link key={link.href} href={link.href} className={linkClasses}>
                   {link.label}
@@ -56,7 +68,8 @@ export function SiteFooter() {
               ))}
             </nav>
             {/* Zones : les quatre pages locales, dérivées du tableau villes. */}
-            <nav aria-label="Zones d’intervention" className="flex flex-col gap-3">
+            <nav aria-label={footerHeadings.zones} className="flex flex-col gap-3">
+              <p className={headingClasses}>{footerHeadings.zones}</p>
               {villes.map((ville) => (
                 <Link
                   key={ville.slug}
@@ -67,24 +80,24 @@ export function SiteFooter() {
                 </Link>
               ))}
             </nav>
-            <nav aria-label="Informations légales" className="flex flex-col gap-3">
-              {footerLegalLinks.map((link) => (
-                <Link key={link.href} href={link.href} className={linkClasses}>
-                  {link.label}
-                </Link>
-              ))}
-            </nav>
           </div>
-
-          <Button nativeButton={false} render={<a href={bookingUrl("footer")} />} size="default">
-            {ctaLabel}
-          </Button>
         </div>
 
-        <div className="mt-14 border-t border-border pt-6">
+        <div className="mt-14 flex flex-col gap-4 border-t border-border pt-6 sm:flex-row sm:items-center sm:justify-between">
           <p className="font-mono text-xs tabular-nums text-muted-foreground">
             © <FooterYear /> {siteName}
           </p>
+          <nav aria-label="Informations légales" className="flex flex-wrap gap-x-6 gap-y-2">
+            {footerLegalLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className={cn(linkClasses, "text-xs")}
+              >
+                {link.label}
+              </Link>
+            ))}
+          </nav>
         </div>
       </div>
     </footer>

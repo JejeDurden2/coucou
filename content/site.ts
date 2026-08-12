@@ -54,6 +54,13 @@ export const footerResourceLinks: NavLink[] = [
   { label: "Qui est derrière Coucou IA", href: "/fondateur" },
 ];
 
+// Intitulés des colonnes de liens du pied de page.
+export const footerHeadings = {
+  site: "Le site",
+  ressources: "Ressources",
+  zones: "Zones d’intervention",
+};
+
 // Positionnement d’une ligne pour le pied de page.
 export const footerPositioning =
   "Conseil et développement IA pour les PME françaises. On trouve ce que l’IA rend possible chez vous, et on le construit.";
