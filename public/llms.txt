@@ -1,6 +1,6 @@
 # Coucou IA
 
-Coucou IA est un cabinet de conseil et développement IA pour les PME françaises (10 à 250 salariés) et les ETI. Deux métiers complémentaires : l'audit et la stratégie IA (état des lieux, cartographie des opportunités, business case chiffré, feuille de route) et le développement IA sur mesure (agents IA, RAG, automatisations, intégration aux outils existants). Le différenciant : on montre aux dirigeants ce que l'IA rend possible chez eux, par où commencer, sans jargon, et on le met en production, avec un business case chiffré avant tout engagement. Le premier contact : trouver son point de départ, un échange gratuit de 30 minutes, sans engagement.
+Coucou IA est un cabinet de conseil et développement IA pour les PME françaises, basé à Nice. Trois temps : l'audit et la stratégie IA (état des lieux, cartographie des opportunités, business case chiffré, feuille de route), le développement IA sur mesure (agents IA, RAG, automatisations, intégration aux outils existants) et le suivi mensuel du système en production. Deux façons de commencer petit : un premier agent en production en 3 semaines, ou une journée de formation sur les cas réels de l'équipe. Secteurs prioritaires : immobilier, location saisonnière et conciergeries, hôtellerie indépendante, artisans du bâtiment, yachting, puis expertise comptable, services B2B et industrie. Le différenciant : on montre aux dirigeants ce que l'IA rend possible chez eux, sans jargon, et on le met en production, avec un business case chiffré avant tout engagement. Le premier contact : trouver son point de départ, un échange gratuit de 30 minutes, sans engagement.
 
 ## Pages
 
@@ -10,12 +10,24 @@ Coucou IA est un cabinet de conseil et développement IA pour les PME française
 ## Secteurs
 
 - [Secteurs](https://coucou-ia.com/secteurs) : l'IA appliquée par secteur, cas d'usage concrets et ROI mesurable.
+- [Immobilier](https://coucou-ia.com/secteurs/immobilier) : qualification des leads portails, relances mandats, annonces multi-portails, préparation des estimations.
+- [Location saisonnière](https://coucou-ia.com/secteurs/location-saisonniere) : réponses voyageurs multilingues à toute heure, coordination des ménages, relance des avis.
+- [Hôtellerie](https://coucou-ia.com/secteurs/hotellerie) : défense de la réservation directe face aux plateformes, devis groupes en une heure, réponses aux avis.
+- [Artisans du bâtiment](https://coucou-ia.com/secteurs/artisans-batiment) : de la visite au devis en 24 h, relances devis et factures, planification des interventions.
+- [Yachting](https://coucou-ia.com/secteurs/yachting) : qualification des demandes charter, proposition le jour même, devis refit consolidés, briefs équipage.
 - [Expertise comptable](https://coucou-ia.com/secteurs/expertise-comptable) : pré-affectation des écritures, liasses fiscales, réponses clients.
 - [Cabinets juridiques](https://coucou-ia.com/secteurs/cabinets-juridiques) : recherche documentaire, premiers jets de conclusions, suivi des délais.
 - [Industrie](https://coucou-ia.com/secteurs/industrie) : réponse aux DCE, documentation technique, reporting de production.
 - [Services B2B](https://coucou-ia.com/secteurs/services-b2b) : propositions commerciales, recherche de missions passées, qualification des leads.
 - [Assurance et mutuelle](https://coucou-ia.com/secteurs/assurance-mutuelle) : pré-instruction des sinistres, réponses aux adhérents.
 - [Santé et médico-social](https://coucou-ia.com/secteurs/sante-medico-social) : transmissions, dossiers patients, questions des familles.
+
+## Zones d'intervention
+
+- [Consultant IA à Nice](https://coucou-ia.com/consultant-ia-nice) : le bureau est à Nice, rencontres dans les locaux des PME de la Côte d'Azur.
+- [Consultant IA à Sophia Antipolis](https://coucou-ia.com/consultant-ia-sophia-antipolis) : éditeurs, services B2B et industriels de la technopole.
+- [Consultant IA à Monaco](https://coucou-ia.com/consultant-ia-monaco) : yachting, immobilier et services, confidentialité conçue dès le premier jour.
+- [Consultant IA à Aix-Marseille](https://coucou-ia.com/consultant-ia-aix-marseille) : industrie, services B2B et immobilier, sur place aux étapes clés.
 
 ## Cas d'usage
 
@@ -28,7 +40,7 @@ Coucou IA est un cabinet de conseil et développement IA pour les PME française
 
 ## Agents IA
 
-- [Agents IA](https://coucou-ia.com/agents-ia) : OpenClaw et Hermes Agent décryptés pour les PME : ce qu'ils font, ce qu'ils coûtent, leurs risques de sécurité et RGPD.
+- [Agents IA](https://coucou-ia.com/agents-ia) : OpenClaw et Hermes Agent décryptés pour les PME : ce qu'ils font, ce qu'ils coûtent, leurs risques de sécurité et RGPD. Et quand l'un d'eux tient la route, Coucou IA l'installe : cadré, sécurisé, réversible (OpenClaw en une semaine, Hermes sur un premier périmètre en 3 semaines).
 - [OpenClaw](https://coucou-ia.com/agents-ia/openclaw) : l'assistant IA open source auto-hébergé, piloté depuis WhatsApp : forces, risques de sécurité, conformité RGPD, coût réel.
 - [Hermes Agent](https://coucou-ia.com/agents-ia/hermes-agent) : l'agent IA open source de Nous Research qui écrit ses propres compétences : forces, limites de jeunesse, supervision nécessaire.
 
@@ -60,7 +72,7 @@ Coucou IA est un cabinet de conseil et développement IA pour les PME française
 
 ## Blog
 
-- [Blog](https://coucou-ia.com/blog) : l'IA en entreprise sans jargon, méthode, décryptages et cas concrets pour les dirigeants de PME et ETI. Flux RSS : https://coucou-ia.com/blog/rss.xml
+- [Blog](https://coucou-ia.com/blog) : l'IA en entreprise sans jargon, méthode, décryptages et cas concrets pour les dirigeants de PME. Flux RSS : https://coucou-ia.com/blog/rss.xml
 - [L'AI Act pour une PME : ce qui s'applique vraiment](https://coucou-ia.com/blog/ai-act-pme-obligations) : ce que l'AI Act impose au 2 août 2026 (transparence de l'article 50, maîtrise de l'IA de l'article 4), la distinction fournisseur ou déployeur, et le report du haut risque à décembre 2027.
 - [Chiffrer un projet IA avant de le lancer](https://coucou-ia.com/blog/business-case-ia) : les trois chiffres d'un business case IA (temps passé, temps visé, coût de mise en production), comment les mesurer et quand renoncer.
 - [OpenClaw ou Hermes Agent : lequel installer dans votre PME ?](https://coucou-ia.com/blog/openclaw-vs-hermes-agent) : décryptage des deux agents IA open source qui montent, leurs limites réelles, et les garde-fous à poser avant d'en installer un.
@@ -86,8 +98,8 @@ Coucou IA est un cabinet de conseil et développement IA pour les PME française
 
 ## Faits clés
 
-- Services : audit & stratégie IA, développement IA sur mesure (agents IA, RAG, automatisations, intégrations).
-- Cible : PME de 10 à 250 salariés et ETI, en France.
+- Services : audit & stratégie IA, développement IA sur mesure (agents IA, RAG, automatisations, intégrations), suivi mensuel en production. Deux entrées courtes : le premier agent en production en 3 semaines, la journée de formation.
+- Cible : PME françaises, en priorité les métiers à décision rapide : immobilier, location saisonnière, hôtellerie indépendante, artisans du bâtiment, yachting. Basé à Nice, toute la France en visio.
 - Différenciant : par où commencer avec l'IA, business case chiffré avant tout engagement, livraison en production.
 - Premier contact : trouver son point de départ, un échange gratuit de 30 minutes, sans engagement.
 - Contact : jerome@coucou-ia.com

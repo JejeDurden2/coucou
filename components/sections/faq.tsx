@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import {
   Accordion,
   AccordionContent,
@@ -17,7 +19,11 @@ export function FaqList({
 }: {
   title: string;
   sub?: string;
-  items: { question: string; answer: string }[];
+  items: {
+    question: string;
+    answer: string;
+    link?: { label: string; href: string };
+  }[];
 }) {
   return (
     <section className="border-t border-border">
@@ -49,6 +55,14 @@ export function FaqList({
                     <p className="max-w-[64ch] text-pretty leading-relaxed text-muted-foreground">
                       {item.answer}
                     </p>
+                    {item.link ? (
+                      <Link
+                        href={item.link.href}
+                        className="mt-3 inline-block rounded-sm text-sm text-primary underline-offset-4 outline-none hover:underline focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                      >
+                        {item.link.label}
+                      </Link>
+                    ) : null}
                   </AccordionContent>
                 </AccordionItem>
               ))}

@@ -24,10 +24,10 @@ export type Hero = {
 };
 
 export const hero: Hero = {
-  kicker: "Conseil IA pour les PME et ETI.",
+  kicker: "Conseil et développement IA pour les PME.",
   headlineSolid: "Tout le monde vous parle d’IA.",
-  headlineHollow: "On sait par où commencer.",
-  lede: "Produire plus vite, ouvrir un marché, automatiser ce qui vous pèse : on trouve ce que l’IA rend possible pour vous, et on le met en production.",
+  headlineHollow: "On la met au travail chez vous.",
+  lede: "Devis, relances, messages clients, saisie : on trouve ce que l’IA prend en charge chez vous, on le chiffre, et on le met en production.",
   reassurance: "30 minutes, gratuit, sans engagement.",
   mapLabel: "La carte des possibles",
   mapItems: [

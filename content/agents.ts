@@ -18,6 +18,17 @@ export type AgentPoint = {
   body: string;
 };
 
+// Bloc offre « On vous l’installe », placé après l’analyse. Vend l’installation
+// sans casser le ton décryptage : `honest` dit quand NE PAS installer.
+export type AgentOffer = {
+  title: string;
+  intro: string;
+  // Ce que l’installation comprend, concret, sans prix.
+  items: string[];
+  // La phrase honnête : quand l’outil n’est pas la bonne réponse.
+  honest: string;
+};
+
 export type AgentPage = {
   slug: string;
   // Nom court : cartes du hub, breadcrumb, liens croisés.
@@ -40,6 +51,8 @@ export type AgentPage = {
   risks: AgentPoint[];
   // Quand ça a du sens pour une PME, avec des cas réels.
   forWho: { title: string; body: string; cases: string[] };
+  // Bloc offre installation. Optionnel : une page sans offre reste pur décryptage.
+  offer?: AgentOffer;
   // 4 questions Google-style. Alimente le JSON-LD FAQPage.
   faq: FaqItem[];
 };
@@ -51,6 +64,7 @@ export const agentsCopy = {
   strengthsTitle: "Ce qui marche vraiment",
   risksTitle: "Ce qui doit vous alerter",
   forWhoDefaultTitle: "Quand ça a du sens pour une PME",
+  offerLabel: "On vous l’installe",
   crossLinkHeading: "Aller plus loin",
   compareLinkName: "OpenClaw ou Hermes Agent : le comparatif complet",
   compareLinkHref: "/blog/openclaw-vs-hermes-agent",
@@ -58,12 +72,12 @@ export const agentsCopy = {
 
 // Copie du hub /agents-ia.
 export const agentsHub = {
-  metaTitle: "OpenClaw, Hermes Agent : le décryptage | Coucou IA",
+  metaTitle: "OpenClaw, Hermes Agent : avis et installation | Coucou IA",
   metaDescription:
-    "OpenClaw et Hermes Agent décryptés pour les PME : ce qu’ils font, ce qu’ils coûtent, leurs risques de sécurité et RGPD. Avis honnête, échange gratuit.",
+    "OpenClaw et Hermes Agent décryptés pour les PME : forces, risques de sécurité, RGPD. Et si l’outil tient la route, on vous l’installe. Échange gratuit.",
   h1: "OpenClaw, Hermes Agent : ce qu’il faut savoir avant d’installer un agent IA",
   intro:
-    "Ces deux agents IA open source font parler d’eux, et quelqu’un chez vous les a peut-être déjà testés. Voici, sans jargon, ce qu’ils font vraiment, ce qu’ils coûtent, et ce qui doit vous alerter avant de les installer dans votre entreprise.",
+    "Ces deux agents IA open source font parler d’eux, et quelqu’un chez vous les a peut-être déjà testés. Voici, sans jargon, ce qu’ils font vraiment, ce qu’ils coûtent, et ce qui doit vous alerter. Et quand l’un d’eux tient la route chez vous, on l’installe : cadré, sécurisé, réversible.",
 };
 
 export const agents: AgentPage[] = [
@@ -128,6 +142,20 @@ export const agents: AgentPage[] = [
         "Le périmètre est délibérément restreint : une tâche précise, sur des données non sensibles, avec supervision humaine des actions engagées.",
         "Vous voulez tester ce qu’un agent IA rend possible avant d’en faire un usage plus large, dans un environnement dédié et surveillé.",
       ],
+    },
+    offer: {
+      title: "OpenClaw installé, cadré et sécurisé en une semaine",
+      intro:
+        "Tout ce que cette page décrit, risques compris, c’est la liste de ce qu’on règle avant de vous le confier. En une semaine, OpenClaw tourne chez vous, dans un cadre écrit.",
+      items: [
+        "Hébergement européen sur un serveur dédié, jamais exposé sur internet.",
+        "Périmètre et règles écrits avec vous : les instructions et la mémoire de l’assistant.",
+        "Connexion à vos canaux : WhatsApp, Slack, ceux que vos équipes utilisent déjà.",
+        "Validation humaine sur les actions sensibles : rien d’engageant ne part sans votre accord.",
+        "Transfert de compétences à la fin : open source et réversible, vous restez propriétaire de tout.",
+      ],
+      honest:
+        "Et si votre besoin tient dans une automatisation simple, on vous le dira au point de départ : inutile d’héberger un agent pour ça.",
     },
     faq: [
       {
@@ -213,6 +241,19 @@ export const agents: AgentPage[] = [
         "Les données traitées ne sont pas sensibles, ou restent en local par défaut avec un accord de traitement posé avec le fournisseur du modèle.",
         "Vous acceptez le rythme d’un logiciel jeune : suivre les versions, tester avant de généraliser, garder un humain dans la boucle.",
       ],
+    },
+    offer: {
+      title: "Un premier périmètre en production en 3 semaines",
+      intro:
+        "Un logiciel jeune se déploie petit. On commence par un seul périmètre, mis en production en 3 semaines, avec la supervision que l’outil n’apporte pas tout seul.",
+      items: [
+        "Un cas d’usage unique, choisi avec vous, pas dix chantiers en parallèle.",
+        "Garde-fous et validations définis avant toute action : l’agent ne décide jamais seul sur ce qui compte.",
+        "Tests sur vos cas réels avant la mise en production.",
+        "Documentation remise à la fin : vous savez ce qui tourne, comment et pourquoi.",
+      ],
+      honest:
+        "Et si une automatisation simple suffit chez vous, on vous le dira au point de départ : pas besoin d’un agent pour ça.",
     },
     faq: [
       {

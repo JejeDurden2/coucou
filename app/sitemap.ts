@@ -7,6 +7,7 @@ import { comparaisons } from "@/content/comparaisons";
 import { agents } from "@/content/agents";
 import { glossaire } from "@/content/glossaire";
 import { articles } from "@/content/blog";
+import { villes } from "@/content/villes";
 
 // Pas de lastModified : new Date() estampillait la date de build, un signal
 // faux que Google apprend a ignorer. changeFrequency et priority sont ignores.
@@ -24,6 +25,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
     })),
     ...casUsagePages.map((casUsage) => ({
       url: `${siteUrl}/cas-usage/${casUsage.slug}`,
+    })),
+    // Pages locales, plates a la racine (/consultant-ia-<ville>).
+    ...villes.map((ville) => ({
+      url: `${siteUrl}/${ville.slug}`,
     })),
     // Les cartes (/ressources/[slug]/carte) sont noindex : jamais dans le sitemap.
     { url: `${siteUrl}/ressources` },

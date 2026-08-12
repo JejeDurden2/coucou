@@ -1,6 +1,9 @@
-// Les deux métiers, mis en scène « le pli » : deux volets d’une même feuille
-// (Trouver / Construire), la marque origami se plie à la charnière. Les deux
-// closers répondent au sub : le rapport du cabinet, la démo de l’agence.
+// Les trois temps de l’offre. Les deux métiers restent mis en scène « le pli » :
+// deux volets d’une même feuille (Trouver / Construire), la marque origami se
+// plie à la charnière. Le troisième temps (Faire tourner) est la bande sous le
+// pli : le système vit après la livraison, quelqu’un le regarde. Les closers
+// répondent au sub : le rapport du cabinet, la démo de l’agence, le chantier
+// abandonné.
 
 export type Service = {
   id: string;
@@ -27,8 +30,8 @@ export type ServicesSection = {
 };
 
 export const services: ServicesSection = {
-  title: "On trouve où l’IA rapporte. Puis on le construit.",
-  sub: "Un cabinet vous laisse un rapport. Une agence, une démo. Nous, on plie les deux métiers en un seul : même interlocuteur du point de départ à la production.",
+  title: "On trouve où l’IA rapporte. On le construit. On le fait tourner.",
+  sub: "Un cabinet vous laisse un rapport. Une agence, une démo. Nous, on plie les deux métiers en un seul : même interlocuteur du point de départ au suivi en production.",
   spineLabel: "Rien ne se perd en route",
   livrableLabel: "Vous repartez avec",
   ctaHook:
@@ -67,6 +70,73 @@ export const services: ServicesSection = {
       ],
       livrable:
         "Un système qui tourne en production, mesuré sur ses résultats. Pas une démo.",
+    },
+    {
+      id: "suivi",
+      step: "03",
+      verb: "Faire tourner.",
+      title: "Suivi mensuel",
+      description:
+        "Un système IA vit : les modèles changent, vos outils et vos volumes aussi. On surveille le système en production, on corrige, on le fait évoluer, avec un point mensuel sur les résultats.",
+      hook: "Un système IA vit : il faut quelqu’un qui le regarde. On surveille le vôtre en production, on corrige, on le fait évoluer.",
+      deliverables: [
+        "La surveillance du système en production, pas seulement à la livraison",
+        "Les corrections dès qu’un comportement dévie",
+        "Les évolutions quand vos besoins ou vos outils changent",
+        "Le point mensuel : résultats mesurés, décisions pour la suite",
+      ],
+      livrable:
+        "Un système qui reste fiable dans le temps. Pas un chantier abandonné.",
+    },
+  ],
+};
+
+// « Commencer petit » : les deux portes d’entrée, petites et à délai publié
+// (les délais sont publiés, jamais les prix). Répond à « c’est trop gros pour
+// nous » juste avant le CTA de la section.
+
+export type StarterOffer = {
+  id: string;
+  title: string;
+  // Badge affiché sur la carte : le délai ou le format, publié volontairement.
+  format: string;
+  hook: string;
+  points: string[];
+};
+
+export type StarterSection = {
+  label: string;
+  title: string;
+  sub: string;
+  offers: StarterOffer[];
+};
+
+export const starter: StarterSection = {
+  label: "Commencer petit",
+  title: "Commencez par un coin de la feuille.",
+  sub: "Deux formats courts pour voir l’IA tourner chez vous, sans engager un chantier. Vous décidez la suite après.",
+  offers: [
+    {
+      id: "premier-agent",
+      title: "Le premier agent",
+      format: "En production en 3 semaines",
+      hook: "Un seul cas d’usage, cadré lors du point de départ, en production en trois semaines.",
+      points: [
+        "Un périmètre : un cas d’usage, pas dix",
+        "Validation humaine sur les actions sensibles",
+        "Un mois d’ajustements inclus",
+      ],
+    },
+    {
+      id: "formation",
+      title: "La journée de formation",
+      format: "Une journée dans vos locaux",
+      hook: "Une journée avec votre équipe, sur vos cas réels et vos outils.",
+      points: [
+        "Vos cas, vos outils : pas d’exemples génériques",
+        "Les premiers réflexes acquis en pratiquant",
+        "Deux ou trois usages en place dès le soir",
+      ],
     },
   ],
 };

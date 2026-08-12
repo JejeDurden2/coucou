@@ -24,8 +24,8 @@ const geistMono = Geist_Mono({
   subsets: ["latin", "latin-ext"],
 });
 
-// Titre par defaut : mots-cles en tete (conseil IA, PME, ETI), 55 caracteres.
-const defaultTitle = "Coucou IA : conseil et développement IA pour PME et ETI";
+// Titre par defaut : mots-cles en tete (conseil IA, PME), 52 caracteres.
+const defaultTitle = "Coucou IA : conseil et développement IA pour les PME";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),

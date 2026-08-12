@@ -1,12 +1,15 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { ArrowRight } from "lucide-react";
 
+import { Button } from "@/components/ui/button";
 import { ScrollReveal } from "@/components/scroll-reveal";
 import { SpokeHero, RelatedLinks } from "@/components/spoke-partials";
 import { Cta } from "@/components/sections/cta";
 import { FaqList } from "@/components/sections/faq";
 import { pageMetadata, spokeJsonLd } from "@/lib/seo";
 import { agents, agentsCopy } from "@/content/agents";
+import { bookingUrl, ctaLabel } from "@/content/site";
 import { spokes } from "@/content/spokes";
 
 type Params = { params: Promise<{ slug: string }> };
@@ -195,6 +198,60 @@ export default async function AgentSpokePage({ params }: Params) {
             </ScrollReveal>
           </div>
         </section>
+
+        {/* Bloc offre « On vous l’installe » : après l’analyse, avant la FAQ.
+            Vend l’installation sans renier le décryptage : la phrase honnête
+            (`offer.honest`) dit quand ne pas installer. */}
+        {page.offer && (
+          <section className="border-t border-border">
+            <div className="mx-auto max-w-[1200px] px-6 py-16 lg:py-20">
+              <ScrollReveal className="rounded-lg border border-border bg-card p-8 lg:p-12">
+                <span className="font-mono text-xs uppercase tracking-[0.12em] text-muted-foreground">
+                  {agentsCopy.offerLabel}
+                </span>
+                <div className="mt-4 grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-16">
+                  <div className="lg:col-span-5">
+                    <h2 className="text-balance font-display text-2xl leading-snug font-medium tracking-[-0.01em] lg:text-[1.75rem]">
+                      {page.offer.title}
+                    </h2>
+                    <p className="mt-4 max-w-[46ch] text-pretty leading-relaxed text-muted-foreground">
+                      {page.offer.intro}
+                    </p>
+                  </div>
+                  <div className="lg:col-span-7">
+                    <ul className="flex flex-col gap-4">
+                      {page.offer.items.map((item) => (
+                        <li
+                          key={item}
+                          className="flex items-start gap-3 text-pretty leading-relaxed text-foreground"
+                        >
+                          <span
+                            aria-hidden
+                            className="mt-2 size-1.5 shrink-0 rounded-full bg-foreground-dim"
+                          />
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                    <p className="mt-6 max-w-[62ch] text-pretty text-sm leading-relaxed text-muted-foreground">
+                      {page.offer.honest}
+                    </p>
+                    <div className="mt-8">
+                      <Button
+                        nativeButton={false}
+                        render={<a href={bookingUrl(`agents-ia-${page.slug}-offre`)} />}
+                        size="lg"
+                      >
+                        {ctaLabel}
+                        <ArrowRight data-icon="inline-end" />
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </ScrollReveal>
+            </div>
+          </section>
+        )}
 
         <FaqList title={spokes.faqTitle} items={page.faq} />
 

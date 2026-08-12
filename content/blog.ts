@@ -68,7 +68,7 @@ export const articles: BlogArticle[] = [
 export const blogHub = {
   metaTitle: "Blog IA pour dirigeants de PME | Coucou IA",
   metaDescription:
-    "Le blog IA pour dirigeants de PME et ETI : méthode, décryptages sans jargon et cas concrets pour savoir par où commencer et ce que ça rapporte.",
+    "Le blog IA pour dirigeants de PME : méthode, décryptages sans jargon et cas concrets pour savoir par où commencer et ce que ça rapporte.",
   eyebrow: "Le blog",
   h1: "L’IA en entreprise, sans jargon",
   intro:

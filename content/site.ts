@@ -9,7 +9,7 @@ export type NavLink = {
 export const siteName = "Coucou IA";
 
 export const tagline =
-  "Tout le monde vous parle d’IA. On sait par où commencer, et on le met en production.";
+  "Tout le monde vous parle d’IA. On la met au travail chez vous.";
 
 export const siteUrl = "https://coucou-ia.com";
 
@@ -56,8 +56,8 @@ export const footerResourceLinks: NavLink[] = [
 
 // Positionnement d’une ligne pour le pied de page.
 export const footerPositioning =
-  "Conseil et développement IA pour les PME et ETI françaises. On trouve ce que l’IA rend possible chez vous, et on le construit.";
+  "Conseil et développement IA pour les PME françaises. On trouve ce que l’IA rend possible chez vous, et on le construit.";
 
-// Meta description (~145 caracteres, mots-cles en tete : conseil IA / PME / ETI).
+// Meta description (~145 caracteres, mots-cles en tete : conseil IA / PME).
 export const description =
-  "Conseil IA pour PME et ETI : on trouve ce que l’IA rend possible chez vous et on le met en production. Business case chiffré, premier échange gratuit.";
+  "Conseil IA pour PME : on trouve ce que l’IA rend possible chez vous et on le met en production. Business case chiffré, premier échange gratuit.";

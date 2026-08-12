@@ -88,29 +88,80 @@ export function spokeJsonLd({
           name: "France",
         },
       },
-      {
-        "@type": "BreadcrumbList",
-        "@id": `${url}#breadcrumb`,
-        itemListElement: breadcrumb.map((crumb, index) => ({
-          "@type": "ListItem",
-          position: index + 1,
-          name: crumb.label,
-          // item est optionnel pour la page courante (dernier maillon sans href).
-          ...(crumb.href ? { item: `${siteUrl}${crumb.href}` } : {}),
-        })),
+      breadcrumbGraph(url, breadcrumb),
+      faqGraph(url, faq),
+    ],
+  };
+}
+
+function breadcrumbGraph(url: string, breadcrumb: Crumb[]) {
+  return {
+    "@type": "BreadcrumbList",
+    "@id": `${url}#breadcrumb`,
+    itemListElement: breadcrumb.map((crumb, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: crumb.label,
+      // item est optionnel pour la page courante (dernier maillon sans href).
+      ...(crumb.href ? { item: `${siteUrl}${crumb.href}` } : {}),
+    })),
+  };
+}
+
+function faqGraph(url: string, faq: FaqItem[]) {
+  return {
+    "@type": "FAQPage",
+    "@id": `${url}#faq`,
+    mainEntity: faq.map((item) => ({
+      "@type": "Question",
+      name: item.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: item.answer,
       },
+    })),
+  };
+}
+
+// Pages locales (/consultant-ia-<ville>) : ProfessionalService avec l’adresse
+// niçoise (même entité que la home) et areaServed sur la ville, plus fil
+// d’ariane et FAQPage. Même sérialisation côté appelant que spokeJsonLd.
+export function villeJsonLd({
+  description,
+  path,
+  breadcrumb,
+  faq,
+  ville,
+}: {
+  description: string;
+  path: string;
+  breadcrumb: Crumb[];
+  faq: FaqItem[];
+  ville: string;
+}) {
+  const url = `${siteUrl}${path}`;
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
       {
-        "@type": "FAQPage",
-        "@id": `${url}#faq`,
-        mainEntity: faq.map((item) => ({
-          "@type": "Question",
-          name: item.question,
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: item.answer,
-          },
-        })),
+        "@type": "ProfessionalService",
+        "@id": `${url}#service`,
+        name: "COUCOU IA",
+        description,
+        url,
+        address: {
+          "@type": "PostalAddress",
+          streetAddress: "460 avenue de Pessicart",
+          postalCode: "06100",
+          addressLocality: "Nice",
+          addressCountry: "FR",
+        },
+        // "Place" plutôt que "City" : Sophia Antipolis et Aix-Marseille ne sont
+        // pas des communes, le type générique reste valide pour les quatre.
+        areaServed: { "@type": "Place", name: ville },
       },
+      breadcrumbGraph(url, breadcrumb),
+      faqGraph(url, faq),
     ],
   };
 }

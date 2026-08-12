@@ -4,6 +4,8 @@
 export type FaqItem = {
   question: string;
   answer: string;
+  // Lien optionnel affiché sous la réponse (jamais un CTA, juste une page à lire).
+  link?: { label: string; href: string };
 };
 
 export type FaqSection = {
@@ -27,6 +29,11 @@ export const faq: FaqSection = {
         "Le tarif dépend du périmètre, découvert lors de ce premier échange. On ne publie pas de prix : un prix sans périmètre ne veut rien dire. Vous recevez un business case chiffré avant tout engagement, donc vous voyez le retour attendu avant de décider.",
     },
     {
+      question: "Combien de temps avant un premier résultat ?",
+      answer:
+        "Trois semaines pour le premier agent : un seul cas d’usage, cadré lors du point de départ, mis en production avec validation humaine sur les actions sensibles, puis un mois d’ajustements. Le périmètre est petit, c’est voulu : un résultat visible vite vaut mieux qu’un chantier qui traîne.",
+    },
+    {
       question: "Comment nos données sont-elles protégées ?",
       answer:
         "On conçoit dès le départ dans le respect du RGPD et de l’AI Act. Vos données restent sous votre contrôle : hébergement adapté, pas de fuite vers des modèles publics sans votre accord. La souveraineté des données est un point de départ, pas une option.",
@@ -41,7 +48,11 @@ export const faq: FaqSection = {
       question:
         "On entend beaucoup parler d’OpenClaw et de Hermes Agent. Faut-il les installer ?",
       answer:
-        "Pas avant d’avoir posé le business case. Ces agents open source sont impressionnants, mais brancher chez vous un outil qui exécute des commandes et lit vos fichiers demande des garde-fous : sécurité, RGPD, supervision. On décrypte les deux sur le site, on chiffre ce que ça rapporterait chez vous, puis on déploie celui qui se justifie. Parfois, la réponse est aucun des deux.",
+        "Oui, on les installe aussi, cadrés et sécurisés. Brancher chez vous un outil qui exécute des commandes et lit vos fichiers demande des garde-fous : sécurité, RGPD, supervision. On pose d’abord le business case, puis on déploie celui qui se justifie chez vous. Parfois, la réponse est aucun des deux.",
+      link: {
+        label: "OpenClaw, Hermes Agent : le décryptage",
+        href: "/agents-ia",
+      },
     },
     {
       question: "On a déjà été échaudés par un POC qui n’a jamais abouti.",
@@ -61,12 +72,12 @@ export const faq: FaqSection = {
     {
       question: "Une structure d’une personne, ce n’est pas un risque ?",
       answer:
-        "La question est légitime, la réponse est concrète. Tout ce qu’on livre est documenté et intégré à vos outils : le système vous appartient, tourne chez vous et ne dépend pas de nous pour fonctionner. Si Coucou IA s’arrête demain, votre système continue, et n’importe quel développeur peut le reprendre avec la documentation.",
+        "La question est légitime, la réponse est double : documenté, et suivi. Tout ce qu’on livre est documenté et intégré à vos outils : le système vous appartient, tourne chez vous et ne dépend pas de nous pour fonctionner. Le suivi mensuel fait le reste : quelqu’un surveille le système, le corrige et le fait évoluer. Et si Coucou IA s’arrête demain, votre système continue, et n’importe quel développeur peut le reprendre avec la documentation.",
     },
     {
       question: "Pour qui n’est-ce PAS fait ?",
       answer:
-        "Pas pour les grands comptes aux cycles d’achat interminables, ni pour les startups pré-revenu qui cherchent un CTO. Si vous voulez juste une démo sans intention de déployer, ou le prestataire le moins cher sans regarder le résultat, on ne sera pas le bon partenaire. On travaille avec des PME et ETI qui ont de vrais process à améliorer.",
+        "Pas pour les grands comptes aux cycles d’achat interminables, ni pour les startups pré-revenu qui cherchent un CTO. Si vous voulez juste une démo sans intention de déployer, ou le prestataire le moins cher sans regarder le résultat, on ne sera pas le bon partenaire. On travaille avec des PME qui ont de vrais process à améliorer.",
     },
   ],
 };
