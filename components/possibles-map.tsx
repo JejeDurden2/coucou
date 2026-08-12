@@ -235,7 +235,7 @@ export function PossiblesMap() {
             height: MARK_PX,
             left: ORIGIN.x - 30.3 * (MARK_PX / 32),
             top: ORIGIN.y - 16 * (MARK_PX / 32),
-            filter: "drop-shadow(0 2px 5px rgb(0 0 0 / 0.45))",
+            filter: "drop-shadow(0 2px 5px rgb(0 0 0 / 0.18))",
             animationDelay: "0.35s",
           }}
         />
@@ -246,7 +246,7 @@ export function PossiblesMap() {
             return (
               <li
                 key={item.category}
-                className="hero-in absolute flex h-19.5 w-53 flex-col justify-center gap-1.25 rounded-lg border border-border bg-popover px-3.5 py-2.5 shadow-[0_8px_24px_rgb(0_0_0/0.35)]"
+                className="hero-in absolute flex h-19.5 w-53 flex-col justify-center gap-1.25 rounded-lg border border-border bg-popover px-3.5 py-2.5 shadow-[0_8px_24px_rgb(0_0_0/0.08)]"
                 style={{ left, top, animationDelay: `${delay}s` }}
               >
                 <span

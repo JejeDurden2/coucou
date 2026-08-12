@@ -173,8 +173,8 @@ export function KitForm() {
 
   return (
     <div className="relative overflow-hidden rounded-lg border border-border bg-card p-6 sm:p-8">
-      {/* Le seul violet de la page : une nappe d'ambiance (--accent-2 via
-          .trace-glow), jamais sur une action ni un texte (§3 du design system). */}
+      {/* Une nappe d'ambiance bleue (.trace-glow), jamais sur une action ni
+          un texte (§5 du design system). */}
       <div
         aria-hidden
         className="trace-glow pointer-events-none absolute -top-44 -right-44 h-100 w-120 opacity-50"

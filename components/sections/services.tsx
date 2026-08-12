@@ -92,7 +92,7 @@ export function Services() {
           {/* Charnière desktop : la ligne du pli, l’oiseau qui se plie, le
               libellé le long de la charnière. */}
           <div className="relative isolate hidden flex-col items-center gap-4 overflow-hidden lg:flex">
-            {/* Le pli concentre la lumière : lueur violette fine, clippée au
+            {/* Le pli concentre la lumière : lueur bleue fine, clippée au
                 canal de la charnière (72px), derrière le FoldMark. */}
             <div
               aria-hidden

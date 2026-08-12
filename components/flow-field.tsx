@@ -2,8 +2,8 @@
 
 import { useEffect, useRef } from "react";
 
-// Hero background: a flow-field of 200 particles leaving fading trails, ~7%
-// blue (--primary) and ~6% violet (--accent-2, the atmosphere accent).
+// Hero background: a flow-field of 200 particles leaving fading trails, ~10%
+// blue (--primary), the rest neutral grey.
 // Colors are resolved once from the design tokens (never hard-coded): each token
 // is painted onto a 1x1 probe canvas so whatever color space it uses (oklch)
 // normalizes to rgb bytes we can compose an alpha onto. The buffer is scaled by
@@ -38,12 +38,12 @@ export function FlowField({ className }: { className?: string }) {
     };
     const clearFill = rgba("--background", 1);
     const trailFill = rgba("--background", 0.05);
-    const blueStroke = rgba("--primary", 0.34);
-    const violetStroke = rgba("--accent-2", 0.32);
-    const greyStroke = rgba("--foreground-dim", 0.15);
+    const blueStroke = rgba("--primary", 0.3);
+    // 0.18 (not the dark theme's 0.15): a mid-grey stroke over near-white
+    // needs a touch more alpha to stay perceivable.
+    const greyStroke = rgba("--foreground-dim", 0.18);
 
-    let particles: { x: number; y: number; blue: boolean; violet: boolean }[] =
-      [];
+    let particles: { x: number; y: number; blue: boolean }[] = [];
     let t = 0;
     // World size in CSS px; drawing happens in this space, the dpr transform
     // maps it onto the (larger) physical buffer.
@@ -65,8 +65,7 @@ export function FlowField({ className }: { className?: string }) {
         particles.push({
           x: Math.random() * w,
           y: Math.random() * h,
-          blue: Math.random() < 0.07,
-          violet: Math.random() < 0.06,
+          blue: Math.random() < 0.1,
         });
       }
     };
@@ -82,11 +81,7 @@ export function FlowField({ className }: { className?: string }) {
           Math.cos(p.y * 0.0031 - t * 1.4) * 1.1;
         const nx = p.x + Math.cos(angle) * 0.8 + 0.35;
         const ny = p.y + Math.sin(angle) * 0.8 - 0.1;
-        ctx.strokeStyle = p.blue
-          ? blueStroke
-          : p.violet
-            ? violetStroke
-            : greyStroke;
+        ctx.strokeStyle = p.blue ? blueStroke : greyStroke;
         ctx.beginPath();
         ctx.moveTo(p.x, p.y);
         ctx.lineTo(nx, ny);

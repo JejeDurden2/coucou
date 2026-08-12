@@ -22,7 +22,7 @@ export function Cta({
 
   return (
     <section className="relative overflow-hidden border-t border-border">
-      {/* Écho violet du hero : la page se ferme sur la même lumière (bookend).
+      {/* Écho bleu du hero : la page se ferme sur la même lumière (bookend).
           Décentré en bas à gauche, cœur hors viewport, opacité sous le hero. */}
       <div
         aria-hidden

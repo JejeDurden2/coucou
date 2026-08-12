@@ -53,9 +53,9 @@ export const metadata: Metadata = {
   },
 };
 
-// Hex de --background (oklch 0.145 0.006 255) : barre du navigateur mobile assortie au fond.
+// Hex de --background (oklch 0.985 0.002 260) : barre du navigateur mobile assortie au fond.
 export const viewport: Viewport = {
-  themeColor: "#090b10",
+  themeColor: "#f9fafb",
 };
 
 export default function RootLayout({
@@ -66,7 +66,7 @@ export default function RootLayout({
   return (
     <html
       lang="fr"
-      className={`dark ${spaceGrotesk.variable} ${geistSans.variable} ${geistMono.variable}`}
+      className={`${spaceGrotesk.variable} ${geistSans.variable} ${geistMono.variable}`}
     >
       <body className="bg-background text-foreground antialiased">
         {/* No-JS escape: reveals SSR with inline opacity:0; this !important

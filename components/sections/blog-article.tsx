@@ -258,7 +258,7 @@ export function BlogArticleTemplate({
         links={relatedPages}
       />
 
-      {/* CTA sobre : pas de lueur violette sur les pages blog. Un seul libellé. */}
+      {/* CTA sobre : pas de lueur d'ambiance sur les pages blog. Un seul libellé. */}
       <section className="border-t border-border">
         <div className="mx-auto max-w-[1200px] px-6 py-16 lg:py-20">
           <ScrollReveal className="flex max-w-[46rem] flex-col gap-6">

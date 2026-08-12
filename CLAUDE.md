@@ -1,7 +1,7 @@
 # Coucou IA: Working Contract
 
 ## Overview
-Coucou IA is an AI consulting company for the French market (PME de 10 à 250 salariés and ETI). Two offers: **Audit & stratégie IA** (états des lieux, cartographie d'opportunités, business cases ROI, roadmaps) and **Développement IA sur mesure** (agents IA, RAG, automatisations, intégrations). Differentiator: **ouvrir le champ des possibles**: we show non-expert dirigeants what AI makes possible in their business and where to start, sans jargon, then ship it to production. ROI survives as method (business case chiffré avant d'engager, résultats mesurés), never as a guarantee: the word "garanti" is banned from all copy. The word "diagnostic" is banned too (medical connotation): the discovery call is called **"le point de départ"** (fallback noun in prose: **"ce premier échange"**). The site has one job: build credibility (dark enterprise-tech) and convert visitors into **booked "point de départ" calls**. Pricing is never published. 100% French, `vous`, no i18n.
+Coucou IA is an AI consulting company for the French market (PME de 10 à 250 salariés and ETI). Two offers: **Audit & stratégie IA** (états des lieux, cartographie d'opportunités, business cases ROI, roadmaps) and **Développement IA sur mesure** (agents IA, RAG, automatisations, intégrations). Differentiator: **ouvrir le champ des possibles**: we show non-expert dirigeants what AI makes possible in their business and where to start, sans jargon, then ship it to production. ROI survives as method (business case chiffré avant d'engager, résultats mesurés), never as a guarantee: the word "garanti" is banned from all copy. The word "diagnostic" is banned too (medical connotation): the discovery call is called **"le point de départ"** (fallback noun in prose: **"ce premier échange"**). The site has one job: build credibility (light enterprise-tech, ink on near-white) and convert visitors into **booked "point de départ" calls**. Pricing is never published. 100% French, `vous`, no i18n.
 
 ## Stack (locked)
 - Next.js 16+ (App Router), React 19, TypeScript `strict`
@@ -40,9 +40,9 @@ Run `pnpm typecheck && pnpm lint` before declaring any task done.
 ## Design system
 Full spec: **`docs/design-system.md`**. Tokens live in `app/globals.css` (`@theme`). Non-negotiables:
 1. **Tokens only.** No arbitrary hex/rgb in components (`bg-[#2fb6ff]` banned). Use `bg-primary`, `text-muted-foreground`, etc.
-2. **Dark-first, one theme.** The whole site is dark. No section inverts to light.
-3. **Accent discipline.** ONE interactive accent (electric blue) on the whole page: CTAs, key metrics, focus rings, one signature motif. The violet `--accent-2` is atmosphere only (hero ambient glow, flow-field particles): never on actions, metrics, or body text. Never a third accent.
-4. **No glow soup.** Glow allowed only as one ambient hero radial plus the primary CTA hover. No glow on every card, no purple/blue mesh gradients, no gradient text.
+2. **Light-first, one theme.** The whole site is light. No section inverts to dark.
+3. **Accent discipline.** ONE accent (deep electric blue `--primary`) on the whole page: CTAs, key metrics, focus rings, one signature motif, and the three sanctioned ambient glows. The violet of the old dark theme is retired: never reintroduce a second accent, atmospheric or otherwise.
+4. **No glow soup.** Ambient glow only as the three sanctioned blue radials (hero, final CTA, services hinge, all at 10% alpha) plus the primary CTA hover shadow. No glow on every card, no purple/blue mesh gradients, no pastel washes, no gradient text.
 5. **One radius scale** (8px family) everywhere; pill only for badges/tags.
 6. **Metrics are the hero.** ROI numbers use the metric-block spec (tabular-nums), never body-text-styled.
 7. **Motion is motivated and reduced-motion safe.** No infinite loops, no animated logo, no count-up except one hero stat.

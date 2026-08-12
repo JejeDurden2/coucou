@@ -6,9 +6,9 @@ import { ImageResponse } from "next/og";
 // d'article ne ressemble pas à un partage de la page d'accueil.
 // Couleurs en dur car ImageResponse ne lit pas les tokens CSS de
 // app/globals.css. Elles miroitent --background, --foreground et --primary.
-const BACKGROUND = "#090b10";
-const FOREGROUND = "#f3f5fa";
-const BLUE = "#2fb6ff";
+const BACKGROUND = "#f9fafb";
+const FOREGROUND = "#14181f";
+const BLUE = "#0074c1";
 
 export const ogSize = { width: 1200, height: 630 };
 

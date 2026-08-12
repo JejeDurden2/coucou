@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 import { hero } from "@/content/hero";
 import { bookingUrl, ctaLabel } from "@/content/site";
 
-// Hero « la carte des possibles »: a flow-field canvas, one ambient violet radial
+// Hero « la carte des possibles »: a flow-field canvas, one ambient blue radial
 // and four corner marks frame the viewport. The left column carries the pitch;
 // the right column is the map of use-cases that light up (client leaf). The old
 // method strip is gone: the Method section already lives further down the page.
