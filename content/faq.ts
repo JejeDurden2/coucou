@@ -77,7 +77,7 @@ export const faq: FaqSection = {
     {
       question: "Pour qui n’est-ce PAS fait ?",
       answer:
-        "Pas pour les grands comptes aux cycles d’achat interminables, ni pour les startups pré-revenu qui cherchent un CTO. Si vous voulez juste une démo sans intention de déployer, ou le prestataire le moins cher sans regarder le résultat, on ne sera pas le bon partenaire. On travaille avec des PME qui ont de vrais process à améliorer.",
+        "Pas pour les grands comptes aux cycles d’achat interminables, ni pour les jeunes pousses sans premier euro de chiffre d’affaires qui cherchent un CTO. Si vous voulez juste une démo sans intention de déployer, ou le prestataire le moins cher sans regarder le résultat, on ne sera pas le bon partenaire. On travaille avec des PME qui ont de vrais process à améliorer.",
     },
   ],
 };

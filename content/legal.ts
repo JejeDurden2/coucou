@@ -64,7 +64,7 @@ export const confidentialite: LegalPage = {
     {
       heading: "En résumé",
       paragraphs: [
-        "Ce site ne dépose aucun cookie et ne vous identifie pas individuellement. Il utilise une mesure d’audience sans cookie (statistiques agrégées et anonymes). Les seules données personnelles que nous recevons sont celles que vous choisissez de nous transmettre : votre adresse e-mail pour recevoir une ressource, ou vos coordonnées pour réserver un premier échange.",
+        "Ce site ne dépose aucun cookie et ne vous identifie pas individuellement. Il utilise une mesure d’audience sans cookie (statistiques agrégées et anonymes). Les seules données personnelles que nous recevons sont celles que vous choisissez de nous transmettre : votre adresse email pour recevoir une ressource, ou vos coordonnées pour réserver un premier échange.",
       ],
     },
     {
@@ -77,9 +77,9 @@ export const confidentialite: LegalPage = {
     {
       heading: "Données que vous nous transmettez",
       paragraphs: [
-        "Si vous demandez une ressource (par exemple une carte des possibles), votre adresse e-mail sert à vous l’envoyer, puis à vous adresser quelques e-mails en lien avec cette ressource. Chaque e-mail contient un lien de désinscription en un clic. Ces envois passent par Brevo (édité par Brevo SAS, société française), prestataire conforme au RGPD, qui traite votre adresse pour notre compte.",
-        "Si vous réservez un premier échange, la prise de rendez-vous passe par l’outil Cal.com, qui recueille les informations que vous renseignez (nom, e-mail, réponses au formulaire de réservation) pour organiser cet échange.",
-        "Si vous nous écrivez directement, nous recevons les informations que vous choisissez de nous communiquer (nom, adresse e-mail, message).",
+        "Si vous demandez une ressource (par exemple une carte des possibles), votre adresse email sert à vous l’envoyer, puis à vous envoyer quelques emails en lien avec cette ressource. Chaque email contient un lien de désinscription en un clic. Ces envois passent par Brevo (édité par Brevo SAS, société française), prestataire conforme au RGPD, qui traite votre adresse pour notre compte.",
+        "Si vous réservez un premier échange, la prise de rendez-vous passe par l’outil Cal.com, qui recueille les informations que vous renseignez (nom, email, réponses au formulaire de réservation) pour organiser cet échange.",
+        "Si vous nous écrivez directement, nous recevons les informations que vous choisissez de nous communiquer (nom, adresse email, message).",
         "Ces données servent uniquement à vous répondre, vous envoyer ce que vous avez demandé et organiser l’échange. Nous ne les utilisons à aucune autre fin et ne les revendons jamais.",
         "Elles sont conservées au plus trois ans après notre dernier échange, puis supprimées.",
       ],
@@ -88,7 +88,7 @@ export const confidentialite: LegalPage = {
       heading: "Sous-traitants",
       paragraphs: [
         "Vercel Inc. (États-Unis) : hébergement du site et mesure d’audience sans cookie.",
-        "Brevo, édité par Brevo SAS (France) : envoi des ressources par e-mail et gestion de la liste de contacts.",
+        "Brevo, édité par Brevo SAS (France) : envoi des ressources par email et gestion de la liste de contacts.",
         "Cal.com : prise de rendez-vous pour le premier échange.",
       ],
     },

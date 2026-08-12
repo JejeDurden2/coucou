@@ -257,7 +257,7 @@ export const casUsagePages: CasUsagePage[] = [
   },
   {
     slug: "recherche-interne",
-    name: "Recherche interne intelligente",
+    name: "Recherche documentaire interne",
     metaTitle: "Recherche documentaire interne avec l’IA | Coucou IA",
     metaDescription:
       "Recherche documentaire interne avec l’IA : retrouvez l’information en entreprise en quelques secondes, sur tous vos outils. Premier échange gratuit.",

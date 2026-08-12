@@ -126,12 +126,12 @@ export const agents: AgentPage[] = [
         body: "Des vulnérabilités documentées permettent de détourner l’agent via un contenu piégé qu’il lit sur le web ou dans un fichier. Un agent qui exécute des commandes rend ce risque concret.",
       },
       {
-        title: "Une place de skills sans filtre",
+        title: "Une place de marché sans contrôle",
         body: "ClawHub, la place de marché de compétences pour OpenClaw, ne soumet pas systématiquement ce qu’elle distribue à un contrôle. Vous ne savez pas toujours ce que vous installez.",
       },
       {
         title: "La conformité repose entièrement sur vous",
-        body: "Aucune certification (SOC 2, ISO 27001), pas d’accord de traitement des données. Et les versions très fréquentes apportent leur lot de changements cassants : la maintenance est réelle.",
+        body: "Aucune certification (SOC 2, ISO 27001), pas d’accord de traitement des données. Et les versions très fréquentes apportent leur lot de ruptures de compatibilité : la maintenance est réelle.",
       },
     ],
     forWho: {
@@ -185,15 +185,15 @@ export const agents: AgentPage[] = [
     name: "Hermes Agent",
     hubTitle: "Hermes Agent : l’IA qui écrit ses propres compétences",
     hubDescription:
-      "Framework d’agent open source qui apprend en travaillant. Prometteur, encore jeune : la supervision humaine reste indispensable.",
+      "Une base open source pour construire des agents, qui apprend en travaillant. Prometteur, encore jeune : la supervision humaine reste indispensable.",
     metaTitle: "Hermes Agent : avis, risques et coûts PME | Coucou IA",
     metaDescription:
-      "Hermes Agent (Nous Research) : agent IA open source qui écrit ses propres skills. Avis, limites de jeunesse, RGPD, coûts réels. Échange gratuit.",
+      "Hermes Agent (Nous Research) : agent IA open source qui écrit ses propres compétences. Avis, limites de jeunesse, RGPD, coûts réels. Échange gratuit.",
     h1: "Hermes Agent : l’IA qui écrit ses propres compétences",
     intro:
-      "Hermes Agent est un framework d’agent open source publié par Nous Research début 2026. Sa particularité : il écrit ses propres compétences réutilisables après chaque tâche et s’améliore avec l’usage. Voici ce qu’il fait vraiment, et pourquoi la supervision humaine reste indispensable.",
+      "Hermes Agent est une base open source pour construire des agents, publiée par Nous Research début 2026. Sa particularité : il écrit ses propres compétences réutilisables après chaque tâche et s’améliore avec l’usage. Voici ce qu’il fait vraiment, et pourquoi la supervision humaine reste indispensable.",
     verdict:
-      "Hermes Agent est l’un des projets les plus intéressants du moment : auto-hébergé, multi-canal, et surtout capable d’écrire ses propres compétences réutilisables au fil des tâches. L’adoption a été très rapide en 2026, portée par une grosse mise à jour début août (voix en temps réel, communication d’agent à agent, recherche avec sources vérifiables). Mais c’est un logiciel jeune, encore en versions 0.x : pas de stabilité assurée entre deux mises à jour, documentation incomplète, aucun journal d’audit structuré. Et si personne ne relit les compétences qu’il s’écrit lui-même, une erreur peut se répéter à chaque usage. Avant de le brancher sur vos process, je pose la supervision qui manque : relecture des skills, données en local, obligations RGPD posées noir sur blanc.",
+      "Hermes Agent est l’un des projets les plus intéressants du moment : auto-hébergé, multi-canal, et surtout capable d’écrire ses propres compétences réutilisables au fil des tâches. L’adoption a été très rapide en 2026, portée par une grosse mise à jour début août (voix en temps réel, communication d’agent à agent, recherche avec sources vérifiables). Mais c’est un logiciel jeune, encore en versions 0.x : pas de stabilité assurée entre deux mises à jour, documentation incomplète, aucun journal d’audit structuré. Et si personne ne relit les compétences qu’il s’écrit lui-même, une erreur peut se répéter à chaque usage. Avant de le brancher sur vos process, je pose la supervision qui manque : relecture des compétences, données en local, obligations RGPD posées noir sur blanc.",
     facts: [
       { label: "Éditeur", value: "Nous Research" },
       { label: "Licence", value: "MIT (open source)" },
@@ -204,7 +204,7 @@ export const agents: AgentPage[] = [
     strengths: [
       {
         title: "Il apprend en travaillant",
-        body: "Après chaque tâche, Hermes Agent écrit un skill réutilisable et s’améliore avec l’usage : plus il tourne, plus il devient efficace sur vos cas concrets.",
+        body: "Après chaque tâche, Hermes Agent écrit une compétence réutilisable et s’améliore avec l’usage : plus il tourne, plus il devient efficace sur vos cas concrets.",
       },
       {
         title: "Gratuit et multi-canal",
@@ -222,11 +222,11 @@ export const agents: AgentPage[] = [
       },
       {
         title: "Documentation incomplète",
-        body: "Beaucoup de zones d’ombre se découvrent en marchant, pas dans un guide. Ça ralentit une mise en place sereine.",
+        body: "Beaucoup de zones d’ombre se découvrent en marchant, pas dans un guide. Ça ralentit la mise en place.",
       },
       {
         title: "Des compétences auto-écrites, sans relecture par défaut",
-        body: "L’agent écrit lui-même ses skills réutilisables. Une erreur codée une fois peut se répéter à chaque usage si personne ne la relit.",
+        body: "L’agent écrit lui-même ses compétences réutilisables. Une erreur codée une fois peut se répéter à chaque usage si personne ne la relit.",
       },
       {
         title: "Pas de journal d’audit structuré",
@@ -237,9 +237,9 @@ export const agents: AgentPage[] = [
       title: "Quand Hermes Agent a du sens pour une PME",
       body: "C’est un outil jeune et prometteur, pas encore taillé pour tourner seul en production. Voici où il trouve sa place aujourd’hui.",
       cases: [
-        "Vous voulez explorer ce qu’un agent qui apprend en marchant peut faire sur des tâches répétitives, avec une personne qui relit ses skills.",
+        "Vous voulez explorer ce qu’un agent qui apprend en marchant peut faire sur des tâches répétitives, avec une personne qui relit ses compétences.",
         "Les données traitées ne sont pas sensibles, ou restent en local par défaut avec un accord de traitement posé avec le fournisseur du modèle.",
-        "Vous acceptez le rythme d’un logiciel jeune : suivre les versions, tester avant de généraliser, garder un humain dans la boucle.",
+        "Vous acceptez le rythme d’un logiciel jeune : suivre les versions, tester avant de généraliser, garder quelqu’un aux commandes.",
       ],
     },
     offer: {
@@ -259,7 +259,7 @@ export const agents: AgentPage[] = [
       {
         question: "Qu’est-ce qu’Hermes Agent ?",
         answer:
-          "Hermes Agent est un framework d’agent IA open source publié par Nous Research en février 2026. Auto-hébergé et multi-canal (Telegram, Slack, WhatsApp, ligne de commande), il a la particularité d’écrire ses propres compétences réutilisables après chaque tâche et de s’améliorer avec l’usage.",
+          "Hermes Agent est une base open source pour construire des agents IA, publiée par Nous Research en février 2026. Auto-hébergé et multi-canal (Telegram, Slack, WhatsApp, ligne de commande), il a la particularité d’écrire ses propres compétences réutilisables après chaque tâche et de s’améliorer avec l’usage.",
       },
       {
         question: "Hermes Agent est-il fiable pour une entreprise ?",

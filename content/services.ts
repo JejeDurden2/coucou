@@ -43,11 +43,11 @@ export const services: ServicesSection = {
       verb: "Trouver.",
       title: "Audit & stratégie IA",
       description:
-        "On part de votre activité, pas de la techno. On regarde vos process, vos données et vos irritants, puis on chiffre le retour attendu de chaque opportunité.",
+        "On part de votre activité, pas de la techno. On regarde vos process, vos données et ce qui vous fait perdre du temps, puis on chiffre le retour attendu de chaque piste.",
       hook: "On dresse votre carte des possibles : où l’IA rapporte chez vous, et où elle ne sert à rien.",
       deliverables: [
         "L’état des lieux : vos process, vos données, vos outils",
-        "Les opportunités IA classées par impact et faisabilité",
+        "Les pistes IA classées par impact et faisabilité",
         "Un business case chiffré pour chaque piste prioritaire",
         "Le cadre RGPD et AI Act posé dès la conception",
       ],

@@ -47,7 +47,7 @@ export const useCases: UseCasesSection = {
       gainLabel: "Exemple",
     },
     {
-      title: "Recherche interne intelligente",
+      title: "Recherche documentaire interne",
       slug: "recherche-interne",
       description:
         "Une recherche qui comprend le langage courant, sur vos données éparpillées (Drive, mails, ERP, SharePoint). Vos équipes trouvent la bonne info sans fouiller dix dossiers.",

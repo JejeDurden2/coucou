@@ -38,7 +38,7 @@ export const openclawVsHermesAgent: BlogArticle = {
     },
     {
       kind: "p",
-      text: "**Hermes Agent** est un framework d'agent open source (MIT), publié par Nous Research en février 2026. Lui aussi s'auto-héberge et parle sur plusieurs canaux : Telegram, Slack, WhatsApp, ligne de commande. Sa particularité tient en une phrase : l'agent écrit ses propres compétences réutilisables après chaque tâche, et s'améliore avec l'usage, sans que vous ayez à le reprogrammer.",
+      text: "**Hermes Agent** est une base open source pour construire des agents (MIT), publiée par Nous Research en février 2026. Lui aussi s'auto-héberge et parle sur plusieurs canaux : Telegram, Slack, WhatsApp, ligne de commande. Sa particularité tient en une phrase : l'agent écrit ses propres compétences réutilisables après chaque tâche, et s'améliore avec l'usage, sans que vous ayez à le reprogrammer.",
     },
     {
       kind: "p",
@@ -144,7 +144,7 @@ export const openclawVsHermesAgent: BlogArticle = {
     {
       question: "C'est quoi Hermes Agent ?",
       answer:
-        "Un framework d'agent IA open source (licence MIT), publié par Nous Research en février 2026. Vous l'hébergez vous-même et le pilotez depuis Telegram, Slack, WhatsApp ou la ligne de commande. Sa particularité : il écrit ses propres compétences réutilisables après chaque tâche et s'améliore avec l'usage. C'est un logiciel jeune, encore en versions 0.x, sans stabilité assurée.",
+        "Une base open source pour construire des agents IA (licence MIT), publiée par Nous Research en février 2026. Vous l'hébergez vous-même et le pilotez depuis Telegram, Slack, WhatsApp ou la ligne de commande. Sa particularité : il écrit ses propres compétences réutilisables après chaque tâche et s'améliore avec l'usage. C'est un logiciel jeune, encore en versions 0.x, sans stabilité assurée.",
     },
     {
       question: "OpenClaw et Hermes Agent sont-ils gratuits ?",

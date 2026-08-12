@@ -35,7 +35,7 @@ export const hero: Hero = {
     { category: "Nouveaux marchés", line: "Votre offre en 12 langues" },
     { category: "Service client", line: "Des réponses même à 3 h du matin" },
     { category: "Compétences", line: "Vos données analysées, sans data scientist" },
-    { category: "Automatisation", line: "Relances et saisie en pilote automatique" },
+    { category: "Automatisation", line: "Relances et saisie sans personne derrière" },
     { category: "Savoir-faire", line: "Vos archives, interrogeables en une question" },
   ],
 };
