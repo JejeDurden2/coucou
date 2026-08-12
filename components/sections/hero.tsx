@@ -45,7 +45,7 @@ export function Hero() {
       <div className="relative mx-auto grid w-full max-w-[1200px] flex-1 grid-cols-1 items-center gap-14 px-6 py-12 lg:grid-cols-[1.05fr_0.95fr]">
         <div>
           <ScrollReveal delay={0}>
-            <span className="font-mono text-xs tracking-[0.12em] text-muted-foreground uppercase">
+            <span className="font-mono text-xs tracking-[0.12em] text-accent-2 uppercase">
               {hero.kicker}
             </span>
           </ScrollReveal>

@@ -3,7 +3,7 @@
 The build implements this spec exactly. Values are the source of truth; components derive from tokens, never from ad-hoc styling.
 
 ## 1. Brand personality
-Light enterprise-tech that **means business**: near-white surfaces, dark ink typography, a single deep electric-blue signal used with discipline. The reference points are Linear (light), Stripe, Notion: restraint, clarity, engineering credibility. The switch from dark to light is a conversion decision: the audience is dirigeants de PME/ETI, not developers, and a bright, open page reads as trustworthy and legible where near-black read as "tech demo". The wink lives in the name "Coucou" and in one or two precise, confident details, never in decoration. Serious expertise, human edge. Every pixel says *measured, shipped, profitable*, not *AI demo*.
+Light enterprise-tech that **means business**: warm paper-white surfaces, dark ink typography, one deep electric-blue signal used with discipline, one warm coral wink. The reference points are Linear (light), Stripe, Notion: restraint, clarity, engineering credibility. The switch from dark to light is a conversion decision: the audience is dirigeants de PME/ETI, not developers, and a bright, open page reads as trustworthy and legible where near-black read as "tech demo". The neutrals sit on a warm axis, never blue-grey: cold grey on light reads as sad. The wink lives in the name "Coucou", in the coral accents, and in one or two precise, confident details, never in decoration. Serious expertise, human edge. Every pixel says *measured, shipped, profitable*, not *AI demo*.
 
 ---
 
@@ -11,50 +11,57 @@ Light enterprise-tech that **means business**: near-white surfaces, dark ink typ
 
 Light-first. Defined in OKLCH in `app/globals.css` under `:root` (the site's only theme) and mirrored in `@theme inline` as `--color-*`. All ratios below verified against `--background`.
 
-### Accent choice: deep electric blue `#0074c1` / `oklch(0.54 0.155 245)`
-Direction: **ink and one blue signal** on a near-white, faintly cool page. Blue reads as engineering credibility and is dark enough to carry both as a button fill (with near-white text) and as link/metric text at AA contrast. `--primary` is the ONE accent on the site: CTA, key metric, focus ring, active marks, and the three sanctioned ambient glows (§5) at low alpha.
+### Accent choices: deep electric blue `#0074c1` + warm coral `#b64c1b`
+Direction: **ink, one blue signal, one warm wink** on warm paper-white. The discipline is split in two, exactly as on the old dark theme but with a warmer partner:
 
-**The violet is retired.** The dark theme kept a second "atmosphere" violet (`--accent-2`); on a light ground a violet wash turns pastel and lands squarely in the AI-startup cliché this brand bans. All ambient light now derives from `--primary`. No second accent exists, atmospheric or otherwise.
+- `--primary` (blue, `oklch(0.54 0.155 245)`) is the ONE interactive signal: CTA, key metric, focus ring, active marks, links, the carte's rays and arrows, the hero and services-hinge glows. Blue reads as engineering credibility and is dark enough to carry both as a button fill (with near-white text) and as text at AA contrast.
+- `--accent-2` (coral, `oklch(0.55 0.15 42)`) is the **warmth and the wink**: the hero eyebrow, the carte's label and card dot marks, ~6% of flow-field particles, and the final CTA's closing glow. It passes AA as small text (4.96:1), but it never colors an action, a metric, a link, or body text.
+
+**The violet is retired** (dark-theme relic): on a light ground a violet wash turns pastel and lands squarely in the AI-startup cliché this brand bans. Coral took over its atmosphere-and-wink role because it complements the blue instead of competing with it.
 
 ### Tokens
 
 | Token | OKLCH | Hex | Role |
 |---|---|---|---|
-| `--background` | `0.985 0.002 260` | `#f9fafb` | Page (near-white, faint cool cast) |
-| `--card` | `1 0 0` | `#ffffff` | Card / raised surface (white above the grey page) |
+| `--background` | `0.985 0.003 85` | `#fbfaf8` | Page (warm paper-white) |
+| `--card` | `1 0 0` | `#ffffff` | Card / raised surface (white above the warm page) |
 | `--popover` / elevated | `1 0 0` | `#ffffff` | Popover, dropdown, tooltip |
-| `--muted` | `0.955 0.004 260` | `#eef0f3` | Muted fills, code, inactive |
+| `--muted` | `0.955 0.005 85` | `#f2f0ec` | Muted fills, code, inactive |
 | `--foreground` | `0.210 0.015 260` | `#14181f` | Primary text (near-black ink, cool cast) |
-| `--muted-foreground` | `0.480 0.015 260` | `#595e66` | Secondary text, labels, lede |
-| `--foreground-dim` | `0.580 0.015 260` | `#757b83` | Tertiary: captions, meta (large/non-essential only) |
-| `--border` | `0.900 0.006 260` | `#dcdee2` | Hairline separators, card edges |
-| `--input` | `0.850 0.008 260` | `#cbced3` | Input borders |
-| `--primary` | `0.540 0.155 245` | `#0074c1` | Accent: CTA, key metric, focus ring |
-| `--primary-foreground` | `0.985 0.002 260` | `#f9fafb` | Text/icon on blue fills |
+| `--muted-foreground` | `0.420 0.015 265` | `#494d56` | Secondary text, labels, lede (dark, ink-like, never washed) |
+| `--foreground-dim` | `0.550 0.012 265` | `#6e7279` | Tertiary: captions, meta |
+| `--border` | `0.900 0.008 85` | `#e0ded8` | Hairline separators, card edges |
+| `--input` | `0.850 0.010 85` | `#d1cdc7` | Input borders |
+| `--primary` | `0.540 0.155 245` | `#0074c1` | Accent 1: CTA, key metric, focus ring, carte rays |
+| `--primary-foreground` | `0.985 0.003 85` | `#fbfaf8` | Text/icon on blue fills |
 | `--accent` | `0.955 0.012 240` | `#e9f1f8` | Subtle blue-tinted hover surface |
 | `--accent-foreground` | `0.210 0.015 260` | `#14181f` | Text on `--accent` |
-| `--secondary` | `0.965 0.004 260` | `#f2f3f6` | Secondary button surface |
+| `--secondary` | `0.965 0.005 85` | `#f5f3f0` | Secondary button surface |
 | `--ring` | `0.540 0.155 245` | `#0074c1` | Focus ring = primary |
+| `--accent-2` | `0.550 0.150 42` | `#b64c1b` | Accent 2 (coral): warmth and wink. Eyebrows, carte marks, flow-field sparks, closing glow. Never actions, metrics, links, or body text |
 | `--success` | `0.520 0.140 158` | `#008048` | Positive delta, confirmed state |
 | `--warning` | `0.550 0.120 75` | `#9a6500` | Caution |
 | `--destructive` | `0.550 0.190 25` | `#c92f33` | Error / form validation |
 
-`--success` sits at hue 158 (green) so it never reads as the blue accent (hue 245); use it only for functional state (deltas, form success), never as a second brand color.
+`--success` sits at hue 158 (green) so it never reads as either accent; use it only for functional state (deltas, form success), never as a third brand color. `--warning` (amber, hue 75) and `--accent-2` (coral, hue 42) are close in family; `--warning` stays functional-only so they never appear side by side.
+
+The neutral axis is deliberately split: **surfaces are warm** (background, muted, border, input at hue 85), **text is cool ink** (foreground family at hue 260-265). Ink on paper. Never move the surfaces back to a blue-grey cast, and never lighten `--muted-foreground` toward the washed-out grey it replaced.
 
 ### Contrast (WCAG, verified vs `--background`)
 | Pair | Ratio | Grade |
 |---|---|---|
 | `foreground` / background | 16.97:1 | AAA |
-| `muted-foreground` / background | 6.26:1 | AA (AAA for large text) |
-| `foreground-dim` / background | 4.10:1 | AA large (large / non-essential text only) |
+| `muted-foreground` / background | 8.11:1 | AAA |
+| `foreground-dim` / background | 4.65:1 | AA |
 | `primary` (blue) text / background | 4.73:1 | AA |
 | `primary-foreground` / `primary` (button) | 4.73:1 | AA |
+| `accent-2` (coral) text / background | 4.96:1 | AA |
 | `success` / background | 4.82:1 | AA |
 | `warning` / background | 4.74:1 | AA |
 | `destructive` / background | 5.12:1 | AA |
 | `ring` (blue) / background | 4.73:1 | AA (non-text, ≥3:1 req.) |
 
-On `--card` (pure white) every ratio above is equal or slightly higher, so tokens are safe on both surfaces. `--border` is a decorative hairline (1.29:1), not a text or control-state color, so no 3:1 requirement; perceivable boundaries come from surface contrast, shadows and the focus ring.
+On `--card` (pure white) every ratio above is equal or slightly higher, so tokens are safe on both surfaces. `--border` is a decorative hairline (1.29:1), not a text or control-state color, so no 3:1 requirement; perceivable boundaries come from surface contrast, shadows and the focus ring. `foreground-dim` now clears 4.5:1 but keep its role tertiary: captions and meta, never running copy.
 
 Verification script: OKLCH → sRGB → WCAG relative luminance. Re-run it whenever a token moves; the table above is generated, not estimated.
 
@@ -100,20 +107,20 @@ Rules: headlines `text-balance`; body/lede `text-pretty`, capped `max-w-[65ch]`.
 
 Two motifs, cleanly split by role: the hero owns one large moving signature; every other section only ever gets the quiet, static "tracé" grid.
 
-**(a) "La carte des possibles": the hero centerpiece.** A full-viewport ambient flow-field particle canvas (fine grey trailing strokes, ~10% of particles blue, trails fading, masked out toward the bottom of the viewport) runs behind the hero copy, with one blue radial glow top-right (the largest ambient light on the page) and four thin corner frame marks. On the right, a map-like SVG fans faint rays from a blue origin point out to small dots and six arrowed rays, each pointing to a use-case card. Every 2.6s, one ray and its card light up in blue, the single moving blue signal on the page, then hand off to the next ray/card. This is the one place the brand allows sustained, looping motion (see §6); nowhere else on the site moves like this.
+**(a) "La carte des possibles": the hero centerpiece.** A full-viewport ambient flow-field particle canvas (fine blue-haze trailing strokes at low alpha, ~10% brighter blue, ~6% warm coral, trails fading, masked out toward the bottom of the viewport) runs behind the hero copy, with one blue radial glow top-right (the largest ambient light on the page) and four thin corner frame marks. Never grey strokes: grey trails read as dirt on the light page. On the right, a map-like SVG fans faint blue-tinted rays from the origin mark out to small dots and six arrowed rays, each pointing to a use-case card; the carte's label and each card's dot mark are coral. Every 2.6s, one ray and its card light up in full blue, the single moving blue signal on the page, then hand off to the next ray/card. This is the one place the brand allows sustained, looping motion (see §6); nowhere else on the site moves like this.
 
 **(b) "Le tracé": a faint measurement grid, for proof and guarantee sections only.** ROI is measurement; the motif is a plotting grid (`.trace-grid` in `app/globals.css`). It does **not** appear in the hero, which uses the flow-field/carte motif above instead.
 
-- **Grid field:** a very low-contrast square grid (`--input` at ~50% via a `background-image` linear-gradient), used behind the guarantee/proof section and the pSEO spoke pages (secteurs, cas d'usage) only. It mixes from `--input`, not `--border`: a border-tinted line at partial alpha drops below perception on the near-white page. Fades out with a radial mask so it never fills the whole viewport. Never on every section.
+- **Grid field:** a very low-contrast square grid (`--input` at ~50% via a `background-image` linear-gradient), used behind the guarantee/proof section and the pSEO spoke pages (secteurs, cas d'usage) only. It mixes from `--input`, not `--border`: a border-tinted line at partial alpha drops below perception on the paper-white page. Fades out with a radial mask so it never fills the whole viewport. Never on every section.
 - **The blue signal:** accent used as precise marks: a 2px blue underline/tick under a key metric, a thin blue left-border on a quoted result, the active nav indicator, the focus ring. Small, surgical, high-signal.
 - **Metric / ROI display:** the brand's centerpiece for proof sections. Big `Space Grotesk` `tabular-nums` figure (`--foreground`), a Geist Mono uppercase label above in `muted-foreground`, and an optional delta badge (`success` + `▲`). See §7.
 
-**Ambient glow (blue, `--primary`):** a **closed list of three** page-level ambient glows, all built from the one `.trace-glow` radial (`--primary` at **10%** alpha, blur-heavy, then sized/placed/dimmed per use via `className` + `opacity`), and nothing else:
-1. **Hero, top-right** (`opacity` up to 100%, the largest): the page's opening light.
-2. **Final CTA, bottom-left, overflowing the viewport** (`opacity` ~40-50%, below the hero): the page closes on the light it opened with (a "bookend"). Decentred, bright core off-screen, never a centred halo, never directly under a running paragraph.
-3. **Services diptych hinge, behind the desktop FoldMark** (`opacity` ~40%, `overflow-hidden`-clipped to the ~72px fold channel, desktop only): a thin vertical bloom, as if the fold concentrated the light.
+**Ambient glow:** a **closed list of three** page-level ambient glows, built from two radial classes (`.trace-glow` = `--primary` at **10%** alpha; `.trace-glow-warm` = `--accent-2` at **12%**; both blur-heavy, sized/placed/dimmed per use via `className` + `opacity`), and nothing else:
+1. **Hero, top-right, blue** (`opacity` up to 100%, the largest): the page's opening light.
+2. **Final CTA, bottom-left, warm coral, overflowing the viewport** (`opacity` ~40-50%): the page opens cool and closes warm (a "bookend" with a temperature arc). Decentred, bright core off-screen, never a centred halo, never directly under a running paragraph.
+3. **Services diptych hinge, blue, behind the desktop FoldMark** (`opacity` ~40%, `overflow-hidden`-clipped to the ~72px fold channel, desktop only): a thin vertical bloom, as if the fold concentrated the light.
 
-No fourth ambient glow, ever; nothing else on the page gets one. The 10% alpha is deliberate: the dark theme ran 20%, but a saturated wash on white turns pastel fast. Separate from this list, two motivated **functional** blue accents stay allowed: the active carte card/ray's outline glow during its 2.6s highlight, and the soft blue shadow behind the primary CTA on hover.
+No fourth ambient glow, ever; nothing else on the page gets one, and the warm glow appears exactly once (the closing bookend). The low alphas are deliberate: the dark theme ran 20%, but a saturated wash on white turns pastel fast. Separate from this list, two motivated **functional** blue accents stay allowed: the active carte card/ray's outline glow during its 2.6s highlight, and the soft blue shadow behind the primary CTA on hover.
 
 **Gradients/glows must NOT:** tint text (no gradient or accent-tinted text), stack multiple colored glows, appear on cards/buttons by default, or become a multi-color mesh background. If in doubt, remove it.
 
@@ -171,17 +178,17 @@ Principles: motion communicates hierarchy, sequence, or feedback, never decorati
 ## 9. Do / Don't (kill the AI-startup template)
 
 **Do**
-- Near-white plus neutral greys plus one disciplined deep-blue signal. Let 90% of the page be quiet.
+- Warm paper-white plus ink plus one disciplined deep-blue signal plus one coral wink. Let 90% of the page be quiet.
 - Lead with ROI: real, measurable numbers in metric blocks.
 - Tight 8px radius, hairline borders, precise type, generous whitespace.
-- The three sanctioned ambient blue glows at 10% and no more (hero top-right, final CTA bottom-left, services hinge), one tracé grid field on proof/spoke pages, surgical blue accents.
+- The three sanctioned ambient glows and no more (hero top-right blue, final CTA bottom-left warm, services hinge blue), one tracé grid field on proof/spoke pages, surgical blue accents, coral only in its listed spots (eyebrows, carte marks, particles, closing glow).
 - Shadows faint (≤10% black alpha), always with a hairline border.
 
 **Don't**
-- Reintroduce the violet, anywhere: the dark theme's atmosphere accent is retired. One blue, period.
+- Coral outside its listed spots: never on actions, metrics, links, body text, and never a third accent (the violet stays retired).
+- Blue-grey neutrals: surfaces stay warm (hue 85), and `muted-foreground` stays dark and ink-like, never washed-out grey. Grey strokes/arrows in motifs: structure tints from an accent, not from grey.
 - Gradient or accent-tinted text; rainbow mesh backgrounds; stacked colored glows; pastel washes.
 - Glassmorphism soup: no frosted blur on every card.
-- A second accent color, or blue creeping onto body copy.
 - Dark or hard shadows (>15% alpha reads as a smudge on white); no dark sections inverting the theme.
 - Three identical feature cards; centered-hero-over-mesh default; an eyebrow above every section.
 - Fake-precise invented specs, div-based fake screenshots, count-ups everywhere, infinite marquees.

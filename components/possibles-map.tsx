@@ -126,7 +126,7 @@ export function PossiblesMap() {
         className="absolute top-0 left-1/2 h-135 w-133 origin-top"
         style={{ transform: `translateX(-50%) scale(${scale})` }}
       >
-        <span className="absolute -top-3.5 left-0 font-mono text-[10px] tracking-[0.12em] text-foreground-dim uppercase">
+        <span className="absolute -top-3.5 left-0 font-mono text-[10px] tracking-[0.12em] text-accent-2 uppercase">
           {hero.mapLabel}
         </span>
 
@@ -149,7 +149,7 @@ export function PossiblesMap() {
             >
               <path
                 d="M1,1 L8,5 L1,9"
-                className="fill-none stroke-foreground-dim/65"
+                className="fill-none stroke-primary/50"
                 strokeWidth="1.6"
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -180,7 +180,7 @@ export function PossiblesMap() {
               <g key={`faint-${x}-${y}`}>
                 <path
                   d={`M${sx},${sy} L${x},${y}`}
-                  className="hero-fade fill-none stroke-foreground-dim/30"
+                  className="hero-fade fill-none stroke-primary/20"
                   strokeWidth="1"
                   style={{ animationDelay: `${pathDelay}s` }}
                 />
@@ -188,7 +188,7 @@ export function PossiblesMap() {
                   cx={x}
                   cy={y}
                   r="1.8"
-                  className="hero-fade fill-foreground-dim/55"
+                  className="hero-fade fill-primary/40"
                   style={{ animationDelay: `${dotDelay}s` }}
                 />
               </g>
@@ -201,7 +201,7 @@ export function PossiblesMap() {
               <path
                 key={`dim-${x}-${y}`}
                 d={`M${sx},${sy} L${x},${y}`}
-                className="hero-fade fill-none stroke-foreground-dim/65"
+                className="hero-fade fill-none stroke-primary/45"
                 strokeWidth="1.2"
                 markerEnd="url(#ccArrowDim)"
                 style={{ animationDelay: `${delay}s` }}
@@ -261,7 +261,7 @@ export function PossiblesMap() {
                 <span className="flex items-center gap-1.75">
                   <span
                     aria-hidden
-                    className="size-1.75 shrink-0 rounded-full border border-foreground-dim"
+                    className="size-1.75 shrink-0 rounded-full border border-accent-2"
                   />
                   <span className="font-mono text-[10px] tracking-[0.12em] text-muted-foreground uppercase">
                     {item.category}

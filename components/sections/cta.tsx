@@ -22,11 +22,12 @@ export function Cta({
 
   return (
     <section className="relative overflow-hidden border-t border-border">
-      {/* Écho bleu du hero : la page se ferme sur la même lumière (bookend).
-          Décentré en bas à gauche, cœur hors viewport, opacité sous le hero. */}
+      {/* Bookend : la page s'ouvre sur la lumière bleue du hero et se ferme
+          sur la chaleur du coral. Décentré en bas à gauche, cœur hors
+          viewport, opacité sous le hero. */}
       <div
         aria-hidden
-        className="trace-glow pointer-events-none absolute -bottom-32 -left-32 h-100 w-120 opacity-40 lg:-bottom-40 lg:-left-40 lg:h-140 lg:w-160 lg:opacity-50"
+        className="trace-glow-warm pointer-events-none absolute -bottom-32 -left-32 h-100 w-120 opacity-40 lg:-bottom-40 lg:-left-40 lg:h-140 lg:w-160 lg:opacity-50"
       />
       <div className="relative mx-auto max-w-[1200px] px-6 py-24 lg:py-32">
         <ScrollReveal className="mx-auto flex max-w-[46rem] flex-col items-center text-center">

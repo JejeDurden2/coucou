@@ -53,9 +53,9 @@ export const metadata: Metadata = {
   },
 };
 
-// Hex de --background (oklch 0.985 0.002 260) : barre du navigateur mobile assortie au fond.
+// Hex de --background (oklch 0.985 0.003 85) : barre du navigateur mobile assortie au fond.
 export const viewport: Viewport = {
-  themeColor: "#f9fafb",
+  themeColor: "#fbfaf8",
 };
 
 export default function RootLayout({

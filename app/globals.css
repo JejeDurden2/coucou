@@ -20,6 +20,7 @@
   --color-muted-foreground: var(--muted-foreground);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
+  --color-accent-2: var(--accent-2);
   --color-destructive: var(--destructive);
   --color-success: var(--success);
   --color-warning: var(--warning);
@@ -45,21 +46,26 @@
 /* Light-first, one theme (docs/design-system.md §2). One palette in :root,
    no dark variant is ever mirrored under .dark. */
 :root {
-  --background: oklch(0.985 0.002 260);
+  /* Neutrals sit on a warm paper axis (hue 85), not a blue-grey one: the
+     cool cast read as sad on light. Text stays cool ink; surfaces are warm. */
+  --background: oklch(0.985 0.003 85);
   --card: oklch(1 0 0);
   --popover: oklch(1 0 0);
-  --muted: oklch(0.955 0.004 260);
+  --muted: oklch(0.955 0.005 85);
   --foreground: oklch(0.21 0.015 260);
-  --muted-foreground: oklch(0.48 0.015 260);
-  --foreground-dim: oklch(0.58 0.015 260);
-  --border: oklch(0.9 0.006 260);
-  --input: oklch(0.85 0.008 260);
+  --muted-foreground: oklch(0.42 0.015 265);
+  --foreground-dim: oklch(0.55 0.012 265);
+  --border: oklch(0.9 0.008 85);
+  --input: oklch(0.85 0.01 85);
   --primary: oklch(0.54 0.155 245);
-  --primary-foreground: oklch(0.985 0.002 260);
+  --primary-foreground: oklch(0.985 0.003 85);
   --accent: oklch(0.955 0.012 240);
   --accent-foreground: var(--foreground);
-  --secondary: oklch(0.965 0.004 260);
+  --secondary: oklch(0.965 0.005 85);
   --ring: oklch(0.54 0.155 245);
+  /* Accent 2: warm coral, the wink. Eyebrows, carte marks, flow-field
+     sparks, the closing glow. Never on actions, metrics, or body text. */
+  --accent-2: oklch(0.55 0.15 42);
   --success: oklch(0.52 0.14 158);
   --warning: oklch(0.55 0.12 75);
   --destructive: oklch(0.55 0.19 25);
@@ -133,12 +139,21 @@
   );
 }
 
-/* Ambient glow: the primary blue at low alpha. 10% (not the 20% the dark
-   theme used): a saturated wash on white turns pastel fast. */
+/* Ambient glows at low alpha: 10-12% (not the 20% the dark theme used), a
+   saturated wash on white turns pastel fast. Blue opens the page (hero,
+   services hinge); the warm variant closes it (final CTA bookend). */
 .trace-glow {
   background: radial-gradient(
     closest-side,
     color-mix(in oklch, var(--primary) 10%, transparent),
+    transparent 72%
+  );
+}
+
+.trace-glow-warm {
+  background: radial-gradient(
+    closest-side,
+    color-mix(in oklch, var(--accent-2) 12%, transparent),
     transparent 72%
   );
 }

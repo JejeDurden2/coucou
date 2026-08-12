@@ -41,8 +41,8 @@ Run `pnpm typecheck && pnpm lint` before declaring any task done.
 Full spec: **`docs/design-system.md`**. Tokens live in `app/globals.css` (`@theme`). Non-negotiables:
 1. **Tokens only.** No arbitrary hex/rgb in components (`bg-[#2fb6ff]` banned). Use `bg-primary`, `text-muted-foreground`, etc.
 2. **Light-first, one theme.** The whole site is light. No section inverts to dark.
-3. **Accent discipline.** ONE accent (deep electric blue `--primary`) on the whole page: CTAs, key metrics, focus rings, one signature motif, and the three sanctioned ambient glows. The violet of the old dark theme is retired: never reintroduce a second accent, atmospheric or otherwise.
-4. **No glow soup.** Ambient glow only as the three sanctioned blue radials (hero, final CTA, services hinge, all at 10% alpha) plus the primary CTA hover shadow. No glow on every card, no purple/blue mesh gradients, no pastel washes, no gradient text.
+3. **Accent discipline.** TWO accents, cleanly split. Deep electric blue `--primary` owns every signal: CTAs, key metrics, focus rings, links, the carte's rays. Warm coral `--accent-2` is the wink: eyebrows, carte marks, ~6% of flow-field particles, the closing glow; never on actions, metrics, links, or body text. Never a third accent (the violet stays retired). Neutrals: warm surfaces (hue 85), cool ink text; never blue-grey surfaces or washed-out grey text.
+4. **No glow soup.** Ambient glow only as the three sanctioned radials (hero blue, services hinge blue, final CTA warm coral, all at 10-12% alpha) plus the primary CTA hover shadow. No glow on every card, no mesh gradients, no pastel washes, no gradient text.
 5. **One radius scale** (8px family) everywhere; pill only for badges/tags.
 6. **Metrics are the hero.** ROI numbers use the metric-block spec (tabular-nums), never body-text-styled.
 7. **Motion is motivated and reduced-motion safe.** No infinite loops, no animated logo, no count-up except one hero stat.
