@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { ArrowUpRight } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
@@ -42,7 +43,15 @@ export function Realisations() {
                   </Badge>
                 </div>
 
-                <h3 className="mt-5 flex items-center gap-2 font-display text-[1.75rem] leading-none font-bold tracking-[-0.02em]">
+                <h3 className="mt-5 flex items-center gap-3 font-display text-[1.75rem] leading-none font-bold tracking-[-0.02em]">
+                  {/* unoptimized : SVG servi tel quel, l'optimiseur d'images le refuse. */}
+                  <Image
+                    src={item.logo}
+                    alt=""
+                    aria-hidden
+                    unoptimized
+                    className="size-9 shrink-0"
+                  />
                   <span className="underline-offset-4 group-hover/rea:underline">
                     {item.name}
                   </span>

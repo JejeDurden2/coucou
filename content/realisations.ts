@@ -3,8 +3,15 @@
 // ce sont nos produits, et c'est ça l'argument. Chiffres repris des sites
 // produits (livia.tech, lecturer.fr), vérifiables en un clic.
 
+import type { StaticImageData } from "next/image";
+
+import logoLecturer from "@/public/brand/logo-lecturer.svg";
+import logoLivia from "@/public/brand/logo-livia.svg";
+
 export type Realisation = {
   name: string;
+  // Marque du produit, reprise de son site. Décorative : le nom est juste à côté.
+  logo: StaticImageData;
   url: string;
   sector: string;
   description: string;
@@ -32,6 +39,7 @@ export const realisations: RealisationsSection = {
   items: [
     {
       name: "Livia",
+      logo: logoLivia,
       url: "https://livia.tech",
       sector: "Formation professionnelle",
       description:
@@ -45,6 +53,7 @@ export const realisations: RealisationsSection = {
     },
     {
       name: "Lecturer",
+      logo: logoLecturer,
       url: "https://lecturer.fr",
       sector: "Enseignement supérieur",
       description:
