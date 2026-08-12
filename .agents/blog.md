@@ -12,9 +12,11 @@ Un article par semaine. Chaque article fait au moins une de ces quatre choses, j
 3. **Leads** : amène naturellement vers le point de départ ou le kit de démarrage, sans forcer.
 4. **Preuve de savoir-faire produit** : raconte ce que construire Livia et Lecturer apprend sur l'IA en production.
 
+**Priorité depuis 2026-08-12 : les requêtes outillées.** Les décideurs des niches cherchent des outils, pas des concepts : comparatifs (« n8n ou Make »), coûts et délais, « outil métier + IA » (Apimo, Smoobu, Obat...). Au moins un article outillé sur deux. Un article outillé montre une manipulation réelle, pas une revue de fonctionnalités.
+
 ## 2. À qui on parle
 
-Dirigeants et cadres de PME (10 à 250 salariés) et d'ETI françaises. Pas experts en IA, pas le temps de le devenir. Ils lisent en diagonale, décident vite, détestent le blabla. Un article réussi leur donne un repère actionnable qu'ils n'avaient pas avant.
+Dirigeants de petits business à décision rapide, d'abord dans les niches prioritaires (immobilier, location saisonnière et conciergeries, hôtellerie indépendante, artisans du bâtiment, yachting), et plus largement les PME françaises. Pas experts en IA, pas le temps de le devenir. Ils lisent en diagonale, décident vite, détestent le blabla. Un article réussi leur donne un repère actionnable qu'ils n'avaient pas avant.
 
 ## 3. La voix (format long)
 
@@ -56,6 +58,12 @@ Prendre le premier sujet non traité, sauf actualité forte qui justifie un déc
 - [ ] Vous triez des CV avec de l'IA ? La CNIL contrôle ce sujet en 2026 (décryptage, source : cnil.fr contrôles prioritaires 2026 ; haut risque annexe III au 2 déc. 2027)
 - [ ] Facturation électronique au 1er septembre 2026 : vos données seront enfin structurées, voilà ce que ça ouvre (décryptage, cible DAF et cabinets comptables)
 - [ ] Charte IA d'entreprise : le modèle et les cinq décisions qu'elle doit trancher (méthode, candidate lead magnet à brancher sur le kit)
+- [ ] n8n ou Make pour une PME : le comparatif de quelqu'un qui a livré avec les deux (décryptage, requête outillée)
+- [ ] Un agent IA branché sur Apimo ou Hektor : ce que ça change dans une agence immobilière (décryptage, cible immobilier)
+- [ ] Répondre aux voyageurs à 3 h du matin sans se lever : l'IA d'une conciergerie, outil par outil (décryptage, cible location saisonnière)
+- [ ] De la visite au devis en 24 h : l'IA côté artisan, de la note vocale au devis à valider (méthode, cible artisans du bâtiment)
+- [ ] Défendre la réservation directe face aux OTA : ce qu'un agent IA change pour un hôtel indépendant (décryptage, cible hôtellerie)
+- [ ] Qualifier une demande de charter en 10 minutes : l'IA dans le yachting (décryptage, cible yachting)
 
 Backlog vide ou sujet daté : en proposer trois nouveaux dans le même esprit, en choisir un, l'ajouter ici.
 
@@ -93,4 +101,5 @@ Rejeter et réécrire si UN de ces points échoue :
 - On ne sent pas quelqu'un qui a construit des systèmes IA : si un rédacteur généraliste aurait pu l'écrire, c'est raté.
 
 ## Changelog
+- v1.1 (2026-08-12) : cible resserrée sur les niches à décision rapide (immobilier, location saisonnière, hôtellerie, artisans, yachting), priorité aux requêtes outillées (un article outillé sur deux), 6 sujets niche ajoutés au backlog.
 - v1 (2026-08-03) : mission, voix, backlog 12 sujets, structure, checklist technique, grille de relecture.
