@@ -52,6 +52,7 @@ Full spec: **`docs/design-system.md`**. Tokens live in `app/globals.css` (`@them
 - **No em-dashes, ever.** All site copy is French and must never use em-dashes or en-dashes as sentence punctuation. Use French punctuation instead: deux-points (:), virgule, parenthèses, or restructure the sentence. Applies to copy, headings, buttons, alt text, and metadata.
 - **Voice:** confident, direct, avec un clin d'œil. The name "Coucou" is an asset: playful but never unserious; expert without jargon-dumping. Short sentences. Address the reader's problem, then the outcome.
 - **ROI claims must be concrete and measurable:** `-40 % de temps de traitement`, `3 j/semaine récupérés`, not `gagnez du temps` or `boostez votre productivité`. Every claim is either real, labeled as example, or cut.
+- **No antithesis punchline, ever.** The construction "affirmation + negated alternative" is banned in every form: `X, pas Y` (`un point de départ, pas une option`), `X. Pas Y.` (`Un système qui tourne. Pas une démo.`), `ce n'est pas X, c'est Y`, `X et non Y`. It is the single most recognisable AI tic in French copy and it adds nothing: the affirmation already carries the meaning. Write the affirmation and stop. If the contrast is genuinely the information (a legal distinction, a factual limit), say it as a full sentence of its own. Applies to copy, headings, buttons, list items, alt text, metadata, blog, LinkedIn, emails.
 - Pricing **never** on the site.
 - **One CTA label, everywhere:** `Trouver mon point de départ` (nav, hero, footer, sections). No synonyms ("Contactez-nous", "Prendre RDV" are banned).
 
@@ -69,5 +70,5 @@ These six rules govern **both** the French site copy **and** every word Claude C
 - Add a second accent color, gradient text, glassmorphism, or purple/AI-cliché gradients.
 - Hand-edit `components/ui/` primitives for styling, or bypass tokens with arbitrary values.
 - Put `"use client"` on a layout, page, or whole section.
-- Ship English copy, `tu`, unquantified ROI claims, a duplicate CTA label, or any em-dash.
+- Ship English copy, `tu`, unquantified ROI claims, a duplicate CTA label, any em-dash, or any `X, pas Y` antithesis.
 - Skip `prefers-reduced-motion`, keyboard focus, or mobile collapse.

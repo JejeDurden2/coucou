@@ -14,7 +14,7 @@ export const aiActPmeObligations: BlogArticle = {
   lede: "Depuis le 2 août 2026, l’AI Act ne demande pas à votre PME un dossier de conformité, mais trois choses simples : dire quand on parle à une IA, avoir formé son personnel depuis février 2025, et savoir si vous êtes fournisseur ou déployeur. La partie qui fait peur, les systèmes à haut risque, a été repoussée à décembre 2027.",
   keyTakeaways: [
     "Depuis le 2 août 2026, l’essentiel de l’AI Act (règlement UE 2024/1689) devient applicable, avec en premier lieu l’article 50 sur la transparence et la capacité des autorités nationales à contrôler et sanctionner.",
-    "La quasi-totalité des PME sont des déployeurs de systèmes d’IA, pas des fournisseurs : les obligations les plus lourdes visent d’abord ceux qui conçoivent ou commercialisent un système sous leur nom.",
+    "La quasi-totalité des PME sont des déployeurs de systèmes d’IA : les obligations les plus lourdes visent d’abord les fournisseurs, ceux qui conçoivent ou commercialisent un système sous leur nom.",
     "L’article 4 sur la maîtrise de l’IA est en vigueur depuis le 2 février 2025, s’applique sans seuil de taille, et n’exige aucune certification : un format libre et proportionné suffit, à condition de pouvoir le prouver.",
     "Le Digital Omnibus, publié le 24 juillet 2026, a repoussé les obligations liées au haut risque au 2 décembre 2027 pour les systèmes autonomes et au 2 août 2028 pour ceux intégrés à des produits déjà réglementés.",
     "Pour une PME, le plafond de sanction retenu est le plus bas des deux montants (fixe ou pourcentage du chiffre d’affaires), alors que les grandes entreprises se voient appliquer le plus élevé.",
@@ -22,7 +22,7 @@ export const aiActPmeObligations: BlogArticle = {
   blocks: [
     {
       kind: "p",
-      text: "Un dirigeant d’une PME de services de 60 salariés m’assurait, il y a peu, ne pas utiliser l’IA dans son entreprise. Une demi-journée d’entretiens avec ses équipes plus tard, on comptait 11 usages différents, dont 4 qu’il ignorait : un tri de CV côté RH, deux assistants de rédaction, un outil de résumé de comptes rendus. Illustration, pas une référence client, mais elle dit l’essentiel : l’AI Act ne s’applique pas au projet IA que vous préparez. Il s’applique à ce qui tourne déjà chez vous, sans que vous l’ayez décidé.",
+      text: "Un dirigeant d’une PME de services de 60 salariés m’assurait, il y a peu, ne pas utiliser l’IA dans son entreprise. Une demi-journée d’entretiens avec ses équipes plus tard, on comptait 11 usages différents, dont 4 qu’il ignorait : un tri de CV côté RH, deux assistants de rédaction, un outil de résumé de comptes rendus. Cas illustratif, sans nom de client, mais il dit l’essentiel : l’AI Act ne s’applique pas au projet IA que vous préparez. Il s’applique à ce qui tourne déjà chez vous, sans que vous l’ayez décidé.",
     },
     {
       kind: "p",
@@ -99,7 +99,7 @@ export const aiActPmeObligations: BlogArticle = {
     {
       kind: "h2",
       id: "haut-risque-reporte",
-      text: "Le haut risque : repoussé, pas annulé",
+      text: "Le haut risque : repoussé à 2027",
     },
     {
       kind: "p",
@@ -144,7 +144,7 @@ export const aiActPmeObligations: BlogArticle = {
       label: "Usages recensés",
       value: "11 usages",
       caption:
-        "Illustration, pas une référence client : PME de services, 60 salariés, une demi-journée d’entretiens, dont 4 usages ignorés de la direction.",
+        "Cas illustratif, sans nom de client : PME de services, 60 salariés, une demi-journée d’entretiens, dont 4 usages ignorés de la direction.",
     },
     {
       kind: "p",
@@ -168,7 +168,7 @@ export const aiActPmeObligations: BlogArticle = {
     {
       question: "L’AI Act s’applique-t-il aux PME ?",
       answer:
-        "Oui, sans seuil de taille pour la plupart des obligations. La quasi-totalité des PME sont déployeurs, pas fournisseurs, donc visées par des obligations plus légères que celles qui pèsent sur les concepteurs de systèmes. L’article 4 sur la maîtrise de l’IA s’applique même aux plus petites structures.",
+        "Oui, sans seuil de taille pour la plupart des obligations. La quasi-totalité des PME ont le statut de déployeur, donc des obligations plus légères que celles qui pèsent sur les concepteurs de systèmes. L’article 4 sur la maîtrise de l’IA s’applique même aux plus petites structures.",
     },
     {
       question: "Quelles sont les obligations de l’AI Act au 2 août 2026 ?",

@@ -577,13 +577,13 @@ export function kitWatchPointsFor(draft: KitDraft): string[] {
 export const kitRgpd = {
   title: "Vos utilisateurs, leurs données",
   intro:
-    "Vous allez manipuler des données de personnes. Trois réflexes suffisent pour partir droit, pas un dossier de quarante pages.",
+    "Vous allez manipuler des données de personnes. Trois réflexes suffisent pour partir droit.",
   points: [
     "Hébergez en Europe. Supabase propose des régions UE, c’est le réglage le plus simple à faire correctement du premier coup.",
     "Publiez vos mentions légales et une page qui dit ce que vous collectez, pourquoi, et combien de temps vous le gardez.",
     "Tenez un registre : un tableau qui liste vos données, où elles sont et qui y accède. Une page suffit pour commencer.",
   ],
-  note: "Ce sont des repères, pas un avis juridique. Pour le reste, parlez à un juriste.",
+  note: "Ce sont des repères, sans valeur d’avis juridique. Pour le reste, parlez à un juriste.",
 } as const;
 
 // « a », « a et b », « a, b et c ».
@@ -763,7 +763,7 @@ export const kit = {
   // Branche automatisation : pas de kit, une réponse franche.
   automationTitle: "Votre besoin ne passe pas par ce kit.",
   automationBody:
-    "Brancher des logiciels entre eux, c’est une autre boîte à outils : Make, n8n, ou du sur mesure quand les deux premiers coincent. Ce kit sert à construire une application, pas à relier ce qui existe déjà.",
+    "Brancher des logiciels entre eux, c’est une autre boîte à outils : Make, n8n, ou du sur mesure quand les deux premiers coincent. Ce kit sert à construire une application.",
   automationBodySecond:
     "Le bon choix dépend de vos logiciels, de vos volumes et de ce qui doit se passer quand ça casse. C’est exactement le genre de décision qui se prend à deux.",
   automationQuestionsTitle: "Trois questions avant de choisir",

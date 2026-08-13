@@ -39,7 +39,7 @@ export const casUsageHub = {
     "Appels d’offres, support client, traitement de documents, recherche interne, qualification des leads : cinq automatisations IA déployées en production.",
   h1: "Ce que l’IA automatise vraiment dans une PME",
   intro:
-    "Pas de démo de labo : des systèmes branchés sur vos données et vos outils, mesurés sur le temps qu’ils rendent à vos équipes.",
+    "Des systèmes branchés sur vos données et vos outils, mesurés sur le temps qu’ils rendent à vos équipes.",
 };
 
 export const casUsagePages: CasUsagePage[] = [
@@ -67,7 +67,7 @@ export const casUsagePages: CasUsagePage[] = [
       "Le dossier est prêt avec de l’avance, et il reste du temps pour une dernière relecture au lieu d’une course contre la montre.",
     ],
     whyNotSaas:
-      "Un outil générique de réponse aux appels d’offres propose des trames vides. Il ne connaît ni votre catalogue, ni vos offres passées, ni les clauses que vos clients redemandent à chaque fois. Le système que nous construisons se branche sur VOS documents (dossiers partagés, CRM, réponses gagnantes) et applique VOS règles métier. Le premier jet ressemble déjà à ce que vous auriez écrit, pas à des cases vides à remplir.",
+      "Un outil générique de réponse aux appels d’offres propose des trames vides. Il ne connaît ni votre catalogue, ni vos offres passées, ni les clauses que vos clients redemandent à chaque fois. Le système que nous construisons se branche sur VOS documents (dossiers partagés, CRM, réponses gagnantes) et applique VOS règles métier. Le premier jet ressemble déjà à ce que vous auriez écrit.",
     prerequisites: [
       "Un historique d’au moins quelques dizaines de réponses passées, exploitable même s’il est mal rangé.",
       "Un accès aux documents de référence à jour : catalogues, CV, certifications, réponses gagnantes.",
@@ -86,7 +86,7 @@ export const casUsagePages: CasUsagePage[] = [
       {
         question: "Est-ce que l’IA répond toute seule à un appel d’offres ?",
         answer:
-          "Non, et ce n’est pas l’objectif. Elle génère un premier jet à partir de vos documents. Un chargé d’affaires relit, corrige les points spécifiques au client et signe la réponse. L’IA fait gagner du temps sur la recherche et la rédaction, pas sur la décision.",
+          "Non, et ce n’est pas l’objectif. Elle génère un premier jet à partir de vos documents. Un chargé d’affaires relit, corrige les points spécifiques au client et signe la réponse. L’IA fait gagner du temps sur la recherche et la rédaction ; la décision reste la vôtre.",
       },
       {
         question:
@@ -102,13 +102,13 @@ export const casUsagePages: CasUsagePage[] = [
       {
         question: "Combien de temps avant d’avoir un système en production ?",
         answer:
-          "Cela dépend du volume et de l’état de votre base documentaire, mais l’objectif est un système qui tourne réellement, pas un prototype de démonstration qui reste au labo.",
+          "Cela dépend du volume et de l’état de votre base documentaire, mais l’objectif est un système qui tourne réellement en production.",
       },
       {
         question:
           "Nos dossiers d’appels d’offres contiennent des informations sensibles. Sont-ils protégés ?",
         answer:
-          "Oui. L’architecture respecte le RGPD et l’AI Act dès la conception, avec un hébergement qui garde vos données sous contrôle. La souveraineté de vos documents est un point de départ, pas une option.",
+          "Oui. L’architecture respecte le RGPD et l’AI Act dès la conception, avec un hébergement qui garde vos données sous contrôle. La souveraineté de vos documents est un point de départ.",
       },
     ],
     relatedSecteurs: ["industrie", "services-b2b", "assurance-mutuelle"],
@@ -172,7 +172,7 @@ export const casUsagePages: CasUsagePage[] = [
       {
         question: "Combien de temps pour mettre l’assistant en production ?",
         answer:
-          "Cela dépend du volume de documentation à connecter et du nombre de canaux, mais l’objectif reste un système qui tourne réellement en production, pas une démo qui reste au labo.",
+          "Cela dépend du volume de documentation à connecter et du nombre de canaux, mais l’objectif reste un système qui tourne réellement en production.",
       },
       {
         question: "Nos données clients restent-elles protégées ?",
@@ -210,7 +210,7 @@ export const casUsagePages: CasUsagePage[] = [
       "Le document est classé et archivé automatiquement, retrouvable en quelques secondes.",
     ],
     whyNotSaas:
-      "Un outil générique de lecture de factures reconnaît des formats standards, mais bute sur vos bons de commande maison, vos gabarits fournisseurs spécifiques ou vos règles de rapprochement internes. Le système que nous construisons apprend VOS documents et se branche directement sur VOTRE ERP ou logiciel de comptabilité, pas sur un export à réimporter à la main. Les règles de validation sont les vôtres, pas un paramétrage générique.",
+      "Un outil générique de lecture de factures reconnaît des formats standards, mais bute sur vos bons de commande maison, vos gabarits fournisseurs spécifiques ou vos règles de rapprochement internes. Le système que nous construisons apprend VOS documents et se branche directement sur VOTRE ERP ou logiciel de comptabilité, sans export à réimporter à la main. Les règles de validation sont les vôtres.",
     prerequisites: [
       "Un volume de documents régulier (au moins plusieurs dizaines par semaine) qui justifie l’automatisation.",
       "Un accès à l’ERP ou au logiciel de comptabilité pour y envoyer les données extraites.",
@@ -234,7 +234,7 @@ export const casUsagePages: CasUsagePage[] = [
       {
         question: "Comment corriger une erreur si elle passe malgré tout ?",
         answer:
-          "Chaque document traité garde une trace de son origine et des données extraites, ce qui permet de corriger et de retrouver l’erreur facilement. Ce n’est pas une boîte noire.",
+          "Chaque document traité garde une trace de son origine et des données extraites, ce qui permet de corriger et de retrouver l’erreur facilement.",
       },
       {
         question: "Est-ce que ça remplace notre équipe comptable ?",
@@ -244,13 +244,13 @@ export const casUsagePages: CasUsagePage[] = [
       {
         question: "Combien de temps pour que le système tourne en production ?",
         answer:
-          "Cela dépend de la variété de vos documents et de la connexion à votre ERP, mais l’objectif est un système en usage réel, pas un prototype qui reste au stade de test.",
+          "Cela dépend de la variété de vos documents et de la connexion à votre ERP, mais l’objectif est un système en usage réel, utilisé chaque semaine.",
       },
       {
         question:
           "Nos factures et contrats contiennent des données sensibles. Comment sont-elles protégées ?",
         answer:
-          "L’architecture respecte le RGPD et l’AI Act dès la conception, avec un hébergement qui garde vos données sous contrôle. La sécurité n’est pas une option ajoutée après coup.",
+          "L’architecture respecte le RGPD et l’AI Act dès la conception, avec un hébergement qui garde vos données sous contrôle. La sécurité est posée dès la conception.",
       },
     ],
     relatedSecteurs: ["expertise-comptable", "industrie", "services-b2b"],
@@ -309,12 +309,12 @@ export const casUsagePages: CasUsagePage[] = [
       {
         question: "Nos équipes vont-elles devoir changer leurs habitudes ?",
         answer:
-          "Très peu. Il y a un seul point d’entrée à connaître au lieu de dix recherches natives différentes. C’est plus simple que ce qui existe aujourd’hui, pas plus compliqué.",
+          "Très peu. Il y a un seul point d’entrée à connaître au lieu de dix recherches natives différentes. C’est plus simple que ce qui existe aujourd’hui.",
       },
       {
         question: "Combien de temps pour connecter nos outils ?",
         answer:
-          "Cela dépend du nombre de sources à relier, mais l’objectif est un système utilisé au quotidien, pas un prototype qui reste au stade de démonstration.",
+          "Cela dépend du nombre de sources à relier, mais l’objectif est un système utilisé au quotidien.",
       },
       {
         question: "Où sont hébergées nos données pendant la recherche ?",
@@ -345,10 +345,10 @@ export const casUsagePages: CasUsagePage[] = [
       "Elle enrichit automatiquement la fiche avec les informations disponibles pour donner du contexte au commercial.",
       "Les demandes qualifiées sont routées directement vers le bon commercial, avec la fiche déjà remplie dans le CRM.",
       "Les demandes hors cible ou peu qualifiées sont écartées ou orientées vers un traitement différent, sans mobiliser un commercial.",
-      "Le commercial garde la main sur la décision finale de prise de contact : il reçoit un dossier prêt, pas un ordre à exécuter.",
+      "Le commercial garde la main sur la décision finale de prise de contact : il reçoit un dossier prêt à travailler.",
     ],
     whyNotSaas:
-      "Un outil générique de scoring applique une grille standard qui ignore vos critères réels : votre client idéal, votre cycle de vente, les signaux qui chez vous distinguent un bon prospect d’un simple curieux. Le système que nous construisons apprend vos règles de qualification et se branche sur VOTRE CRM, pas sur un score générique à réinterpréter à chaque fois. Vos commerciaux reçoivent des dossiers triés selon vos propres critères.",
+      "Un outil générique de scoring applique une grille standard qui ignore vos critères réels : votre client idéal, votre cycle de vente, les signaux qui chez vous distinguent un bon prospect d’un simple curieux. Le système que nous construisons apprend vos règles de qualification et se branche sur VOTRE CRM et rend un score que vos commerciaux comprennent du premier coup. Vos commerciaux reçoivent des dossiers triés selon vos propres critères.",
     prerequisites: [
       "Un CRM ou un outil de suivi des demandes déjà en place, même basique.",
       "Des critères de qualification déjà identifiés en interne, même informels (taille d’entreprise cible, budget, urgence).",
@@ -378,12 +378,12 @@ export const casUsagePages: CasUsagePage[] = [
       {
         question: "Que se passe-t-il si un lead est mal classé ?",
         answer:
-          "Le classement reste modifiable et chaque correction affine les règles pour la suite. Ce n’est pas un verdict figé, c’est un tri qui s’améliore avec l’usage.",
+          "Le classement reste modifiable et chaque correction affine les règles pour la suite. C’est un tri qui s’améliore avec l’usage.",
       },
       {
         question: "Combien de temps avant que le tri soit automatique en production ?",
         answer:
-          "Cela dépend de la complexité de vos critères et de la connexion au CRM, mais l’objectif est un système utilisé au quotidien par vos commerciaux, pas une démonstration isolée.",
+          "Cela dépend de la complexité de vos critères et de la connexion au CRM, mais l’objectif est un système utilisé au quotidien par vos commerciaux.",
       },
       {
         question: "Les données de nos prospects sont-elles en sécurité ?",

@@ -14,7 +14,7 @@ export const prixProjetIa: BlogArticle = {
   publishedAt: "2026-08-10",
   lede: "Les fourchettes publiées sur le web vont de moins de 3 000 € à plus de 100 000 € pour « un agent IA », sans jamais expliquer le calcul. Voici les cinq postes qui font varier la facture, et de quoi lire un devis sans se faire raconter d’histoires.",
   keyTakeaways: [
-    "Un prix annoncé avant d’avoir regardé vos processus et vos données n’est pas un prix : c’est un tarif de catalogue posé sur un projet que personne n’a décrit.",
+    "Un prix annoncé avant d’avoir regardé vos processus et vos données est un tarif de catalogue posé sur un projet que personne n’a décrit.",
     "Cinq postes expliquent l’écart entre deux devis d’agent IA : le nombre d’outils à brancher, l’état des données, l’autonomie confiée à l’agent, les exigences de conformité, et le coût de fonctionnement une fois le système en service.",
     "Le branchement aux outils existants coûte souvent plus cher que l’intelligence de l’agent : chaque outil ajoute des droits à obtenir, des formats à traduire et des pannes à gérer.",
     "Un devis sérieux sépare l’investissement de départ du coût annuel de fonctionnement : le premier se rembourse une fois, le second se soustrait au gain chaque année.",
@@ -118,7 +118,7 @@ export const prixProjetIa: BlogArticle = {
     },
     {
       kind: "p",
-      text: "Elle contient au moins quatre choses. Les appels aux modèles, facturés au [token](/glossaire/token) et donc proportionnels à votre volume réel, pas à celui de la démonstration. L’hébergement et la surveillance. Le temps humain de supervision : quelqu’un qui regarde ce que l’agent a fait et traite ce qu’il a renvoyé. Les évolutions, parce que vos formats bougent, vos outils changent de version et vos règles métier aussi.",
+      text: "Elle contient au moins quatre choses. Les appels aux modèles, facturés au [token](/glossaire/token) et donc proportionnels à votre volume réel. L’hébergement et la surveillance. Le temps humain de supervision : quelqu’un qui regarde ce que l’agent a fait et traite ce qu’il a renvoyé. Les évolutions, parce que vos formats bougent, vos outils changent de version et vos règles métier aussi.",
     },
     {
       kind: "p",
@@ -168,7 +168,7 @@ export const prixProjetIa: BlogArticle = {
       kind: "list",
       ordered: true,
       items: [
-        "Quels outils l’agent lit-il, dans lesquels écrit-il ? Une liste nominative, pas « vos outils ».",
+        "Quels outils l’agent lit-il, dans lesquels écrit-il ? Une liste nominative, nom de logiciel par nom de logiciel.",
         "Qui rassemble et nettoie les données, et ce temps est-il dans le prix ou en supplément ?",
         "Quelle autonomie est chiffrée, et que se passe-t-il quand l’agent n’est pas sûr de lui ?",
         "Quelles données personnelles ou sensibles sont touchées, et où sont-elles hébergées ?",
@@ -198,7 +198,7 @@ export const prixProjetIa: BlogArticle = {
     {
       question: "Pourquoi les prix des agents IA varient autant ?",
       answer:
-        "Parce que le mot recouvre deux objets très différents : un assistant qui répond dans une fenêtre de discussion sans toucher à vos systèmes, et un système qui lit vos dossiers, écrit dans vos outils et agit seul sur certains cas. L’essentiel du coût vient des branchements, de la préparation des données et du filet de sécurité, pas du modèle d’IA lui-même.",
+        "Parce que le mot recouvre deux objets très différents : un assistant qui répond dans une fenêtre de discussion sans toucher à vos systèmes, et un système qui lit vos dossiers, écrit dans vos outils et agit seul sur certains cas. L’essentiel du coût vient des branchements, de la préparation des données et du filet de sécurité. Le modèle d’IA lui-même pèse peu.",
     },
     {
       question: "Combien coûte le fonctionnement d’un agent IA par mois ?",

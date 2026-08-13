@@ -63,12 +63,12 @@ export const villeCommon = {
       {
         title: "Le business case",
         description:
-          "On chiffre le gain attendu et le coût avant tout engagement. Vous décidez sur des chiffres, pas sur une intuition.",
+          "On chiffre le gain attendu et le coût avant tout engagement. Vous décidez sur des chiffres.",
       },
       {
         title: "La mise en production",
         description:
-          "On construit le système et on le branche sur vos outils. Vos équipes l’utilisent au quotidien, pas de prototype qui dort dans un tiroir.",
+          "On construit le système et on le branche sur vos outils. Vos équipes l’utilisent au quotidien.",
       },
       {
         title: "La mesure",
@@ -196,7 +196,7 @@ export const villes: Ville[] = [
       "Consultant IA à Sophia Antipolis : agents IA, RAG et automatisations pour éditeurs, services B2B et industriels de la technopole. Premier échange gratuit.",
     h1: "Consultant IA à Sophia Antipolis pour les entreprises de la technopole",
     intro:
-      "Coucou IA est basé à Nice, à une demi-heure de la technopole. On vient sur place quand ça compte, la visio couvre le reste. Et on arrive avec un chiffrage, pas un discours.",
+      "Coucou IA est basé à Nice, à une demi-heure de la technopole. On vient sur place quand ça compte, la visio couvre le reste. Et on arrive avec un chiffrage.",
     contexte: {
       title: "Parler IA à des gens qui en font déjà",
       paragraphs: [
@@ -265,12 +265,12 @@ export const villes: Ville[] = [
       {
         question: "Nos équipes connaissent déjà l’IA. Qu’apportez-vous de plus ?",
         answer:
-          "Un chiffrage et une mise en production. Savoir construire un agent et savoir où il rapporte dans une entreprise sont deux métiers différents. On apporte le second, et on livre le premier. Vos développeurs restent concentrés sur votre produit, pas sur l’outillage interne.",
+          "Un chiffrage et une mise en production. Savoir construire un agent et savoir où il rapporte dans une entreprise sont deux métiers différents. On apporte le second, et on livre le premier. Vos développeurs restent concentrés sur votre produit.",
       },
       {
         question: "Quels types d’entreprises accompagnez-vous ?",
         answer:
-          "Des PME de 10 à 250 salariés : éditeurs, sociétés de services, industriels. Le point commun : des dirigeants qui veulent des résultats mesurés, pas un pilote de plus. Avoir déjà une équipe technique n’est ni requis ni gênant, ça accélère juste les intégrations.",
+          "Des PME de 10 à 250 salariés : éditeurs, sociétés de services, industriels. Le point commun : des dirigeants qui veulent des résultats mesurés. Avoir déjà une équipe technique n’est ni requis ni gênant, ça accélère juste les intégrations.",
       },
       {
         question: "Travaillez-vous à distance ?",
@@ -292,7 +292,7 @@ export const villes: Ville[] = [
       "Consultant IA à Monaco : yachting, immobilier, services. Basé à Nice, sur place en Principauté, données sous votre contrôle. Premier échange gratuit.",
     h1: "Consultant IA à Monaco pour les PME et les sociétés de services",
     intro:
-      "Coucou IA est basé à Nice, à une demi-heure de la Principauté. On se déplace à Monaco pour les rendez-vous qui comptent, et la visio assure le suivi. La discrétion fait partie de la méthode, pas des options.",
+      "Coucou IA est basé à Nice, à une demi-heure de la Principauté. On se déplace à Monaco pour les rendez-vous qui comptent, et la visio assure le suivi. La discrétion fait partie de la méthode.",
     contexte: {
       title: "L’IA à Monaco : utile, discrète, sous votre contrôle",
       paragraphs: [
@@ -394,7 +394,7 @@ export const villes: Ville[] = [
       paragraphs: [
         "Commandes, dossiers, documents techniques : quand les volumes montent, chaque tâche répétitive coûte cher en heures. C’est là qu’une IA bien placée se rembourse le plus vite, et c’est le quotidien des entreprises qu’on suit ici, dans l’industrie, les services et l’immobilier.",
         "Soyons clairs sur la distance : notre bureau est à Nice, à deux heures de route. On ne prétend pas passer chaque semaine dans vos locaux. On vient pour ce qui mérite du face à face : la rencontre de vos équipes, la restitution du business case, le lancement. Le reste passe en visio, sans rien perdre.",
-        "La région ne manque pas de prestataires informatiques. Notre différence tient en deux temps : un chiffrage avant que vous n’engagiez un euro, des résultats mesurés après la mise en service. Pas de journées vendues au poids, un système qui tourne et des chiffres pour en juger.",
+        "La région ne manque pas de prestataires informatiques. Notre différence tient en deux temps : un chiffrage avant que vous n’engagiez un euro, des résultats mesurés après la mise en service. Un système qui tourne, et des chiffres pour en juger.",
       ],
     },
     carte: [

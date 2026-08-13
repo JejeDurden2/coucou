@@ -30,7 +30,8 @@
 - Parler de LEUR monde : « vous / votre » domine « je / nous ». Ne jamais ouvrir sur qui je suis.
 - Un seul ask par message. Premier contact : CTA d'intérêt (« Ça vous parle ? »), jamais une demande de call. Le lien Cal.com n'apparaît qu'APRÈS un « oui ».
 - Chaque message tient seul : le prospect n'a peut-être rien lu avant.
-- Français, « vous », entreprise unipersonnelle (« je », jamais « notre équipe »). Aucun tiret cadratin ni demi-cadratin. Aucun client inventé, aucun chiffre inventé : les illustrations chiffrées sont toujours étiquetées « illustration, pas une référence client ».
+- Français, « vous », entreprise unipersonnelle (« je », jamais « notre équipe »). Aucun tiret cadratin ni demi-cadratin. Aucun client inventé, aucun chiffre inventé : les illustrations chiffrées sont toujours étiquetées « illustration, sans nom de client ».
+- **Jamais « X, pas Y ».** L'affirmation suivie de son contraire nié (« un point de départ, pas une option », « Un système qui tourne. Pas une démo. », « ce n'est pas X, c'est Y ») est le tic IA le plus reconnaissable en français. On écrit l'affirmation et on s'arrête.
 - **Test avant envoi :** est-ce que moi, dirigeant, je répondrais à ce message si je le recevais ?
 
 ---
@@ -104,7 +105,7 @@ Variables entre crochets réduites au minimum. Chacune est suivie d'un exemple r
 >
 > Autre angle : la période fiscale. Chaque année, bilans, liasses et déclarations se concentrent sur quelques semaines, et l'équipe encaisse le pic sans renfort durable.
 >
-> Un exemple pour situer l'ordre de grandeur (illustration, pas une référence client) : sur un cabinet d'une douzaine de collaborateurs, pré-remplir les éléments récurrents des liasses et laisser l'expert relire peut récupérer plusieurs jours de collaborateur sur le mois le plus chargé.
+> Un exemple pour situer l'ordre de grandeur (illustration, sans nom de client) : sur un cabinet d'une douzaine de collaborateurs, pré-remplir les éléments récurrents des liasses et laisser l'expert relire peut récupérer plusieurs jours de collaborateur sur le mois le plus chargé.
 >
 > La vraie question, c'est si ça se transpose chez vous. C'est tout l'objet des 30 min. Je vous montre ?
 >
@@ -142,7 +143,7 @@ Variables entre crochets réduites au minimum. Chacune est suivie d'un exemple r
 
 > Bonjour [Prénom],
 >
-> Pour situer l'ordre de grandeur sur les réponses aux appels d'offres (illustration, pas une référence client) : sur une PME industrielle qui traite plusieurs DCE par mois, faire produire le premier dossier de réponse par l'IA peut le ramener d'une semaine à une journée.
+> Pour situer l'ordre de grandeur sur les réponses aux appels d'offres (illustration, sans nom de client) : sur une PME industrielle qui traite plusieurs DCE par mois, faire produire le premier dossier de réponse par l'IA peut le ramener d'une semaine à une journée.
 >
 > Concrètement, ça veut dire répondre à plus d'appels d'offres sans mobiliser un ingénieur à temps plein sur la paperasse.
 >
@@ -189,7 +190,7 @@ Règle d'or : le lien Cal.com n'apparaît qu'à partir d'une réponse engagée. 
 > Je comprends, c'est justement le problème que l'IA adresse. Aucune urgence : le lien reste ouvert quand vous voulez, même dans trois semaines [lien]. En attendant, je vous envoie la carte des cas d'usage IA pour [votre activité] : deux minutes de lecture, vous verrez tout de suite si un des cas vous parle [carte].
 
 **« Envoyez une doc / une plaquette »**
-> Une plaquette vous parlerait de moi, pas de vous. Ce qui est vraiment utile, c'est 30 min sur VOTRE cas, chiffres à l'appui : un créneau ici [lien]. En attendant, j'ai mieux qu'une plaquette : la carte des cas d'usage IA pour [votre activité], vous verrez si ça vous parle avant même qu'on en discute [carte].
+> Une plaquette parlerait de moi. Ce qui est vraiment utile, c'est 30 min sur VOTRE cas, chiffres à l'appui : un créneau ici [lien]. En attendant, j'ai mieux qu'une plaquette : la carte des cas d'usage IA pour [votre activité], vous verrez si ça vous parle avant même qu'on en discute [carte].
 
 **« Combien ça coûte ? »**
 > Honnêtement, je ne peux pas vous donner un prix sérieux sans connaître le périmètre : ça n'aurait aucun sens de vous avancer un chiffre au hasard. C'est justement ce que le point de départ sert à cadrer. Il est gratuit, 30 min, et à la fin vous savez ce qui vaut le coup d'être chiffré, et ce qui ne vaut pas la peine. On en parle ? [lien]

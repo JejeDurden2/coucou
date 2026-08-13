@@ -43,7 +43,7 @@ export const services: ServicesSection = {
       verb: "Trouver.",
       title: "Audit & stratégie IA",
       description:
-        "On part de votre activité, pas de la techno. On regarde vos process, vos données et ce qui vous fait perdre du temps, puis on chiffre le retour attendu de chaque piste.",
+        "On part de votre activité. On regarde vos process, vos données et ce qui vous fait perdre du temps, puis on chiffre le retour attendu de chaque piste.",
       hook: "On dresse votre carte des possibles : où l’IA rapporte chez vous, et où elle ne sert à rien.",
       deliverables: [
         "L’état des lieux : vos process, vos données, vos outils",
@@ -52,7 +52,7 @@ export const services: ServicesSection = {
         "Le cadre RGPD et AI Act posé dès la conception",
       ],
       livrable:
-        "Une feuille de route chiffrée, classée par impact. Pas un rapport qui dort dans un tiroir.",
+        "Une feuille de route chiffrée, classée par impact, prête à exécuter.",
     },
     {
       id: "developpement",
@@ -69,7 +69,7 @@ export const services: ServicesSection = {
         "L’intégration à vos outils : ERP, CRM, Drive, mails",
       ],
       livrable:
-        "Un système qui tourne en production, mesuré sur ses résultats. Pas une démo.",
+        "Un système qui tourne en production, mesuré sur ses résultats.",
     },
     {
       id: "suivi",
@@ -80,13 +80,13 @@ export const services: ServicesSection = {
         "Un système IA vit : les modèles changent, vos outils et vos volumes aussi. On surveille le système en production, on corrige, on le fait évoluer, avec un point mensuel sur les résultats.",
       hook: "Un système IA vit : il faut quelqu’un qui le regarde. On surveille le vôtre en production, on corrige, on le fait évoluer.",
       deliverables: [
-        "La surveillance du système en production, pas seulement à la livraison",
+        "La surveillance du système en production, mois après mois",
         "Les corrections dès qu’un comportement dévie",
         "Les évolutions quand vos besoins ou vos outils changent",
         "Le point mensuel : résultats mesurés, décisions pour la suite",
       ],
       livrable:
-        "Un système qui reste fiable dans le temps. Pas un chantier abandonné.",
+        "Un système qui reste fiable dans le temps.",
     },
   ],
 };
@@ -113,7 +113,7 @@ export type StarterSection = {
 
 export const starter: StarterSection = {
   label: "Commencer petit",
-  title: "Commencez par un bout, pas par tout.",
+  title: "Commencez par un bout.",
   sub: "Deux formats courts pour voir l’IA tourner chez vous, sans engager un chantier. Vous décidez la suite après.",
   offers: [
     {
@@ -122,7 +122,7 @@ export const starter: StarterSection = {
       format: "En production en 3 semaines",
       hook: "Un seul cas d’usage, cadré lors du point de départ, en production en trois semaines.",
       points: [
-        "Un périmètre : un cas d’usage, pas dix",
+        "Un périmètre serré : un seul cas d’usage",
         "Validation humaine sur les actions sensibles",
         "Un mois d’ajustements inclus",
       ],
@@ -133,7 +133,7 @@ export const starter: StarterSection = {
       format: "Une journée dans vos locaux",
       hook: "Une journée avec votre équipe, sur vos cas réels et vos outils.",
       points: [
-        "Vos cas, vos outils : pas d’exemples génériques",
+        "Vos cas, vos outils, vos données",
         "Les premiers réflexes acquis en pratiquant",
         "Deux ou trois usages en place dès le soir",
       ],

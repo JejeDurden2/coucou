@@ -17,7 +17,7 @@ export const diagDataIaBpifrance: BlogArticle = {
     "Le Diag Data IA de Bpifrance finance 8 jours d’un expert data et IA agréé, sur 3 mois maximum, facturés 10 000 € HT et pris en charge à 40 % par France 2030 : reste à charge 6 000 € HT.",
     "Sont éligibles les PME et ETI au sens européen de 10 à 2 000 salariés, avec au moins 1 000 000 € de chiffre d’affaires sur 12 mois et plus d’un an d’existence, clientes ou non de Bpifrance.",
     "France 2030 a mobilisé 9,6 M€ pour cofinancer 2 000 accompagnements sur 2026 et 2027 : l’enveloppe est comptée, le dispositif n’est pas un droit permanent.",
-    "L’expert est agréé individuellement par Bpifrance, pas au nom de son cabinet, et c’est l’entreprise qui le désigne dans sa demande sur diag.bpifrance.fr.",
+    "Bpifrance agrée l’expert à titre individuel, et c’est l’entreprise qui le désigne dans sa demande sur diag.bpifrance.fr.",
     "Le Diag finance l’analyse et la feuille de route, jamais le développement : la mise en production reste entièrement à votre charge et se décide sur un business case chiffré.",
   ],
   blocks: [
@@ -69,7 +69,7 @@ export const diagDataIaBpifrance: BlogArticle = {
     {
       kind: "callout",
       title: "L’enveloppe est comptée",
-      body: "France 2030 a mobilisé 9,6 M€ pour cofinancer 2 000 accompagnements sur 2026 et 2027. Ce n’est pas un guichet permanent : c’est un budget avec un plafond et une date de fin. Si le dispositif vous concerne, le bon moment pour instruire la demande est celui où vous y pensez.",
+      body: "France 2030 a mobilisé 9,6 M€ pour cofinancer 2 000 accompagnements sur 2026 et 2027. C’est un budget avec un plafond et une date de fin. Si le dispositif vous concerne, le bon moment pour instruire la demande est celui où vous y pensez.",
     },
     {
       kind: "h2",
@@ -82,11 +82,11 @@ export const diagDataIaBpifrance: BlogArticle = {
     },
     {
       kind: "p",
-      text: "La conséquence est pratique : un cabinet peut être excellent sans qu’aucun de ses consultants ne soit agréé, et un expert agréé peut travailler seul. Vérifiez le nom de la personne, pas l’enseigne. Puis posez-lui les questions que mérite n’importe quel prestataire : quels secteurs il connaît, ce qu’il a mis en production, ce qu’il vous rendra à la fin.",
+      text: "La conséquence est pratique : un cabinet peut être excellent sans qu’aucun de ses consultants ne soit agréé, et un expert agréé peut travailler seul. Vérifiez le nom de la personne. Puis posez-lui les questions que mérite n’importe quel prestataire : quels secteurs il connaît, ce qu’il a mis en production, ce qu’il vous rendra à la fin.",
     },
     {
       kind: "p",
-      text: "Ensuite, huit jours sur trois mois au maximum : entretiens avec vos équipes, revue de vos données et de vos outils, tri des usages possibles, rédaction. Trois mois est un plafond, pas un objectif. Plus la mission est resserrée, plus la feuille de route arrive pendant que le sujet est encore chaud.",
+      text: "Ensuite, huit jours sur trois mois au maximum : entretiens avec vos équipes, revue de vos données et de vos outils, tri des usages possibles, rédaction. Trois mois est un plafond. Plus la mission est resserrée, plus la feuille de route arrive pendant que le sujet est encore chaud.",
     },
     {
       kind: "h2",
@@ -123,7 +123,7 @@ export const diagDataIaBpifrance: BlogArticle = {
     },
     {
       kind: "p",
-      text: "Le chiffre le plus parlant de cette étude est ailleurs : 71 % des entreprises qui n’utilisent pas l’IA disent ne pas y voir d’utilité. Pas le prix, pas la technique, pas le règlement. L’utilité. C’est exactement ce qu’un état des lieux sérieux traite : montrer, sur vos propres tâches, ce qui change et ce qui ne change rien. Le [traitement automatique de documents](/cas-usage/traitement-documents) est le cas où le déclic se produit le plus vite, parce que le temps perdu s’y compte en heures visibles.",
+      text: "Le chiffre le plus parlant de cette étude est ailleurs : 71 % des entreprises qui n’utilisent pas l’IA disent ne pas y voir d’utilité. Le frein n’est ni le prix, ni la technique, ni le règlement : c’est l’utilité. C’est exactement ce qu’un état des lieux sérieux traite : montrer, sur vos propres tâches, ce qui change et ce qui ne change rien. Le [traitement automatique de documents](/cas-usage/traitement-documents) est le cas où le déclic se produit le plus vite, parce que le temps perdu s’y compte en heures visibles.",
     },
     {
       kind: "h2",
@@ -166,7 +166,7 @@ export const diagDataIaBpifrance: BlogArticle = {
         "Le Diag Data IA convient quand vous partez de loin, que le périmètre est large, et que vous voulez balayer toute l’entreprise avec un cadre et un tarif connus d’avance.",
         "Un état des lieux privé convient quand vous avez déjà une idée précise, un délai court, ou un besoin qui sort du format : huit jours sur trois mois n’est pas toujours le bon rythme.",
         "Les critères d’éligibilité tranchent aussi tout seuls : moins de 10 salariés, moins de 1 000 000 € de chiffre d’affaires ou moins d’un an d’existence, et la question ne se pose pas.",
-        "Dernier critère, le plus honnête : la personne. Agréée ou non, regardez ce qu’elle a mis en production, pas ce qu’elle a présenté en réunion.",
+        "Dernier critère, le plus honnête : la personne. Agréée ou non, regardez ce qu’elle a mis en production.",
       ],
     },
     {

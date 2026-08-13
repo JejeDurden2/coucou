@@ -95,7 +95,7 @@
 **Différenciateurs clés :**
 - **Ouvrir le champ des possibles** : on montre au dirigeant non expert ce que l'IA rend possible chez lui, par où commencer, sans jargon, puis on le met en production. C'est le cœur du positionnement.
 - **Le business case chiffré comme preuve de méthode** : on chiffre le retour attendu avant d'engager, on mesure les résultats après (temps gagné, coûts réduits, revenus rendus possibles). Une méthode, pas une garantie contractuelle.
-- **On livre en production, pas des slides** : la stratégie ET le système qui tourne réellement chez le client, intégré à ses outils existants.
+- **On livre en production** : la stratégie ET le système qui tourne réellement chez le client, intégré à ses outils existants.
 - **Conseil + delivery sous un même toit** : la vision stratégique d'un cabinet et les mains dans le code d'une équipe technique. Ni l'un sans l'autre.
 - **Taillé pour la PME/ETI française.** Le bon calibre : ni l'usine à gaz d'un grand cabinet, ni le pari risqué du freelance. Ancrage marché français : RGPD, AI Act, souveraineté des données.
 
@@ -113,9 +113,9 @@
 |-----------|---------|
 | **« C'est trop cher pour nous. »** | On ne démarre jamais sans un business case chiffré : vous voyez le retour attendu avant d'engager. On chiffre le retour attendu avant d'engager : l'enjeu n'est pas le coût, c'est ce que ça vous rapporte. Et on calibre pour une PME, pas pour un grand groupe. |
 | **« L'IA, ce n'est pas pour une entreprise comme la nôtre. »** | L'IA n'est pas réservée aux géants de la tech. On commence par trouver votre point de départ, un échange gratuit qui identifie des cas d'usage concrets dans VOTRE activité. Si l'IA n'apporte rien chez vous, on vous le dit franchement. |
-| **« La sécurité et la confidentialité de nos données ? »** | On conçoit dès le départ dans le respect du RGPD et de l'AI Act, avec des architectures qui gardent vos données sous contrôle (hébergement adapté, pas de fuite vers des modèles publics quand ce n'est pas voulu). La souveraineté des données est un point de départ, pas une option. |
-| **« On a déjà essayé ChatGPT, ça n'a rien changé. »** | ChatGPT tout seul, c'est un outil individuel, pas un système d'entreprise. La valeur vient quand l'IA est branchée sur VOS données et VOS process, en production, mesurée. C'est exactement notre métier : pas le prompt, le système. |
-| **« On a déjà été échaudés par un POC qui n'a jamais abouti. »** | C'est justement pour ça qu'on existe. On ne livre pas un POC de démo, on livre un système en production, mesuré sur ses résultats. Le POC qui reste au labo, ce n'est pas un livrable, c'est un échec facturé. |
+| **« La sécurité et la confidentialité de nos données ? »** | On conçoit dès le départ dans le respect du RGPD et de l'AI Act, avec des architectures qui gardent vos données sous contrôle (hébergement adapté, aucune fuite vers des modèles publics quand ce n'est pas voulu). La souveraineté des données est un point de départ. |
+| **« On a déjà essayé ChatGPT, ça n'a rien changé. »** | ChatGPT tout seul, c'est un outil individuel. La valeur vient quand l'IA est branchée sur VOS données et VOS process, en production, mesurée. C'est exactement notre métier : le système. |
+| **« On a déjà été échaudés par un POC qui n'a jamais abouti. »** | C'est justement pour ça qu'on existe. On ne livre pas un POC de démo, on livre un système en production, mesuré sur ses résultats. Le POC qui reste au labo est un échec facturé. |
 
 **Anti-persona (pas fait pour nous) :** grands comptes (cycles longs, appels d'offres, achats centralisés) ; startups pré-revenu (pas de budget, cherchent un CTO) ; entreprises qui veulent « juste une démo » sans intention de déployer ; dirigeants qui cherchent le prestataire le moins-disant sans intérêt pour le résultat ; structures sans aucune donnée exploitable ni process à optimiser.
 
@@ -154,8 +154,8 @@
 **Glossaire :**
 | Terme | Signification (formulation client) |
 |-------|-------------------------------------|
-| Agent IA | Un programme qui exécute des tâches pour vous de bout en bout, pas juste répondre à une question |
-| RAG | L'IA qui répond à partir de VOS documents et données, pas de connaissances générales |
+| Agent IA | Un programme qui exécute des tâches pour vous de bout en bout |
+| RAG | L'IA qui répond à partir de VOS documents et de vos données |
 | POC | Prototype de démonstration, utile pour tester, dangereux s'il ne devient jamais un vrai système |
 | ROI | Retour sur investissement : ce que ça vous rapporte concrètement (temps, argent) |
 | AI Act | La réglementation européenne sur l'IA : le cadre à respecter dès la conception |
@@ -173,7 +173,7 @@
 **Garde-fous. 3 exemples concrets à FAIRE / NE PAS FAIRE :**
 
 1. **Accroche d'accueil**
-   - ✅ À FAIRE : « Coucou. On installe l'IA qui rapporte vraiment dans votre PME. Pas des slides, des systèmes qui tournent. »
+   - ✅ À FAIRE : « Coucou. On installe l'IA qui rapporte vraiment dans votre PME : des systèmes qui tournent, mesurés sur leurs résultats. »
    - ❌ À ÉVITER : « Bienvenue chez Coucou IA, votre partenaire de la transformation digitale par l'intelligence artificielle. »
 
 2. **Bénéfice / preuve**

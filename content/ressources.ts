@@ -69,10 +69,10 @@ export const ressourcesShared = {
   axisFaisabilite: "Faisabilité",
   enProductionTitle: "En production",
   enProductionBody:
-    "Un système qui tourne pour de vrai chez vous, utilisé par l'équipe chaque semaine. Pas une démo, pas un pilote qui ne dépasse jamais le stade du test.",
+    "Un système qui tourne pour de vrai chez vous, utilisé par l'équipe chaque semaine.",
   chiffresTitle: "Les chiffres",
   chiffresBody:
-    "Des ordres de grandeur réalistes pour situer le gain, pas des résultats mesurés chez un client. Votre business case chiffré les remplace au point de départ.",
+    "Des ordres de grandeur réalistes pour situer le gain. Ce ne sont pas des résultats mesurés chez un client : votre business case chiffré les remplace au point de départ.",
   // Cas d'usage.
   branchementLabel: "Se branche sur",
   questionsTitle: "Est-ce chez vous ?",
@@ -219,7 +219,7 @@ export const ressources: RessourcePage[] = [
         problem:
           "Un rendez-vous d’estimation se gagne sur la crédibilité du prix. Rassembler les ventes comparables, l’historique du bien et la tension du micro-marché prend une demi-journée quand on la trouve ; le propriétaire, lui, arrive avec trois estimations en ligne contradictoires.",
         solution:
-          "L’IA monte le dossier avant chaque rendez-vous : ventes réelles comparables (surface, époque, étage), délais de vente constatés dans le quartier, positionnement du prix. Le négociateur arrive avec des faits, pas une fourchette au doigt mouillé.",
+          "L’IA monte le dossier avant chaque rendez-vous : ventes réelles comparables (surface, époque, étage), délais de vente constatés dans le quartier, positionnement du prix. Le négociateur arrive avec des faits.",
         branchement:
           "les données DVF publiques, votre historique de ventes et les annonces actives du secteur",
         metric: "20 min",
@@ -333,7 +333,7 @@ export const ressources: RessourcePage[] = [
       {
         title: "Consolider taxe de séjour et récapitulatif DAC7",
         problem:
-          "La taxe de séjour se déclare commune par commune, avec des taux qui varient selon le classement du meublé ; les plateformes en collectent une partie, pas tout. Ajoutez le récapitulatif annuel DAC7 et les revenus par plateforme : une journée de tableur, propriétaire par propriétaire.",
+          "La taxe de séjour se déclare commune par commune, avec des taux qui varient selon le classement du meublé ; les plateformes n'en collectent qu'une partie. Ajoutez le récapitulatif annuel DAC7 et les revenus par plateforme : une journée de tableur, propriétaire par propriétaire.",
         solution:
           "L’IA consolide nuitées, revenus et taxes déjà collectées depuis vos plateformes et votre channel manager, par logement et par commune. Vous vérifiez et déclarez ; le rapport propriétaire tombe dans la foulée.",
         branchement: "les exports de vos plateformes et de votre channel manager",
@@ -514,7 +514,7 @@ export const ressources: RessourcePage[] = [
         problem:
           "Un devis sans réponse ne se relance pas : pas le temps, pas envie de paraître insistant. Une facture échue non plus. L’argent dort à deux endroits, le carnet de commandes et la trésorerie, pendant que vous êtes sur un toit.",
         solution:
-          "Chaque devis est relancé au rythme que vous avez choisi, chaque facture échue aussi, avec des messages qui vous ressemblent, pas des mises en demeure robotiques. Vous êtes au chantier ; les relances partent quand même, et vous voyez qui a ouvert, qui a répondu.",
+          "Chaque devis est relancé au rythme que vous avez choisi, chaque facture échue aussi, avec des messages qui vous ressemblent. Vous êtes au chantier ; les relances partent quand même, et vous voyez qui a ouvert, qui a répondu.",
         branchement: "votre outil de devis et facturation, avec vos formulations à vous",
         metric: "J+7",
         metricLabel: "première relance de chaque devis, factures échues relancées de même",

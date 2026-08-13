@@ -28,15 +28,15 @@ export const method: MethodSection = {
       number: "02",
       title: "Business case chiffré",
       description:
-        "Avant le moindre développement, on chiffre le retour attendu. Vous voyez le gain estimé, le périmètre et le coût. Vous décidez sur des chiffres, pas sur une promesse.",
+        "Avant le moindre développement, on chiffre le retour attendu. Vous voyez le gain estimé, le périmètre et le coût. Vous décidez sur des chiffres.",
       detail: "Le retour attendu, avant d’engager.",
     },
     {
       number: "03",
       title: "Déploiement en production",
       description:
-        "On construit le système et on le met en service dans vos outils. Pas un prototype qui reste au labo : quelque chose que vos équipes utilisent pour de vrai. Intégré, sécurisé, documenté.",
-      detail: "En production, pas au labo.",
+        "On construit le système et on le met en service dans vos outils : vos équipes s’en servent pour de vrai, chaque semaine. Intégré, sécurisé, documenté.",
+      detail: "Mis en service dans vos outils.",
     },
     {
       number: "04",

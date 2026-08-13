@@ -82,7 +82,7 @@ export const comparaisons: ComparaisonPage[] = [
     intro:
       "Un grand cabinet rassure : la marque, les équipes, la méthode. Mais pour une PME, la facture et les délais grimpent vite, et le livrable reste souvent une présentation. La vraie question n’est pas la taille du cabinet, c’est ce qui tourne chez vous à la fin.",
     verdict:
-      "Si vous êtes un groupe multi-pays avec une transformation à piloter sur plusieurs années, un grand cabinet a les moyens de vos ambitions : prenez-le, je vous le dis franchement. Si vous êtes une PME ou une ETI qui veut savoir par où commencer et voir un premier système en production sans y engloutir un budget de grand compte, je suis mieux placé : un seul interlocuteur, un business case chiffré avant la moindre ligne de code, et du concret livré, pas une présentation.",
+      "Si vous êtes un groupe multi-pays avec une transformation à piloter sur plusieurs années, un grand cabinet a les moyens de vos ambitions : prenez-le, je vous le dis franchement. Si vous êtes une PME ou une ETI qui veut savoir par où commencer et voir un premier système en production sans y engloutir un budget de grand compte, je suis mieux placé : un seul interlocuteur, un business case chiffré avant la moindre ligne de code, et du concret livré.",
     comparison: [
       {
         criterion: "Par où commencer",
@@ -94,7 +94,7 @@ export const comparaisons: ComparaisonPage[] = [
       {
         criterion: "Mise en production",
         coucou:
-          "Je livre le système qui tourne, branché sur vos outils, pas seulement le plan.",
+          "Je livre le système qui tourne, branché sur vos outils.",
         other:
           "La stratégie est le cœur du métier ; le développement est souvent confié à un autre prestataire.",
       },
@@ -130,14 +130,14 @@ export const comparaisons: ComparaisonPage[] = [
     differences: [
       {
         title: "La marque rassure, le système fait le travail",
-        body: "Un grand cabinet vend d’abord une signature et une méthode éprouvée sur des groupes du CAC 40. C’est rassurant, et parfois c’est exactement ce qu’il faut. Mais dans une PME, ce qui compte le lundi matin, ce n’est pas l’épaisseur du rapport, c’est de savoir si l’IA traite vraiment vos devis ou vos factures. Je vous vends le second, et je le mets en route.",
+        body: "Un grand cabinet vend d’abord une signature et une méthode éprouvée sur des groupes du CAC 40. C’est rassurant, et parfois c’est exactement ce qu’il faut. Mais dans une PME, ce qui compte le lundi matin, c’est de savoir si l’IA traite vraiment vos devis ou vos factures. Je vous vends le second, et je le mets en route.",
       },
       {
         title: "La présentation ou la production",
-        body: "Beaucoup de missions de conseil s’arrêtent au plan d’action : une belle feuille de route, puis il faut trouver qui la réalise. Le prototype reste au labo, le budget est déjà parti. Chez moi, la stratégie et le code sont sous le même toit : je chiffre, je priorise, puis je livre le système qui tourne. Pas de passage de relais où le projet se perd.",
+        body: "Beaucoup de missions de conseil s’arrêtent au plan d’action : une belle feuille de route, puis il faut trouver qui la réalise. Le prototype reste au labo, le budget est déjà parti. Chez moi, la stratégie et le code sont sous le même toit : je chiffre, je priorise, puis je livre le système qui tourne. Le projet ne change jamais de mains.",
       },
       {
-        title: "Le bon calibre, pas l’usine à gaz",
+        title: "Le bon calibre",
         body: "Les honoraires d’un grand cabinet et ses cycles de plusieurs mois sont calibrés pour des enjeux à sept chiffres. Sur un premier chantier IA de PME, c’est disproportionné : vous payez la structure avant de payer le résultat. Je travaille au périmètre réel de votre besoin, et vous voyez le retour attendu avant d’engager quoi que ce soit.",
       },
       {
@@ -159,7 +159,7 @@ export const comparaisons: ComparaisonPage[] = [
       {
         question: "Un grand cabinet n’est-il pas plus crédible pour un projet IA ?",
         answer:
-          "Sur un chantier de groupe, oui, la marque et la taille comptent. Sur un premier projet IA de PME, ce qui vous rend crédible en interne, c’est un système qui tourne et des résultats mesurés, pas l’épaisseur d’un rapport. C’est exactement ce que je livre.",
+          "Sur un chantier de groupe, oui, la marque et la taille comptent. Sur un premier projet IA de PME, ce qui vous rend crédible en interne, c’est un système qui tourne et des résultats mesurés. C’est exactement ce que je livre.",
       },
       {
         question: "Vous êtes seul, comment tenez-vous face à une équipe entière ?",
@@ -190,7 +190,7 @@ export const comparaisons: ComparaisonPage[] = [
       "ESN ou cabinet de conseil IA pour votre projet PME ? L’ESN exécute, je définis par où commencer puis je livre en production. Premier échange gratuit.",
     h1: "Coucou IA ou une ESN ?",
     intro:
-      "Une ESN vous fournit des développeurs et de la capacité, parfois en régie chez vous. C’est précieux quand vous savez déjà quoi construire. Sur l’IA, le nœud est en amont : par où commencer, et qui s’assure que ce qu’on code crée vraiment de la valeur, pas juste des jours-hommes facturés ?",
+      "Une ESN vous fournit des développeurs et de la capacité, parfois en régie chez vous. C’est précieux quand vous savez déjà quoi construire. Sur l’IA, le nœud est en amont : par où commencer, et qui s’assure que ce qu’on code crée vraiment de la valeur ?",
     verdict:
       "Si vous avez une DSI qui pilote, un cahier des charges clair et un besoin de renfort au forfait ou en régie sur la durée, une ESN fait très bien le travail. Si vous cherchez d’abord quelqu’un pour définir par où commencer, chiffrer le retour et livrer un premier système IA sans monter une équipe, je suis plus adapté : je décide du cap avec vous, puis je le construis. L’ESN exécute un plan ; je vous aide à écrire le bon.",
     comparison: [
@@ -211,7 +211,7 @@ export const comparaisons: ComparaisonPage[] = [
       {
         criterion: "Mise en production",
         coucou:
-          "Je livre un système qui tourne et mesuré, pas seulement du développement au forfait.",
+          "Je livre un système qui tourne, mesuré sur ses résultats.",
         other:
           "Forte capacité de développement, mais le résultat métier n’est pas toujours l’objet du contrat.",
       },
@@ -220,7 +220,7 @@ export const comparaisons: ComparaisonPage[] = [
         coucou:
           "Au projet, sur un périmètre chiffré, avec le retour attendu posé avant d’engager.",
         other:
-          "En régie ou au forfait, souvent en jours-hommes : vous payez la capacité, pas le résultat.",
+          "En régie ou au forfait, souvent en jours-hommes : vous payez des jours de travail.",
       },
       {
         criterion: "Interlocuteur",
@@ -258,7 +258,7 @@ export const comparaisons: ComparaisonPage[] = [
       title: "Quand choisir une ESN",
       body: "Une ESN est parfois le meilleur choix, et voici où elle prend clairement l’avantage.",
       cases: [
-        "Vous avez une DSI qui pilote et un cahier des charges déjà écrit : vous cherchez de la capacité de développement, pas une vision.",
+        "Vous avez une DSI qui pilote et un cahier des charges déjà écrit : vous cherchez de la capacité de développement.",
         "Vous voulez du renfort en régie sur la durée, intégré à vos équipes, sur un périmètre technique large qui dépasse l’IA.",
         "Le projet demande plusieurs profils en parallèle sur plusieurs mois, avec un volume qu’un interlocuteur unique ne peut pas porter.",
         "Vous devez faire évoluer et maintenir un parc applicatif existant, au-delà d’un premier chantier IA.",
@@ -273,7 +273,7 @@ export const comparaisons: ComparaisonPage[] = [
       {
         question: "Une ESN peut-elle définir par où commencer avec l’IA ?",
         answer:
-          "Ce n’est pas son cœur de métier. Une ESN est taillée pour construire ce qu’on lui demande, pas pour arbitrer où l’IA crée le plus de valeur chez vous. Ce cadrage, c’est le point de départ que je vous propose avant tout développement.",
+          "Ce n’est pas son cœur de métier. Une ESN est taillée pour construire ce qu’on lui demande ; arbitrer où l’IA crée le plus de valeur chez vous est un autre métier. Ce cadrage, c’est le point de départ que je vous propose avant tout développement.",
       },
       {
         question: "On n’a pas de DSI pour piloter une régie, est-ce un problème avec vous ?",
@@ -339,7 +339,7 @@ export const comparaisons: ComparaisonPage[] = [
       {
         criterion: "Redevabilité",
         coucou:
-          "Résultats mesurés après livraison, pas seulement la tâche cochée.",
+          "Résultats mesurés après livraison.",
         other:
           "Livrable remis, mais le résultat en production est rarement mesuré.",
       },
@@ -347,18 +347,18 @@ export const comparaisons: ComparaisonPage[] = [
     differences: [
       {
         title: "Même taille, méthode différente",
-        body: "Autant le dire tout de suite : un freelance et moi, c’est une personne face à votre projet. Je ne vais pas inventer une équipe. Ce qui nous sépare, ce n’est pas le nombre, c’est la manière. Avant de toucher au code, je chiffre ce que ça doit vous rapporter et je décide avec vous par quoi commencer. Un freelance démarre en général directement sur la tâche que vous lui donnez.",
+        body: "Autant le dire tout de suite : un freelance et moi, c’est une personne face à votre projet. Je ne vais pas inventer une équipe. Ce qui nous sépare, c’est la manière. Avant de toucher au code, je chiffre ce que ça doit vous rapporter et je décide avec vous par quoi commencer. Un freelance démarre en général directement sur la tâche que vous lui donnez.",
       },
       {
         title: "Le business case avant la ligne de code",
-        body: "Un freelance facture son temps sur ce que vous demandez. Si le chantier n’était pas le bon, vous l’apprenez à la fin. Je prends le problème à l’envers : j’estime le retour attendu, je priorise par impact, et je ne lance que ce qui vaut la peine. Vous engagez sur des chiffres, pas sur une intuition.",
+        body: "Un freelance facture son temps sur ce que vous demandez. Si le chantier n’était pas le bon, vous l’apprenez à la fin. Je prends le problème à l’envers : j’estime le retour attendu, je priorise par impact, et je ne lance que ce qui vaut la peine. Vous engagez sur des chiffres.",
       },
       {
         title: "Le système tourne sans moi",
         body: "C’est la vraie réponse à la fragilité du modèle solo. Un projet freelance s’arrête souvent le jour où le freelance n’est plus disponible : le savoir part avec lui. Je livre un système documenté, avec la passation prévue dès le départ. La continuité ne tient pas à ma présence, elle tient au système que vous gardez. Vous ne dépendez pas de moi.",
       },
       {
-        title: "Redevable sur le résultat, pas sur la tâche",
+        title: "Redevable sur le résultat",
         body: "Cocher une tâche, ce n’est pas prouver qu’elle rapporte. Après la mise en production, je mesure ce que le système change vraiment : temps gagné, coûts réduits. C’est la même honnêteté que le business case de départ, appliquée à l’arrivée.",
       },
     ],
@@ -381,7 +381,7 @@ export const comparaisons: ComparaisonPage[] = [
       {
         question: "Un projet solo, n’est-ce pas risqué si vous n’êtes plus disponible ?",
         answer:
-          "C’est justement le risque que je neutralise. Le système est documenté et la passation prévue dès le départ, pour qu’il tourne sans moi. La continuité tient au système livré, qui reste à vous, pas à ma présence.",
+          "C’est justement le risque que je neutralise. Le système est documenté et la passation prévue dès le départ, pour qu’il tourne sans moi. La continuité tient au système livré, qui reste à vous.",
       },
       {
         question: "Un freelance est moins cher, pourquoi payer plus ?",
@@ -391,7 +391,7 @@ export const comparaisons: ComparaisonPage[] = [
       {
         question: "Comment être sûr que ce qu’on construit crée de la valeur ?",
         answer:
-          "Parce qu’on ne démarre pas sans business case chiffré : le retour attendu est posé avant le code, et mesuré après la mise en production. La valeur n’est pas une promesse, c’est ce qu’on vérifie avant et après.",
+          "Parce qu’on ne démarre pas sans business case chiffré : le retour attendu est posé avant le code, et mesuré après la mise en production. La valeur, c’est ce qu’on vérifie avant et après.",
       },
     ],
   },
@@ -464,10 +464,10 @@ export const comparaisons: ComparaisonPage[] = [
       },
       {
         title: "Ce que vos équipes y collent",
-        body: "Le vrai angle mort de l’usage libre, c’est la confidentialité. Vos collaborateurs collent des données clients, des contrats, des chiffres dans un outil grand public, sans cadre. Un système conçu pour l’entreprise garde vos données sous contrôle, avec un hébergement adapté et le respect du RGPD et de l’AI Act. La souveraineté de vos données n’est pas une option, c’est un point de départ.",
+        body: "Le vrai angle mort de l’usage libre, c’est la confidentialité. Vos collaborateurs collent des données clients, des contrats, des chiffres dans un outil grand public, sans cadre. Un système conçu pour l’entreprise garde vos données sous contrôle, avec un hébergement adapté et le respect du RGPD et de l’AI Act. La souveraineté de vos données est un point de départ.",
       },
       {
-        title: "Complémentaires, pas concurrents",
+        title: "Complémentaires",
         body: "Je ne vais pas vous dire d’abandonner ChatGPT, ce serait absurde. C’est un excellent outil individuel pour écrire, résumer, explorer. Mais il ne remplace pas un système d’entreprise, et l’inverse est vrai aussi. Le bon réflexe : garder l’un pour la personne et construire l’autre pour l’entreprise.",
       },
     ],
@@ -485,7 +485,7 @@ export const comparaisons: ComparaisonPage[] = [
       {
         question: "ChatGPT suffit-il pour une PME ?",
         answer:
-          "Pour un usage individuel, oui : écrire, résumer, explorer. Pour un résultat fiable, branché sur vos données et répétable à l’échelle de l’entreprise, non. ChatGPT tout seul reste un outil personnel, pas un système d’entreprise. Les deux sont complémentaires.",
+          "Pour un usage individuel, oui : écrire, résumer, explorer. Pour un résultat fiable, branché sur vos données et répétable à l’échelle de l’entreprise, non. ChatGPT tout seul reste un outil personnel. Les deux sont complémentaires.",
       },
       {
         question: "Quelles sont les limites de ChatGPT en entreprise ?",

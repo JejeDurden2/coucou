@@ -16,7 +16,7 @@
 **Section Infos :**
 > Vous savez que l'IA compte. Personne ne vous dit par où commencer chez vous.
 >
-> C'est exactement mon métier. Je montre aux dirigeants de PME et d'ETI ce que l'IA rend possible dans leur activité, je chiffre le business case avant d'engager quoi que ce soit, puis je mets le système en production. Pas des slides : un système qui tourne, mesuré sur ses résultats.
+> C'est exactement mon métier. Je montre aux dirigeants de PME et d'ETI ce que l'IA rend possible dans leur activité, je chiffre le business case avant d'engager quoi que ce soit, puis je mets le système en production. Un système qui tourne, mesuré sur ses résultats.
 >
 > Deux métiers complémentaires :
 > 1. Audit & stratégie IA : état des lieux, cartographie des opportunités, business cases chiffrés, feuille de route priorisée.
@@ -41,7 +41,7 @@ Structure commune : le problème vécu, ce que l'IA sait faire aujourd'hui, l'or
 >
 > Ce que l'IA sait faire aujourd'hui : lire la pièce, proposer l'imputation, laisser le collaborateur valider au lieu de saisir de zéro.
 >
-> Ordre de grandeur (illustration, pas une référence client) : jusqu'à 80 % de saisie manuelle en moins sur les flux récurrents.
+> Ordre de grandeur (illustration, sans nom de client) : jusqu'à 80 % de saisie manuelle en moins sur les flux récurrents.
 >
 > La vraie question n'est pas « est-ce que ça marche ». C'est « est-ce que ça vaut le coup dans MON cabinet ». Et ça, ça se vérifie en trois questions : le volume, les données, la douleur.
 >
@@ -55,9 +55,9 @@ Structure commune : le problème vécu, ce que l'IA sait faire aujourd'hui, l'or
 >
 > Ce que l'IA sait faire aujourd'hui : produire un premier dossier de réponse complet à partir de VOS documents, que vos équipes valident et complètent.
 >
-> Ordre de grandeur (illustration, pas une référence client) : un premier dossier en une journée au lieu d'une semaine. Concrètement : répondre à plus d'appels d'offres, sans embaucher.
+> Ordre de grandeur (illustration, sans nom de client) : un premier dossier en une journée au lieu d'une semaine. Concrètement : répondre à plus d'appels d'offres, sans embaucher.
 >
-> Dirigeants industriels : combien de DCE laissez-vous passer par manque de temps, pas par manque d'envie ?
+> Dirigeants industriels : combien de DCE laissez-vous passer faute de temps ?
 
 ### Post 3 (transversal, le POC mort)
 
@@ -79,7 +79,7 @@ Structure commune : le problème vécu, ce que l'IA sait faire aujourd'hui, l'or
 >
 > Ce que l'IA sait faire aujourd'hui : pré-remplir les éléments récurrents des liasses à partir des dossiers, et laisser l'expert relire au lieu de produire.
 >
-> Ordre de grandeur (illustration, pas une référence client) : plusieurs jours de collaborateur récupérés sur le mois le plus chargé, pour un cabinet d'une douzaine de personnes.
+> Ordre de grandeur (illustration, sans nom de client) : plusieurs jours de collaborateur récupérés sur le mois le plus chargé, pour un cabinet d'une douzaine de personnes.
 >
 > Le bon moment pour regarder ça, ce n'est pas en mars. C'est maintenant, quand tout le monde a encore le temps de réfléchir.
 >

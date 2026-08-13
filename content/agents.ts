@@ -94,7 +94,7 @@ export const agents: AgentPage[] = [
     intro:
       "OpenClaw s’auto-héberge sur votre serveur et se pilote depuis WhatsApp, Telegram, Slack ou Discord, avec votre propre clé API. Il a connu l’une des croissances les plus rapides de l’histoire de GitHub. Voici ce qu’il fait vraiment, et ce qui doit vous arrêter avant de l’installer sans y réfléchir.",
     verdict:
-      "OpenClaw est un projet impressionnant : gratuit, open source, et franchement puissant. Il exécute des commandes, lit et écrit des fichiers, navigue sur le web depuis une simple conversation WhatsApp. C’est exactement ce qui en fait un risque en entreprise sans garde-fous : début 2026, des chercheurs en sécurité ont recensé des dizaines de milliers d’instances exposées sur internet, avec des vulnérabilités d’injection de prompt documentées. Aucune certification, pas d’accord de traitement des données : la conformité RGPD repose entièrement sur vous. Avant d’y connecter la moindre donnée d’entreprise, je pose le cadre : serveur isolé, accès limités, supervision humaine. C’est le travail que je fais avant d’installer OpenClaw chez un client.",
+      "OpenClaw est un projet impressionnant : gratuit, open source, et franchement puissant. Il exécute des commandes, lit et écrit des fichiers, navigue sur le web depuis une simple conversation WhatsApp. C’est exactement ce qui en fait un risque en entreprise sans garde-fous : début 2026, des chercheurs en sécurité ont recensé des dizaines de milliers d’instances exposées sur internet, avec des vulnérabilités d’injection de prompt documentées. Aucune certification ni accord de traitement des données : la conformité RGPD repose entièrement sur vous. Avant d’y connecter la moindre donnée d’entreprise, je pose le cadre : serveur isolé, accès limités, supervision humaine. C’est le travail que je fais avant d’installer OpenClaw chez un client.",
     facts: [
       { label: "Éditeur", value: "Peter Steinberger, créateur du projet ; confié à une fondation à but non lucratif en juillet 2026" },
       { label: "Licence", value: "MIT (open source), conservée après le passage en fondation" },
@@ -131,7 +131,7 @@ export const agents: AgentPage[] = [
       },
       {
         title: "La conformité repose entièrement sur vous",
-        body: "Aucune certification (SOC 2, ISO 27001), pas d’accord de traitement des données. Et les versions très fréquentes apportent leur lot de ruptures de compatibilité : la maintenance est réelle.",
+        body: "Aucune certification (SOC 2, ISO 27001) ni accord de traitement des données. Et les versions très fréquentes apportent leur lot de ruptures de compatibilité : la maintenance est réelle.",
       },
     ],
     forWho: {
@@ -222,7 +222,7 @@ export const agents: AgentPage[] = [
       },
       {
         title: "Documentation incomplète",
-        body: "Beaucoup de zones d’ombre se découvrent en marchant, pas dans un guide. Ça ralentit la mise en place.",
+        body: "Beaucoup de zones d’ombre se découvrent en marchant. Ça ralentit la mise en place.",
       },
       {
         title: "Des compétences auto-écrites, sans relecture par défaut",
@@ -230,7 +230,7 @@ export const agents: AgentPage[] = [
       },
       {
         title: "Pas de journal d’audit structuré",
-        body: "Difficile de tracer précisément ce que l’agent a fait et pourquoi. La supervision humaine n’est pas une option, elle est indispensable.",
+        body: "Difficile de tracer précisément ce que l’agent a fait et pourquoi. La supervision humaine est indispensable.",
       },
     ],
     forWho: {
@@ -247,7 +247,7 @@ export const agents: AgentPage[] = [
       intro:
         "Un logiciel jeune se déploie petit. On commence par un seul périmètre, mis en production en 3 semaines, avec la supervision que l’outil n’apporte pas tout seul.",
       items: [
-        "Un cas d’usage unique, choisi avec vous, pas dix chantiers en parallèle.",
+        "Un seul cas d’usage, choisi avec vous.",
         "Garde-fous et validations définis avant toute action : l’agent ne décide jamais seul sur ce qui compte.",
         "Tests sur vos cas réels avant la mise en production.",
         "Documentation remise à la fin : vous savez ce qui tourne, comment et pourquoi.",

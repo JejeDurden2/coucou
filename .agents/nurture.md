@@ -88,7 +88,7 @@ Objet : `votre carte des possibles`. Corps (variante compta ; l'industrie rempla
 >
 > Vous avez la carte sous les yeux, alors autant vous dire ce que je constate : le cas qui parle le plus aux dirigeants industriels, c'est la réponse aux appels d'offres.
 >
-> Pas un hasard : chaque DCE mobilise un ingénieur plusieurs jours pour rassembler des pièces qui existent déjà quelque part dans vos documents. L'IA sait aujourd'hui produire un premier dossier complet que vos équipes valident et complètent. Pour situer l'ordre de grandeur (illustration, pas une référence client) : passer d'une semaine à une journée par dossier, c'est répondre à plus d'appels d'offres sans embaucher.
+> Pas un hasard : chaque DCE mobilise un ingénieur plusieurs jours pour rassembler des pièces qui existent déjà quelque part dans vos documents. L'IA sait aujourd'hui produire un premier dossier complet que vos équipes valident et complètent. Pour situer l'ordre de grandeur (illustration, sans nom de client) : passer d'une semaine à une journée par dossier, c'est répondre à plus d'appels d'offres sans embaucher.
 >
 > La question qui reste, c'est si ça tient chez vous. Prenez la grille des 3 questions sur ce cas : deux minutes, et vous saurez s'il mérite d'aller plus loin.
 >
@@ -158,7 +158,7 @@ Le kit se débloque sur la page (le contenu complet s'affiche après l'email) : 
 
 > Bonjour,
 >
-> Un chiffre pour situer votre premier outil (illustration, pas un devis) : comptez 20 à 70 € par mois pour un outil sérieux, l'essentiel pour l'IA qui écrit le code, le reste pour l'hébergement et le nom de domaine.
+> Un chiffre pour situer votre premier outil (illustration, sans valeur de devis) : comptez 20 à 70 € par mois pour un outil sérieux, l'essentiel pour l'IA qui écrit le code, le reste pour l'hébergement et le nom de domaine.
 >
 > Ce n'est donc pas le budget qui décide, c'est le temps. Si votre outil commence à compter pour l'entreprise (des collègues qui s'en servent, des clients, des données à ne pas perdre), c'est exactement le travail qu'on fait chez Coucou IA : reprendre ce qui existe et l'amener en production, proprement.
 >

@@ -18,10 +18,11 @@ Jamais les trois à la fois. Un post, une idée.
 ## La voix
 
 - **Confiante et directe.** On affirme, on ne suppose pas. "Cette annonce change trois choses pour vous" plutôt que "cela pourrait potentiellement impacter".
-- **Un clin d'œil, pas un stand-up.** Le nom Coucou autorise une pointe de légèreté par post, maximum. Jamais de blague sur le client ou sur la peur de l'IA.
+- **Un clin d'œil par post, maximum.** Le nom Coucou autorise une pointe de légèreté par post, maximum. Jamais de blague sur le client ou sur la peur de l'IA.
 - **Sans jargon.** RAG, agent IA, automatisation: seulement si c'est le nom le plus simple de la chose, et toujours suivi d'une explication en une phrase. Bannis: "disruption", "game changer", "révolutionner", "libérer le potentiel", tout anglicisme qui a un équivalent français courant.
 - **Concret ou rien.** Un chiffre est réel, étiqueté comme exemple, ou coupé. "3 jours par semaine récupérés sur la saisie" oui, "gagnez en productivité" non.
 - **Phrases courtes.** Une idée par phrase. Si une phrase dépasse deux lignes, la couper.
+- **Jamais « X, pas Y ».** L'affirmation suivie de son contraire nié (« un point de départ, pas une option », « Un système qui tourne. Pas une démo. », « ce n'est pas X, c'est Y ») est le tic IA le plus reconnaissable en français. On écrit l'affirmation et on s'arrête.
 
 ## Piliers de contenu
 

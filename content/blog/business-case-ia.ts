@@ -16,7 +16,7 @@ export const businessCaseIa: BlogArticle = {
     "Un business case IA tient sur trois chiffres : le temps que la tâche coûte aujourd’hui, le temps qu’elle coûtera une fois le système en place, et le coût de la mise en production.",
     "Le temps actuel se mesure sur des dossiers réels, chronomètre en main : une estimation donnée en réunion se trompe souvent du simple au double, dans un sens comme dans l’autre.",
     "Le temps qui reste après l’IA n’est jamais zéro : il faut y compter la relecture humaine, les cas renvoyés à quelqu’un et les corrections.",
-    "Un business case qui ne peut pas conclure « on ne fait pas » n’est pas un business case : renoncer avant d’engager est un résultat, pas un échec.",
+    "Un business case qui ne peut pas conclure « on ne fait pas » n’est pas un business case : renoncer avant d’engager est un résultat en soi.",
   ],
   blocks: [
     {
@@ -67,7 +67,7 @@ export const businessCaseIa: BlogArticle = {
       label: "Réponse aux appels d’offres",
       value: "540 h/an",
       caption:
-        "Illustration, pas une référence client : 90 dossiers par an, 6 heures mesurées par dossier sur cinq cas réels.",
+        "Cas illustratif, sans nom de client : 90 dossiers par an, 6 heures mesurées par dossier sur cinq cas réels.",
     },
     {
       kind: "p",
@@ -80,7 +80,7 @@ export const businessCaseIa: BlogArticle = {
     },
     {
       kind: "p",
-      text: "Ce chiffre n’est jamais zéro. Un système en production propose un premier jet, extrait des données, trie des demandes : quelqu’un relit, corrige et signe. Il faut aussi compter les cas que le système renvoie à un humain parce qu’il n’est pas sûr, et c’est une bonne nouvelle, pas un défaut de conception.",
+      text: "Ce chiffre n’est jamais zéro. Un système en production propose un premier jet, extrait des données, trie des demandes : quelqu’un relit, corrige et signe. Il faut aussi compter les cas que le système renvoie à un humain parce qu’il n’est pas sûr, et c’est une bonne nouvelle.",
     },
     {
       kind: "callout",
@@ -89,7 +89,7 @@ export const businessCaseIa: BlogArticle = {
     },
     {
       kind: "p",
-      text: "Le temps visé s’estime avec la personne qui fera la relecture, pas avec le prestataire. Sur l’exemple des appels d’offres, la relecture et la personnalisation d’un premier jet tiennent en 2 heures par dossier, contre 6 aujourd’hui. Soit 180 heures par an au lieu de 540. Vous pouvez retrouver le détail de ce cas sur la page [réponse aux appels d’offres](/cas-usage/reponse-appels-offres).",
+      text: "Le temps visé s’estime avec la personne qui fera la relecture. Sur l’exemple des appels d’offres, la relecture et la personnalisation d’un premier jet tiennent en 2 heures par dossier, contre 6 aujourd’hui. Soit 180 heures par an au lieu de 540. Vous pouvez retrouver le détail de ce cas sur la page [réponse aux appels d’offres](/cas-usage/reponse-appels-offres).",
     },
     {
       kind: "h2",
@@ -117,7 +117,7 @@ export const businessCaseIa: BlogArticle = {
     },
     {
       kind: "p",
-      text: "Je ne publie pas de prix, et un prestataire qui vous en donne un avant d’avoir vu vos données vend un catalogue, pas un projet. Ce que vous devez exiger, c’est un [chiffrage détaillé par poste](/blog/prix-projet-ia), séparant l’investissement de départ du coût annuel de fonctionnement. Le premier se rembourse, le second se soustrait au gain, chaque année.",
+      text: "Je ne publie pas de prix, et un prestataire qui vous en donne un avant d’avoir vu vos données vend un catalogue. Ce que vous devez exiger, c’est un [chiffrage détaillé par poste](/blog/prix-projet-ia), séparant l’investissement de départ du coût annuel de fonctionnement. Le premier se rembourse, le second se soustrait au gain, chaque année.",
     },
     {
       kind: "h2",
@@ -133,7 +133,7 @@ export const businessCaseIa: BlogArticle = {
       label: "Le même exemple, une fois soustrait",
       value: "360 h/an",
       caption:
-        "Illustration, pas une référence client : 540 heures mesurées moins 180 heures de relecture, soit environ 45 jours de travail rendus par an.",
+        "Cas illustratif, sans nom de client : 540 heures mesurées moins 180 heures de relecture, soit environ 45 jours de travail rendus par an.",
     },
     {
       kind: "callout",

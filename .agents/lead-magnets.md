@@ -21,7 +21,7 @@ Un PDF court (8 à 12 pages) par secteur de tête de pont, qui montre au dirigea
 
 - **C'est la version gratuite du produit.** Le métier de Coucou IA est littéralement « cartographier les opportunités ». Le lead magnet fait la démo de la méthode sur des cas génériques du secteur ; le point de départ la fait sur l'entreprise du prospect. Le chemin vers la conversion est le produit lui-même.
 - **La matière existe déjà.** `content/secteurs.ts` et `content/cas-usage-pages.ts` contiennent les cas d'usage rédigés par secteur (impact, faisabilité, conformité). Effort de création : 1 à 2 jours par secteur, mise en page comprise, pas 3 semaines.
-- **Zéro dépendance à des preuves clients.** Interdiction de fabriquer des références : un format éducatif à base de cas d'usage et d'auto-évaluation n'a besoin d'aucun logo ni témoignage. Tout chiffre est étiqueté « illustration, pas une référence client », comme dans l'outbound.
+- **Zéro dépendance à des preuves clients.** Interdiction de fabriquer des références : un format éducatif à base de cas d'usage et d'auto-évaluation n'a besoin d'aucun logo ni témoignage. Tout chiffre est étiqueté « illustration, sans nom de client », comme dans l'outbound.
 - **Il sert l'outbound immédiatement.** Réponse « envoyez une doc » ou « pas le temps » : au lieu des « 3 lignes par mail » improvisées du playbook, on envoie la carte. Ce n'est pas une plaquette qui parle de nous, c'est un document qui parle d'eux.
 
 **Écarté (et pourquoi) :** ebook long (trop d'effort, stade trop précoce), webinar (audience inexistante en phase outbound solo), calculateur ROI interactif (bon candidat v2 une fois le flux prouvé, voir skill free-tools), mini-cours email (pas de séquence nurture en place).

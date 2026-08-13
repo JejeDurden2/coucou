@@ -31,7 +31,7 @@ export type RealisationsSection = {
 
 export const realisations: RealisationsSection = {
   title: "On code ce qu'on conseille.",
-  sub: "Deux produits IA que nous avons conçus, développés et mis en production. Pas des maquettes : ils sont en ligne, allez les voir.",
+  sub: "Deux produits IA que nous avons conçus, développés et mis en production. Ils sont en ligne, allez les voir.",
   statusLabel: "En production",
   metricLabel: "Résultat",
   closer:

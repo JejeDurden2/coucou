@@ -70,7 +70,7 @@ export const secteurs: SecteurPage[] = [
       "IA pour agence immobilière : qualification des leads portails, relances mandats, annonces multi-portails. ROI chiffré, premier échange gratuit.",
     h1: "IA pour agence immobilière : des leads rappelés, des mandats relancés",
     intro:
-      "Entre les leads portails qui refroidissent dans la boîte mail et les propriétaires jamais relancés après l’estimation, votre agence laisse filer des mandats. Pas par manque de talent : par manque de temps.",
+      "Entre les leads portails qui refroidissent dans la boîte mail et les propriétaires jamais relancés après l’estimation, votre agence laisse filer des mandats. Le talent est là, c’est le temps qui manque.",
     painPoints: [
       "Les leads SeLoger et Leboncoin arrivent par mail, non qualifiés, et refroidissent en attendant qu’un négociateur ait le temps de rappeler.",
       "Les propriétaires rencontrés en estimation ne sont pas relancés au bon moment, et le mandat part chez le confrère qui a rappelé le premier.",
@@ -95,7 +95,7 @@ export const secteurs: SecteurPage[] = [
       {
         title: "Préparation des rendez-vous d’estimation",
         description:
-          "Avant chaque estimation, l’IA rassemble ventes comparables, historique du bien et contexte du quartier. Le négociateur arrive préparé, pas les mains vides.",
+          "Avant chaque estimation, l’IA rassemble ventes comparables, historique du bien et contexte du quartier. Le négociateur arrive préparé.",
       },
     ],
     compliance: {
@@ -114,7 +114,7 @@ export const secteurs: SecteurPage[] = [
       {
         question: "On utilise déjà ChatGPT à l’agence, pourquoi aller plus loin ?",
         answer:
-          "ChatGPT ne connaît ni votre CRM, ni vos mandats, ni vos leads. Votre activité vit dans votre logiciel métier, les mails des portails et le téléphone. Notre système se branche sur ces canaux et travaille avec vos données réelles, pas avec des généralités.",
+          "ChatGPT ne connaît ni votre CRM, ni vos mandats, ni vos leads. Votre activité vit dans votre logiciel métier, les mails des portails et le téléphone. Notre système se branche sur ces canaux et travaille avec vos données réelles.",
       },
       {
         question: "Ça marche avec notre logiciel de transaction ?",
@@ -129,7 +129,7 @@ export const secteurs: SecteurPage[] = [
       {
         question: "On est une petite agence, c’est un projet pour nous ?",
         answer:
-          "Oui, c’est même notre terrain : des équipes de quelques personnes où chaque heure compte. Pas besoin d’équipe technique, on pilote de bout en bout.",
+          "Oui, c’est même notre terrain : des équipes de quelques personnes où chaque heure compte. Vous n’avez pas besoin d’équipe technique : on pilote de bout en bout.",
       },
       {
         question: "Quel retour sur investissement avant de s’engager ?",
@@ -162,7 +162,7 @@ export const secteurs: SecteurPage[] = [
       {
         title: "Coordination des ménages et interventions",
         description:
-          "À chaque réservation ou modification, le planning ménage se met à jour et les intervenants sont prévenus. Un ménage non confirmé remonte avant le check-in, pas après.",
+          "À chaque réservation ou modification, le planning ménage se met à jour et les intervenants sont prévenus. Un ménage non confirmé remonte avant le check-in, quand il est encore temps d’agir.",
       },
       {
         title: "Relance des avis voyageurs",
@@ -234,7 +234,7 @@ export const secteurs: SecteurPage[] = [
       {
         title: "Réponse aux demandes de réservation directe",
         description:
-          "Chaque demande par mail ou formulaire reçoit une réponse rapide avec disponibilités et tarif direct. Le client réserve chez vous, pas via une plateforme qui prend sa commission.",
+          "Chaque demande par mail ou formulaire reçoit une réponse rapide avec disponibilités et tarif direct. Le client réserve chez vous, en direct, sans commission de plateforme.",
       },
       {
         title: "Devis groupes et séminaires en minutes",
@@ -311,7 +311,7 @@ export const secteurs: SecteurPage[] = [
       {
         title: "De la visite au devis en 24 h",
         description:
-          "Vos notes vocales et photos prises sur place sont structurées en devis dans votre outil habituel : postes, quantités, mentions attendues. Vous relisez, ajustez, envoyez. Le lendemain, pas la semaine suivante.",
+          "Vos notes vocales et photos prises sur place sont structurées en devis dans votre outil habituel : postes, quantités, mentions attendues. Vous relisez, ajustez, envoyez, dès le lendemain.",
       },
       {
         title: "Relances devis et factures au bon moment",
@@ -355,17 +355,17 @@ export const secteurs: SecteurPage[] = [
       {
         question: "Un devis engage ma décennale, je ne laisse pas une machine le faire.",
         answer:
-          "Vous avez raison, et ce n’est pas ce qu’on propose. L’IA prépare un devis complet avec les mentions attendues, vous vérifiez chaque poste et vous signez. Elle vous épargne la rédaction, pas la décision.",
+          "Vous avez raison, et ce n’est pas ce qu’on propose. L’IA prépare un devis complet avec les mentions attendues, vous vérifiez chaque poste et vous signez. Elle vous épargne la rédaction ; la décision reste la vôtre.",
       },
       {
         question: "On n’a personne au bureau pour gérer un projet informatique.",
         answer:
-          "Ce n’est pas nécessaire. On pilote de bout en bout, on branche l’IA sur vos outils actuels et on forme l’équipe. Pas de serveur à gérer, pas de jargon.",
+          "Ce n’est pas nécessaire. On pilote de bout en bout, on branche l’IA sur vos outils actuels et on forme l’équipe. Vous gardez vos outils, on s’occupe du reste.",
       },
       {
         question: "Combien ça rapporte, concrètement ?",
         answer:
-          "Vous recevez un business case chiffré avant tout engagement : nombre de devis par mois, taux de signature actuel, gain estimé, coût. Vous décidez sur vos chiffres, pas sur une promesse.",
+          "Vous recevez un business case chiffré avant tout engagement : nombre de devis par mois, taux de signature actuel, gain estimé, coût. Vous décidez sur vos chiffres.",
       },
     ],
     relatedCasUsage: ["reponse-appels-offres", "traitement-documents", "qualification-leads"],
@@ -422,7 +422,7 @@ export const secteurs: SecteurPage[] = [
       {
         question: "Nos clients exigent une discrétion absolue, comment est-elle protégée ?",
         answer:
-          "Vos données clients restent sous votre contrôle, avec un hébergement adapté, et rien n’est envoyé à un modèle public sans votre accord. La confidentialité est un principe de conception, pas une option.",
+          "Vos données clients restent sous votre contrôle, avec un hébergement adapté, et rien n’est envoyé à un modèle public sans votre accord. La confidentialité est un principe de conception.",
       },
       {
         question: "ChatGPT ne suffit pas pour rédiger nos propositions ?",
@@ -505,7 +505,7 @@ export const secteurs: SecteurPage[] = [
         question:
           "On a déjà testé un outil de reconnaissance de factures, ça n’a pas tenu sur nos volumes.",
         answer:
-          "Un outil générique s’arrête souvent dès qu’il rencontre un format de pièce inhabituel. Ici, le système est construit sur VOS pièces et VOS process, et mesuré sur ses résultats, pas sur une démo qui reste au stade de test.",
+          "Un outil générique s’arrête souvent dès qu’il rencontre un format de pièce inhabituel. Ici, le système est construit sur VOS pièces et VOS process, et mesuré sur ses résultats en usage réel.",
       },
       {
         question: "Est-ce compatible avec notre logiciel de production comptable ?",
@@ -520,7 +520,7 @@ export const secteurs: SecteurPage[] = [
       {
         question: "Nos données clients restent-elles confidentielles ?",
         answer:
-          "Oui, c’est le point de départ, pas une option. Secret professionnel, RGPD et AI Act encadrent la conception de chaque système dès le premier jour.",
+          "Oui, c’est le point de départ. Secret professionnel, RGPD et AI Act encadrent la conception de chaque système dès le premier jour.",
       },
     ],
     relatedCasUsage: ["traitement-documents", "assistant-support-client", "recherche-interne"],
@@ -563,7 +563,7 @@ export const secteurs: SecteurPage[] = [
     ],
     compliance: {
       title: "Confidentialité client et réversibilité",
-      body: "Les systèmes que nous concevons cloisonnent, dès la conception, les données de chaque client : pas de mélange entre missions. Vous restez maître de vos données et de leur réversibilité en cas de changement de prestataire. Le tout dans le cadre du RGPD et de l’AI Act.",
+      body: "Les systèmes que nous concevons cloisonnent, dès la conception, les données de chaque client : chaque mission reste étanche. Vous restez maître de vos données et de leur réversibilité en cas de changement de prestataire. Le tout dans le cadre du RGPD et de l’AI Act.",
     },
     businessCase: {
       context:
@@ -577,7 +577,7 @@ export const secteurs: SecteurPage[] = [
       {
         question: "Nos données clients ne doivent jamais se mélanger entre missions, est-ce vraiment le cas ?",
         answer:
-          "Oui, c’est un principe de conception, pas une option. Chaque client reste cloisonné, sans mélange entre missions.",
+          "Oui, c’est un principe de conception. Chaque client reste cloisonné, sans mélange entre missions.",
       },
       {
         question: "On a déjà testé ChatGPT pour nos propositions, le résultat était générique.",
@@ -669,7 +669,7 @@ export const secteurs: SecteurPage[] = [
       {
         question: "Quel est le retour sur investissement avant qu’on investisse ?",
         answer:
-          "Vous recevez un business case chiffré avant tout engagement : volumétrie, gain estimé, coût. Vous décidez sur des chiffres, pas sur une promesse.",
+          "Vous recevez un business case chiffré avant tout engagement : volumétrie, gain estimé, coût. Vous décidez sur des chiffres.",
       },
       {
         question: "Nos équipes d’atelier ne sont pas des experts IA, est-ce un problème ?",
@@ -732,7 +732,7 @@ export const secteurs: SecteurPage[] = [
         question:
           "Le secret professionnel est non négociable pour nous, comment est-il protégé ?",
         answer:
-          "C’est le point de départ de chaque système que nous concevons, pas une option ajoutée après coup. Vos dossiers restent sous votre contrôle, avec un hébergement adapté et dans le respect du RIN.",
+          "C’est le point de départ de chaque système que nous concevons. Vos dossiers restent sous votre contrôle, avec un hébergement adapté et dans le respect du RIN.",
       },
       {
         question: "Un avocat garde-t-il la main sur ce que produit l’IA ?",
@@ -743,7 +743,7 @@ export const secteurs: SecteurPage[] = [
         question:
           "On a testé ChatGPT pour des recherches juridiques, les réponses n’étaient pas fiables.",
         answer:
-          "ChatGPT seul répond à partir de connaissances générales, pas de vos dossiers. Notre système travaille sur votre fonds documentaire réel, avec des réponses sourcées dans vos propres pièces.",
+          "ChatGPT seul répond à partir de connaissances générales, sans accès à vos dossiers. Notre système travaille sur votre fonds documentaire réel, avec des réponses sourcées dans vos propres pièces.",
       },
       {
         question: "On a peur de retomber sur un outil qui reste au stade de test.",
@@ -753,7 +753,7 @@ export const secteurs: SecteurPage[] = [
       {
         question: "Quel est le retour sur investissement pour un cabinet de notre taille ?",
         answer:
-          "Vous recevez un business case chiffré avant tout engagement : volume de dossiers, gain de temps estimé, coût. La décision se prend sur des chiffres, pas sur une promesse.",
+          "Vous recevez un business case chiffré avant tout engagement : volume de dossiers, gain de temps estimé, coût. La décision se prend sur des chiffres.",
       },
     ],
     relatedCasUsage: ["recherche-interne", "traitement-documents", "qualification-leads"],
@@ -815,7 +815,7 @@ export const secteurs: SecteurPage[] = [
       {
         question: "Nos données adhérents sont sensibles, comment sont-elles protégées ?",
         answer:
-          "Elles restent sous votre contrôle, avec un hébergement adapté et dans le respect du RGPD. La souveraineté des données est un point de départ, pas une option.",
+          "Elles restent sous votre contrôle, avec un hébergement adapté et dans le respect du RGPD. La souveraineté des données est un point de départ.",
       },
       {
         question: "On a déjà testé un chatbot, les adhérents n’étaient pas satisfaits.",

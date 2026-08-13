@@ -51,7 +51,7 @@ export const grille = {
     // Trois oui.
     strong: {
       title: "Ce cas mérite un vrai chiffrage chez vous.",
-      body: "Trois oui, c'est un signal net : du volume, des données, une vraie douleur. La prochaine étape, c'est de poser les chiffres sur votre situation à vous, pas sur une moyenne. Ce premier échange, c'est 30 min pour ça.",
+      body: "Trois oui, c'est un signal net : du volume, des données, une vraie douleur. La prochaine étape, c'est de poser les chiffres sur votre situation à vous. Ce premier échange, c'est 30 min pour ça.",
     },
     // Un ou deux oui.
     medium: {

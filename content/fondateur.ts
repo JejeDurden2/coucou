@@ -26,7 +26,7 @@ export const fondateur: FondateurSection = {
   role: "Fondateur",
   bio: "Plus de dix ans à entreprendre, construire des logiciels et diriger des équipes de développement, pour le luxe, la fintech et l'édition comptable. Coucou IA applique ce que ces années ont appris : comprendre le métier d'abord, construire le système ensuite.",
   closer:
-    "Pas de commercial, pas d'intermédiaire : du point de départ à la mise en production, vous gardez le même interlocuteur.",
+    "Du point de départ à la mise en production, vous gardez le même interlocuteur.",
   photoAlt: "Jérôme Desmares, fondateur de Coucou IA",
   linkedinLabel: "Vérifier sur LinkedIn",
   linkedinUrl: "https://www.linkedin.com/in/jeromedesmares",

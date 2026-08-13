@@ -72,7 +72,7 @@ export const blogHub = {
   eyebrow: "Le blog",
   h1: "L’IA en entreprise, sans jargon",
   intro:
-    "Ce que je vois sur le terrain, ce qui marche, ce qui coûte cher pour rien. Un article quand j’ai quelque chose d’utile à dire, pas avant.",
+    "Ce que je vois sur le terrain, ce qui marche, ce qui coûte cher pour rien. Un article quand j’ai quelque chose d’utile à dire.",
   readMore: "Lire l’article",
 };
 

@@ -39,7 +39,7 @@ export const glossaireHub = {
     "Le glossaire de l’IA sans jargon pour dirigeants de PME : RAG, agent IA, LLM, hallucination, AI Act. Chaque terme en clair, et ce que ça change chez vous.",
   h1: "L’IA sans jargon",
   intro:
-    "Chaque mot de l’IA, expliqué en clair pour un dirigeant : la définition, l’image concrète, et ce que ça change dans votre PME. Pas de charabia, pas de survente.",
+    "Chaque mot de l’IA, expliqué en clair pour un dirigeant : la définition, l’image concrète, et ce que ça change dans votre PME.",
 };
 
 // Copie transverse des gabarits glossaire (même rôle que spokes.ts pour les spokes).
@@ -90,9 +90,9 @@ export const glossaire: GlossaireTerm[] = [
     explanation:
       "Pensez à un moteur, comme celui d’une voiture. ChatGPT, Claude, Gemini, Mistral sont des carrosseries différentes autour du même type de moteur. Il est puissant, mais générique : seul, sorti de l’usine, il ne connaît rien de votre activité.",
     whatItChanges:
-      "C’est ce que vous « louez » à un fournisseur. Choisir un modèle, c’est arbitrer entre qualité, coût et lieu d’hébergement de vos données. Vous n’achetez pas le moteur, vous le branchez sur vos documents et vos process. C’est ce branchement qui crée la valeur, pas le moteur nu.",
+      "C’est ce que vous « louez » à un fournisseur. Choisir un modèle, c’est arbitrer entre qualité, coût et lieu d’hébergement de vos données. Vous n’achetez pas le moteur, vous le branchez sur vos documents et vos process. C’est ce branchement qui crée la valeur.",
     example:
-      "Exemple : un assistant support client s’appuie sur un LLM pour comprendre la question et rédiger la réponse. Mais la réponse juste vient de VOS fiches produits et de votre historique de tickets, pas des connaissances générales du modèle.",
+      "Exemple : un assistant support client s’appuie sur un LLM pour comprendre la question et rédiger la réponse. Mais la réponse juste vient de VOS fiches produits et de votre historique de tickets.",
     relatedTerms: ["ia-generative", "token", "prompt"],
     relatedCasUsage: ["assistant-support-client"],
     relatedSecteurs: [],
@@ -119,16 +119,16 @@ export const glossaire: GlossaireTerm[] = [
   {
     slug: "agent-ia",
     name: "Agent IA",
-    h1: "L’agent IA : l’IA qui agit, pas seulement qui répond",
+    h1: "L’agent IA : l’IA qui agit",
     metaTitle: "Agent IA : définition simple pour dirigeant | Coucou IA",
     metaDescription:
-      "Agent IA : un programme qui exécute une tâche de bout en bout, pas seulement répondre. Définition simple pour dirigeant, l’image concrète et un exemple PME.",
+      "Agent IA : un programme qui exécute une tâche de bout en bout. Définition simple pour dirigeant, l’image concrète et un exemple PME.",
     definition:
       "Un agent IA est un programme qui exécute une tâche de bout en bout pour vous, au lieu de seulement répondre à une question. Il enchaîne des étapes (lire, décider, agir dans vos outils) pour atteindre un objectif, dans les limites que vous fixez.",
     explanation:
       "C’est la différence entre demander un renseignement à un assistant et lui confier une mission : « trie ces demandes et envoie chacune au bon commercial ». L’assistant répond à une question. L’agent, lui, abat la tâche du début à la fin.",
     whatItChanges:
-      "C’est ce qui fait passer l’IA d’outil de réponse à collègue qui traite une tâche répétitive. Le gain est réel. La vraie question à poser : jusqu’où le laisse-t-on décider seul, et où un humain valide. Un agent utile est un agent cadré, pas un agent lâché sans garde-fou.",
+      "C’est ce qui fait passer l’IA d’outil de réponse à collègue qui traite une tâche répétitive. Le gain est réel. La vraie question à poser : jusqu’où le laisse-t-on décider seul, et où un humain valide. Un agent utile est un agent cadré.",
     example:
       "Exemple : une entreprise de services reçoit 150 demandes par mois sur quatre canaux. Un agent qualifie chaque demande, remplit la fiche dans le CRM et la route au bon commercial. L’équipe démarre la journée avec des dossiers déjà triés, sans une heure de tri manuel.",
     relatedTerms: ["automatisation-vs-ia", "rag", "llm"],
@@ -166,7 +166,7 @@ export const glossaire: GlossaireTerm[] = [
     explanation:
       "C’est un brief à un prestataire. Un brief vague (« fais-moi un truc bien ») donne un résultat vague. Un brief précis (le ton, le format, un exemple, ce qu’il faut éviter) donne un résultat exploitable. Même IA, brief différent, résultat différent.",
     whatItChanges:
-      "En interne, bricoler des consignes dans ChatGPT fait la démo, mais ne tient pas à l’échelle : le résultat dépend de qui tape et de son humeur. Dans un vrai système, les prompts sont écrits, testés et figés, pour que la réponse soit fiable chaque jour, pas une bonne surprise de temps en temps.",
+      "En interne, bricoler des consignes dans ChatGPT fait la démo, mais ne tient pas à l’échelle : le résultat dépend de qui tape et de son humeur. Dans un vrai système, les prompts sont écrits, testés et figés, pour que la réponse soit fiable chaque jour.",
     example:
       "Exemple : un assistant support. Sans consigne cadrée, il répond parfois trop long, parfois hors sujet. Avec un prompt qui fixe le ton de la maison, la longueur et la règle « en cas de doute, transférer à un conseiller », il répond juste, à chaque fois.",
     relatedTerms: ["llm", "hallucination", "agent-ia"],
@@ -204,7 +204,7 @@ export const glossaire: GlossaireTerm[] = [
     explanation:
       "C’est prendre un excellent généraliste et lui faire suivre une formation maison, pour qu’il adopte vos habitudes et votre vocabulaire. Utile quand le style ou le format comptent beaucoup et reviennent tout le temps de la même manière.",
     whatItChanges:
-      "Point clé pour votre budget : le fine-tuning n’est presque jamais la première réponse. Le plus souvent, brancher l’IA sur vos documents (RAG) suffit et coûte bien moins cher. Le fine-tuning se justifie quand le RAG ne suffit plus, pas par principe. Méfiez-vous de qui le vend d’emblée.",
+      "Point clé pour votre budget : le fine-tuning n’est presque jamais la première réponse. Le plus souvent, brancher l’IA sur vos documents (RAG) suffit et coûte bien moins cher. Le fine-tuning se justifie quand le RAG ne suffit plus. Méfiez-vous de qui le vend d’emblée.",
     example:
       "Exemple : un cabinet qui traite des documents à un format maison très particulier, que le modèle générique lit mal. Après avoir montré au modèle quelques centaines d’exemples annotés, il apprend ce gabarit précis et l’extraction devient fiable.",
     relatedTerms: ["rag", "machine-learning", "llm"],
@@ -242,7 +242,7 @@ export const glossaire: GlossaireTerm[] = [
     explanation:
       "C’est un plat réussi une fois, un soir, pour un ami, sans contrainte. Le refaire chaque jour pour cent couverts, avec des ingrédients qui varient et un service qui n’attend pas, c’est un autre métier. La plupart des POC d’IA meurent exactement à ce passage.",
     whatItChanges:
-      "Beaucoup de budgets IA ont été enterrés dans des POC séduisants restés au labo. Un POC n’est pas un livrable, c’est une étape. Avant même de lancer un test, la vraie question est : « si ça marche, qu’est-ce qu’il faut pour le mettre en production ? ». Sans cette réponse, c’est un échec facturé d’avance.",
+      "Beaucoup de budgets IA ont été enterrés dans des POC séduisants restés au labo. Un POC est une étape de test. Avant même de lancer un test, la vraie question est : « si ça marche, qu’est-ce qu’il faut pour le mettre en production ? ». Sans cette réponse, c’est un échec facturé d’avance.",
     example:
       "Exemple : une PME industrielle teste une IA sur une ligne, la démo est bluffante, puis le projet s’arrête faute d’intégration aux outils existants. Un an plus tard, il ne reste qu’une facture et une déception. Le POC avait marché, personne n’avait prévu la suite.",
     relatedTerms: ["mise-en-production", "automatisation-vs-ia", "agent-ia"],
@@ -259,7 +259,7 @@ export const glossaire: GlossaireTerm[] = [
     definition:
       "La mise en production, c’est le moment où un système d’IA passe de la démonstration à l’usage quotidien réel, par vos équipes, sur vos vraies données. C’est là que la valeur se crée, et là que la plupart des projets calent.",
     explanation:
-      "C’est la différence entre un prototype de voiture au salon et une voiture qui démarre chaque matin, par tous les temps, pendant des années. Le prototype se montre sous les projecteurs. La voiture de série se conduit sous la pluie. En production, ce qui compte, c’est la fiabilité, pas l’effet de démonstration.",
+      "C’est la différence entre un prototype de voiture au salon et une voiture qui démarre chaque matin, par tous les temps, pendant des années. Le prototype se montre sous les projecteurs. La voiture de série se conduit sous la pluie. En production, ce qui compte, c’est la fiabilité.",
     whatItChanges:
       "C’est le seul jalon qui compte pour votre retour sur investissement : tant qu’un système n’est pas en production, il ne vous rapporte rien. Un projet sérieux se juge là-dessus : intégration à vos outils, gestion des cas d’erreur, adoption par les équipes, résultats mesurés. Le reste, ce sont des promesses.",
     example:
@@ -280,9 +280,9 @@ export const glossaire: GlossaireTerm[] = [
     explanation:
       "Voyez-le comme le code de la route de l’IA en Europe : certains usages sont libres, d’autres encadrés, quelques-uns interdits. Le but n’est pas de bloquer, mais de fixer des règles claires selon ce que l’IA touche. Un chatbot marketing et une IA qui trie des CV ne jouent pas dans la même catégorie.",
     whatItChanges:
-      "Pour une PME, ce n’est pas un mur, mais un cadre à connaître dès la conception, pas après coup. Selon votre usage (ressources humaines, santé, crédit, biométrie), les obligations changent. Pensé dès le départ, c’est un simple cadre. Découvert trop tard, c’est un frein. On conçoit dans ce cadre par défaut.",
+      "Pour une PME, c’est un cadre à connaître dès la conception. Selon votre usage (ressources humaines, santé, crédit, biométrie), les obligations changent. Pensé dès le départ, c’est un simple cadre. Découvert trop tard, c’est un frein. On conçoit dans ce cadre par défaut.",
     example:
-      "Exemple : une mutuelle veut une IA pour pré-instruire des dossiers. Bien conçue, l’IA prépare le dossier et la décision reste au gestionnaire, ce qui la maintient dans une catégorie de risque maîtrisée. Le cadre est pensé au début du projet, pas rattrapé à la fin.",
+      "Exemple : une mutuelle veut une IA pour pré-instruire des dossiers. Bien conçue, l’IA prépare le dossier et la décision reste au gestionnaire, ce qui la maintient dans une catégorie de risque maîtrisée. Le cadre est pensé au début du projet.",
     relatedTerms: ["ia-souveraine", "machine-learning", "mise-en-production"],
     relatedCasUsage: [],
     relatedSecteurs: ["sante-medico-social", "assurance-mutuelle"],
@@ -316,9 +316,9 @@ export const glossaire: GlossaireTerm[] = [
     definition:
       "Une IA souveraine, c’est une IA conçue pour que vos données restent sous votre contrôle : hébergement maîtrisé (souvent en France ou en Europe) et aucune fuite vers des modèles publics sans votre accord. Vous gardez la main sur l’endroit où vont vos données et sur qui peut les lire.",
     explanation:
-      "C’est la différence entre confier vos dossiers sensibles à un coffre dont vous avez la clé, et les déposer chez un prestataire sans savoir qui y accède ni où c’est stocké. La souveraineté, ce n’est pas un slogan : c’est savoir, et décider.",
+      "C’est la différence entre confier vos dossiers sensibles à un coffre dont vous avez la clé, et les déposer chez un prestataire sans savoir qui y accède ni où c’est stocké. La souveraineté, c’est savoir qui accède à vos données, et décider.",
     whatItChanges:
-      "Pour beaucoup de dirigeants, c’est le premier réflexe, et il est légitime : « mes données ne doivent pas partir n’importe où ». C’est un choix d’architecture, pas une option de dernière minute : modèles hébergés en Europe, données qui ne servent pas à entraîner le modèle d’un tiers, accès cloisonné. Un point de départ, pas une case à cocher.",
+      "Pour beaucoup de dirigeants, c’est le premier réflexe, et il est légitime : « mes données ne doivent pas partir n’importe où ». C’est un choix d’architecture : modèles hébergés en Europe, données qui ne servent pas à entraîner le modèle d’un tiers, accès cloisonné.",
     example:
       "Exemple : un cabinet comptable tenu au secret professionnel. Une architecture souveraine garde les pièces clients sur un hébergement adapté, sans qu’aucune facture ne parte vers un modèle public. Le cabinet profite de l’IA sans transiger sur la confidentialité.",
     relatedTerms: ["ai-act", "rag", "llm"],

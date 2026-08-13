@@ -11,7 +11,7 @@ export const openclawVsHermesAgent: BlogArticle = {
     "OpenClaw ou Hermes Agent pour votre PME ? Ce que ces agents IA open source font vraiment, leurs limites, et la question à poser avant d'installer.",
   category: "décryptage",
   publishedAt: "2026-08-07",
-  lede: "OpenClaw et Hermes Agent reviennent dans toutes les conversations de dirigeants en ce moment. La vraie question n'est pas lequel des deux installer, c'est quel problème de votre entreprise vaut un agent, et avec quels garde-fous.",
+  lede: "OpenClaw et Hermes Agent reviennent dans toutes les conversations de dirigeants en ce moment. La question utile : quel problème de votre entreprise vaut un agent, et avec quels garde-fous ?",
   keyTakeaways: [
     "OpenClaw et Hermes Agent sont deux agents IA open source et gratuits à installer : ce qui coûte, c'est le serveur, l'accès au modèle et la surveillance dans la durée, jamais le logiciel lui-même.",
     "OpenClaw exécute des commandes, lit et écrit des fichiers, navigue sur le web depuis WhatsApp ou Slack : puissant, donc risqué si personne ne ferme la porte derrière lui.",
@@ -60,7 +60,7 @@ export const openclawVsHermesAgent: BlogArticle = {
     {
       kind: "callout",
       title: "Ce qu'OpenClaw ne vous donne pas",
-      body: "Aucune certification (SOC 2, ISO 27001), aucun accord de traitement des données. La conformité RGPD repose entièrement sur vous, pas sur l'éditeur. Ajoutez un rythme de versions effréné, avec des changements cassants fréquents : la maintenance devient un vrai poste, pas une ligne dans un budget.",
+      body: "Aucune certification (SOC 2, ISO 27001), aucun accord de traitement des données. La conformité RGPD repose entièrement sur vous. Ajoutez un rythme de versions effréné, avec des changements cassants fréquents : la maintenance devient un vrai poste de dépense.",
     },
     {
       kind: "p",
@@ -68,7 +68,7 @@ export const openclawVsHermesAgent: BlogArticle = {
     },
     {
       kind: "p",
-      text: "C'est un logiciel jeune, encore en versions 0.x, sans stabilité assurée et avec une documentation incomplète. Il n'a pas de journal d'audit structuré pour retracer ce que l'agent a fait et pourquoi. Dans les deux cas, la supervision humaine n'est pas une option, c'est la condition pour que l'outil reste sous contrôle.",
+      text: "C'est un logiciel jeune, encore en versions 0.x, sans stabilité assurée et avec une documentation incomplète. Il n'a pas de journal d'audit structuré pour retracer ce que l'agent a fait et pourquoi. Dans les deux cas, la supervision humaine est la condition pour que l'outil reste sous contrôle.",
     },
     {
       kind: "h2",
@@ -81,7 +81,7 @@ export const openclawVsHermesAgent: BlogArticle = {
     },
     {
       kind: "p",
-      text: "La question utile ressemble à celle que je pose pour tout projet IA : quelle tâche répétitive, chez vous, coûte assez cher en temps pour justifier qu'on y mette un agent, avec la surveillance que ça implique ? Si vous n'avez pas encore chiffré cette tâche, la [méthode pour chiffrer un projet IA avant de l'engager](/blog/business-case-ia) vient avant le choix de l'outil, pas après.",
+      text: "La question utile ressemble à celle que je pose pour tout projet IA : quelle tâche répétitive, chez vous, coûte assez cher en temps pour justifier qu'on y mette un agent, avec la surveillance que ça implique ? Si vous n'avez pas encore chiffré cette tâche, la [méthode pour chiffrer un projet IA avant de l'engager](/blog/business-case-ia) vient avant le choix de l'outil.",
     },
     {
       kind: "stat",

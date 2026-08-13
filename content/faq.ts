@@ -36,13 +36,13 @@ export const faq: FaqSection = {
     {
       question: "Comment nos données sont-elles protégées ?",
       answer:
-        "On conçoit dès le départ dans le respect du RGPD et de l’AI Act. Vos données restent sous votre contrôle : hébergement adapté, pas de fuite vers des modèles publics sans votre accord. La souveraineté des données est un point de départ, pas une option.",
+        "On conçoit dès le départ dans le respect du RGPD et de l’AI Act. Vos données restent sous votre contrôle : hébergement adapté, aucune fuite vers des modèles publics sans votre accord. La souveraineté des données est un point de départ.",
     },
     {
       question:
         "On a déjà testé ChatGPT et ça n’a rien changé. En quoi c’est différent ?",
       answer:
-        "ChatGPT tout seul, c’est un outil individuel, pas un système d’entreprise. La valeur arrive quand l’IA est branchée sur vos données et vos process, en production, et mesurée. Notre métier, ce n’est pas le prompt, c’est le système.",
+        "ChatGPT tout seul, c’est un outil individuel. La valeur arrive quand l’IA est branchée sur vos données et vos process, en production, et mesurée. Notre métier, c’est le système.",
     },
     {
       question:
@@ -57,17 +57,17 @@ export const faq: FaqSection = {
     {
       question: "On a déjà été échaudés par un POC qui n’a jamais abouti.",
       answer:
-        "C’est justement pour ça qu’on existe. On ne livre pas un POC de démo, on livre un système en production, mesuré sur ses résultats. Un prototype qui reste au labo, pour nous, ce n’est pas un livrable.",
+        "C’est justement pour ça qu’on existe. On ne livre pas un POC de démo, on livre un système en production, mesuré sur ses résultats. Un prototype qui reste au labo, chez nous, ne sort jamais.",
     },
     {
       question: "On n’a personne en interne pour piloter un projet IA.",
       answer:
-        "C’est notre rôle, pas le vôtre. On pilote de bout en bout, on s’intègre à vos outils existants et on documente ce qu’on livre. Vos équipes utilisent le système sans avoir à monter une équipe data.",
+        "C’est notre rôle. On pilote de bout en bout, on s’intègre à vos outils existants et on documente ce qu’on livre. Vos équipes utilisent le système sans avoir à monter une équipe data.",
     },
     {
       question: "Qui travaille concrètement sur notre projet ?",
       answer:
-        "La même personne du premier appel à la mise en production : celle qui conçoit la stratégie écrit aussi le code. Pas de junior intercalé, pas de sous-traitance, rien ne se perd entre l’audit et le système.",
+        "La même personne du premier appel à la mise en production : celle qui conçoit la stratégie écrit aussi le code. Aucun junior intercalé, aucune sous-traitance : rien ne se perd entre l’audit et le système.",
     },
     {
       question: "Une structure d’une personne, ce n’est pas un risque ?",
