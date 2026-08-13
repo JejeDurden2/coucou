@@ -43,7 +43,7 @@ Prendre le premier sujet non traité, sauf actualité forte qui justifie un déc
 
 - [x] Business case IA : comment chiffrer un projet avant d'engager un euro (méthode) — `business-case-ia`
 - [x] AI Act : ce qui s'applique vraiment à une PME depuis le 2 août 2026 (décryptage, actualité) — `ai-act-pme-obligations`
-- [ ] Ce que 18 mois à construire Livia m'ont appris sur les agents IA en production (coulisses)
+- [x] Ce que construire Livia m'a appris sur les agents IA en production (coulisses) — `agent-ia-production-lecons`
 - [ ] POC IA : pourquoi le vôtre dort dans un tiroir, et comment le suivant finit en production (méthode)
 - [ ] Combien de temps prend vraiment un projet IA dans une PME (décryptage)
 - [ ] RAG : brancher l'IA sur les documents de l'entreprise, expliqué à un dirigeant pressé (décryptage)

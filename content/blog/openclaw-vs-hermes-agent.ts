@@ -157,7 +157,11 @@ export const openclawVsHermesAgent: BlogArticle = {
         "Pas avant d'avoir chiffré la tâche visée. Un agent générique peut, en théorie, toucher à presque tout : c'est justement ce qui rend l'outil impossible à juger hors d'un cas précis. Mesurez d'abord le temps que la tâche vous coûte aujourd'hui, ce qu'elle coûtera après, et le coût de la mise en production, avant de choisir l'outil.",
     },
   ],
-  relatedArticles: ["business-case-ia", "ai-act-pme-obligations"],
+  relatedArticles: [
+    "agent-ia-production-lecons",
+    "business-case-ia",
+    "ai-act-pme-obligations",
+  ],
   relatedCasUsage: ["assistant-support-client", "traitement-documents"],
   relatedSecteurs: [],
 };

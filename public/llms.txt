@@ -78,6 +78,7 @@ Coucou IA est un cabinet de conseil et développement IA pour les PME française
 - [OpenClaw ou Hermes Agent : lequel installer dans votre PME ?](https://coucou-ia.com/blog/openclaw-vs-hermes-agent) : décryptage des deux agents IA open source qui montent, leurs limites réelles, et les garde-fous à poser avant d'en installer un.
 - [Diag Data IA : l'aide publique que personne ne vous a signalée](https://coucou-ia.com/blog/diag-data-ia-bpifrance) : 8 jours d'expert facturés 10 000 € HT et pris en charge à 40 % par France 2030, les critères d'éligibilité, le déroulé, ce que le dispositif ne couvre pas.
 - [Ce que la facture d'un projet IA contient vraiment](https://coucou-ia.com/blog/prix-projet-ia) : les cinq postes qui font varier le prix d'un agent IA (branchements, données, autonomie, conformité, fonctionnement) et les six questions pour lire un devis.
+- [Ce que construire Livia m'a appris sur les agents IA en production](https://coucou-ia.com/blog/agent-ia-production-lecons) : ce qui casse vraiment un agent IA en production (données sales, cas limites du métier, reprise après panne), les quatre niveaux d'autonomie à régler action par action et les quatre chiffres à suivre chaque semaine.
 
 ## Outils gratuits
 
