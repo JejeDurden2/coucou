@@ -38,10 +38,11 @@ const jsonLd = {
         addressLocality: "Nice",
         addressCountry: "FR",
       },
-      areaServed: {
-        "@type": "Country",
-        name: "France",
-      },
+      // Le département ancre l'entité localement, la France rappelle que la visio couvre le reste.
+      areaServed: [
+        { "@type": "AdministrativeArea", name: "Alpes-Maritimes" },
+        { "@type": "Country", name: "France" },
+      ],
       // Le parcours vérifiable du fondateur est l'argument de confiance :
       // exposé aux moteurs, pas seulement aux visiteurs.
       sameAs: [fondateur.linkedinUrl],

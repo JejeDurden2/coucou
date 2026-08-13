@@ -15,7 +15,7 @@ import { villeJsonLd } from "@/lib/seo";
 
 // Gabarit des pages locales (/consultant-ia-<ville>). Hero, FAQ et CTA sont
 // les blocs spoke existants ; contexte, métiers et méthode sont propres ici.
-// Le JSON-LD et le <main> vivent ici pour garder les quatre page.tsx minces.
+// Le JSON-LD et le <main> vivent ici pour garder les cinq page.tsx minces.
 export function VillePageTemplate({ ville }: { ville: Ville }) {
   const breadcrumb = [
     { label: "Accueil", href: "/" },

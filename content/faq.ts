@@ -34,6 +34,11 @@ export const faq: FaqSection = {
         "Trois semaines pour le premier agent : un seul cas d’usage, cadré lors du point de départ, mis en production avec validation humaine sur les actions sensibles, puis un mois d’ajustements. Le périmètre est petit, c’est voulu : un résultat visible vite vaut mieux qu’un chantier qui traîne.",
     },
     {
+      question: "Où intervient Coucou IA ?",
+      answer:
+        "Coucou IA est basé à Nice et intervient dans tout le département des Alpes-Maritimes : Nice, Cannes, Antibes, Grasse, Sophia Antipolis, Menton. Monaco est à une demi-heure. Partout ailleurs en France, la visio couvre le projet, du point de départ à la mise en production.",
+    },
+    {
       question: "Comment nos données sont-elles protégées ?",
       answer:
         "On conçoit dès le départ dans le respect du RGPD et de l’AI Act. Vos données restent sous votre contrôle : hébergement adapté, aucune fuite vers des modèles publics sans votre accord. La souveraineté des données est un point de départ.",

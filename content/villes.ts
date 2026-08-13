@@ -1,4 +1,5 @@
-// Pages locales (/consultant-ia-<ville>). Quatre villes, URLs plates à la racine.
+// Pages locales (/consultant-ia-<ville>). Quatre villes plus le hub
+// départemental (Alpes-Maritimes), URLs plates à la racine.
 // Chaque page a sa propre substance locale : intro, contexte, carte des possibles,
 // métiers, business case (métriques alignées sur la page secteur du métier phare),
 // FAQ et maillage sortant. Les métiers pointent vers /secteurs/<slug>.
@@ -80,6 +81,118 @@ export const villeCommon = {
 } as const;
 
 export const villes: Ville[] = [
+  {
+    slug: "consultant-ia-alpes-maritimes",
+    name: "Alpes-Maritimes",
+    inName: "dans les Alpes-Maritimes",
+    metaTitle: "Consultant IA Alpes-Maritimes (06) | Coucou IA",
+    metaDescription:
+      "Consultant IA dans les Alpes-Maritimes : développement IA sur mesure, agents IA et automatisations pour les PME du 06. Premier échange gratuit.",
+    h1: "Consultant IA dans les Alpes-Maritimes pour les PME",
+    intro:
+      "Coucou IA a son bureau à Nice. On prend la route dans tout le département quand la rencontre change quelque chose, et la visio prend le relais ensuite. Rien ne s’engage tant que le gain n’est pas chiffré.",
+    contexte: {
+      title: "Votre activité vit dans vos outils métier. L’IA doit y entrer.",
+      paragraphs: [
+        "Vos journées se remplissent de gestes que personne n’a choisis : recopier une demande d’un mail vers le logiciel, refaire un devis presque identique au précédent, retrouver la pièce d’un dossier ouvert il y a six mois. Chacun prend trois minutes, et il y en a cent par semaine.",
+        "C’est là que le développement IA sur mesure change quelque chose. Des agents IA qui lisent vos demandes entrantes et préparent la réponse, des automatisations qui font circuler l’information entre vos logiciels sans ressaisie. On les branche sur ce que vous utilisez déjà, vos équipes gardent la décision.",
+        "Pour se rencontrer, on se déplace à Nice, Cannes, Antibes, Grasse, Sophia Antipolis, Menton et Cagnes-sur-Mer. Une demi-journée sur place, à regarder passer une vraie semaine de travail, apprend plus qu’une réunion de cadrage. Ensuite, la visio suffit pour mener le projet jusqu’en production.",
+      ],
+    },
+    carte: [
+      {
+        category: "Immobilier",
+        line: "Le vendeur estimé est relancé au bon moment",
+      },
+      {
+        category: "Location saisonnière",
+        line: "Le voyageur a sa réponse avant de reposer son téléphone",
+      },
+      {
+        category: "Hôtellerie",
+        line: "Chaque avis reçoit sa réponse, dans la langue de l’avis",
+      },
+      {
+        category: "Artisans",
+        line: "La note vocale de la visite revient en devis à relire",
+      },
+      {
+        category: "Yachting",
+        line: "Les devis de refit arrivent consolidés, écarts en évidence",
+      },
+    ],
+    metiers: [
+      {
+        name: "Immobilier",
+        href: "/secteurs/immobilier",
+        description:
+          "Agences et administrateurs de biens : les demandes portails tombent toute la journée, les vendeurs estimés attendent une relance. L’IA qualifie, prépare le dossier, relance au bon moment.",
+      },
+      {
+        name: "Location saisonnière",
+        href: "/secteurs/location-saisonniere",
+        description:
+          "Conciergeries et propriétaires multi-logements : messages voyageurs à toute heure, ménages à caler entre deux séjours, avis à solliciter. L’IA tient la cadence de la haute saison.",
+      },
+      {
+        name: "Artisans du bâtiment",
+        href: "/secteurs/artisans-batiment",
+        description:
+          "Plombiers, maçons, piscinistes : la visite se fait en journée, le devis attend le soir. L’IA le monte à partir de vos notes vocales, vous relisez et vous signez.",
+      },
+      {
+        name: "Yachting",
+        href: "/secteurs/yachting",
+        description:
+          "Courtiers, gestionnaires, chantiers : demandes charter multilingues, contrats à monter, devis de refit à consolider. L’IA rassemble les pièces, vos équipes tranchent.",
+      },
+    ],
+    businessCase: {
+      context:
+        "Conciergerie de 40 logements sur Airbnb, Booking et Abritel. En haute saison, les messages voyageurs arrivent du petit déjeuner à minuit.",
+      metric: "première réponse en quelques minutes",
+      result:
+        "Le temps de première réponse passe de quelques heures à quelques minutes, dans la langue du voyageur, même un samedi de juillet à 23 h.",
+      label: "Exemple",
+    },
+    faq: [
+      {
+        question: "Intervenez-vous à Cannes, à Antibes ou à Grasse ?",
+        answer:
+          "Oui, dans tout le département. On part de Nice et on se déplace à Cannes, Antibes, Grasse, Sophia Antipolis, Menton ou Cagnes-sur-Mer pour le point de départ, la restitution du business case et le lancement. Monaco est à une demi-heure. Pour le suivi courant, la visio épargne à chacun deux heures de route.",
+      },
+      {
+        question: "Que développez-vous exactement comme IA sur mesure ?",
+        answer:
+          "Des agents IA qui traitent vos demandes entrantes, des systèmes de recherche RAG qui répondent à partir de vos propres documents, des automatisations qui font circuler l’information entre vos outils. Tout se branche sur ce que vous utilisez déjà : CRM, logiciel métier, boîte mail, channel manager. Vos équipes gardent la validation sur les actions sensibles.",
+      },
+      {
+        question:
+          "Pourquoi un consultant des Alpes-Maritimes plutôt qu’un prestataire à distance ?",
+        answer:
+          "Parce que la première étape se joue chez vous. Une matinée passée à côté de vos équipes fait gagner des semaines de cadrage, et une heure de route rend cette visite possible sans négociation. Ensuite, tout le monde travaille à distance, nous compris. La proximité sert au démarrage, là où une mauvaise piste coûte le plus cher.",
+      },
+      {
+        question: "Combien coûte un projet IA chez vous ?",
+        answer:
+          "Le point de départ ne coûte rien : 30 minutes en visio ou sur place, sans engagement. Ensuite, le montant dépend du périmètre, donc on le chiffre. Vous recevez un business case avec le temps passé aujourd’hui, le gain attendu et le coût de la mise en production, avant de décider quoi que ce soit.",
+      },
+      {
+        question: "Quelles entreprises des Alpes-Maritimes accompagnez-vous ?",
+        answer:
+          "Des PME de 10 à 250 salariés dont le dirigeant décide vite : agences immobilières, conciergeries, hôtels indépendants, artisans du bâtiment, maisons de yachting, cabinets et industriels. Ce qui les rassemble : des équipes qui passent leurs journées sur des tâches répétitives, dans des outils métier qu’un ChatGPT générique ne voit pas.",
+      },
+    ],
+    liens: [
+      { href: "/consultant-ia-nice", name: "Consultant IA à Nice" },
+      {
+        href: "/consultant-ia-sophia-antipolis",
+        name: "Consultant IA à Sophia Antipolis",
+      },
+      { href: "/consultant-ia-monaco", name: "Consultant IA à Monaco" },
+      { href: "/outils", name: "Les outils gratuits" },
+    ],
+  },
   {
     slug: "consultant-ia-nice",
     name: "Nice",

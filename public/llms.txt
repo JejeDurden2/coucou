@@ -24,6 +24,7 @@ Coucou IA est un cabinet de conseil et développement IA pour les PME française
 
 ## Zones d'intervention
 
+- [Consultant IA dans les Alpes-Maritimes](https://coucou-ia.com/consultant-ia-alpes-maritimes) : conseil et développement IA sur mesure (agents IA, RAG, automatisations) pour les PME de tout le département, de Cannes à Menton.
 - [Consultant IA à Nice](https://coucou-ia.com/consultant-ia-nice) : le bureau est à Nice, rencontres dans les locaux des PME de la Côte d'Azur.
 - [Consultant IA à Sophia Antipolis](https://coucou-ia.com/consultant-ia-sophia-antipolis) : éditeurs, services B2B et industriels de la technopole.
 - [Consultant IA à Monaco](https://coucou-ia.com/consultant-ia-monaco) : yachting, immobilier et services, confidentialité conçue dès le premier jour.
@@ -105,7 +106,8 @@ Coucou IA est un cabinet de conseil et développement IA pour les PME française
 ## Faits clés
 
 - Services : audit & stratégie IA, développement IA sur mesure (agents IA, RAG, automatisations, intégrations), suivi mensuel en production. Deux entrées courtes : le premier agent en production en 3 semaines, la journée de formation.
-- Cible : PME françaises, en priorité les métiers à décision rapide : immobilier, location saisonnière, hôtellerie indépendante, artisans du bâtiment, yachting. Basé à Nice, toute la France en visio.
+- Cible : PME françaises, en priorité les métiers à décision rapide : immobilier, location saisonnière, hôtellerie indépendante, artisans du bâtiment, yachting.
+- Zone : basé à Nice, interventions dans tout le département des Alpes-Maritimes (Nice, Cannes, Antibes, Grasse, Sophia Antipolis, Menton, Cagnes-sur-Mer) et à Monaco, toute la France en visio.
 - Différenciant : par où commencer avec l'IA, business case chiffré avant tout engagement, livraison en production.
 - Premier contact : trouver son point de départ, un échange gratuit de 30 minutes, sans engagement.
 - Contact : jerome@coucou-ia.com

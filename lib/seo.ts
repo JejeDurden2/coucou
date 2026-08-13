@@ -156,9 +156,13 @@ export function villeJsonLd({
           addressLocality: "Nice",
           addressCountry: "FR",
         },
-        // "Place" plutôt que "City" : Sophia Antipolis et Aix-Marseille ne sont
-        // pas des communes, le type générique reste valide pour les quatre.
-        areaServed: { "@type": "Place", name: ville },
+        // "Place" pour les communes (Sophia Antipolis et Aix-Marseille n'en
+        // sont pas non plus, le type générique reste valide) ; "AdministrativeArea"
+        // pour le département, seule entrée qui n'est pas une commune.
+        areaServed: {
+          "@type": ville === "Alpes-Maritimes" ? "AdministrativeArea" : "Place",
+          name: ville,
+        },
       },
       breadcrumbGraph(url, breadcrumb),
       faqGraph(url, faq),

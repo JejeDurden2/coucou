@@ -67,7 +67,7 @@ export function SiteFooter() {
                 </Link>
               ))}
             </nav>
-            {/* Zones : les quatre pages locales, dérivées du tableau villes. */}
+            {/* Zones : les pages locales et le hub départemental, dérivés du tableau villes. */}
             <nav aria-label={footerHeadings.zones} className="flex flex-col gap-3">
               <p className={headingClasses}>{footerHeadings.zones}</p>
               {villes.map((ville) => (
