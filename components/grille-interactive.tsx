@@ -21,6 +21,7 @@ export type GrilleSector = {
     title: string;
     problem: string;
     order: string;
+    orderDetail: string;
     questions: readonly string[];
   }[];
 };
@@ -367,6 +368,9 @@ export function GrilleInteractive({ sectors }: { sectors: GrilleSector[] }) {
             </span>
             <span className="font-display text-2xl leading-tight font-bold tracking-[-0.02em] tabular-nums text-primary">
               {useCase.order}
+            </span>
+            <span className="text-sm leading-relaxed text-muted-foreground">
+              {useCase.orderDetail}
             </span>
             <span className="font-mono text-[10px] tracking-[0.12em] text-foreground-dim uppercase">
               {grille.illustrationLabel}

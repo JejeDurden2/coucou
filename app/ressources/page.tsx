@@ -14,7 +14,7 @@ export const metadata: Metadata = pageMetadata({
 export default function RessourcesHubPage() {
   const items = ressources.map((ressource) => ({
     name: ressource.name,
-    description: ressource.intro,
+    description: ressource.pitch,
     href: `/ressources/${ressource.slug}`,
   }));
 

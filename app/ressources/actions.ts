@@ -1,13 +1,13 @@
 "use server";
 
-// Server action de capture email pour les landings /ressources/[slug].
+// Server action de l'opt-in email en fin de carte (/ressources/[slug]).
 // Signature imposee par useActionState : (prevState, formData). Le slug
 // voyage dans un champ cache du formulaire (voir components/ressource-form.tsx).
 
-// Le lead entre dans la liste nurture Brevo du secteur : l'automation livre
-// la carte par email (etape 0), les relances J+3 / J+10 / J+21 suivent.
-// L'envoi respecte le planning de l'automation (heures ouvrees) : la page de
-// succes donne de toute facon l'acces direct a la carte.
+// Le lead entre dans la liste nurture Brevo du secteur : l'automation envoie
+// le lien de la carte par email (etape 0), puis les trois conseils
+// d'application (.agents/nurture.md). La carte reste en acces libre : l'email
+// n'est jamais une barriere.
 
 import { captureLead, type SubscribeState } from "@/lib/brevo";
 import { ressources } from "@/content/ressources";

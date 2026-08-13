@@ -113,7 +113,7 @@ export type StarterSection = {
 
 export const starter: StarterSection = {
   label: "Commencer petit",
-  title: "Commencez par un coin de la feuille.",
+  title: "Commencez par un bout, pas par tout.",
   sub: "Deux formats courts pour voir l’IA tourner chez vous, sans engager un chantier. Vous décidez la suite après.",
   offers: [
     {

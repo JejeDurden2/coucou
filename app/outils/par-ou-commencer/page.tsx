@@ -28,10 +28,11 @@ const breadcrumb = [{ label: "Accueil", href: "/" }, { label: "Par où commencer
 const sectors: GrilleSector[] = ressources.map((ressource) => ({
   slug: ressource.slug,
   name: ressource.name,
-  useCases: ressource.carte.useCases.map((useCase) => ({
+  useCases: ressource.useCases.map((useCase) => ({
     title: useCase.title,
     problem: useCase.problem,
-    order: useCase.order,
+    order: useCase.metric,
+    orderDetail: useCase.metricLabel,
     questions: useCase.questions,
   })),
 }));

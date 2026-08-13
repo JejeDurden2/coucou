@@ -4,7 +4,6 @@ import { useActionState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { bookingUrl, ctaLabel } from "@/content/site";
 import { ressourcesShared } from "@/content/ressources";
 import { subscribeRessource, type SubscribeState } from "@/app/ressources/actions";
 
@@ -26,25 +25,14 @@ export function RessourceForm({ slug }: { slug: string }) {
     return (
       <div
         aria-live="polite"
-        className="flex flex-col gap-4 rounded-lg border border-border bg-card p-6"
+        className="flex flex-col gap-2 rounded-lg border border-border bg-background p-6"
       >
-        <h2 className="font-display text-xl leading-snug font-medium tracking-[-0.01em]">
+        <h3 className="font-display text-xl leading-snug font-medium tracking-[-0.01em]">
           {ressourcesShared.successTitle}
-        </h2>
+        </h3>
         <p className="text-pretty leading-relaxed text-muted-foreground">
-          {ressourcesShared.successBody}{" "}
-          <a
-            href={`/ressources/${slug}/carte`}
-            className="rounded-sm text-primary underline-offset-4 outline-none hover:underline focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
-          >
-            {ressourcesShared.successCarteLabel}
-          </a>
+          {ressourcesShared.successBody}
         </p>
-        <div>
-          <Button nativeButton={false} render={<a href={bookingUrl("ressource-success")} />} size="lg">
-            {ctaLabel}
-          </Button>
-        </div>
       </div>
     );
   }

@@ -31,11 +31,11 @@ export const hero: Hero = {
   reassurance: "30 minutes, gratuit, sans engagement.",
   mapLabel: "La carte des possibles",
   mapItems: [
-    { category: "Productivité", line: "Vos devis chiffrés en minutes, pas en jours" },
-    { category: "Nouveaux marchés", line: "Votre offre en 12 langues" },
-    { category: "Service client", line: "Des réponses même à 3 h du matin" },
-    { category: "Compétences", line: "Vos données analysées, sans data scientist" },
-    { category: "Automatisation", line: "Relances et saisie sans personne derrière" },
-    { category: "Savoir-faire", line: "Vos archives, interrogeables en une question" },
+    { category: "Premier contact", line: "Chaque demande rappelée en 5 minutes" },
+    { category: "Chiffrage", line: "Le devis prêt le jour de la visite" },
+    { category: "Relances", line: "Vos relances partent, même la semaine chargée" },
+    { category: "Langues", line: "Une réponse dans la langue du client, même à 3 h" },
+    { category: "Terrain", line: "Vos visites dictées, votre logiciel à jour" },
+    { category: "Savoir-faire", line: "Le bon document retrouvé en une question" },
   ],
 };
