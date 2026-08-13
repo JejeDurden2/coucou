@@ -75,13 +75,17 @@ export function CartePageTemplate({
         <div className="mx-auto max-w-[1200px] px-6 py-14 lg:py-16">
           <ScrollReveal>
             <h2 className="sr-only">{ressourcesShared.axesTitle}</h2>
-            <dl className="grid grid-cols-1 gap-8 md:grid-cols-3 md:gap-12">
+            <dl className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4 lg:gap-10">
               {[
                 { term: ressourcesShared.axisImpact, def: page.axes.impact },
                 { term: ressourcesShared.axisFaisabilite, def: page.axes.faisabilite },
                 {
                   term: ressourcesShared.enProductionTitle,
                   def: ressourcesShared.enProductionBody,
+                },
+                {
+                  term: ressourcesShared.chiffresTitle,
+                  def: ressourcesShared.chiffresBody,
                 },
               ].map((item) => (
                 <div key={item.term} className="flex flex-col gap-3 border-l-2 border-primary/60 pl-5">
@@ -139,9 +143,6 @@ export function CartePageTemplate({
 
                 <ScrollReveal delay={0.05} className="flex flex-col gap-8 lg:col-span-4 lg:col-start-9">
                   <div className="flex flex-col gap-2">
-                    <span className="font-mono text-[10px] tracking-[0.12em] text-foreground-dim uppercase">
-                      {ressourcesShared.illustrationLabel}
-                    </span>
                     <span className="font-display text-4xl leading-none font-bold tracking-[-0.02em] tabular-nums text-primary">
                       {useCase.metric}
                     </span>

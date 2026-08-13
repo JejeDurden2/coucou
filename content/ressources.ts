@@ -15,7 +15,8 @@ export type CarteUseCase = {
   // ressourcesShared.branchementLabel) : outils métier nommés, canaux, données.
   branchement: string;
   // Chiffre court pour l'affichage métrique (ex. "24 h", "< 5 min").
-  // Toujours accompagné de ressourcesShared.illustrationLabel.
+  // Ordre de grandeur, jamais un résultat client : la règle est posée une fois
+  // par page dans le bloc de lecture (ressourcesShared.chiffres*).
   metric: string;
   // Ce que le chiffre mesure, une ligne.
   metricLabel: string;
@@ -69,10 +70,14 @@ export const ressourcesShared = {
   enProductionTitle: "En production",
   enProductionBody:
     "Un système qui tourne pour de vrai chez vous, utilisé par l'équipe chaque semaine. Pas une démo, pas un pilote qui ne dépasse jamais le stade du test.",
+  chiffresTitle: "Les chiffres",
+  chiffresBody:
+    "Des ordres de grandeur réalistes pour situer le gain, pas des résultats mesurés chez un client. Votre business case chiffré les remplace au point de départ.",
   // Cas d'usage.
   branchementLabel: "Se branche sur",
   questionsTitle: "Est-ce chez vous ?",
-  illustrationLabel: "Illustration, pas une référence client",
+  // Signal court sous un chiffre isolé de son contexte (grille interactive).
+  illustrationLabel: "Ordre de grandeur",
   // Matrice de synthèse.
   matrixTitle: "La carte de synthèse",
   quadrantTopRight: "Commencez ici",
