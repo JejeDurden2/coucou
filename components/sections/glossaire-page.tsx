@@ -28,10 +28,7 @@ export function GlossairePageTemplate({
         <div className="mx-auto max-w-[1200px] px-6 pt-12 pb-16 lg:pt-16 lg:pb-20">
           <Breadcrumb items={breadcrumb} />
           <ScrollReveal className="mt-8 max-w-[52rem]">
-            <p className="font-mono text-xs uppercase tracking-[0.12em] text-muted-foreground">
-              {glossaireShared.eyebrow}
-            </p>
-            <h1 className="mt-4 text-balance font-display text-4xl leading-[1.05] font-bold tracking-[-0.03em] sm:text-5xl">
+            <h1 className="text-balance font-display text-4xl leading-[1.05] font-bold tracking-[-0.03em] sm:text-5xl">
               {term.h1}
             </h1>
             <div className="mt-8 border-l-2 border-primary/60 pl-6">

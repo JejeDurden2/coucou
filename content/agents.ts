@@ -64,7 +64,6 @@ export const agentsCopy = {
   strengthsTitle: "Ce qui marche vraiment",
   risksTitle: "Ce qui doit vous alerter",
   forWhoDefaultTitle: "Quand ça a du sens pour une PME",
-  offerLabel: "On vous l’installe",
   crossLinkHeading: "Aller plus loin",
   compareLinkName: "OpenClaw ou Hermes Agent : le comparatif complet",
   compareLinkHref: "/blog/openclaw-vs-hermes-agent",

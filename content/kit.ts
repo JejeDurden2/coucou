@@ -702,7 +702,6 @@ export const kit = {
   editLabel: "Changer une réponse",
 
   // Verdict, visible tout de suite après la dernière question.
-  verdictEyebrow: "Votre pile",
   verdictTitle: "Voici ce qu’il vous faut.",
   verdictOpeners: {
     idee: "Vous partez d’une idée : vous allez tout créer dans le bon ordre, sans rien avoir à reprendre.",
@@ -737,7 +736,6 @@ export const kit = {
   gateErrorServer: `Une erreur est survenue. Réessayez, ou écrivez-nous : ${contactEmail}.`,
 
   // Kit complet.
-  kitEyebrow: "Le kit",
   checklistTitle: "La liste, dans l’ordre",
   checklistIntro:
     "Ce que l’IA ne peut pas cliquer à votre place. Faites-les dans cet ordre, chacune débloque la suivante.",

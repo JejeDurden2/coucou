@@ -162,10 +162,7 @@ export function Services() {
             Délais publiés, jamais de prix. */}
         <ScrollReveal className="mt-14 lg:mt-16">
           <div className="mx-auto max-w-[46rem] text-center">
-            <p className="font-mono text-xs uppercase tracking-[0.12em] text-muted-foreground">
-              {starter.label}
-            </p>
-            <h3 className="mt-3 text-balance font-display text-2xl leading-[1.1] font-bold tracking-[-0.02em] lg:text-3xl">
+            <h3 className="text-balance font-display text-2xl leading-[1.1] font-bold tracking-[-0.02em] lg:text-3xl">
               {starter.title}
             </h3>
             <p className="mx-auto mt-4 max-w-[54ch] text-pretty leading-relaxed text-muted-foreground">

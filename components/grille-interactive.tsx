@@ -352,19 +352,14 @@ export function GrilleInteractive({ sectors }: { sectors: GrilleSector[] }) {
       const cartePath = `/ressources/${sector.slug}`;
       return (
         <div role="status" aria-live="polite" className="flex flex-col gap-8">
-          <div className="flex flex-col gap-2">
-            <span className="font-mono text-xs tracking-[0.12em] text-primary uppercase">
-              {grille.verdictEyebrow}
-            </span>
-            <span className="font-mono text-xs tracking-[0.12em] text-muted-foreground uppercase">
-              {sector.name} · {useCase.title}
-            </span>
-          </div>
+          <span className="font-mono text-xs tracking-[0.12em] text-muted-foreground uppercase">
+            {sector.name} · {useCase.title}
+          </span>
 
           {/* Ordre de grandeur : signal bleu (filet gauche + chiffre), étiqueté illustration. */}
           <div className="flex flex-col gap-1 border-l-2 border-primary pl-4">
             <span className="font-mono text-[10px] tracking-[0.12em] text-muted-foreground uppercase">
-              {grille.orderEyebrow}
+              {grille.orderLabel}
             </span>
             <span className="font-display text-2xl leading-tight font-bold tracking-[-0.02em] tabular-nums text-primary">
               {useCase.order}

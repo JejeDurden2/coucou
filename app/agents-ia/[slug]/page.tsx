@@ -206,10 +206,7 @@ export default async function AgentSpokePage({ params }: Params) {
           <section className="border-t border-border">
             <div className="mx-auto max-w-[1200px] px-6 py-16 lg:py-20">
               <ScrollReveal className="rounded-lg border border-border bg-card p-8 lg:p-12">
-                <span className="font-mono text-xs uppercase tracking-[0.12em] text-muted-foreground">
-                  {agentsCopy.offerLabel}
-                </span>
-                <div className="mt-4 grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-16">
+                <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-16">
                   <div className="lg:col-span-5">
                     <h2 className="text-balance font-display text-2xl leading-snug font-medium tracking-[-0.01em] lg:text-[1.75rem]">
                       {page.offer.title}

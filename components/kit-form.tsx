@@ -50,7 +50,7 @@ const inputClasses = cn(
 );
 
 const sectionTitle = "font-display text-xl leading-snug font-medium tracking-[-0.01em]";
-const eyebrow = "font-mono text-xs tracking-[0.12em] uppercase";
+const monoLabel = "font-mono text-xs tracking-[0.12em] uppercase";
 
 function optionClasses(selected: boolean) {
   return cn(
@@ -180,7 +180,7 @@ export function KitForm() {
         className="trace-glow pointer-events-none absolute -top-44 -right-44 h-100 w-120 opacity-50"
       />
       {!done ? (
-        <p className={cn(eyebrow, "text-muted-foreground")}>
+        <p className={cn(monoLabel, "text-muted-foreground")}>
           {kit.progressLabel}{" "}
           <span className="tabular-nums text-foreground">{index + 1}</span> {kit.progressJoin}{" "}
           <span className="tabular-nums">{questions.length}</span>
@@ -295,7 +295,6 @@ export function KitForm() {
             porte email ne vit jamais dans une zone live. */}
         <div role="status" aria-live="polite" className="flex flex-col gap-10">
           <div className="flex flex-col gap-4">
-            <span className={cn(eyebrow, "text-primary")}>{kit.verdictEyebrow}</span>
             <h2 className="text-balance font-display text-2xl leading-snug font-bold tracking-[-0.02em] sm:text-3xl">
               {kit.verdictTitle}
             </h2>
@@ -428,7 +427,6 @@ export function KitForm() {
     return (
       <div role="status" aria-live="polite" className="flex flex-col gap-10">
         <div className="flex flex-col gap-4">
-          <span className={cn(eyebrow, "text-primary")}>{kit.kitEyebrow}</span>
           <h3 className={sectionTitle}>{kit.checklistTitle}</h3>
           <p className="max-w-[54ch] text-pretty leading-relaxed text-muted-foreground">
             {kit.checklistIntro}
@@ -447,16 +445,16 @@ export function KitForm() {
               </p>
               <dl className="flex flex-wrap gap-x-8 gap-y-2 text-sm">
                 <div className="flex items-baseline gap-2">
-                  <dt className={cn(eyebrow, "text-muted-foreground")}>{kit.stepWhereLabel}</dt>
+                  <dt className={cn(monoLabel, "text-muted-foreground")}>{kit.stepWhereLabel}</dt>
                   <dd className="text-foreground">{step.where}</dd>
                 </div>
                 <div className="flex items-baseline gap-2">
-                  <dt className={cn(eyebrow, "text-muted-foreground")}>{kit.stepTimeLabel}</dt>
+                  <dt className={cn(monoLabel, "text-muted-foreground")}>{kit.stepTimeLabel}</dt>
                   <dd className="tabular-nums text-foreground">{step.time}</dd>
                 </div>
               </dl>
               <p className="max-w-[62ch] border-l-2 border-border pl-4 text-sm leading-relaxed text-muted-foreground">
-                <span className={cn(eyebrow, "mr-2 text-foreground")}>{kit.stepPiegeLabel}</span>
+                <span className={cn(monoLabel, "mr-2 text-foreground")}>{kit.stepPiegeLabel}</span>
                 {step.piege}
               </p>
             </li>

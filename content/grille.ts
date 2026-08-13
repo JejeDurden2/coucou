@@ -44,8 +44,7 @@ export const grille = {
   questionsBack: "Choisir un autre cas",
 
   // Verdict.
-  verdictEyebrow: "Le verdict",
-  orderEyebrow: "Ordre de grandeur",
+  orderLabel: "Ordre de grandeur",
   illustrationLabel: ressourcesShared.illustrationLabel,
   verdicts: {
     // Trois oui.

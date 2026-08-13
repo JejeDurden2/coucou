@@ -3,7 +3,6 @@
 // aussi celui qui construit.
 
 export type FondateurSection = {
-  kicker: string;
   name: string;
   role: string;
   bio: string;
@@ -21,7 +20,6 @@ export const fondateurPage = {
 };
 
 export const fondateur: FondateurSection = {
-  kicker: "Qui est derrière Coucou IA",
   name: "Jérôme Desmares",
   role: "Fondateur",
   bio: "Plus de dix ans à entreprendre, construire des logiciels et diriger des équipes de développement, pour le luxe, la fintech et l'édition comptable. Coucou IA applique ce que ces années ont appris : comprendre le métier d'abord, construire le système ensuite.",

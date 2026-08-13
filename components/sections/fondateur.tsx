@@ -22,10 +22,7 @@ export function Fondateur({ titleAs: Title = "h2" }: { titleAs?: "h1" | "h2" }) 
             className="w-full max-w-[16rem] rounded-lg border border-border"
           />
           <div>
-            <span className="font-mono text-xs uppercase tracking-[0.12em] text-muted-foreground">
-              {fondateur.kicker}
-            </span>
-            <Title className="mt-4 font-display text-[2rem] leading-[1.08] font-bold tracking-[-0.02em] lg:text-[2.75rem]">
+            <Title className="font-display text-[2rem] leading-[1.08] font-bold tracking-[-0.02em] lg:text-[2.75rem]">
               {fondateur.name}
             </Title>
             <p className="mt-2 font-mono text-sm text-foreground-dim">

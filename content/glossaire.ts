@@ -44,7 +44,6 @@ export const glossaireHub = {
 
 // Copie transverse des gabarits glossaire (même rôle que spokes.ts pour les spokes).
 export const glossaireShared = {
-  eyebrow: "L’IA sans jargon",
   definitionLabel: "Définition",
   explanationTitle: "L’image, pour un dirigeant",
   whatItChangesTitle: "Ce que ça change dans votre PME",

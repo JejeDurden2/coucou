@@ -15,7 +15,7 @@ Light-first. Defined in OKLCH in `app/globals.css` under `:root` (the site's onl
 Direction: **ink, one blue signal, one warm wink** on warm paper-white. The discipline is split in two, exactly as on the old dark theme but with a warmer partner:
 
 - `--primary` (blue, `oklch(0.54 0.155 245)`) is the ONE interactive signal: CTA, key metric, focus ring, active marks, links, the carte's rays and arrows, the hero and services-hinge glows. Blue reads as engineering credibility and is dark enough to carry both as a button fill (with near-white text) and as text at AA contrast.
-- `--accent-2` (coral, `oklch(0.55 0.15 42)`) is the **warmth and the wink**: the hero eyebrow, the carte's label and card dot marks, ~6% of flow-field particles, and the final CTA's closing glow. It passes AA as small text (4.96:1), but it never colors an action, a metric, a link, or body text.
+- `--accent-2` (coral, `oklch(0.55 0.15 42)`) is the **warmth and the wink**: the carte's label and card dot marks, ~6% of flow-field particles, and the final CTA's closing glow. It passes AA as small text (4.96:1), but it never colors an action, a metric, a link, or body text.
 
 **The violet is retired** (dark-theme relic): on a light ground a violet wash turns pastel and lands squarely in the AI-startup cliché this brand bans. Coral took over its atmosphere-and-wink role because it complements the blue instead of competing with it.
 
@@ -38,7 +38,7 @@ Direction: **ink, one blue signal, one warm wink** on warm paper-white. The disc
 | `--accent-foreground` | `0.210 0.015 260` | `#14181f` | Text on `--accent` |
 | `--secondary` | `0.965 0.005 85` | `#f5f3f0` | Secondary button surface |
 | `--ring` | `0.540 0.155 245` | `#0074c1` | Focus ring = primary |
-| `--accent-2` | `0.550 0.150 42` | `#b64c1b` | Accent 2 (coral): warmth and wink. Eyebrows, carte marks, flow-field sparks, closing glow. Never actions, metrics, links, or body text |
+| `--accent-2` | `0.550 0.150 42` | `#b64c1b` | Accent 2 (coral): warmth and wink. Carte marks, flow-field sparks, closing glow. Never actions, metrics, links, or body text |
 | `--success` | `0.520 0.140 158` | `#008048` | Positive delta, confirmed state |
 | `--warning` | `0.550 0.120 75` | `#9a6500` | Caution |
 | `--destructive` | `0.550 0.190 25` | `#c92f33` | Error / form validation |
@@ -73,7 +73,7 @@ Self-hosted via `next/font`. Three roles, all free:
 
 - **Display: Space Grotesk** (headlines, hero, big metrics). A grotesque with techy DNA (derived from Space Mono) and just enough character to carry the wink, without the neutrality of Inter/Geist. Weights 500 & 700.
 - **Body / UI: Geist Sans**. Vercel's workhorse: neutral, precise, excellent at small sizes and dense UI. The credibility face. Weights 400, 500, 600.
-- **Data / labels: Geist Mono**. ROI figures (`tabular-nums`), eyebrows, code, metric labels. Shares geometry with the other two.
+- **Data / labels: Geist Mono**. ROI figures (`tabular-nums`), code, metric labels. Shares geometry with the other two.
 
 CSS vars: `--font-display`, `--font-sans`, `--font-mono`.
 
@@ -87,7 +87,7 @@ CSS vars: `--font-display`, `--font-sans`, `--font-mono`.
 | Lede | 1.125rem to 1.25rem (18/20) | 1.6 | 0 | Geist Sans 400, `muted-foreground` |
 | Body | 1rem (16) | 1.6 | 0 | Geist Sans 400, max `65ch` |
 | Small | 0.875rem (14) | 1.5 | 0 | Geist Sans 400/500 |
-| Label / eyebrow | 0.75rem (12) | 1.4 | +0.12em, uppercase | Geist Mono 500, `muted-foreground` |
+| Label | 0.75rem (12) | 1.4 | +0.12em, uppercase | Geist Mono 500, `muted-foreground` |
 | Metric (stat) | 2.5rem to 4rem (40/64) | 1.0 | -0.02em | Space Grotesk 700, `tabular-nums` |
 
 Rules: headlines `text-balance`; body/lede `text-pretty`, capped `max-w-[65ch]`. Numbers always `tabular-nums`. Emphasis inside a headline uses bold/italic of the **same** family, never a swapped font.
@@ -155,7 +155,7 @@ Principles: motion communicates hierarchy, sequence, or feedback, never decorati
 
 **Footer:** `border-t border-border`, `bg-background`, `py-16`. Columns: wordmark plus one-line positioning; nav links; legal (Mentions légales, Confidentialité); the CTA repeated once. Muted text, hairline dividers. No newsletter unless briefed.
 
-**Section rhythm:** container `max-w-[1200px] mx-auto px-6`. Vertical padding `py-20` (mobile) to `py-28`/`py-32` (desktop), consistent across sections. Each section: one focused message, optional single eyebrow (max 1 per 3 sections total), H2, ≤ 25-word sub, then content. No two sections share the same layout family; max 2 consecutive image+text splits.
+**Section rhythm:** container `max-w-[1200px] mx-auto px-6`. Vertical padding `py-20` (mobile) to `py-28`/`py-32` (desktop), consistent across sections. Each section: one focused message, H2, ≤ 25-word sub, then content. No two sections share the same layout family; max 2 consecutive image+text splits.
 
 **Metric / stat block:** vertical stack. Geist Mono uppercase label (`muted-foreground`, 12px), then big Space Grotesk `tabular-nums` figure, then optional `success` delta badge with `▲`. In a `grid grid-cols-1 sm:grid-cols-3 gap-8`, separated by negative space or hairlines, never boxed cards. This is where the brand's ROI proof lives, so give it room.
 
@@ -181,7 +181,7 @@ Principles: motion communicates hierarchy, sequence, or feedback, never decorati
 - Warm paper-white plus ink plus one disciplined deep-blue signal plus one coral wink. Let 90% of the page be quiet.
 - Lead with ROI: real, measurable numbers in metric blocks.
 - Tight 8px radius, hairline borders, precise type, generous whitespace.
-- The three sanctioned ambient glows and no more (hero top-right blue, final CTA bottom-left warm, services hinge blue), one tracé grid field on proof/spoke pages, surgical blue accents, coral only in its listed spots (eyebrows, carte marks, particles, closing glow).
+- The three sanctioned ambient glows and no more (hero top-right blue, final CTA bottom-left warm, services hinge blue), one tracé grid field on proof/spoke pages, surgical blue accents, coral only in its listed spots (carte marks, particles, closing glow).
 - Shadows faint (≤10% black alpha), always with a hairline border.
 
 **Don't**
@@ -190,6 +190,6 @@ Principles: motion communicates hierarchy, sequence, or feedback, never decorati
 - Gradient or accent-tinted text; rainbow mesh backgrounds; stacked colored glows; pastel washes.
 - Glassmorphism soup: no frosted blur on every card.
 - Dark or hard shadows (>15% alpha reads as a smudge on white); no dark sections inverting the theme.
-- Three identical feature cards; centered-hero-over-mesh default; an eyebrow above every section.
+- Three identical feature cards; centered-hero-over-mesh default; an eyebrow (mono kicker label) above a heading, anywhere: the pattern is retired site-wide.
 - Fake-precise invented specs, div-based fake screenshots, count-ups everywhere, infinite marquees.
 - Any arbitrary hex in a component; tokens only.

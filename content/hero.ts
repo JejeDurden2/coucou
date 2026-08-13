@@ -10,8 +10,6 @@ export type HeroMapItem = {
 };
 
 export type Hero = {
-  // Bandeau mono au-dessus du titre.
-  kicker: string;
   // Deux temps : le premier plein, le second tracé en creux (.text-hollow).
   headlineSolid: string;
   headlineHollow: string;
@@ -24,7 +22,6 @@ export type Hero = {
 };
 
 export const hero: Hero = {
-  kicker: "Conseil et développement IA pour les PME.",
   headlineSolid: "Tout le monde vous parle d’IA.",
   headlineHollow: "On la met au travail chez vous.",
   lede: "Devis, relances, messages clients, saisie : on trouve ce que l’IA prend en charge chez vous, on le chiffre, et on le met en production.",

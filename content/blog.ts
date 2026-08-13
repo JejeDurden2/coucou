@@ -69,7 +69,6 @@ export const blogHub = {
   metaTitle: "Blog IA pour dirigeants de PME | Coucou IA",
   metaDescription:
     "Le blog IA pour dirigeants de PME : méthode, décryptages sans jargon et cas concrets pour savoir par où commencer et ce que ça rapporte.",
-  eyebrow: "Le blog",
   h1: "L’IA en entreprise, sans jargon",
   intro:
     "Ce que je vois sur le terrain, ce qui marche, ce qui coûte cher pour rien. Un article quand j’ai quelque chose d’utile à dire.",

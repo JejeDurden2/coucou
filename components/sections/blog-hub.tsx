@@ -27,10 +27,7 @@ export function BlogHub() {
         <Breadcrumb items={[{ label: "Accueil", href: "/" }, { label: "Blog" }]} />
 
         <ScrollReveal className="mt-8 max-w-[46rem]">
-          <p className="font-mono text-xs uppercase tracking-[0.12em] text-muted-foreground">
-            {blogHub.eyebrow}
-          </p>
-          <h1 className="mt-4 text-balance font-display text-4xl leading-[1.05] font-bold tracking-[-0.03em] sm:text-5xl">
+          <h1 className="text-balance font-display text-4xl leading-[1.05] font-bold tracking-[-0.03em] sm:text-5xl">
             {blogHub.h1}
           </h1>
           <p className="mt-6 max-w-[54ch] text-pretty text-lg leading-relaxed text-muted-foreground lg:text-xl">

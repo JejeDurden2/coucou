@@ -30,10 +30,7 @@ export function CartePageTemplate({
 
           <div className="mt-8 grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16">
             <ScrollReveal className="lg:col-span-7">
-              <span className="font-mono text-xs tracking-[0.12em] text-accent-2 uppercase">
-                {ressourcesShared.eyebrow}
-              </span>
-              <h1 className="mt-4 text-balance font-display text-4xl leading-[1.05] font-bold tracking-[-0.03em] sm:text-5xl">
+              <h1 className="text-balance font-display text-4xl leading-[1.05] font-bold tracking-[-0.03em] sm:text-5xl">
                 {page.h1}
               </h1>
               <p className="mt-6 max-w-[54ch] text-pretty text-lg leading-relaxed text-muted-foreground lg:text-xl">

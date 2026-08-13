@@ -63,8 +63,8 @@
   --accent-foreground: var(--foreground);
   --secondary: oklch(0.965 0.005 85);
   --ring: oklch(0.54 0.155 245);
-  /* Accent 2: warm coral, the wink. Eyebrows, carte marks, flow-field
-     sparks, the closing glow. Never on actions, metrics, or body text. */
+  /* Accent 2: warm coral, the wink. Carte marks, flow-field sparks,
+     the closing glow. Never on actions, metrics, or body text. */
   --accent-2: oklch(0.55 0.15 42);
   --success: oklch(0.52 0.14 158);
   --warning: oklch(0.55 0.12 75);

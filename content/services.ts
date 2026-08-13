@@ -105,14 +105,12 @@ export type StarterOffer = {
 };
 
 export type StarterSection = {
-  label: string;
   title: string;
   sub: string;
   offers: StarterOffer[];
 };
 
 export const starter: StarterSection = {
-  label: "Commencer petit",
   title: "Commencez par un bout.",
   sub: "Deux formats courts pour voir l’IA tourner chez vous, sans engager un chantier. Vous décidez la suite après.",
   offers: [

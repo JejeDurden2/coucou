@@ -59,8 +59,6 @@ export type RessourcePage = {
 
 // Copie transverse des gabarits ressources (même rôle que spokes.ts pour les spokes).
 export const ressourcesShared = {
-  // Hero.
-  eyebrow: "La carte des possibles",
   heroMetaClassement: "classés impact × faisabilité",
   heroMetaAccess: "en accès libre",
   // Lecture de la carte.
