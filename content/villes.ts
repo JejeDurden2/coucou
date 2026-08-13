@@ -3,6 +3,8 @@
 // métiers, business case (métriques alignées sur la page secteur du métier phare),
 // FAQ et maillage sortant. Les métiers pointent vers /secteurs/<slug>.
 // Aucune référence client, aucun quartier inventé, tout chiffre étiqueté "Exemple".
+// Le contexte parle au dirigeant, jamais de la ville : pas de leçon de géographie
+// ou d'économie régionale, pas d'adresse postale (elle vit dans les JSON-LD et le légal).
 
 import type { HeroMapItem } from "@/content/hero";
 import type { BusinessCase, FaqItem } from "@/content/secteurs";
@@ -87,14 +89,13 @@ export const villes: Ville[] = [
       "Consultant IA à Nice : audit, agents IA et automatisations pour les PME de la Côte d’Azur. Basé à Nice, sur place ou en visio. Premier échange gratuit.",
     h1: "Consultant IA à Nice pour les PME",
     intro:
-      "Coucou IA est installé à Nice. On rencontre les dirigeants de la Côte d’Azur en personne, dans leurs locaux, et la visio couvre le reste de la France. Même méthode partout : on trouve où l’IA rapporte chez vous, on le chiffre, on le construit.",
+      "Coucou IA est installé à Nice. On vient voir vos équipes travailler, on trouve où l’IA vous rend du temps, on le chiffre, on le construit.",
     contexte: {
-      title: "Un consultant IA installé à Nice, pas une antenne de passage",
+      title: "Vous connaissez votre métier. Nous, ce que l’IA sait en faire.",
       paragraphs: [
-        "Notre bureau est avenue de Pessicart, à Nice. Quand un dirigeant de la région veut comprendre ce que l’IA change dans son métier, on vient le voir : dans ses locaux, face à ses équipes, devant ses vrais dossiers. Un échange de terrain, pas une présentation générique déroulée depuis Paris.",
-        "La Côte d’Azur est l’une des premières destinations touristiques de France, et Nice, inscrite au patrimoine mondial de l’UNESCO pour son histoire de villégiature, en est la capitale. L’économie d’ici vit du tourisme, de l’immobilier, du bâtiment et des services : des métiers de saison et de relation, avec des équipes réduites et des pics de charge marqués. C’est précisément là qu’une IA bien ciblée rapporte : elle absorbe les demandes répétitives et rend du temps aux équipes pour ce qui compte, le client.",
-        "Le premier réflexe des dirigeants qu’on rencontre est souvent le même : l’IA, ce serait pour les grands groupes. Notre travail commence là : montrer, exemples en main, ce qu’elle rend possible dans une entreprise de dix ou de cinquante personnes, puis chiffrer ce que ça rapporte avant de construire quoi que ce soit.",
-        "Et si votre entreprise est ailleurs, rien ne bloque : le point de départ, les restitutions et le suivi se font aussi bien en visio.",
+        "Vos équipes répondent aux mêmes demandes, ressaisissent les mêmes informations, remontent les mêmes dossiers. Ça tourne, mais ça mange les heures que vous voudriez passer avec vos clients. Ajoutez la saison, les équipes réduites, les pics d’août : le retard se rattrape le soir.",
+        "On vient voir ça chez vous, devant vos vrais dossiers. Une matinée suffit à repérer les deux ou trois tâches où l’IA rend le plus de temps. On chiffre le gain, vous décidez, on construit. Si votre entreprise est ailleurs, la visio fait le même travail.",
+        "Le premier réflexe des dirigeants qu’on rencontre est souvent le même : l’IA, ce serait pour les grands groupes. Notre travail commence là, exemples en main : montrer ce qu’elle change dans une entreprise de dix ou de cinquante personnes.",
       ],
     },
     carte: [
@@ -199,10 +200,9 @@ export const villes: Ville[] = [
     contexte: {
       title: "Parler IA à des gens qui en font déjà",
       paragraphs: [
-        "Sophia Antipolis n’est pas une zone d’activité comme les autres : créée en 1969, c’est la première technopole d’Europe. Elle concentre des éditeurs de logiciels, des sociétés de services et des centres de recherche. Beaucoup vendent de la technologie. Et beaucoup gardent, en interne, des process manuels : avant-vente réécrite à chaque appel d’offres, support saturé, documentation introuvable.",
-        "On ne vient pas expliquer l’IA à des ingénieurs. On vient chiffrer où elle rapporte dans vos opérations : avant-vente, support, gestion interne, production documentaire. Un business case d’abord, un système en production ensuite, des résultats mesurés à la fin.",
-        "Un mot sur ce qu’on n’est pas : une société qui place des développeurs chez vous, ou un cabinet qui vend des journées d’étude. On vend un résultat en production, avec un chiffrage avant l’engagement et une mesure après la mise en service. Si le business case ne tient pas, on vous le dit et on s’arrête là.",
-        "Notre bureau est à Nice, la technopole est à une demi-heure de route. Les rencontres sur place s’organisent simplement, et la visio fait le reste, comme vos équipes en ont l’habitude.",
+        "Vous vendez de la technologie, et en interne l’avant-vente réécrit chaque réponse d’appel d’offres, le support traite dix fois la même question, la documentation prend une version de retard. C’est le sort commun des équipes qui construisent pour les autres.",
+        "On ne vient pas expliquer l’IA à vos ingénieurs. On vient chiffrer où elle rapporte dans vos opérations : avant-vente, support, production documentaire, recherche interne. Un business case d’abord, un système en production ensuite, des résultats mesurés à la fin. Si le calcul ne tient pas, on vous le dit et on s’arrête là.",
+        "Ce qu’on n’est pas : une société qui place des développeurs chez vous, ni un cabinet qui vend des journées d’étude. On vend un résultat en production. Notre bureau niçois est à une demi-heure de la technopole : on passe quand ça compte, la visio fait le reste.",
       ],
     },
     carte: [
@@ -296,10 +296,9 @@ export const villes: Ville[] = [
     contexte: {
       title: "L’IA à Monaco : utile, discrète, sous votre contrôle",
       paragraphs: [
-        "Monaco vit du yachting, de l’immobilier et des services, au cœur du yachting méditerranéen : le Monaco Yacht Show réunit chaque année la grande plaisance au port Hercule, et le port Vauban d’Antibes est à quelques kilomètres. Des métiers de relation, où chaque client compte et où la confidentialité n’est pas négociable. L’IA y trouve sa place à une condition : rester sous votre contrôle. Vos données ne partent pas dans un outil public, et la décision reste humaine.",
-        "Ce qu’on automatise : les demandes entrantes, les dossiers à monter, les documents à produire, souvent en plusieurs langues. Ce qu’on ne touche pas : la relation elle-même. Vos équipes récupèrent des heures sur l’administratif et les passent avec leurs clients.",
-        "La Principauté travaille en plusieurs langues et avec des clients sur plusieurs fuseaux horaires. C’est un terrain où l’IA excelle : elle lit et rédige dans la langue du client, à toute heure, et prépare les réponses pendant que vos équipes dorment. Le matin, elles relisent et valident.",
-        "On vient en Principauté pour le point de départ si vous le souhaitez, pour la restitution du business case et pour le lancement. Entre ces étapes, la visio suffit.",
+        "Vos clients écrivent à toute heure, dans plusieurs langues, et chaque demande mérite une réponse soignée. Entre deux rendez-vous, monter un dossier ou une proposition prend la soirée.",
+        "L’IA prépare ce travail : elle qualifie la demande, rédige dans la langue du client, assemble le dossier. Vos équipes relisent et décident. On ne touche pas à la relation, on rend le temps de s’en occuper.",
+        "Une condition, non négociable ici : vos données restent sous votre contrôle. L’hébergement se choisit avec vous, rien ne part vers un modèle public sans votre accord, et ce qu’on apprend de votre activité reste entre vous et nous. On vient en Principauté pour les rendez-vous qui comptent, Nice est à une demi-heure.",
       ],
     },
     carte: [
@@ -391,12 +390,11 @@ export const villes: Ville[] = [
     intro:
       "Coucou IA est basé à Nice. Pour la métropole Aix-Marseille, on se déplace aux étapes clés et la visio couvre le reste. La méthode ne change pas : un business case chiffré d’abord, un système en production ensuite.",
     contexte: {
-      title: "Un consultant IA pour la métropole Aix-Marseille",
+      title: "Plus vous traitez de volume, plus vite l’IA se rembourse",
       paragraphs: [
-        "D’Aix-en-Provence au port de Marseille, la métropole concentre de l’industrie, de la logistique, des services et de l’immobilier. Marseille est la deuxième ville de France, et son port le premier port de commerce du pays : autour, des entreprises avec de vrais volumes de commandes, de dossiers et de documents techniques. Plus le volume est gros, plus vite une IA bien placée se rembourse.",
-        "Soyons clairs sur la géographie : notre bureau est à Nice, à environ deux heures de route. On ne prétend pas passer chaque semaine dans vos locaux. On vient pour ce qui mérite du face à face : la rencontre de vos équipes, la restitution du business case, le lancement. Le reste passe en visio, sans rien perdre.",
-        "La région ne manque pas de prestataires informatiques. Notre différence tient en deux temps : un business case chiffré avant que vous n’engagiez un euro, puis des résultats mesurés après la mise en service. Pas de journées vendues au poids, un système qui tourne et des chiffres pour en juger.",
-        "Le point de départ, lui, se tient où vous voulez : en visio ou sur place, selon vos contraintes.",
+        "Commandes, dossiers, documents techniques : quand les volumes montent, chaque tâche répétitive coûte cher en heures. C’est là qu’une IA bien placée se rembourse le plus vite, et c’est le quotidien des entreprises qu’on suit ici, dans l’industrie, les services et l’immobilier.",
+        "Soyons clairs sur la distance : notre bureau est à Nice, à deux heures de route. On ne prétend pas passer chaque semaine dans vos locaux. On vient pour ce qui mérite du face à face : la rencontre de vos équipes, la restitution du business case, le lancement. Le reste passe en visio, sans rien perdre.",
+        "La région ne manque pas de prestataires informatiques. Notre différence tient en deux temps : un chiffrage avant que vous n’engagiez un euro, des résultats mesurés après la mise en service. Pas de journées vendues au poids, un système qui tourne et des chiffres pour en juger.",
       ],
     },
     carte: [
