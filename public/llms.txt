@@ -88,6 +88,11 @@ Coucou IA est un cabinet de conseil et développement IA pour les PME française
 ## Ressources
 
 - [Les cartes des possibles](https://coucou-ia.com/ressources) : une carte par secteur, les cas d'usage IA classés par impact et faisabilité.
+- [La carte des possibles : immobilier](https://coucou-ia.com/ressources/carte-immobilier) : les cas d'usage IA d'une agence immobilière, classés par impact et faisabilité.
+- [La carte des possibles : location saisonnière](https://coucou-ia.com/ressources/carte-location-saisonniere) : les cas d'usage IA d'une conciergerie, classés par impact et faisabilité.
+- [La carte des possibles : hôtellerie](https://coucou-ia.com/ressources/carte-hotellerie) : les cas d'usage IA d'un hôtel indépendant, classés par impact et faisabilité.
+- [La carte des possibles : artisans du bâtiment](https://coucou-ia.com/ressources/carte-artisans-batiment) : les cas d'usage IA d'une entreprise du bâtiment, classés par impact et faisabilité.
+- [La carte des possibles : yachting](https://coucou-ia.com/ressources/carte-yachting) : les cas d'usage IA d'une maison de charter, classés par impact et faisabilité.
 - [La carte des possibles : expertise comptable](https://coucou-ia.com/ressources/carte-expertise-comptable) : les cas d'usage IA d'un cabinet comptable, classés par impact et faisabilité.
 - [La carte des possibles : industrie](https://coucou-ia.com/ressources/carte-industrie) : les cas d'usage IA d'une PME industrielle, classés par impact et faisabilité.
 

@@ -30,7 +30,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ...villes.map((ville) => ({
       url: `${siteUrl}/${ville.slug}`,
     })),
-    // Les cartes (/ressources/[slug]/carte) sont noindex : jamais dans le sitemap.
+    // L'ancienne URL /ressources/[slug]/carte redirige en 308 : jamais dans le sitemap.
     { url: `${siteUrl}/ressources` },
     ...ressources.map((ressource) => ({
       url: `${siteUrl}/ressources/${ressource.slug}`,
