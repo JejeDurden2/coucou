@@ -39,8 +39,10 @@ Le blog complète, il ne double pas. Avant de choisir un sujet, vérifier qu'il 
 
 ## 5. Le backlog de sujets
 
-Prendre le premier sujet non traité, sauf actualité forte qui justifie un décryptage. Cocher ici une fois publié.
+Prendre le premier sujet non traité, sauf actualité forte qui justifie un décryptage. Cocher ici une fois publié. Exception : un sujet daté (« → JJ/MM ») se traite à sa date, avant tout le reste. Les deux guides datés d'août suspendent la règle « un article outillé sur deux » ; la cadence reprend le 3 septembre.
 
+- [ ] → 20/08 : Charte IA d'entreprise : le guide et le modèle à télécharger (méthode, guide de référence ; angle vide confirmé par la recherche SEO du 2026-08-10). Requêtes visées : « charte IA entreprise », « modèle charte IA ». Définition extractible dès le chapô. L'article 4 de l'AI Act en appui (lier `ai-act-pme-obligations`). Les 8 à 10 clauses qu'une charte de PME doit trancher : usages autorisés, données interdites de saisie, validation humaine, outils approuvés, confidentialité client, formation. Le modèle complet livré en fichier `public/charte-ia-modele.md`, téléchargeable librement, jamais derrière un formulaire (les moteurs IA ne citent pas ce qu'ils ne peuvent pas lire), lié depuis l'article et ajouté à `public/llms.txt`. FAQ : « Une charte IA est-elle obligatoire ? », « Qui doit la signer ? », « Que risque une PME sans cadre d'usage de l'IA ? ». Fin d'article : renvoi vers le kit de démarrage.
+- [ ] → 27/08 : Audit IA d'une PME : la méthode complète et la grille d'auto-évaluation (méthode, guide de référence ; angle vide confirmé par la recherche SEO du 2026-08-10). Requêtes visées : « audit IA », « audit IA PME ». Angle : auditez vous-même votre potentiel IA. Les quatre étapes : cartographier les tâches répétitives, croiser volume, données et douleur, chiffrer le gain, décider. La grille d'auto-évaluation livrée en `public/grille-audit-ia.csv` (s'ouvre dans Excel), liée depuis l'article et ajoutée à `public/llms.txt`. Maillage obligatoire vers `business-case-ia`, `prix-projet-ia`, `diag-data-ia-bpifrance` et `/outils/par-ou-commencer` : l'article devient le pivot de ce cluster. FAQ : « Peut-on faire un audit IA soi-même ? », « Combien de temps prend un audit IA ? », « Quelles aides financent un audit IA ? » (Diag Data IA, pris en charge à 40 %). Rappel : « diagnostic » reste banni partout, « Diag Data IA » passe (nom propre Bpifrance).
 - [x] Business case IA : comment chiffrer un projet avant d'engager un euro (méthode) — `business-case-ia`
 - [x] AI Act : ce qui s'applique vraiment à une PME depuis le 2 août 2026 (décryptage, actualité) — `ai-act-pme-obligations`
 - [x] Ce que construire Livia m'a appris sur les agents IA en production (coulisses) — `agent-ia-production-lecons`
@@ -57,7 +59,6 @@ Prendre le premier sujet non traité, sauf actualité forte qui justifie un déc
 - [ ] Mesurer un projet IA après la mise en production : les chiffres qui comptent (méthode)
 - [ ] Vous triez des CV avec de l'IA ? La CNIL contrôle ce sujet en 2026 (décryptage, source : cnil.fr contrôles prioritaires 2026 ; haut risque annexe III au 2 déc. 2027)
 - [ ] Facturation électronique au 1er septembre 2026 : vos données seront enfin structurées, voilà ce que ça ouvre (décryptage, cible DAF et cabinets comptables)
-- [ ] Charte IA d'entreprise : le modèle et les cinq décisions qu'elle doit trancher (méthode, candidate lead magnet à brancher sur le kit)
 - [ ] n8n ou Make pour une PME : le comparatif de quelqu'un qui a livré avec les deux (décryptage, requête outillée)
 - [ ] Un agent IA branché sur Apimo ou Hektor : ce que ça change dans une agence immobilière (décryptage, cible immobilier)
 - [ ] Répondre aux voyageurs à 3 h du matin sans se lever : l'IA d'une conciergerie, outil par outil (décryptage, cible location saisonnière)
@@ -101,5 +102,6 @@ Rejeter et réécrire si UN de ces points échoue :
 - On ne sent pas quelqu'un qui a construit des systèmes IA : si un rédacteur généraliste aurait pu l'écrire, c'est raté.
 
 ## Changelog
+- v1.2 (2026-08-13) : deux guides de référence datés en tête de backlog (charte IA le 20/08, audit IA le 27/08) avec spec détaillée et livrable téléchargeable chacun ; l'ancienne ligne charte IA fusionnée dans l'entrée datée ; règle des sujets datés ajoutée.
 - v1.1 (2026-08-12) : cible resserrée sur les niches à décision rapide (immobilier, location saisonnière, hôtellerie, artisans, yachting), priorité aux requêtes outillées (un article outillé sur deux), 6 sujets niche ajoutés au backlog.
 - v1 (2026-08-03) : mission, voix, backlog 12 sujets, structure, checklist technique, grille de relecture.
