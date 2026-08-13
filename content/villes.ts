@@ -220,7 +220,7 @@ export const villes: Ville[] = [
       },
       {
         category: "Recherche interne",
-        line: "L’information retrouvée en secondes",
+        line: "L’information retrouvée en quelques secondes",
       },
     ],
     metiers: [
@@ -246,7 +246,7 @@ export const villes: Ville[] = [
     businessCase: {
       context:
         "Éditeur de logiciels d’une quarantaine de salariés. Plusieurs appels d’offres par mois, chaque réponse réécrite à la main par l’avant-vente.",
-      metric: "un premier jet en minutes",
+      metric: "un premier jet en quelques minutes",
       result:
         "Le premier jet de la réponse sort en quelques minutes au lieu de plusieurs heures, assemblé depuis les réponses passées. L’équipe affine au lieu de partir d’une page blanche.",
       label: "Exemple",

@@ -131,7 +131,7 @@ export const ressources: RessourcePage[] = [
     secteurSlug: "immobilier",
     name: "Immobilier",
     pitch:
-      "Leads portails rappelés en minutes, estimations relancées, annonces contrôlées : la carte d’une agence.",
+      "Leads portails rappelés en cinq minutes, estimations relancées, annonces contrôlées : la carte d’une agence.",
     metaTitle: "IA en agence immobilière : 5 cas d’usage classés | Coucou IA",
     metaDescription:
       "Leads SeLoger rappelés en 5 minutes, relances d’estimation, annonces contrôlées : 5 cas d’usage IA pour agence immobilière, classés par impact et faisabilité.",
@@ -145,11 +145,11 @@ export const ressources: RessourcePage[] = [
     },
     useCases: [
       {
-        title: "Qualifier et rappeler les leads portails en minutes",
+        title: "Qualifier et rappeler les leads portails en cinq minutes",
         problem:
           "Le lead SeLoger, Leboncoin ou Bien’ici arrive en mail semi-structuré dans une boîte que personne ne surveille en continu. Il est motivé au moment où il clique ; le lendemain, il a déjà recontacté deux confrères. Chaque heure de silence fait fondre la probabilité du rendez-vous.",
         solution:
-          "L’IA lit chaque mail portail à l’arrivée, crée ou complète la fiche dans votre logiciel, et engage la conversation dans les minutes : projet, budget, financement en cours, délai. Le négociateur reçoit une fiche qualifiée et rappelle en priorité les contacts chauds, avec tout le contexte, au lieu de dépiler une boîte mail.",
+          "L’IA lit chaque mail portail à l’arrivée, crée ou complète la fiche dans votre logiciel, et engage la conversation dans les minutes qui suivent : projet, budget, financement en cours, délai. Le négociateur reçoit une fiche qualifiée et rappelle en priorité les contacts chauds, avec tout le contexte, au lieu de dépiler une boîte mail.",
         branchement:
           "les mails SeLoger, Leboncoin et Bien’ici ; votre logiciel métier (Apimo, Hektor, Netty ou autre)",
         metric: "< 5 min",
@@ -262,7 +262,7 @@ export const ressources: RessourcePage[] = [
     },
     useCases: [
       {
-        title: "Répondre aux voyageurs en minutes, dans leur langue",
+        title: "Répondre aux voyageurs en quelques minutes, dans leur langue",
         problem:
           "Airbnb classe les annonces aussi sur la réactivité : le statut Superhôte exige un taux de réponse d’au moins 90 % sous 24 h, et une demande sans réponse rapide part chez le voisin. Les messages tombent à toute heure, en quatre langues, sur trois plateformes, et c’est toujours votre téléphone qui vibre.",
         solution:
@@ -381,7 +381,7 @@ export const ressources: RessourcePage[] = [
         problem:
           "Le client qui écrit par mail ou par le formulaire du site vous tend une réservation sans commission. Si la réponse attend la fin du rush du check-out, il a réservé le même séjour sur Booking, et l’hôtel paie 15 à 25 % pour un client qui était déjà venu frapper à sa porte.",
         solution:
-          "Chaque demande directe reçoit en minutes une réponse avec disponibilités, tarif direct et lien de réservation, dans la langue du client. Les demandes particulières remontent à la réception avec le contexte. Le direct redevient le canal le plus rapide, donc le canal choisi.",
+          "Chaque demande directe reçoit en quelques minutes une réponse avec disponibilités, tarif direct et lien de réservation, dans la langue du client. Les demandes particulières remontent à la réception avec le contexte. Le direct redevient le canal le plus rapide, donc le canal choisi.",
         branchement:
           "votre boîte mail, le formulaire du site et votre PMS (Mews, Thais, Misterbooking ou autre)",
         metric: "15-25 %",
@@ -561,7 +561,7 @@ export const ressources: RessourcePage[] = [
         faisabilite: 2,
       },
       {
-        title: "Classer les photos de chantier, les retrouver en secondes",
+        title: "Classer les photos de chantier, les retrouver en quelques secondes",
         problem:
           "L’état des lieux avant travaux, la réserve levée, la malfaçon du sous-traitant : tout est en photo quelque part, dans trois téléphones. Le jour où l’assurance décennale ou un client de mauvaise foi demande des preuves, la recherche commence, et parfois elle échoue.",
         solution:
@@ -645,7 +645,7 @@ export const ressources: RessourcePage[] = [
         problem:
           "Un refit fait travailler cinq corps de métier, cinq formats de devis et cinq calendriers. Consolider le tout en un chiffrage défendable devant l’armateur prend des jours, et chaque itération (une option ajoutée, un lot retiré) rouvre le chantier de tableur.",
         solution:
-          "L’IA lit les devis de chaque prestataire, quel que soit le format, les aligne poste par poste et produit un chiffrage consolidé, écarts et trous signalés. Vous arbitrez ; l’armateur reçoit un document clair, et chaque itération se recalcule en minutes.",
+          "L’IA lit les devis de chaque prestataire, quel que soit le format, les aligne poste par poste et produit un chiffrage consolidé, écarts et trous signalés. Vous arbitrez ; l’armateur reçoit un document clair, et chaque itération se recalcule en quelques minutes.",
         branchement: "les devis PDF de vos prestataires, quel que soit leur gabarit",
         metric: "1 doc",
         metricLabel: "tous les lots consolidés, écarts signalés, au lieu d’une pile de PDF",

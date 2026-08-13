@@ -145,7 +145,7 @@ export const secteurs: SecteurPage[] = [
     metaTitle: "IA pour conciergerie et location saisonnière | Coucou IA",
     metaDescription:
       "IA pour conciergerie et location saisonnière : réponses voyageurs immédiates et multilingues, ménages, avis, déclarations. Premier échange gratuit.",
-    h1: "IA pour conciergerie et location saisonnière : répondez en minutes, à toute heure",
+    h1: "IA pour conciergerie et location saisonnière : répondez en quelques minutes, à toute heure",
     intro:
       "Un voyageur écrit à 23 h dans sa langue, le ménage doit passer entre deux séjours, et trois calendriers vivent sur Airbnb, Booking et Abritel. L’IA prend la partie répétitive, vous gardez les décisions.",
     painPoints: [
@@ -182,7 +182,7 @@ export const secteurs: SecteurPage[] = [
     businessCase: {
       context:
         "Conciergerie de 40 logements répartis sur Airbnb, Booking et Abritel, messages voyageurs du petit déjeuner à minuit en haute saison.",
-      metric: "première réponse en minutes",
+      metric: "première réponse en quelques minutes",
       result:
         "Le temps de première réponse passe de quelques heures à quelques minutes, dans la langue du voyageur, même un samedi de juillet à 23 h.",
       label: "Exemple",
@@ -237,7 +237,7 @@ export const secteurs: SecteurPage[] = [
           "Chaque demande par mail ou formulaire reçoit une réponse rapide avec disponibilités et tarif direct. Le client réserve chez vous, en direct, sans commission de plateforme.",
       },
       {
-        title: "Devis groupes et séminaires en minutes",
+        title: "Devis groupes et séminaires en quelques minutes",
         description:
           "L’IA monte le devis à partir de votre grille et des disponibilités : chambres, salles, restauration. La réception vérifie et envoie, l’organisateur reçoit sa réponse le jour même.",
       },
@@ -568,9 +568,9 @@ export const secteurs: SecteurPage[] = [
     businessCase: {
       context:
         "Cabinet de conseil de 25 consultants, plusieurs appels d’offres à répondre chaque mois, propositions rédigées à la main à chaque fois.",
-      metric: "un premier jet en minutes",
+      metric: "un premier jet en quelques minutes",
       result:
-        "Premier jet de proposition commerciale produit en quelques minutes au lieu de plusieurs heures, un livrable passé retrouvé en secondes plutôt qu’en fouillant les dossiers clients.",
+        "Premier jet de proposition commerciale produit en quelques minutes au lieu de plusieurs heures, un livrable passé retrouvé en quelques secondes plutôt qu’en fouillant les dossiers clients.",
       label: "Exemple",
     },
     faq: [
@@ -878,7 +878,7 @@ export const secteurs: SecteurPage[] = [
     businessCase: {
       context:
         "Structure médico-sociale de plusieurs dizaines de résidents, transmissions et comptes rendus rédigés à la main chaque jour.",
-      metric: "un compte rendu en minutes",
+      metric: "un compte rendu en quelques minutes",
       result:
         "Premier jet de compte rendu ou de transmission rédigé en quelques minutes, temps de recherche dans le dossier patient divisé par deux.",
       label: "Exemple",

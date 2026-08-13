@@ -289,7 +289,7 @@ export const casUsagePages: CasUsagePage[] = [
     businessCase: {
       context:
         "Une entreprise industrielle de 120 salariés avec des procédures et des retours d’expérience éparpillés entre un Drive, une messagerie et un ERP vieillissant.",
-      metric: "l’info en secondes",
+      metric: "l’info en quelques secondes",
       result:
         "L’information est retrouvée en quelques secondes, contre une bonne demi-heure de recherche et de messages avant.",
       label: "Exemple",

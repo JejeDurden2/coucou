@@ -51,7 +51,7 @@ export const useCases: UseCasesSection = {
       slug: "recherche-interne",
       description:
         "Une recherche qui comprend le langage courant, sur vos données éparpillées (Drive, mails, ERP, SharePoint). Vos équipes trouvent la bonne info sans fouiller dix dossiers.",
-      gain: "l’information retrouvée en secondes plutôt qu’en heures",
+      gain: "l’information retrouvée en quelques secondes au lieu de plusieurs heures",
       gainLabel: "Exemple",
     },
     {
