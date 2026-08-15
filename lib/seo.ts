@@ -94,17 +94,23 @@ export function spokeJsonLd({
   };
 }
 
-function breadcrumbGraph(url: string, breadcrumb: Crumb[]) {
+// `url` est l'URL absolue de la page courante. Partagé par toutes les pages qui
+// émettent un fil d'ariane en JSON-LD.
+export function breadcrumbGraph(url: string, breadcrumb: Crumb[]) {
   return {
     "@type": "BreadcrumbList",
     "@id": `${url}#breadcrumb`,
-    itemListElement: breadcrumb.map((crumb, index) => ({
-      "@type": "ListItem",
-      position: index + 1,
-      name: crumb.label,
+    itemListElement: breadcrumb.map((crumb, index) => {
+      const listItem = {
+        "@type": "ListItem",
+        position: index + 1,
+        name: crumb.label,
+      };
       // item est optionnel pour la page courante (dernier maillon sans href).
-      ...(crumb.href ? { item: `${siteUrl}${crumb.href}` } : {}),
-    })),
+      return crumb.href
+        ? { ...listItem, item: `${siteUrl}${crumb.href}` }
+        : listItem;
+    }),
   };
 }
 

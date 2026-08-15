@@ -25,8 +25,10 @@ type CalPayload = {
     title?: string;
     startTime?: string;
     attendees?: { name?: string; email?: string }[];
-    responses?: Record<string, unknown>;
-    metadata?: Record<string, unknown>;
+    // Champs libres cote Cal.com : jamais lus champ par champ, seulement
+    // recopies dans le log.
+    responses?: unknown;
+    metadata?: unknown;
   };
 };
 
@@ -50,6 +52,9 @@ export async function POST(request: Request): Promise<Response> {
 
   let data: CalPayload;
   try {
+    // SAFETY: chaque champ de CalPayload est optionnel et relu avec un repli
+    // ("?" / "??") avant usage, donc un corps JSON qui ne correspond pas au
+    // contrat ne produit qu'un log incomplet.
     data = JSON.parse(body) as CalPayload;
   } catch {
     return new Response("corps illisible", { status: 400 });

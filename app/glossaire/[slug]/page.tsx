@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { GlossairePageTemplate } from "@/components/sections/glossaire-page";
-import { pageMetadata, resolveRelated } from "@/lib/seo";
+import { breadcrumbGraph, pageMetadata, resolveRelated } from "@/lib/seo";
 import { glossaire } from "@/content/glossaire";
 import { casUsagePages } from "@/content/cas-usage-pages";
 import { secteurs } from "@/content/secteurs";
@@ -69,17 +69,7 @@ export default async function GlossaireTermPage({ params }: Params) {
           url: `${siteUrl}/glossaire`,
         },
       },
-      {
-        "@type": "BreadcrumbList",
-        "@id": `${url}#breadcrumb`,
-        itemListElement: breadcrumb.map((crumb, index) => ({
-          "@type": "ListItem",
-          position: index + 1,
-          name: crumb.label,
-          // item est optionnel pour la page courante (dernier maillon sans href).
-          ...(crumb.href ? { item: `${siteUrl}${crumb.href}` } : {}),
-        })),
-      },
+      breadcrumbGraph(url, breadcrumb),
     ],
   };
 

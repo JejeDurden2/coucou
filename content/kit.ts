@@ -84,12 +84,12 @@ const needsDatabase = (draft: KitDraft) =>
 // Un espace client répond « oui » à la connexion, un outil interne répond « non »
 // à l'encaissement, sans qu'on pose la question. La réponse déduite l'emporte sur
 // une réponse donnée avant un changement d'avis.
-function withDerived(draft: KitDraft): KitDraft {
+function withDerived(draft: KitDraft) {
   if (draft.projet === "espace-client") {
-    return { ...draft, connexion: "connexion-oui" };
+    return { ...draft, connexion: "connexion-oui" } satisfies KitDraft;
   }
   if (draft.projet === "outil-interne") {
-    return { ...draft, paiements: "paiements-non" };
+    return { ...draft, paiements: "paiements-non" } satisfies KitDraft;
   }
   return draft;
 }
@@ -387,7 +387,9 @@ const kitStack: KitBrick[] = [
 
 // L'aperçu gratuit : le langage et une seule brique inconnue du grand public.
 // Le reste part dans `locked`, flouté jusqu'à l'email.
-export function kitVerdictBricks(draft: KitDraft): { teaser: KitBrick[]; locked: KitBrick[] } {
+export type KitVerdict = { teaser: KitBrick[]; locked: KitBrick[] };
+
+export function kitVerdictBricks(draft: KitDraft): KitVerdict {
   const bricks = kitStack.filter((brick) => !brick.when || brick.when(draft));
   const insider = bricks
     .filter((brick) => brick.insider)

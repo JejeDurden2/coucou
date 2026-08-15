@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { BlogArticleTemplate } from "@/components/sections/blog-article";
-import { pageMetadata, resolveRelated } from "@/lib/seo";
+import { breadcrumbGraph, pageMetadata, resolveRelated } from "@/lib/seo";
 import { articles } from "@/content/blog";
 import { casUsagePages } from "@/content/cas-usage-pages";
 import { fondateur } from "@/content/fondateur";
@@ -70,48 +70,41 @@ export default async function BlogArticlePage({ params }: Params) {
   ];
 
   const url = `${siteUrl}/blog/${slug}`;
+  const blogPosting = {
+    "@type": "BlogPosting",
+    "@id": `${url}#article`,
+    headline: article.title,
+    description: article.metaDescription,
+    datePublished: article.publishedAt,
+    inLanguage: "fr-FR",
+    url,
+    author: {
+      "@type": "Person",
+      name: fondateur.name,
+      url: fondateur.linkedinUrl,
+    },
+    publisher: {
+      "@type": "Organization",
+      name: "COUCOU IA",
+      url: siteUrl,
+    },
+    isPartOf: {
+      "@type": "Blog",
+      "@id": `${siteUrl}/blog#blog`,
+    },
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": url,
+    },
+  };
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@graph": [
-      {
-        "@type": "BlogPosting",
-        "@id": `${url}#article`,
-        headline: article.title,
-        description: article.metaDescription,
-        datePublished: article.publishedAt,
-        ...(article.updatedAt ? { dateModified: article.updatedAt } : {}),
-        inLanguage: "fr-FR",
-        url,
-        author: {
-          "@type": "Person",
-          name: fondateur.name,
-          url: fondateur.linkedinUrl,
-        },
-        publisher: {
-          "@type": "Organization",
-          name: "COUCOU IA",
-          url: siteUrl,
-        },
-        isPartOf: {
-          "@type": "Blog",
-          "@id": `${siteUrl}/blog#blog`,
-        },
-        mainEntityOfPage: {
-          "@type": "WebPage",
-          "@id": url,
-        },
-      },
-      {
-        "@type": "BreadcrumbList",
-        "@id": `${url}#breadcrumb`,
-        itemListElement: breadcrumb.map((crumb, index) => ({
-          "@type": "ListItem",
-          position: index + 1,
-          name: crumb.label,
-          // item est optionnel pour la page courante (dernier maillon sans href).
-          ...(crumb.href ? { item: `${siteUrl}${crumb.href}` } : {}),
-        })),
-      },
+      article.updatedAt
+        ? { ...blogPosting, dateModified: article.updatedAt }
+        : blogPosting,
+      breadcrumbGraph(url, breadcrumb),
       ...(article.faq && article.faq.length > 0
         ? [
             {

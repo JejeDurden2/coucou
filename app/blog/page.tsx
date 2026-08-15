@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 import { BlogHub } from "@/components/sections/blog-hub";
 import { Cta } from "@/components/sections/cta";
-import { pageMetadata } from "@/lib/seo";
+import { breadcrumbGraph, pageMetadata } from "@/lib/seo";
 import { articles, blogHub } from "@/content/blog";
 import { siteUrl } from "@/content/site";
 
@@ -42,17 +42,7 @@ export default function BlogHubPage() {
           url: `${siteUrl}/blog/${article.slug}`,
         })),
       },
-      {
-        "@type": "BreadcrumbList",
-        "@id": `${url}#breadcrumb`,
-        itemListElement: breadcrumb.map((crumb, index) => ({
-          "@type": "ListItem",
-          position: index + 1,
-          name: crumb.label,
-          // item est optionnel pour la page courante (dernier maillon sans href).
-          ...(crumb.href ? { item: `${siteUrl}${crumb.href}` } : {}),
-        })),
-      },
+      breadcrumbGraph(url, breadcrumb),
     ],
   };
 

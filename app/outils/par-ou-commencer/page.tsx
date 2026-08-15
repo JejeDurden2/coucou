@@ -3,7 +3,7 @@ import Link from "next/link";
 
 import { Breadcrumb } from "@/components/breadcrumb";
 import { GrilleInteractive, type GrilleSector } from "@/components/grille-interactive";
-import { pageMetadata } from "@/lib/seo";
+import { breadcrumbGraph, pageMetadata } from "@/lib/seo";
 import { grille, grilleCross } from "@/content/grille";
 import { ressources } from "@/content/ressources";
 import { siteUrl } from "@/content/site";
@@ -58,16 +58,7 @@ const jsonLd = {
         name: "France",
       },
     },
-    {
-      "@type": "BreadcrumbList",
-      "@id": `${url}#breadcrumb`,
-      itemListElement: breadcrumb.map((crumb, index) => ({
-        "@type": "ListItem",
-        position: index + 1,
-        name: crumb.label,
-        ...(crumb.href ? { item: `${siteUrl}${crumb.href}` } : {}),
-      })),
-    },
+    breadcrumbGraph(url, breadcrumb),
   ],
 };
 

@@ -11,6 +11,13 @@ export type SubscribeState = {
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+// Frontière d'entrée des server actions : un champ de formulaire vaut un texte,
+// un fichier ou rien. Seul le texte a un sens ici, le reste devient `undefined`.
+export function champTexte(formData: FormData, nom: string): string | undefined {
+  const valeur = formData.get(nom);
+  return valeur === null || valeur instanceof File ? undefined : valeur;
+}
+
 // Champs optionnels du lead. Brevo n'accepte que des attributs déclarés à
 // l'avance dans le compte (contrairement à Lemlist) : `notes` regroupe donc
 // toutes les réponses du visiteur dans un seul attribut texte libre (NOTES),
@@ -66,8 +73,8 @@ export async function captureLead(
     return { status: "success" };
   }
 
-  const email = formData.get("email");
-  if (typeof email !== "string" || email.length > 254 || !EMAIL_RE.test(email)) {
+  const email = champTexte(formData, "email");
+  if (email === undefined || email.length > 254 || !EMAIL_RE.test(email)) {
     return { status: "error", error: "invalid" };
   }
 

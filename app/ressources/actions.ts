@@ -9,7 +9,7 @@
 // d'application (.agents/nurture.md). La carte reste en acces libre : l'email
 // n'est jamais une barriere.
 
-import { captureLead, type SubscribeState } from "@/lib/brevo";
+import { captureLead, champTexte, type SubscribeState } from "@/lib/brevo";
 import { ressources } from "@/content/ressources";
 
 export type { SubscribeState } from "@/lib/brevo";
@@ -18,8 +18,8 @@ export async function subscribeRessource(
   _prevState: SubscribeState,
   formData: FormData
 ): Promise<SubscribeState> {
-  const slug = formData.get("slug");
-  const ressource = typeof slug === "string" ? ressources.find((entry) => entry.slug === slug) : undefined;
+  const slug = champTexte(formData, "slug");
+  const ressource = ressources.find((entry) => entry.slug === slug);
   if (!ressource) {
     return { status: "error", error: "server" };
   }

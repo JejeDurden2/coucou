@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { CartePageTemplate } from "@/components/sections/carte-page";
-import { pageMetadata } from "@/lib/seo";
+import { breadcrumbGraph, pageMetadata } from "@/lib/seo";
 import { ressources } from "@/content/ressources";
 import { siteUrl } from "@/content/site";
 
@@ -75,16 +75,7 @@ export default async function RessourceCartePage({ params }: Params) {
           url: `${url}#cas-${index + 1}`,
         })),
       },
-      {
-        "@type": "BreadcrumbList",
-        "@id": `${url}#breadcrumb`,
-        itemListElement: breadcrumb.map((crumb, index) => ({
-          "@type": "ListItem",
-          position: index + 1,
-          name: crumb.label,
-          ...(crumb.href ? { item: `${siteUrl}${crumb.href}` } : {}),
-        })),
-      },
+      breadcrumbGraph(url, breadcrumb),
     ],
   };
 

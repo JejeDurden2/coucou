@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { Breadcrumb } from "@/components/breadcrumb";
 import { Cta } from "@/components/sections/cta";
 import { Fondateur } from "@/components/sections/fondateur";
-import { pageMetadata } from "@/lib/seo";
+import { breadcrumbGraph, pageMetadata } from "@/lib/seo";
 import { fondateur, fondateurPage } from "@/content/fondateur";
 import { siteUrl } from "@/content/site";
 
@@ -33,16 +33,7 @@ const jsonLd = {
       sameAs: [fondateur.linkedinUrl],
       worksFor: { "@id": `${siteUrl}/#organization` },
     },
-    {
-      "@type": "BreadcrumbList",
-      "@id": `${url}#breadcrumb`,
-      itemListElement: breadcrumb.map((crumb, index) => ({
-        "@type": "ListItem",
-        position: index + 1,
-        name: crumb.label,
-        ...(crumb.href ? { item: `${siteUrl}${crumb.href}` } : {}),
-      })),
-    },
+    breadcrumbGraph(url, breadcrumb),
   ],
 };
 
