@@ -12,6 +12,7 @@ import { businessCaseIa } from "@/content/blog/business-case-ia";
 import { diagDataIaBpifrance } from "@/content/blog/diag-data-ia-bpifrance";
 import { openclawVsHermesAgent } from "@/content/blog/openclaw-vs-hermes-agent";
 import { prixProjetIa } from "@/content/blog/prix-projet-ia";
+import { whatsappPlanningEquipeTerrain } from "@/content/blog/whatsapp-planning-equipe-terrain";
 
 // Quatre catégories, verrouillées : au-delà, le blog se disperse.
 export type BlogCategory = "méthode" | "décryptage" | "cas concret" | "coulisses";
@@ -56,6 +57,7 @@ export type BlogArticle = {
 
 // Du plus récent au plus ancien : le hub et le flux RSS lisent ce tableau tel quel.
 export const articles: BlogArticle[] = [
+  whatsappPlanningEquipeTerrain,
   agentIaProductionLecons,
   diagDataIaBpifrance,
   prixProjetIa,

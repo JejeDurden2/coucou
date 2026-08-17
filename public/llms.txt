@@ -80,6 +80,7 @@ Coucou IA est un cabinet de conseil et développement IA pour les PME française
 - [Diag Data IA : l'aide publique que personne ne vous a signalée](https://coucou-ia.com/blog/diag-data-ia-bpifrance) : 8 jours d'expert facturés 10 000 € HT et pris en charge à 40 % par France 2030, les critères d'éligibilité, le déroulé, ce que le dispositif ne couvre pas.
 - [Ce que la facture d'un projet IA contient vraiment](https://coucou-ia.com/blog/prix-projet-ia) : les cinq postes qui font varier le prix d'un agent IA (branchements, données, autonomie, conformité, fonctionnement) et les six questions pour lire un devis.
 - [Ce que construire Livia m'a appris sur les agents IA en production](https://coucou-ia.com/blog/agent-ia-production-lecons) : ce qui casse vraiment un agent IA en production (données sales, cas limites du métier, reprise après panne), les quatre niveaux d'autonomie à régler action par action et les quatre chiffres à suivre chaque semaine.
+- [WhatsApp pour piloter un planning : je l'ai construit, puis rangé](https://coucou-ia.com/blog/whatsapp-planning-equipe-terrain) : pourquoi un pilotage de planning par WhatsApp (Twilio, SMS de secours, réponses lues par mots-clés) casse sur la réponse humaine, la fenêtre de 24 heures de la plateforme WhatsApp Business, et ce qui marche pour une conciergerie ou un artisan.
 
 ## Outils gratuits
 

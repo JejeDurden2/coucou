@@ -190,7 +190,12 @@ export const agentIaProductionLecons: BlogArticle = {
         "Cela dépend du type d’action. Lire un dossier ou proposer une correction peut se faire seul dès le début. Écrire un message prêt à partir, ou l’envoyer à un client ou à un auditeur, mérite une validation humaine, au moins tant que l’agent n’a pas fait ses preuves sur la durée.",
     },
   ],
-  relatedArticles: ["openclaw-vs-hermes-agent", "business-case-ia", "prix-projet-ia"],
+  relatedArticles: [
+    "whatsapp-planning-equipe-terrain",
+    "openclaw-vs-hermes-agent",
+    "business-case-ia",
+    "prix-projet-ia",
+  ],
   relatedCasUsage: ["traitement-documents", "assistant-support-client"],
   relatedSecteurs: ["services-b2b", "expertise-comptable"],
 };
