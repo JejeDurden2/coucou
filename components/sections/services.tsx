@@ -16,13 +16,23 @@ import { bookingUrl, ctaLabel } from "@/content/site";
 function OfferPanel({ offer }: { offer: Service }) {
   return (
     <div className="flex h-full flex-col p-8">
-      <p className="font-mono text-xs uppercase tracking-[0.12em] text-muted-foreground">
-        {offer.step} · {offer.title}
-      </p>
-      <h3 className="mt-4 font-display text-[1.75rem] leading-none font-bold tracking-[-0.02em] lg:text-[2.5rem]">
-        {offer.verb}
-      </h3>
-      <p className="mt-5 max-w-[44ch] text-pretty text-lg leading-relaxed text-foreground">
+      <div className="flex items-start justify-between">
+        <div>
+          <h3 className="font-display text-[1.75rem] leading-none font-bold tracking-[-0.02em] lg:text-[2.5rem]">
+            {offer.verb}
+          </h3>
+          <p className="mt-2 text-sm font-medium text-muted-foreground">
+            {offer.title}
+          </p>
+        </div>
+        <span
+          aria-hidden
+          className="font-display text-5xl font-bold leading-none text-foreground/8 select-none"
+        >
+          {offer.step}
+        </span>
+      </div>
+      <p className="mt-6 max-w-[44ch] text-pretty text-lg leading-relaxed text-foreground">
         {offer.hook}
       </p>
 
@@ -121,13 +131,23 @@ export function Services() {
         <ScrollReveal className="mt-6 rounded-lg border border-border bg-card">
           <div className="grid grid-cols-1 gap-8 p-8 lg:grid-cols-2 lg:gap-12">
             <div>
-              <p className="font-mono text-xs uppercase tracking-[0.12em] text-muted-foreground">
-                {suivi.step} · {suivi.title}
-              </p>
-              <h3 className="mt-4 font-display text-[1.75rem] leading-none font-bold tracking-[-0.02em] lg:text-[2.5rem]">
-                {suivi.verb}
-              </h3>
-              <p className="mt-5 max-w-[44ch] text-pretty text-lg leading-relaxed text-foreground">
+              <div className="flex items-start justify-between">
+                <div>
+                  <h3 className="font-display text-[1.75rem] leading-none font-bold tracking-[-0.02em] lg:text-[2.5rem]">
+                    {suivi.verb}
+                  </h3>
+                  <p className="mt-2 text-sm font-medium text-muted-foreground">
+                    {suivi.title}
+                  </p>
+                </div>
+                <span
+                  aria-hidden
+                  className="font-display text-5xl font-bold leading-none text-foreground/8 select-none"
+                >
+                  {suivi.step}
+                </span>
+              </div>
+              <p className="mt-6 max-w-[44ch] text-pretty text-lg leading-relaxed text-foreground">
                 {suivi.hook}
               </p>
             </div>
@@ -173,7 +193,7 @@ export function Services() {
             {starter.offers.map((offer) => (
               <div
                 key={offer.id}
-                className="flex flex-col rounded-lg border border-border bg-card p-6"
+                className="flex flex-col rounded-lg border border-border bg-card p-6 transition-colors hover:border-input"
               >
                 <span className="self-start rounded-full border border-border px-3 py-1 font-mono text-xs text-muted-foreground">
                   {offer.format}

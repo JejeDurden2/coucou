@@ -10,9 +10,10 @@ export type HeroMapItem = {
 };
 
 export type Hero = {
-  // Deux temps : le premier plein, le second tracé en creux (.text-hollow).
-  headlineSolid: string;
-  headlineHollow: string;
+  // Deux temps : la première phrase atténuée (text-muted-foreground),
+  // la seconde en encre pleine.
+  headlineSetup: string;
+  headlinePayoff: string;
   lede: string;
   // Note mono à côté du CTA.
   reassurance: string;
@@ -22,8 +23,8 @@ export type Hero = {
 };
 
 export const hero: Hero = {
-  headlineSolid: "Tout le monde vous parle d’IA.",
-  headlineHollow: "On la met au travail chez vous.",
+  headlineSetup: "Tout le monde vous parle d’IA.",
+  headlinePayoff: "On la met au travail chez vous.",
   lede: "Devis, relances, messages clients, saisie : on trouve ce que l’IA prend en charge chez vous, on le chiffre, et on le met en production.",
   reassurance: "30 minutes, gratuit, sans engagement.",
   mapLabel: "La carte des possibles",

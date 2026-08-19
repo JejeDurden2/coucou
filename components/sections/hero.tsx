@@ -46,8 +46,10 @@ export function Hero() {
         <div>
           <ScrollReveal delay={0.06}>
             <h1 className="font-display text-[2.75rem] leading-[1.02] font-bold tracking-[-0.03em] text-balance sm:text-[3.5rem] lg:text-[4.5rem]">
-              {hero.headlineSolid}{" "}
-              <span className="text-hollow">{hero.headlineHollow}</span>
+              <span className="block text-muted-foreground">
+                {hero.headlineSetup}
+              </span>
+              <span className="block">{hero.headlinePayoff}</span>
             </h1>
           </ScrollReveal>
 

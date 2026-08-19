@@ -2,6 +2,7 @@ import Image from "next/image";
 import { ArrowUpRight } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
+import { MetricBlock } from "@/components/metric-block";
 import { ScrollReveal } from "@/components/scroll-reveal";
 import { realisations } from "@/content/realisations";
 
@@ -22,7 +23,26 @@ export function Realisations() {
           </p>
         </ScrollReveal>
 
-        <div className="mt-12 grid grid-cols-1 gap-6 lg:grid-cols-2 lg:items-start">
+        <ScrollReveal className="mt-12">
+          <div className="relative">
+            <div
+              aria-hidden
+              className="trace-grid pointer-events-none absolute -inset-x-6 -inset-y-6"
+            />
+            <div className="grid grid-cols-1 gap-10 sm:grid-cols-2">
+              {realisations.items.map((item, index) => (
+                <MetricBlock
+                  key={item.name}
+                  value={item.stat.value}
+                  label={item.stat.label}
+                  marked={index === 0}
+                />
+              ))}
+            </div>
+          </div>
+        </ScrollReveal>
+
+        <div className="mt-14 grid grid-cols-1 gap-6 lg:grid-cols-2 lg:items-start">
           {realisations.items.map((item, index) => (
             <ScrollReveal key={item.name} delay={index * 0.04}>
               <a
@@ -32,13 +52,9 @@ export function Realisations() {
                 className="group/rea flex h-full flex-col rounded-lg border border-border bg-card p-8 outline-none transition-colors hover:border-foreground-dim focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4 focus-visible:ring-offset-background"
               >
                 <div className="flex items-center justify-between gap-4">
-                  <span className="font-mono text-xs uppercase tracking-[0.12em] text-muted-foreground">
-                    {item.sector}
-                  </span>
-                  <Badge
-                    variant="outline"
-                    className="font-mono uppercase tracking-[0.1em] text-muted-foreground"
-                  >
+                  <span className="text-sm text-muted-foreground">{item.sector}</span>
+                  <Badge variant="outline" className="gap-1.5 text-muted-foreground">
+                    <span aria-hidden className="size-1.5 rounded-full bg-success" />
                     {realisations.statusLabel}
                   </Badge>
                 </div>
@@ -57,35 +73,23 @@ export function Realisations() {
                   </span>
                   <ArrowUpRight
                     aria-hidden
-                    className="size-5 shrink-0 text-muted-foreground transition-colors group-hover/rea:text-foreground"
+                    className="size-5 shrink-0 text-muted-foreground transition group-hover/rea:-translate-y-0.5 group-hover/rea:translate-x-0.5 group-hover/rea:text-foreground"
                   />
                 </h3>
-                <p className="mt-4 mb-8 max-w-[52ch] text-pretty leading-relaxed text-muted-foreground">
+                <p className="mt-4 max-w-[52ch] text-pretty leading-relaxed text-muted-foreground">
                   {item.description}
                 </p>
 
                 {item.quote ? (
-                  <figure className="mb-8 border-l-2 border-border pl-4">
+                  <figure className="mt-8 border-l-2 border-border pl-4">
                     <blockquote className="text-pretty leading-relaxed text-muted-foreground">
                       «&nbsp;{item.quote.text}&nbsp;»
                     </blockquote>
-                    <figcaption className="mt-3 font-mono text-xs uppercase tracking-[0.12em] text-muted-foreground">
+                    <figcaption className="mt-3 text-sm text-foreground-dim">
                       {item.quote.author}
                     </figcaption>
                   </figure>
                 ) : null}
-
-                <div className="mt-auto flex items-start gap-3 border-t border-border pt-6">
-                  <span aria-hidden className="mt-1 h-0.5 w-4 shrink-0 bg-primary" />
-                  <div>
-                    <span className="font-mono text-xs uppercase tracking-[0.12em] text-muted-foreground">
-                      {realisations.metricLabel}
-                    </span>
-                    <p className="mt-1.5 text-pretty leading-relaxed tabular-nums text-foreground">
-                      {item.metric}
-                    </p>
-                  </div>
-                </div>
               </a>
             </ScrollReveal>
           ))}

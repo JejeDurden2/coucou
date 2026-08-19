@@ -170,18 +170,6 @@
   mask-image: linear-gradient(to bottom, black 0%, black 60%, transparent 96%);
 }
 
-/* Second headline line: hollow letterforms stroked from the foreground token.
-   Falls back to solid text where text-stroke is unsupported. */
-.text-hollow {
-  color: transparent;
-  -webkit-text-stroke: 1.5px var(--foreground);
-}
-@supports not (-webkit-text-stroke: 1px black) {
-  .text-hollow {
-    color: var(--foreground);
-  }
-}
-
 /* Hero « carte des possibles » entrance (§6): the cards rise in, the rays and
    dots fade in along a stagger. Per-element animation-delay is set inline where
    each piece renders. Gated behind no-preference so reduced-motion users get the
