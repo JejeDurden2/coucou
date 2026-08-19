@@ -20,14 +20,14 @@ export const useCases: UseCasesSection = {
   title: "Cinq exemples concrets. Le vôtre reste à écrire.",
   sub: "Voici où l’IA fait gagner du temps dans des entreprises comme la vôtre.",
   disclaimer:
-    "Exemples illustratifs. Chaque chiffre dépend de votre contexte : le vrai, c’est votre business case qui l’établit, après ce premier échange.",
+    "Exemples illustratifs. Chaque chiffre dépend de votre contexte : le vrai, c’est votre business case qui l’établit.",
   cases: [
     {
       title: "Réponse aux appels d’offres",
       slug: "reponse-appels-offres",
       description:
         "Un agent rédige un premier jet de réponse ou de devis à partir de votre base documentaire : offres passées, catalogues, références. Vos équipes valident au lieu de repartir de zéro.",
-      gain: "un premier jet en quelques minutes, plus en plusieurs heures",
+      gain: "un premier jet en quelques minutes au lieu de plusieurs heures",
       gainLabel: "Exemple",
     },
     {

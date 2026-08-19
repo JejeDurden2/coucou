@@ -592,7 +592,7 @@ export const secteurs: SecteurPage[] = [
       {
         question: "On n’a pas d’équipe technique en interne pour piloter ça.",
         answer:
-          "Ce n’est pas votre rôle, c’est le nôtre. On pilote de bout en bout et on documente ce qu’on livre.",
+          "C’est notre rôle. On pilote de bout en bout et on documente ce qu’on livre.",
       },
       {
         question: "Si on arrête la mission avec vous, on récupère quoi ?",
@@ -659,7 +659,7 @@ export const secteurs: SecteurPage[] = [
       {
         question: "On a déjà testé un outil IA sur une ligne, ça n’a pas dépassé le stade du pilote.",
         answer:
-          "C’est le problème qu’on résout. On ne livre pas un prototype de démonstration, on livre un système en production, utilisé au quotidien et mesuré sur ses résultats.",
+          "C’est le problème qu’on résout. On livre un système en production, utilisé au quotidien et mesuré sur ses résultats.",
       },
       {
         question: "Est-ce compatible avec nos systèmes existants (ERP, MES) ?",
@@ -748,7 +748,7 @@ export const secteurs: SecteurPage[] = [
       {
         question: "On a peur de retomber sur un outil qui reste au stade de test.",
         answer:
-          "C’est justement pour ça qu’on existe. On ne livre pas une démo, on livre un système en production, utilisé au quotidien et mesuré sur ses résultats.",
+          "C’est justement pour ça qu’on existe. On livre un système en production, utilisé au quotidien et mesuré sur ses résultats.",
       },
       {
         question: "Quel est le retour sur investissement pour un cabinet de notre taille ?",
@@ -815,7 +815,7 @@ export const secteurs: SecteurPage[] = [
       {
         question: "Nos données adhérents sont sensibles, comment sont-elles protégées ?",
         answer:
-          "Elles restent sous votre contrôle, avec un hébergement adapté et dans le respect du RGPD. La souveraineté des données est un point de départ.",
+          "Elles restent sous votre contrôle, avec un hébergement adapté et dans le respect du RGPD.",
       },
       {
         question: "On a déjà testé un chatbot, les adhérents n’étaient pas satisfaits.",
@@ -907,7 +907,7 @@ export const secteurs: SecteurPage[] = [
       {
         question: "On a déjà testé un outil qui n’a jamais dépassé le stade du test.",
         answer:
-          "C’est justement pour ça qu’on existe. On ne livre pas un prototype de démonstration, on livre un système en production, utilisé au quotidien et mesuré sur ses résultats.",
+          "C’est justement pour ça qu’on existe. On livre un système en production, utilisé au quotidien et mesuré sur ses résultats.",
       },
     ],
     relatedCasUsage: ["traitement-documents", "recherche-interne", "assistant-support-client"],

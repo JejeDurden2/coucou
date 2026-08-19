@@ -70,7 +70,7 @@ export const glossaire: GlossaireTerm[] = [
     explanation:
       "Voyez un collaborateur très rapide qui a beaucoup lu et sait rédiger un premier jet sur presque tout, mais qui n’a jamais mis les pieds dans votre entreprise. Il écrit vite et plutôt bien. Il ne connaît ni vos dossiers, ni vos clients, ni vos règles maison.",
     whatItChanges:
-      "C’est la brique qui rédige vos premiers jets : devis, réponses, comptes rendus, courriers. Le gain n’est pas magique, c’est le temps de la page blanche qui disparaît. Le risque : elle écrit avec assurance même quand elle se trompe. Un humain valide toujours avant l’envoi.",
+      "C’est la brique qui rédige vos premiers jets : devis, réponses, comptes rendus, courriers. Le gain est concret : le temps de la page blanche disparaît. Le risque : elle écrit avec assurance même quand elle se trompe. Un humain valide toujours avant l’envoi.",
     example:
       "Exemple : une PME qui répond à un appel d’offres. L’IA rédige un premier jet à partir de vos documents en quelques minutes, là où un chargé d’affaires y passait une demi-journée. Il relit, ajuste ce qui est propre à ce client, et signe.",
     relatedTerms: ["llm", "hallucination", "machine-learning"],
@@ -182,7 +182,7 @@ export const glossaire: GlossaireTerm[] = [
     definition:
       "Une hallucination, c’est quand l’IA produit une réponse fausse mais formulée avec assurance, comme si elle était vraie. Le modèle ne ment pas volontairement : il comble un manque d’information par ce qui lui semble le plus probable.",
     explanation:
-      "Voyez un stagiaire brillant qui déteste dire « je ne sais pas » et invente une réponse plausible pour ne pas rester coincé. Le problème n’est pas qu’il se trompe de temps en temps. C’est qu’il se trompe avec aplomb, sans prévenir.",
+      "Voyez un stagiaire brillant qui déteste dire « je ne sais pas » et invente une réponse plausible pour ne pas rester coincé. Le problème : il se trompe avec aplomb, sans prévenir.",
     whatItChanges:
       "C’est LE risque à connaître avant de déployer. On ne le supprime pas à 100 %, on le maîtrise : brancher l’IA sur vos documents (RAG), lui faire citer ses sources, et garder un humain qui valide les décisions qui engagent. Une IA qui répond « je ne trouve pas » vaut mieux qu’une IA qui invente.",
     example:

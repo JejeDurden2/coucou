@@ -41,7 +41,7 @@ export const faq: FaqSection = {
     {
       question: "Comment nos données sont-elles protégées ?",
       answer:
-        "On conçoit dès le départ dans le respect du RGPD et de l’AI Act. Vos données restent sous votre contrôle : hébergement adapté, aucune fuite vers des modèles publics sans votre accord. La souveraineté des données est un point de départ.",
+        "On conçoit dès le départ dans le respect du RGPD et de l’AI Act. Vos données restent sous votre contrôle : hébergement adapté, aucune fuite vers des modèles publics sans votre accord.",
     },
     {
       question:
@@ -62,7 +62,7 @@ export const faq: FaqSection = {
     {
       question: "On a déjà été échaudés par un POC qui n’a jamais abouti.",
       answer:
-        "C’est justement pour ça qu’on existe. On ne livre pas un POC de démo, on livre un système en production, mesuré sur ses résultats. Un prototype qui reste au labo, chez nous, ne sort jamais.",
+        "C’est justement pour ça qu’on existe. On livre un système en production, mesuré sur ses résultats. Un prototype qui reste au labo, chez nous, ne sort jamais.",
     },
     {
       question: "On n’a personne en interne pour piloter un projet IA.",

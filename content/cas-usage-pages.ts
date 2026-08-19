@@ -279,7 +279,7 @@ export const casUsagePages: CasUsagePage[] = [
       "Les messages envoyés à un collègue « au cas où il saurait » disparaissent pour tout ce qui est déjà écrit dans l’entreprise.",
     ],
     whyNotSaas:
-      "Un outil de recherche générique indexe ce qu’on lui donne, mais ne comprend ni vos sigles internes, ni la hiérarchie de vos dossiers, ni les droits d’accès propres à votre organisation. Le système que nous construisons se branche sur VOS outils exacts, avec VOS permissions respectées, et répond dans le vocabulaire de votre entreprise. Ce n’est pas un moteur de recherche de plus à ouvrir, c’est une seule porte d’entrée sur ce que vous avez déjà.",
+      "Un outil de recherche générique indexe ce qu’on lui donne, mais ne comprend ni vos sigles internes, ni la hiérarchie de vos dossiers, ni les droits d’accès propres à votre organisation. Le système que nous construisons se branche sur VOS outils exacts, avec VOS permissions respectées, et répond dans le vocabulaire de votre entreprise. C’est une seule porte d’entrée sur ce que vous avez déjà.",
     prerequisites: [
       "Des documents déjà numérisés et rangés dans au moins un outil accessible (Drive, SharePoint, ERP, messagerie).",
       "Des droits d’accès existants et clairs, pour que la recherche respecte qui a le droit de voir quoi.",

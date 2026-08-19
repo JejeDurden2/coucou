@@ -9,7 +9,7 @@ export type Problem = {
 
 export const problem: Problem = {
   title: "Vous savez que l’IA compte. Et après ?",
-  body: "Le sujet est partout, les avis se contredisent, et personne ne vous dit où l’IA rapporte vraiment chez vous. Alors vous attendez le bon moment. Ce qui vous manque n’est pas le bon moment : c’est le point de départ. Trouver le vôtre, c’est exactement notre métier.",
+  body: "Le sujet est partout, les avis se contredisent, et personne ne vous dit où l’IA rapporte vraiment chez vous. Alors vous attendez le bon moment. Ce qui vous manque, c’est le point de départ. Trouver le vôtre, c’est exactement notre métier.",
   pains: [
     "« On sait qu’il faut s’y mettre, mais par où commencer ? »",
     "« On a testé ChatGPT, concrètement ça n’a rien changé. »",

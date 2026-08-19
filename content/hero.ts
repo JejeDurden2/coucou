@@ -24,15 +24,16 @@ export type Hero = {
 
 export const hero: Hero = {
   headlineSetup: "Tout le monde vous parle d’IA.",
-  headlinePayoff: "On la met au travail chez vous.",
+  //   : jamais de césure dans « au travail ».
+  headlinePayoff: "On la met au travail chez vous.",
   lede: "Devis, relances, messages clients, saisie : on trouve ce que l’IA prend en charge chez vous, on le chiffre, et on le met en production.",
-  reassurance: "30 minutes, gratuit, sans engagement.",
+  reassurance: "30 minutes, gratuites, sans engagement.",
   mapLabel: "La carte des possibles",
   mapItems: [
     { category: "Premier contact", line: "Chaque demande rappelée en 5 minutes" },
     { category: "Chiffrage", line: "Le devis prêt le jour de la visite" },
     { category: "Relances", line: "Vos relances partent, même la semaine chargée" },
-    { category: "Langues", line: "Une réponse dans la langue du client, même à 3 h" },
+    { category: "Langues", line: "Une réponse dans la langue du client, même à 3 h" },
     { category: "Terrain", line: "Vos visites dictées, votre logiciel à jour" },
     { category: "Savoir-faire", line: "Le bon document retrouvé en une question" },
   ],

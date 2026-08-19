@@ -44,9 +44,9 @@ export const realisations: RealisationsSection = {
       description:
         "Un agent IA qui tient la conformité Qualiopi en continu : il surveille les 32 indicateurs, réclame les preuves manquantes et prépare l'audit.",
       stat: { value: "3 sem. → 2 j", label: "Préparer un audit Qualiopi" },
-      // Validée par Stevie Bengono le 20 juillet 2026.
+      // Validée par Stevie Bengono le 20 juillet 2026 ; coupée à la phrase près, mots inchangés (spec : citation ≤ 3 lignes).
       quote: {
-        text: "Jérôme a pris Livia du premier besoin client à la production. Un agent IA qui suit les 32 indicateurs Qualiopi en continu, construit et fiabilisé en quelques mois. Je n'ai jamais eu à traduire entre le métier et la technique : il fait les deux.",
+        text: "Jérôme a pris Livia du premier besoin client à la production. Je n'ai jamais eu à traduire entre le métier et la technique : il fait les deux.",
         author: "Stevie Bengono, cofondateur et CEO de Livia",
       },
     },

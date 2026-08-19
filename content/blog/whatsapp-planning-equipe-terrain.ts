@@ -5,7 +5,7 @@ import type { BlogArticle } from "@/content/blog";
 
 export const whatsappPlanningEquipeTerrain: BlogArticle = {
   slug: "whatsapp-planning-equipe-terrain",
-  title: "WhatsApp pour piloter un planning : je l’ai construit, puis rangé",
+  title: "WhatsApp pour piloter un planning : je l’ai construit, puis rangé",
   metaTitle: "WhatsApp pour piloter un planning terrain | Coucou IA",
   metaDescription:
     "Piloter un planning d’équipe sur WhatsApp : ce que Twilio et les mots-clés oui/non permettent, et pourquoi le planning doit vivre dans l’application.",

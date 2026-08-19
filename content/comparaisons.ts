@@ -80,7 +80,7 @@ export const comparaisons: ComparaisonPage[] = [
       "Cabinet conseil IA ou grand cabinet pour votre PME ? Un seul interlocuteur, un système en production, un business case chiffré. Premier échange gratuit.",
     h1: "Coucou IA ou un grand cabinet de conseil ?",
     intro:
-      "Un grand cabinet rassure : la marque, les équipes, la méthode. Mais pour une PME, la facture et les délais grimpent vite, et le livrable reste souvent une présentation. La vraie question n’est pas la taille du cabinet, c’est ce qui tourne chez vous à la fin.",
+      "Un grand cabinet rassure : la marque, les équipes, la méthode. Mais pour une PME, la facture et les délais grimpent vite, et le livrable reste souvent une présentation. La vraie question, c’est ce qui tourne chez vous à la fin.",
     verdict:
       "Si vous êtes un groupe multi-pays avec une transformation à piloter sur plusieurs années, un grand cabinet a les moyens de vos ambitions : prenez-le, je vous le dis franchement. Si vous êtes une PME ou une ETI qui veut savoir par où commencer et voir un premier système en production sans y engloutir un budget de grand compte, je suis mieux placé : un seul interlocuteur, un business case chiffré avant la moindre ligne de code, et du concret livré.",
     comparison: [
@@ -243,7 +243,7 @@ export const comparaisons: ComparaisonPage[] = [
       },
       {
         title: "Payer la capacité ou payer le résultat",
-        body: "En régie, vous achetez des jours-hommes : la facture court tant que la mission court, indépendamment de ce qui sort en production. Je fonctionne autrement : un périmètre chiffré, un retour attendu posé avant d’engager, un système livré et mesuré. L’enjeu n’est pas le nombre de jours passés, c’est ce que ça vous rapporte.",
+        body: "En régie, vous achetez des jours-hommes : la facture court tant que la mission court, indépendamment de ce qui sort en production. Je fonctionne autrement : un périmètre chiffré, un retour attendu posé avant d’engager, un système livré et mesuré. L’enjeu, c’est ce que ça vous rapporte.",
       },
       {
         title: "Sans DSI pour piloter, vous n’êtes pas coincé",
@@ -495,7 +495,7 @@ export const comparaisons: ComparaisonPage[] = [
       {
         question: "On a déjà testé ChatGPT et ça n’a rien changé, pourquoi ?",
         answer:
-          "Parce qu’un outil individuel ne transforme pas un process d’entreprise. La valeur arrive quand l’IA est branchée sur vos données et vos process, en production, et mesurée. Ce n’est pas le prompt qui compte, c’est le système.",
+          "Parce qu’un outil individuel ne transforme pas un process d’entreprise. La valeur arrive quand l’IA est branchée sur vos données et vos process, en production, et mesurée. Ce qui compte, c’est le système.",
       },
       {
         question: "Un système sur mesure remplace-t-il ChatGPT ?",
