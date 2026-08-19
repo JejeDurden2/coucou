@@ -14,7 +14,7 @@ Light-first. Defined in OKLCH in `app/globals.css` under `:root` (the site's onl
 ### Accent choices: deep electric blue `#0074c1` + warm coral `#b64c1b`
 Direction: **ink, one blue signal, one warm wink** on warm paper-white. The discipline is split in two, exactly as on the old dark theme but with a warmer partner:
 
-- `--primary` (blue, `oklch(0.54 0.155 245)`) is the ONE interactive signal: CTA, key metric, focus ring, active marks, links, the carte's rays and arrows, the hero and services-hinge glows. Blue reads as engineering credibility and is dark enough to carry both as a button fill (with near-white text) and as text at AA contrast.
+- `--primary` (blue, `oklch(0.54 0.155 245)`) is the ONE interactive signal: CTA, key metric, focus ring, active marks, links, the carte's dotted rays and dithered head, the hero and services-hinge glows. Blue reads as engineering credibility and is dark enough to carry both as a button fill (with near-white text) and as text at AA contrast.
 - `--accent-2` (coral, `oklch(0.55 0.15 42)`) is the **warmth and the wink**: the carte's label and card dot marks, ~6% of flow-field particles, and the final CTA's closing glow. It passes AA as small text (4.96:1), but it never colors an action, a metric, a link, or body text.
 
 **The violet is retired** (dark-theme relic): on a light ground a violet wash turns pastel and lands squarely in the AI-startup cliché this brand bans. Coral took over its atmosphere-and-wink role because it complements the blue instead of competing with it.
@@ -80,7 +80,7 @@ CSS vars: `--font-display`, `--font-sans`, `--font-mono`.
 ### Type scale (rem @ 16px base)
 | Role | Size (mobile to desktop) | Line-height | Tracking | Font / weight |
 |---|---|---|---|---|
-| Display / H1 (hero) | 3rem to 4.5rem (48/72) | 1.02 | -0.03em | Space Grotesk 700 |
+| Display / H1 (hero) | 2.75rem to 4rem (44/64) | 1.02 | -0.03em | Space Grotesk 700 |
 | H2 (section) | 2rem to 2.75rem (32/44) | 1.08 | -0.02em | Space Grotesk 700 |
 | H3 | 1.5rem (24) | 1.2 | -0.01em | Space Grotesk 500 |
 | H4 | 1.25rem (20) | 1.3 | -0.01em | Geist Sans 600 |
@@ -107,7 +107,7 @@ Rules: headlines `text-balance`; body/lede `text-pretty`, capped `max-w-[65ch]`.
 
 Two motifs, cleanly split by role: the hero owns one large moving signature; every other section only ever gets the quiet, static "tracé" grid.
 
-**(a) "La carte des possibles": the hero centerpiece.** A full-viewport ambient flow-field particle canvas (fine blue-haze trailing strokes at low alpha, ~10% brighter blue, ~6% warm coral, trails fading, masked out toward the bottom of the viewport) runs behind the hero copy, with one blue radial glow top-right (the largest ambient light on the page) and four thin corner frame marks. Never grey strokes: grey trails read as dirt on the light page. On the right, a map-like SVG fans faint blue-tinted rays from the origin mark out to small dots and six arrowed rays, each pointing to a use-case card; the carte's label and each card's dot mark are coral. Every 2.6s, one ray and its card light up in full blue, the single moving blue signal on the page, then hand off to the next ray/card. This is the one place the brand allows sustained, looping motion (see §6); nowhere else on the site moves like this.
+**(a) "La carte des possibles": the hero centerpiece.** A full-viewport ambient flow-field particle canvas (fine blue-haze trailing strokes at low alpha, ~10% brighter blue, ~6% warm coral, trails fading, masked out toward the bottom of the viewport) runs behind the hero copy, with one blue radial glow top-right (the largest ambient light on the page) and four thin corner frame marks. Never grey strokes: grey trails read as dirt on the light page. On the right (`lg` and up), a fixed 532x540 canvas composition scales to fit its column: the coucou head drawn LARGE as an ordered-dither pixel field (Bayer 8x8) whose cells assemble from noise over ~1.0s, a one-shot glitch shimmer passing at ~1.6-1.8s, then dotted blue rays stippling from the beak to six real-text use-case cards that rise in between 1.15s and 1.5s. Everything plays ONCE (~2.1s) and settles on a static frame with the first card's blue outline lit; the carte's label (coral, mono uppercase) sits above the cards column, and each card's dot mark is coral. The carte is entrance choreography, never a loop: only the ambient flow-field behind the copy runs continuously (see §6), and nowhere else on the site moves like this.
 
 **(b) "Le tracé": a faint measurement grid, for proof and guarantee sections only.** ROI is measurement; the motif is a plotting grid (`.trace-grid` in `app/globals.css`). It does **not** appear in the hero, which uses the flow-field/carte motif above instead.
 
@@ -120,7 +120,7 @@ Two motifs, cleanly split by role: the hero owns one large moving signature; eve
 2. **Final CTA, bottom-left, warm coral, overflowing the viewport** (`opacity` ~40-50%): the page opens cool and closes warm (a "bookend" with a temperature arc). Decentred, bright core off-screen, never a centred halo, never directly under a running paragraph.
 3. **Services diptych hinge, blue, behind the desktop FoldMark** (`opacity` ~40%, `overflow-hidden`-clipped to the ~72px fold channel, desktop only): a thin vertical bloom, as if the fold concentrated the light.
 
-No fourth ambient glow, ever; nothing else on the page gets one, and the warm glow appears exactly once (the closing bookend). The low alphas are deliberate: the dark theme ran 20%, but a saturated wash on white turns pastel fast. Separate from this list, two motivated **functional** blue accents stay allowed: the active carte card/ray's outline glow during its 2.6s highlight, and the soft blue shadow behind the primary CTA on hover.
+No fourth ambient glow, ever; nothing else on the page gets one, and the warm glow appears exactly once (the closing bookend). The low alphas are deliberate: the dark theme ran 20%, but a saturated wash on white turns pastel fast. Separate from this list, two motivated **functional** blue accents stay allowed: the first carte card's resting outline glow once the entrance has settled, and the soft blue shadow behind the primary CTA on hover.
 
 **Gradients/glows must NOT:** tint text (no gradient or accent-tinted text), stack multiple colored glows, appear on cards/buttons by default, or become a multi-color mesh background. If in doubt, remove it.
 
@@ -133,9 +133,9 @@ Principles: motion communicates hierarchy, sequence, or feedback, never decorati
 - **Durations:** micro (hover, press) 120-160ms; entrances/reveals 240-320ms.
 - **Easing:** entrances `cubic-bezier(0.16, 1, 0.3, 1)` (ease-out-expo); hover/press `ease-out`.
 - **What animates:** hero entrance (short opacity+`y` stagger), section scroll-reveal (`whileInView`, `once: true`, `y: 16` to `0`), CTA hover (`-translate-y-px` plus subtle blue shadow), nav background blur-in on scroll.
-- **The one sanctioned loop:** the hero's ambient flow-field canvas and its 2.6s "carte des possibles" ray/card cycle run continuously. This is the single, deliberate exception to the no-infinite-loop rule below, allowed because it reads as low-contrast, slow ambient signal (one moving element at a time) rather than decoration.
+- **The one sanctioned loop:** the hero's ambient flow-field canvas runs continuously (paused off-screen via IntersectionObserver). This is the single, deliberate exception to the no-infinite-loop rule below, allowed because it reads as low-contrast, slow ambient signal rather than decoration. The "carte des possibles" is NOT part of the loop: it is entrance choreography that plays once (~2s), then settles on a static frame with the first card's outline resting lit.
 - **What never animates:** the logo/wordmark, body text, metric numbers, anything on an infinite loop outside the hero exception above. No marquees. No parallax.
-- **`prefers-reduced-motion`:** disable all transforms and scroll-reveals; render final state. The hero canvas falls back to one static pre-rendered frame (no particle motion) and the carte shows a static state with the first ray/card lit, no cycling. Use Motion's `useReducedMotion`.
+- **`prefers-reduced-motion`:** disable all transforms and scroll-reveals; render final state. The hero canvas falls back to one static pre-rendered frame (no particle motion) and the carte draws its settled final frame directly, no assembly. Use Motion's `useReducedMotion`.
 - Continuous values (scroll, pointer) use Motion values, never `useState`.
 
 ---
@@ -151,7 +151,7 @@ Principles: motion communicates hierarchy, sequence, or feedback, never decorati
 
 **Card:** `bg-card border border-border rounded-lg p-6`. Full composition (`CardHeader/Title/Description/Content/Footer`). Use cards only where elevation means hierarchy (service offers, proof); otherwise group with `border-t` plus spacing. Optional hover: `border` darkens to `--input`; no lift, no glow.
 
-**Nav / Header:** sticky, height 64px (max 80px), single line at `lg`. Transparent over hero, then on scroll `bg-background/80 backdrop-blur border-b border-border`. Left: wordmark. Center/right: 3 or 4 links (Services, Méthode, Résultats). Far right: secondary CTA (the hero CTA is the only primary button above the fold). Mobile: Sheet drawer, hamburger; le CTA vit dans le drawer (un CTA pleine largeur en bas de la nav), le header ne garde que la marque et le burger.
+**Nav / Header:** sticky, height 64px, single line at `lg`. Transparent over hero, then on scroll `bg-background/80 backdrop-blur border-b border-border`. Left: wordmark. Center/right: 6 links (Services, Méthode, Secteurs, Cas d'usage, Outils, Blog); the active route gets `aria-current="page"` and a 2px blue underline (`decoration-primary`), the "active nav indicator" named in §5. Far right: secondary CTA, visible from `sm` up (the hero CTA is the only primary button above the fold). Below `sm`, le header ne garde que la marque et le burger: a sticky bottom MobileCtaBar (full-width primary CTA, `sticky bottom-0`, backdrop blur) carries the CTA, and the mobile Sheet drawer holds a full-width CTA as well.
 
 **Footer:** `border-t border-border`, `bg-background`, `py-16`. Columns: wordmark plus one-line positioning; nav links; legal (Mentions légales, Confidentialité); the CTA repeated once. Muted text, hairline dividers. No newsletter unless briefed.
 
@@ -168,10 +168,10 @@ Principles: motion communicates hierarchy, sequence, or feedback, never decorati
 ## 8. Accessibility
 
 - Contrast: all body/UI text ≥ 4.5:1 (see §2); `foreground-dim` restricted to large/non-essential text.
-- **Focus-visible:** 2px `--ring` (blue) outline plus 2px offset on every interactive element. Never remove outlines without a visible replacement. Blue ring gives ≥4.7:1 on light (non-text minimum is 3:1).
+- **Focus-visible:** 2px `--ring` (blue) outline plus 2px offset on every interactive element, uniform site-wide. Never remove outlines without a visible replacement. Blue ring gives ≥4.7:1 on light (non-text minimum is 3:1).
 - **Targets:** interactive elements ≥ 44×44px (buttons min `h-10`; pad small icon buttons to `size-11`).
-- Every section collapses to one column < 768px, declared per component. Hero fits the initial viewport (headline ≤ 2 lines, sub ≤ 20 words, CTA visible without scroll).
-- Semantic HTML; images have alt; the hero flow-field canvas, the carte des possibles cycle, and scroll-reveals all respect reduced motion.
+- Every section collapses to one column < 768px, declared per component. Hero fits the initial viewport (headline ≤ 2 lines per phrase (the hero headline is two phrases, setup + payoff, each capped at 2 lines; line breaks controlled with no-break spaces, never mid-locution), sub ≤ 20 words, CTA visible without scroll).
+- Semantic HTML; images have alt; the hero flow-field canvas, the carte des possibles entrance, and scroll-reveals all respect reduced motion.
 
 ---
 
