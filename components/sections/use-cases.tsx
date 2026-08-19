@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 import { ScrollReveal } from "@/components/scroll-reveal";
 import { useCases } from "@/content/use-cases";
@@ -24,16 +24,16 @@ export function UseCases() {
             <ScrollReveal key={useCase.title} delay={index * 0.04}>
               <Link
                 href={`/cas-usage/${useCase.slug}`}
-                className="group/uc -mx-4 grid grid-cols-1 gap-4 rounded-lg border-b border-border px-4 py-7 outline-none transition-colors hover:bg-card focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4 focus-visible:ring-offset-background md:grid-cols-12 md:gap-8"
+                className="group/uc -mx-4 grid grid-cols-1 gap-4 rounded-lg border-b border-border px-4 py-7 outline-none transition-colors hover:bg-card focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background md:grid-cols-12 md:gap-8"
               >
                 <div className="md:col-span-7">
                   <h3 className="flex items-center gap-2 font-display text-xl leading-snug font-medium tracking-[-0.01em]">
                     <span className="underline-offset-4 group-hover/uc:underline">
                       {useCase.title}
                     </span>
-                    <ArrowUpRight
+                    <ArrowRight
                       aria-hidden
-                      className="size-4 shrink-0 text-muted-foreground transition group-hover/uc:-translate-y-0.5 group-hover/uc:translate-x-0.5 group-hover/uc:text-foreground"
+                      className="size-4 shrink-0 text-muted-foreground transition group-hover/uc:translate-x-0.5 group-hover/uc:text-foreground"
                     />
                   </h3>
                   <p className="mt-2 max-w-[60ch] text-pretty leading-relaxed text-muted-foreground">
@@ -54,12 +54,8 @@ export function UseCases() {
         </div>
 
         <ScrollReveal>
-          <p className="mt-8 flex items-start gap-3 text-sm text-muted-foreground">
-            <span
-              aria-hidden
-              className="mt-1.5 h-0.5 w-4 shrink-0 bg-primary"
-            />
-            <span className="max-w-[82ch]">{useCases.disclaimer}</span>
+          <p className="mt-8 max-w-[82ch] text-sm text-muted-foreground">
+            {useCases.disclaimer}
           </p>
         </ScrollReveal>
       </div>

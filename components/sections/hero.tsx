@@ -45,7 +45,7 @@ export function Hero() {
       <div className="relative mx-auto grid w-full max-w-[1200px] flex-1 grid-cols-1 items-center gap-14 px-6 py-12 lg:grid-cols-[1.05fr_0.95fr]">
         <div>
           <ScrollReveal delay={0.06}>
-            <h1 className="font-display text-[2.75rem] leading-[1.02] font-bold tracking-[-0.03em] text-balance sm:text-[3.5rem] lg:text-[4.5rem]">
+            <h1 className="font-display text-[2.75rem] leading-[1.02] font-bold tracking-[-0.03em] text-balance sm:text-[3.5rem] lg:text-[4rem]">
               <span className="block text-muted-foreground">
                 {hero.headlineSetup}
               </span>

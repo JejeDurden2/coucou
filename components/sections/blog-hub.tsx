@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 import { Breadcrumb } from "@/components/breadcrumb";
 import { ScrollReveal } from "@/components/scroll-reveal";
@@ -55,7 +55,7 @@ export function BlogHub() {
               <div className="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3">
                 <span className="inline-flex items-center gap-1.5 font-mono text-xs uppercase tracking-[0.1em] text-primary">
                   {blogHub.readMore}
-                  <ArrowUpRight aria-hidden className="size-3.5" />
+                  <ArrowRight aria-hidden className="size-3.5" />
                 </span>
                 <span className="font-mono text-xs uppercase tracking-[0.12em] tabular-nums text-foreground-dim">
                   {readingMinutes(featured)} {blogArticleCopy.readingSuffix}
@@ -80,7 +80,7 @@ export function BlogHub() {
                     <div>
                       <h2 className="flex items-start justify-between gap-4 text-balance font-display text-xl leading-snug font-medium tracking-[-0.01em] text-foreground lg:text-2xl">
                         {article.title}
-                        <ArrowUpRight
+                        <ArrowRight
                           aria-hidden
                           className="mt-1 size-4 shrink-0 text-muted-foreground transition-colors group-hover/post:text-foreground"
                         />

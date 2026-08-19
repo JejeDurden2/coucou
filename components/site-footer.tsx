@@ -18,7 +18,7 @@ import {
 import { villes } from "@/content/villes";
 
 const linkClasses =
-  "rounded-sm text-sm text-muted-foreground outline-none transition-colors hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4 focus-visible:ring-offset-background";
+  "rounded-sm text-sm text-muted-foreground outline-none transition-colors hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background";
 
 const headingClasses =
   "font-mono text-xs font-medium uppercase tracking-[0.12em] text-foreground-dim";

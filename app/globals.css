@@ -104,6 +104,13 @@
       scroll-behavior: smooth;
     }
   }
+  /* Impression : les sections révélées au scroll doivent être visibles. */
+  @media print {
+    [data-reveal] {
+      opacity: 1 !important;
+      transform: none !important;
+    }
+  }
 }
 
 /* "Le tracé" (design-system §5): the two signature motifs, defined here so

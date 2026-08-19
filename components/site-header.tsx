@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Menu } from "lucide-react";
 import { useMotionValueEvent, useScroll } from "motion/react";
 
@@ -18,13 +19,19 @@ import {
 import { bookingUrl, ctaLabel, menuLabel, nav, siteName } from "@/content/site";
 
 const linkClasses =
-  "rounded-sm outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4 focus-visible:ring-offset-background";
+  "rounded-sm outline-none transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background";
 
 export function SiteHeader() {
   const [scrolled, setScrolled] = useState(false);
   // Rejoue le pliage du logo au survol de la marque : remonter le svg via key.
   const [logoRun, setLogoRun] = useState(0);
   const { scrollY } = useScroll();
+  const pathname = usePathname();
+
+  // Le soulignement bleu marque la page active dans la nav (design-system §5).
+  const isActive = (href: string) =>
+    !href.includes("#") &&
+    (pathname === href || pathname.startsWith(href + "/"));
 
   // Boolean threshold: React bails on an unchanged value, so the header
   // re-renders only when it crosses, not per scrolled pixel (§6).
@@ -59,9 +66,13 @@ export function SiteHeader() {
             <Link
               key={link.href}
               href={link.href}
+              aria-current={isActive(link.href) ? "page" : undefined}
               className={cn(
                 linkClasses,
-                "text-sm text-muted-foreground hover:text-foreground"
+                "text-sm hover:text-foreground",
+                isActive(link.href)
+                  ? "text-foreground underline underline-offset-8 decoration-2 decoration-primary"
+                  : "text-muted-foreground"
               )}
             >
               {link.label}
@@ -100,10 +111,16 @@ export function SiteHeader() {
                   <SheetClose
                     key={link.href}
                     nativeButton={false}
-                    render={<Link href={link.href} />}
+                    render={
+                      <Link
+                        href={link.href}
+                        aria-current={isActive(link.href) ? "page" : undefined}
+                      />
+                    }
                     className={cn(
                       linkClasses,
-                      "rounded-md px-3 py-3 text-base text-muted-foreground hover:bg-accent hover:text-foreground"
+                      "rounded-md px-3 py-3 text-base text-muted-foreground hover:bg-accent hover:text-foreground",
+                      isActive(link.href) && "bg-accent text-foreground"
                     )}
                   >
                     {link.label}

@@ -31,17 +31,14 @@ export function Fondateur({ titleAs: Title = "h2" }: { titleAs?: "h1" | "h2" }) 
             <p className="mt-5 max-w-[58ch] text-pretty text-lg leading-relaxed text-muted-foreground">
               {fondateur.bio}
             </p>
-            <p className="mt-5 flex items-start gap-3">
-              <span aria-hidden className="mt-2 h-0.5 w-4 shrink-0 bg-primary" />
-              <span className="max-w-[58ch] text-pretty leading-relaxed text-foreground">
-                {fondateur.closer}
-              </span>
+            <p className="mt-5 max-w-[58ch] text-pretty leading-relaxed text-foreground">
+              {fondateur.closer}
             </p>
             <a
               href={fondateur.linkedinUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-7 inline-flex items-center gap-1.5 text-sm text-muted-foreground underline-offset-4 outline-none transition-colors hover:text-foreground hover:underline focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4 focus-visible:ring-offset-background"
+              className="mt-7 inline-flex items-center gap-1.5 text-sm text-muted-foreground underline-offset-4 outline-none transition-colors hover:text-foreground hover:underline focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
             >
               {fondateur.linkedinLabel}
               <ArrowUpRight aria-hidden className="size-4" />

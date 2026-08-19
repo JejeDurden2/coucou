@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 import { Cta } from "@/components/sections/cta";
 import { FaqList } from "@/components/sections/faq";
@@ -110,7 +110,7 @@ export function VillePageTemplate({ ville }: { ville: Ville }) {
                       <span className="font-display text-lg leading-snug font-medium tracking-[-0.01em] text-foreground">
                         {metier.name}
                       </span>
-                      <ArrowUpRight
+                      <ArrowRight
                         aria-hidden
                         className="size-4 shrink-0 text-muted-foreground transition-colors group-hover/metier:text-foreground"
                       />

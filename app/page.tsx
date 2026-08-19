@@ -25,7 +25,8 @@ const jsonLd = {
     {
       "@type": "ProfessionalService",
       "@id": `${siteUrl}/#organization`,
-      name: "COUCOU IA",
+      name: siteName,
+      legalName: "COUCOU IA",
       url: siteUrl,
       description,
       email: contactEmail,

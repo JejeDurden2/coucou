@@ -42,14 +42,14 @@ export function Realisations() {
           </div>
         </ScrollReveal>
 
-        <div className="mt-14 grid grid-cols-1 gap-6 lg:grid-cols-2 lg:items-start">
+        <div className="mt-14 grid grid-cols-1 gap-6 lg:grid-cols-2">
           {realisations.items.map((item, index) => (
             <ScrollReveal key={item.name} delay={index * 0.04}>
               <a
                 href={item.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group/rea flex h-full flex-col rounded-lg border border-border bg-card p-8 outline-none transition-colors hover:border-foreground-dim focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4 focus-visible:ring-offset-background"
+                className="group/rea flex h-full flex-col rounded-lg border border-border bg-card p-8 outline-none transition-colors hover:border-foreground-dim focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
               >
                 <div className="flex items-center justify-between gap-4">
                   <span className="text-sm text-muted-foreground">{item.sector}</span>
@@ -96,9 +96,8 @@ export function Realisations() {
         </div>
 
         <ScrollReveal>
-          <p className="mt-8 flex items-start gap-3 text-sm text-muted-foreground">
-            <span aria-hidden className="mt-1.5 h-0.5 w-4 shrink-0 bg-primary" />
-            <span className="max-w-[82ch]">{realisations.closer}</span>
+          <p className="mt-8 max-w-[82ch] text-sm text-muted-foreground">
+            {realisations.closer}
           </p>
         </ScrollReveal>
       </div>

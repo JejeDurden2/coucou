@@ -9,7 +9,7 @@ import { hero } from "@/content/hero";
 // coucou head LARGE as an ordered-dither pixel field (Bayer 8x8): cells
 // assemble from noise, a one-shot glitch shimmer passes, then dotted rays
 // stipple from the beak to the six cards. The cards are real text (a ul) so
-// screen readers get the content. Everything plays once (~3s) and stops on a
+// screen readers get the content. Everything plays once (~2s) and stops on a
 // static frame (design-system §6); the first card's outline rests lit.
 // Reduced motion: the final frame is drawn once, entrance keyframes are gated
 // off in globals.css, and a media-query flip either way is honored live.
@@ -32,14 +32,14 @@ const RAY_TARGETS: [number, number][] = [
 ];
 
 // Card top-left positions and their entrance delays (synced to the dither
-// timeline: head assembled ~1.6s, rays 1.45-2.2s), index-aligned with mapItems.
+// timeline: head assembled ~1.0s, rays 1.0-1.55s), index-aligned with mapItems.
 const CARDS: [number, number, number][] = [
-  [296, 12, 1.7],
-  [320, 100, 1.8],
-  [296, 188, 1.9],
-  [320, 276, 2.0],
-  [296, 364, 2.1],
-  [320, 452, 2.2],
+  [296, 12, 1.15],
+  [320, 100, 1.22],
+  [296, 188, 1.29],
+  [320, 276, 1.36],
+  [296, 364, 1.43],
+  [320, 452, 1.5],
 ];
 
 // Bayer 8x8 ordered-dither matrix: cell arrival order for the assembly.
@@ -129,7 +129,7 @@ export function PossiblesMap() {
         cells.push({
           x: gx,
           y: gy,
-          appear: 0.3 + (m / 64) * 1.1 + Math.random() * 0.08,
+          appear: 0.2 + (m / 64) * 0.75 + Math.random() * 0.06,
           alpha: 0.55 + Math.random() * 0.35,
           warm: Math.random() < 0.05,
         });
@@ -147,11 +147,11 @@ export function PossiblesMap() {
         rayDots.push({
           x: TIP.x + (dx / len) * d,
           y: TIP.y + (dy / len) * d,
-          appear: 1.45 + index * 0.09 + (d / len) * 0.3,
+          appear: 1.0 + index * 0.07 + (d / len) * 0.25,
           end: false,
         });
       }
-      rayDots.push({ x: tx, y: ty, appear: 1.45 + index * 0.09 + 0.32, end: true });
+      rayDots.push({ x: tx, y: ty, appear: 1.0 + index * 0.07 + 0.27, end: true });
     });
 
     let noise: { x: number; y: number }[] = [];
@@ -165,7 +165,7 @@ export function PossiblesMap() {
       ctx.clearRect(0, 0, 532, 540);
 
       // Ambient noise field while the head assembles.
-      if (t < 1.5) {
+      if (t < 1.0) {
         if (noise.length === 0 || frame % 4 === 0) {
           noise = [];
           for (let i = 0; i < 60; i++) {
@@ -175,13 +175,13 @@ export function PossiblesMap() {
             });
           }
         }
-        ctx.fillStyle = `rgba(${blue},${(0.06 * (1 - t / 1.5)).toFixed(3)})`;
+        ctx.fillStyle = `rgba(${blue},${(0.06 * (1 - t)).toFixed(3)})`;
         for (const n of noise) ctx.fillRect(n.x, n.y, 3, 3);
       }
 
       // The dithered head: cells arrive in Bayer order with a settling jitter,
       // then a one-shot glitch shimmer shifts two bands by a whole cell.
-      const glitch = t > 2.25 && t < 2.5;
+      const glitch = t > 1.6 && t < 1.8;
       for (const c of cells) {
         if (t < c.appear) continue;
         const settling = t < c.appear + 0.3;
@@ -211,7 +211,7 @@ export function PossiblesMap() {
     const loop = (ts: number) => {
       if (t0 === null) t0 = ts;
       const t = (ts - t0) / 1000;
-      if (t < 2.9) {
+      if (t < 2.1) {
         drawFrame(t);
         raf = requestAnimationFrame(loop);
       } else {
@@ -254,7 +254,7 @@ export function PossiblesMap() {
         className="absolute top-0 left-1/2 h-135 w-133 origin-top"
         style={{ transform: `translateX(-50%) scale(${scale})` }}
       >
-        <span className="absolute -top-3.5 left-0 font-mono text-[10px] tracking-[0.12em] text-accent-2 uppercase">
+        <span className="absolute -top-3.5 right-0 font-mono text-[10px] tracking-[0.12em] text-accent-2 uppercase">
           {hero.mapLabel}
         </span>
 
@@ -278,7 +278,7 @@ export function PossiblesMap() {
                     aria-hidden
                     className="hero-fade pointer-events-none absolute -inset-px rounded-lg border border-primary"
                     style={{
-                      animationDelay: "2.9s",
+                      animationDelay: "2.1s",
                       boxShadow:
                         "0 0 20px color-mix(in oklch, var(--primary) 25%, transparent)",
                     }}

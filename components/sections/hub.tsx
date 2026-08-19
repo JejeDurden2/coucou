@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 import { Breadcrumb } from "@/components/breadcrumb";
 import { ScrollReveal } from "@/components/scroll-reveal";
@@ -51,7 +51,7 @@ export function HubSection({
                 </p>
                 <span className="mt-auto inline-flex items-center gap-1.5 pt-2 font-mono text-xs uppercase tracking-[0.1em] text-primary">
                   {spokes.hubCardCta}
-                  <ArrowUpRight aria-hidden className="size-3.5" />
+                  <ArrowRight aria-hidden className="size-3.5" />
                 </span>
               </Link>
             </ScrollReveal>

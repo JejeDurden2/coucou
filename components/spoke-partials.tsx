@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, ArrowUpRight, ShieldCheck } from "lucide-react";
+import { ArrowRight, ShieldCheck } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Breadcrumb, type Crumb } from "@/components/breadcrumb";
@@ -179,7 +179,7 @@ export function RelatedLinks({
                 <span className="font-display text-base leading-snug font-medium tracking-[-0.01em] text-foreground">
                   {link.name}
                 </span>
-                <ArrowUpRight
+                <ArrowRight
                   aria-hidden
                   className="size-4 shrink-0 text-muted-foreground transition-colors group-hover/rel:text-foreground"
                 />
