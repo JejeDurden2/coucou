@@ -1,90 +1,70 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useReducedMotion } from "motion/react";
 
-import { LogoMark } from "@/components/logo-mark";
 import { hero } from "@/content/hero";
 
 // « La carte des possibles » : a fixed 532x540 composition scaled to fit its
-// column (ResizeObserver, transform-origin top center). A decorative SVG draws
-// the coucou mark at the origin, faint rays and the six arrows; the six cards are real text (a ul)
-// so screen readers get the content. The active card cycles once through the
-// six (first switch after 1.3s, then every 2.6s), lighting its blue arrow +
-// outline, and rests on the first: motion stays finite (design-system §6).
-// Reduced motion: no cycle (card 0 stays lit) and entrance keyframes are gated
-// off in globals.css.
+// column (ResizeObserver, transform-origin top center). A canvas draws the
+// coucou head LARGE as an ordered-dither pixel field (Bayer 8x8): cells
+// assemble from noise, a one-shot glitch shimmer passes, then dotted rays
+// stipple from the beak to the six cards. The cards are real text (a ul) so
+// screen readers get the content. Everything plays once (~3s) and stops on a
+// static frame (design-system §6); the first card's outline rests lit.
+// Reduced motion: the final frame is drawn once, entrance keyframes are gated
+// off in globals.css, and a media-query flip either way is honored live.
 
-// Geometry is presentation, not content: it lives here, next to the SVG.
-// ORIGIN is where the rays fan out: the coucou mark's beak sits on it (x = beak
-// tip), vertically centered on y, so the brand is the source of the possibles.
-const ORIGIN = { x: 31, y: 270 };
+// Geometry is presentation, not content: it lives here, next to the canvas.
+// The head is the LogoMark's 32-unit geometry at scale 8 (256px), placed so
+// its vertical center sits on the fan's axis; TIP is the beak tip, where the
+// dotted rays start.
+const HEAD = { x: 2, y: 142, scale: 8 };
+const TIP = { x: HEAD.x + 30.3 * HEAD.scale, y: HEAD.y + 13.5 * HEAD.scale };
 
-// Origami mark size (px). Larger than a dot so it reads as the brand, not a
-// floating blue blob. left/top place viewBox point (30.3, 16) — beak tip x,
-// vertical center — exactly on ORIGIN, so the beak stays on the fan's axis
-// whatever MARK_PX is (both offsets derive from it).
-const MARK_PX = 44;
-
-// Rays start this far (px) from ORIGIN along their own direction, leaving a
-// clean ring around the beak: the fan reads as sourced from the mark, not
-// piercing it. The head sits left of ORIGIN, the fan opens right, so this gap
-// is pure breathing room, never overlapping the head.
-const RAY_GAP = 14;
-
-// Start point of a ray aimed at (x, y): ORIGIN pushed RAY_GAP px along the
-// unit vector toward the target.
-function rayStart(x: number, y: number): readonly [number, number] {
-  const dx = x - ORIGIN.x;
-  const dy = y - ORIGIN.y;
-  const len = Math.hypot(dx, dy);
-  return [ORIGIN.x + (dx / len) * RAY_GAP, ORIGIN.y + (dy / len) * RAY_GAP];
-}
-
-// Faint short rays, each ending in a tiny dot: [x, y, pathDelay, dotDelay].
-const FAINT_RAYS: [number, number, number, number][] = [
-  [120, 55, 0.7, 0.75],
-  [215, 95, 0.76, 0.81],
-  [140, 150, 0.82, 0.87],
-  [240, 180, 0.88, 0.93],
-  [110, 225, 0.94, 0.99],
-  [250, 250, 1.0, 1.05],
-  [122, 302, 1.06, 1.11],
-  [245, 330, 1.12, 1.17],
-  [135, 370, 1.18, 1.23],
-  [220, 415, 1.24, 1.29],
-  [115, 455, 1.3, 1.35],
-  [235, 480, 1.36, 1.41],
-  [160, 520, 1.42, 1.47],
-  [90, 130, 1.48, 1.53],
+// Ray endpoints pointing at the six cards, index-aligned with mapItems.
+const RAY_TARGETS: [number, number][] = [
+  [288, 51],
+  [312, 139],
+  [288, 227],
+  [312, 315],
+  [288, 403],
+  [312, 491],
 ];
 
-// Arrow rays pointing at the six cards: [x, y, entranceDelay]. The dim arrow is
-// always visible; the blue arrow (same geometry) fades in only when active.
-const ARROW_RAYS: [number, number, number][] = [
-  [288, 51, 0.45],
-  [312, 139, 0.53],
-  [288, 227, 0.61],
-  [312, 315, 0.69],
-  [288, 403, 0.77],
-  [312, 491, 0.85],
-];
-
-// Card top-left positions and their entrance delays, index-aligned with mapItems.
+// Card top-left positions and their entrance delays (synced to the dither
+// timeline: head assembled ~1.6s, rays 1.45-2.2s), index-aligned with mapItems.
 const CARDS: [number, number, number][] = [
-  [296, 12, 0.5],
-  [320, 100, 0.58],
-  [296, 188, 0.66],
-  [320, 276, 0.74],
-  [296, 364, 0.82],
-  [320, 452, 0.9],
+  [296, 12, 1.7],
+  [320, 100, 1.8],
+  [296, 188, 1.9],
+  [320, 276, 2.0],
+  [296, 364, 2.1],
+  [320, 452, 2.2],
+];
+
+// Bayer 8x8 ordered-dither matrix: cell arrival order for the assembly.
+const BAYER = [
+  0, 32, 8, 40, 2, 34, 10, 42, 48, 16, 56, 24, 50, 18, 58, 26, 12, 44, 4, 36,
+  14, 46, 6, 38, 60, 28, 52, 20, 62, 30, 54, 22, 3, 35, 11, 43, 1, 33, 9, 41,
+  51, 19, 59, 27, 49, 17, 57, 25, 15, 47, 7, 39, 13, 45, 5, 37, 63, 31, 55,
+  23, 61, 29, 53, 21,
+];
+
+// The LogoMark's three facets (components/logo-mark.tsx geometry) as Path2D
+// sources, drawn once on an offscreen canvas to sample which cells are "in".
+const MARK_PATHS: [string, CanvasFillRule][] = [
+  ["M12.25 6.3 L5.53 8.93 L2.6 16 L5.53 23.07 L12.25 25.7 Z", "nonzero"],
+  [
+    "M12.95 6.15V25.85L19.67 23.07L22.45 17.74L22.11 12.91L19.79 9.05ZM15.1 12.1a2.1 2.1 0 1 0 4.2 0a2.1 2.1 0 1 0-4.2 0Z",
+    "evenodd",
+  ],
+  ["M21.16 10.07 L30.3 13.5 L23.03 16.63 L22.72 12.72 Z", "nonzero"],
 ];
 
 export function PossiblesMap() {
   const outerRef = useRef<HTMLDivElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   const [scale, setScale] = useState(1);
-  const [active, setActive] = useState(0);
-  const reducedMotion = useReducedMotion();
 
   // Scale-to-fit: match the design’s _fit(), guarding the hidden (width 0) case.
   useEffect(() => {
@@ -97,24 +77,172 @@ export function PossiblesMap() {
     return () => ro.disconnect();
   }, []);
 
-  // Cycle the active card once through the six, then stop back on the first
-  // (no infinite loop). Reduced motion keeps card 0 lit, no timers.
   useEffect(() => {
-    if (reducedMotion) return;
-    let ticks = 0;
-    let interval: ReturnType<typeof setInterval>;
-    const start = setTimeout(() => {
-      interval = setInterval(() => {
-        ticks += 1;
-        setActive(ticks % 6);
-        if (ticks === 6) clearInterval(interval);
-      }, 2600);
-    }, 1300);
-    return () => {
-      clearTimeout(start);
-      if (interval) clearInterval(interval);
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = Math.round(532 * dpr);
+    canvas.height = Math.round(540 * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    // Resolve token -> "r,g,b" once via a probe canvas (flow-field idiom), so
+    // the oklch tokens normalize to bytes we can compose an alpha onto.
+    const tokens = getComputedStyle(canvas);
+    const probe = document
+      .createElement("canvas")
+      .getContext("2d", { willReadFrequently: true });
+    if (!probe) return;
+    const bytes = (name: string) => {
+      probe.fillStyle = "#000";
+      probe.fillStyle = tokens.getPropertyValue(name).trim();
+      probe.fillRect(0, 0, 1, 1);
+      const [r, g, b] = probe.getImageData(0, 0, 1, 1).data;
+      return `${r},${g},${b}`;
     };
-  }, [reducedMotion]);
+    const blue = bytes("--primary");
+    const coral = bytes("--accent-2");
+
+    // Alpha map of the mark at scale 8: which 4px cells belong to the head.
+    const off = document.createElement("canvas");
+    off.width = 532;
+    off.height = 540;
+    const offCtx = off.getContext("2d", { willReadFrequently: true });
+    if (!offCtx) return;
+    offCtx.translate(HEAD.x, HEAD.y);
+    offCtx.scale(HEAD.scale, HEAD.scale);
+    for (const [d, rule] of MARK_PATHS) offCtx.fill(new Path2D(d), rule);
+    const map = offCtx.getImageData(0, 0, 532, 540).data;
+
+    const cells: {
+      x: number;
+      y: number;
+      appear: number;
+      alpha: number;
+      warm: boolean;
+    }[] = [];
+    for (let gy = 140; gy < 400; gy += 4) {
+      for (let gx = 0; gx < 264; gx += 4) {
+        if (map[((gy + 2) * 532 + (gx + 2)) * 4 + 3] <= 120) continue;
+        const m = BAYER[(Math.floor(gy / 4) % 8) * 8 + (Math.floor(gx / 4) % 8)];
+        cells.push({
+          x: gx,
+          y: gy,
+          appear: 0.3 + (m / 64) * 1.1 + Math.random() * 0.08,
+          alpha: 0.55 + Math.random() * 0.35,
+          warm: Math.random() < 0.05,
+        });
+      }
+    }
+
+    // Dotted rays from the beak tip to the six card anchors.
+    const rayDots: { x: number; y: number; appear: number; end: boolean }[] =
+      [];
+    RAY_TARGETS.forEach(([tx, ty], index) => {
+      const dx = tx - TIP.x;
+      const dy = ty - TIP.y;
+      const len = Math.hypot(dx, dy);
+      for (let d = 24; d < len - 4; d += 9) {
+        rayDots.push({
+          x: TIP.x + (dx / len) * d,
+          y: TIP.y + (dy / len) * d,
+          appear: 1.45 + index * 0.09 + (d / len) * 0.3,
+          end: false,
+        });
+      }
+      rayDots.push({ x: tx, y: ty, appear: 1.45 + index * 0.09 + 0.32, end: true });
+    });
+
+    let noise: { x: number; y: number }[] = [];
+    let frame = 0;
+
+    // t = 99 is the settled final frame (also the reduced-motion frame).
+    const drawFrame = (t: number) => {
+      frame += 1;
+      // Full redraw on a transparent canvas: the page's ambient glow and
+      // flow-field stay visible behind the dither.
+      ctx.clearRect(0, 0, 532, 540);
+
+      // Ambient noise field while the head assembles.
+      if (t < 1.5) {
+        if (noise.length === 0 || frame % 4 === 0) {
+          noise = [];
+          for (let i = 0; i < 60; i++) {
+            noise.push({
+              x: Math.floor(Math.random() * 133) * 4,
+              y: Math.floor(Math.random() * 135) * 4,
+            });
+          }
+        }
+        ctx.fillStyle = `rgba(${blue},${(0.06 * (1 - t / 1.5)).toFixed(3)})`;
+        for (const n of noise) ctx.fillRect(n.x, n.y, 3, 3);
+      }
+
+      // The dithered head: cells arrive in Bayer order with a settling jitter,
+      // then a one-shot glitch shimmer shifts two bands by a whole cell.
+      const glitch = t > 2.25 && t < 2.5;
+      for (const c of cells) {
+        if (t < c.appear) continue;
+        const settling = t < c.appear + 0.3;
+        const ox = settling ? Math.random() * 2 - 1 : 0;
+        const oy = settling ? Math.random() * 2 - 1 : 0;
+        ctx.fillStyle = c.warm
+          ? `rgba(${coral},0.4)`
+          : `rgba(${blue},${c.alpha.toFixed(2)})`;
+        ctx.fillRect(c.x + ox, c.y + oy, 3, 3);
+        if (glitch && ((c.y >= 186 && c.y < 216) || (c.y >= 306 && c.y < 336))) {
+          ctx.fillStyle = `rgba(${blue},0.22)`;
+          ctx.fillRect(c.x + (Math.sin(t * 45) > 0 ? 4 : -4), c.y, 3, 3);
+        }
+      }
+
+      for (const dot of rayDots) {
+        if (t < dot.appear) continue;
+        ctx.fillStyle = `rgba(${blue},${dot.end ? 0.45 : 0.35})`;
+        ctx.beginPath();
+        ctx.arc(dot.x, dot.y, dot.end ? 1.8 : 1.3, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    };
+
+    let raf = 0;
+    let t0: number | null = null;
+    const loop = (ts: number) => {
+      if (t0 === null) t0 = ts;
+      const t = (ts - t0) / 1000;
+      if (t < 2.9) {
+        drawFrame(t);
+        raf = requestAnimationFrame(loop);
+      } else {
+        drawFrame(99);
+        raf = 0;
+      }
+    };
+
+    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
+    // Single control point: static final frame under reduced motion, one
+    // play-through otherwise; honors the media query flipping either way.
+    const play = () => {
+      if (raf) {
+        cancelAnimationFrame(raf);
+        raf = 0;
+      }
+      if (media.matches) {
+        drawFrame(99);
+      } else {
+        t0 = null;
+        raf = requestAnimationFrame(loop);
+      }
+    };
+    play();
+    media.addEventListener("change", play);
+
+    return () => {
+      media.removeEventListener("change", play);
+      if (raf) cancelAnimationFrame(raf);
+    };
+  }, []);
 
   return (
     <div
@@ -130,114 +258,10 @@ export function PossiblesMap() {
           {hero.mapLabel}
         </span>
 
-        <svg
-          viewBox="0 0 532 540"
-          width="100%"
-          height="100%"
+        <canvas
+          ref={canvasRef}
           aria-hidden
-          className="absolute inset-0 overflow-visible"
-        >
-          <defs>
-            <marker
-              id="ccArrowDim"
-              viewBox="0 0 10 10"
-              refX="8"
-              refY="5"
-              markerWidth="7"
-              markerHeight="7"
-              orient="auto-start-reverse"
-            >
-              <path
-                d="M1,1 L8,5 L1,9"
-                className="fill-none stroke-primary/50"
-                strokeWidth="1.6"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </marker>
-            <marker
-              id="ccArrowBlue"
-              viewBox="0 0 10 10"
-              refX="8"
-              refY="5"
-              markerWidth="7"
-              markerHeight="7"
-              orient="auto-start-reverse"
-            >
-              <path
-                d="M1,1 L8,5 L1,9"
-                className="fill-none stroke-primary"
-                strokeWidth="1.6"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </marker>
-          </defs>
-
-          {FAINT_RAYS.map(([x, y, pathDelay, dotDelay]) => {
-            const [sx, sy] = rayStart(x, y);
-            return (
-              <g key={`faint-${x}-${y}`}>
-                <path
-                  d={`M${sx},${sy} L${x},${y}`}
-                  className="hero-fade fill-none stroke-primary/20"
-                  strokeWidth="1"
-                  style={{ animationDelay: `${pathDelay}s` }}
-                />
-                <circle
-                  cx={x}
-                  cy={y}
-                  r="1.8"
-                  className="hero-fade fill-primary/40"
-                  style={{ animationDelay: `${dotDelay}s` }}
-                />
-              </g>
-            );
-          })}
-
-          {ARROW_RAYS.map(([x, y, delay]) => {
-            const [sx, sy] = rayStart(x, y);
-            return (
-              <path
-                key={`dim-${x}-${y}`}
-                d={`M${sx},${sy} L${x},${y}`}
-                className="hero-fade fill-none stroke-primary/45"
-                strokeWidth="1.2"
-                markerEnd="url(#ccArrowDim)"
-                style={{ animationDelay: `${delay}s` }}
-              />
-            );
-          })}
-
-          {ARROW_RAYS.map(([x, y], index) => {
-            const [sx, sy] = rayStart(x, y);
-            return (
-              <path
-                key={`blue-${x}-${y}`}
-                d={`M${sx},${sy} L${x},${y}`}
-                className="fill-none stroke-primary"
-                strokeWidth="1.5"
-                markerEnd="url(#ccArrowBlue)"
-                style={{
-                  opacity: active === index ? 1 : 0,
-                  transition: "opacity 0.45s ease-out",
-                }}
-              />
-            );
-          })}
-        </svg>
-
-        {/* The source: the origami coucou head (LogoMark) sits on ORIGIN, not an anonymous blue dot. */}
-        <LogoMark
-          className="hero-fade absolute text-primary"
-          style={{
-            width: MARK_PX,
-            height: MARK_PX,
-            left: ORIGIN.x - 30.3 * (MARK_PX / 32),
-            top: ORIGIN.y - 16 * (MARK_PX / 32),
-            filter: "drop-shadow(0 2px 5px rgb(0 0 0 / 0.18))",
-            animationDelay: "0.35s",
-          }}
+          className="absolute inset-0 h-full w-full"
         />
 
         <ul aria-label={hero.mapLabel}>
@@ -246,18 +270,20 @@ export function PossiblesMap() {
             return (
               <li
                 key={item.category}
-                className="hero-in absolute flex h-19.5 w-53 flex-col justify-center gap-1.25 rounded-lg border border-border bg-popover px-3.5 py-2.5 shadow-[0_8px_24px_rgb(0_0_0/0.08)]"
+                className="hero-in absolute flex h-19.5 w-53 flex-col justify-center gap-1.25 rounded-lg border border-border bg-popover px-3.5 py-2.5 shadow-[0_1px_2px_rgb(0_0_0/0.05),0_10px_28px_rgb(0_0_0/0.07)]"
                 style={{ left, top, animationDelay: `${delay}s` }}
               >
-                <span
-                  aria-hidden
-                  className="pointer-events-none absolute -inset-px rounded-lg border border-primary transition-opacity duration-450"
-                  style={{
-                    opacity: active === index ? 1 : 0,
-                    boxShadow:
-                      "0 0 20px color-mix(in oklch, var(--primary) 25%, transparent)",
-                  }}
-                />
+                {index === 0 && (
+                  <span
+                    aria-hidden
+                    className="hero-fade pointer-events-none absolute -inset-px rounded-lg border border-primary"
+                    style={{
+                      animationDelay: "2.9s",
+                      boxShadow:
+                        "0 0 20px color-mix(in oklch, var(--primary) 25%, transparent)",
+                    }}
+                  />
+                )}
                 <span className="flex items-center gap-1.75">
                   <span
                     aria-hidden
