@@ -22,6 +22,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
     return {};
   }
   return pageMetadata({
+    ownOgImage: true,
     title: article.metaTitle,
     description: article.metaDescription,
     path: `/blog/${slug}`,

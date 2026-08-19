@@ -16,17 +16,26 @@ export function pageMetadata({
   description,
   path,
   article,
+  ownOgImage,
 }: {
   title: string;
   description: string;
   path: string;
+  ownOgImage?: boolean;
   article?: {
     publishedTime: string;
     modifiedTime?: string;
     authors: string[];
   };
 }): Metadata {
-  const openGraph = { locale: "fr_FR", siteName, url: path, title, description };
+  // og:image de repli, la carte de marque. Les pages statiques (hubs, villes,
+  // /fondateur, /outils) n'ont pas d'opengraph-image.tsx et partaient sans
+  // visuel de partage. `ownOgImage` est réservé aux segments qui en ont un :
+  // un `images` posé ici écrase le fichier, l'article perdrait sa carte titrée.
+  const base = { locale: "fr_FR", siteName, url: path, title, description };
+  const openGraph = ownOgImage
+    ? base
+    : { ...base, images: ["/opengraph-image"] };
   return {
     title: { absolute: title },
     description,
@@ -51,6 +60,17 @@ export function resolveRelated(
       : [];
   });
 }
+
+// Adresse du siège, partagée par le provider des pages spoke et par les pages
+// villes. Google valide ProfessionalService comme un LocalBusiness et exige
+// l'adresse : sans elle, les 24 pages spoke sortaient en erreur de validation.
+export const businessAddress = {
+  "@type": "PostalAddress",
+  streetAddress: "460 avenue de Pessicart",
+  postalCode: "06100",
+  addressLocality: "Nice",
+  addressCountry: "FR",
+} as const;
 
 // Service (provider Coucou IA) + BreadcrumbList + FAQPage, same @graph pattern
 // as app/page.tsx. Stringify + escape "<" at the call site, like the home page.
@@ -82,6 +102,7 @@ export function spokeJsonLd({
           "@type": "ProfessionalService",
           name: "COUCOU IA",
           url: siteUrl,
+          address: businessAddress,
         },
         areaServed: {
           "@type": "Country",
@@ -155,13 +176,7 @@ export function villeJsonLd({
         name: "COUCOU IA",
         description,
         url,
-        address: {
-          "@type": "PostalAddress",
-          streetAddress: "460 avenue de Pessicart",
-          postalCode: "06100",
-          addressLocality: "Nice",
-          addressCountry: "FR",
-        },
+        address: businessAddress,
         // "Place" pour les communes (Sophia Antipolis et Aix-Marseille n'en
         // sont pas non plus, le type générique reste valide) ; "AdministrativeArea"
         // pour le département, seule entrée qui n'est pas une commune.

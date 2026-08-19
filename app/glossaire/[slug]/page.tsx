@@ -21,6 +21,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
     return {};
   }
   return pageMetadata({
+    ownOgImage: true,
     title: term.metaTitle,
     description: term.metaDescription,
     path: `/glossaire/${slug}`,

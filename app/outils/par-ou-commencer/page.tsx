@@ -3,7 +3,7 @@ import Link from "next/link";
 
 import { Breadcrumb } from "@/components/breadcrumb";
 import { GrilleInteractive, type GrilleSector } from "@/components/grille-interactive";
-import { breadcrumbGraph, pageMetadata } from "@/lib/seo";
+import { breadcrumbGraph, businessAddress, pageMetadata } from "@/lib/seo";
 import { grille, grilleCross } from "@/content/grille";
 import { ressources } from "@/content/ressources";
 import { siteUrl } from "@/content/site";
@@ -52,6 +52,7 @@ const jsonLd = {
         "@type": "ProfessionalService",
         name: "COUCOU IA",
         url: siteUrl,
+        address: businessAddress,
       },
       areaServed: {
         "@type": "Country",
