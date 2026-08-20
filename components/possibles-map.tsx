@@ -254,10 +254,6 @@ export function PossiblesMap() {
         className="absolute top-0 left-1/2 h-135 w-133 origin-top"
         style={{ transform: `translateX(-50%) scale(${scale})` }}
       >
-        <span className="absolute -top-3.5 right-0 type-label text-accent-2">
-          {hero.mapLabel}
-        </span>
-
         <canvas
           ref={canvasRef}
           aria-hidden
