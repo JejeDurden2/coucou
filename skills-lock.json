@@ -55,6 +55,12 @@
       "skillPath": "skills/cold-email/SKILL.md",
       "computedHash": "be0b73511a6244b8b8aa9126225844cfe9e492f4c1ee6bffc57344ce5ee2a6e8"
     },
+    "commissaire-aux-comptes": {
+      "source": "romainsimon/paperasse",
+      "sourceType": "github",
+      "skillPath": "commissaire-aux-comptes/SKILL.md",
+      "computedHash": "fdffea765afa0b2c8eeb1184525a0adb3c4c2e309634bd277060737bc090d8fc"
+    },
     "community-marketing": {
       "source": "coreyhaines31/marketingskills",
       "sourceType": "github",
@@ -73,11 +79,23 @@
       "skillPath": "skills/competitors/SKILL.md",
       "computedHash": "6380b59f188f71552e4ea878f41518c387490d583c457f95c4d0f4161ccb7c71"
     },
+    "comptable": {
+      "source": "romainsimon/paperasse",
+      "sourceType": "github",
+      "skillPath": "comptable/SKILL.md",
+      "computedHash": "b2b6dcd71c0351bb438ae1200e9a18e406083ec799bd42491db1310df9c83019"
+    },
     "content-strategy": {
       "source": "coreyhaines31/marketingskills",
       "sourceType": "github",
       "skillPath": "skills/content-strategy/SKILL.md",
       "computedHash": "13824c129ab70874c57d766c2d844f8dac7a0b366845f108a73527c9d094c4f6"
+    },
+    "controleur-fiscal": {
+      "source": "romainsimon/paperasse",
+      "sourceType": "github",
+      "skillPath": "controleur-fiscal/SKILL.md",
+      "computedHash": "840952a3fdad57b66a78d120568aef9dfe64f6ac63c77a4fedd04da31e1b8758"
     },
     "copy-editing": {
       "source": "coreyhaines31/marketingskills",
@@ -126,6 +144,12 @@
       "sourceType": "github",
       "skillPath": "skills/find-skills/SKILL.md",
       "computedHash": "781bd6d3f9b19f8c9af6b53d8d0e4876d0183841b565db34ca7092ffa412d111"
+    },
+    "fiscaliste": {
+      "source": "romainsimon/paperasse",
+      "sourceType": "github",
+      "skillPath": "fiscaliste/SKILL.md",
+      "computedHash": "fda6551bc27a04eaa50402be0c83ec9dce7f29ae683812270c411319b0215040"
     },
     "free-tools": {
       "source": "coreyhaines31/marketingskills",
@@ -204,6 +228,12 @@
       "sourceType": "github",
       "skillPath": "skills/marketing-psychology/SKILL.md",
       "computedHash": "50d735eb0f5c36f379ed2200f21aeacc9b9ad85667b5d33ec6111857352a1340"
+    },
+    "notaire": {
+      "source": "romainsimon/paperasse",
+      "sourceType": "github",
+      "skillPath": "notaire/SKILL.md",
+      "computedHash": "29a0b63b416a05e4aa86036ecd290788621700170135dd15a27ca28549e7fe15"
     },
     "offers": {
       "source": "coreyhaines31/marketingskills",
@@ -318,6 +348,12 @@
       "sourceType": "github",
       "skillPath": "skills/social/SKILL.md",
       "computedHash": "906a0529e4ee506c3e2ae81d6dab72d98d2933ec3dac0f332d6b8a2e67acf6a0"
+    },
+    "syndic": {
+      "source": "romainsimon/paperasse",
+      "sourceType": "github",
+      "skillPath": "syndic/SKILL.md",
+      "computedHash": "d0591028bd6ee8bd29505a08cab49ae10407047ba4282393e762919c9e5b976e"
     },
     "vercel-react-best-practices": {
       "source": "vercel-labs/agent-skills",

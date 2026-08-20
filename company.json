@@ -1,0 +1,67 @@
+{
+  "name": "COUCOU IA",
+  "legal_form": "SAS",
+  "capital": 500,
+  "address": "460 avenue de Pessicart, 06100 Nice",
+  "city": "Nice",
+  "siren": "100498070",
+  "siret": "10049807000018",
+  "vat_number": "FR83100498070",
+  "rcs": "RCS Nice",
+  "naf": "58.29C",
+  "president": {
+    "title": "President",
+    "first_name": "Jerome",
+    "last_name": "DESMARES",
+    "civility": "M."
+  },
+  "fiscal_year": {
+    "start": "2026-01-28",
+    "end": "2026-12-31",
+    "is_first_year": true
+  },
+  "tax": {
+    "regime_tva": "reel_normal",
+    "regime_is": "reel_normal",
+    "tva_rate": 0.2
+  },
+  "banks": [
+    {
+      "id": "swan",
+      "name": "Indy / Swan",
+      "account": "5121",
+      "fec_account": "51211",
+      "type": "import",
+      "import_dir": "data/imports/swan/"
+    }
+  ],
+  "qonto": { "enabled": false },
+  "stripe_accounts": [],
+  "invoicing": {
+    "prefix": "F",
+    "separator": "-",
+    "year_format": "YYYY",
+    "next_numbers": { "2026": 1 },
+    "avoir_prefix": "AV"
+  },
+  "einvoicing": {
+    "pa": "",
+    "pa_name": "",
+    "peppol_id": "",
+    "reception_ready": false,
+    "emission_ready": false,
+    "ereporting_ready": false,
+    "_comment": "Indy est candidat PA : a confirmer sur la liste officielle des plateformes agreees."
+  },
+  "payment": {
+    "default_terms": "net_30",
+    "default_terms_label": "30 jours date de facture",
+    "methods": ["virement"],
+    "bank_details": { "iban": "", "bic": "" },
+    "late_penalty_rate": "3x_legal",
+    "late_penalty_label": "3 fois le taux d'interet legal",
+    "escompte": "none",
+    "escompte_label": "Pas d'escompte pour paiement anticipe",
+    "recovery_fee": 40
+  }
+}
