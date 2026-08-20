@@ -12,6 +12,9 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Skills tiers embarques (deja ignores par oxlint).
+    ".agents/**",
+    ".claude/**",
   ]),
 ]);
 
