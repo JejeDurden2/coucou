@@ -17,7 +17,7 @@ export type Hero = {
   lede: string;
   // Note mono à côté du CTA.
   reassurance: string;
-  // Libellé de la carte (nom accessible de la liste + étiquette visible).
+  // Nom accessible de la liste (non affiché).
   mapLabel: string;
   mapItems: HeroMapItem[];
 };
@@ -26,7 +26,7 @@ export const hero: Hero = {
   headlineSetup: "Tout le monde vous parle d’IA.",
   //   : jamais de césure dans « au travail ».
   headlinePayoff: "On la met au travail chez vous.",
-  lede: "Devis, relances, messages clients, saisie : on trouve ce que l’IA prend en charge chez vous, on le chiffre, et on le met en production.",
+  lede: "On trouve ce que l’IA peut prendre en charge chez vous, on le chiffre, on le met en production.",
   reassurance: "30 minutes, gratuites, sans engagement.",
   mapLabel: "La carte des possibles",
   mapItems: [
