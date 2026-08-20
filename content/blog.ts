@@ -9,6 +9,7 @@ import { plain } from "@/lib/inline";
 import { agentIaProductionLecons } from "@/content/blog/agent-ia-production-lecons";
 import { aiActPmeObligations } from "@/content/blog/ai-act-pme-obligations";
 import { businessCaseIa } from "@/content/blog/business-case-ia";
+import { charteIaEntreprise } from "@/content/blog/charte-ia-entreprise";
 import { diagDataIaBpifrance } from "@/content/blog/diag-data-ia-bpifrance";
 import { openclawVsHermesAgent } from "@/content/blog/openclaw-vs-hermes-agent";
 import { prixProjetIa } from "@/content/blog/prix-projet-ia";
@@ -57,6 +58,7 @@ export type BlogArticle = {
 
 // Du plus récent au plus ancien : le hub et le flux RSS lisent ce tableau tel quel.
 export const articles: BlogArticle[] = [
+  charteIaEntreprise,
   whatsappPlanningEquipeTerrain,
   agentIaProductionLecons,
   diagDataIaBpifrance,

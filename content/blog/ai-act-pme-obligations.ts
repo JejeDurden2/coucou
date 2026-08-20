@@ -163,6 +163,10 @@ export const aiActPmeObligations: BlogArticle = {
       kind: "p",
       text: "Pas de dossier de conformité à monter cette semaine. Trois vérifications, un registre à écrire, et [une grille en trois questions](/outils/par-ou-commencer) si vous ne savez pas par où commencer. Le haut risque attendra 2027, et vous aurez le temps de vous y préparer sans le faire dans l’urgence.",
     },
+    {
+      kind: "p",
+      text: "Une fois le registre écrit, le document qui le prolonge est [la charte d’usage de l’IA](/blog/charte-ia-entreprise) : elle dit à vos équipes quels outils sont approuvés, quelles données ne sortent jamais et ce qui doit être relu avant d’être envoyé. J’en donne le modèle, et la procédure qui la rend opposable.",
+    },
   ],
   faq: [
     {
@@ -181,7 +185,7 @@ export const aiActPmeObligations: BlogArticle = {
         "Oui, c’est l’article 4, en vigueur depuis février 2025, qui l’impose à tout fournisseur et tout déployeur, sans distinction de taille. Aucun programme officiel n’est exigé : le format est libre, mais la formation doit être proportionnée aux rôles et l’entreprise doit pouvoir en apporter la preuve.",
     },
   ],
-  relatedArticles: ["business-case-ia"],
+  relatedArticles: ["charte-ia-entreprise", "business-case-ia"],
   relatedCasUsage: ["assistant-support-client", "qualification-leads"],
   relatedSecteurs: ["sante-medico-social", "assurance-mutuelle"],
 };
