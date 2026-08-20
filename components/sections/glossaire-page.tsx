@@ -28,11 +28,11 @@ export function GlossairePageTemplate({
         <div className="mx-auto max-w-[1200px] px-6 pt-12 pb-16 lg:pt-16 lg:pb-20">
           <Breadcrumb items={breadcrumb} />
           <ScrollReveal className="mt-8 max-w-[52rem]">
-            <h1 className="text-balance font-display text-4xl leading-[1.05] font-bold tracking-[-0.03em] sm:text-5xl">
+            <h1 className="type-h1">
               {term.h1}
             </h1>
             <div className="mt-8 border-l-2 border-primary/60 pl-6">
-              <p className="font-mono text-xs uppercase tracking-[0.12em] text-muted-foreground">
+              <p className="type-label text-muted-foreground">
                 {glossaireShared.definitionLabel}
               </p>
               <p className="mt-3 max-w-[60ch] text-pretty text-xl leading-relaxed text-foreground lg:text-2xl">
@@ -48,7 +48,7 @@ export function GlossairePageTemplate({
         <div className="mx-auto max-w-[1200px] px-6 py-16 lg:py-20">
           <div className="flex max-w-[46rem] flex-col gap-12">
             <ScrollReveal className="flex flex-col gap-4">
-              <h2 className="text-balance font-display text-2xl leading-snug font-medium tracking-[-0.01em] lg:text-[1.75rem]">
+              <h2 className="type-h3">
                 {glossaireShared.explanationTitle}
               </h2>
               <p className="max-w-[65ch] text-pretty text-lg leading-relaxed text-muted-foreground">
@@ -56,7 +56,7 @@ export function GlossairePageTemplate({
               </p>
             </ScrollReveal>
             <ScrollReveal className="flex flex-col gap-4">
-              <h2 className="text-balance font-display text-2xl leading-snug font-medium tracking-[-0.01em] lg:text-[1.75rem]">
+              <h2 className="type-h3">
                 {glossaireShared.whatItChangesTitle}
               </h2>
               <p className="max-w-[65ch] text-pretty text-lg leading-relaxed text-muted-foreground">
@@ -72,7 +72,7 @@ export function GlossairePageTemplate({
         <div className="mx-auto max-w-[1200px] px-6 py-16 lg:py-20">
           <ScrollReveal className="max-w-[52rem]">
             <div className="rounded-lg border border-border bg-card p-8 lg:p-10">
-              <span className="font-mono text-xs uppercase tracking-[0.12em] text-muted-foreground">
+              <span className="type-label text-muted-foreground">
                 {glossaireShared.exampleTitle}
               </span>
               <p className="mt-4 max-w-[64ch] text-pretty text-lg leading-relaxed text-foreground">
@@ -91,7 +91,7 @@ export function GlossairePageTemplate({
       <section className="border-t border-border">
         <div className="mx-auto max-w-[1200px] px-6 py-16 lg:py-20">
           <ScrollReveal className="flex max-w-[46rem] flex-col gap-6">
-            <h2 className="text-balance font-display text-2xl leading-snug font-medium tracking-[-0.01em] lg:text-[1.75rem]">
+            <h2 className="type-h3">
               {glossaireShared.cta.title}
             </h2>
             <p className="max-w-[54ch] text-pretty text-lg leading-relaxed text-muted-foreground">

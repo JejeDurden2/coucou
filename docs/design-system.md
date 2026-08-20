@@ -90,6 +90,8 @@ CSS vars: `--font-display`, `--font-sans`, `--font-mono`.
 | Label | 0.75rem (12) | 1.4 | +0.12em, uppercase | Geist Mono 500, `muted-foreground` |
 | Metric (stat) | 2.5rem to 4rem (40/64) | 1.0 | -0.02em | Space Grotesk 700, `tabular-nums` |
 
+Ces roles sont figes en utilitaires dans `app/globals.css` : `type-h1`, `type-h2`, `type-h3`, `type-h4`, `type-h5`, `type-label`, `type-metric`. Un composant appelle la classe du role, jamais taille + graisse + interlettrage a la main (seule exception : la taille d'une metrique, posee a cote de `type-metric`). Une taille arbitraire (`text-[2rem]`) dans un composant est un bug de systeme.
+
 Rules: headlines `text-balance`; body/lede `text-pretty`, capped `max-w-[65ch]`. Numbers always `tabular-nums`. Emphasis inside a headline uses bold/italic of the **same** family, never a swapped font.
 
 ---

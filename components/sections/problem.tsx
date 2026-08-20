@@ -7,7 +7,7 @@ export function Problem() {
       <div className="mx-auto max-w-[1200px] px-6 py-20 lg:py-28">
         <ScrollReveal className="grid grid-cols-1 gap-12 lg:grid-cols-2 lg:gap-16">
           <div>
-            <h2 className="text-balance font-display text-[2rem] leading-[1.08] font-bold tracking-[-0.02em] lg:text-[2.75rem]">
+            <h2 className="type-h2">
               {problem.title}
             </h2>
             <p className="mt-6 max-w-[48ch] text-pretty text-lg leading-relaxed text-muted-foreground">

@@ -32,7 +32,7 @@ function ArticleBlock({ block }: { block: BlogBlock }) {
         // scroll-mt : le header collant (64 px) ne recouvre pas l’ancre visée.
         <h2
           id={block.id}
-          className="mt-8 scroll-mt-24 text-balance font-display text-2xl leading-snug font-bold tracking-[-0.02em] text-foreground lg:text-[2rem]"
+          className="mt-8 scroll-mt-24 type-h2 text-foreground"
         >
           <span aria-hidden className="mb-4 block h-0.5 w-8 bg-primary" />
           {block.text}
@@ -40,7 +40,7 @@ function ArticleBlock({ block }: { block: BlogBlock }) {
       );
     case "h3":
       return (
-        <h3 className="mt-4 text-balance font-display text-xl leading-snug font-medium tracking-[-0.01em] text-foreground lg:text-2xl">
+        <h3 className="mt-4 type-h4 text-foreground">
           {block.text}
         </h3>
       );
@@ -73,7 +73,7 @@ function ArticleBlock({ block }: { block: BlogBlock }) {
             {inline(block.text)}
           </blockquote>
           {block.source ? (
-            <figcaption className="mt-3 font-mono text-xs uppercase tracking-[0.12em] text-muted-foreground">
+            <figcaption className="mt-3 type-label text-muted-foreground">
               {block.source}
             </figcaption>
           ) : null}
@@ -82,7 +82,7 @@ function ArticleBlock({ block }: { block: BlogBlock }) {
     case "callout":
       return (
         <div className="rounded-lg border border-border bg-card p-6 lg:p-8">
-          <p className="font-display text-base leading-snug font-medium tracking-[-0.01em] text-foreground">
+          <p className="type-h5 text-foreground">
             {block.title}
           </p>
           <p className="mt-3 text-pretty leading-relaxed text-muted-foreground">
@@ -124,7 +124,7 @@ export function BlogArticleTemplate({
         <div className="mx-auto max-w-[1200px] px-6 pt-12 pb-12 lg:pt-16 lg:pb-16">
           <Breadcrumb items={breadcrumb} />
           <ScrollReveal className="mt-8 max-w-[52rem]">
-            <p className="font-mono text-xs uppercase tracking-[0.12em] text-muted-foreground">
+            <p className="type-label text-muted-foreground">
               {article.category}
               <span aria-hidden> · </span>
               {formatLongDate(article.publishedAt)}
@@ -133,7 +133,7 @@ export function BlogArticleTemplate({
                 {readingMinutes(article)} {blogArticleCopy.readingSuffix}
               </span>
             </p>
-            <h1 className="mt-4 text-balance font-display text-4xl leading-[1.05] font-bold tracking-[-0.03em] sm:text-5xl">
+            <h1 className="mt-4 type-h1">
               {article.title}
             </h1>
             <p className="mt-6 max-w-[58ch] text-pretty text-lg leading-relaxed text-muted-foreground lg:text-xl">
@@ -150,7 +150,7 @@ export function BlogArticleTemplate({
             <div className="min-w-0">
               {/* Le bloc citable : il vit avant le corps, pas en conclusion. */}
               <ScrollReveal className="max-w-[65ch] rounded-lg border border-border bg-card p-6 lg:p-8">
-                <h2 className="font-mono text-xs uppercase tracking-[0.12em] text-muted-foreground">
+                <h2 className="type-label text-muted-foreground">
                   {blogArticleCopy.takeawaysTitle}
                 </h2>
                 <ul className="mt-5 flex flex-col gap-4">
@@ -176,7 +176,7 @@ export function BlogArticleTemplate({
 
               {article.faq && article.faq.length > 0 ? (
                 <div className="mt-16 max-w-[65ch] border-t border-border pt-12">
-                  <h2 className="text-balance font-display text-2xl leading-snug font-bold tracking-[-0.02em] lg:text-[2rem]">
+                  <h2 className="type-h2">
                     {blogArticleCopy.faqTitle}
                   </h2>
                   <dl className="mt-8 flex flex-col gap-8">
@@ -202,7 +202,7 @@ export function BlogArticleTemplate({
                 className="hidden lg:block"
               >
                 <div className="sticky top-24">
-                  <p className="font-mono text-xs uppercase tracking-[0.12em] text-muted-foreground">
+                  <p className="type-label text-muted-foreground">
                     {blogArticleCopy.tocTitle}
                   </p>
                   <ul className="mt-5 flex flex-col gap-3 border-l border-border pl-4">
@@ -228,7 +228,7 @@ export function BlogArticleTemplate({
         <section className="border-t border-border">
           <div className="mx-auto max-w-[1200px] px-6 py-16 lg:py-20">
             <ScrollReveal>
-              <h2 className="text-balance font-display text-2xl leading-snug font-medium tracking-[-0.01em] lg:text-[1.75rem]">
+              <h2 className="type-h3">
                 {blogArticleCopy.relatedArticlesTitle}
               </h2>
             </ScrollReveal>
@@ -239,10 +239,10 @@ export function BlogArticleTemplate({
                     href={related.href}
                     className={`flex flex-col gap-2 border-b border-border py-6 transition-colors hover:border-input sm:flex-row sm:items-baseline sm:justify-between sm:gap-8 ${linkFocus}`}
                   >
-                    <span className="font-display text-lg leading-snug font-medium tracking-[-0.01em] text-foreground">
+                    <span className="type-h5 text-foreground">
                       {related.title}
                     </span>
-                    <span className="font-mono text-xs uppercase tracking-[0.12em] text-muted-foreground">
+                    <span className="type-label text-muted-foreground">
                       {related.category}
                     </span>
                   </Link>
@@ -262,7 +262,7 @@ export function BlogArticleTemplate({
       <section className="border-t border-border">
         <div className="mx-auto max-w-[1200px] px-6 py-16 lg:py-20">
           <ScrollReveal className="flex max-w-[46rem] flex-col gap-6">
-            <h2 className="text-balance font-display text-2xl leading-snug font-medium tracking-[-0.01em] lg:text-[1.75rem]">
+            <h2 className="type-h3">
               {blogArticleCopy.cta.title}
             </h2>
             <p className="max-w-[54ch] text-pretty text-lg leading-relaxed text-muted-foreground">

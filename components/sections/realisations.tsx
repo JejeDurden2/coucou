@@ -15,7 +15,7 @@ export function Realisations() {
     <section className="border-t border-border">
       <div className="mx-auto max-w-[1200px] px-6 py-20 lg:py-28">
         <ScrollReveal className="max-w-[46rem]">
-          <h2 className="text-balance font-display text-[2rem] leading-[1.08] font-bold tracking-[-0.02em] lg:text-[2.75rem]">
+          <h2 className="type-h2">
             {realisations.title}
           </h2>
           <p className="mt-5 max-w-[54ch] text-pretty text-lg leading-relaxed text-muted-foreground">
@@ -59,7 +59,7 @@ export function Realisations() {
                   </Badge>
                 </div>
 
-                <h3 className="mt-5 flex items-center gap-3 font-display text-[1.75rem] leading-none font-bold tracking-[-0.02em]">
+                <h3 className="mt-5 flex items-center gap-3 type-metric text-[1.75rem]">
                   {/* unoptimized : SVG servi tel quel, l'optimiseur d'images le refuse. */}
                   <Image
                     src={item.logo}

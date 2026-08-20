@@ -28,7 +28,7 @@ export function HubSection({
           items={[{ label: "Accueil", href: "/" }, { label: breadcrumbLabel }]}
         />
         <ScrollReveal className="mt-8 max-w-[46rem]">
-          <h1 className="text-balance font-display text-4xl leading-[1.05] font-bold tracking-[-0.03em] sm:text-5xl">
+          <h1 className="type-h1">
             {h1}
           </h1>
           <p className="mt-6 max-w-[54ch] text-pretty text-lg leading-relaxed text-muted-foreground lg:text-xl">
@@ -43,13 +43,13 @@ export function HubSection({
                 href={item.href}
                 className="group/hub flex h-full flex-col gap-3 rounded-lg border border-border bg-card p-6 outline-none transition-colors hover:border-input focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
               >
-                <h2 className="font-display text-xl leading-snug font-medium tracking-[-0.01em] text-foreground">
+                <h2 className="type-h4 text-foreground">
                   {item.name}
                 </h2>
                 <p className="text-sm leading-relaxed text-muted-foreground">
                   {item.description}
                 </p>
-                <span className="mt-auto inline-flex items-center gap-1.5 pt-2 font-mono text-xs uppercase tracking-[0.1em] text-primary">
+                <span className="mt-auto inline-flex items-center gap-1.5 pt-2 type-label text-primary">
                   {spokes.hubCardCta}
                   <ArrowRight aria-hidden className="size-3.5" />
                 </span>

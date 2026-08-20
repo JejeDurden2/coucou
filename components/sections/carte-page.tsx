@@ -30,13 +30,13 @@ export function CartePageTemplate({
 
           <div className="mt-8 grid grid-cols-1 gap-12 lg:grid-cols-12 lg:gap-16">
             <ScrollReveal className="lg:col-span-7">
-              <h1 className="text-balance font-display text-4xl leading-[1.05] font-bold tracking-[-0.03em] sm:text-5xl">
+              <h1 className="type-h1">
                 {page.h1}
               </h1>
               <p className="mt-6 max-w-[54ch] text-pretty text-lg leading-relaxed text-muted-foreground lg:text-xl">
                 {page.lede}
               </p>
-              <p className="mt-6 font-mono text-xs tracking-[0.08em] text-foreground-dim uppercase">
+              <p className="mt-6 type-label text-foreground-dim">
                 {page.useCases.length} cas d’usage
                 <span aria-hidden> · </span>
                 {ressourcesShared.heroMetaClassement}
@@ -86,7 +86,7 @@ export function CartePageTemplate({
                 },
               ].map((item) => (
                 <div key={item.term} className="flex flex-col gap-3 border-l-2 border-primary/60 pl-5">
-                  <dt className="font-mono text-xs tracking-[0.12em] text-muted-foreground uppercase">
+                  <dt className="type-label text-muted-foreground">
                     {item.term}
                   </dt>
                   <dd className="text-pretty text-sm leading-relaxed text-foreground">
@@ -112,16 +112,16 @@ export function CartePageTemplate({
               <div className="grid grid-cols-1 gap-10 py-12 lg:grid-cols-12 lg:gap-16 lg:py-16">
                 <ScrollReveal className="lg:col-span-7">
                   <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1">
-                    <span className="font-display text-xl leading-none font-bold tabular-nums text-primary">
+                    <span className="type-metric text-xl text-primary">
                       {String(index + 1).padStart(2, "0")}
                     </span>
-                    <span className="font-mono text-[10px] tracking-[0.12em] text-foreground-dim uppercase">
+                    <span className="type-label text-foreground-dim">
                       {ressourcesShared.axisImpact} {useCase.impact}/3
                       <span aria-hidden> · </span>
                       {ressourcesShared.axisFaisabilite} {useCase.faisabilite}/3
                     </span>
                   </div>
-                  <h2 className="mt-4 text-balance font-display text-2xl leading-snug font-medium tracking-[-0.01em] lg:text-[1.75rem]">
+                  <h2 className="mt-4 type-h3">
                     {useCase.title}
                   </h2>
                   <p className="mt-5 max-w-[62ch] text-pretty leading-relaxed text-muted-foreground">
@@ -131,7 +131,7 @@ export function CartePageTemplate({
                     {useCase.solution}
                   </p>
                   <p className="mt-6 max-w-[62ch] text-sm leading-relaxed text-muted-foreground">
-                    <span className="font-mono text-xs tracking-[0.12em] text-foreground-dim uppercase">
+                    <span className="type-label text-foreground-dim">
                       {ressourcesShared.branchementLabel}
                     </span>{" "}
                     {useCase.branchement}
@@ -140,7 +140,7 @@ export function CartePageTemplate({
 
                 <ScrollReveal delay={0.05} className="flex flex-col gap-8 lg:col-span-4 lg:col-start-9">
                   <div className="flex flex-col gap-2">
-                    <span className="font-display text-4xl leading-none font-bold tracking-[-0.02em] tabular-nums text-primary">
+                    <span className="type-metric text-4xl text-primary">
                       {useCase.metric}
                     </span>
                     <span className="text-pretty text-sm leading-relaxed text-muted-foreground">
@@ -149,7 +149,7 @@ export function CartePageTemplate({
                   </div>
 
                   <div className="rounded-lg border border-border bg-card p-5">
-                    <span className="font-mono text-xs tracking-[0.12em] text-muted-foreground uppercase">
+                    <span className="type-label text-muted-foreground">
                       {ressourcesShared.questionsTitle}
                     </span>
                     <ul className="mt-4 flex flex-col gap-3">
@@ -175,7 +175,7 @@ export function CartePageTemplate({
       <section className="border-t border-border">
         <div className="mx-auto max-w-[1200px] px-6 py-16 lg:py-20">
           <ScrollReveal className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-16">
-            <h2 className="text-balance font-display text-2xl leading-snug font-medium tracking-[-0.01em] lg:col-span-4 lg:text-[1.75rem]">
+            <h2 className="type-h3 lg:col-span-4">
               {ressourcesShared.verdictTitle}
             </h2>
             <p className="max-w-[62ch] text-pretty text-lg leading-relaxed text-foreground lg:col-span-8">
@@ -192,7 +192,7 @@ export function CartePageTemplate({
         <div className="mx-auto max-w-[1200px] px-6 py-16 lg:py-20">
           <ScrollReveal className="grid grid-cols-1 gap-10 rounded-lg border border-border bg-card p-8 lg:grid-cols-2 lg:gap-16 lg:p-12">
             <div>
-              <h2 className="text-balance font-display text-2xl leading-snug font-medium tracking-[-0.01em]">
+              <h2 className="type-h3">
                 {ressourcesShared.emailTitle}
               </h2>
               <p className="mt-3 max-w-[52ch] text-pretty leading-relaxed text-muted-foreground">
@@ -213,7 +213,7 @@ export function CartePageTemplate({
       <section className="border-t border-border">
         <div className="mx-auto max-w-[1200px] px-6 py-24 lg:py-32">
           <ScrollReveal className="mx-auto flex max-w-[46rem] flex-col items-center text-center">
-            <h2 className="text-balance font-display text-[2.5rem] leading-[1.05] font-bold tracking-[-0.03em] sm:text-5xl lg:text-6xl">
+            <h2 className="type-h1">
               {ressourcesShared.closingTitle}
             </h2>
             <p className="mt-6 max-w-[52ch] text-pretty text-lg leading-relaxed text-muted-foreground">

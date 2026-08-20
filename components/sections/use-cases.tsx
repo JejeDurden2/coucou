@@ -9,7 +9,7 @@ export function UseCases() {
     <section className="border-t border-border">
       <div className="mx-auto max-w-[1200px] px-6 py-20 lg:py-28">
         <ScrollReveal className="max-w-[46rem]">
-          <h2 className="text-balance font-display text-[2rem] leading-[1.08] font-bold tracking-[-0.02em] lg:text-[2.75rem]">
+          <h2 className="type-h2">
             {useCases.title}
           </h2>
           <p className="mt-5 max-w-[54ch] text-pretty text-lg leading-relaxed text-muted-foreground">
@@ -27,7 +27,7 @@ export function UseCases() {
                 className="group/uc -mx-4 grid grid-cols-1 gap-4 rounded-lg border-b border-border px-4 py-7 outline-none transition-colors hover:bg-card focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background md:grid-cols-12 md:gap-8"
               >
                 <div className="md:col-span-7">
-                  <h3 className="flex items-center gap-2 font-display text-xl leading-snug font-medium tracking-[-0.01em]">
+                  <h3 className="flex items-center gap-2 type-h4">
                     <span className="underline-offset-4 group-hover/uc:underline">
                       {useCase.title}
                     </span>
@@ -41,7 +41,7 @@ export function UseCases() {
                   </p>
                 </div>
                 <div className="md:col-span-5 md:border-l md:border-border md:pl-8">
-                  <span className="font-mono text-xs uppercase tracking-[0.12em] text-muted-foreground">
+                  <span className="type-label text-muted-foreground">
                     {useCase.gainLabel}
                   </span>
                   <p className="mt-2.5 text-pretty leading-relaxed tabular-nums text-foreground">

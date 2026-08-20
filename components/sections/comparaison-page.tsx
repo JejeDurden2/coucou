@@ -25,7 +25,7 @@ export function ComparaisonPageTemplate({
       <section className="border-t border-border">
         <div className="mx-auto max-w-[1200px] px-6 py-16 lg:py-20">
           <ScrollReveal className="max-w-4xl border-l-2 border-primary pl-6 lg:pl-8">
-            <span className="font-mono text-xs uppercase tracking-[0.12em] text-primary">
+            <span className="type-label text-primary">
               {comparaisonsCopy.verdictLabel}
             </span>
             <p className="mt-4 text-pretty text-lg leading-relaxed text-foreground lg:text-xl">
@@ -40,19 +40,19 @@ export function ComparaisonPageTemplate({
       <section className="border-t border-border">
         <div className="mx-auto max-w-[1200px] px-6 py-16 lg:py-20">
           <ScrollReveal className="max-w-[46rem]">
-            <h2 className="text-balance font-display text-2xl leading-snug font-medium tracking-[-0.01em] lg:text-[1.75rem]">
+            <h2 className="type-h3">
               {comparaisonsCopy.tableTitle}
             </h2>
           </ScrollReveal>
           <ScrollReveal className="mt-10 overflow-hidden rounded-lg border border-border">
             <div className="hidden md:grid md:grid-cols-[1.1fr_1fr_1fr]">
-              <div className="px-6 py-4 font-mono text-xs uppercase tracking-[0.12em] text-muted-foreground">
+              <div className="px-6 py-4 type-label text-muted-foreground">
                 {comparaisonsCopy.criterionHead}
               </div>
-              <div className="border-l border-border px-6 py-4 font-mono text-xs uppercase tracking-[0.12em] text-primary">
+              <div className="border-l border-border px-6 py-4 type-label text-primary">
                 {comparaisonsCopy.coucouHead}
               </div>
-              <div className="border-l border-border px-6 py-4 font-mono text-xs uppercase tracking-[0.12em] text-muted-foreground">
+              <div className="border-l border-border px-6 py-4 type-label text-muted-foreground">
                 {page.otherColumn}
               </div>
             </div>
@@ -64,12 +64,12 @@ export function ComparaisonPageTemplate({
                 }`}
               >
                 <div className="px-6 py-5">
-                  <span className="font-display text-base leading-snug font-medium tracking-[-0.01em] text-foreground">
+                  <span className="type-h5 text-foreground">
                     {row.criterion}
                   </span>
                 </div>
                 <div className="border-t border-border px-6 py-5 md:border-t-0 md:border-l md:border-border">
-                  <span className="mb-2 block font-mono text-xs uppercase tracking-[0.12em] text-primary md:hidden">
+                  <span className="mb-2 block type-label text-primary md:hidden">
                     {comparaisonsCopy.coucouHead}
                   </span>
                   <p className="text-pretty text-sm leading-relaxed text-foreground">
@@ -77,7 +77,7 @@ export function ComparaisonPageTemplate({
                   </p>
                 </div>
                 <div className="border-t border-border px-6 py-5 md:border-t-0 md:border-l md:border-border">
-                  <span className="mb-2 block font-mono text-xs uppercase tracking-[0.12em] text-muted-foreground md:hidden">
+                  <span className="mb-2 block type-label text-muted-foreground md:hidden">
                     {page.otherColumn}
                   </span>
                   <p className="text-pretty text-sm leading-relaxed text-muted-foreground">
@@ -94,7 +94,7 @@ export function ComparaisonPageTemplate({
       <section className="border-t border-border">
         <div className="mx-auto max-w-[1200px] px-6 py-16 lg:py-20">
           <ScrollReveal className="max-w-[46rem]">
-            <h2 className="text-balance font-display text-2xl leading-snug font-medium tracking-[-0.01em] lg:text-[1.75rem]">
+            <h2 className="type-h3">
               {comparaisonsCopy.differencesTitle}
             </h2>
           </ScrollReveal>
@@ -102,7 +102,7 @@ export function ComparaisonPageTemplate({
             {page.differences.map((diff, index) => (
               <ScrollReveal key={diff.title} delay={index * 0.04}>
                 <div className="grid grid-cols-1 gap-3 border-t border-border py-8 lg:grid-cols-12 lg:gap-10">
-                  <h3 className="text-balance font-display text-xl leading-snug font-medium tracking-[-0.01em] lg:col-span-5">
+                  <h3 className="type-h4 lg:col-span-5">
                     {diff.title}
                   </h3>
                   <p className="max-w-[62ch] text-pretty leading-relaxed text-muted-foreground lg:col-span-7">
@@ -120,7 +120,7 @@ export function ComparaisonPageTemplate({
         <div className="mx-auto max-w-[1200px] px-6 py-16 lg:py-20">
           <ScrollReveal className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-16">
             <div className="lg:col-span-5">
-              <h2 className="text-balance font-display text-2xl leading-snug font-medium tracking-[-0.01em] lg:text-[1.75rem]">
+              <h2 className="type-h3">
                 {page.whenOther.title}
               </h2>
               <p className="mt-4 max-w-[46ch] text-pretty leading-relaxed text-muted-foreground">

@@ -27,7 +27,7 @@ export function RessourceForm({ slug }: { slug: string }) {
         aria-live="polite"
         className="flex flex-col gap-2 rounded-lg border border-border bg-background p-6"
       >
-        <h3 className="font-display text-xl leading-snug font-medium tracking-[-0.01em]">
+        <h3 className="type-h4">
           {ressourcesShared.successTitle}
         </h3>
         <p className="text-pretty leading-relaxed text-muted-foreground">

@@ -254,7 +254,7 @@ export function PossiblesMap() {
         className="absolute top-0 left-1/2 h-135 w-133 origin-top"
         style={{ transform: `translateX(-50%) scale(${scale})` }}
       >
-        <span className="absolute -top-3.5 right-0 font-mono text-[10px] tracking-[0.12em] text-accent-2 uppercase">
+        <span className="absolute -top-3.5 right-0 type-label text-accent-2">
           {hero.mapLabel}
         </span>
 
@@ -289,11 +289,11 @@ export function PossiblesMap() {
                     aria-hidden
                     className="size-1.75 shrink-0 rounded-full border border-accent-2"
                   />
-                  <span className="font-mono text-[10px] tracking-[0.12em] text-muted-foreground uppercase">
+                  <span className="type-label text-muted-foreground">
                     {item.category}
                   </span>
                 </span>
-                <span className="text-[13px] leading-snug font-medium">
+                <span className="text-sm leading-snug font-medium">
                   {item.line}
                 </span>
               </li>

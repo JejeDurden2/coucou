@@ -22,7 +22,7 @@ const COLLISION_OFFSETS: [number, number][] = [
 ];
 
 const quadrantClasses =
-  "pointer-events-none absolute font-mono text-[9px] tracking-[0.1em] text-foreground-dim uppercase";
+  "pointer-events-none absolute font-mono text-[10px] tracking-[0.12em] text-foreground-dim uppercase";
 
 export function CarteMatrix({
   useCases,
@@ -64,7 +64,7 @@ export function CarteMatrix({
         {/* Axe vertical : écrit de bas en haut, la flèche pointe vers le haut. */}
         <span
           aria-hidden
-          className="self-center font-mono text-[10px] tracking-[0.12em] text-muted-foreground uppercase [writing-mode:vertical-rl] rotate-180"
+          className="self-center type-label text-muted-foreground [writing-mode:vertical-rl] rotate-180"
         >
           {ressourcesShared.axisImpact} →
         </span>
@@ -117,7 +117,7 @@ export function CarteMatrix({
 
       <span
         aria-hidden
-        className="self-end font-mono text-[10px] tracking-[0.12em] text-muted-foreground uppercase"
+        className="self-end type-label text-muted-foreground"
       >
         {ressourcesShared.axisFaisabilite} →
       </span>

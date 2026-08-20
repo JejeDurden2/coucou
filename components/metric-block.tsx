@@ -14,10 +14,10 @@ type MetricBlockProps = {
 export function MetricBlock({ value, label, marked = false, className }: MetricBlockProps) {
   return (
     <div className={cn("flex flex-col gap-3", className)}>
-      <span className="font-mono text-xs uppercase tracking-[0.12em] text-muted-foreground">
+      <span className="type-label text-muted-foreground">
         {label}
       </span>
-      <span className="font-display text-[2.5rem] leading-none font-bold tracking-[-0.02em] tabular-nums text-foreground lg:text-[4rem]">
+      <span className="type-metric text-[2.5rem] text-foreground lg:text-[4rem]">
         {value}
       </span>
       {marked ? (

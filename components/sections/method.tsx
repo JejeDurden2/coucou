@@ -12,7 +12,7 @@ export function Method() {
     <section id="methode" className="scroll-mt-20 border-t border-border">
       <div className="mx-auto max-w-[1200px] px-6 py-20 lg:py-28">
         <ScrollReveal className="max-w-[46rem]">
-          <h2 className="text-balance font-display text-[2rem] leading-[1.08] font-bold tracking-[-0.02em] lg:text-[2.75rem]">
+          <h2 className="type-h2">
             {method.title}
           </h2>
           <p className="mt-5 max-w-[54ch] text-pretty text-lg leading-relaxed text-muted-foreground">
@@ -51,7 +51,7 @@ export function Method() {
                   </div>
 
                   <div className="pb-1">
-                    <h3 className="font-display text-xl leading-snug font-medium tracking-[-0.01em]">
+                    <h3 className="type-h4">
                       {step.title}
                     </h3>
                     <p className="mt-3 max-w-[62ch] text-pretty leading-relaxed text-muted-foreground">

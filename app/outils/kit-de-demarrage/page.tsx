@@ -46,7 +46,7 @@ export default function KitDeDemarragePage() {
           <div className="mx-auto max-w-[1200px] px-6 pt-12 pb-16 lg:pt-16 lg:pb-20">
             <Breadcrumb items={breadcrumb} className="mb-8" />
             <div className="max-w-[52rem]">
-              <h1 className="text-balance font-display text-4xl leading-[1.05] font-bold tracking-[-0.03em] sm:text-5xl">
+              <h1 className="type-h1">
                 {kit.h1}
               </h1>
               <p className="mt-6 max-w-[54ch] text-pretty text-lg leading-relaxed text-muted-foreground lg:text-xl">

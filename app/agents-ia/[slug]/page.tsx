@@ -78,7 +78,7 @@ export default async function AgentSpokePage({ params }: Params) {
         <section className="border-t border-border">
           <div className="mx-auto max-w-[1200px] px-6 py-16 lg:py-20">
             <ScrollReveal className="max-w-4xl border-l-2 border-primary pl-6 lg:pl-8">
-              <span className="font-mono text-xs uppercase tracking-[0.12em] text-primary">
+              <span className="type-label text-primary">
                 {agentsCopy.verdictLabel}
               </span>
               <p className="mt-4 text-pretty text-lg leading-relaxed text-foreground lg:text-xl">
@@ -92,7 +92,7 @@ export default async function AgentSpokePage({ params }: Params) {
         <section className="border-t border-border">
           <div className="mx-auto max-w-[1200px] px-6 py-16 lg:py-20">
             <ScrollReveal className="max-w-[46rem]">
-              <h2 className="text-balance font-display text-2xl leading-snug font-medium tracking-[-0.01em] lg:text-[1.75rem]">
+              <h2 className="type-h3">
                 {agentsCopy.factsTitle}
               </h2>
             </ScrollReveal>
@@ -105,7 +105,7 @@ export default async function AgentSpokePage({ params }: Params) {
                   }`}
                 >
                   <div className="px-6 py-5">
-                    <span className="font-mono text-xs uppercase tracking-[0.12em] text-muted-foreground">
+                    <span className="type-label text-muted-foreground">
                       {fact.label}
                     </span>
                   </div>
@@ -124,7 +124,7 @@ export default async function AgentSpokePage({ params }: Params) {
         <section className="border-t border-border">
           <div className="mx-auto max-w-[1200px] px-6 py-16 lg:py-20">
             <ScrollReveal className="max-w-[46rem]">
-              <h2 className="text-balance font-display text-2xl leading-snug font-medium tracking-[-0.01em] lg:text-[1.75rem]">
+              <h2 className="type-h3">
                 {agentsCopy.strengthsTitle}
               </h2>
             </ScrollReveal>
@@ -132,7 +132,7 @@ export default async function AgentSpokePage({ params }: Params) {
               {page.strengths.map((strength, index) => (
                 <ScrollReveal key={strength.title} delay={index * 0.04}>
                   <div className="h-full rounded-lg border border-border bg-card p-6">
-                    <h3 className="font-display text-lg leading-snug font-medium tracking-[-0.01em] text-foreground">
+                    <h3 className="type-h5 text-foreground">
                       {strength.title}
                     </h3>
                     <p className="mt-3 text-pretty text-sm leading-relaxed text-muted-foreground">
@@ -149,7 +149,7 @@ export default async function AgentSpokePage({ params }: Params) {
         <section className="border-t border-border">
           <div className="mx-auto max-w-[1200px] px-6 py-16 lg:py-20">
             <ScrollReveal className="max-w-[46rem]">
-              <h2 className="text-balance font-display text-2xl leading-snug font-medium tracking-[-0.01em] lg:text-[1.75rem]">
+              <h2 className="type-h3">
                 {agentsCopy.risksTitle}
               </h2>
             </ScrollReveal>
@@ -157,7 +157,7 @@ export default async function AgentSpokePage({ params }: Params) {
               {page.risks.map((risk, index) => (
                 <ScrollReveal key={risk.title} delay={index * 0.04}>
                   <div className="grid grid-cols-1 gap-3 border-t border-border py-8 lg:grid-cols-12 lg:gap-10">
-                    <h3 className="text-balance font-display text-xl leading-snug font-medium tracking-[-0.01em] lg:col-span-5">
+                    <h3 className="type-h4 lg:col-span-5">
                       {risk.title}
                     </h3>
                     <p className="max-w-[62ch] text-pretty leading-relaxed text-muted-foreground lg:col-span-7">
@@ -175,7 +175,7 @@ export default async function AgentSpokePage({ params }: Params) {
           <div className="mx-auto max-w-[1200px] px-6 py-16 lg:py-20">
             <ScrollReveal className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-16">
               <div className="lg:col-span-5">
-                <h2 className="text-balance font-display text-2xl leading-snug font-medium tracking-[-0.01em] lg:text-[1.75rem]">
+                <h2 className="type-h3">
                   {page.forWho.title}
                 </h2>
                 <p className="mt-4 max-w-[46ch] text-pretty leading-relaxed text-muted-foreground">
@@ -209,7 +209,7 @@ export default async function AgentSpokePage({ params }: Params) {
               <ScrollReveal className="rounded-lg border border-border bg-card p-8 lg:p-12">
                 <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-16">
                   <div className="lg:col-span-5">
-                    <h2 className="text-balance font-display text-2xl leading-snug font-medium tracking-[-0.01em] lg:text-[1.75rem]">
+                    <h2 className="type-h3">
                       {page.offer.title}
                     </h2>
                     <p className="mt-4 max-w-[46ch] text-pretty leading-relaxed text-muted-foreground">

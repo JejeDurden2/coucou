@@ -27,7 +27,7 @@ export function SpokeHero({
       <div className="mx-auto max-w-[1200px] px-6 pt-12 pb-16 lg:pt-16 lg:pb-20">
         <Breadcrumb items={breadcrumb} />
         <ScrollReveal className="mt-8 max-w-[52rem]">
-          <h1 className="text-balance font-display text-4xl leading-[1.05] font-bold tracking-[-0.03em] sm:text-5xl">
+          <h1 className="type-h1">
             {h1}
           </h1>
           <p className="mt-6 max-w-[54ch] text-pretty text-lg leading-relaxed text-muted-foreground lg:text-xl">
@@ -72,7 +72,7 @@ export function BusinessCaseBlock({
           />
           <ScrollReveal className="relative grid grid-cols-1 gap-8 p-8 lg:grid-cols-2 lg:gap-12 lg:p-12">
             <div>
-              <span className="font-mono text-xs uppercase tracking-[0.12em] text-muted-foreground">
+              <span className="type-label text-muted-foreground">
                 {spokes.businessCaseLabel}
               </span>
               <p className="mt-4 max-w-[52ch] text-pretty text-lg leading-relaxed text-foreground">
@@ -104,7 +104,7 @@ export function ComplianceBlock({ title, body }: { title: string; body: string }
             className="size-5 shrink-0 text-primary sm:mt-1"
           />
           <div>
-            <h2 className="font-display text-2xl leading-snug font-medium tracking-[-0.01em] lg:text-[1.75rem]">
+            <h2 className="type-h3">
               {title}
             </h2>
             <p className="mt-3 max-w-[72ch] text-pretty leading-relaxed text-muted-foreground">
@@ -125,7 +125,7 @@ export function MethodRecap() {
       <div className="mx-auto max-w-[1200px] px-6 py-16 lg:py-20">
         <ScrollReveal className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between lg:gap-16">
           <div className="max-w-[46rem]">
-            <h2 className="text-balance font-display text-2xl leading-snug font-medium tracking-[-0.01em] lg:text-[1.75rem]">
+            <h2 className="type-h3">
               {spokes.methodRecap.title}
             </h2>
             <p className="mt-4 max-w-[60ch] text-pretty leading-relaxed text-muted-foreground">
@@ -165,7 +165,7 @@ export function RelatedLinks({
     <section className="border-t border-border">
       <div className="mx-auto max-w-[1200px] px-6 py-16 lg:py-20">
         <ScrollReveal>
-          <h2 className="text-balance font-display text-2xl leading-snug font-medium tracking-[-0.01em] lg:text-[1.75rem]">
+          <h2 className="type-h3">
             {heading}
           </h2>
         </ScrollReveal>
@@ -176,7 +176,7 @@ export function RelatedLinks({
                 href={link.href}
                 className="group/rel flex items-center justify-between gap-4 rounded-lg border border-border bg-card p-5 outline-none transition-colors hover:border-input focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
               >
-                <span className="font-display text-base leading-snug font-medium tracking-[-0.01em] text-foreground">
+                <span className="type-h5 text-foreground">
                   {link.name}
                 </span>
                 <ArrowRight

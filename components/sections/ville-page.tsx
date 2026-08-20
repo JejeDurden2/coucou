@@ -45,7 +45,7 @@ export function VillePageTemplate({ ville }: { ville: Ville }) {
         <section className="border-t border-border">
           <div className="mx-auto max-w-[1200px] px-6 py-16 lg:py-20">
             <ScrollReveal className="grid grid-cols-1 gap-10 lg:grid-cols-2 lg:gap-16">
-              <h2 className="text-balance font-display text-2xl leading-snug font-medium tracking-[-0.01em] lg:text-[1.75rem]">
+              <h2 className="type-h3">
                 {ville.contexte.title}
               </h2>
               <div className="flex flex-col gap-6">
@@ -67,7 +67,7 @@ export function VillePageTemplate({ ville }: { ville: Ville }) {
         <section className="border-t border-border">
           <div className="mx-auto max-w-[1200px] px-6 py-16 lg:py-20">
             <ScrollReveal className="max-w-[46rem]">
-              <h2 className="text-balance font-display text-2xl leading-snug font-medium tracking-[-0.01em] lg:text-[1.75rem]">
+              <h2 className="type-h3">
                 {villeCommon.carteTitle} {ville.inName}
               </h2>
             </ScrollReveal>
@@ -78,7 +78,7 @@ export function VillePageTemplate({ ville }: { ville: Ville }) {
                     delay={index * 0.04}
                     className="flex h-full flex-col gap-2 rounded-lg border border-border bg-card p-5"
                   >
-                    <span className="font-mono text-xs tracking-[0.12em] text-muted-foreground uppercase">
+                    <span className="type-label text-muted-foreground">
                       {item.category}
                     </span>
                     <span className="text-sm leading-relaxed text-foreground">
@@ -95,7 +95,7 @@ export function VillePageTemplate({ ville }: { ville: Ville }) {
         <section className="border-t border-border">
           <div className="mx-auto max-w-[1200px] px-6 py-16 lg:py-20">
             <ScrollReveal className="max-w-[46rem]">
-              <h2 className="text-balance font-display text-2xl leading-snug font-medium tracking-[-0.01em] lg:text-[1.75rem]">
+              <h2 className="type-h3">
                 {villeCommon.metiersTitle}
               </h2>
             </ScrollReveal>
@@ -107,7 +107,7 @@ export function VillePageTemplate({ ville }: { ville: Ville }) {
                     className="group/metier flex h-full flex-col gap-3 rounded-lg border border-border bg-card p-6 outline-none transition-colors hover:border-input focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
                   >
                     <span className="flex items-center justify-between gap-4">
-                      <span className="font-display text-lg leading-snug font-medium tracking-[-0.01em] text-foreground">
+                      <span className="type-h5 text-foreground">
                         {metier.name}
                       </span>
                       <ArrowRight
@@ -138,7 +138,7 @@ export function VillePageTemplate({ ville }: { ville: Ville }) {
         <section className="border-t border-border">
           <div className="mx-auto max-w-[1200px] px-6 py-16 lg:py-20">
             <ScrollReveal className="max-w-[46rem]">
-              <h2 className="text-balance font-display text-2xl leading-snug font-medium tracking-[-0.01em] lg:text-[1.75rem]">
+              <h2 className="type-h3">
                 {villeCommon.methode.title}
               </h2>
             </ScrollReveal>
@@ -149,7 +149,7 @@ export function VillePageTemplate({ ville }: { ville: Ville }) {
                     <span className="font-mono text-sm tabular-nums text-muted-foreground">
                       0{index + 1}
                     </span>
-                    <h3 className="font-display text-lg leading-snug font-medium tracking-[-0.01em]">
+                    <h3 className="type-h5">
                       {step.title}
                     </h3>
                     <p className="text-sm leading-relaxed text-muted-foreground">

@@ -16,7 +16,7 @@ export default function ErrorPage({ reset }: { error: Error; reset: () => void }
           {errorPage.accroche}
         </p>
 
-        <h1 className="mx-auto mt-6 max-w-[24ch] text-balance font-display text-4xl leading-[1.05] font-bold tracking-[-0.03em] sm:text-5xl">
+        <h1 className="mx-auto mt-6 max-w-[24ch] type-h1">
           {errorPage.headline}
         </h1>
 

@@ -30,7 +30,7 @@ export function FaqList({
       <div className="mx-auto max-w-[1200px] px-6 py-20 lg:py-28">
         <div className="mx-auto max-w-[46rem]">
           <ScrollReveal>
-            <h2 className="text-balance font-display text-[2rem] leading-[1.08] font-bold tracking-[-0.02em] lg:text-[2.75rem]">
+            <h2 className="type-h2">
               {title}
             </h2>
             {sub ? (

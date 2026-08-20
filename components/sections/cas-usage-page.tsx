@@ -32,13 +32,13 @@ export function CasUsagePageTemplate({
       <section className="border-t border-border">
         <div className="mx-auto max-w-[1200px] px-6 py-16 lg:py-20">
           <ScrollReveal className="max-w-[46rem]">
-            <h2 className="text-balance font-display text-2xl leading-snug font-medium tracking-[-0.01em] lg:text-[1.75rem]">
+            <h2 className="type-h3">
               {spokes.casUsage.beforeAfterTitle}
             </h2>
           </ScrollReveal>
           <div className="mt-10 grid grid-cols-1 gap-8 md:grid-cols-2 md:gap-12">
             <div>
-              <span className="font-mono text-xs uppercase tracking-[0.12em] text-muted-foreground">
+              <span className="type-label text-muted-foreground">
                 {spokes.casUsage.beforeLabel}
               </span>
               <ul className="mt-5 flex flex-col gap-4">
@@ -57,7 +57,7 @@ export function CasUsagePageTemplate({
               </ul>
             </div>
             <div className="md:border-l md:border-border md:pl-12">
-              <span className="font-mono text-xs uppercase tracking-[0.12em] text-primary">
+              <span className="type-label text-primary">
                 {spokes.casUsage.afterLabel}
               </span>
               <ul className="mt-5 flex flex-col gap-4">
@@ -83,7 +83,7 @@ export function CasUsagePageTemplate({
       <section className="border-t border-border">
         <div className="mx-auto max-w-[1200px] px-6 py-16 lg:py-20">
           <ScrollReveal className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-16">
-            <h2 className="text-balance font-display text-2xl leading-snug font-medium tracking-[-0.01em] lg:col-span-5 lg:text-[1.75rem]">
+            <h2 className="type-h3 lg:col-span-5">
               {spokes.casUsage.whyNotSaasTitle}
             </h2>
             <p className="max-w-[62ch] text-pretty text-lg leading-relaxed text-muted-foreground lg:col-span-7">
@@ -97,7 +97,7 @@ export function CasUsagePageTemplate({
       <section className="border-t border-border">
         <div className="mx-auto max-w-[1200px] px-6 py-16 lg:py-20">
           <ScrollReveal className="max-w-[46rem]">
-            <h2 className="text-balance font-display text-2xl leading-snug font-medium tracking-[-0.01em] lg:text-[1.75rem]">
+            <h2 className="type-h3">
               {spokes.casUsage.prerequisitesTitle}
             </h2>
           </ScrollReveal>

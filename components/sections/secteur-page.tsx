@@ -32,7 +32,7 @@ export function SecteurPageTemplate({
       <section className="border-t border-border">
         <div className="mx-auto max-w-[1200px] px-6 py-16 lg:py-20">
           <ScrollReveal className="grid grid-cols-1 gap-10 lg:grid-cols-2 lg:gap-16">
-            <h2 className="text-balance font-display text-2xl leading-snug font-medium tracking-[-0.01em] lg:text-[1.75rem]">
+            <h2 className="type-h3">
               {spokes.secteur.painsTitle}
             </h2>
             <ul className="flex flex-col gap-6">
@@ -53,7 +53,7 @@ export function SecteurPageTemplate({
       <section className="border-t border-border">
         <div className="mx-auto max-w-[1200px] px-6 py-16 lg:py-20">
           <ScrollReveal className="max-w-[46rem]">
-            <h2 className="text-balance font-display text-2xl leading-snug font-medium tracking-[-0.01em] lg:text-[1.75rem]">
+            <h2 className="type-h3">
               {spokes.secteur.useCasesTitle}
             </h2>
           </ScrollReveal>
@@ -61,7 +61,7 @@ export function SecteurPageTemplate({
             {page.useCases.map((useCase, index) => (
               <ScrollReveal key={useCase.title} delay={index * 0.04}>
                 <div className="flex h-full flex-col gap-3 rounded-lg border border-border bg-card p-6">
-                  <h3 className="font-display text-lg leading-snug font-medium tracking-[-0.01em]">
+                  <h3 className="type-h5">
                     {useCase.title}
                   </h3>
                   <p className="text-sm leading-relaxed text-muted-foreground">

@@ -49,8 +49,8 @@ const inputClasses = cn(
   "focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
 );
 
-const sectionTitle = "font-display text-xl leading-snug font-medium tracking-[-0.01em]";
-const monoLabel = "font-mono text-xs tracking-[0.12em] uppercase";
+const sectionTitle = "type-h4";
+const monoLabel = "type-label";
 
 function optionClasses(selected: boolean) {
   return cn(
@@ -75,7 +75,7 @@ function MiniButton({
       type="button"
       onClick={onClick}
       className={cn(
-        "inline-flex items-center gap-1.5 rounded-sm py-1 font-mono text-xs tracking-[0.12em] text-muted-foreground uppercase transition-colors hover:text-foreground",
+        "inline-flex items-center gap-1.5 rounded-sm py-1 type-label text-muted-foreground transition-colors hover:text-foreground",
         focusRing
       )}
     >
@@ -221,7 +221,7 @@ export function KitForm() {
                 }}
                 className={optionClasses(draft[question.id] === option.value)}
               >
-                <span className="font-display text-base font-medium text-foreground">
+                <span className="type-h5 text-foreground">
                   {option.label}
                 </span>
                 <ArrowRight
@@ -243,7 +243,7 @@ export function KitForm() {
     if (isAutomation(draft)) {
       return (
         <div role="status" aria-live="polite" className="flex flex-col gap-6">
-          <h2 className="text-balance font-display text-2xl leading-snug font-bold tracking-[-0.02em]">
+          <h2 className="type-h2">
             {kit.automationTitle}
           </h2>
           <p className="max-w-[54ch] text-pretty leading-relaxed text-muted-foreground">
@@ -295,7 +295,7 @@ export function KitForm() {
             porte email ne vit jamais dans une zone live. */}
         <div role="status" aria-live="polite" className="flex flex-col gap-10">
           <div className="flex flex-col gap-4">
-            <h2 className="text-balance font-display text-2xl leading-snug font-bold tracking-[-0.02em] sm:text-3xl">
+            <h2 className="type-h2">
               {kit.verdictTitle}
             </h2>
             {opener ? (
@@ -324,7 +324,7 @@ export function KitForm() {
                     masked && "pointer-events-none blur-sm select-none"
                   )}
                 >
-                  <span className="font-display text-base font-medium text-foreground">
+                  <span className="type-h5 text-foreground">
                     {brick.name}
                   </span>
                   <span className="text-sm leading-relaxed text-muted-foreground">

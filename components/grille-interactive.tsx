@@ -86,7 +86,7 @@ function MiniButton({
       type="button"
       onClick={onClick}
       className={cn(
-        "inline-flex items-center gap-1.5 rounded-sm py-1 font-mono text-xs tracking-[0.12em] text-muted-foreground uppercase transition-colors hover:text-foreground",
+        "inline-flex items-center gap-1.5 rounded-sm py-1 type-label text-muted-foreground transition-colors hover:text-foreground",
         focusRing
       )}
     >
@@ -154,7 +154,7 @@ export function GrilleInteractive({ sectors }: { sectors: GrilleSector[] }) {
       {/* Indicateur d'étape : orientation visuelle, décoratif (les titres portent le sens). */}
       <ol
         aria-hidden
-        className="flex flex-wrap items-center gap-x-3 gap-y-2 font-mono text-xs tracking-[0.12em] uppercase"
+        className="flex flex-wrap items-center gap-x-3 gap-y-2 type-label"
       >
         {STEP_META.map((s, i) => {
           const state = i < activeStepIdx ? "done" : i === activeStepIdx ? "active" : "todo";
@@ -162,7 +162,7 @@ export function GrilleInteractive({ sectors }: { sectors: GrilleSector[] }) {
             <li key={s.key} className="flex items-center gap-2">
               <span
                 className={cn(
-                  "flex size-5 items-center justify-center rounded-full border text-[10px] tabular-nums",
+                  "flex size-5 items-center justify-center rounded-full border font-mono text-[10px] tabular-nums",
                   state === "active" && "border-primary bg-primary text-primary-foreground",
                   state === "done" && "border-primary text-primary",
                   state === "todo" && "border-border text-foreground-dim"
@@ -205,7 +205,7 @@ export function GrilleInteractive({ sectors }: { sectors: GrilleSector[] }) {
     if (step === "sector") {
       return (
         <div className="flex flex-col gap-6">
-          <h2 className="font-display text-2xl leading-snug font-medium tracking-[-0.01em]">
+          <h2 className="type-h3">
             {grille.sectorHeading}
           </h2>
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
@@ -218,10 +218,10 @@ export function GrilleInteractive({ sectors }: { sectors: GrilleSector[] }) {
                 className={optionClasses(sectorSlug === s.slug)}
               >
                 <span className="flex flex-col gap-1">
-                  <span className="font-display text-lg font-medium tracking-[-0.01em] text-foreground">
+                  <span className="type-h5 text-foreground">
                     {s.name}
                   </span>
-                  <span className="font-mono text-xs tracking-[0.12em] text-muted-foreground uppercase">
+                  <span className="type-label text-muted-foreground">
                     {s.useCases.length} {grille.sectorCountLabel}
                   </span>
                 </span>
@@ -252,10 +252,10 @@ export function GrilleInteractive({ sectors }: { sectors: GrilleSector[] }) {
       return (
         <div className="flex flex-col gap-6">
           <div className="flex flex-col gap-1">
-            <span className="font-mono text-xs tracking-[0.12em] text-muted-foreground uppercase">
+            <span className="type-label text-muted-foreground">
               {sector.name}
             </span>
-            <h2 className="font-display text-2xl leading-snug font-medium tracking-[-0.01em]">
+            <h2 className="type-h3">
               {grille.useCaseHeading}
             </h2>
           </div>
@@ -269,7 +269,7 @@ export function GrilleInteractive({ sectors }: { sectors: GrilleSector[] }) {
                 className={optionClasses(useCaseIndex === i)}
               >
                 <span className="flex flex-col gap-1">
-                  <span className="font-display text-base font-medium text-foreground">
+                  <span className="type-h5 text-foreground">
                     {u.title}
                   </span>
                   <span className="line-clamp-1 text-sm text-muted-foreground">
@@ -292,10 +292,10 @@ export function GrilleInteractive({ sectors }: { sectors: GrilleSector[] }) {
       return (
         <div className="flex flex-col gap-8">
           <div className="flex flex-col gap-2">
-            <span className="font-mono text-xs tracking-[0.12em] text-muted-foreground uppercase">
+            <span className="type-label text-muted-foreground">
               {sector.name}
             </span>
-            <h2 className="font-display text-xl leading-snug font-medium tracking-[-0.01em]">
+            <h2 className="type-h4">
               {useCase.title}
             </h2>
             <p className="text-sm text-muted-foreground">{grille.questionsIntro}</p>
@@ -352,28 +352,28 @@ export function GrilleInteractive({ sectors }: { sectors: GrilleSector[] }) {
       const cartePath = `/ressources/${sector.slug}`;
       return (
         <div role="status" aria-live="polite" className="flex flex-col gap-8">
-          <span className="font-mono text-xs tracking-[0.12em] text-muted-foreground uppercase">
+          <span className="type-label text-muted-foreground">
             {sector.name} · {useCase.title}
           </span>
 
           {/* Ordre de grandeur : signal bleu (filet gauche + chiffre), étiqueté illustration. */}
           <div className="flex flex-col gap-1 border-l-2 border-primary pl-4">
-            <span className="font-mono text-[10px] tracking-[0.12em] text-muted-foreground uppercase">
+            <span className="type-label text-muted-foreground">
               {grille.orderLabel}
             </span>
-            <span className="font-display text-2xl leading-tight font-bold tracking-[-0.02em] tabular-nums text-primary">
+            <span className="type-metric text-2xl text-primary">
               {useCase.order}
             </span>
             <span className="text-sm leading-relaxed text-muted-foreground">
               {useCase.orderDetail}
             </span>
-            <span className="font-mono text-[10px] tracking-[0.12em] text-foreground-dim uppercase">
+            <span className="type-label text-foreground-dim">
               {grille.illustrationLabel}
             </span>
           </div>
 
           <div className="flex flex-col gap-3">
-            <h2 className="text-balance font-display text-2xl leading-snug font-bold tracking-[-0.02em] sm:text-3xl">
+            <h2 className="type-h2">
               {verdict.title}
             </h2>
             <p className="max-w-[54ch] text-pretty leading-relaxed text-muted-foreground">

@@ -21,7 +21,7 @@ const linkClasses =
   "rounded-sm text-sm text-muted-foreground outline-none transition-colors hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background";
 
 const headingClasses =
-  "font-mono text-xs font-medium uppercase tracking-[0.12em] text-foreground-dim";
+  "type-label text-foreground-dim";
 
 export function SiteFooter() {
   return (
@@ -30,7 +30,7 @@ export function SiteFooter() {
         <div className="grid gap-12 lg:grid-cols-[minmax(0,4fr)_minmax(0,7fr)] lg:gap-20">
           {/* Bloc marque : identité, positionnement, contact et le CTA unique. */}
           <div className="max-w-[42ch]">
-            <div className="flex items-center gap-2 font-display text-base font-bold tracking-[-0.01em] text-foreground">
+            <div className="flex items-center gap-2 type-h5 text-foreground">
               <LogoMark className="size-6 text-primary" />
               <span>{siteName}</span>
             </div>

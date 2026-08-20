@@ -33,7 +33,7 @@ export function Cta({
       />
       <div className="relative mx-auto max-w-[1200px] px-6 py-24 lg:py-32">
         <ScrollReveal className="mx-auto flex max-w-[46rem] flex-col items-center text-center">
-          <h2 className="text-balance font-display text-[2.5rem] leading-[1.05] font-bold tracking-[-0.03em] sm:text-5xl lg:text-6xl">
+          <h2 className="type-h1">
             {finalCta.title}
           </h2>
           <p className="mt-6 max-w-[52ch] text-pretty text-lg leading-relaxed text-muted-foreground">

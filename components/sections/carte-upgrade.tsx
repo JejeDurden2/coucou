@@ -28,7 +28,7 @@ export function CarteUpgrade({ secteurSlug }: { secteurSlug: string }) {
       <div className="mx-auto max-w-[1200px] px-6 py-10 lg:py-12">
         <ScrollReveal className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between sm:gap-8">
           <div>
-            <h2 className="font-display text-xl leading-snug font-medium tracking-[-0.01em]">
+            <h2 className="type-h4">
               {upgrade.title}
             </h2>
             <p className="mt-2 max-w-[54ch] text-pretty text-sm leading-relaxed text-muted-foreground">

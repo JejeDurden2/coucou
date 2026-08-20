@@ -22,7 +22,7 @@ export function Fondateur({ titleAs: Title = "h2" }: { titleAs?: "h1" | "h2" }) 
             className="w-full max-w-[16rem] rounded-lg border border-border"
           />
           <div>
-            <Title className="font-display text-[2rem] leading-[1.08] font-bold tracking-[-0.02em] lg:text-[2.75rem]">
+            <Title className="type-h2">
               {fondateur.name}
             </Title>
             <p className="mt-2 font-mono text-sm text-foreground-dim">

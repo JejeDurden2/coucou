@@ -274,3 +274,28 @@
     opacity: 1;
   }
 }
+
+/* Échelle typographique (design-system §3). Un rôle = une classe : les
+   composants n'écrivent plus taille + graisse + interlettrage à la main,
+   c'est là que la dérive s'installait. */
+@utility type-h1 {
+  @apply text-balance font-display text-[2.75rem] leading-[1.02] font-bold tracking-[-0.03em] sm:text-[3.5rem] lg:text-[4rem];
+}
+@utility type-h2 {
+  @apply text-balance font-display text-[2rem] leading-[1.08] font-bold tracking-[-0.02em] lg:text-[2.75rem];
+}
+@utility type-h3 {
+  @apply text-balance font-display text-2xl leading-snug font-medium tracking-[-0.01em] lg:text-[1.75rem];
+}
+@utility type-h4 {
+  @apply font-display text-xl leading-snug font-medium tracking-[-0.01em];
+}
+@utility type-h5 {
+  @apply font-display text-lg leading-snug font-medium tracking-[-0.01em];
+}
+@utility type-label {
+  @apply font-mono text-xs font-medium uppercase tracking-[0.12em];
+}
+@utility type-metric {
+  @apply font-display leading-none font-bold tracking-[-0.02em] tabular-nums;
+}

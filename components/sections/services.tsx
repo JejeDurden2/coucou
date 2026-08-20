@@ -18,7 +18,7 @@ function OfferPanel({ offer }: { offer: Service }) {
     <div className="flex h-full flex-col p-8">
       <div className="flex items-start justify-between">
         <div>
-          <h3 className="font-display text-[1.75rem] leading-none font-bold tracking-[-0.02em] lg:text-[2.5rem]">
+          <h3 className="type-metric text-[1.75rem] lg:text-[2.5rem]">
             {offer.verb}
           </h3>
           <p className="mt-2 text-sm font-medium text-muted-foreground">
@@ -53,7 +53,7 @@ function OfferPanel({ offer }: { offer: Service }) {
       <div className="mt-auto flex items-start gap-3 border-t border-border pt-6">
         <span aria-hidden className="mt-1 h-0.5 w-4 shrink-0 bg-primary" />
         <div>
-          <span className="font-mono text-xs uppercase tracking-[0.12em] text-muted-foreground">
+          <span className="type-label text-muted-foreground">
             {services.livrableLabel}
           </span>
           <p className="mt-1.5 text-pretty leading-relaxed text-foreground">
@@ -72,7 +72,7 @@ export function Services() {
     <section id="services" className="scroll-mt-20 border-t border-border">
       <div className="mx-auto max-w-[1200px] px-6 py-20 lg:py-28">
         <ScrollReveal className="mx-auto max-w-[46rem] text-center">
-          <h2 className="text-balance font-display text-[2rem] leading-[1.08] font-bold tracking-[-0.02em] lg:text-[2.75rem]">
+          <h2 className="type-h2">
             {services.title}
           </h2>
           <p className="mx-auto mt-5 max-w-[58ch] text-pretty text-lg leading-relaxed text-muted-foreground">
@@ -96,7 +96,7 @@ export function Services() {
               <FoldMark className="rounded-md border border-border p-2.5" />
               <span aria-hidden className="h-px flex-1 bg-border" />
             </div>
-            <span className="font-mono text-xs uppercase tracking-[0.12em] text-muted-foreground">
+            <span className="type-label text-muted-foreground">
               {services.spineLabel}
             </span>
           </div>
@@ -112,7 +112,7 @@ export function Services() {
             />
             <span aria-hidden className="w-px flex-1 bg-border" />
             <FoldMark className="rounded-md border border-border p-2.5" />
-            <span className="font-mono text-xs uppercase tracking-[0.12em] text-muted-foreground [writing-mode:vertical-rl]">
+            <span className="type-label text-muted-foreground [writing-mode:vertical-rl]">
               {services.spineLabel}
             </span>
             <span aria-hidden className="w-px flex-1 bg-border" />
@@ -133,7 +133,7 @@ export function Services() {
             <div>
               <div className="flex items-start justify-between">
                 <div>
-                  <h3 className="font-display text-[1.75rem] leading-none font-bold tracking-[-0.02em] lg:text-[2.5rem]">
+                  <h3 className="type-metric text-[1.75rem] lg:text-[2.5rem]">
                     {suivi.verb}
                   </h3>
                   <p className="mt-2 text-sm font-medium text-muted-foreground">
@@ -168,7 +168,7 @@ export function Services() {
           <div className="flex items-start gap-3 border-t border-border p-8 pt-6">
             <span aria-hidden className="mt-1 h-0.5 w-4 shrink-0 bg-primary" />
             <div>
-              <span className="font-mono text-xs uppercase tracking-[0.12em] text-muted-foreground">
+              <span className="type-label text-muted-foreground">
                 {services.livrableLabel}
               </span>
               <p className="mt-1.5 text-pretty leading-relaxed text-foreground">
@@ -182,7 +182,7 @@ export function Services() {
             Délais publiés, jamais de prix. */}
         <ScrollReveal className="mt-14 lg:mt-16">
           <div className="mx-auto max-w-[46rem] text-center">
-            <h3 className="text-balance font-display text-2xl leading-[1.1] font-bold tracking-[-0.02em] lg:text-3xl">
+            <h3 className="type-h2">
               {starter.title}
             </h3>
             <p className="mx-auto mt-4 max-w-[54ch] text-pretty leading-relaxed text-muted-foreground">

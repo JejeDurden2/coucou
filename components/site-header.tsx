@@ -53,7 +53,7 @@ export function SiteHeader() {
           href="/#top"
           className={cn(
             linkClasses,
-            "flex items-center gap-2 font-display text-base font-bold tracking-[-0.01em] text-foreground"
+            "flex items-center gap-2 type-h5 text-foreground"
           )}
           onMouseEnter={() => setLogoRun((run) => run + 1)}
         >
