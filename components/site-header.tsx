@@ -104,7 +104,11 @@ export function SiteHeader() {
             >
               <Menu />
             </SheetTrigger>
-            <SheetContent side="right" className="w-72 gap-0 p-0">
+            {/* Panel open / close (transitions.dev): slower in, quicker out. */}
+            <SheetContent
+              side="right"
+              className="w-72 gap-0 p-0 duration-(--duration-slow) ease-(--ease-smooth-out) data-ending-style:duration-(--duration-medium)"
+            >
               <SheetTitle className="sr-only">{menuLabel}</SheetTitle>
               <nav className="flex flex-col gap-1 px-4 pt-16">
                 {nav.map((link) => (

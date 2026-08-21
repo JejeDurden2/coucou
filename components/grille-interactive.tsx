@@ -6,6 +6,7 @@ import { ArrowLeft, ArrowRight, Check, RotateCcw, type LucideIcon } from "lucide
 import { motion, useReducedMotion } from "motion/react";
 
 import { Button } from "@/components/ui/button";
+import { pageSlide } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 import { grille } from "@/content/grille";
 import { bookingUrl, ctaLabel } from "@/content/site";
@@ -192,7 +193,7 @@ export function GrilleInteractive({ sectors }: { sectors: GrilleSector[] }) {
             key={step}
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.24, ease: [0.16, 1, 0.3, 1] }}
+            transition={pageSlide}
           >
             {content}
           </motion.div>

@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { FlowField } from "@/components/flow-field";
 import { PossiblesMap } from "@/components/possibles-map";
 import { ScrollReveal } from "@/components/scroll-reveal";
+import { staggerLarge } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 import { hero } from "@/content/hero";
 import { bookingUrl, ctaLabel } from "@/content/site";
@@ -44,7 +45,7 @@ export function Hero() {
 
       <div className="relative mx-auto grid w-full max-w-[1200px] flex-1 grid-cols-1 items-center gap-14 px-6 py-12 lg:grid-cols-[1.05fr_0.95fr]">
         <div>
-          <ScrollReveal delay={0.06}>
+          <ScrollReveal delay={staggerLarge}>
             <h1 className="type-h1">
               <span className="block text-muted-foreground">
                 {hero.headlineSetup}
@@ -53,13 +54,13 @@ export function Hero() {
             </h1>
           </ScrollReveal>
 
-          <ScrollReveal delay={0.12}>
+          <ScrollReveal delay={staggerLarge * 2}>
             <p className="mt-6 max-w-[46ch] text-pretty text-lg leading-relaxed text-muted-foreground">
               {hero.lede}
             </p>
           </ScrollReveal>
 
-          <ScrollReveal delay={0.18}>
+          <ScrollReveal delay={staggerLarge * 3}>
             <div className="mt-9 flex flex-col gap-4 sm:flex-row sm:items-center">
               <Button nativeButton={false} render={<a href={bookingUrl("hero")} />} size="lg">
                 {ctaLabel}
