@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Breadcrumb } from "@/components/breadcrumb";
 import { KitForm } from "@/components/kit-form";
 import { FaqList } from "@/components/sections/faq";
-import { pageMetadata, spokeJsonLd } from "@/lib/seo";
+import { pageMetadata, serializeJsonLd, spokeJsonLd } from "@/lib/seo";
 import { kit, kitCross, kitFaq, kitFaqTitle } from "@/content/kit";
 
 // Kit de démarrage : l'outil du dirigeant qui fait écrire son premier outil par
@@ -38,7 +38,7 @@ export default function KitDeDemarragePage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
+          __html: serializeJsonLd(jsonLd),
         }}
       />
       <main id="contenu">

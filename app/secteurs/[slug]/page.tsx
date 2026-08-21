@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { SecteurPageTemplate } from "@/components/sections/secteur-page";
-import { pageMetadata, resolveRelated, spokeJsonLd } from "@/lib/seo";
+import { pageMetadata, resolveRelated, serializeJsonLd, spokeJsonLd } from "@/lib/seo";
 import { secteurs } from "@/content/secteurs";
 import { casUsagePages } from "@/content/cas-usage-pages";
 
@@ -60,7 +60,7 @@ export default async function SecteurSpokePage({ params }: Params) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
+          __html: serializeJsonLd(jsonLd),
         }}
       />
       <main id="contenu">

@@ -11,7 +11,7 @@ import {
 } from "@/components/spoke-partials";
 import { spokes } from "@/content/spokes";
 import { villeCommon, type Ville } from "@/content/villes";
-import { villeJsonLd } from "@/lib/seo";
+import { serializeJsonLd, villeJsonLd } from "@/lib/seo";
 
 // Gabarit des pages locales (/consultant-ia-<ville>). Hero, FAQ et CTA sont
 // les blocs spoke existants ; contexte, métiers et méthode sont propres ici.
@@ -35,7 +35,7 @@ export function VillePageTemplate({ ville }: { ville: Ville }) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
+          __html: serializeJsonLd(jsonLd),
         }}
       />
       <main id="contenu">

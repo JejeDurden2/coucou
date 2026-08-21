@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { GlossairePageTemplate } from "@/components/sections/glossaire-page";
-import { breadcrumbGraph, pageMetadata, resolveRelated } from "@/lib/seo";
+import { breadcrumbGraph, pageMetadata, resolveRelated, serializeJsonLd } from "@/lib/seo";
 import { glossaire } from "@/content/glossaire";
 import { casUsagePages } from "@/content/cas-usage-pages";
 import { secteurs } from "@/content/secteurs";
@@ -79,7 +79,7 @@ export default async function GlossaireTermPage({ params }: Params) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
+          __html: serializeJsonLd(jsonLd),
         }}
       />
       <main id="contenu">

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { CasUsagePageTemplate } from "@/components/sections/cas-usage-page";
-import { pageMetadata, resolveRelated, spokeJsonLd } from "@/lib/seo";
+import { pageMetadata, resolveRelated, serializeJsonLd, spokeJsonLd } from "@/lib/seo";
 import { casUsagePages } from "@/content/cas-usage-pages";
 import { secteurs } from "@/content/secteurs";
 
@@ -60,7 +60,7 @@ export default async function CasUsageSpokePage({ params }: Params) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
+          __html: serializeJsonLd(jsonLd),
         }}
       />
       <main id="contenu">

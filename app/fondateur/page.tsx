@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { Breadcrumb } from "@/components/breadcrumb";
 import { Cta } from "@/components/sections/cta";
 import { Fondateur } from "@/components/sections/fondateur";
-import { breadcrumbGraph, pageMetadata } from "@/lib/seo";
+import { breadcrumbGraph, pageMetadata, serializeJsonLd } from "@/lib/seo";
 import { fondateur, fondateurPage } from "@/content/fondateur";
 import { siteUrl } from "@/content/site";
 
@@ -43,7 +43,7 @@ export default function FondateurPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
+          __html: serializeJsonLd(jsonLd),
         }}
       />
       <main id="contenu">

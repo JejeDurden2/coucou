@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { CartePageTemplate } from "@/components/sections/carte-page";
-import { breadcrumbGraph, pageMetadata } from "@/lib/seo";
+import { breadcrumbGraph, pageMetadata, serializeJsonLd } from "@/lib/seo";
 import { ressources } from "@/content/ressources";
 import { siteUrl } from "@/content/site";
 
@@ -85,7 +85,7 @@ export default async function RessourceCartePage({ params }: Params) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
+          __html: serializeJsonLd(jsonLd),
         }}
       />
       <main id="contenu">

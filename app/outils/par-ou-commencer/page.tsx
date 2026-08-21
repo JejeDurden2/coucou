@@ -3,7 +3,7 @@ import Link from "next/link";
 
 import { Breadcrumb } from "@/components/breadcrumb";
 import { GrilleInteractive, type GrilleSector } from "@/components/grille-interactive";
-import { breadcrumbGraph, businessAddress, pageMetadata } from "@/lib/seo";
+import { breadcrumbGraph, businessAddress, pageMetadata, serializeJsonLd } from "@/lib/seo";
 import { grille, grilleCross } from "@/content/grille";
 import { ressources } from "@/content/ressources";
 import { siteUrl } from "@/content/site";
@@ -69,7 +69,7 @@ export default function ParOuCommencerPage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
+          __html: serializeJsonLd(jsonLd),
         }}
       />
       <main id="contenu">

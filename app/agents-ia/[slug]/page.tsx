@@ -7,7 +7,7 @@ import { ScrollReveal } from "@/components/scroll-reveal";
 import { SpokeHero, RelatedLinks } from "@/components/spoke-partials";
 import { Cta } from "@/components/sections/cta";
 import { FaqList } from "@/components/sections/faq";
-import { pageMetadata, spokeJsonLd } from "@/lib/seo";
+import { pageMetadata, serializeJsonLd, spokeJsonLd } from "@/lib/seo";
 import { agents, agentsCopy } from "@/content/agents";
 import { bookingUrl, ctaLabel } from "@/content/site";
 import { spokes } from "@/content/spokes";
@@ -68,7 +68,7 @@ export default async function AgentSpokePage({ params }: Params) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
+          __html: serializeJsonLd(jsonLd),
         }}
       />
       <main id="contenu">

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { ComparaisonPageTemplate } from "@/components/sections/comparaison-page";
-import { pageMetadata, spokeJsonLd } from "@/lib/seo";
+import { pageMetadata, serializeJsonLd, spokeJsonLd } from "@/lib/seo";
 import { comparaisons } from "@/content/comparaisons";
 
 type Params = { params: Promise<{ slug: string }> };
@@ -53,7 +53,7 @@ export default async function ComparaisonSpokePage({ params }: Params) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
+          __html: serializeJsonLd(jsonLd),
         }}
       />
       <main id="contenu">

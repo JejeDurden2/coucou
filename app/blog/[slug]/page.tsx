@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { BlogArticleTemplate } from "@/components/sections/blog-article";
-import { breadcrumbGraph, pageMetadata, resolveRelated } from "@/lib/seo";
+import { breadcrumbGraph, pageMetadata, resolveRelated, serializeJsonLd } from "@/lib/seo";
 import { articles } from "@/content/blog";
 import { casUsagePages } from "@/content/cas-usage-pages";
 import { fondateur } from "@/content/fondateur";
@@ -130,7 +130,7 @@ export default async function BlogArticlePage({ params }: Params) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
+          __html: serializeJsonLd(jsonLd),
         }}
       />
       <main id="contenu">

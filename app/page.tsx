@@ -12,6 +12,7 @@ import { faq } from "@/content/faq";
 import { fondateur } from "@/content/fondateur";
 import { services } from "@/content/services";
 import { contactEmail, description, siteName, siteUrl } from "@/content/site";
+import { serializeJsonLd } from "@/lib/seo";
 
 export const metadata: Metadata = {
   alternates: { canonical: "/" },
@@ -107,7 +108,7 @@ export default function Home() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
+          __html: serializeJsonLd(jsonLd),
         }}
       />
       <main id="contenu">

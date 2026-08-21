@@ -73,7 +73,7 @@ export const businessAddress = {
 } as const;
 
 // Service (provider Coucou IA) + BreadcrumbList + FAQPage, same @graph pattern
-// as app/page.tsx. Stringify + escape "<" at the call site, like the home page.
+// as app/page.tsx. Le résultat passe par serializeJsonLd() au point d’appel.
 // `breadcrumb` is the same array fed to the visible <Breadcrumb>.
 export function spokeJsonLd({
   name,
@@ -152,7 +152,7 @@ function faqGraph(url: string, faq: FaqItem[]) {
 
 // Pages locales (/consultant-ia-<ville>) : ProfessionalService avec l’adresse
 // niçoise (même entité que la home) et areaServed sur la ville, plus fil
-// d’ariane et FAQPage. Même sérialisation côté appelant que spokeJsonLd.
+// d’ariane et FAQPage. Même serializeJsonLd() côté appelant que spokeJsonLd.
 export function villeJsonLd({
   description,
   path,
@@ -189,4 +189,47 @@ export function villeJsonLd({
       faqGraph(url, faq),
     ],
   };
+}
+
+// Ce que JSON.stringify sait écrire dans un document JSON-LD.
+export type JsonLdValue =
+  | string
+  | number
+  | boolean
+  | null
+  | undefined
+  | JsonLdObject
+  | readonly JsonLdValue[];
+
+// Un objet JSON-LD : une entité schema.org, ou l’un de ses objets imbriqués
+// (une adresse, un renvoi par "@id"). Les propriétés dépendent du "@type".
+export type JsonLdObject = {
+  readonly [property: string]: JsonLdValue;
+};
+
+// Une entrée du @graph : une entité nommée, donc toujours typée.
+export type JsonLdNode = JsonLdObject & {
+  readonly "@type": string;
+};
+
+// Le document complet posé dans le <script type="application/ld+json">.
+export type JsonLdDocument = {
+  readonly "@context": string;
+  readonly "@graph": readonly JsonLdNode[];
+};
+
+// Sérialisation du JSON-LD injecté dans <script type="application/ld+json">.
+// Googlebot n'applique plus qu'une seule passe de déséchappement HTML sur ces
+// blocs (annonce Google, 21 août 2026) : un "&" nu dans la charge utile peut
+// être lu comme le début d'une entité (les formes historiques &copy, &reg,
+// &amp sont reconnues sans point-virgule) et ressortir décodé, et une entité
+// déjà présente dans le texte est décodée une fois de plus. On n'émet donc ni
+// "&", ni "<", ni ">" : des échappements Unicode, valides en JSON (RFC 8259,
+// section 7) et invisibles pour le parseur HTML. U+2028 et U+2029 passent au
+// même endroit, JSON.stringify les laisse bruts et ils cassent l'analyse JS.
+export function serializeJsonLd(document: JsonLdDocument): string {
+  return JSON.stringify(document).replace(
+    /[&<>\u2028\u2029]/g,
+    (char) => `\\u${char.charCodeAt(0).toString(16).padStart(4, "0")}`
+  );
 }
