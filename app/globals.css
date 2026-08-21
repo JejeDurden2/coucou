@@ -90,6 +90,19 @@
     @apply font-sans;
     /* Scrollbars et controles natifs clairs (Windows, mobile). */
     color-scheme: light;
+    /* Lissage une seule fois, à la racine (interface cheat sheet). */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+  /* Les ancres (sommaire blog, cas de la carte, #contenu) passent sous le
+     header fixe. */
+  [id] {
+    scroll-margin-top: 5rem;
   }
   /* Tailwind v4 aligne le preflight sur le navigateur : button = cursor
      default. On remet le pointeur sur tout l'interactif non desactive (les
@@ -102,6 +115,18 @@
   @media (prefers-reduced-motion: no-preference) {
     html {
       scroll-behavior: smooth;
+    }
+  }
+  /* Reduced motion : coupe toute animation et transition, y compris celles
+     de tw-animate-css, que les blocs no-preference ci-dessous ne couvrent pas. */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    ::before,
+    ::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
     }
   }
   /* Impression : les sections révélées au scroll doivent être visibles. */

@@ -398,6 +398,7 @@ export function KitForm() {
             <input
               id="kit-email"
               type="email"
+              inputMode="email"
               name="email"
               autoComplete="email"
               required

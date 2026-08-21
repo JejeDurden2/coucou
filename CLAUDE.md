@@ -72,3 +72,6 @@ These six rules govern **both** the French site copy **and** every word Claude C
 - Put `"use client"` on a layout, page, or whole section.
 - Ship English copy, `tu`, unquantified ROI claims, a duplicate CTA label, any em-dash, or any `X, pas Y` antithesis.
 - Skip `prefers-reduced-motion`, keyboard focus, or mobile collapse.
+
+## Skills
+- **interface-cheat-sheet** (global, `~/.agents/skills/interface-cheat-sheet`): UI craft rules from interfaces.dev. Apply on every frontend change.

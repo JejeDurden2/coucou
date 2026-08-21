@@ -62,6 +62,7 @@ export function RessourceForm({ slug }: { slug: string }) {
         <input
           id="ressource-email"
           type="email"
+          inputMode="email"
           name="email"
           autoComplete="email"
           required
