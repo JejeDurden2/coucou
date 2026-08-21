@@ -4,7 +4,7 @@ import { ArrowRight } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { bookingUrl, ctaLabel } from "@/content/site";
-import { notFound } from "@/content/not-found";
+import { notFound, recoveryLinks } from "@/content/not-found";
 
 export const metadata: Metadata = {
   title: "Page introuvable",
@@ -38,6 +38,28 @@ export default function NotFound() {
             {notFound.homeLabel}
           </Button>
         </div>
+
+        {/* Repères de récupération : le visiteur retrouve une porte d'entrée,
+            et l'agent qui a suivi un lien mort repart avec le plan du site,
+            l'index llms.txt et les instructions qui lui sont destinées. */}
+        <nav
+          aria-label={notFound.recoveryTitle}
+          className="mx-auto mt-16 max-w-[46rem] border-t border-border pt-8 text-left"
+        >
+          <h2 className="type-label text-muted-foreground">{notFound.recoveryTitle}</h2>
+          <ul className="mt-4 flex flex-wrap gap-x-6 gap-y-3">
+            {recoveryLinks.map((entry) => (
+              <li key={entry.href}>
+                <a
+                  href={entry.href}
+                  className="rounded-sm text-sm text-primary underline-offset-4 outline-none hover:underline focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
+                >
+                  {entry.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
       </div>
     </main>
   );

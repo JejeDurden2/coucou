@@ -5,7 +5,7 @@
 // Chiffres = exemples étiquetés, jamais une référence client validée.
 
 import type { FaqItem } from "@/content/secteurs";
-import { plain } from "@/lib/inline";
+import { plain } from "@/lib/inline-text";
 import { agentIaProductionLecons } from "@/content/blog/agent-ia-production-lecons";
 import { aiActPmeObligations } from "@/content/blog/ai-act-pme-obligations";
 import { businessCaseIa } from "@/content/blog/business-case-ia";

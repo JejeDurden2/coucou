@@ -41,7 +41,11 @@ export function FaqList({
           </ScrollReveal>
 
           <ScrollReveal className="mt-10">
-            <Accordion className="border-t border-border">
+            {/* hiddenUntilFound : les réponses restent dans le DOM quand le
+                panneau est fermé (hidden="until-found"). La recherche du
+                navigateur les trouve, et les robots qui n'exécutent pas de JS
+                lisent le texte au lieu d'un accordéon vide. */}
+            <Accordion hiddenUntilFound className="border-t border-border">
               {items.map((item, index) => (
                 <AccordionItem
                   key={item.question}

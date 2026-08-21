@@ -39,6 +39,7 @@ export const nav: NavLink[] = [
 ];
 
 export const footerLegalLinks: NavLink[] = [
+  { label: "Nous joindre", href: "/contact" },
   { label: "Mentions légales", href: "/mentions-legales" },
   { label: "Confidentialité", href: "/confidentialite" },
 ];

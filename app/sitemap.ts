@@ -16,6 +16,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return [
     { url: siteUrl },
     { url: `${siteUrl}/fondateur` },
+    { url: `${siteUrl}/contact` },
     { url: `${siteUrl}/mentions-legales` },
     { url: `${siteUrl}/confidentialite` },
     { url: `${siteUrl}/secteurs` },

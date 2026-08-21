@@ -26,12 +26,16 @@ const jsonLd = {
       "@type": "ProfessionalService",
       "@id": `${siteUrl}/#organization`,
       name: siteName,
+      // La recherche de marque tape aussi bien « Coucou IA » que « Coucou.IA »
+      // ou la raison sociale : les trois désignent la même entité.
+      alternateName: ["Coucou.IA", "COUCOU IA"],
       legalName: "COUCOU IA",
       url: siteUrl,
       description,
       email: contactEmail,
       // Requis par Google pour les resultats enrichis LocalBusiness.
       image: `${siteUrl}/opengraph-image`,
+      logo: `${siteUrl}/brand/avatar-coucou-ia-1024.png`,
       address: {
         "@type": "PostalAddress",
         streetAddress: "460 avenue de Pessicart",
@@ -47,12 +51,15 @@ const jsonLd = {
       // Le parcours vérifiable du fondateur est l'argument de confiance :
       // exposé aux moteurs, pas seulement aux visiteurs.
       sameAs: [fondateur.linkedinUrl],
-      founder: {
-        "@type": "Person",
-        name: fondateur.name,
-        jobTitle: fondateur.role,
-        url: `${siteUrl}/fondateur`,
-        sameAs: [fondateur.linkedinUrl],
+      founder: { "@id": `${siteUrl}/#jerome-desmares` },
+      // Un agent qui vérifie une entreprise cherche par quel bout la joindre.
+      contactPoint: {
+        "@type": "ContactPoint",
+        contactType: "sales",
+        email: contactEmail,
+        url: `${siteUrl}/contact`,
+        areaServed: "FR",
+        availableLanguage: ["fr"],
       },
       vatID: "FR83100498070",
       identifier: {
@@ -80,11 +87,28 @@ const jsonLd = {
         })),
       },
     },
+    // Nœud à part plutôt qu'imbriqué dans `founder` : un lecteur de JSON-LD
+    // qui isole les entités trouve une identité complète, pas un nom seul.
+    {
+      "@type": "Person",
+      "@id": `${siteUrl}/#jerome-desmares`,
+      name: fondateur.name,
+      description: fondateur.bio,
+      jobTitle: fondateur.role,
+      url: `${siteUrl}/fondateur`,
+      sameAs: [fondateur.linkedinUrl],
+      worksFor: { "@id": `${siteUrl}/#organization` },
+      knowsLanguage: "fr",
+    },
     {
       "@type": "WebSite",
       "@id": `${siteUrl}/#website`,
       name: siteName,
+      alternateName: "Coucou.IA",
       url: siteUrl,
+      description,
+      inLanguage: "fr-FR",
+      publisher: { "@id": `${siteUrl}/#organization` },
     },
     {
       "@type": "FAQPage",

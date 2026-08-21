@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 
 // Micro-markdown des textes du blog : liens [texte](/chemin) et gras **texte**.
+// Le texte nu de la même syntaxe vit dans lib/inline-text.ts, sans React.
 // Zéro dépendance : le corps d'un article reste une donnée typée, jamais du JSX
 // dispersé dans le contenu. Les liens internes portent le maillage SEO.
 const pattern = /\[([^\]]+)\]\(([^)]+)\)|\*\*([^*]+)\*\*/g;
@@ -47,10 +48,4 @@ export function inline(text: string): ReactNode[] {
     nodes.push(text.slice(cursor));
   }
   return nodes;
-}
-
-// Texte nu d'une chaîne à micro-markdown : métadonnées, JSON-LD, RSS, comptage
-// des mots. Rien ne doit sortir du site avec des crochets ou des astérisques.
-export function plain(text: string): string {
-  return text.replace(/\[([^\]]+)\]\([^)]+\)/g, "$1").replace(/\*\*([^*]+)\*\*/g, "$1");
 }

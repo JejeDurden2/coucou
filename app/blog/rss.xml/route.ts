@@ -2,7 +2,7 @@
 // lignes de XML. Titre, chapô, lien et date de publication, en français.
 
 import { articles, blogHub } from "@/content/blog";
-import { plain } from "@/lib/inline";
+import { plain } from "@/lib/inline-text";
 import { siteUrl } from "@/content/site";
 
 // Le flux ne dépend que du contenu : prérendu au build, comme le sitemap.
