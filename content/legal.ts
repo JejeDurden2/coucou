@@ -16,7 +16,7 @@ export type LegalPage = {
 
 export const mentionsLegales: LegalPage = {
   title: "Mentions légales",
-  updated: "8 août 2026",
+  updated: "22 août 2026",
   sections: [
     {
       heading: "Éditeur du site",
@@ -25,7 +25,7 @@ export const mentionsLegales: LegalPage = {
         "Siège social : 460 avenue de Pessicart, 06100 Nice, France.",
         "SIREN : 100 498 070. SIRET du siège : 100 498 070 00018.",
         "TVA intracommunautaire : FR83 100 498 070.",
-        "Immatriculée au Registre national des entreprises (RNE) tenu par l’INPI.",
+        "RCS Nice 100 498 070.",
         "Code NAF : 58.29C (édition de logiciels applicatifs).",
         `Contact : ${contactEmail}.`,
       ],
@@ -59,7 +59,7 @@ export const mentionsLegales: LegalPage = {
 
 export const confidentialite: LegalPage = {
   title: "Politique de confidentialité",
-  updated: "8 août 2026",
+  updated: "22 août 2026",
   sections: [
     {
       heading: "En résumé",
@@ -81,6 +81,7 @@ export const confidentialite: LegalPage = {
         "Si vous réservez un premier échange, la prise de rendez-vous passe par l’outil Cal.com, qui recueille les informations que vous renseignez (nom, email, réponses au formulaire de réservation) pour organiser cet échange.",
         "Si vous nous écrivez directement, nous recevons les informations que vous choisissez de nous communiquer (nom, adresse email, message).",
         "Ces données servent uniquement à vous répondre, vous envoyer ce que vous avez demandé et organiser l’échange. Nous ne les utilisons à aucune autre fin et ne les revendons jamais.",
+        "Base légale : votre consentement pour l’envoi d’une ressource et des emails qui la suivent (retirable à tout moment par le lien de désinscription), et les démarches précontractuelles que vous engagez pour la réservation d’un échange ou un message direct.",
         "Elles sont conservées au plus trois ans après notre dernier échange, puis supprimées.",
       ],
     },
@@ -89,7 +90,8 @@ export const confidentialite: LegalPage = {
       paragraphs: [
         "Vercel Inc. (États-Unis) : hébergement du site et mesure d’audience sans cookie.",
         "Brevo, édité par Brevo SAS (France) : envoi des ressources par email et gestion de la liste de contacts.",
-        "Cal.com : prise de rendez-vous pour le premier échange.",
+        "Cal.com Inc. (États-Unis) : prise de rendez-vous pour le premier échange.",
+        "Sentry, édité par Functional Software Inc. (États-Unis) : remontée des erreurs techniques du site, sans données d’identification (nous ne lui transmettons ni adresse IP ni identifiant de visiteur).",
       ],
     },
     {
@@ -103,7 +105,7 @@ export const confidentialite: LegalPage = {
       heading: "Hébergement et journaux techniques",
       paragraphs: [
         "Le site est hébergé par Vercel Inc. (États-Unis). L’hébergeur peut traiter des données techniques de connexion (journaux serveur) à des fins de sécurité et de bon fonctionnement, sans que COUCOU IA n’exploite ces données à des fins de suivi.",
-        "Vercel Inc. adhère au cadre de protection des données UE-États-Unis (Data Privacy Framework) : les transferts hors Union européenne s’appuient sur ce cadre.",
+        "Vercel Inc., Cal.com Inc. et Functional Software Inc. (Sentry) sont établis aux États-Unis : les transferts hors Union européenne s’appuient sur le cadre de protection des données UE-États-Unis (Data Privacy Framework) auquel ces prestataires adhèrent, ou sur les clauses contractuelles types de la Commission européenne.",
       ],
     },
     {
